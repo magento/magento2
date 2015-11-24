@@ -21,7 +21,6 @@ define([
             window.setTimeout(callback, 1000 / 60);
         };
 
-
     /**
      * Creates new process object or extracts the
      * the existing one.

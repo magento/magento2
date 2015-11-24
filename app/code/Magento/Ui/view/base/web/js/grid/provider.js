@@ -59,6 +59,7 @@ define([
         },
 
         /**
+         * Clears provider's data properties.
          *
          * @returns {Provider} Chainable.
          */
@@ -72,8 +73,9 @@ define([
         },
 
         /**
+         * Overrides current data with a provided one.
          *
-         * @param {Object} data
+         * @param {Object} data - New data object.
          * @returns {Provider} Chainable.
          */
         setData: function (data) {
@@ -99,7 +101,6 @@ define([
 
             return data;
         },
-
 
         /**
          * Reloads data with current parameters.
