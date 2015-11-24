@@ -1,6 +1,6 @@
 <?php
 
-namespace Magento\CatalogInventory\Api;
+namespace Magento\CatalogInventory\Api\Data;
 
 /**
  * Location information interface

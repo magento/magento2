@@ -57,8 +57,8 @@ interface InventoryRecordCriteriaInterface extends StockItemCriteriaInterface
     /**
      * Sets location filter, to retrieve inventory records based on location
      *
-     * @param LocationInformationInterface $location
+     * @param Data\LocationInformationInterface $location
      * @return $this
      */
-    public function setLocationFilter(LocationInformationInterface $location);
+    public function setLocationFilter(Data\LocationInformationInterface $location);
 }

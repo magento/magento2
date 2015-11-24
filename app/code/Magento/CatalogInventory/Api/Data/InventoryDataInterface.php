@@ -2,8 +2,6 @@
 
 namespace Magento\CatalogInventory\Api\Data;
 
-use Magento\CatalogInventory\Api\LocationInformationInterface;
-
 /**
  * Interface of shared data of inventory with warehouse
  *
