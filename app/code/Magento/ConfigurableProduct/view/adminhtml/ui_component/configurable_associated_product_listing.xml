@@ -58,6 +58,7 @@
                 </argument>
             </filterSelect>
         </filters>
+        <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="product_columns" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns">
         <argument name="data" xsi:type="array">
