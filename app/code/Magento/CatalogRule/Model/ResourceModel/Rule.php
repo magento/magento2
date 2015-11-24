@@ -31,24 +31,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $_logger;
 
     /**
-     * Store associated with rule entities information map
-     *
-     * @var array
-     */
-    protected $_associatedEntitiesMap = [
-        'website' => [
-            'associations_table' => 'catalogrule_website',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'website_id',
-        ],
-        'customer_group' => [
-            'associations_table' => 'catalogrule_customer_group',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'customer_group_id',
-        ],
-    ];
-
-    /**
      * Catalog rule data
      *
      * @var \Magento\CatalogRule\Helper\Data
@@ -110,6 +92,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\EntityManager $entityManager
+     * @param array $associatedEntitiesMap
      * @param null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -125,6 +108,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         \Magento\Framework\Stdlib\DateTime $dateTime,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\EntityManager $entityManager,
+        array $associatedEntitiesMap = [],
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
@@ -137,6 +121,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
         $this->entityManager = $entityManager;
+        $this->_associatedEntitiesMap = $associatedEntitiesMap;
         parent::__construct($context, $connectionName);
     }
 
