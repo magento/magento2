@@ -22,23 +22,23 @@ class CustomerGroup extends AbstractPlugin
     protected $clientOptions;
 
     /**
-     * @var string
+     * @var EngineResolver
      */
-    protected $searchEngine;
+    protected $engineResolver;
 
     /**
      * @param IndexerRegistry $indexerRegistry
      * @param ClientOptionsInterface $clientOptions
-     * @param EngineResolver $searchEngine
+     * @param EngineResolver $engineResolver
      */
     public function __construct(
         IndexerRegistry $indexerRegistry,
         ClientOptionsInterface $clientOptions,
-        EngineResolver $searchEngine
+        EngineResolver $engineResolver
     ) {
         parent::__construct($indexerRegistry);
         $this->clientOptions = $clientOptions;
-        $this->searchEngine = $searchEngine;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
@@ -55,7 +55,7 @@ class CustomerGroup extends AbstractPlugin
         \Closure $proceed,
         AbstractModel $group
     ) {
-        $needInvalidation = ($this->searchEngine->getCurrentSearchEngine() != EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE)
+        $needInvalidation = ($this->engineResolver->getCurrentSearchEngine() != EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE)
             && ($group->isObjectNew() || $group->dataHasChangedFor('tax_class_id'));
         $result = $proceed($group);
         if ($needInvalidation) {

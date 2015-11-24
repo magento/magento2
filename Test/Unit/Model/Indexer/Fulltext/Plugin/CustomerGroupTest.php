@@ -31,6 +31,11 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
     protected $indexerRegistryMock;
 
     /**
+     * @var \Magento\Search\Model\EngineResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $engineResolverMock;
+
+    /**
      * @var CustomerGroup
      */
     protected $model;
@@ -61,25 +66,33 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->engineResolverMock = $this->getMock(
+            'Magento\Search\Model\EngineResolver',
+            ['getCurrentSearchEngine'],
+            [],
+            '',
+            false
+        );
         $this->model = new CustomerGroup(
             $this->indexerRegistryMock,
-            $this->customerOptionsMock
+            $this->customerOptionsMock,
+            $this->engineResolverMock
         );
     }
 
     /**
-     * @param bool $isThirdPartyEngineAvailable
+     * @param string $searchEngine
      * @param bool $isObjectNew
      * @param bool $isTaxClassIdChanged
      * @param int $invalidateCounter
      * @return void
      * @dataProvider aroundSaveDataProvider
      */
-    public function testAroundSave($isThirdPartyEngineAvailable, $isObjectNew, $isTaxClassIdChanged, $invalidateCounter)
+    public function testAroundSave($searchEngine, $isObjectNew, $isTaxClassIdChanged, $invalidateCounter)
     {
-        $this->customerOptionsMock->expects($this->once())
-            ->method('isThirdPartyEngineAvailable')
-            ->will($this->returnValue($isThirdPartyEngineAvailable));
+        $this->engineResolverMock->expects($this->once())
+            ->method('getCurrentSearchEngine')
+            ->will($this->returnValue($searchEngine));
 
         $groupMock = $this->getMock(
             'Magento\Customer\Model\Group',
@@ -117,14 +130,14 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
     public function aroundSaveDataProvider()
     {
         return [
-            [false, false, false, 0],
-            [false, false, true, 0],
-            [false, true, false, 0],
-            [false, true, true, 0],
-            [true, false, false, 0],
-            [true, false, true, 1],
-            [true, true, false, 1],
-            [true, true, true, 1],
+            ['mysql', false, false, 0],
+            ['mysql', false, true, 0],
+            ['mysql', true, false, 0],
+            ['mysql', true, true, 0],
+            ['custom', false, false, 0],
+            ['custom', false, true, 1],
+            ['custom', true, false, 1],
+            ['custom', true, true, 1],
         ];
     }
 }
