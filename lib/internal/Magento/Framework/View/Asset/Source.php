@@ -133,9 +133,13 @@ class Source
     private function preProcess(LocalInterface $asset)
     {
         $sourceFile = $this->findSourceFile($asset);
-        $fileParts = explode('/', $sourceFile);
-        $path = array_pop($fileParts);
-        $dir = implode('/', $fileParts);
+        $dir = false;
+        $path = false;
+        if ($sourceFile) {
+            $fileParts = explode('/', $sourceFile);
+            $path = array_pop($fileParts);
+            $dir = implode('/', $fileParts);
+        }
 
         $chain = $this->createChain($asset, $dir, $path);
         $this->preProcessorPool->process($chain);
@@ -230,6 +234,7 @@ class Source
      * Creates a chain for pre-processing
      *
      * @param LocalInterface $asset
+     * @param string|bool $dir
      * @param string|bool $path
      * @return PreProcessor\Chain
      */
