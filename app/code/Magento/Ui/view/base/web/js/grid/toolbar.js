@@ -81,7 +81,7 @@ define([
          */
         initialize: function () {
             this._super();
-            
+
             if (this.sticky) {
                 this.waitDOMElements()
                     .then(this.run.bind(this));

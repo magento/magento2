@@ -390,11 +390,11 @@ app/code/Magento/Ui/view/base/web/js/grid/controls/bookmarks/storage.js
 app/code/Magento/Ui/view/base/web/js/grid/export.js
 app/code/Magento/Ui/view/base/web/js/grid/resize.js
 app/code/Magento/Ui/view/base/web/js/lib/core/element/links.js
-app/code/Magento/Ui/view/base/web/js/lib/ko/bind/datepicker.js
-app/code/Magento/Ui/view/base/web/js/lib/ko/bind/fadeVisible.js
-app/code/Magento/Ui/view/base/web/js/lib/ko/bind/mage-init.js
-app/code/Magento/Ui/view/base/web/js/lib/ko/bind/optgroup.js
-app/code/Magento/Ui/view/base/web/js/lib/ko/extender/observable_array.js
+app/code/Magento/Ui/view/base/web/js/lib/knockout/bindings/datepicker.js
+app/code/Magento/Ui/view/base/web/js/lib/knockout/bindings/fadeVisible.js
+app/code/Magento/Ui/view/base/web/js/lib/knockout/bindings/mage-init.js
+app/code/Magento/Ui/view/base/web/js/lib/knockout/bindings/optgroup.js
+app/code/Magento/Ui/view/base/web/js/lib/knockout/extender/observable_array.js
 app/code/Magento/Ui/view/base/web/js/lib/spinner.js
 app/code/Magento/Ui/view/base/web/js/lib/step-wizard.js
 app/code/Magento/Ui/view/base/web/js/lib/validation/rules.js
