@@ -191,10 +191,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
             ['rule_id=?' => $rule->getId()]
         );
         $connection->delete(
-            $this->getTable('catalogrule_customer_group'),
-            ['rule_id=?' => $rule->getId()]
-        );
-        $connection->delete(
             $this->getTable('catalogrule_group_website'),
             ['rule_id=?' => $rule->getId()]
         );
