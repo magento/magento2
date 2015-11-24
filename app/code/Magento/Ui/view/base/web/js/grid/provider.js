@@ -7,16 +7,27 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'uiElement',
+    'rjsResolver',
+    'uiLayout',
     'Magento_Ui/js/modal/alert',
-    'mage/translate'
-], function ($, _, utils, Element, alert, $t) {
+    'mage/translate',
+    'uiElement'
+], function ($, _, utils, resolver, layout, alert, $t, Element) {
     'use strict';
 
     return Element.extend({
         defaults: {
+            firstLoad: true,
+            storageConfig: {
+                component: 'Magento_Ui/js/grid/data-storage',
+                provider: '${ $.storageConfig.name }',
+                name: '${ $.name }_storage',
+                updateUrl: '${ $.update_url }',
+                indexField: 'entity_id',
+                cacheRequests: true
+            },
             listens: {
-                params: 'reload'
+                params: 'onParamsChange'
             }
         },
 
@@ -26,20 +37,32 @@ define([
          * @returns {Provider} Chainable.
          */
         initialize: function () {
-            utils.limit(this, 'reload', 300);
+            utils.limit(this, 'onParamsChange', 5);
             _.bindAll(this, 'onReload');
 
-            return this._super();
+            this._super()
+                .initStorage()
+                .clearData();
+
+            return this;
         },
 
         /**
-         * Initializes provider config.
+         * Initializes storage component.
          *
          * @returns {Provider} Chainable.
          */
-        initConfig: function () {
-            this._super();
+        initStorage: function () {
+            layout([this.storageConfig]);
 
+            return this;
+        },
+
+        /**
+         *
+         * @returns {Provider} Chainable.
+         */
+        clearData: function () {
             this.setData({
                 items: [],
                 totalRecords: 0
@@ -62,28 +85,6 @@ define([
         },
 
         /**
-         * Reloads data with current parameters.
-         */
-        reload: function () {
-            this.trigger('reload');
-
-            if (this.request && this.request.readyState !== 4) {
-                this.request.abort();
-            }
-
-            this.request = $.ajax({
-                url: this['update_url'],
-                method: 'GET',
-                data: this.get('params'),
-                dataType: 'json'
-            });
-
-            this.request
-                .done(this.onReload)
-                .error(this.onError);
-        },
-
-        /**
          * Processes data before applying it.
          *
          * @param {Object} data - Data to be processed.
@@ -97,6 +98,33 @@ define([
             });
 
             return data;
+        },
+
+
+        /**
+         * Reloads data with current parameters.
+         *
+         * @returns {Promise} Reload promise object.
+         */
+        reload: function () {
+            var request = this.storage().getData(this.params);
+
+            this.trigger('reload');
+
+            request
+                .done(this.onReload)
+                .fail(this.onError);
+
+            return request;
+        },
+
+        /**
+         * Handles changes of 'params' object.
+         */
+        onParamsChange: function () {
+            this.firstLoad ?
+                resolver(this.reload, this) :
+                this.reload();
         },
 
         /**
@@ -118,6 +146,8 @@ define([
          * @param {Object} data - Retrieved data object.
          */
         onReload: function (data) {
+            this.firstLoad = false;
+
             this.setData(data)
                 .trigger('reloaded');
         }
