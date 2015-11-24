@@ -58,7 +58,7 @@ define([
             tableSelector: 'table',
             columnsProvider: 'componentType = columns, ns = ${ $.ns }',
             refreshFPS: 15,
-            sticky: true,
+            sticky: false,
             visible: false,
             _resized: true,
             _scrolled: true,
