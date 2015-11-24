@@ -16,7 +16,7 @@ define(
 
             if (quote.shippingAddress() && billingAddress.getCacheKey() == quote.shippingAddress().getCacheKey()) {
                 address = $.extend({}, billingAddress);
-                address.saveInAddressBook = false;
+                address.saveInAddressBook = null;
             } else {
                 address = billingAddress;
             }
