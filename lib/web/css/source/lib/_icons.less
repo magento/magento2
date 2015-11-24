@@ -297,6 +297,8 @@
     .lib-url-check(@_icon-image);
 
     .lib-css(background-image, @lib-url-check-output); // @lib-url-check-output is a returned variable of .lib-url-check() mixin
+    .lib-css(background-position-x, @_icon-image-position-x);
+    .lib-css(background-position-y, @_icon-image-position-y);
     .lib-css(line-height, @_icon-image-height);
     .lib-css(margin, @_icon-image-margin);
     .lib-css(vertical-align, @_icon-image-vertical-align);
@@ -304,8 +306,6 @@
         @_icon-image-width,
         @_icon-image-height
     );
-    background-position-x: @_icon-image-position-x;
-    background-position-y: @_icon-image-position-y;
     background-repeat: no-repeat;
     content: '';
     display: inline-block;
