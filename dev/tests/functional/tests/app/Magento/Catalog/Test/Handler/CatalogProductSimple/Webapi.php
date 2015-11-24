@@ -95,7 +95,7 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $this->convertData();
 
         /** @var CatalogProductSimple $fixture */
-        $url = $_ENV['app_frontend_url'] . 'rest/V1/products';
+        $url = $_ENV['app_frontend_url'] . 'rest/default/V1/products';
         $this->webapiTransport->write($url, $this->fields, CurlInterface::POST);
         $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
@@ -200,7 +200,6 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     protected function prepareAdvancedInventory()
     {
         $stockData = $this->fields['product']['stock_data'];
-        $stockData['website_id'] = 1;
 
         if (!isset($stockData['is_in_stock'])) {
             $stockData['is_in_stock'] = isset($this->fields['product']['quantity_and_stock_status']['is_in_stock'])
