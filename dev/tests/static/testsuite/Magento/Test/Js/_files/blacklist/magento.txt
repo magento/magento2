@@ -545,7 +545,6 @@ lib/web/mage/mage.js
 lib/web/mage/menu.js
 lib/web/mage/popup-window.js
 lib/web/mage/redirect-url.js
-lib/web/mage/requirejs/resolver.js
 lib/web/mage/smart-keyboard-handler.js
 lib/web/mage/sticky.js
 lib/web/mage/storage.js
