@@ -1,5 +1,5 @@
 // /**
-// * Copyright © 2015 Magento. All rights reserved.
+// * Copyright Â© 2015 Magento. All rights reserved.
 // * See COPYING.txt for license details.
 // */
 
@@ -39,4 +39,15 @@
     display: -moz-inline-box;
     display: inline-block;
     vertical-align: @va;
+}
+
+.fotorama-button-background() {
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: background-color @fotorama-duration-time ease-in-out;
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+    &:active {
+        background-color: rgba(213, 213, 213, 0.5);
+    }
 }
