@@ -4,10 +4,11 @@
  */
 define([
     'underscore',
-    'uiCollection',
     'Magento_Ui/js/lib/spinner',
-    './adapter'
-], function (_, Collection, loader, adapter) {
+    'rjsResolver',
+    './adapter',
+    'uiCollection'
+], function (_, loader, resolver, adapter, Collection) {
     'use strict';
 
     function collectData(selector) {
@@ -26,8 +27,9 @@ define([
     return Collection.extend({
         initialize: function () {
             this._super()
-                .initAdapter()
-                .hideLoader();
+                .initAdapter();
+
+            resolver(this.hideLoader, this);
 
             return this;
         },
