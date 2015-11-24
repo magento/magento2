@@ -370,7 +370,6 @@ app/code/Magento/Translation/view/frontend/requirejs-config.js
 app/code/Magento/Translation/view/frontend/web/add-class.js
 app/code/Magento/Ui/view/base/requirejs-config.js
 app/code/Magento/Ui/view/base/web/js/block-loader.js
-app/code/Magento/Ui/view/base/web/js/core/app.js
 app/code/Magento/Ui/view/base/web/js/core/renderer/layout.js
 app/code/Magento/Ui/view/base/web/js/core/renderer/types.js
 app/code/Magento/Ui/view/base/web/js/form/adapter.js
@@ -390,13 +389,9 @@ app/code/Magento/Ui/view/base/web/js/grid/columns/thumbnail.js
 app/code/Magento/Ui/view/base/web/js/grid/controls/bookmarks/storage.js
 app/code/Magento/Ui/view/base/web/js/grid/export.js
 app/code/Magento/Ui/view/base/web/js/grid/resize.js
-app/code/Magento/Ui/view/base/web/js/grid/sticky/sticky.js
 app/code/Magento/Ui/view/base/web/js/lib/core/element/links.js
-app/code/Magento/Ui/view/base/web/js/lib/key-codes.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/datepicker.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/fadeVisible.js
-app/code/Magento/Ui/view/base/web/js/lib/ko/bind/i18n.js
-app/code/Magento/Ui/view/base/web/js/lib/ko/bind/keyboard.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/mage-init.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/optgroup.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/extender/observable_array.js
@@ -404,8 +399,6 @@ app/code/Magento/Ui/view/base/web/js/lib/spinner.js
 app/code/Magento/Ui/view/base/web/js/lib/step-wizard.js
 app/code/Magento/Ui/view/base/web/js/lib/validation/rules.js
 app/code/Magento/Ui/view/base/web/js/lib/validation/utils.js
-app/code/Magento/Ui/view/base/web/js/lib/validation/validator.js
-app/code/Magento/Ui/view/base/web/js/lib/view/utils/raf.js
 app/code/Magento/Ui/view/base/web/js/modal/modalToggle.js
 app/code/Magento/Ui/view/frontend/web/js/model/messageList.js
 app/code/Magento/Ui/view/frontend/web/js/model/messages.js
