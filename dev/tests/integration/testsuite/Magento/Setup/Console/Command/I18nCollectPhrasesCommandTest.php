@@ -82,7 +82,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteMagentoFlagDirectoryPath()
     {
-        $this->tester->execute(['directory' => 'a', '--magento' => true,]);
+        $this->tester->execute(['directory' => 'a', '--magento' => true]);
     }
 
     /**
