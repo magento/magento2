@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Api\Data\InventoryIndexRecordInterface;
  *
  * @api
  */
-interface InventoryIndexManagerInterface
+interface InventoryIndexManagementInterface
 {
     /**
      * @param InventoryInterface $inventory

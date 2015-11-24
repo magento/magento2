@@ -11,7 +11,7 @@ use Magento\CatalogInventory\Api\Data\InventoryInterface;
  *
  * @api
  */
-interface InventoryManagerInterface
+interface InventoryManagementInterface
 {
     /**
      * Returns main store inventory based on scope configuration
