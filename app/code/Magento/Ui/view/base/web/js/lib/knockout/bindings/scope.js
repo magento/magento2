@@ -6,12 +6,10 @@
 define([
     'ko',
     'uiRegistry',
-    'jquery',
-    'mage/translate'
-], function (ko, registry, $) {
+    'mage/translate',
+    '../template/renderer'
+], function (ko, registry, $t, renderer) {
     'use strict';
-
-    var i18n = $.mage.__;
 
     /**
      * Creates child context with passed component param as $data. Extends context with $t helper.
@@ -24,7 +22,7 @@ define([
         component = bindingContext.createChildContext(component);
 
         ko.utils.extend(component, {
-            $t: i18n
+            $t: $t
         });
 
         ko.utils.arrayForEach(el.childNodes, ko.cleanNode);
@@ -66,4 +64,8 @@ define([
     };
 
     ko.virtualElements.allowedBindings.scope = true;
+
+    renderer
+        .addNode('scope')
+        .addAttribute('scope');
 });
