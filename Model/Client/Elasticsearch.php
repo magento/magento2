@@ -118,7 +118,7 @@ class Elasticsearch implements ClientInterface
      * 
      * @param string $index
      * @param string $entityType
-     * return array
+     * @return array
      */
     public function getAllIds($index, $entityType)
     {
@@ -174,7 +174,7 @@ class Elasticsearch implements ClientInterface
      *
      * @param array $fields
      * @param string $index
-     * @param $entityType
+     * @param string $entityType
      * @return void
      */
     public function addFieldsMapping(array $fields, $index, $entityType)
