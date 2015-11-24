@@ -400,7 +400,7 @@
             <data name="product/data/name" xsi:type="string">simple%isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">10</data>
-            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">46</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">345</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
