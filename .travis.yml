@@ -21,8 +21,6 @@ matrix:
       env: TEST_SUITE=static_phpcs
     - php: 5.6
       env: TEST_SUITE=static_annotation
-  allow_failures:
-    - php: 7.0
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
