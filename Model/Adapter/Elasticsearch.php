@@ -174,7 +174,9 @@ class Elasticsearch
         $indexName = $this->clientConfig->getIndexName();
         $entityType = $this->clientConfig->getEntityType();
         $documentIds = $this->connectionManager->getConnection()->getAllIds($indexName, $entityType);
-        $this->deleteDocs($documentIds);
+        if (count($documentIds) > 0) {
+            $this->deleteDocs($documentIds);
+        }
 
         return $this;
     }
