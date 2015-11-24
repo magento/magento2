@@ -227,20 +227,6 @@ class Source
     }
 
     /**
-     * @param \Magento\Framework\View\Asset\LocalInterface $asset
-     *
-     * @return bool|string
-     */
-    public function findRelativeSourceFilePath(LocalInterface $asset)
-    {
-        $sourceFile = $this->findSourceFile($asset);
-        if (!$sourceFile) {
-            return false;
-        }
-        return $this->rootDir->getRelativePath($sourceFile);
-    }
-
-    /**
      * Creates a chain for pre-processing
      *
      * @param LocalInterface $asset
