@@ -38,6 +38,8 @@
                     <xs:element name="actionsColumn" type="actionsColumn" />
                     <xs:element name="selectionsColumn" type="selectionsColumn" />
                     <xs:element type="exportButton" name="exportButton"/>
+                    <xs:element type="columnsControls" name="columnsControls"/>
+                    <xs:element type="listingToolbar" name="listingToolbar"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

@@ -53,6 +53,8 @@
             <xs:element type="actions" name="actions"/>
             <xs:element type="bookmark" name="bookmark"/>
             <xs:element type="exportButton" name="exportButton"/>
+            <xs:element type="columnsControls" name="columnsControls"/>
+            <xs:element type="listingToolbar" name="listingToolbar"/>
             <xs:element type="action" name="action"/>
             <xs:element name="component" type="component" />
             <xs:element name="actionsColumn" type="actionsColumn" />
