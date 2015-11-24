@@ -66,6 +66,7 @@
         <xs:complexContent>
             <xs:extension base="listing">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element type="listingToolbar" name="listingToolbar"/>
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="paging" name="paging"/>
                     <xs:element type="massaction" name="massaction"/>

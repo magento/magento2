@@ -59,6 +59,7 @@
             <xs:extension base="listing">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="paging" name="paging"/>
+                    <xs:element type="listingToolbar" name="listingToolbar"/>
                     <xs:element type="filtersConfiguration" name="filters"/>
                     <xs:element type="massactionConfiguration" name="massaction"/>
                     <xs:element type="dataSource" name="dataSource"/>
