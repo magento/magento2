@@ -12,38 +12,46 @@ require([
         // disabled select only
         $('select#frontend_input:disabled').each(function () {
             var select = $(this),
-                value = select.find('option:selected').val(),
+                currentValue = select.find('option:selected').val(),
                 enabledTypes = ['select', 'swatch_visual', 'swatch_text'],
-                message = $.mage.__('This changes affect all related products'),
-                warning = $('<label>').hide().text(message).addClass('mage-error').attr({
-                    generated: true,
-                    for: select.attr('id')
-                });
+                warning = $('<label>')
+                    .hide()
+                    .text($.mage.__('This changes affect all related products'))
+                    .addClass('mage-error')
+                    .attr({
+                        generated: true, for: select.attr('id')
+                    }),
 
-            // Check current type (allow only: select, swatch_visual, swatch_text)
-            if (!~enabledTypes.indexOf(value)) {
-                return;
-            }
-
-            // Enable select and keep only available options (all other will be removed)
-            select
-                .removeAttr('disabled')
-                .find('option').each(function () {
-                    if (!~enabledTypes.indexOf($(this).val())) {
-                        $(this).remove();
-                    }
-                });
-
-            // Add warning on page and event for show/hide it
-            select
-                .after(warning)
-                .on('change', function () {
-                    if (select.find('option:selected').val() === value) {
+                /**
+                 * Toggle hint about changes types
+                 */
+                toggleWarning = function () {
+                    if (select.find('option:selected').val() === currentValue) {
                         warning.hide();
                     } else {
                         warning.show();
                     }
-                });
+                },
+
+                /**
+                 * Remove unsupported options
+                 */
+                removeOption = function () {
+                    if (!~enabledTypes.indexOf($(this).val())) {
+                        $(this).remove();
+                    }
+                };
+
+            // Check current type (allow only: select, swatch_visual, swatch_text)
+            if (!~enabledTypes.indexOf(currentValue)) {
+                return;
+            }
+
+            // Enable select and keep only available options (all other will be removed)
+            select.removeAttr('disabled').find('option').each(removeOption);
+
+            // Add warning on page and event for show/hide it
+            select.after(warning).on('change', toggleWarning);
         });
     });
 });

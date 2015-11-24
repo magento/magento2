@@ -33,8 +33,14 @@ define([
                 usedInProductListing: $('#used_in_product_listing'),
                 isVisibleOnFront: $('#is_visible_on_front'),
                 position: $('#position'),
-                tabsFront: $('#product_attribute_tabs_front').length ?
-                    $('#product_attribute_tabs_front').closest('li') : $('#front_fieldset-wrapper'),
+                attrTabsFront: $('#product_attribute_tabs_front'),
+
+                /**
+                 * @returns {*|jQuery|HTMLElement}
+                 */
+                get tabsFront() {
+                    return this.attrTabsFront.length ? this.attrTabsFront.closest('li') : $('#front_fieldset-wrapper');
+                },
                 selectFields: ['select', 'multiselect', 'price', 'swatch_text', 'swatch_visual'],
 
                 /**
@@ -88,14 +94,16 @@ define([
                     this.checkOptionsPanelVisibility();
                     this.switchDefaultValueField();
 
-                    if ($.inArray(this.frontendInput.val(), this.selectFields) >= 0) {
-                        this._enable(this.isFilterable);
-                        this._enable(this.isFilterableInSearch);
-                        this.backendType.val('int');
-                    } else {
+                    if (!~$.inArray(this.frontendInput.val(), this.selectFields)) {
+                        // not in array
                         this.isFilterable.selectedIndex = 0;
                         this._disable(this.isFilterable);
                         this._disable(this.isFilterableInSearch);
+                    } else {
+                        // in array
+                        this._enable(this.isFilterable);
+                        this._enable(this.isFilterableInSearch);
+                        this.backendType.val('int');
                     }
 
                     if (this.frontendInput.is(':visible') &&

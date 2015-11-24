@@ -94,11 +94,7 @@
     <script type="text/x-magento-init">
         {
             "*": {
-                "Magento_Swatches/js/text": {
-                    "attributesData": <?php /* @escapeNotVerified */ echo json_encode($values); ?>,
-                    "isSortable":  <?php echo (int)(!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) ?>,
-                    "isReadOnly": <?php echo (int)$block->getReadOnly(); ?>
-                }
+                "Magento_Swatches/js/text": <?php /* @escapeNotVerified */ echo $block->getJsonConfig(); ?>
             }
         }
     </script>
