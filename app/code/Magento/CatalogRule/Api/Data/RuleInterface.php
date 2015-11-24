@@ -34,6 +34,8 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
 
     const SUB_DISCOUNT_AMOUNT = 'sub_discount_amount';
 
+    const DISCOUNT_AMOUNT = 'discount_amount';
+
     /**#@-*/
 
     /**

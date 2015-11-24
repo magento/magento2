@@ -735,7 +735,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
      */
     public function getDiscountAmount()
     {
-        return $this->getData(self::SUB_DISCOUNT_AMOUNT);
+        return $this->getData(self::DISCOUNT_AMOUNT);
     }
 
     /**
@@ -743,7 +743,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
      */
     public function setDiscountAmount($amount)
     {
-        return $this->setData(self::SUB_DISCOUNT_AMOUNT, $amount);
+        return $this->setData(self::DISCOUNT_AMOUNT, $amount);
     }
 
     /**
