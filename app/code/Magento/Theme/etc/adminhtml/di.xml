@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Theme\Model\Design\Config\MetadataProviderInterface" type="Magento\Theme\Model\Design\Config\MetadataProvider"/>
     <type name="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content">
         <arguments>
             <argument name="storageHelper" xsi:type="object">Magento\Theme\Helper\Storage\Proxy</argument>
@@ -29,6 +30,66 @@
             <argument name="configurationsMap" xsi:type="array">
                 <item name="default_message_identifier" xsi:type="array">
                     <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\EscapeRenderer::CODE</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="head_shortcut_icon" xsi:type="array">
+                    <item name="path" xsi:type="string">design/head/shortcut_icon</item>
+                    <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Image\Favicon</item>
+                    <item name="base_url" xsi:type="array">
+                        <item name="type" xsi:type="string">media</item>
+                        <item name="scope_info" xsi:type="string">1</item>
+                        <item name="value" xsi:type="string">favicon</item>
+                    </item>
+                </item>
+                <item name="head_default_title" xsi:type="array">
+                    <item name="path" xsi:type="string">design/head/default_title</item>
+                </item>
+                <item name="head_title_prefix" xsi:type="array">
+                    <item name="path" xsi:type="string">design/head/title_prefix</item>
+                </item>
+                <item name="head_title_suffix" xsi:type="array">
+                    <item name="path" xsi:type="string">design/head/title_suffix</item>
+                </item>
+                <item name="head_default_description" xsi:type="array">
+                    <item name="path" xsi:type="string">design/head/default_description</item>
+                </item>
+                <item name="head_default_keywords" xsi:type="array">
+                    <item name="path" xsi:type="string">design/head/default_keywords</item>
+                </item>
+                <item name="head_demonotice" xsi:type="array">
+                    <item name="path" xsi:type="string">design/head/demonotice</item>
+                </item>
+                <item name="header_logo_src" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/logo_src</item>
+                    <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Image\Logo</item>
+                    <item name="base_url" xsi:type="array">
+                        <item name="type" xsi:type="string">media</item>
+                        <item name="scope_info" xsi:type="string">1</item>
+                        <item name="value" xsi:type="string">logo</item>
+                    </item>
+                </item>
+                <item name="header_logo_width" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/logo_width</item>
+                </item>
+                <item name="header_logo_height" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/logo_height</item>
+                </item>
+                <item name="header_logo_alt" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/logo_alt</item>
+                </item>
+                <item name="header_welcome" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/welcome</item>
+                </item>
+                <item name="footer_copyright" xsi:type="array">
+                    <item name="path" xsi:type="string">design/footer/copyright</item>
+                </item>
+                <item name="footer_absolute_footer" xsi:type="array">
+                    <item name="path" xsi:type="string">design/footer/absolute_footer</item>
                 </item>
             </argument>
         </arguments>
