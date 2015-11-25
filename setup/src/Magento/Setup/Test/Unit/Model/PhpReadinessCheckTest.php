@@ -193,7 +193,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             50
         );
 
-        $this->setUpNoPrettyVersionParser();
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
  	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
@@ -212,6 +211,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         if (!$this->isPhp7OrHackLang()) {
+            $this->setUpNoPrettyVersionParser();
             $expected['data']['always_populate_raw_post_data'] = [
                 'message' => $rawPostMessage,
                 'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
@@ -233,7 +233,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             200
         );
 
-        $this->setUpNoPrettyVersionParser();
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
  	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
@@ -252,6 +251,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         if (!$this->isPhp7OrHackLang()) {
+            $this->setUpNoPrettyVersionParser();
             $expected['data']['always_populate_raw_post_data'] = [
                 'message' => $rawPostMessage,
                 'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
@@ -265,7 +265,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->phpInfo->expects($this->once())->method('getCurrent')->willReturn([]);
 
-        $this->setUpNoPrettyVersionParser();
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
  	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
@@ -279,6 +278,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             'data' => []
         ];
         if (!$this->isPhp7OrHackLang()) {
+            $this->setUpNoPrettyVersionParser();
             $expected['data'] = [
                 'always_populate_raw_post_data' => [
                     'message' => $rawPostMessage,
