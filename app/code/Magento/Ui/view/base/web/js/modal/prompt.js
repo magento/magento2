@@ -17,40 +17,40 @@ define([
             modalClass: 'prompt',
             promptField: '[data-role="promptField"]',
             actions: {
-                always: function(){},
-                confirm: function(){},
-                cancel: function(){}
+                always: function () {},
+                confirm: function () {},
+                cancel: function () {}
             },
             buttons: [{
                 text: $.mage.__('Cancel'),
                 class: 'action-tertiary',
-                click: function(){
+                click: function () {
                     this.closeModal();
                 }
             }, {
                 text: $.mage.__('OK'),
                 class: 'action-secondary',
-                click: function() {
+                click: function () {
                     this.closeModal(true);
                 }
             }]
         },
-        _create: function() {
+        _create: function () {
             this._super();
             this.modal.find(this.options.modalContent).append('<input value="" data-role="promptField" type="text"/>');
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
             this.openModal();
         },
-        _remove: function() {
+        _remove: function () {
             this.modal.remove();
         },
-        closeModal: function(result) {
+        closeModal: function (result) {
             var value;
 
             result = result || false;
 
             if (result) {
-                value =  this.modal.find(this.options.promptField).val();
+                value = this.modal.find(this.options.promptField).val();
                 this.options.actions.confirm(value);
             } else {
                 this.options.actions.cancel();
