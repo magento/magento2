@@ -82,7 +82,7 @@ define([
                          */
                         onShow: function () {
                             var color = jQuery(element).parent().parent().prev().prev('input').val(),
-                                menu = jQuery(this).parents('.swatch_submenu_container');
+                                menu = jQuery(this).parents('.swatch_sub-menu_container');
 
                             menu.hide();
                             jQuery(element).ColorPickerSetColor(color);
@@ -246,12 +246,12 @@ define([
             var element = jQuery(event.target);
 
             if (
-                element.parents('.swatch_submenu_container').length === 1 ||
-                element.next('div.swatch_submenu_container').length === 1
+                element.parents('.swatch_sub-menu_container').length === 1 ||
+                element.next('div.swatch_sub-menu_container').length === 1
             ) {
                 return true;
             }
-            jQuery('.swatch_submenu_container').hide();
+            jQuery('.swatch_sub-menu_container').hide();
         });
 
         if (config.isSortable) {
@@ -396,6 +396,13 @@ define([
 
                 optionPanel.hide();
                 optionPanel.addClass('unavailable');
+            });
+
+            /**
+             * Toggle color upload chooser
+             */
+            $(document).on('click', '.swatch_window', function () {
+                $(this).next('div').toggle();
             });
         });
     };
