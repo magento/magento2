@@ -42,16 +42,12 @@ class Collection extends \Magento\Framework\Data\Collection
      * Get if updated
      *
      * @param string $reportCode
-     * @return string|\DateTime
+     * @return string
      */
     protected function _getUpdatedAt($reportCode)
     {
         $flag = $this->_reportsFlagFactory->create()->setReportFlagCode($reportCode)->loadSelf();
-        return $flag->hasData() ? $this->_localeDate->scopeDate(
-            0,
-            $flag->getLastUpdate(),
-            true
-        ) : '';
+        return $flag->hasData() ? $flag->getLastUpdate() : '';
     }
 
     /**

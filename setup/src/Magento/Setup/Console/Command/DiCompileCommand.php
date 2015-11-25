@@ -28,6 +28,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DiCompileCommand extends Command
 {
+    /** Command name */
+    const NAME = 'setup:di:compile';
+
     /** @var DeploymentConfig */
     private $deploymentConfig;
 
@@ -89,7 +92,7 @@ class DiCompileCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('setup:di:compile')
+        $this->setName(self::NAME)
             ->setDescription(
                 'Generates DI configuration and all non-existing interceptors and factories'
             );
@@ -172,7 +175,6 @@ class DiCompileCommand extends Command
             $this->cleanupFilesystem(
                 [
                     DirectoryList::CACHE,
-                    DirectoryList::GENERATION,
                     DirectoryList::DI,
                 ]
             );
@@ -291,19 +293,34 @@ class DiCompileCommand extends Command
         array $compiledPathsList,
         array $dataAttributesIncludePattern
     ) {
+        $excludePatterns = [];
+        foreach ($this->excludedPathsList as $excludedPaths) {
+            $excludePatterns = array_merge($excludedPaths, $excludePatterns);
+        }
+
         $operations = [
+            OperationFactory::PROXY_GENERATOR => [
+                'paths' => $compiledPathsList['application'],
+                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'],
+                'excludePatterns' => $excludePatterns,
+            ],
             OperationFactory::REPOSITORY_GENERATOR => [
                 'paths' => $compiledPathsList['application'],
-                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
+                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'],
+                'excludePatterns' => $excludePatterns,
             ],
             OperationFactory::DATA_ATTRIBUTES_GENERATOR => [
                 'paths' => $compiledPathsList['application'],
                 'filePatterns' => $dataAttributesIncludePattern
             ],
             OperationFactory::APPLICATION_CODE_GENERATOR => [
-                $compiledPathsList['application'],
-                $compiledPathsList['library'],
-                $compiledPathsList['generated_helpers'],
+                'paths' => [
+                    $compiledPathsList['application'],
+                    $compiledPathsList['library'],
+                    $compiledPathsList['generated_helpers'],
+                ],
+                'filePatterns' => ['php' => '/\.php$/'],
+                'excludePatterns' => $excludePatterns,
             ],
             OperationFactory::INTERCEPTION => [
                 'intercepted_paths' => [

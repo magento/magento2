@@ -30,22 +30,6 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Initialization the quote
-     *
-     * @param Quote $quote
-     * @return void
-     */
-    protected function quoteInitialization(Quote $quote)
-    {
-        $quote->setCheckoutMethod(Onepage::METHOD_REGISTER);
-        $quote->setCustomerEmail('user@example.com');
-        $quote->setCustomerFirstname('Firstname');
-        $quote->setCustomerLastname('Lastname');
-        $quote->setCustomerIsGuest(false);
-        $quote->setReservedOrderId(null);
-    }
-
-    /**
      * Verify that an order placed with an existing customer can re-use the customer addresses.
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payment_express_with_customer.php
@@ -86,28 +70,6 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Verify that an order placed with a new customer will create the customer.
-     *
-     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
-     */
-    public function testPrepareNewCustomerQuote()
-    {
-        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerService */
-        $customerService = $this->_objectManager->get('Magento\Customer\Api\CustomerRepositoryInterface');
-
-        /** @var Quote $quote */
-        $quote = $this->_getFixtureQuote();
-        $this->quoteInitialization($quote);
-        $checkout = $this->_getCheckout($quote);
-        $checkout->place('token');
-        $customer = $customerService->getById($quote->getCustomerId());
-        $this->assertEquals('user@example.com', $customer->getEmail());
-        $this->assertEquals('11111111', $customer->getAddresses()[0]->getTelephone());
-    }
-
-    /**
      * Verify that after placing the order, addresses are associated with the order and the quote is a guest quote.
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
@@ -139,6 +101,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($order->getBillingAddress());
         $this->assertNotEmpty($order->getShippingAddress());
     }
+
 
     /**
      * @param Quote $quote

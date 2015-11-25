@@ -77,6 +77,7 @@ class SalesOrderAfterPlaceObserver implements ObserverInterface
             $rule = $this->_ruleFactory->create();
             $rule->load($ruleId);
             if ($rule->getId()) {
+                $rule->loadCouponCode();
                 $rule->setTimesUsed($rule->getTimesUsed() + 1);
                 $rule->save();
 

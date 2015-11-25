@@ -81,7 +81,7 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         } else {
             if (strlen($value) > 0) {
                 if (in_array($attribute->getBackendType(), ['varchar', 'text', 'static'])) {
-                    $condition = ['like' => '%' . $value . '%']; // text search
+                    $condition = ['like' => $value]; // text search
                 } else {
                     $condition = $value;
                 }

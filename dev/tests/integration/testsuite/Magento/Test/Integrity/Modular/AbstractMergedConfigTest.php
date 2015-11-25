@@ -39,15 +39,28 @@ abstract class AbstractMergedConfigTest extends \PHPUnit_Framework_TestCase
         $invalidFiles = [];
 
         $files = $this->getConfigFiles();
+        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(false);
         $mergedConfig = new \Magento\Framework\Config\Dom(
             '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></config>',
+            $validationStateMock,
             $this->getIdAttributes()
         );
 
         foreach ($files as $file) {
             $content = file_get_contents($file[0]);
             try {
-                new \Magento\Framework\Config\Dom($content, $this->getIdAttributes());
+                $validationStateMock = $this->getMock(
+                    '\Magento\Framework\Config\ValidationStateInterface',
+                    [],
+                    [],
+                    '',
+                    false
+                );
+                $validationStateMock->method('isValidationRequired')
+                    ->willReturn(true);
+                new \Magento\Framework\Config\Dom($content, $validationStateMock, $this->getIdAttributes());
                 //merge won't be performed if file is invalid because of exception thrown
                 $mergedConfig->merge($content);
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {

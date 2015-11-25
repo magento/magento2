@@ -118,9 +118,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     {
         $price = 0.0;
         if ($product->hasCustomOptions()) {
-            $customOption = $product->getCustomOption('bundle_selection_ids');
-            if ($customOption) {
-                $selectionIds = unserialize($customOption->getValue());
+            $selectionIds = $this->getBundleSelectionIds($product);
+            if ($selectionIds) {
                 $selections = $product->getTypeInstance()->getSelectionsByIds($selectionIds, $product);
                 $selections->addTierPriceData();
                 $this->_eventManager->dispatch(
@@ -143,6 +142,24 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             }
         }
         return $price;
+    }
+
+    /**
+     * Retrieve array of bundle selection IDs
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return array
+     */
+    protected function getBundleSelectionIds(\Magento\Catalog\Model\Product $product)
+    {
+        $customOption = $product->getCustomOption('bundle_selection_ids');
+        if ($customOption) {
+            $selectionIds = unserialize($customOption->getValue());
+            if (!empty($selectionIds) && is_array($selectionIds)) {
+                return $selectionIds;
+            }
+        }
+        return [];
     }
 
     /**

@@ -9,6 +9,7 @@
 namespace Magento\Paypal\Block\Express;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
  * Paypal Express Onepage checkout block
@@ -35,7 +36,7 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Currently selected shipping rate
      *
-     * @var \Magento\Quote\Model\Quote\Address\Rate
+     * @var Rate
      */
     protected $_currentShippingRate = null;
 
@@ -183,11 +184,21 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Getter for current shipping rate
      *
-     * @return \Magento\Quote\Model\Quote\Address\Rate
+     * @return Rate
      */
     public function getCurrentShippingRate()
     {
         return $this->_currentShippingRate;
+    }
+
+    /**
+     * Whether can edit shipping method
+     *
+     * @return bool
+     */
+    public function canEditShippingMethod()
+    {
+        return $this->getData('can_edit_shipping_method') || !$this->getCurrentShippingRate();
     }
 
     /**

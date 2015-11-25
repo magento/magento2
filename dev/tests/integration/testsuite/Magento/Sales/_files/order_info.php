@@ -64,7 +64,7 @@ $quote->collectTotals();
 $quote->save();
 
 $quote->setCustomerEmail('admin@example.com');
-$quoteManagement = $objectManager->create('Magento\Quote\Model\QuoteManagement');
+$quoteManagement = $objectManager->create('\Magento\Quote\Api\CartManagementInterface');
 
 $order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 

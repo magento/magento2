@@ -54,6 +54,7 @@ class ManagestockTest extends \PHPUnit_Framework_TestCase
             Bootstrap::getObjectManager()->get('Magento\Framework\Model\Context'),
             Bootstrap::getObjectManager()->get('Magento\Framework\Registry'),
             Bootstrap::getObjectManager()->get('Magento\Framework\App\Config\ScopeConfigInterface'),
+            Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\TypeListInterface'),
             $stockManagement,
             Bootstrap::getObjectManager()->get('Magento\CatalogInventory\Model\Indexer\Stock\Processor'),
             Bootstrap::getObjectManager()->get('Magento\Config\Model\ResourceModel\Config')

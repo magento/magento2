@@ -49,6 +49,40 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
         'coupon_code'
     ];
 
+    /**
+     * Attributes that has a setter while creating sales rule using web api.
+     *
+     * @var array
+     */
+    protected $basicAttributes = [
+        "rule_id",
+        "name",
+        "store_labels",
+        "description",
+        "website_ids",
+        "customer_group_ids",
+        "from_date",
+        "to_date",
+        "uses_per_customer",
+        "is_active",
+        "condition",
+        "action_condition",
+        "stop_rules_processing",
+        "is_advanced",
+        "product_ids",
+        "sort_order",
+        "simple_action",
+        "discount_amount",
+        "discount_qty",
+        "discount_step",
+        "apply_to_shipping",
+        "times_used",
+        "is_rss",
+        "coupon_type",
+        "use_auto_generation",
+        "uses_per_coupon",
+        "simple_free_shipping",
+    ];
 
     /**
      * @constructor
@@ -108,8 +142,9 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
         $this->prepareConditions();
         $this->prepareActions();
         $this->prepareLabels();
-
         unset($this->data['rule']);
+        $this->prepareExtensionAttributes();
+
         return ['rule' => $this->data];
     }
 
@@ -243,6 +278,21 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Prepare extension attributes for the sales rule.
+     *
+     * @return void
+     */
+    protected function prepareExtensionAttributes()
+    {
+        foreach ($this->data as $fieldName => $fieldValue) {
+            if (!in_array($fieldName, $this->basicAttributes)) {
+                $this->data['extension_attributes'][$fieldName] = $fieldValue;
+                unset($this->data[$fieldName]);
+            }
+        }
     }
 
     /**

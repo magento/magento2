@@ -9,6 +9,9 @@
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
         <plugin name="Bundle" type="Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle" sortOrder="60" />
     </type>
+    <type name="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar">
+        <plugin name="Bundle" type="Magento\Bundle\Block\Adminhtml\Order\Create\Sidebar" sortOrder="200"/>
+    </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <arguments>
             <argument name="constructors" xsi:type="array">

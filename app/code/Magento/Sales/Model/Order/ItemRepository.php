@@ -99,8 +99,7 @@ class ItemRepository implements OrderItemRepositoryInterface
         }
         if (!isset($this->registry[$id])) {
             /** @var OrderItemInterface $orderItem */
-            $orderItem = $this->metadata->getNewInstance();
-            $this->metadata->getMapper()->load($orderItem, $id);
+            $orderItem = $this->metadata->getNewInstance()->load($id);
             if (!$orderItem->getItemId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
@@ -114,16 +113,16 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * Find entities by criteria
      *
-     * @param SearchCriteria  $criteria
+     * @param SearchCriteria $searchCriteria
      * @return OrderItemInterface[]
      */
-    public function getList(SearchCriteria $criteria)
+    public function getList(SearchCriteria $searchCriteria)
     {
         /** @var OrderItemSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
-        $searchResult->setSearchCriteria($criteria);
+        $searchResult->setSearchCriteria($searchCriteria);
 
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);

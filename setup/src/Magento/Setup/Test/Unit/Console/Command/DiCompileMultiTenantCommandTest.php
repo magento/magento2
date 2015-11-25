@@ -6,11 +6,22 @@
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\DiCompileMultiTenantCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class DiCompileMultiTenantCommandTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Setup\Console\Command\DiCompileMultiTenantCommand */
+    private $model;
+
+    public function setUp()
+    {
+        $this->model = (new ObjectManager($this))->getObject(
+            '\Magento\Setup\Console\Command\DiCompileMultiTenantCommand'
+        );
+    }
+
     /**
      * @dataProvider validateDataProvider
      * @param array $option
@@ -82,5 +93,15 @@ class DiCompileMultiTenantCommandTest extends \PHPUnit_Framework_TestCase
                 . DiCompileMultiTenantCommand::INPUT_KEY_EXCLUDE_PATTERN . '\'.'
             ],
         ];
+    }
+
+    public function testConfigure()
+    {
+        $methodUnderTest = new \ReflectionMethod($this->model, 'configure');
+        $methodUnderTest->setAccessible(true);
+        $methodUnderTest->invoke($this->model);
+        $this->assertSame(DiCompileMultiTenantCommand::NAME, $this->model->getName());
+        $this->assertNotEmpty($this->model->getDescription());
+        $this->assertCount(6, $this->model->getDefinition()->getOptions());
     }
 }

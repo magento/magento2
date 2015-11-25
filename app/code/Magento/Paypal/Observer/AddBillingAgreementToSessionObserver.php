@@ -53,6 +53,7 @@ class AddBillingAgreementToSessionObserver implements ObserverInterface
             if ($agreement->isValid()) {
                 $message = __('Created billing agreement #%1.', $agreement->getReferenceId());
                 $order->addRelatedObject($agreement);
+                $agreement->addOrderRelation($order);
                 $this->checkoutSession->setLastBillingAgreementReferenceId($agreement->getReferenceId());
                 $agreementCreated = true;
             } else {

@@ -116,8 +116,18 @@ $elementName = $block->getElement()->getName() . '[images]';
                 <button type="button"
                         class="action-delete"
                         data-role="delete-button"
-                        title="<?php /* @escapeNotVerified */ echo __('Delete image') ?>">
-                    <span> <?php /* @escapeNotVerified */ echo __('Delete image') ?></span >
+                        title="<% if (data.media_type == 'external-video') {%>
+                            <?php /* @escapeNotVerified */ echo __('Delete video') ?>
+                        <%} else {%>
+                            <?php /* @escapeNotVerified */ echo __('Delete image') ?>
+                        <%}%>">
+                    <span>
+                        <% if (data.media_type == 'external-video') { %>
+                            <?php /* @escapeNotVerified */ echo __('Delete video') ?>
+                        <% } else {%>
+                            <?php /* @escapeNotVerified */ echo __('Delete image') ?>
+                        <%} %>
+                    </span >
                 </button>
                 <button type="button"
                         class="action-make-base"

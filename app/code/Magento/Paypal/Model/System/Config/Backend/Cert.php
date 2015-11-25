@@ -10,6 +10,8 @@ use Magento\Framework\Filesystem\DirectoryList;
 
 /**
  * Backend model for saving certificate file in case of using certificate based authentication
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class Cert extends \Magento\Framework\App\Config\Value
 {
@@ -32,6 +34,7 @@ class Cert extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Paypal\Model\CertFactory $certFactory
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Filesystem $filesystem
@@ -43,6 +46,7 @@ class Cert extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Paypal\Model\CertFactory $certFactory,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Filesystem $filesystem,
@@ -53,7 +57,7 @@ class Cert extends \Magento\Framework\App\Config\Value
         $this->_certFactory = $certFactory;
         $this->_encryptor = $encryptor;
         $this->_tmpDirectory = $filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**

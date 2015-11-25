@@ -12,14 +12,14 @@ use Magento\Framework\DataObject;
  * Class ShipmentLoader
  *
  * @package Magento\Shipping\Controller\Adminhtml\Order
- * @method ShipmentLoader setOrderId
- * @method ShipmentLoader setShipmentId
- * @method ShipmentLoader setShipment
- * @method ShipmentLoader setTracking
- * @method int getOrderId
- * @method int getShipmentId
- * @method array getShipment
- * @method array getTracking
+ * @method ShipmentLoader setOrderId($id)
+ * @method ShipmentLoader setShipmentId($id)
+ * @method ShipmentLoader setShipment($shipment)
+ * @method ShipmentLoader setTracking($tracking)
+ * @method int getOrderId()
+ * @method int getShipmentId()
+ * @method array getShipment()
+ * @method array getTracking()
  */
 class ShipmentLoader extends DataObject
 {
@@ -34,7 +34,7 @@ class ShipmentLoader extends DataObject
     protected $registry;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentRepository
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
      */
     protected $shipmentRepository;
 
@@ -56,7 +56,7 @@ class ShipmentLoader extends DataObject
     /**
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
+     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
@@ -65,7 +65,7 @@ class ShipmentLoader extends DataObject
     public function __construct(
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Registry $registry,
-        \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
+        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,

@@ -3949,8 +3949,8 @@ return [
     ['Magento\Catalog\Ui\Component\Listing\Filters'],
     ['Magento\Customer\Ui\Component\Listing\Filters'],
     ['Magento\Catalog\Block\Product\TemplateSelector'],
-    ['Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\SuggestProductTemplates'],
-    ['Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\SuggestProductTemplates'],
+    ['Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\SuggestAttributeSets'],
+    ['Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\SuggestAttributeSets'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute'],
     ['Magento\Wishlist\Model\Observer'],
     ['Magento\Swatches\Model\Observer', 'Magento\Swatches\Observer\*'],
@@ -4102,4 +4102,12 @@ return [
     ['Magento\GoogleOptimizer\Model\Observer\Block\Category\Tab', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\Payment\Model\Observer', 'Magento\Payment\Observer\*'],
     ['Magento\Tax\Observer\AggregateSalesReportTaxData', 'Magento\Tax\Model\AggregateSalesReportTaxData'],
+    ['Magento\Developer\Console\Command\CssDeployCommand'],
+    ['Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChain'],
+    ['Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChainFactory'],
+    [
+        'Magento\Quote\Api\GuestShippingAddressManagementInterface',
+        'Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface'
+    ],
+    ['Magento\Quote\Api\ShippingAddressManagementInterface', 'Magento\Quote\Model\ShippingAddressManagementInterface'],
 ];

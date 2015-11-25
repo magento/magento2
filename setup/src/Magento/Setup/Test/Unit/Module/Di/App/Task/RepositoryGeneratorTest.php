@@ -16,7 +16,7 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
      * @var Scanner\DirectoryScanner | \PHPUnit_Framework_MockObject_MockObject
      */
     private $directoryScannerMock;
-    
+
     /**
      * @var Scanner\RepositoryScanner | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -75,6 +75,7 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
         $data = [
             'paths' => ['path/to/app'],
             'filePatterns' => ['di' => 'di.xml'],
+            'excludePatterns' => ['/\/Test\//'],
         ];
         $files = ['di' => []];
         $model = new RepositoryGenerator(

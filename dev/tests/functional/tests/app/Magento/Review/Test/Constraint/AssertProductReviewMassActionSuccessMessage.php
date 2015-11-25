@@ -34,7 +34,7 @@ class AssertProductReviewMassActionSuccessMessage extends AbstractConstraint
         $successMessage = sprintf(self::SUCCESS_MESSAGE, count($reviews));
         \PHPUnit_Framework_Assert::assertEquals(
             $successMessage,
-            $reviewIndex->getMessagesBlock()->getSuccessMessages(),
+            $reviewIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success message is displayed.'
         );
     }

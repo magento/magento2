@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Braintree\Block\Form $block */
-$code = $block->getMethodCode();
+$code = $block->escapeHtml($block->getMethodCode());
 $loggedIn = $block->isCustomerLoggedIn();
 $storedCards = $block->getStoredCards();
 $useVault = $loggedIn && $block->useVault() && count($storedCards);

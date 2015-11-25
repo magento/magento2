@@ -76,7 +76,7 @@ class OrderItemRepositoryTest extends WebapiAbstract
             ]
         );
 
-        $requestData = ['criteria' => $searchCriteriaBuilder->create()->__toArray()];
+        $requestData = ['searchCriteria' => $searchCriteriaBuilder->create()->__toArray()];
 
         $serviceInfo = [
             'rest' => [

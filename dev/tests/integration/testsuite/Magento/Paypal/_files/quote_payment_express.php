@@ -92,7 +92,7 @@ $quote->collectTotals()->save();
 
 $quote->setCustomerEmail('admin@example.com');
 
-/** @var $service \Magento\Quote\Model\QuoteManagement */
+/** @var $service \Magento\Quote\Api\CartManagementInterface */
 $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\QuoteManagement');
+    ->create('\Magento\Quote\Api\CartManagementInterface');
 $order = $service->submit($quote, ['increment_id' => '100000002']);

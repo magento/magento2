@@ -7,6 +7,7 @@ namespace Magento\ConfigurableImportExport\Model\Export;
 
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ImportExport\Model\Import;
 
 class RowCustomizer implements RowCustomizerInterface
 {
@@ -52,11 +53,11 @@ class RowCustomizer implements RowCustomizerInterface
 
                 foreach ($variations as $sku => $values) {
                     $variations[$sku] =
-                        'sku=' . $sku . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-                        . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
+                        'sku=' . $sku . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        . implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
                 }
                 $variations = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variations);
-                $variationsLabels = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $variationsLabels);
+                $variationsLabels = implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $variationsLabels);
 
                 $this->configurableData[$product->getId()] = [
                     'configurable_variations' => $variations,

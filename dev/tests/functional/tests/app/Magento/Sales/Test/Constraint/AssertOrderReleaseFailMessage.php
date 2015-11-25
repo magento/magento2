@@ -30,7 +30,7 @@ class AssertOrderReleaseFailMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::FAIL_RELEASE_MESSAGE,
-            $orderIndex->getMessagesBlock()->getErrorMessages()
+            $orderIndex->getMessagesBlock()->getErrorMessage()
         );
     }
 

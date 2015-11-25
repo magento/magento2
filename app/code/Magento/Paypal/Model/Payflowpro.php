@@ -500,8 +500,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $this->processErrors($response);
 
         if ($response->getResultCode() == self::RESPONSE_CODE_APPROVED) {
-            $payment->setTransactionId($response->getPnref())->setIsTransactionClosed(1);
-            $payment->setShouldCloseParentTransaction(!$payment->getCreditmemo()->getInvoice()->canRefund());
+            $payment->setTransactionId($response->getPnref())->setIsTransactionClosed(true);
         }
         return $this;
     }

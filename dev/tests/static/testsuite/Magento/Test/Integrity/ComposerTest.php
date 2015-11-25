@@ -141,7 +141,6 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('license', $json);
         $this->assertObjectHasAttribute('type', $json);
         $this->assertObjectHasAttribute('version', $json);
-        $this->assertVersionInSync($json->name, $json->version);
         $this->assertObjectHasAttribute('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
@@ -154,6 +153,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 $xml = simplexml_load_file("$dir/etc/module.xml");
                 $this->assertConsistentModuleName($xml, $json->name);
                 $this->assertDependsOnPhp($json->require);
+                $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);
@@ -166,12 +166,14 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
             case 'magento2-theme':
                 $this->assertRegExp('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
                 $this->assertDependsOnPhp($json->require);
+                $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 break;
             case 'magento2-library':
                 $this->assertDependsOnPhp($json->require);
                 $this->assertRegExp('/^magento\/framework*/', $json->name);
+                $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);
                 break;
@@ -262,19 +264,21 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that versions in root composer.json and Magento component's composer.json are not out of sync
+     * Assert that PHP versions in root composer.json and Magento component's composer.json are not out of sync
      *
      * @param string $name
-     * @param string $version
+     * @param string $phpVersion
      */
-    private function assertVersionInSync($name, $version)
+    private function assertPhpVersionInSync($name, $phpVersion)
     {
-        $this->assertEquals(
-            self::$rootJson['version'],
-            $version,
-            "Version {$version} in component {$name} is inconsistent with version "
-            . self::$rootJson['version'] . ' in root composer.json'
-        );
+        if (isset(self::$rootJson['require']['php'])) {
+            $this->assertEquals(
+                self::$rootJson['require']['php'],
+                $phpVersion,
+                "PHP version {$phpVersion} in component {$name} is inconsistent with version "
+                . self::$rootJson['require']['php'] . ' in root composer.json'
+            );
+        }
     }
 
     /**

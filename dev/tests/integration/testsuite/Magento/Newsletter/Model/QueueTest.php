@@ -74,12 +74,14 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
         $builder = $this->getMock(
             '\Magento\Newsletter\Model\Queue\TransportBuilder',
-            ['getTransport', 'setFrom', 'addTo'],
+            ['getTransport', 'setFrom', 'addTo', 'setTemplateOptions', 'setTemplateVars'],
             [],
             '',
             false
         );
         $builder->expects($this->any())->method('getTransport')->will($this->returnValue($transport));
+        $builder->expects($this->any())->method('setTemplateOptions')->will($this->returnSelf());
+        $builder->expects($this->any())->method('setTemplateVars')->will($this->returnSelf());
         $builder->expects($this->any())->method('setFrom')->will($this->returnSelf());
         $builder->expects($this->any())->method('addTo')->will($this->returnSelf());
 

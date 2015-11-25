@@ -34,11 +34,17 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $translitFilter = $this->getMockBuilder(\Magento\Framework\Filter\Translit::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translitFilter->expects($this->atLeastOnce())->method('filter')->willReturnArgument(0);
+
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
         $contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManagerMock);
         $constructorArguments = [
             'resource' => $this->resourceMock,
+            'translitFilter' => $translitFilter,
             'context' => $contextMock,
         ];
         $objectManager = new ObjectManager($this);

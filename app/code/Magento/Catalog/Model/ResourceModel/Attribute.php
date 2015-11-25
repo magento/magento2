@@ -86,7 +86,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 
         if ($object->isScopeGlobal() && isset(
             $origData['is_global']
-        ) && \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL != $origData['is_global']
+        ) && \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL != $origData['is_global']
         ) {
             $attributeStoreIds = array_keys($this->_storeManager->getStores());
             if (!empty($attributeStoreIds)) {

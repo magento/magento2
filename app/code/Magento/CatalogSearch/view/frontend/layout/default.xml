@@ -13,7 +13,7 @@
         <referenceBlock name="footer_links">
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="catalog-search-advanced-link">
                 <arguments>
-                    <argument name="label" xsi:type="string">Advanced Search</argument>
+                    <argument name="label" xsi:type="string" translate="true">Advanced Search</argument>
                     <argument name="path" xsi:type="string">catalogsearch/advanced</argument>
                     <argument name="attributes" xsi:type="array">
                         <item name="data-action" xsi:type="string">advanced-search</item>

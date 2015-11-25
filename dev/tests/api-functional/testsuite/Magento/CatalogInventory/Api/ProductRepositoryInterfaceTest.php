@@ -21,7 +21,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const KEY_QTY = StockStatusInterface::QTY;
     const KEY_ITEM_ID = 'item_id';
     const KEY_PRODUCT_ID = StockStatusInterface::PRODUCT_ID;
-    const KEY_WEBSITE_ID = StockStatusInterface::WEBSITE_ID;
     const KEY_CUSTOM_ATTRIBUTES = 'custom_attributes';
     const KEY_ATTRIBUTE_CODE = \Magento\Eav\Api\Data\AttributeInterface::ATTRIBUTE_CODE;
     const CODE_QUANTITY_AND_STOCK_STATUS = 'quantity_and_stock_status';
@@ -38,7 +37,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productData = $this->getSimpleProductData($qty);
         $stockItemData = $this->getStockItemData($qty);
         $this->assertArrayNotHasKey(self::KEY_ITEM_ID, $stockItemData);
-        $this->assertArrayNotHasKey(self::KEY_WEBSITE_ID, $stockItemData);
         $this->assertArrayNotHasKey(self::KEY_PRODUCT_ID, $stockItemData);
         $productData[self::KEY_EXTENSION_ATTRIBUTES] = $stockItemData;
 
@@ -51,7 +49,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($qty, $returnedQty, 'CREATE: Expected qty to be same: ' . $qty .', '. $returnedQty);
         $this->assertArrayHasKey(self::KEY_ITEM_ID, $stockItemData);
         $this->assertArrayHasKey(self::KEY_PRODUCT_ID, $stockItemData);
-        $this->assertArrayHasKey(self::KEY_WEBSITE_ID, $stockItemData);
 
         // officially get the product
         $response = $this->getProduct($productData[ProductInterface::SKU]);
@@ -69,14 +66,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
         $returnedQty = $stockItemData[self::KEY_QTY];
         $this->assertEquals($qty, $returnedQty, 'UPDATE 1: Expected qty to be same: ' . $qty .', '. $returnedQty);
-
-        $customAttributeQty = $this->findCustomAttributeQty($response[self::KEY_CUSTOM_ATTRIBUTES]);
-        $this->assertTrue(!is_bool($customAttributeQty), 'Expected to find a quantity in the custom attributes');
-        $this->assertEquals(
-            $qty,
-            $customAttributeQty,
-            'UPDATE 1: Expected custom attribute qty to be updated: ' . $qty .', '. $customAttributeQty
-        );
 
         // update the product without any mention of catalog inventory; no change expected for catalog inventory
         // note: $qty expected to be the same as previously set, above
@@ -108,7 +97,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productData = $this->getSimpleProductData($qty);
         $stockItemData = $this->getStockItemData($qty);
         $this->assertArrayNotHasKey(self::KEY_ITEM_ID, $stockItemData);
-        $this->assertArrayNotHasKey(self::KEY_WEBSITE_ID, $stockItemData);
         $this->assertArrayNotHasKey(self::KEY_PRODUCT_ID, $stockItemData);
         $productData[self::KEY_EXTENSION_ATTRIBUTES] = $stockItemData;
 
@@ -121,7 +109,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($qty, $returnedQty, 'POST 1: Expected qty to be same: ' . $qty .', '. $returnedQty);
         $this->assertArrayHasKey(self::KEY_ITEM_ID, $stockItemData);
         $this->assertArrayHasKey(self::KEY_PRODUCT_ID, $stockItemData);
-        $this->assertArrayHasKey(self::KEY_WEBSITE_ID, $stockItemData);
 
         // re-save the catalog inventory:
         // -- update quantity (which should be honored)
@@ -134,10 +121,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $bogusProductId = $this->getDifferent($originalProductId);
         $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM][self::KEY_PRODUCT_ID] = $bogusProductId;
 
-        $originalWebsiteId = $stockItemData[self::KEY_WEBSITE_ID];
-        $bogusWebsiteId = $this->getDifferent($originalWebsiteId);
-        $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM][self::KEY_WEBSITE_ID] = $bogusWebsiteId;
-
         $response = $this->saveProduct($response);
 
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
@@ -146,9 +129,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $returnedProductId = $stockItemData[self::KEY_PRODUCT_ID];
         $this->assertEquals($originalProductId, $returnedProductId);
-
-        $returnedWebsiteId = $stockItemData[self::KEY_WEBSITE_ID];
-        $this->assertEquals($originalWebsiteId, $returnedWebsiteId);
 
         // delete the product; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
@@ -173,7 +153,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
         $this->assertArrayHasKey(self::KEY_ITEM_ID, $stockItemData);
         $this->assertArrayHasKey(self::KEY_PRODUCT_ID, $stockItemData);
-        $this->assertArrayHasKey(self::KEY_WEBSITE_ID, $stockItemData);
 
         // delete the product; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
@@ -191,40 +170,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function getDifferent($original)
     {
         return 1 + $original * $original;
-    }
-
-    /**
-     * Returns the product's quantity from the array of custom attributes.
-     * If no quantity can be found, will return false.
-     *
-     * @param array $customAttributes
-     * @return int|bool
-     */
-    protected function findCustomAttributeQty($customAttributes)
-    {
-        $qty = false;
-        $qtyAndStockStatus = [];
-        foreach ($customAttributes as $customAttribute) {
-            if ($customAttribute[self::KEY_ATTRIBUTE_CODE] == self::CODE_QUANTITY_AND_STOCK_STATUS) {
-                $qtyAndStockStatus = $customAttribute['value'];
-                break;
-            }
-        }
-        if (!empty($qtyAndStockStatus) && is_array($qtyAndStockStatus)) {
-
-            if (array_key_exists('any_type', $qtyAndStockStatus)) {
-                // for SOAP, need to use the inner array
-                $qtyAndStockStatus = $qtyAndStockStatus['any_type'];
-            }
-
-            // ex: [true, 1234]
-            if (is_bool($qtyAndStockStatus[0]) || is_string($qtyAndStockStatus[0])) {
-                $qty = $qtyAndStockStatus[1];
-            } else {
-                $qty = $qtyAndStockStatus[0];
-            }
-        }
-        return $qty;
     }
 
     /**

@@ -42,6 +42,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->installer = $this->getMock('\Magento\Setup\Model\Installer', [], [], '', false);
         $this->progressFactory = $this->getMock('\Magento\Setup\Model\Installer\ProgressFactory', [], [], '', false);
         $this->sampleDataState = $this->getMock('\Magento\Framework\Setup\SampleData\State', [], [], '', false);
+
         $installerFactory->expects($this->once())->method('create')->with($this->webLogger)
             ->willReturn($this->installer);
         $this->controller = new Install(
@@ -100,6 +101,8 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     {
         $numValue = 42;
         $consoleMessages = ['key1' => 'log message 1', 'key2' => 'log message 2'];
+
+        $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(true);
         $progress = $this->getMock('\Magento\Setup\Model\Installer\Progress', [], [], '', false);
         $this->progressFactory->expects($this->once())->method('createFromLog')->with($this->webLogger)
             ->willReturn($progress);
@@ -119,6 +122,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     public function testProgressActionWithError()
     {
         $e = 'Some exception message';
+        $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(true);
         $this->progressFactory->expects($this->once())->method('createFromLog')
             ->will($this->throwException(new \LogicException($e)));
         $jsonModel = $this->controller->progressAction();
@@ -134,6 +138,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     public function testProgressActionWithSampleDataError()
     {
         $numValue = 42;
+        $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(true);
         $progress = $this->getMock('\Magento\Setup\Model\Installer\Progress', [], [], '', false);
         $progress->expects($this->once())->method('getRatio')->willReturn($numValue);
         $this->progressFactory->expects($this->once())->method('createFromLog')->willReturn($progress);
@@ -146,6 +151,19 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
         $this->assertTrue($jsonModel->getVariable('isSampleDataError'));
         $this->assertSame(sprintf('%d', $numValue * 100), $variables['progress']);
+    }
+
+    public function testProgressActionNoInstallLogFile()
+    {
+        $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(false);
+        $jsonModel = $this->controller->progressAction();
+        $this->assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
+        $variables = $jsonModel->getVariables();
+        $this->assertArrayHasKey('success', $variables);
+        $this->assertArrayHasKey('console', $variables);
+        $this->assertTrue($variables['success']);
+        $this->assertEmpty($variables['console']);
+        $this->assertSame(0, $variables['progress']);
     }
 
     public function testDispatch()

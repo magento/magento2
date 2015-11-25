@@ -103,39 +103,33 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'no_source_class' => [
-                '$errors' => ['Source class ' . self::SOURCE_CLASS . ' doesn\'t exist.'],
-                '$validationSuccess' => false,
-                '$sourceClassExists' => false,
-            ],
-            'result_class_exists' => [
-                '$errors' => ['Result class ' . self::RESULT_CLASS . ' already exists.'],
-                '$validationSuccess' => false,
-                '$sourceClassExists' => true,
-                '$resultClassExists' => true,
+                'errors' => ['Source class ' . self::SOURCE_CLASS . ' doesn\'t exist.'],
+                'validationSuccess' => false,
+                'sourceClassExists' => false,
             ],
             'cant_create_result_directory' => [
-                '$errors' => ['Can\'t create directory ' . self::RESULT_DIRECTORY . '.'],
-                '$validationSuccess' => false,
-                '$sourceClassExists' => true,
-                '$resultClassExists' => false,
-                '$makeResultDirSuccess' => false,
+                'errors' => ['Can\'t create directory ' . self::RESULT_DIRECTORY . '.'],
+                'validationSuccess' => false,
+                'sourceClassExists' => true,
+                'resultClassExists' => false,
+                'makeResultDirSuccess' => false,
             ],
             'result_file_exists' => [
-                '$errors' => [],
-                '$validationSuccess' => true,
-                '$sourceClassExists' => true,
-                '$resultClassExists' => false,
-                '$makeResultDirSuccess' => false,
-                '$resultFileExists' => true,
+                'errors' => [],
+                'validationSuccess' => true,
+                'sourceClassExists' => true,
+                'resultClassExists' => false,
+                'makeResultDirSuccess' => false,
+                'resultFileExists' => true,
             ],
             'generate_no_data' => [
-                '$errors' => ['Can\'t generate source code.'],
-                '$validationSuccess' => true,
-                '$sourceClassExists' => true,
-                '$resultClassExists' => false,
-                '$makeResultDirSuccess' => true,
-                '$resultFileExists' => true,
-                '$willWriteCode' => false,
+                'errors' => ['Can\'t generate source code.'],
+                'validationSuccess' => true,
+                'sourceClassExists' => true,
+                'resultClassExists' => false,
+                'makeResultDirSuccess' => true,
+                'resultFileExists' => true,
+                'willWriteCode' => false,
             ],
             'generate_ok' => []
         ];
@@ -292,7 +286,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         if ($willWriteCode) {
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);
         }
-        $ioObject->expects($this->any())->method('getResultFileName')->willReturn(self::RESULT_FILE);
+        $ioObject->expects($this->any())->method('generateResultFileName')->willReturn(self::RESULT_FILE);
 
         return [
             'source_class' => $mocks['source_class'],

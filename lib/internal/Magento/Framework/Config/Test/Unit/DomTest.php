@@ -8,6 +8,24 @@ namespace Magento\Framework\Config\Test\Unit;
 class DomTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\Config\ValidationStateInterface
+     */
+    protected $validationStateMock;
+
+    public function setUp()
+    {
+        $this->validationStateMock = $this->getMock(
+            '\Magento\Framework\Config\ValidationStateInterface',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+    }
+
+    /**
      * @param string $xmlFile
      * @param string $newXmlFile
      * @param array $ids
@@ -19,7 +37,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         $xml = file_get_contents(__DIR__ . "/_files/dom/{$xmlFile}");
         $newXml = file_get_contents(__DIR__ . "/_files/dom/{$newXmlFile}");
-        $config = new \Magento\Framework\Config\Dom($xml, $ids, $typeAttributeName);
+        $config = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock, $ids, $typeAttributeName);
         $config->merge($newXml);
         $this->assertXmlStringEqualsXmlFile(__DIR__ . "/_files/dom/{$expectedXmlFile}", $config->getDom()->saveXML());
     }
@@ -87,7 +105,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         $xml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_two.xml");
         $newXml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_new_one.xml");
-        $config = new \Magento\Framework\Config\Dom($xml);
+        $config = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
         $config->merge($newXml);
     }
 
@@ -98,7 +116,10 @@ class DomTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate($xml, array $expectedErrors)
     {
-        $dom = new \Magento\Framework\Config\Dom($xml);
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);
@@ -125,7 +146,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $expectedErrors = [
             "Error: `Element 'unknown_node': This element is not expected. Expected is ( node ).`",
         ];
-        $dom = new \Magento\Framework\Config\Dom($xml, [], null, null, $errorFormat);
+        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock, [], null, null, $errorFormat);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
         $this->assertFalse($actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);
@@ -139,15 +160,18 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         $xml = '<root><unknown_node/></root>';
         $errorFormat = '%message%,%unknown%';
-        $dom = new \Magento\Framework\Config\Dom($xml, [], null, null, $errorFormat);
+        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock, [], null, null, $errorFormat);
         $dom->validate(__DIR__ . '/_files/sample.xsd');
     }
 
     public function testValidateUnknownError()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
-        $dom = new \Magento\Framework\Config\Dom($xml);
+        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
         $domMock = $this->getMock('DOMDocument', ['schemaValidate'], []);
         $domMock->expects($this->once())
             ->method('schemaValidate')

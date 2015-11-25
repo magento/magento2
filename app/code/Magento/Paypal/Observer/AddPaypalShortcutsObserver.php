@@ -49,12 +49,9 @@ class AddPaypalShortcutsObserver implements ObserverInterface
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
         $blocks = [
-            'Magento\Paypal\Block\Express\ShortcutContainer' => PaypalConfig::METHOD_WPP_EXPRESS,
-            'Magento\Paypal\Block\WpsExpress\ShortcutContainer' => PaypalConfig::METHOD_WPS_EXPRESS,
             'Magento\Paypal\Block\Express\Shortcut' => PaypalConfig::METHOD_WPP_EXPRESS,
             'Magento\Paypal\Block\WpsExpress\Shortcut' => PaypalConfig::METHOD_WPS_EXPRESS,
             'Magento\Paypal\Block\PayflowExpress\Shortcut' => PaypalConfig::METHOD_WPP_PE_EXPRESS,
-            'Magento\Paypal\Block\PayflowExpress\ShortcutContainer' => PaypalConfig::METHOD_WPP_PE_EXPRESS,
             'Magento\Paypal\Block\Bml\Shortcut' => PaypalConfig::METHOD_WPP_EXPRESS,
             'Magento\Paypal\Block\WpsBml\Shortcut' => PaypalConfig::METHOD_WPS_EXPRESS,
             'Magento\Paypal\Block\Payflow\Bml\Shortcut' => PaypalConfig::METHOD_WPP_PE_EXPRESS

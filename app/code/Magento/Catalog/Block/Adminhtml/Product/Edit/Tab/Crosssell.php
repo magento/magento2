@@ -249,7 +249,7 @@ class Crosssell extends Extended
         $this->addColumn(
             'set_name',
             [
-                'header' => __('Product Template'),
+                'header' => __('Attribute Set'),
                 'index' => 'attribute_set_id',
                 'type' => 'options',
                 'options' => $sets,

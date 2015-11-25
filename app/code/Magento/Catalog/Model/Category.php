@@ -1086,9 +1086,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 $flatIndexer->reindexRow($this->getId());
             }
         }
-        $affectedProductIds = $this->getAffectedProductIds();
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
-        if (!$productIndexer->isScheduled() && !empty($affectedProductIds)) {
+        if (!$productIndexer->isScheduled()
+            && (!empty($this->getAffectedProductIds()) || $this->dataHasChangedFor('is_anchor'))
+        ) {
             $productIndexer->reindexList($this->getPathIds());
         }
     }

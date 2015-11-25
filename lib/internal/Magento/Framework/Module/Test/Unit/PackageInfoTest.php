@@ -57,6 +57,11 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('C', $this->packageInfo->getModuleName('c'));
         $this->assertEquals('D', $this->packageInfo->getModuleName('d'));
         $this->assertEquals('E', $this->packageInfo->getModuleName('e'));
+        $this->assertEquals(
+            'Magento_TestModuleName',
+            $this->packageInfo->getModuleName('magento/module-test-module-name')
+        );
+        $this->assertArrayHasKey('Magento_TestModuleName', $this->packageInfo->getNonExistingDependencies());
     }
 
     public function testGetPackageName()

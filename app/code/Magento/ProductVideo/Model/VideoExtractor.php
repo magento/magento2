@@ -12,7 +12,7 @@ class VideoExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtrac
     /**
      * Media Entry type code
      */
-    const MEDIA_TYPE_CODE = 'image';
+    const MEDIA_TYPE_CODE = 'video';
 
     /**
      * Extract configuration data of videos from the DOM structure

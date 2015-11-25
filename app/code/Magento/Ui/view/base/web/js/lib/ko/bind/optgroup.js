@@ -265,7 +265,8 @@ define([
                     var value = applyToObject(option, optionsValue, option),
                         label = applyToObject(option, optionsText, value) || '',
                         title = applyToObject(option, optionsText, value) || '',
-                        obj = {};
+                        obj = {},
+                        space = '\u2007\u2007\u2007';
 
                     obj[optionTitle] = applyToObject(option, optionsText + 'title', value);
 
@@ -276,7 +277,7 @@ define([
                         res.push(obj);
                         res = res.concat(formatOptions(value));
                     } else {
-                        obj[optionsText] = strPad('  ', nestedOptionsLevel * 2) + label;
+                        obj[optionsText] = strPad(space, nestedOptionsLevel * 2) + label;
                         obj[optionsValue] = value;
                         res.push(obj);
                     }

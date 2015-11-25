@@ -85,7 +85,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->addressMock = $this->getMock(
             'Magento\Quote\Model\Quote\Address',
             ['getData', 'getTotals'],

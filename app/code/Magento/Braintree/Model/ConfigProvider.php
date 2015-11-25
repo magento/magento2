@@ -12,6 +12,7 @@ use \Magento\Braintree\Model\PaymentMethod;
 
 class ConfigProvider extends CcGenericConfigProvider
 {
+
     /**
      * @var string[]
      */
@@ -97,8 +98,7 @@ class ConfigProvider extends CcGenericConfigProvider
      */
     protected function getCcAvailableCcTypes()
     {
-        $country = $this->checkoutSession->getQuote()->getBillingAddress()->getCountryId();
-        return $this->dataHelper->getCcAvailableCardTypes($country);
+        return $this->dataHelper->getCcAvailableCardTypes();
     }
 
     /**
@@ -185,7 +185,7 @@ class ConfigProvider extends CcGenericConfigProvider
                     'isCcDetectionEnabled' => $this->config->isCcDetectionEnabled(),
                     'availableCardTypes' => $this->getCcAvailableCcTypes(),
                     'braintreeDataJs'=> $this->config->getBraintreeDataJs(),
-                    'ajaxGenerateNonceUrl' => $this->getAjaxGenerateNonceUrl(),
+                    'ajaxGenerateNonceUrl' => $this->getAjaxGenerateNonceUrl()
                 ],
             ],
         ]);

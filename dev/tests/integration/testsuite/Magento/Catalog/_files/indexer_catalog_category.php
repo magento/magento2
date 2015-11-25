@@ -96,6 +96,8 @@ $categoryFifth->setName(
 $productFirst = $objectManager->create('Magento\Catalog\Model\Product');
 $productFirst->setTypeId(
     'simple'
+)->setId(
+    1
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
@@ -124,6 +126,8 @@ $productFirst->setTypeId(
 $productSecond = $objectManager->create('Magento\Catalog\Model\Product');
 $productSecond->setTypeId(
     'simple'
+)->setId(
+    2
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
@@ -152,6 +156,8 @@ $productSecond->setTypeId(
 $productThird = $objectManager->create('Magento\Catalog\Model\Product');
 $productThird->setTypeId(
     'simple'
+)->setId(
+    3
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
@@ -159,7 +165,7 @@ $productThird->setTypeId(
 )->setName(
     'Simple Product 03'
 )->setSku(
-    'simple 02'
+    'simple 03'
 )->setPrice(
     10
 )->setMetaTitle(

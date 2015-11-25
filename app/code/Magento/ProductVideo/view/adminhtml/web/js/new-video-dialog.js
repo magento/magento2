@@ -4,14 +4,13 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation',
     'Magento_ProductVideo/js/get-video-information'
-], function ($, alert) {
+], function ($) {
     'use strict';
 
     $.widget('mage.createVideoPlayer', {
@@ -62,11 +61,9 @@ define([
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
-            } else
-            if (checkVideoID && checkVideoID === this.options.videoId) {
+            } else if (checkVideoID && checkVideoID === this.options.videoId) {
                 return false;
-            } else
-            if (!checkVideoID) {
+            } else if (!checkVideoID) {
                 this._doUpdate();
             }
 
@@ -97,8 +94,7 @@ define([
                     this.options.metaData.data.uploader +
                     '</a>'
                 );
-            } else
-            if (this.options.videoProvider === 'vimeo') {
+            } else if (this.options.videoProvider === 'vimeo') {
                 $(this.options.metaData.DOM.uploader).html(
                     '<a href="' +
                     this.options.metaData.data.uploaderUrl +
@@ -232,6 +228,8 @@ define([
 
         _videoPlayerSelector: '.mage-new-video-dialog',
 
+        _videoRequestComplete: null,
+
         /**
          * Bind events
          * @private
@@ -247,15 +245,20 @@ define([
                 youtubeKey: this.options.youTubeApiKey,
                 eventSource: 'focusout'
             });
+
             this._videoInformationGetBtn = $(this._videoInformationBtnSelector);
             this._videoInformationGetUrlField = $(this._videoUrlSelector);
             this._videoInformationGetEditBtn = $(this._editVideoBtnSelector);
 
             this._videoInformationGetBtn.on('click', $.proxy(this._onGetVideoInformationClick, this));
             this._videoInformationGetUrlField.on('focusout', $.proxy(this._onGetVideoInformationFocusOut, this));
+
             this._videoUrlWidget.on('updated_video_information', $.proxy(this._onGetVideoInformationSuccess, this));
             this._videoUrlWidget.on('error_updated_information', $.proxy(this._onGetVideoInformationError, this));
-
+            this._videoUrlWidget.on(
+                'request_video_information',
+                $.proxy(this._onGetVideoInformationStartRequest, this)
+            );
         },
 
         /**
@@ -265,10 +268,6 @@ define([
         _onGetVideoInformationClick: function () {
             this._onlyVideoPlayer = false;
             this._isEditPage = false;
-            this._videoInformationGetUrlField.videoData({
-                youtubeKey: this.options.youTubeApiKey,
-                eventSource: 'click'
-            });
             this._videoUrlWidget.trigger('update_video_information');
         },
 
@@ -277,11 +276,14 @@ define([
          * @private
          */
         _onGetVideoInformationFocusOut: function () {
-            this._videoInformationGetUrlField.videoData({
-                youtubeKey: this.options.youTubeApiKey,
-                eventSource: 'focusout'
-            });
             this._videoUrlWidget.trigger('update_video_information');
+        },
+
+        /**
+         * @private
+         */
+        _onGetVideoInformationStartRequest: function () {
+            this._videoRequestComplete = false;
         },
 
         /**
@@ -291,10 +293,6 @@ define([
         _onGetVideoInformationEditClick: function () {
             this._onlyVideoPlayer = true;
             this._isEditPage = true;
-            this._videoInformationGetUrlField.videoData({
-                youtubeKey: this.options.youTubeApiKey,
-                eventSource: 'click'
-            });
             this._videoUrlWidget.trigger('update_video_information');
         },
 
@@ -327,6 +325,8 @@ define([
                     }
                 }
             });
+
+            this._videoRequestComplete = true;
 
             if (!this._isEditPage) {
                 player.updateInputFields({
@@ -425,7 +425,9 @@ define([
          */
         _replaceImage: function (oldFile, newFile, imageData) {
             var tmpNewFile = newFile,
+                tmpOldImage,
                 newImageId,
+                oldNewFilePosition,
                 fc,
                 suff,
                 searchsuff,
@@ -434,6 +436,7 @@ define([
 
             oldFile = this.__prepareFilename(oldFile);
             newFile = this.__prepareFilename(newFile);
+            tmpOldImage = this._images[oldFile];
 
             if (newFile === oldFile) {
                 this._images[newFile] = imageData;
@@ -445,26 +448,36 @@ define([
             this._removeImage(oldFile);
             this._setImage(newFile, imageData);
 
-            if (oldFile && imageData.oldFile) {
-                newImageId = this.findElementId(tmpNewFile);
-                fc = $(this._itemIdSelector).val();
-
-                suff = 'product[media_gallery][images]' + fc;
-
-                searchsuff = 'input[name="' + suff + '[value_id]"]';
-                key = $(searchsuff).val();
-
-                if (!key) {
-                    return null;
-                }
-
-                oldValIdElem = document.createElement('input');
-                $('form[data-form="edit-product"]').append(oldValIdElem);
-                $(oldValIdElem).attr({
-                    type: 'hidden',
-                    name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
-                }).val(key);
+            if (!oldFile || !imageData.oldFile) {
+                return null;
             }
+
+            newImageId = this.findElementId(tmpNewFile);
+            fc = $(this._itemIdSelector).val();
+
+            suff = 'product[media_gallery][images]' + fc;
+
+            searchsuff = 'input[name="' + suff + '[value_id]"]';
+            key = $(searchsuff).val();
+
+            if (!key) {
+                return null;
+            }
+
+            oldValIdElem = document.createElement('input');
+            $('form[data-form="edit-product"]').append(oldValIdElem);
+            $(oldValIdElem).attr({
+                type: 'hidden',
+                name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
+            }).val(key);
+
+            oldNewFilePosition = parseInt(tmpOldImage.position, 10);
+            imageData.position = oldNewFilePosition;
+
+            $(this._imageWidgetSelector).trigger('setPosition', {
+                imageData: imageData,
+                position: oldNewFilePosition
+            });
         },
 
         /**
@@ -527,10 +540,13 @@ define([
         _onImageLoaded: function (result, file, oldFile, callback) {
             var data = JSON.parse(result);
 
+            if ($('#video_url').parent().find('.image-upload-error').length > 0) {
+                $('.image-upload-error').remove();
+            }
+
             if (data.errorcode || data.error) {
-                alert({
-                    content: data.error
-                });
+                $('#video_url').parent().append('<div class="image-upload-error">' +
+                '<div class="image-upload-error-cross"></div><span>' + data.error + '</span></div>');
 
                 return;
             }
@@ -647,7 +663,7 @@ define([
                     roles.prop('disabled', false);
                     file = $('#file_name').val();
                     widget._onGetVideoInformationEditClick();
-                    modalTitleElement = $('.modal-title');
+                    modalTitleElement = $('.mage-new-video-dialog .modal-title');
 
                     if (!file) {
                         widget._blockActionButtons(true);
@@ -680,30 +696,45 @@ define([
          */
         _blockActionButtons: function (status) {
             $('.page-actions-buttons').find('button.video-create-button').attr('disabled', status);
+            $('.page-actions-buttons').find('button.video-edit').attr('disabled', status);
         },
 
         /**
          * Check form
-         * @returns {*}
+         * @param {Function} callback
          */
-        isValid: function () {
-            var videoForm = $(this._videoFormSelector);
+        isValid: function (callback) {
+            var videoForm = $(this._videoFormSelector),
+                videoLoaded = true;
 
-            videoForm.mage('validation', {
+            this._blockActionButtons(true);
+            this._videoUrlWidget.on('finish_update_information.validation', $.proxy(
+                function (event, status) {
+                    videoForm.mage('validation', {
 
-                /**
-                 * @param {jQuery} error
-                 * @param {jQuery} element
-                 */
-                errorPlacement: function (error, element) {
-                    error.insertAfter(element);
-                }
-            }).on('highlight.validate', function () {
-                $(this).validation('option');
-            });
-            videoForm.validation();
+                        /**
+                         * @param {jQuery} error
+                         * @param {jQuery} element
+                         */
+                        errorPlacement: function (error, element) {
+                            error.insertAfter(element);
+                        }
+                    }).on('highlight.validate', function () {
+                        $(this).validation('option');
+                    });
+                    videoForm.validation();
 
-            return videoForm.valid();
+                    if (this._videoRequestComplete === false) {
+                        videoLoaded = false;
+                    }
+
+                    callback(status && videoForm.valid() && videoLoaded);
+                    this._videoUrlWidget.off('finish_update_information.validation');
+                    this._blockActionButtons(false);
+                }, this
+            ));
+
+            this._videoUrlWidget.trigger('update_video_information');
         },
 
         /**
@@ -717,6 +748,8 @@ define([
             $productGalleryWrapper.parent().addClass('video-item');
             $imageWidget.removeClass('video-item');
             $productGalleryWrapper.removeClass('video-item');
+            $('.video-item .action-delete').attr('title',  $.mage.__('Delete video'));
+            $('.video-item .action-delete span').html($.mage.__('Delete video'));
         },
 
         /**
@@ -738,19 +771,24 @@ define([
                 nvs.addClass(reqClass);
             }
 
-            if (!this.isValid()) {
-                return;
-            }
+            this.isValid($.proxy(
+                function (videoValidStatus) {
 
-            if (this._tempPreviewImageData) {
-                this._onImageLoaded(this._tempPreviewImageData, null, null, $.proxy(this.close, this));
-            } else {
-                this._uploadImage(file, null, $.proxy(function () {
-                    this.close();
-                }, this));
-            }
+                    if (!videoValidStatus) {
+                        return;
+                    }
 
-            nvs.removeClass(reqClass);
+                    if (this._tempPreviewImageData) {
+                        this._onImageLoaded(this._tempPreviewImageData, null, null, $.proxy(this.close, this));
+                    } else {
+                        this._uploadImage(file, null, $.proxy(function () {
+                            this.close();
+                        }, this));
+                    }
+
+                    nvs.removeClass(reqClass);
+                }, this
+            ));
         },
 
         /**
@@ -760,55 +798,66 @@ define([
         _onUpdate: function () {
             var inputFile, itemId, _inputSelector, mediaFields, imageData, flagChecked, fileName, callback;
 
-            if (!this.isValid()) {
-                return;
-            }
-            imageData = this.imageData;
-            inputFile       = $(this._videoPreviewInputSelector);
-            itemId          = $(this._itemIdSelector).val();
-            itemId              = itemId.slice(1, itemId.length - 1);
-            _inputSelector  = '[name*="[' + itemId + ']"]';
-            mediaFields     = $('input' + _inputSelector);
-            $.each(mediaFields, function (i, el) {
-                var elName      = el.name,
-                start       = elName.indexOf(itemId) + itemId.length + 2,
-                fieldName   = elName.substring(start, el.name.length - 1),
-                _field      = $('#' + fieldName),
-                _tmp;
+            this.isValid($.proxy(
+                function (videoValidStatus) {
 
-                if (_field.length > 0) {
-                    _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
-                    $(_tmp).val(_field.val());
-                    imageData[fieldName] = _field.val();
-                }
-            });
-            flagChecked     = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
-            $('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
-            $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible' : 'hidden');
-            imageData.disabled = flagChecked;
+                    if (!videoValidStatus) {
+                        return;
+                    }
 
-            if (this._tempPreviewImageData) {
-                this._onImageLoaded(this._tempPreviewImageData, null, imageData.file, $.proxy(this.close, this));
+                    imageData = this.imageData;
+                    inputFile       = $(this._videoPreviewInputSelector);
+                    itemId          = $(this._itemIdSelector).val();
+                    itemId              = itemId.slice(1, itemId.length - 1);
+                    _inputSelector  = '[name*="[' + itemId + ']"]';
+                    mediaFields     = $('input' + _inputSelector);
+                    $.each(mediaFields, function (i, el) {
+                        var elName      = el.name,
+                            start       = elName.indexOf(itemId) + itemId.length + 2,
+                            fieldName   = elName.substring(start, el.name.length - 1),
+                            _field      = $('#' + fieldName),
+                            _tmp;
 
-                return;
-            }
-            fileName = inputFile.get(0).files;
+                        if (_field.length > 0) {
+                            _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
+                            $(_tmp).val(_field.val());
+                            imageData[fieldName] = _field.val();
+                        }
+                    });
+                    flagChecked     = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+                    $('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
+                    $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible' : 'hidden');
+                    imageData.disabled = flagChecked;
 
-            if (!fileName || !fileName.length) {
-                fileName = null;
-            }
-            inputFile.replaceWith(inputFile);
+                    if (this._tempPreviewImageData) {
+                        this._onImageLoaded(
+                            this._tempPreviewImageData,
+                            null,
+                            imageData.file,
+                            $.proxy(this.close, this)
+                        );
 
-            callback = $.proxy(function () {
-                this.close();
-            }, this);
+                        return;
+                    }
+                    fileName = inputFile.get(0).files;
 
-            if (fileName) {
-                this._uploadImage(fileName, imageData.file, callback);
-            } else {
-                this._replaceImage(imageData.file, imageData.file, imageData);
-                callback(0, imageData);
-            }
+                    if (!fileName || !fileName.length) {
+                        fileName = null;
+                    }
+                    inputFile.replaceWith(inputFile);
+
+                    callback = $.proxy(function () {
+                        this.close();
+                    }, this);
+
+                    if (fileName) {
+                        this._uploadImage(fileName, imageData.file, callback);
+                    } else {
+                        this._replaceImage(imageData.file, imageData.file, imageData);
+                        callback(0, imageData);
+                    }
+                }, this
+            ));
         },
 
         /**
@@ -870,9 +919,8 @@ define([
             if (
                 ext.length < 2 ||
                 this._imageTypes.indexOf(ext.toLowerCase()) === -1 ||
-                !file.files  ||
+                !file.files ||
                 !file.files.length
-
             ) {
                 prev.remove();
                 this._previewImage = null;
@@ -968,7 +1016,9 @@ define([
 
             try {
                 newVideoForm.validation('clearError');
-            } catch (e) {}
+            } catch (e) {
+
+            }
             newVideoForm.trigger('reset');
         },
 
@@ -1138,7 +1188,7 @@ define([
         }
     });
 
-    $('#group-fields-image-management > legend > span').text('Images and Videos');
+    $('#group-fields-image-management > legend > span').text($.mage.__('Images and Videos'));
 
     return $.mage.newVideoDialog;
 });

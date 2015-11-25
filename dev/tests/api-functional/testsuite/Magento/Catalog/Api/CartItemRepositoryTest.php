@@ -13,7 +13,6 @@ class CartItemRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'quoteCartItemRepositoryV1';
     const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/carts/items';
     const SIMPLE_PRODUCT_SKU = 'simple';
 
     /**
@@ -43,7 +42,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
+                'resourcePath' => '/V1/carts/' . $cartId . '/items',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
             ],
             'soap' => [

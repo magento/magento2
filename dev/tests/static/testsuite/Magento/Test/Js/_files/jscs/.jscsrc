@@ -75,6 +75,7 @@
     "disallowTrailingComma": true,
     "disallowTrailingWhitespace": true,
     "disallowYodaConditions": true,
+    "maxErrors": null,
     "requireBlocksOnNewline": true,
     "requireDotNotation": "except_snake_case",
     "requireCamelCaseOrUpperCaseIdentifiers": true,

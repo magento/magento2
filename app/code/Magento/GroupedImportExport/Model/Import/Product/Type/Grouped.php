@@ -8,6 +8,7 @@
 namespace Magento\GroupedImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\ImportExport\Model\Import;
 
 class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -76,7 +77,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum) || empty($associatedSkusQty)) {
                     continue;
                 }
-                $associatedSkusAndQtyPairs = explode(Product::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $associatedSkusQty);
+                $associatedSkusAndQtyPairs = explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $associatedSkusQty);
                 $position = 0;
                 foreach ($associatedSkusAndQtyPairs as $associatedSkuAndQty) {
                     ++$position;

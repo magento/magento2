@@ -59,6 +59,9 @@ class Module implements RuleInterface
             ComponentRegistrar::MODULE,
             $params['module_name']
         );
+        if (empty($params['module_dir'])) {
+            return [];
+        }
         return $this->rule->getPatternDirs($params);
     }
 }

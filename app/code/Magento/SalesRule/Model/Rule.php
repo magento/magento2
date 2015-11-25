@@ -231,11 +231,23 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     protected function _afterLoad()
     {
-        $this->loadCouponCode();
+        $this->loadRelations();
         return parent::_afterLoad();
     }
 
     /**
+     * Load all relative data
+     *
+     * @return void
+     */
+    public function loadRelations()
+    {
+        $this->loadCouponCode();
+    }
+
+    /**
+     * Load coupon code
+     *
      * @return void
      */
     public function loadCouponCode()

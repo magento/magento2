@@ -129,7 +129,7 @@ class Main extends \Magento\Backend\Block\Template
                     'label' => __('Delete'),
                     'onclick' => 'deleteConfirm(\'' . $this->escapeJsQuote(
                         __(
-                            'You are about to delete all products in this product template. '
+                            'You are about to delete all products in this attribute set. '
                             . 'Are you sure you want to do that?'
                         )
                     ) . '\', \'' . $this->getUrl(
@@ -187,7 +187,7 @@ class Main extends \Magento\Backend\Block\Template
      */
     protected function _getHeader()
     {
-        return __("Edit Product Template '%1'", $this->_getAttributeSet()->getAttributeSetName());
+        return __("Edit Attribute Set '%1'", $this->_getAttributeSet()->getAttributeSetName());
     }
 
     /**

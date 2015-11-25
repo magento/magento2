@@ -56,7 +56,6 @@ class ConfigOptionsListConstants
      */
     const SESSION_SAVE_FILES = 'files';
     const SESSION_SAVE_DB = 'db';
-    const SESSION_SAVE_REDIS = 'redis';
     /**#@-*/
 
     /**
@@ -97,4 +96,9 @@ class ConfigOptionsListConstants
      * Key for modules
      */
     const KEY_MODULES = 'modules';
+
+    /**
+     * Size of random string generated for store's encryption key
+     */
+    const STORE_KEY_RANDOM_STRING_SIZE = 32;
 }

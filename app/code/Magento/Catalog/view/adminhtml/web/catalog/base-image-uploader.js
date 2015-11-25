@@ -38,7 +38,7 @@ define([
 
             var findElement = function (data) {
                 return $container.find('.image:not(.image-placeholder)').filter(function () {
-                    if(!$(this).data('image')) {
+                    if (!$(this).data('image')) {
                         return false;
                     }
                     return $(this).data('image').file === data.file;

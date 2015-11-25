@@ -148,7 +148,9 @@ class ProcessCronQueueObserver implements ObserverInterface
         $jobGroupsRoot = $this->_config->getJobs();
 
         foreach ($jobGroupsRoot as $groupId => $jobsRoot) {
-            if ($this->_request->getParam('group') !== null && $this->_request->getParam('group') != $groupId) {
+            if ($this->_request->getParam('group') !== null
+                && $this->_request->getParam('group') !== '\'' . ($groupId) . '\''
+                && $this->_request->getParam('group') !== $groupId) {
                 continue;
             }
             if (($this->_request->getParam(self::STANDALONE_PROCESS_STARTED) !== '1') && (
@@ -232,7 +234,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->timezone->scopeTimeStamp()))->save();
 
         try {
-            call_user_func($callback);
+            call_user_func_array($callback, [$schedule]);
         } catch (\Exception $e) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
             throw $e;

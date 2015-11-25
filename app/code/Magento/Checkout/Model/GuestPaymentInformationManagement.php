@@ -27,7 +27,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     protected $cartManagement;
 
     /**
-     * @var \Magento\Checkout\Model\PaymentInformationManagement
+     * @var \Magento\Checkout\Api\PaymentInformationManagementInterface
      */
     protected $paymentInformationManagement;
 
@@ -45,7 +45,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
-     * @param PaymentInformationManagement $paymentInformationManagement
+     * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
      * @codeCoverageIgnore
@@ -54,7 +54,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement,
         \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
-        \Magento\Checkout\Model\PaymentInformationManagement $paymentInformationManagement,
+        \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository
     ) {

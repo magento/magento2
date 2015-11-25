@@ -39,6 +39,9 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media">
         <plugin name="external_video_media_entry_processor" type="Magento\ProductVideo\Model\Plugin\ExternalVideoEntryProcessor" />
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media">
+        <plugin name="external_video_media_resource_backend" type="Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend" />
+    </type>
     <type name="Magento\Catalog\Block\Adminhtml\Product\Helper\Form\BaseImage">
         <plugin name="base_image_element_render" type="Magento\ProductVideo\Model\Plugin\BaseImage" />
     </type>

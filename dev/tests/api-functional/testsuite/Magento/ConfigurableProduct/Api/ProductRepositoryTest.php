@@ -126,7 +126,6 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $response = $this->createConfigurableProduct();
         $this->assertEquals(self::CONFIGURABLE_PRODUCT_SKU, $response[ProductInterface::SKU]);
-        $this->assertEquals(50, $response['price']);
         $this->assertTrue(
             isset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"])
         );

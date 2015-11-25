@@ -48,8 +48,9 @@ class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
     public function getDefaultExclusions()
     {
         $exclusions = parent::getDefaultExclusions();
+        $exclusions[] = \Magento\Weee\Pricing\TaxAdjustment::ADJUSTMENT_CODE;
 
-        //Determine if the Weee amount should be excluded from the price
+        // Determine if the Weee amount should be excluded from the price
         if ($this->typeOfDisplay([Tax::DISPLAY_EXCL_DESCR_INCL, Tax::DISPLAY_EXCL])) {
             $exclusions[] = \Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE;
         }

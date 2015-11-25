@@ -7,7 +7,7 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -15,7 +15,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $model;
 
@@ -107,21 +107,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
             ]
         );
-    }
-
-    public function testCreate()
-    {
-        $this->quoteFactoryMock->expects($this->once())
-            ->method('create')
-            ->with([1, 2, 3])
-            ->willReturn($this->quoteMock);
-        $this->storeManagerMock->expects($this->never())->method('getStore');
-        $this->storeMock->expects($this->never())->method('getId');
-        $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
-        $this->quoteMock->expects($this->never())->method('load');
-        $this->quoteMock->expects($this->never())->method('getId');
-
-        $this->assertEquals($this->quoteMock, $this->model->create([1, 2, 3]));
     }
 
     /**

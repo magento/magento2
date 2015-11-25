@@ -6,6 +6,7 @@
 namespace Magento\Authorizenet\Model;
 
 use Magento\Authorizenet\Model\TransactionService;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\TransparentInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
@@ -92,7 +93,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     protected $storeManager;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -132,9 +133,10 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param Directpost\Request\Factory $requestFactory
      * @param Directpost\Response\Factory $responseFactory
      * @param \Magento\Authorizenet\Model\TransactionService $transactionService
+     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param OrderSender $orderSender
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -156,9 +158,10 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         \Magento\Authorizenet\Model\Directpost\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Directpost\Response\Factory $responseFactory,
         TransactionService $transactionService,
+        ZendClientFactory $httpClientFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -187,6 +190,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $requestFactory,
             $responseFactory,
             $transactionService,
+            $httpClientFactory,
             $resource,
             $resourceCollection,
             $data
@@ -404,9 +408,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                     if ($result->getXTransId() != $payment->getParentTransactionId()) {
                         $payment->setTransactionId($result->getXTransId());
                     }
-                    $shouldCloseCaptureTransaction = $payment->getOrder()->canCreditmemo() ? 0 : 1;
-                    $payment->setIsTransactionClosed(1)
-                        ->setShouldCloseParentTransaction($shouldCloseCaptureTransaction)
+                    $payment->setIsTransactionClosed(true)
                         ->setTransactionAdditionalInfo(self::REAL_TRANSACTION_ID_KEY, $result->getXTransId());
                     return $this;
                 }

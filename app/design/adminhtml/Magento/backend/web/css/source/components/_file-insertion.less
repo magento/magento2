@@ -9,16 +9,19 @@
 
 .contents-uploader {
     margin: 0 0 @indent__base;
+
     .fileinput-button {
         cursor: pointer;
         display: inline-block;
         float: none;
         vertical-align: middle;
+
         span {
             display: none;
         }
+
         input {
-            -moz-transforms: none;
+            -moz-transform: none;
             border: none;
             opacity: 1;
             position: static;
@@ -40,9 +43,11 @@
     overflow: hidden;
     padding: 3px;
     width: 100px;
+
     &.selected {
         border-color: @color-blue-dodger;
     }
+
     p {
         text-align: center;
     }

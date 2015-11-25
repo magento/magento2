@@ -58,7 +58,7 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $attributeSetName = 'Default Product Template';
+        $attributeSetName = 'Default Attribute Set';
         $expectedResult = [
             $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeInterface'),
         ];

@@ -55,6 +55,9 @@ class ColumnFactory
             'dataType' => $this->getDataType($attribute),
             'add_field' => true,
             'visible' => $attribute->getIsVisibleInGrid(),
+            'filter' => ($attribute->getIsFilterableInGrid())
+                ? $this->getFilterType($attribute->getFrontendInput())
+                : null,
         ], $config);
 
         if ($attribute->usesSource()) {
@@ -91,5 +94,18 @@ class ColumnFactory
         return isset($this->dataTypeMap[$attribute->getFrontendInput()])
             ? $this->dataTypeMap[$attribute->getFrontendInput()]
             : $this->dataTypeMap['default'];
+    }
+
+    /**
+     * Retrieve filter type by $frontendInput
+     *
+     * @param string $frontendInput
+     * @return string
+     */
+    protected function getFilterType($frontendInput)
+    {
+        $filtersMap = ['date' => 'dateRange'];
+        $result = array_replace_recursive($this->dataTypeMap, $filtersMap);
+        return isset($result[$frontendInput]) ? $result[$frontendInput] : $result['default'];
     }
 }

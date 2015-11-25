@@ -7,6 +7,7 @@
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Export;
 
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ImportExport\Model\Import;
 
 class RowCustomizerTest extends \PHPUnit_Framework_TestCase
 {
@@ -256,17 +257,17 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         return [
             $this->initiatedProductId => [
                 'configurable_variations' => implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, [
-                    '_sku_' => 'sku=_sku_'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-                        . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
+                    '_sku_' => 'sku=_sku_'  . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        . implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
                             'code_of_attribute=Option Title',
                             'code_of_attribute=Option Title',
                         ]),
-                    '_sku_2' => 'sku=_sku_2'  . ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-                        . implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
+                    '_sku_2' => 'sku=_sku_2' . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        . implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
                             'code_of_attribute_2=Option Title 2',
                         ])
                 ]),
-                'configurable_variation_labels' => implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
+                'configurable_variation_labels' => implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
                     'code_of_attribute' => 'code_of_attribute=Super attribute label',
                     'code_of_attribute_2' => 'code_of_attribute_2=Super attribute label 2',
                 ]),
@@ -291,6 +292,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $object
      * @param $property
+     * @return mixed
      */
     protected function getPropertyValue(&$object, $property)
     {

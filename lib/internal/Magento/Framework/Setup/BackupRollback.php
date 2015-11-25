@@ -197,7 +197,6 @@ class BackupRollback
      */
     public function dbBackup($time)
     {
-        $this->setAreaCode();
         /** @var \Magento\Framework\Backup\Db $dbBackup */
         $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbBackup->setRootDir($this->directoryList->getRoot());
@@ -227,13 +226,12 @@ class BackupRollback
      */
     public function dbRollback($rollbackFile)
     {
-        if (preg_match('/[0-9]_(db).(gz)$/', $rollbackFile) !== 1) {
+        if (preg_match('/[0-9]_(db)(.*?).(gz)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
         }
         if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
             throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
-        $this->setAreaCode();
         /** @var \Magento\Framework\Backup\Db $dbRollback */
         $dbRollback = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbRollback->setRootDir($this->directoryList->getRoot());
@@ -251,22 +249,6 @@ class BackupRollback
         $this->log->log('DB rollback filename: ' . $dbRollback->getBackupFilename());
         $this->log->log('DB rollback path: ' . $dbRollback->getBackupPath());
         $this->log->logSuccess('DB rollback completed successfully.');
-    }
-
-    /**
-     * Sets area code to start a session for database backup and rollback
-     *
-     * @return void
-     */
-    private function setAreaCode()
-    {
-        $areaCode = 'adminhtml';
-        /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
-        $appState->setAreaCode($areaCode);
-        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
-        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
-        $this->objectManager->configure($configLoader->load($areaCode));
     }
 
     /**

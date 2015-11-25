@@ -19,7 +19,7 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -52,14 +52,14 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
     protected $messageFactory;
 
     /**
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GiftMessageManager $giftMessageManager
      * @param \Magento\GiftMessage\Helper\Message $helper
      * @param MessageFactory $messageFactory
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager,
         \Magento\GiftMessage\Helper\Message $helper,

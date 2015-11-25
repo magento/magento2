@@ -56,7 +56,7 @@ class InstallData implements InstallDataInterface
                 'input' => 'select',
                 'class' => '',
                 'source' => 'Magento\Tax\Model\TaxClass\Source\Product',
-                'global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_WEBSITE,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
                 'visible' => true,
                 'required' => false,
                 'user_defined' => false,

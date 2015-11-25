@@ -20,10 +20,11 @@ define([
             var self = this;
 
             this.modal = $('<div id="create_new_attribute"/>').modal({
-                title: 'New Attribute',
+                title: $.mage.__('New Attribute'),
                 type: 'slide',
                 buttons: [],
                 opened: function () {
+                    $(this).parent().addClass('modal-content-new-attribute');
                     self.iframe = $('<iframe id="create_new_attribute_container">').attr({
                         src: self._prepareUrl(),
                         frameborder: 0

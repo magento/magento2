@@ -24,7 +24,7 @@ class AssertReviewSuccessSaveMessage extends AbstractConstraint
      */
     public function processAssert(ReviewIndex $reviewIndex)
     {
-        $actualMessage = $reviewIndex->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $reviewIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

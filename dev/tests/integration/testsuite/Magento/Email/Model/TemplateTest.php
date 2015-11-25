@@ -122,17 +122,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->getArea(Area::AREA_FRONTEND)
             ->load();
 
-        $this->setNotDefaultThemeForFixtureStore();
         $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
-        $this->model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
-        $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplate());
         $this->model->setDesignConfig([
             'area' => 'frontend',
             'store' => $this->objectManager->get('Magento\Store\Model\StoreManagerInterface')
                 ->getStore('fixturestore')
                 ->getId(),
         ]);
+        $this->model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
 
+        $this->setNotDefaultThemeForFixtureStore();
+        $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplate());
+
+        $this->setDefaultThemeForFixtureStore();
         $this->assertStringEndsWith($expectedViewUrl, $this->model->getProcessedTemplate());
     }
 
@@ -529,6 +531,28 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected function setNotDefaultThemeForFixtureStore()
     {
+        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\View\Design\ThemeInterface'
+        );
+        $theme->load('Magento/luma', 'theme_path');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+        )->setValue(
+            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
+            $theme->getId(),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            'fixturestore'
+        );
+    }
+
+    /**
+     * Set 'Magento/blank' for the 'fixturestore' store.
+     * Application isolation is required, if a test uses this method.
+     */
+    protected function setDefaultThemeForFixtureStore()
+    {
+        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\View\Design\ThemeInterface'
         );
@@ -554,10 +578,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->getArea(Area::AREA_FRONTEND)
             ->load();
 
-        $this->setNotDefaultThemeForFixtureStore();
         $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setTemplateSubject('{{view url="Magento_Theme::favicon.ico"}}');
-        $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
         $this->model->setDesignConfig([
             'area' => 'frontend',
             'store' => $this->objectManager->get('Magento\Store\Model\StoreManagerInterface')
@@ -565,6 +587,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 ->getId(),
         ]);
 
+        $this->setNotDefaultThemeForFixtureStore();
+        $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
+
+        $this->setDefaultThemeForFixtureStore();
         $this->assertStringEndsWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
     }
 

@@ -56,7 +56,7 @@ class InterceptorTest extends \PHPUnit_Framework_TestCase
         $this->classGeneratorMock->expects($this->once())->method('generate')
             ->will($this->returnValue('source code example'));
         $model->expects($this->once())->method('_validateData')->will($this->returnValue(true));
-        $this->ioObjectMock->expects($this->any())->method('getResultFileName')->with('Exception_Interceptor');
+        $this->ioObjectMock->expects($this->any())->method('generateResultFileName')->with('Exception_Interceptor');
         $this->assertEquals('', $model->generate());
     }
 }

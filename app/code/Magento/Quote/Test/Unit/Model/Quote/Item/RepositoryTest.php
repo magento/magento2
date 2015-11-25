@@ -7,12 +7,10 @@
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
-use Magento\Quote\Model\Quote\Item\Repository;
-
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Repository
+     * @var \Magento\Quote\Api\CartItemRepositoryInterface
      */
     protected $repository;
 
@@ -59,10 +57,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->quoteRepositoryMock =
-            $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
-        $this->productRepositoryMock =
-            $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
+        $this->productRepositoryMock = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
         $this->itemDataFactoryMock =
             $this->getMock('Magento\Quote\Api\Data\CartItemInterfaceFactory', ['create'], [], '', false);
         $this->dataMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
@@ -79,7 +75,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->repository = new Repository(
+        $this->repository = new \Magento\Quote\Model\Quote\Item\Repository(
             $this->quoteRepositoryMock,
             $this->productRepositoryMock,
             $this->itemDataFactoryMock,
@@ -386,7 +382,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $itemId = 5;
         $buyRequest = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
         $cartItemProcessorMock = $this->getMock('\Magento\Quote\Model\Quote\Item\CartItemProcessorInterface');
-        $this->repository = new Repository(
+        $this->repository = new \Magento\Quote\Model\Quote\Item\Repository(
             $this->quoteRepositoryMock,
             $this->productRepositoryMock,
             $this->itemDataFactoryMock,

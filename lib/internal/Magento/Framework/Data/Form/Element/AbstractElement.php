@@ -345,15 +345,18 @@ abstract class AbstractElement extends AbstractForm
     public function getElementHtml()
     {
         $html = '';
-        if ($this->getBeforeElementHtml() && $this->getBeforeElementHtml() != '') {
+        $htmlId = $this->getHtmlId();
+
+        if (($beforeElementHtml = $this->getBeforeElementHtml())) {
             $html .= '<label class="addbefore" for="' .
-                $this->getHtmlId() .
+                $htmlId .
                 '">' .
-                $this->getBeforeElementHtml() .
+                $beforeElementHtml .
                 '</label>';
         }
+
         $html .= '<input id="' .
-            $this->getHtmlId() .
+            $htmlId .
             '" name="' .
             $this->getName() .
             '" ' .
@@ -364,16 +367,19 @@ abstract class AbstractElement extends AbstractForm
             $this->serialize(
                 $this->getHtmlAttributes()
             ) . '/>';
-        if ($this->getAfterElementJs() && $this->getAfterElementJs() != '') {
-            $html .= $this->getAfterElementJs();
+
+        if (($afterElementJs = $this->getAfterElementJs())) {
+            $html .= $afterElementJs;
         }
-        if ($this->getAfterElementHtml() && $this->getAfterElementHtml() != '') {
+
+        if (($afterElementHtml = $this->getAfterElementHtml())) {
             $html .= '<label class="addafter" for="' .
-                $this->getHtmlId() .
+                $htmlId .
                 '">' .
-                $this->getAfterElementHtml() .
+                $afterElementHtml .
                 '</label>';
         }
+
         return $html;
     }
 

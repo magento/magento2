@@ -58,6 +58,7 @@ class AssertCatalogPriceRuleAppliedShoppingCart extends AbstractConstraint
                 . "\nActual: " . $actualPrice . "\n"
             );
         }
+        $checkoutCartPage->getTotalsBlock()->waitForShippingPriceBlock();
         $actualPrices['sub_total'] = $checkoutCartPage->getTotalsBlock()->getSubtotal();
         $actualPrices['grand_total'] = $checkoutCartPage->getTotalsBlock()->getGrandTotal();
         $expectedPrices['sub_total'] = $cartPrice['sub_total'];

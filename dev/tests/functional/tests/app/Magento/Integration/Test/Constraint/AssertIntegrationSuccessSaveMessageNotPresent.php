@@ -26,7 +26,7 @@ class AssertIntegrationSuccessSaveMessageNotPresent extends AbstractConstraint
         $noSuccessMessage = false;
         if ($integrationIndex->getMessagesBlock()->isVisible()) {
             try {
-                $integrationIndex->getMessagesBlock()->getSuccessMessages();
+                $integrationIndex->getMessagesBlock()->getSuccessMessage();
             } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
                 $noSuccessMessage = true;
             }

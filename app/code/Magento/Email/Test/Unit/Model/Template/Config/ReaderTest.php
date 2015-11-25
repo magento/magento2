@@ -69,8 +69,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
         $schemaLocator = new \Magento\Email\Model\Template\Config\SchemaLocator($moduleReader);
 
-        $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
+        $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface', [], [], '', true);
+        $validationStateMock->expects($this->any())
+            ->method('isValidationRequired')
+            ->willReturn(false);
 
         $this->_moduleDirResolver = $this->getMock(
             'Magento\Framework\Module\Dir\ReverseResolver',
@@ -109,7 +111,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             $fileResolver,
             $this->_converter,
             $schemaLocator,
-            $validationState
+            $validationStateMock
         );
     }
 

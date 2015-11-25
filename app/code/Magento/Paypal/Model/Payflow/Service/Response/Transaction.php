@@ -11,7 +11,7 @@ use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Framework\Session\Generic;
 use Magento\Payment\Model\InfoInterface;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 
@@ -26,7 +26,7 @@ class Transaction
     protected $sessionTransparent;
 
     /**
-     * @var QuoteRepository
+     * @var CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -54,7 +54,7 @@ class Transaction
      * Constructor
      *
      * @param Generic $sessionTransparent
-     * @param QuoteRepository $quoteRepository
+     * @param CartRepositoryInterface $quoteRepository
      * @param Transparent $transparent
      * @param PaymentMethodManagementInterface $paymentManagement
      * @param HandlerInterface $errorHandler
@@ -62,7 +62,7 @@ class Transaction
      */
     public function __construct(
         Generic $sessionTransparent,
-        QuoteRepository $quoteRepository,
+        CartRepositoryInterface $quoteRepository,
         Transparent $transparent,
         PaymentMethodManagementInterface $paymentManagement,
         HandlerInterface $errorHandler,

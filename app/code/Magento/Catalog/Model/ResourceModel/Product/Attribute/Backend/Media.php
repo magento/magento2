@@ -298,41 +298,30 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $newFiles
      * @param int $originalProductId
      * @param int $newProductId
-     * @return $this
+     * @return array
      */
     public function duplicate($attributeId, $newFiles, $originalProductId, $newProductId)
     {
-        $mainTableAlias = $this->getMainTableAlias();
+        $mediaGalleryEntities = $this->loadMediaGalleryEntities($attributeId, $originalProductId);
 
-        $select = $this->getConnection()->select()->from(
-            [$mainTableAlias => $this->getMainTable()],
-            ['value_id', 'value']
-        )->joinInner(
-            ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
-            $mainTableAlias . '.value_id = entity.value_id',
-            ['entity_id' => 'entity_id']
-        )->where(
-            'attribute_id = ?',
-            $attributeId
-        )->where(
-            'entity.entity_id = ?',
-            $originalProductId
-        );
-
-        $valueIdMap = [];
         // Duplicate main entries of gallery
-        foreach ($this->getConnection()->fetchAll($select) as $row) {
+        $valueIdMap = [];
+        foreach ($mediaGalleryEntities as $row) {
+            $valueId = $row['value_id'];
             $data = [
                 'attribute_id' => $attributeId,
-                'entity_id' => $newProductId,
-                'value' => isset($newFiles[$row['value_id']]) ? $newFiles[$row['value_id']] : $row['value'],
+                'media_type' => $row['media_type'],
+                'disabled' => $row['disabled'],
+                'value' => isset($newFiles[$valueId]) ? $newFiles[$valueId] : $row['value'],
             ];
-
-            $valueIdMap[$row['value_id']] = $this->insertGallery($data);
+            $valueIdMap[$valueId] = $this->insertGallery($data);
+            $this->bindValueToEntity($valueIdMap[$valueId], $newProductId);
         }
 
+
+
         if (count($valueIdMap) == 0) {
-            return $this;
+            return [];
         }
 
         // Duplicate per store gallery values
@@ -345,9 +334,54 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $row['value_id'] = $valueIdMap[$row['value_id']];
+            unset($row['record_id']);
             $this->insertGalleryValueInStore($row);
+            $this->bindValueToEntity($row['value_id'], $newProductId);
         }
 
-        return $this;
+        return $valueIdMap;
+    }
+
+    /**
+     * @param array $valueIds
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function loadMediaGalleryEntitiesbyId($valueIds)
+    {
+        $select = $this->getConnection()->select()->from(
+            $this->getMainTable()
+        )->where(
+            'value_id IN(?)',
+            $valueIds
+        );
+
+        return $this->getConnection()->fetchAll($select);
+    }
+
+    /**
+     * @param int $attributeId
+     * @param int $productId
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function loadMediaGalleryEntities($attributeId, $productId)
+    {
+        $mainTableAlias = $this->getMainTableAlias();
+        $select = $this->getConnection()->select()->from(
+            [$mainTableAlias => $this->getMainTable()]
+        )->joinInner(
+            ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
+            $mainTableAlias . '.value_id = entity.value_id',
+            ['entity_id' => 'entity_id']
+        )->where(
+            'attribute_id = ?',
+            $attributeId
+        )->where(
+            'entity.entity_id = ?',
+            $productId
+        );
+
+        return $this->getConnection()->fetchAll($select);
     }
 }

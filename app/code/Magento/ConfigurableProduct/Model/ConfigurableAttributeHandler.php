@@ -40,7 +40,7 @@ class ConfigurableAttributeHandler
             1
         )->addFieldToFilter(
             'is_global',
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
         );
     }
 

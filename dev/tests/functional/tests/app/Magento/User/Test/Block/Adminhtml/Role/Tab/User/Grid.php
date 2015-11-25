@@ -30,5 +30,5 @@ class Grid extends AbstractGrid
      *
      * @var string
      */
-    protected $selectItem = '.col-in_role_users > input';
+    protected $selectItem = '.col-in_role_users input';
 }

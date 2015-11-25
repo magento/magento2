@@ -33,6 +33,9 @@
     <event name="sales_order_creditmemo_delete_after">
         <observer name="sales_grid_order_creditmemo_sync_remove" instance="SalesCreditmemoIndexGridSyncRemove" />
     </event>
+    <event name="admin_sales_order_address_update">
+        <observer name="sales_grid_admin_refresh_grids" instance="Magento\Sales\Observer\GridProcessAddressChange" />
+    </event>
     <event name="config_data_dev_grid_async_indexing_disabled">
         <observer name="sales_grid_order_async_insert" instance="SalesOrderIndexGridAsyncInsertObserver" />
         <observer name="sales_grid_order_invoice_async_insert" instance="SalesInvoiceIndexGridAsyncInsertObserver" />

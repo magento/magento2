@@ -11,6 +11,7 @@ namespace Magento\Framework\Css\PreProcessor\Instruction;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\NotationResolver;
 use Magento\Framework\View\Asset\PreProcessorInterface;
+use Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator;
 
 /**
  * @import instruction preprocessor
@@ -34,11 +35,22 @@ class Import implements PreProcessorInterface
     protected $relatedFiles = [];
 
     /**
-     * @param NotationResolver\Module $notationResolver
+     * @var RelatedGenerator
      */
-    public function __construct(NotationResolver\Module $notationResolver)
-    {
+    private $relatedFileGenerator;
+
+    /**
+     * Constructor
+     *
+     * @param NotationResolver\Module $notationResolver
+     * @param RelatedGenerator $relatedFileGenerator
+     */
+    public function __construct(
+        NotationResolver\Module $notationResolver,
+        RelatedGenerator $relatedFileGenerator
+    ) {
         $this->notationResolver = $notationResolver;
+        $this->relatedFileGenerator = $relatedFileGenerator;
     }
 
     /**
@@ -54,6 +66,7 @@ class Import implements PreProcessorInterface
         $content = $this->removeComments($chain->getContent());
 
         $processedContent = preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $content);
+        $this->relatedFileGenerator->generate($this);
 
         if ($processedContent !== $content) {
             $chain->setContent($processedContent);

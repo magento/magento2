@@ -40,7 +40,7 @@ class Data
     {
         $images = $product->getMediaGalleryImages();
         if ($images instanceof \Magento\Framework\Data\Collection) {
-            foreach ($images as &$image) {
+            foreach ($images as $image) {
                 /** @var $image \Magento\Catalog\Model\Product\Image */
                 $image->setData(
                     'small_image_url',

@@ -41,11 +41,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $validatorMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\GridPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $gridPoolMock;
-
-    /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
@@ -87,13 +82,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->gridPoolMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\GridPool',
-            ['refreshByOrderId'],
-            [],
-            '',
-            false
-        );
         $this->entitySnapshotMock = $this->getMock(
             'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             [],
@@ -117,7 +105,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             [
                 'resource' => $this->appResourceMock,
                 'validator' => $this->validatorMock,
-                'gridPool' => $this->gridPoolMock,
                 'entitySnapshot' => $this->entitySnapshotMock
             ]
         );
@@ -136,13 +123,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('isModified')
             ->with($this->addressMock)
             ->willReturn(true);
-        $this->addressMock->expects($this->exactly(3))
+        $this->addressMock->expects($this->once())
             ->method('getParentId')
             ->will($this->returnValue(1));
-        $this->gridPoolMock->expects($this->once())
-            ->method('refreshByOrderId')
-            ->with($this->equalTo(1))
-            ->will($this->returnSelf());
 
         $this->addressResource->save($this->addressMock);
     }

@@ -32,6 +32,11 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     protected $_eventPrefix = 'review';
 
     /**
+     * Cache tag
+     */
+    const CACHE_TAG = 'review_block';
+
+    /**
      * Product entity review code
      */
     const ENTITY_PRODUCT_CODE = 'product';

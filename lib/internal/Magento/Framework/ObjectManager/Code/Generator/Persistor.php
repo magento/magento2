@@ -249,8 +249,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getLoadEntityMethod()
     {
-        $body = "\$entity = \$this->{$this->_getSourceFactoryPropertyName()}->create();\n"
-            . "\$this->{$this->_getSourceResourcePropertyName()}->load(\$entity, \$key);\n"
+        $body = "\$entity = \$this->{$this->_getSourceFactoryPropertyName()}->create()->load(\$key);\n"
             . "return \$entity;";
         return [
             'name' => 'loadEntity',

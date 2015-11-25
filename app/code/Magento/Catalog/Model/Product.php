@@ -25,7 +25,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
  * @method array getAssociatedProductIds()
  * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
- * @method int getPriceType
+ * @method int getPriceType()
  * @method \Magento\Catalog\Model\ResourceModel\Product\Collection getCollection()
  * @method string getUrlKey()
  * @method Product setUrlKey(string $urlKey)
@@ -58,6 +58,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Category product relation cache tag
      */
     const CACHE_PRODUCT_CATEGORY_TAG = 'catalog_category_product';
+
+    /**
+     * Product Store Id
+     */
+    const STORE_ID = 'store_id';
 
     /**
      * @var string
@@ -118,11 +123,18 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_errors = [];
 
     /**
+     * Product option factory
+     *
+     * @var Product\OptionFactory
+     */
+    protected $optionFactory;
+
+    /**
      * Product option
      *
      * @var Product\Option
      */
-    protected $_optionInstance;
+    protected $optionInstance;
 
     /**
      * @var array
@@ -309,7 +321,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         ProductInterface::TYPE_ID,
         ProductInterface::CREATED_AT,
         ProductInterface::UPDATED_AT,
-        ProductInterface::STORE_ID,
         'media_gallery',
         'tier_price',
     ];
@@ -337,7 +348,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Link $productLink
      * @param Product\Configuration\Item\OptionFactory $itemOptionFactory
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
-     * @param Product\Option $catalogProductOption
+     * @param Product\OptionFactory $catalogProductOptionFactory
      * @param Product\Visibility $catalogProductVisibility
      * @param Product\Attribute\Source\Status $catalogProductStatus
      * @param Product\Media\Config $catalogProductMediaConfig
@@ -376,7 +387,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         Product\Link $productLink,
         \Magento\Catalog\Model\Product\Configuration\Item\OptionFactory $itemOptionFactory,
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
-        \Magento\Catalog\Model\Product\Option $catalogProductOption,
+        \Magento\Catalog\Model\Product\OptionFactory $catalogProductOptionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
@@ -405,7 +416,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_stockItemFactory = $stockItemFactory;
-        $this->_optionInstance = $catalogProductOption;
+        $this->optionFactory = $catalogProductOptionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_catalogProductStatus = $catalogProductStatus;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -961,9 +972,24 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function eavReindexCallback()
     {
-        if ($this->isObjectNew() || $this->hasDataChanges()) {
+        if ($this->isObjectNew() || $this->isDataChanged($this)) {
             $this->_productEavIndexerProcessor->reindexRow($this->getEntityId());
         }
+    }
+
+    /**
+     * Check if data was changed
+     *
+     * @return bool
+     */
+    public function isDataChanged()
+    {
+        foreach (array_keys($this->getData()) as $field) {
+            if ($this->dataHasChangedFor($field)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1483,11 +1509,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasData('media_gallery_images') && is_array($this->getMediaGallery('images'))) {
             $images = $this->_collectionFactory->create();
             foreach ($this->getMediaGallery('images') as $image) {
-                if (isset($image['disabled']) && $image['disabled']) {
+                if ((isset($image['disabled']) && $image['disabled']) || empty($image['value_id'])) {
                     continue;
                 }
                 $image['url'] = $this->getMediaConfig()->getMediaUrl($image['file']);
-                $image['id'] = !empty($image['value_id']) ? $image['value_id'] : null;
+                $image['id'] = $image['value_id'];
                 $image['path'] = $directory->getAbsolutePath($this->getMediaConfig()->getMediaPath($image['file']));
                 $images->addItem(new \Magento\Framework\DataObject($image));
             }
@@ -1889,7 +1915,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getOptionInstance()
     {
-        return $this->_optionInstance;
+        if (!isset($this->optionInstance)) {
+            $this->optionInstance = $this->optionFactory->create();
+            $this->optionInstance->setProduct($this);
+        }
+        return $this->optionInstance;
     }
 
     /**

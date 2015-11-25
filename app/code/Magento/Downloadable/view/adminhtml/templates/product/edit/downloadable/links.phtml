@@ -34,7 +34,34 @@
     <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[GLOBAL]') . '"' : ''; ?>>
         <label class="admin__field-label" for="downloadable_link_purchase_type"><span><?php /* @escapeNotVerified */ echo __('Links can be purchased separately')?></span></label>
         <div class="admin__field-control">
-            <?php /* @escapeNotVerified */ echo $block->getPurchasedSeparatelySelect()?>
+            <div class="admin__field-control link-switcher" data-role="link-switcher">
+                <div class="admin__field-control-group">
+                    <div class="admin__field admin__field-option">
+                        <input type="radio" name="product[links_purchased_separately]" value="1"
+                               class="admin__control-radio"
+                               id="link-switcher1"
+                           <?php if($block->isProductLinksCanBePurchasedSeparately()): ?>
+                               checked="checked"
+                           <?php endif; ?>
+                            >
+                        <label class="admin__field-label" for="link-switcher1">
+                            <span>Yes</span>
+                        </label>
+                    </div>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio" name="product[links_purchased_separately]" value="0"
+                                class="admin__control-radio"
+                                id="link-switcher0"
+                            <?php if(!$block->isProductLinksCanBePurchasedSeparately()): ?>
+                                checked="checked"
+                            <?php endif; ?>
+                            >
+                        <label class="admin__field-label" for="link-switcher0">
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="admin__field admin__field-wide">
@@ -107,8 +134,10 @@ require([
             '</td>'+
             <?php if ($block->getCanReadPrice() !== false) : ?>
                 '<td class="col-price">'+
-                    '<input type="text" id="downloadable_link_<%- data.id %>_price_value" class="input-text admin__control-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%- data.id %>][price]" value="<%- data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
-                    '<div class="note">[<?php /* @escapeNotVerified */ echo $block->getBaseCurrencyCode($_product->getStoreId()) ?>]</div>' +
+                    '<div class="admin__control-addon">' +
+                        '<input type="text" id="downloadable_link_<%- data.id %>_price_value" class="input-text admin__control-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%- data.id %>][price]" value="<%- data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
+                        '<label class="admin__addon-prefix"><span><?php echo $block->escapeHtml($block->getBaseCurrencySymbol($_product->getStoreId())) ?></span></label>' +
+                    '</div>' +
                     <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
                         '<div class="admin__field admin__field-option">'+
                             '<input type="checkbox" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> class="admin__control-checkbox" />'+
@@ -355,9 +384,9 @@ require([
                 }
             },
             togglePriceFields : function(){
-                var toogleTo = $('downloadable_link_purchase_type').value;
+                var toogleTo = jQuery('#link-switcher1').is(':checked');
                 var disableFlag = true;
-                if (toogleTo == '1') {
+                if (toogleTo) {
                     disableFlag = false;
                 }
                 $$('.link-prices[type="text"]').each(function(elm){
@@ -440,9 +469,10 @@ require([
             })(jQuery);
         };
 
-
-        if ($('downloadable_link_purchase_type')) {
-            Event.observe('downloadable_link_purchase_type', 'change', linkItems.togglePriceFields.bind());
+        if (jQuery('input[name="product[links_purchased_separately]"]')) {
+            jQuery('input[name="product[links_purchased_separately]"]').on('change', function () {
+                linkItems.togglePriceFields.bind()
+            });
         }
 
         if($('add_link_item')) {

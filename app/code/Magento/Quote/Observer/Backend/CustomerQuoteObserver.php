@@ -7,7 +7,7 @@ namespace Magento\Quote\Observer\Backend;
 
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Config\Share as ShareConfig;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -27,19 +27,19 @@ class CustomerQuoteObserver implements ObserverInterface
     protected $storeManager;
 
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
      * @param StoreManagerInterface $storeManager
      * @param ShareConfig $config
-     * @param QuoteRepository $quoteRepository
+     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ShareConfig $config,
-        QuoteRepository $quoteRepository
+        CartRepositoryInterface $quoteRepository
     ) {
         $this->storeManager = $storeManager;
         $this->config = $config;

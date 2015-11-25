@@ -87,7 +87,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerRepositoryMock;
 
-    /** @var \Magento\Quote\Model\QuoteRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $quoteRepositoryMock;
 
     /**
@@ -142,7 +142,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->addressFactoryMock = $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false);
         $this->formFactoryMock = $this->getMock('Magento\Customer\Model\Metadata\FormFactory', [], [], '', false);
         $this->customerFactoryMock = $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false);
-        $this->quoteManagementMock = $this->getMock('Magento\Quote\Model\QuoteManagement', [], [], '', false);
+        $this->quoteManagementMock = $this->getMock('\Magento\Quote\Api\CartManagementInterface');
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
         $this->copyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
@@ -181,13 +181,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->quoteRepositoryMock = $this->getMock(
-            'Magento\Quote\Model\QuoteRepository',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
 
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
             'Magento\Framework\Api\ExtensibleDataObjectConverter'

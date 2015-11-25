@@ -24,18 +24,18 @@ class Validation
     protected $checkoutAgreementsRepository;
 
     /**
-     * @var \Magento\CheckoutAgreements\Model\AgreementsValidator
+     * @var \Magento\Checkout\Api\AgreementsValidatorInterface
      */
     protected $agreementsValidator;
 
     /**
-     * @param \Magento\CheckoutAgreements\Model\AgreementsValidator $agreementsValidator
+     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\CheckoutAgreements\Model\AgreementsValidator $agreementsValidator,
+        \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
     ) {

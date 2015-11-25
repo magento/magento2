@@ -27,7 +27,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
         $this->resultJsonFactory = $resultJsonFactory;
     }
     /**
-     * Add attribute to product template
+     * Add attribute to attribute set
      *
      * @return \Magento\Framework\Controller\Result\Json
      */

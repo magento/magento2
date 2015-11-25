@@ -11,7 +11,71 @@ define([
     'use strict';
 
     var root = 'appData',
+        localStorage = window.localStorage,
+        hasSupport,
         storage;
+
+    /**
+     * Flag which indicates whether localStorage is supported.
+     */
+    hasSupport = (function () {
+        var key = '_storageSupported';
+
+        try {
+            localStorage.setItem(key, 'true');
+
+            if (localStorage.getItem(key) === 'true') {
+                localStorage.removeItem(key);
+
+                return true;
+            }
+
+            return false;
+        } catch (e) {
+            return false;
+        }
+    })();
+
+    if (!hasSupport) {
+        localStorage = {
+            _data: {},
+
+            /**
+             * Sets value of the specified item.
+             *
+             * @param {String} key - Key of the property.
+             * @param {*} value - Properties' value.
+             */
+            setItem: function (key, value) {
+                this._data[key] = value + '';
+            },
+
+            /**
+             * Retrieves specfied item.
+             *
+             * @param {String} key - Key of the property to be retrieved.
+             */
+            getItem: function (key) {
+                return this._data[key];
+            },
+
+            /**
+             * Removes specfied item.
+             *
+             * @param {String} key - Key of the property to be removed.
+             */
+            removeItem: function (key) {
+                delete this._data[key];
+            },
+
+            /**
+             * Removes all items.
+             */
+            clear: function () {
+                this._data = {};
+            }
+        };
+    }
 
     /**
      * Extracts and parses data stored in localStorage by the

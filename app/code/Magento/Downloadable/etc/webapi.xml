@@ -45,10 +45,10 @@
     </route>
     <route url="/V1/products/:sku/downloadable-links/samples/:id" method="PUT">
     <service class="Magento\Downloadable\Api\SampleRepositoryInterface" method="save"/>
-    <resources>
-        <resource ref="Magento_Downloadable::downloadable" />
-    </resources>
-</route>
+        <resources>
+            <resource ref="Magento_Downloadable::downloadable" />
+        </resources>
+    </route>
     <route url="/V1/products/downloadable-links/samples/:id" method="DELETE">
         <service class="Magento\Downloadable\Api\SampleRepositoryInterface" method="delete"/>
         <resources>

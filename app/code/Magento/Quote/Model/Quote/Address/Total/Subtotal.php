@@ -104,6 +104,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
+        $quoteItem->setConvertedPrice(null);
         $originalPrice = $product->getPrice();
         if ($quoteItem->getParentItem() && $quoteItem->isChildrenCalculated()) {
             $finalPrice = $quoteItem->getParentItem()->getProduct()->getPriceModel()->getChildFinalPrice(
@@ -170,6 +171,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

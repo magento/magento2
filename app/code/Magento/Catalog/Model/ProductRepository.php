@@ -286,7 +286,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($createNew) {
             $product = $this->productFactory->create();
             if ($this->storeManager->hasSingleStore()) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
+                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
             }
         } else {
             unset($this->instances[$productData['sku']]);
@@ -296,8 +296,27 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
+        $this->assignProductToWebsites($product);
 
         return $product;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return void
+     */
+    private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
+    {
+        if (!$this->storeManager->hasSingleStore()) {
+
+            if ($this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+                $websiteIds = array_keys($this->storeManager->getWebsites());
+            } else {
+                $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
+            }
+
+            $product->setWebsiteIds(array_unique(array_merge($product->getWebsiteIds(), $websiteIds)));
+        }
     }
 
     /**
@@ -558,6 +577,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productLinks = $product->getProductLinks();
         }
 
+        $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
         $product = $this->initializeProductData($productDataArray, empty($productId));
 
         if (isset($productDataArray['options'])) {
@@ -679,10 +699,21 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         Collection $collection
     ) {
         $fields = [];
+        $categoryFilter = [];
         foreach ($filterGroup->getFilters() as $filter) {
-            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-            $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
+            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+
+            if ($filter->getField() == 'category_id') {
+                $categoryFilter[$conditionType][] = $filter->getValue();
+                continue;
+            }
+            $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
         }
+
+        if ($categoryFilter) {
+            $collection->addCategoriesFilter($categoryFilter);
+        }
+
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }

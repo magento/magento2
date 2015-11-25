@@ -179,7 +179,7 @@ define([
                     });
                     importContainer.load(
                         this.options.productGridUrl,
-                        {form_key: this.options.formKey},
+                        {form_key: this.options.formKey, current_product_id : this.options.currentProductId},
                         function () {
                             importContainer.modal('openModal');
                         }
@@ -194,7 +194,8 @@ define([
                     var widget = this,
                         currentElement = $(event.target),
                         parentId = '#' + currentElement.closest('.fieldset-alt').attr('id'),
-                        group = currentElement.find('[value="' + currentElement.val() + '"]').closest('optgroup').attr('label'),
+                        group = currentElement.find('[value="' + currentElement.val() + '"]')
+                            .closest('optgroup').attr('data-optgroup-name'),
                         previousGroup = $(parentId + '_previous_group').val(),
                         previousBlock = $(parentId + '_type_' + previousGroup),
                         tmpl;
@@ -385,9 +386,12 @@ define([
                 var priceType = $('#' + this.options.fieldId + '_' + data.id + '_select_' + data.select_id + '_price_type');
                 priceType.val(data.price_type).attr('data-store-label', data.price_type);
             }
+
             this._bindUseDefault(this.options.fieldId + '_' + data.id + '_select_' + data.select_id, data);
             this.refreshSortableElements();
             this.options.selectionItemCount[data.id] = parseInt(this.options.selectionItemCount[data.id], 10) + 1;
+
+            $('#' + this.options.fieldId + '_' + data.id + '_select_' + data.select_id + '_title').focus();
         },
 
         /**

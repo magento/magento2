@@ -23,11 +23,11 @@ $partners = $block->getPartners();
                     <?php echo $block->escapeHtml($partner['description']);?>
                     <br />
                     <a href="<?php echo $block->escapeHtml($partner['url_page']);?>" target="_blank">
-                        Read More
+                        <?php /* @escapeNotVerified */ echo __('Read More'); ?>
                     </a>
                     <br />
                     <a href="<?php echo $block->escapeHtml($partner['url_partner_page']);?>" target="_blank">
-                        Partner Page
+                        <?php /* @escapeNotVerified */ echo __('Partner Page'); ?>
                     </a>
                 </p>
             </div>
@@ -35,6 +35,6 @@ $partners = $block->getPartners();
     </div>
 <?php else : ?>
     <p>
-        No partners were found
+        <?php /* @escapeNotVerified */ echo __('No partners were found'); ?>
     </p>
 <?php endif; ?>

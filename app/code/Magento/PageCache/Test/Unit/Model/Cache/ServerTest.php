@@ -64,7 +64,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($httpHost);
         $this->urlBuilderMock->expects($this->exactly($getUrlCallCtr))
             ->method('getUrl')
-            ->with('*')
+            ->with('*', ['_nosid' => true])
             ->willReturn($url);
 
         $uris = [];

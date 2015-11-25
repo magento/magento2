@@ -26,8 +26,15 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
         $this->assertSame(
             $this->taxDetailsItem,
-            $this->calculate($this->rowBaseCalculator)
+            $this->calculate($this->rowBaseCalculator, true)
         );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
+
+        $this->assertSame(
+            $this->taxDetailsItem,
+            $this->calculate($this->rowBaseCalculator, false)
+        );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
     }
 
     public function testCalculateWithTaxNotInPrice()

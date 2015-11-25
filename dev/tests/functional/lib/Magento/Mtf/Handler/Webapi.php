@@ -13,7 +13,7 @@ use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 /**
  * Abstract class for webapi handlers.
  */
-abstract class Webapi implements HandlerInterface
+abstract class Webapi extends Curl implements HandlerInterface
 {
     /**
      * Configuration parameters array.
