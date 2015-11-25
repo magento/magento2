@@ -122,7 +122,7 @@ class Source
      * Perform necessary preprocessing and materialization when the specified asset is requested
      *
      * Returns an array of two elements:
-     * - directory code where the file is supposed to be found
+     * - directory where the file is supposed to be found
      * - relative path to the file
      *
      * returns false if source file was not found
@@ -133,8 +133,8 @@ class Source
     private function preProcess(LocalInterface $asset)
     {
         $sourceFile = $this->findSourceFile($asset);
-        $dir = false;
-        $path = false;
+        $dir = $this->rootDir->getAbsolutePath();
+        $path = '';
         if ($sourceFile) {
             $fileParts = explode('/', $sourceFile);
             $path = array_pop($fileParts);
