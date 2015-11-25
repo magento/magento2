@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 
+/* global $break $ $$ FORM_KEY */
+
 define([
     'jquery',
     'mage/template',
