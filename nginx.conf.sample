@@ -30,6 +30,7 @@ add_header 'X-XSS-Protection' '1; mode=block';
 location /setup {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {
+        fastcgi_split_path_info ^(.+?\.php)(/.*)$;
         fastcgi_pass   fastcgi_backend;
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
