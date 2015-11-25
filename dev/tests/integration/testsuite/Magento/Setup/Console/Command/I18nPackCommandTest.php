@@ -36,7 +36,8 @@ class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
         $this->removeCsv('D');
     }
 
-    private function removeCsv($module) {
+    private function removeCsv($module)
+    {
         if (file_exists(__DIR__ . "/_files/root/app/code/Magento/{$module}/i18n")) {
             $helper = new \Magento\Framework\Backup\Filesystem\Helper();
             $helper->rm(__DIR__ . "/_files/root/app/code/Magento/{$module}/i18n", [], true);
