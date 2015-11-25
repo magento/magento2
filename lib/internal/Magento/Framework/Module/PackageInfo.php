@@ -54,6 +54,11 @@ class PackageInfo
     private $componentRegistrar;
 
     /**
+     * @var array
+     */
+    protected $nonExistingDependencies = [];
+
+    /**
      * Constructor
      *
      * @param Dir\Reader $reader
@@ -104,7 +109,65 @@ class PackageInfo
     public function getModuleName($packageName)
     {
         $this->load();
-        return isset($this->packageModuleMap[$packageName]) ? $this->packageModuleMap[$packageName] : '';
+
+        $moduleName = null;
+        if (isset($this->packageModuleMap[$packageName])) {
+            $moduleName = $this->packageModuleMap[$packageName];
+        } elseif ($this->isMagentoPackage($packageName)) {
+            $moduleName = $this->convertPackageNameToModuleName($packageName);
+            $this->addNonExistingDependency($moduleName);
+        }
+
+        return $moduleName;
+    }
+
+    /**
+     * Add non existing dependency
+     *
+     * @param string $dependency
+     * @return void
+     */
+    protected function addNonExistingDependency($dependency)
+    {
+        if (!isset($this->nonExistingDependencies[$dependency])) {
+            $this->nonExistingDependencies[$dependency] = $dependency;
+        }
+    }
+
+    /**
+     * Return list of non existing dependencies
+     *
+     * @return array
+     */
+    public function getNonExistingDependencies()
+    {
+        return $this->nonExistingDependencies;
+    }
+
+    /**
+     * Build module name based on internal package name
+     *
+     * @param string $packageName
+     * @return string|null
+     */
+    protected function convertPackageNameToModuleName($packageName)
+    {
+        $moduleName = str_replace('magento/module-', '', $packageName);
+        $moduleName = str_replace('-', ' ', $moduleName);
+        $moduleName = str_replace(' ', '', ucwords($moduleName));
+
+        return 'Magento_' . $moduleName;
+    }
+
+    /**
+     * Check if package is internal magento module
+     *
+     * @param string $packageName
+     * @return bool
+     */
+    protected function isMagentoPackage($packageName)
+    {
+        return strpos($packageName, 'magento/module-') === 0;
     }
 
     /**

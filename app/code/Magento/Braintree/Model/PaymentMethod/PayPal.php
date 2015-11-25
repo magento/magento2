@@ -148,8 +148,9 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      *
      * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
+     * @throws LocalizedException
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
         $infoInstance = $this->getInfoInstance();
         $infoInstance->setAdditionalInformation('payment_method_nonce', $data->getPaymentMethodNonce());

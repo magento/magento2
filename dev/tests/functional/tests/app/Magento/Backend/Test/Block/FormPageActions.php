@@ -49,7 +49,7 @@ class FormPageActions extends PageActions
      *
      * @var string
      */
-    protected $deleteButton = '#delete';
+    protected $deleteButton = '.delete';
 
     /**
      * Magento loader

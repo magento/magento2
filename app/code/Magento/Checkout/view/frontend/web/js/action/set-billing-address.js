@@ -59,6 +59,7 @@ define(
 
                     if (!quote.isVirtual()) {
                         getTotalsAction([]);
+                        fullScreenLoader.stopLoader();
                     } else {
                         deferred = $.Deferred();
                         getPaymentInformationAction(deferred);

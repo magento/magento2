@@ -204,7 +204,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
             'unsigned' => true,
             'nullable' => false,
             'default' => '0',
-            'comment' => 'Product Template ID',
+            'comment' => 'Attribute Set ID',
         ];
         $columns['type_id'] = [
             'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,

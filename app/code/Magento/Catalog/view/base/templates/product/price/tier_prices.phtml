@@ -22,17 +22,19 @@ $product = $block->getSaleableItem();
     <?php foreach ($tierPrices as $index => $price) : ?>
         <li class="item">
             <?php
-                $popupId = 'msrp-popup-' . $product->getId() . $block->getRandomString(20);
+                $productId = $product->getId();
+                $isSaleable = $product->isSaleable();
+                $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
                 if ($msrpShowOnGesture && $price['price']->getValue() < $product->getMsrp()):
                     $addToCartUrl = '';
-                    if ($product->isSaleable()) {
+                    if ($isSaleable) {
                         $addToCartUrl = $this->helper('\Magento\Checkout\Helper\Cart')
                             ->getAddUrl($product, ['qty' => $price['price_qty']]);
                     }
                     $tierPriceData = [
                         'addToCartUrl' => $addToCartUrl,
                         'name' => $product->getName(),
-                        'price' => $block->renderAmount(
+                        'realPrice' => $block->renderAmount(
                             $price['price'],
                             [
                                 'price_id'          => $index,
@@ -40,7 +42,7 @@ $product = $block->getSaleableItem();
                                 'include_container' => true
                             ]
                         ),
-                        'msrp' => $block->renderAmount(
+                        'msrpPrice' => $block->renderAmount(
                             $block->getPriceType('msrp_price')->getAmount(),
                             [
                                 'price_id'          => $index,
@@ -54,7 +56,8 @@ $product = $block->getSaleableItem();
                     }
                 ?>
                 <?php /* @escapeNotVerified */ echo __('Buy %1 for: ', $price['price_qty']); ?>
-                <a href="#" id="<?php /* @escapeNotVerified */ echo($popupId);?>"
+                <a href="javascript:void(0);"
+                   id="<?php /* @escapeNotVerified */ echo($popupId);?>"
                    data-tier-price="<?php echo $block->escapeHtml($block->jsonEncode($tierPriceData)); ?>">
                     <?php /* @escapeNotVerified */ echo __('Click for price'); ?></a>
                 <?php else:
@@ -87,9 +90,14 @@ $product = $block->getSaleableItem();
             {
                 ".product-info-main": {
                     "addToCart": {
+                        "origin": "tier",
+                        "addToCartButton": "#product_addtocart_form [type=submit]",
                         "inputQty": "#qty",
                         "attr": "[data-tier-price]",
-                        "productForm": "#product_addtocart_form"
+                        "productForm": "#product_addtocart_form",
+                        "productId": "<?php /* @escapeNotVerified */ echo $productId; ?>",
+                        "productIdInput": "input[type=hidden][name=product]",
+                        "isSaleable": "<?php /* @escapeNotVerified */ echo $isSaleable; ?>"
                     }
                 }
             }

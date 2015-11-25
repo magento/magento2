@@ -671,4 +671,23 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 
         return $this->getConnection()->fetchCol($select);
     }
+
+    /**
+     * Get positions of associated to category products
+     *
+     * @param \Magento\Catalog\Model\Category $category
+     * @return array
+     */
+    public function getProductsPosition($category)
+    {
+        $select = $this->getConnection()->select()->from(
+            $this->getTable('catalog_category_product'),
+            ['product_id', 'position']
+        )->where(
+            'category_id = :category_id'
+        );
+        $bind = ['category_id' => (int)$category->getId()];
+
+        return $this->getConnection()->fetchPairs($select, $bind);
+    }
 }

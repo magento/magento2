@@ -46,6 +46,11 @@ define([
                     .off('click')
                     .on('click', $.proxy(this._placeOrderHandler, this));
             }
+
+            this.element.validation();
+            $('[data-container="' + this.options.gateway + '-cc-number"]').on('focusout', function () {
+                $(this).valid();
+            });
         },
 
         /**

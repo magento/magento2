@@ -117,7 +117,7 @@ class Minifier implements MinifierInterface
             '</',
             preg_replace(
                 '#((?:<\?php\s+(?!echo|print|if|elseif|else)[^\?]*)\?>)\s+#',
-                '$1',
+                '$1 ',
                 preg_replace(
                     '#(?<!' . implode('|', $this->inlineHtmlTags) . ')\> \<#',
                     '><',

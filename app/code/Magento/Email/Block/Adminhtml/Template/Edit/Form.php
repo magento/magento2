@@ -116,7 +116,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $fieldset->addField('insert_variable', 'note', ['text' => $insertVariableButton->toHtml()]);
+        $fieldset->addField('insert_variable', 'note', ['text' => $insertVariableButton->toHtml(), 'label' => '']);
 
         $fieldset->addField(
             'template_text',

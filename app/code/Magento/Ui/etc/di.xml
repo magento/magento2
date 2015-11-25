@@ -78,7 +78,7 @@
     </virtualType>
     <virtualType name="uiConfigurationDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
         <arguments>
-            <argument name="schema" xsi:type="string">urn:magento:framework:Ui/etc/ui_configuration.xsd</argument>
+            <argument name="schema" xsi:type="string">urn:magento:module:Magento_Ui:etc/ui_configuration.xsd</argument>
             <argument name="contextXPath" xsi:type="array">
                 <item name="ui_context" xsi:type="string">/</item>
             </argument>
@@ -111,7 +111,7 @@
     </type>
     <virtualType name="uiDefinitionDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
         <arguments>
-            <argument name="schema" xsi:type="string">urn:magento:framework:Ui/etc/ui_definition.xsd</argument>
+            <argument name="schema" xsi:type="string">urn:magento:module:Magento_Ui:etc/ui_definition.xsd</argument>
             <argument name="contextXPath" xsi:type="array">
                 <item name="ui_context" xsi:type="string">/components</item>
             </argument>

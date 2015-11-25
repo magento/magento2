@@ -7,6 +7,9 @@
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
 use Magento\Catalog\Test\Constraint\AssertProductForm;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertConfigurableProductForm
@@ -23,6 +26,7 @@ class AssertConfigurableProductForm extends AssertProductForm
         'id',
         'affected_attribute_set',
         'checkout_data',
+        'price'
     ];
 
     /**
@@ -117,5 +121,40 @@ class AssertConfigurableProductForm extends AssertProductForm
             }
         }
         return $variationsMatrix;
+    }
+
+    /**
+     * Assert form data equals product configurable data.
+     *
+     * @param FixtureInterface $product
+     * @param CatalogProductIndex $productGrid
+     * @param CatalogProductEdit $productPage
+     * @return void
+     */
+    public function processAssert(
+        FixtureInterface $product,
+        CatalogProductIndex $productGrid,
+        CatalogProductEdit $productPage
+    ) {
+        $product = $this->processFixture($product);
+        parent::processAssert($product, $productGrid, $productPage);
+    }
+
+    /**
+     * Remove price field from fixture as it should not be retrieved from product page
+     *
+     * @param FixtureInterface $product
+     * @return mixed
+     */
+    protected function processFixture(FixtureInterface $product)
+    {
+        $data = $product->getData();
+        if (isset($data['price'])) {
+            unset($data['price']);
+        }
+        return $this->objectManager->create(
+            'Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct',
+            ['data' => $data]
+        );
     }
 }

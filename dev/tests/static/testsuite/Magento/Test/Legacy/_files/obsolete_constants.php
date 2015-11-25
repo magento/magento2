@@ -945,4 +945,9 @@ return [
         'THEMES',
         'Magento\Framework\App\Filesystem\DirectoryList'
     ],
+    [
+        'DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR',
+        'Magento\CatalogImportExport\Model\Import\Product',
+        'Magento\ImportExport\Model\Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR'
+    ]
 ];

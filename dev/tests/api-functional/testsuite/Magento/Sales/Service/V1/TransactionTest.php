@@ -118,7 +118,7 @@ class TransactionTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters($filters);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
-        $requestData = ['criteria' => $searchData];
+        $requestData = ['searchCriteria' => $searchData];
 
         $serviceInfo = [
             'rest' => [

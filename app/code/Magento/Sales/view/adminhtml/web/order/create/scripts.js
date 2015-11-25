@@ -64,20 +64,22 @@ define([
                     }, 10);
                 };
 
-                this.dataArea.onLoad = this.dataArea.onLoad.wrap(function(proceed) {
-                    proceed();
-                    this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
-                    this._parent.itemsArea.onLoad();
-                });
+                if (jQuery('#' + this.getAreaId('items')).is(':visible')) {
+                    this.dataArea.onLoad = this.dataArea.onLoad.wrap(function(proceed) {
+                        proceed();
+                        this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
+                        this._parent.itemsArea.onLoad();
+                    });
 
-                this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
-                    proceed();
-                    if ($(searchAreaId) && !$(searchAreaId).visible()) {
-                        this.addControlButton(searchButton);
-                    }
-                });
-                this.areasLoaded();
-                this.itemsArea.onLoad();
+                    this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
+                        proceed();
+                        if ($(searchAreaId) && !$(searchAreaId).visible()) {
+                            this.addControlButton(searchButton);
+                        }
+                    });
+                    this.areasLoaded();
+                    this.itemsArea.onLoad();
+                }
             }).bind(this));
 
             jQuery('#edit_form')
@@ -85,7 +87,6 @@ define([
                     jQuery(this).trigger('realOrder');
                 })
                 .on('realOrder', this._realSubmit.bind(this));
-
         },
 
         areasLoaded: function(){
@@ -1151,11 +1152,22 @@ define([
                 jQuery('#edit_form').triggerHandler('save');
             }
             if (this.orderItemChanged) {
-                if (confirm('You have item changes')) {
-                    disableAndSave();
-                } else {
-                    this.itemsUpdate();
-                }
+                var self = this;
+
+                jQuery('#edit_form').trigger('processStop');
+
+                confirm({
+                    content: jQuery.mage.__('You have item changes'),
+                    actions: {
+                        confirm: function() {
+                            jQuery('#edit_form').trigger('processStart');
+                            disableAndSave();
+                        },
+                        cancel: function() {
+                            self.itemsUpdate();
+                        }
+                    }
+                });
             } else {
                 disableAndSave();
             }

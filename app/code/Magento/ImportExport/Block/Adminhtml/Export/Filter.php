@@ -120,7 +120,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $html = '<input type="text" name="' . $this->getFilterElementName(
             $attribute->getAttributeCode()
-        ) . '" class="input-text input-text-export-filter"';
+        ) . '" class="admin__control-text input-text input-text-export-filter"';
         if ($value) {
             $html .= ' value="' . $this->escapeHtml($value) . '"';
         }
@@ -190,7 +190,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         ':</strong>&nbsp;' .
         '<input type="text" name="' .
         $name .
-        '[]" class="input-text input-text-range"' .
+        '[]" class="admin__control-text input-text input-text-range"' .
         ' value="' .
         $fromValue .
         '"/>&nbsp;' .
@@ -200,7 +200,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         ) .
         ':</strong>&nbsp;<input type="text" name="' .
         $name .
-        '[]" class="input-text input-text-range" value="' .
+        '[]" class="admin__control-text input-text input-text-range" value="' .
         $toValue .
         '" />';
     }
@@ -236,7 +236,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()),
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
-                'class' => 'select select-export-filter',
+                'class' => 'admin__control-select select select-export-filter',
             ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->createBlock(

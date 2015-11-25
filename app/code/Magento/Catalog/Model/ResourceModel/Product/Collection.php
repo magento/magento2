@@ -134,22 +134,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_priceDataFieldFilters = [];
 
     /**
-     * Map of price fields
-     *
-     * @var array
-     */
-    protected $_map = [
-        'fields' => [
-            'price' => 'price_index.price',
-            'final_price' => 'price_index.final_price',
-            'min_price' => 'price_index.min_price',
-            'max_price' => 'price_index.max_price',
-            'tier_price' => 'price_index.tier_price',
-            'special_price' => 'price_index.special_price',
-        ],
-    ];
-
-    /**
      * Price expression sql
      *
      * @var string|null
@@ -854,6 +838,40 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         return $this;
+    }
+
+    /**
+     * Filter Product by Categories
+     *
+     * @param array $categoriesFilter
+     */
+    public function addCategoriesFilter(array $categoriesFilter)
+    {
+        foreach ($categoriesFilter as $conditionType => $values) {
+            $categorySelect = $this->getConnection()->select()->from(
+                ['cat' => $this->getTable('catalog_category_product')],
+                'cat.product_id'
+            )->where($this->getConnection()->prepareSqlCondition('cat.category_id', ['in' => $values]));
+            $selectCondition = [
+                $this->mapConditionType($conditionType) => $categorySelect
+            ];
+            $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id' , $selectCondition));
+        }
+    }
+
+    /**
+     * Map equal and not equal conditions to in and not in
+     *
+     * @param string $conditionType
+     * @return mixed
+     */
+    private function mapConditionType($conditionType)
+    {
+        $conditionsMap = [
+            'eq' => 'in',
+            'neq' => 'nin'
+        ];
+        return isset($conditionsMap[$conditionType]) ? $conditionsMap[$conditionType] : $conditionType;
     }
 
     /**

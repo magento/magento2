@@ -105,7 +105,7 @@ $relatedOrders = $block->getRelatedOrders();
                                     )); ?>
                                 </td>
                                 <td data-th="<?php echo $block->escapeHtml(__('Order Total')); ?>" class="col total">
-                                    <?php echo $block->escapeHtml($block->getOrderItemValue($order, 'order_total')); ?>
+                                    <?php /* @noEscape */ echo $block->getOrderItemValue($order, 'order_total'); ?>
                                 </td>
                                 <td data-th="<?php echo $block->escapeHtml(__('Order Status')); ?>" class="col status">
                                     <?php echo $block->escapeHtml($block->getOrderItemValue(

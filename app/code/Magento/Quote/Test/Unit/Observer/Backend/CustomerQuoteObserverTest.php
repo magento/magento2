@@ -26,7 +26,7 @@ class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\\Magento\Quote\Model\QuoteRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepositoryMock;
 
@@ -48,10 +48,7 @@ class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
         $this->configMock = $this->getMockBuilder('Magento\Customer\Model\Config\Share')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quoteRepositoryMock = $this->getMockBuilder('\Magento\Quote\Model\QuoteRepository')
-            ->disableOriginalConstructor()
-            ->setMethods(['getForCustomer', 'save'])
-            ->getMock();
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
             ->disableOriginalConstructor()
             ->getMock();

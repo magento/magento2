@@ -10,121 +10,55 @@
 namespace Magento\Framework\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
-use Magento\Framework\View\Xsd\Reader;
-use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
 
-class View extends \Magento\Framework\Config\AbstractXml
+class View extends \Magento\Framework\Config\Reader\Filesystem
 {
-    /** @var UrnResolver */
-    protected $urnResolver;
-
-    /**
-     * @var \Magento\Framework\View\Xsd\Media\TypeDataExtractorPool
-     */
-    protected $extractorPool;
-
     /**
      * @var array
      */
     protected $xpath;
 
     /**
-     * @var Reader
+     * View config data
+     *
+     * @var array
      */
-    private $xsdReader;
+    protected $data;
 
     /**
-     * @param array $configFiles
-     * @param Reader $xsdReader
-     * @param UrnResolver $urnResolver
-     * @param TypeDataExtractorPool $extractorPool
+     * @param FileResolverInterface $fileResolver
+     * @param ConverterInterface $converter
+     * @param SchemaLocatorInterface $schemaLocator
+     * @param ValidationStateInterface $validationState
+     * @param string $fileName
+     * @param array $idAttributes
+     * @param string $domDocumentClass
+     * @param string $defaultScope
      * @param array $xpath
      */
     public function __construct(
-        $configFiles,
-        Reader $xsdReader,
-        UrnResolver $urnResolver,
-        TypeDataExtractorPool $extractorPool,
+        FileResolverInterface $fileResolver,
+        ConverterInterface $converter,
+        SchemaLocatorInterface $schemaLocator,
+        ValidationStateInterface $validationState,
+        $fileName,
+        $idAttributes = [],
+        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $defaultScope = 'global',
         $xpath = []
     ) {
         $this->xpath = $xpath;
-        $this->extractorPool = $extractorPool;
-        $this->urnResolver = $urnResolver;
-        $this->xsdReader = $xsdReader;
-        parent::__construct($configFiles);
-    }
-    
-    /**
-     * Merged file view.xsd
-     *
-     * @return string
-     */
-    public function getSchemaFile()
-    {
-        $configXsd = $this->xsdReader->read();
-        return $configXsd;
-    }
-
-    /**
-     * Extract configuration data from the DOM structure
-     *
-     * @param \DOMDocument $dom
-     * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _extractData(\DOMDocument $dom)
-    {
-        $result = [];
-        /** @var $varsNode \DOMElement */
-        foreach ($dom->childNodes->item(0)->childNodes as $childNode) {
-            switch ($childNode->tagName) {
-                case 'vars':
-                    $moduleName = $childNode->getAttribute('module');
-                    $result[$childNode->tagName][$moduleName] = $this->parseVarElement($childNode);
-                    break;
-                case 'exclude':
-                    /** @var $itemNode \DOMElement */
-                    foreach ($childNode->getElementsByTagName('item') as $itemNode) {
-                        $itemType = $itemNode->getAttribute('type');
-                        $result[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
-                    }
-                    break;
-                case 'media':
-                    foreach ($childNode->childNodes as $mediaNode) {
-                        if ($mediaNode instanceof \DOMElement) {
-                            $mediaNodesArray =
-                                $this->extractorPool->nodeProcessor($mediaNode->tagName)->process(
-                                    $mediaNode,
-                                    $childNode->tagName
-                                );
-                            $result = array_merge($result, $mediaNodesArray);
-                        }
-                    }
-                    break;
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Recursive parser for <var> nodes
-     *
-     * @param \DOMElement $node
-     * @return string|boolean|number|null|[]
-     */
-    protected function parseVarElement(\DOMElement $node)
-    {
-        $result = [];
-        for ($varNode = $node->firstChild; $varNode !== null; $varNode = $varNode->nextSibling) {
-            if ($varNode instanceof \DOMElement && $varNode->tagName == "var") {
-                $varName = $varNode->getAttribute('name');
-                $result[$varName] = $this->parseVarElement($varNode);
-            }
-        }
-        if (!count($result)) {
-            $result = $node->nodeValue;
-        }
-        return $result;
+        $idAttributes = $this->getIdAttributes();
+        parent::__construct(
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $idAttributes,
+            $domDocumentClass,
+            $defaultScope
+        );
     }
 
     /**
@@ -137,7 +71,8 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getVars($module)
     {
-        return isset($this->_data['vars'][$module]) ? $this->_data['vars'][$module] : [];
+        $this->initData();
+        return isset($this->data['vars'][$module]) ? $this->data['vars'][$module] : [];
     }
 
     /**
@@ -149,11 +84,12 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getVarValue($module, $var)
     {
-        if (!isset($this->_data['vars'][$module])) {
+        $this->initData();
+        if (!isset($this->data['vars'][$module])) {
             return false;
         }
 
-        $value = $this->_data['vars'][$module];
+        $value = $this->data['vars'][$module];
         foreach (explode('/', $var) as $node) {
             if (is_array($value) && isset($value[$node])) {
                 $value = $value[$node];
@@ -174,7 +110,8 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getMediaEntities($module, $mediaType)
     {
-        return isset($this->_data['media'][$module][$mediaType]) ? $this->_data['media'][$module][$mediaType] : [];
+        $this->initData();
+        return isset($this->data['media'][$module][$mediaType]) ? $this->data['media'][$module][$mediaType] : [];
     }
 
     /**
@@ -187,8 +124,9 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getMediaAttributes($module, $mediaType, $mediaId)
     {
-        return isset($this->_data['media'][$module][$mediaType][$mediaId])
-            ? $this->_data['media'][$module][$mediaType][$mediaId]
+        $this->initData();
+        return isset($this->data['media'][$module][$mediaType][$mediaId])
+            ? $this->data['media'][$module][$mediaType][$mediaId]
             : [];
     }
 
@@ -203,41 +141,18 @@ class View extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
-     * Getter for initial view.xml contents
-     *
-     * @return string
-     */
-    protected function _getInitialXml()
-    {
-        return '<?xml version="1.0" encoding="UTF-8"?>' .
-        '<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></view>';
-    }
-
-    /**
      * Variables are identified by module and name
      *
      * @return array
      */
-    protected function _getIdAttributes()
-    {
-        $idAttributes = $this->addIdAttributes($this->xpath);
-        return $idAttributes;
-    }
-
-    /**
-     * Add attributes for module identification
-     *
-     * @param array $xpath
-     * @return array
-     */
-    protected function addIdAttributes($xpath)
+    protected function getIdAttributes()
     {
         $idAttributes = [
             '/view/vars' => 'module',
             '/view/vars/var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
         ];
-        foreach ($xpath as $attribute) {
+        foreach ($this->xpath as $attribute) {
             if (is_array($attribute)) {
                 foreach ($attribute as $key => $id) {
                     if (count($id) > 1) {
@@ -280,6 +195,19 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected function getItems()
     {
-        return isset($this->_data['exclude']) ? $this->_data['exclude'] : [];
+        $this->initData();
+        return isset($this->data['exclude']) ? $this->data['exclude'] : [];
+    }
+
+    /**
+     * Initialize data array
+     *
+     * @return void
+     */
+    protected function initData()
+    {
+        if ($this->data === null) {
+            $this->data = $this->read();
+        }
     }
 }

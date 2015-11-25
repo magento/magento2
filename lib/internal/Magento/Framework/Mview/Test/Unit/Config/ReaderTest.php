@@ -44,7 +44,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $schemaLocator = new \Magento\Framework\Mview\Config\SchemaLocator($urnResolverMock);
 
         $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
+        $validationState->expects($this->any())
+            ->method('isValidationRequired')
+            ->willReturn(false);
 
         $this->_model = new \Magento\Framework\Mview\Config\Reader(
             $this->_fileResolverMock,

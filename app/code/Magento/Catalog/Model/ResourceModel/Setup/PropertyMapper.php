@@ -26,7 +26,7 @@ class PropertyMapper extends PropertyMapperAbstract
             'is_global' => $this->_getValue(
                 $input,
                 'global',
-                \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL
+                \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
             ),
             'is_visible' => $this->_getValue($input, 'visible', 1),
             'is_searchable' => $this->_getValue($input, 'searchable', 0),

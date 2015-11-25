@@ -6,12 +6,10 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 
-class Logout extends Action implements AccountInterface
+class Logout extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var Session

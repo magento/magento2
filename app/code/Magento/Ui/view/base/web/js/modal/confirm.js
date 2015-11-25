@@ -16,6 +16,7 @@ define([
         options: {
             modalClass: 'confirm',
             title: '',
+            focus: '.action-accept',
             actions: {
 
                 /**
@@ -40,8 +41,8 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
-                    this.closeModal();
+                click: function (event) {
+                    this.closeModal(event);
                 }
             }, {
                 text: $.mage.__('OK'),
@@ -50,8 +51,8 @@ define([
                 /**
                  * Click handler.
                  */
-                click: function () {
-                    this.closeModal(true);
+                click: function (event) {
+                    this.closeModal(event, true);
                 }
             }]
         },
@@ -61,7 +62,7 @@ define([
          */
         _create: function () {
             this._super();
-            this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
+            this.modal.find(this.options.modalCloseBtn).off().on('click', _.bind(this.closeModal, this));
             this.openModal();
         },
 
@@ -82,15 +83,15 @@ define([
         /**
          * Close modal window.
          */
-        closeModal: function (result) {
+        closeModal: function (event, result) {
             result = result || false;
 
             if (result) {
-                this.options.actions.confirm();
+                this.options.actions.confirm(event);
             } else {
-                this.options.actions.cancel();
+                this.options.actions.cancel(event);
             }
-            this.options.actions.always();
+            this.options.actions.always(event);
             this.element.bind('confirmclosed', _.bind(this._remove, this));
 
             return this._super();

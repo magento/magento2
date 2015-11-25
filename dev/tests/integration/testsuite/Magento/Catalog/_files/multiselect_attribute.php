@@ -32,6 +32,7 @@ $attribute->setData(
         'used_for_sort_by' => 0,
         'frontend_label' => ['Multiselect Attribute'],
         'backend_type' => 'varchar',
+        'backend_model' => 'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend',
         'option' => [
             'value' => [
                 'option_1' => ['Option 1'],

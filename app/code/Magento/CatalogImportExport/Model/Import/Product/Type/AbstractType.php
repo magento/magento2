@@ -418,10 +418,9 @@ abstract class AbstractType
     {
         $error = false;
         $rowScope = $this->_entityModel->getRowScope($rowData);
-        if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope) &&
-            !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
-
-
+        if (\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope
+            && !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])
+        ) {
             foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
                 // check value for non-empty in the case of required attribute?
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
@@ -437,9 +436,7 @@ abstract class AbstractType
                         ))
                     ) {
                         $this->_entityModel->addRowError(
-                            // @codingStandardsIgnoreStart
-                            \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
-                            // @codingStandardsIgnoreEnd
+                            RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
                             $rowNum,
                             $attrCode
                         );

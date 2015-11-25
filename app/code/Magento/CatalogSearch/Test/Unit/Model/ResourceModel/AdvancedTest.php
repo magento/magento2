@@ -54,7 +54,7 @@ class AdvancedTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['string', 'string', 'string'],
-            ['varchar', 'string', ['like' => '%string%']],
+            ['varchar', 'string', ['like' => 'string']],
             ['varchar', ['test'], ['in_set' => ['test']]],
             ['select', ['test'], ['in' => ['test']]],
             ['range', ['from' => 1], ['from' => 1]],

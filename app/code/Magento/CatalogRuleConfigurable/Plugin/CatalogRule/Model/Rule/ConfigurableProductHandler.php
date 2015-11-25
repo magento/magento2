@@ -20,9 +20,6 @@ class ConfigurableProductHandler
     /** @var ConfigurableProductsProvider */
     private $configurableProductsProvider;
 
-    /** @var array */
-    private $subProductsValidationResults = [];
-
     /**
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable
      * @param ConfigurableProductsProvider $configurableProductsProvider
@@ -39,45 +36,24 @@ class ConfigurableProductHandler
      * @param \Magento\CatalogRule\Model\Rule $rule
      * @param array $productIds
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetMatchingProductIds(\Magento\CatalogRule\Model\Rule $rule, array $productIds)
     {
         $configurableProductIds = $this->configurableProductsProvider->getIds(array_keys($productIds));
         foreach ($configurableProductIds as $productId) {
-            $subProductsIds = $this->configurable->getChildrenIds($productId)[0];
-            $parentValidationResult = $productIds[$productId];
-            foreach ($subProductsIds as $subProductsId) {
-                $productIds[$subProductsId] = $this->getSubProductValidationResult(
-                    $rule->getId(),
-                    $subProductsId,
-                    $parentValidationResult
-                );
+            $subProductIds = $this->configurable->getChildrenIds($productId)[0];
+            $parentValidationResult = isset($productIds[$productId])
+                ? array_filter($productIds[$productId])
+                : [];
+            foreach ($subProductIds as $subProductId) {
+                $childValidationResult = isset($productIds[$subProductId])
+                    ? array_filter($productIds[$subProductId])
+                    : [];
+                $productIds[$subProductId] = $parentValidationResult + $childValidationResult;
             }
             unset($productIds[$productId]);
         }
         return $productIds;
-    }
-
-    /**
-     * Return validation result for sub-product.
-     * If any of configurable product is valid for current rule, then their sub-product must be valid too
-     *
-     * @param int $urlId
-     * @param int $subProductsId
-     * @param array $parentValidationResult
-     * @return array
-     */
-    private function getSubProductValidationResult($urlId, $subProductsId, $parentValidationResult)
-    {
-        if (!isset($this->subProductsValidationResults[$urlId][$subProductsId])) {
-            $this->subProductsValidationResults[$urlId][$subProductsId] = array_filter($parentValidationResult);
-        } else {
-            $parentValidationResult = array_intersect_key(
-                $this->subProductsValidationResults[$urlId][$subProductsId] + $parentValidationResult,
-                $parentValidationResult
-            );
-            $this->subProductsValidationResults[$urlId][$subProductsId] = $parentValidationResult;
-        }
-        return $parentValidationResult;
     }
 }

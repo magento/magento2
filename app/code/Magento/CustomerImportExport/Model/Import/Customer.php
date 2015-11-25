@@ -5,6 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -135,25 +136,25 @@ class Customer extends AbstractCustomer
     /**
      * Customer fields in file
      */
-    public $customerFields = [
-        'group_id',
-        'store_id',
-        'updated_at',
-        'created_at',
-        'created_in',
-        'prefix',
-        'firstname',
-        'middlename',
-        'lastname',
-        'suffix',
-        'dob',
+    protected $customerFields = [
+        CustomerInterface::GROUP_ID,
+        CustomerInterface::STORE_ID,
+        CustomerInterface::UPDATED_AT,
+        CustomerInterface::CREATED_AT,
+        CustomerInterface::CREATED_IN,
+        CustomerInterface::PREFIX,
+        CustomerInterface::FIRSTNAME,
+        CustomerInterface::MIDDLENAME,
+        CustomerInterface::LASTNAME,
+        CustomerInterface::SUFFIX,
+        CustomerInterface::DOB,
         'password_hash',
-        'taxvat',
-        'confirmation',
-        'gender',
+        CustomerInterface::TAXVAT,
+        CustomerInterface::CONFIRMATION,
+        CustomerInterface::GENDER,
         'rp_token',
         'rp_token_created_at',
-        ];
+    ];
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -236,11 +237,6 @@ class Customer extends AbstractCustomer
         $this->addMessageTemplate(self::ERROR_PASSWORD_LENGTH, __('Please enter a password with a valid length.'));
 
         $this->_initStores(true)->_initAttributes();
-
-        $this->validColumnNames = array_merge(
-            $this->validColumnNames,
-            $this->customerFields
-        );
 
         $this->_customerModel = $customerFactory->create();
         /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
@@ -381,7 +377,9 @@ class Customer extends AbstractCustomer
                 $attributeParameters = $this->_attributes[$attributeCode];
 
                 if ('select' == $attributeParameters['type']) {
-                    $value = $attributeParameters['options'][strtolower($value)];
+                    $value = isset($attributeParameters['options'][strtolower($value)])
+                        ? $attributeParameters['options'][strtolower($value)]
+                        : 0;
                 } elseif ('datetime' == $attributeParameters['type']) {
                     $value = (new \DateTime())->setTimestamp(strtotime($value));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
@@ -561,5 +559,18 @@ class Customer extends AbstractCustomer
     public function getEntityTable()
     {
         return $this->_entityTable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValidColumnNames()
+    {
+        $this->validColumnNames = array_merge(
+            $this->validColumnNames,
+            $this->customerFields
+        );
+
+        return $this->validColumnNames;
     }
 }

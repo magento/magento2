@@ -39,21 +39,23 @@ class Agreement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Add billing agreement filter on orders collection
      *
-     * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderCollection
+     * @param \Magento\Framework\Data\Collection\AbstractDb $orderCollection
      * @param string|int|array $agreementIds
      * @return $this
      */
-    public function addOrdersFilter(\Magento\Sales\Model\ResourceModel\Order\Collection $orderCollection, $agreementIds)
+    public function addOrdersFilter(\Magento\Framework\Data\Collection\AbstractDb $orderCollection, $agreementIds)
     {
         $agreementIds = is_array($agreementIds) ? $agreementIds : [$agreementIds];
-        $orderCollection->getSelect()->joinInner(
-            ['pbao' => $this->getTable('paypal_billing_agreement_order')],
-            'main_table.entity_id = pbao.order_id',
-            []
-        )->where(
-            'pbao.agreement_id IN(?)',
-            $agreementIds
+        $orderIds = $this->getConnection()->fetchCol(
+            $this->getConnection()->select()
+                ->from(['pbao' => $this->getTable('paypal_billing_agreement_order')], ['order_id'])
+                ->where(
+                    'pbao.agreement_id IN(?)',
+                    $agreementIds
+                )
         );
+        $orderCollection->getSelect()
+            ->where('main_table.entity_id IN (?)', $orderIds);
         return $this;
     }
 }

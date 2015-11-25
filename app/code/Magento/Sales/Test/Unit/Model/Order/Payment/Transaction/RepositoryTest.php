@@ -210,10 +210,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $transactionId = 12;
         $transaction = $this->mockTransaction($transactionId);
+        $transaction->expects($this->any())->method('load')->with($transactionId)->willReturn($transaction);
         $this->entityStorage->method('has')->with($transactionId)->willReturn(false);
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($transaction);
-        $this->metaData->expects($this->once())->method('getMapper')->willReturn($this->transactionResource);
-        $this->transactionResource->expects($this->once())->method('load')->with($transaction, $transactionId);
         $this->entityStorage->expects($this->once())->method('add')->with($transaction);
         $this->entityStorage->expects($this->once())->method('get')->with($transactionId)->willReturn($transaction);
         $this->assertSame($transaction, $this->repository->get($transactionId));
@@ -240,13 +239,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $transactionId = null;
         $transactionIdFromArgument = 12;
         $transaction = $this->mockTransaction($transactionId);
+        $transaction->expects($this->any())->method('load')->with(12)->willReturn($transaction);
         $this->entityStorage->method('has')->with($transactionIdFromArgument)->willReturn(false);
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($transaction);
-        $this->metaData->expects($this->once())->method('getMapper')->willReturn($this->transactionResource);
-        $this->transactionResource->expects($this->once())->method('load')->with(
-            $transaction,
-            $transactionIdFromArgument
-        );
         $this->entityStorage->expects($this->never())->method('add');
         $this->entityStorage->expects($this->never())->method('get');
         $this->assertSame($transaction, $this->repository->get(12));

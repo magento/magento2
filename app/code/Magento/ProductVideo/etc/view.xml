@@ -5,7 +5,7 @@
 * See COPYING.txt for license details.
 */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ProductVideo/etc/view.xsd">
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
     <media>
         <videos module="Magento_ProductVideo">
             <video id="play_if_base" type="play_if_base">

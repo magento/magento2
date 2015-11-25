@@ -63,22 +63,24 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
+
+    <virtualType name="AssetPreProcessorPool">
         <arguments>
-            <argument name="preProcessors" xsi:type="array">
+            <argument name="preprocessors" xsi:type="array">
                 <item name="js" xsi:type="array">
-                    <item name="js" xsi:type="array">
-                        <item name="js_translation" xsi:type="string">Magento\Translation\Model\Js\PreProcessor</item>
+                    <item name="js_translation" xsi:type="array">
+                        <item name="class" xsi:type="string">Magento\Translation\Model\Js\PreProcessor</item>
                     </item>
                 </item>
                 <item name="json" xsi:type="array">
-                    <item name="json" xsi:type="array">
-                        <item name="json_generation" xsi:type="string">Magento\Translation\Model\Json\PreProcessor</item>
+                    <item name="json_generation" xsi:type="array">
+                        <item name="class" xsi:type="string">Magento\Translation\Model\Json\PreProcessor</item>
                     </item>
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
+
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">

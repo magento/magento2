@@ -6,6 +6,8 @@
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
 /**
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/SalesRule/_files/rules.php
  * @magentoDataFixture Magento/SalesRule/_files/coupons.php
  */
@@ -46,5 +48,67 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ],
             'Check result with wrong code' => ['wrong_code', ['#5']]
         ];
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/rule_specific_date.php
+     * @magentoConfigFixture general/locale/timezone Europe/Kiev
+     */
+    public function testMultiRulesWithTimezone()
+    {
+        $this->setSpecificTimezone('Europe/Kiev');
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
+        );
+        $collection->addWebsiteGroupDateFilter(1, 0);
+        $items = array_values($collection->getItems());
+        $this->assertNotEmpty($items);
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/rule_specific_date.php
+     * @magentoConfigFixture general/locale/timezone Australia/Sydney
+     */
+    public function testMultiRulesWithDifferentTimezone()
+    {
+        $this->setSpecificTimezone('Australia/Sydney');
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
+        );
+        $collection->addWebsiteGroupDateFilter(1, 0);
+        $items = array_values($collection->getItems());
+        $this->assertNotEmpty($items);
+    }
+
+    protected function setSpecificTimezone($timezone)
+    {
+        $localeData = [
+            'section' => 'general',
+            'website' => null,
+            'store' => null,
+            'groups' => [
+                'locale' => [
+                    'fields' => [
+                        'timezone' => [
+                            'value' => $timezone
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Config\Model\Config\Factory')
+            ->create()
+            ->addData($localeData)
+            ->save();
+    }
+
+    public function tearDown()
+    {
+        // restore default timezone
+        $this->setSpecificTimezone('America/Los_Angeles');
     }
 }

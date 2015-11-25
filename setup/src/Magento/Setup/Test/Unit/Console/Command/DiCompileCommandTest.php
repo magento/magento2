@@ -141,7 +141,7 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Symfony\Component\Console\Helper\ProgressBar')
             ->willReturn($progressBar);
-        $this->manager->expects($this->exactly(6))->method('addOperation');
+        $this->manager->expects($this->exactly(7))->method('addOperation');
         $this->manager->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);
         $tester->execute([]);
@@ -149,5 +149,6 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             'Generated code and dependency injection configuration successfully.',
             explode(PHP_EOL, $tester->getDisplay())
         );
+        $this->assertSame(DiCompileCommand::NAME, $this->command->getName());
     }
 }

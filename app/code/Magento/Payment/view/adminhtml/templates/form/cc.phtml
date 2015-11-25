@@ -8,7 +8,7 @@
 /**
  * @var \Magento\Payment\Block\Adminhtml\Transparent\Form $block
  */
-$code = $block->getMethodCode();
+$code = $block->escapeHtml($block->getMethodCode());
 $ccType = $block->getInfoData('cc_type');
 $ccExpMonth = $block->getInfoData('cc_exp_month');
 $ccExpYear = $block->getInfoData('cc_exp_year');

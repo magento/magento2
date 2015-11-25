@@ -35,7 +35,7 @@ class AssertOrderMassOnHoldSuccessMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::SUCCESS_ON_HOLD_MESSAGE, $ordersCount),
-            $orderIndex->getMessagesBlock()->getSuccessMessages()
+            $orderIndex->getMessagesBlock()->getSuccessMessage()
         );
     }
 

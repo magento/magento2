@@ -394,6 +394,61 @@ class Files
     // @codingStandardsIgnoreEnd
 
     /**
+     * Returns list of XML related files, used by Magento application
+     *
+     * @param string $fileNamePattern
+     * @param array $excludedFileNames
+     * @param bool $asDataSet
+     * @return array
+     */
+    public function getXmlCatalogFiles(
+        $fileNamePattern = '*.xsd',
+        $excludedFileNames = [],
+        $asDataSet = true
+    ) {
+        $cacheKey = __METHOD__ . '|' . BP . '|' . serialize(func_get_args());
+        if (!isset(self::$_cache[$cacheKey])) {
+            $files = $this->getFilesSubset(
+                $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+                $fileNamePattern,
+                []
+            );
+            $libraryExcludeDirs = [];
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+                $libraryExcludeDirs[] = str_replace('\\', '/', '#' . $libraryDir . '/Test#');
+                $libraryExcludeDirs[] = str_replace('\\', '/', '#' . $libraryDir) . '/[\\w]+/Test#';
+            }
+            $files = array_merge(
+                $files,
+                $this->getFilesSubset(
+                    $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY),
+                    $fileNamePattern,
+                    $libraryExcludeDirs
+                )
+            );
+            $files = array_merge(
+                $files,
+                $this->getFilesSubset(
+                    $this->componentRegistrar->getPaths(ComponentRegistrar::THEME),
+                    $fileNamePattern,
+                    []
+                )
+            );
+            $files = array_filter(
+                $files,
+                function ($file) use ($excludedFileNames) {
+                    return !in_array(basename($file), $excludedFileNames);
+                }
+            );
+            self::$_cache[$cacheKey] = $files;
+        }
+        if ($asDataSet) {
+            return self::composeDataSets(self::$_cache[$cacheKey]);
+        }
+        return self::$_cache[$cacheKey];
+    }
+
+    /**
      * Returns a list of configuration files found under theme directories.
      *
      * @param string $fileNamePattern

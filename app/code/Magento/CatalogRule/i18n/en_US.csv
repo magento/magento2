@@ -71,3 +71,5 @@ Promo,Promo
 "Percentage discount should be between 0 and 100.","Percentage discount should be between 0 and 100."
 "Discount value should be 0 or greater.","Discount value should be 0 or greater."
 "Unknown action.","Unknown action."
+"Subproduct discounts","Subproduct discounts"
+"Discard subsequent rules","Discard subsequent rules"

@@ -8,6 +8,7 @@ namespace Magento\CatalogRule\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab\Conditions;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 
@@ -33,8 +34,10 @@ class AssertProductAttributeIsUsedPromoRules extends AbstractConstraint
         $catalogRuleIndex->getGridPageActions()->addNew();
         $catalogRuleNew->getEditForm()->openTab('conditions');
 
+        /** @var Conditions $conditionsTab */
+        $conditionsTab = $catalogRuleNew->getEditForm()->getTab('conditions');
         \PHPUnit_Framework_Assert::assertTrue(
-            $catalogRuleNew->getEditForm()->isAttributeInConditions($attribute->getFrontendLabel()),
+            $conditionsTab->isAttributeInConditions($attribute),
             'Product attribute can\'t be used on promo rules conditions.'
         );
     }

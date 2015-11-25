@@ -234,7 +234,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'attribute_id' => $attribute->getId(),
                 'table' => $attribute->getBackend()->getTable(),
                 'is_global' => $attribute->getIsGlobal() ==
-                \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL,
+                \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
                 'backend_type' => $attribute->getBackendType(),
             ];
         }

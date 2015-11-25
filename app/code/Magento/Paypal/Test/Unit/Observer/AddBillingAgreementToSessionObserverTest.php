@@ -122,6 +122,7 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCa
             )->will(
                 $this->returnValue('agreement reference id')
             );
+            $agreement->expects($this->once())->method('addOrderRelation')->with($order);
             $order->expects(new MethodInvokedAtIndex(0))->method('addRelatedObject')->with($agreement);
             $this->_checkoutSession->expects(
                 $this->once()

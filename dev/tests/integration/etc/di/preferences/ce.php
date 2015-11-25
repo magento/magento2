@@ -19,4 +19,5 @@ return [
     'Magento\Framework\View\LayoutInterface' => 'Magento\TestFramework\View\Layout',
     'Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface' =>
         'Magento\TestFramework\Db\ConnectionAdapter',
+    'Magento\Framework\Filesystem\DriverInterface' => 'Magento\Framework\Filesystem\Driver\File'
 ];

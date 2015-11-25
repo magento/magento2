@@ -117,9 +117,8 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpVersion());
     }
 
-    public function testCheckPhpVersion()
+    private function setUpNoPrettyVersionParser()
     {
-        $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
         $multipleConstraints = $this->getMockForAbstractClass(
             'Composer\Package\LinkConstraint\LinkConstraintInterface',
             [],
@@ -136,6 +135,13 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         );
         $this->versionParser->expects($this->at(2))->method('parseConstraints')->willReturn($currentPhpVersion);
         $multipleConstraints->expects($this->once())->method('matches')->willReturn(true);
+    }
+
+    public function testCheckPhpVersion()
+    {
+        $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
+
+        $this->setUpNoPrettyVersionParser();
         $expected = [
             'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
             'data' => [
@@ -179,19 +185,34 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->phpInfo->expects($this->once())->method('getCurrent')->willReturn(['xdebug']);
         $this->phpInfo->expects($this->once())->method('getRequiredMinimumXDebugNestedLevel')->willReturn(50);
-        $message = sprintf(
+        $xdebugMessage = sprintf(
             'Your current setting of xdebug.max_nesting_level=%d.
                  Magento 2 requires it to be set to %d or more.
                  Edit your config, restart web server, and try again.',
             100,
             50
         );
+
+        $this->setUpNoPrettyVersionParser();
+        $rawPostMessage = sprintf(
+            'Your PHP Version is %s, but always_populate_raw_post_data = -1.
+ 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
+ 	        This will stop the installer from running.
+	        Please open your php.ini file and set always_populate_raw_post_data to -1.
+ 	        If you need more help please call your hosting provider.',
+            PHP_VERSION
+        );
         $expected = [
             'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
             'data' => [
                 'xdebug_max_nesting_level' => [
-                    'message' => $message,
+                    'message' => $xdebugMessage,
                     'error' => false,
+                ],
+                'always_populate_raw_post_data' => [
+                    'message' => $rawPostMessage,
+                    'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
+                    'error' => false
                 ]
             ]
         ];
@@ -202,19 +223,34 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->phpInfo->expects($this->once())->method('getCurrent')->willReturn(['xdebug']);
         $this->phpInfo->expects($this->once())->method('getRequiredMinimumXDebugNestedLevel')->willReturn(200);
-        $message = sprintf(
+        $xdebugMessage = sprintf(
             'Your current setting of xdebug.max_nesting_level=%d.
                  Magento 2 requires it to be set to %d or more.
                  Edit your config, restart web server, and try again.',
             100,
             200
         );
+
+        $this->setUpNoPrettyVersionParser();
+        $rawPostMessage = sprintf(
+            'Your PHP Version is %s, but always_populate_raw_post_data = -1.
+ 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
+ 	        This will stop the installer from running.
+	        Please open your php.ini file and set always_populate_raw_post_data to -1.
+ 	        If you need more help please call your hosting provider.',
+            PHP_VERSION
+        );
         $expected = [
             'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
             'data' => [
                 'xdebug_max_nesting_level' => [
-                    'message' => $message,
+                    'message' => $xdebugMessage,
                     'error' => true,
+                ],
+                'always_populate_raw_post_data' => [
+                    'message' => $rawPostMessage,
+                    'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
+                    'error' => false
                 ]
             ]
         ];
@@ -224,7 +260,26 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     public function testCheckPhpSettingsNoXDebug()
     {
         $this->phpInfo->expects($this->once())->method('getCurrent')->willReturn([]);
-        $expected = ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, 'data' => []];
+
+        $this->setUpNoPrettyVersionParser();
+        $rawPostMessage = sprintf(
+            'Your PHP Version is %s, but always_populate_raw_post_data = -1.
+ 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
+ 	        This will stop the installer from running.
+	        Please open your php.ini file and set always_populate_raw_post_data to -1.
+ 	        If you need more help please call your hosting provider.',
+            PHP_VERSION
+        );
+        $expected = [
+            'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
+            'data' => [
+                'always_populate_raw_post_data' => [
+                    'message' => $rawPostMessage,
+                    'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
+                    'error' => false
+                ]
+            ]
+        ];
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
@@ -282,7 +337,11 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
 namespace Magento\Setup\Model;
 
-function ini_get()
+function ini_get($param)
 {
-    return 100;
+    if ($param === 'xdebug.max_nesting_level') {
+        return 100;
+    } elseif ($param === 'always_populate_raw_post_data') {
+        return -1;
+    }
 }

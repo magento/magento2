@@ -97,7 +97,7 @@ abstract class EntityAbstract
             if ($this->_validateData()) {
                 $sourceCode = $this->_generateCode();
                 if ($sourceCode) {
-                    $fileName = $this->_ioObject->getResultFileName($this->_getResultClassName());
+                    $fileName = $this->_ioObject->generateResultFileName($this->_getResultClassName());
                     $this->_ioObject->writeResultFile($fileName, $sourceCode);
                     return $fileName;
                 } else {
@@ -251,9 +251,6 @@ abstract class EntityAbstract
 
         if (!$this->definedClasses->isClassLoadable($sourceClassName)) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
-            return false;
-        } elseif ($this->definedClasses->isClassLoadableFromDisc($resultClassName)) {
-            $this->_addError('Result class ' . $resultClassName . ' already exists.');
             return false;
         } elseif (
             /**

@@ -17,65 +17,65 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
- * Abstract class for implementing assert applying
+ * Abstract class for implementing assert applying.
  */
 abstract class AssertTaxRuleApplying extends AbstractConstraint
 {
     /**
-     * Initial tax rule
+     * Initial tax rule.
      *
      * @var TaxRule
      */
     protected $initialTaxRule;
 
     /**
-     * Tax rule
+     * Tax rule.
      *
      * @var TaxRule
      */
     protected $taxRule;
 
     /**
-     * Product simple
+     * Product simple.
      *
      * @var CatalogProductSimple
      */
     protected $productSimple;
 
     /**
-     * Checkout cart page
+     * Checkout cart page.
      *
      * @var CheckoutCart
      */
     protected $checkoutCart;
 
     /**
-     * Shipping carrier and method
+     * Shipping carrier and method.
      *
      * @var array
      */
     protected $shipping;
 
     /**
-     * Tax Rule name
+     * Tax Rule name.
      *
      * @var string
      */
     protected $taxRuleCode;
 
     /**
-     * Implementation assert
+     * Implementation assert.
      *
      * @return void
      */
     abstract protected function assert();
 
     /**
-     * 1. Creating product simple with custom tax product class
-     * 2. Log In as customer
-     * 3. Add product to shopping cart
-     * 4. Estimate Shipping and Tax
-     * 5. Implementation assert
+     * 1. Creating product simple with custom tax product class.
+     * 2. Log In as customer.
+     * 3. Add product to shopping cart.
+     * 4. Estimate Shipping and Tax.
+     * 5. Implementation assert.
      *
      * @param FixtureFactory $fixtureFactory
      * @param TaxRule $taxRule
@@ -136,9 +136,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         $catalogProductView->getMessagesBlock()->waitSuccessMessage();
         // Estimate Shipping and Tax
         $checkoutCart->open();
-        $checkoutCart->getShippingBlock()->openEstimateShippingAndTax();
-        $checkoutCart->getShippingBlock()->fill($address);
-        $checkoutCart->getShippingBlock()->clickGetQuote();
+        $checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($address);
         $checkoutCart->getShippingBlock()->selectShippingMethod($shipping);
         $this->assert();
     }

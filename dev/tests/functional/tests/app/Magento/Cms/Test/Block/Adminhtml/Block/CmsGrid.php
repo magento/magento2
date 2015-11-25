@@ -44,8 +44,9 @@ class CmsGrid extends DataGrid
             'input' => 'simplifiedselect'
         ],
         'is_active' => [
-            'selector' => '[name="is_active"]',
-            'input' => 'select',
+            'selector' => '//label[span[text()="Status"]]/following-sibling::div',
+            'strategy' => 'xpath',
+            'input' => 'dropdownmultiselect',
         ],
         'creation_time_from' => [
             'selector' => '[name="creation_time[from]"]',

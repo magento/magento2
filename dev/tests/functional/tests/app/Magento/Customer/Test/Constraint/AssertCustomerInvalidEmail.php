@@ -29,7 +29,7 @@ class AssertCustomerInvalidEmail extends AbstractConstraint
     public function processAssert(Customer $customer, CustomerIndexNew $pageCustomerIndexNew)
     {
         $expectMessage = str_replace('%email%', $customer->getEmail(), self::ERROR_EMAIL_MESSAGE);
-        $actualMessage = $pageCustomerIndexNew->getMessagesBlock()->getErrorMessages();
+        $actualMessage = $pageCustomerIndexNew->getMessagesBlock()->getErrorMessage();
 
         \PHPUnit_Framework_Assert::assertEquals(
             $expectMessage,

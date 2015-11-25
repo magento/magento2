@@ -54,7 +54,7 @@ class TemplateSelector extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieve list of product templates with search part contained in label
+     * Retrieve list of attribute sets with search part contained in label
      *
      * @param string $labelPart
      * @return array

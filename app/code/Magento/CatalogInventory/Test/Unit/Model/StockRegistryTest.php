@@ -44,7 +44,7 @@ class StockRegistryTest extends \PHPUnit_Framework_TestCase
     public function testGetLowStockItems()
     {
         $this->criteria->expects($this->once())->method('setLimit')->with(1, 0);
-        $this->criteria->expects($this->once())->method('setWebsiteFilter')->with(1);
+        $this->criteria->expects($this->once())->method('setScopeFilter')->with(1);
         $this->criteria->expects($this->once())->method('setQtyFilter')->with('<=');
         $this->criteria->expects($this->once())->method('addField')->with('qty');
         $this->model->getLowStockItems(1, 100);

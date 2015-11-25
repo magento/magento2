@@ -63,7 +63,6 @@ class CollectionFilter implements CollectionFilterInterface
             ->addTaxPercents()
             ->addStoreFilter()
             ->addUrlRewrite()
-            ->setVisibility($this->productVisibility->getVisibleInSearchIds())
-            ->setOrder('relevance', Select::SQL_DESC);
+            ->setVisibility($this->productVisibility->getVisibleInSearchIds());
     }
 }

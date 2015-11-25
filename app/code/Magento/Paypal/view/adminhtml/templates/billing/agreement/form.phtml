@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 /** @var \Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Form $block */
 ?>
-<?php $code = $block->getMethodCode() ?>
+<?php $code = $block->escapeHtml($block->getMethodCode()) ?>
 <fieldset class="form-list" id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display:none;">
     <div class="admin__field _required">
         <label for="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id" class="admin__field-label">

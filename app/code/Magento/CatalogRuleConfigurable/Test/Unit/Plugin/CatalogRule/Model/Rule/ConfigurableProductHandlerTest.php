@@ -93,13 +93,9 @@ class ConfigurableProductHandlerTest extends \PHPUnit_Framework_TestCase
                     0 => true,
                     1 => true,
                     3 => true,
-                    4 => false,
                 ],
                 'simple2' => [
-                    0 => false,
-                    1 => false,
                     3 => true,
-                    4 => false,
                 ]
             ],
             $this->configurableProductHandler->afterGetMatchingProductIds(

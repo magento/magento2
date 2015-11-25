@@ -17,6 +17,11 @@ class Config
     protected $urnResolver;
 
     /**
+     * @var \Magento\Framework\Config\DomFactory
+     */
+    protected $domFactory;
+
+    /**
      * Data extracted from the configuration file
      *
      * @var array
@@ -28,22 +33,18 @@ class Config
      *
      * @param string $source
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @param \Magento\Framework\Config\DomFactory $domFactory
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         $source,
-        \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver,
+        \Magento\Framework\Config\DomFactory $domFactory
     ) {
         $this->urnResolver = $urnResolver;
-        $config = new \DOMDocument();
-        $config->loadXML($source);
-        $errors = Dom::validateDomDocument($config, $this->getSchemaFile());
-        if (!empty($errors)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("Invalid Document: \n%1", [implode("\n", $errors)])
-            );
-        }
-        $this->_data = $this->_extractData($config);
+        $this->domFactory = $domFactory;
+        $dom = $this->domFactory->createDom(['xml' => $source, 'schemaFile' => $this->getSchemaFile()]);
+        $this->_data = $this->_extractData($dom->getDom());
     }
 
     /**

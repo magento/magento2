@@ -58,8 +58,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->getConnection()->quoteInto('table_rating.store_id > ?', 0),
         ];
 
-        $percentField = $this->getConnection()->quoteIdentifier('table_rating.percent');
-        $sumPercentField = new \Zend_Db_Expr("SUM({$percentField})");
+        $sumPercentField = new \Zend_Db_Expr("SUM(table_rating.percent)");
         $sumPercentApproved = new \Zend_Db_Expr('SUM(table_rating.percent_approved)');
         $countRatingId = new \Zend_Db_Expr('COUNT(table_rating.rating_id)');
 
@@ -67,8 +66,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             ['table_rating' => $this->getTable('rating_option_vote_aggregated')],
             implode(' AND ', $joinCondition),
             [
-                'avg_rating' => sprintf('%s/%s', $sumPercentField, $countRatingId),
-                'avg_rating_approved' => sprintf('%s/%s', $sumPercentApproved, $countRatingId)
+                'avg_rating' => new \Zend_Db_Expr(sprintf('%s/%s', $sumPercentField, $countRatingId)),
+                'avg_rating_approved' => new \Zend_Db_Expr(sprintf('%s/%s', $sumPercentApproved, $countRatingId))
             ]
         );
 

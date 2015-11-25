@@ -51,7 +51,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
             $validateStateMock = $this->getMockBuilder(
                 'Magento\Framework\Config\ValidationStateInterface'
             )->disableOriginalConstructor()->getMock();
-            $validateStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
+            $validateStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
 
             $this->_reader = $this->_objectManager->create(
                 $this->_getReaderClassName(),
@@ -79,7 +79,11 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
         if ($skip) {
             $this->markTestSkipped('There are no xml files in the system for this test.');
         }
-        $domConfig = new \Magento\Framework\Config\Dom($file);
+        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(false);
+        $domConfig = new \Magento\Framework\Config\Dom($file, $validationStateMock);
+        $errors = [];
         $result = $domConfig->validate($this->_schemaFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {

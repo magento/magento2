@@ -8,7 +8,7 @@
 /**
  * @var \Magento\Paypal\Block\Payment\Form\Billing\Agreement $block
  */
-$code = $block->getMethodCode();
+$code = $block->escapeHtml($block->getMethodCode());
 ?>
 <div class="field items required" id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display:none;">
     <label for="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id" class="label">

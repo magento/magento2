@@ -157,19 +157,14 @@
         jQuery('#packed_window').modal('openModal');
     }
 </script>
-<?php
-$printLocation = $block->getUrl(
-    'adminhtml/order_shipment/printPackage',
-    array('shipment_id' => $block->getShipment()->getId())
-);
-?>
+
 <script type="text/x-magento-init">
     {
         "#packed_window": {
             "Magento_Shipping/js/packages":{
                 "type":"slide",
                 "title":"<?= /* @escapeNotVerified */  __('Packages') ?>",
-                "url": "<?= /* @escapeNotVerified */ $printLocation ?>"
+                "url": "<?= /* @escapeNotVerified */ $block->getPrintButton(); ?>"
             }
         }
     }

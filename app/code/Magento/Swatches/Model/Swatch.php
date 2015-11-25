@@ -41,6 +41,16 @@ class Swatch extends \Magento\Framework\Model\AbstractModel
     const SWATCH_TYPE_EMPTY = 3;
 
     /**
+     * Name of swatch image
+     */
+    const SWATCH_IMAGE_NAME = 'swatch_image';
+
+    /**
+     * Name of swatch thumbnail
+     */
+    const SWATCH_THUMBNAIL_NAME = 'swatch_thumb';
+
+    /**
      * Initialize resource model
      *
      * @codeCoverageIgnore

@@ -576,7 +576,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests the specific method
      *
-     * @param string $itemData
+     * @param string $appliedTaxesData
      * @param array $addressData
      *
      * @dataProvider dataProviderFetchArray
@@ -584,7 +584,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetch($appliedTaxesData, $addressData)
     {
-        $methods = ['getAppliedTaxes', 'getTaxAmount', 'getTotalAmount', 'getGrandTotal', 'getSubtotalInclTax'];
+        $taxAmount = 8;
+        $methods = ['getAppliedTaxes', 'getTotalAmount', 'getGrandTotal', 'getSubtotalInclTax'];
         $totalsMock = $this->getMock('Magento\Quote\Model\Quote\Address\Total', $methods, [], '', false);
         $taxConfig = $this->getMockBuilder('\Magento\Tax\Model\Config')
             ->disableOriginalConstructor()
@@ -632,10 +633,6 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getAppliedTaxes')
             ->will($this->returnValue($appliedTaxes));
-        $address
-            ->expects($this->any())
-            ->method('getQuote')
-            ->will($this->returnValue($quote));
         $totalsMock
             ->expects($this->any())
             ->method('getGrandTotal')
@@ -644,10 +641,17 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));
+        $quote->expects($this->any())
+            ->method('getAllAddresses')
+            ->will($this->returnValue([$address]));
+        $address
+            ->expects($this->any())
+            ->method('getQuote')
+            ->will($this->returnValue($quote));
         $address
             ->expects($this->any())
             ->method('getTaxAmount')
-            ->will($this->returnValue(8));
+            ->will($this->returnValue($taxAmount));
         $address
             ->expects($this->any())
             ->method('getCustomAttributesCodes')
@@ -658,7 +662,10 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             $address->setData($key, $value);
         }
 
-        $taxTotalsCalcModel->fetch($quote, $totalsMock);
+        $this->assertNull($totalsMock->getTaxAmount());
+        $totalsArray = $taxTotalsCalcModel->fetch($quote, $totalsMock);
+        $this->assertArrayHasKey('value', $totalsArray[0]);
+        $this->assertEquals($taxAmount, $totalsArray[0]['value']);
     }
 
     /**

@@ -19,10 +19,12 @@
     <?php if ($_element->getLegend()): ?>
         <legend class="admin__legend legend">
             <span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span>
+            <?php echo $block->getHintHtml() ?>
         </legend><br/>
         <?php /* @escapeNotVerified */ echo $_element->getHeaderBar() ?>
-    <?php endif; ?>
+    <?php else: ?>
         <?php echo $block->getHintHtml() ?>
+    <?php endif; ?>
         <div class="tree-store-scope">
             <?php if ($_element->getComment()): ?>
             <p class="comment"><?php echo $block->escapeHtml($_element->getComment()) ?></p>

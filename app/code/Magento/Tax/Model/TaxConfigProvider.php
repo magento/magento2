@@ -65,6 +65,18 @@ class TaxConfigProvider implements ConfigProviderInterface
             'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
             'isZeroTaxDisplayed' => $this->taxConfig->displayCartZeroTax(),
             'reloadOnBillingAddress' => $this->reloadOnBillingAddress(),
+            'defaultCountryId' => $this->scopeConfig->getValue(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ),
+            'defaultRegionId' => $this->scopeConfig->getValue(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ),
+            'defaultPostcode' => $this->scopeConfig->getValue(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ),
         ];
     }
 
@@ -164,7 +176,10 @@ class TaxConfigProvider implements ConfigProviderInterface
     protected function reloadOnBillingAddress()
     {
         $quote = $this->checkoutSession->getQuote();
-        return 'billing' == $this->scopeConfig->getValue(Config::CONFIG_XML_PATH_BASED_ON)
-            || $quote->isVirtual();
+        $configValue = $this->scopeConfig->getValue(
+            Config::CONFIG_XML_PATH_BASED_ON,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return 'billing' == $configValue || $quote->isVirtual();
     }
 }

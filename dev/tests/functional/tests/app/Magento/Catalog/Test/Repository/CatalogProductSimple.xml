@@ -42,6 +42,7 @@
             <field name="name" xsi:type="string">Product \&#39;!@#$%^&amp;*()+:;\\|}{][?=-~` %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
             <field name="is_virtual" xsi:type="string">No</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">25</item>
@@ -73,6 +74,7 @@
                 <item name="qty" xsi:type="string">25</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">560</item>

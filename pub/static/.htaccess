@@ -2,6 +2,10 @@
 php_flag engine 0
 </IfModule>
 
+<IfModule mod_php7.c>
+php_flag engine 0
+</IfModule>
+
 # To avoid situation when web server automatically adds extension to path
 Options -MultiViews
 

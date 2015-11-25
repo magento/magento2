@@ -242,7 +242,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         )
         ) {
             throw new LocalizedException(
-                __('An attribute code must be fewer than %1 characters.', self::ATTRIBUTE_CODE_MAX_LENGTH)
+                __('An attribute code must not be more than %1 characters.', self::ATTRIBUTE_CODE_MAX_LENGTH)
             );
         }
 

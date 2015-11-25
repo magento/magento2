@@ -114,7 +114,7 @@ class ProductUrlPathGenerator
      * @param \Magento\Catalog\Model\Product $product
      * @return string
      */
-    public function generateUrlKey($product)
+    public function getUrlKey($product)
     {
         return $product->getUrlKey() === false ? false : $this->prepareProductUrlKey($product);
     }

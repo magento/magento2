@@ -31,7 +31,7 @@ class AssertOrderCancelMassActionSuccessMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::SUCCESS_CANCEL_MESSAGE, $ordersCount),
-            $orderIndex->getMessagesBlock()->getSuccessMessages()
+            $orderIndex->getMessagesBlock()->getSuccessMessage()
         );
     }
 

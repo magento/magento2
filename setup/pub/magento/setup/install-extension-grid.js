@@ -108,8 +108,8 @@ angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
         $scope.isHiddenSpinner = true;
         $scope.installAll = function() {
             $scope.checkAuth();
-            $localStorage.isConnectAuthorized = typeof $localStorage.isConnectAuthorized !== 'undefined' ? $localStorage.isConnectAuthorized : false;
-            if ($localStorage.isConnectAuthorized === false) {
+            $localStorage.isMarketplaceAuthorized = typeof $localStorage.isMarketplaceAuthorized !== 'undefined' ? $localStorage.isMarketplaceAuthorized : false;
+            if ($localStorage.isMarketplaceAuthorized === false) {
                 $scope.open();
             } else {
                 if ($scope.getObjectSize($scope.selectedExtensions) > 0) {
@@ -129,8 +129,8 @@ angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
 
         $scope.install = function(extension) {
             $scope.checkAuth();
-            $localStorage.isConnectAuthorized = typeof $localStorage.isConnectAuthorized !== 'undefined' ? $localStorage.isConnectAuthorized : false;
-            if ($localStorage.isConnectAuthorized === false) {
+            $localStorage.isMarketplaceAuthorized = typeof $localStorage.isMarketplaceAuthorized !== 'undefined' ? $localStorage.isMarketplaceAuthorized : false;
+            if ($localStorage.isMarketplaceAuthorized === false) {
                 $scope.open();
             } else {
                 if (extension === 'undefined') {
@@ -154,16 +154,16 @@ angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
         };
 
         $scope.checkAuth = function() {
-            $http.post('index.php/connect/check-auth', [])
+            $http.post('index.php/marketplace/check-auth', [])
             .success(function (response) {
                 if (response.success) {
-                    $localStorage.isConnectAuthorized = true;
+                    $localStorage.isMarketplaceAuthorized = true;
                 } else {
-                    $localStorage.isConnectAuthorized = false;
+                    $localStorage.isMarketplaceAuthorized = false;
                 }
             })
             .error(function() {
-                $localStorage.isConnectAuthorized = false;
+                $localStorage.isMarketplaceAuthorized = false;
                 $scope.error = true;
                 $scope.errorMessage = 'Internal server error';
             });

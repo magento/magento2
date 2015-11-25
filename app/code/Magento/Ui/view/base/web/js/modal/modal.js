@@ -22,7 +22,7 @@ define([
      */
     var transitionEvent =  (function () {
         var transition,
-            elementStyle = document.body.style,
+            elementStyle = document.createElement('div').style,
             transitions = {
                 'transition': 'transitionend',
                 'OTransition': 'oTransitionEnd',
@@ -78,8 +78,8 @@ define([
                 /**
                  * Default action on button click
                  */
-                click: function () {
-                    this.closeModal();
+                click: function (event) {
+                    this.closeModal(event);
                 }
             }]
         },

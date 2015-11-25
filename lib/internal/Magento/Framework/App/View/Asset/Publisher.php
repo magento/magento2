@@ -37,7 +37,8 @@ class Publisher
     }
 
     /**
-     * {@inheritdoc}
+     * @param Asset\LocalInterface $asset
+     * @return bool
      */
     public function publish(Asset\LocalInterface $asset)
     {

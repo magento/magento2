@@ -56,22 +56,17 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
+            ->method('load')
+            ->with($id)
+            ->willReturn($entity);
+        $entity->expects($this->once())
             ->method('getEntityId')
             ->willReturn($id);
+
         $this->metadataMock->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Creditmemo')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mapper->expects($this->once())
-            ->method('load')
-            ->with($entity, $id);
-
-        $this->metadataMock->expects($this->any())
-            ->method('getMapper')
-            ->willReturn($mapper);
         $this->assertEquals($entity, $this->creditmemo->get($id));
         //retrieve entity from registry
         $this->assertEquals($entity, $this->creditmemo->get($id));
@@ -97,22 +92,17 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
+            ->method('load')
+            ->with($id)
+            ->willReturn($entity);
+        $entity->expects($this->once())
             ->method('getEntityId')
             ->willReturn(null);
+
         $this->metadataMock->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Creditmemo')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mapper->expects($this->once())
-            ->method('load')
-            ->with($entity, $id);
-
-        $this->metadataMock->expects($this->any())
-            ->method('getMapper')
-            ->willReturn($mapper);
         $this->assertNull($entity, $this->creditmemo->get($id));
     }
 
@@ -153,10 +143,10 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getFilters')
             ->willReturn([$filter]);
 
-        $criteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
+        $searchCriteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
             ->disableOriginalConstructor()
             ->getMock();
-        $criteria->expects($this->once())
+        $searchCriteria->expects($this->once())
             ->method('getFilterGroups')
             ->willReturn($filterGroups);
 
@@ -171,7 +161,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collection);
 
-        $this->assertEquals($collection, $this->creditmemo->getList($criteria));
+        $this->assertEquals($collection, $this->creditmemo->getList($searchCriteria));
     }
 
     public function testDelete()

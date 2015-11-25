@@ -25,12 +25,12 @@
         <dl class="items check payable">
             <!-- ko if: getPayableTo() -->
             <dt class="title"><!-- ko i18n: 'Make Check payable to:' --><!-- /ko --></dt>
-            <dd class="content"><!-- ko i18n: getPayableTo() --><!-- /ko --></dd>
+            <dd class="content"><!-- ko text: getPayableTo() --><!-- /ko --></dd>
             <!-- /ko -->
             <!-- ko if: getMailingAddress() -->
             <dt class="title"><!-- ko i18n: 'Send Check to:' --><!-- /ko --></dt>
             <dd class="content">
-                <address class="checkmo mailing address" data-bind="html: $t(getMailingAddress())"></address>
+                <address class="checkmo mailing address" data-bind="html: getMailingAddress()"></address>
             </dd>
             <!-- /ko -->
         </dl>

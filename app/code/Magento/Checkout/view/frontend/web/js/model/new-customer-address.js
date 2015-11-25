@@ -14,7 +14,9 @@ define([], function() {
         return {
             email: addressData.email,
             countryId: (addressData.country_id) ? addressData.country_id : window.checkoutConfig.defaultCountryId,
-            regionId: (addressData.region) ? addressData.region.region_id : null,
+            regionId: (addressData.region && addressData.region.region_id)
+                ? addressData.region.region_id
+                : window.checkoutConfig.defaultRegionId,
             regionCode: (addressData.region) ? addressData.region.region_code : null,
             region: (addressData.region) ? addressData.region.region : null,
             customerId: addressData.customer_id,
@@ -22,7 +24,7 @@ define([], function() {
             company: addressData.company,
             telephone: addressData.telephone,
             fax: addressData.fax,
-            postcode: addressData.postcode,
+            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode,
             city: addressData.city,
             firstname: addressData.firstname,
             lastname: addressData.lastname,

@@ -31,11 +31,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $qty = 1;
         $configurableProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomOption', 'setSelectedConfigurableOption', 'setFinalPrice', '__wakeUp'])
-            ->getMock();
-        $childProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(['getPriceInfo', '__wakeUp'])
+            ->setMethods(['getCustomOption', 'getPriceInfo', 'setFinalPrice', '__wakeUp'])
             ->getMock();
         $customOption = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option')
             ->disableOriginalConstructor()
@@ -52,24 +48,14 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $configurableProduct->expects($this->at(0))
+        $configurableProduct->expects($this->any())
             ->method('getCustomOption')
-            ->with('simple_product')
-            ->willReturn($customOption);
-        $configurableProduct->expects($this->at(1))
-            ->method('getCustomOption')
-            ->with('simple_product')
-            ->willReturn($customOption);
-        $customOption->expects($this->once())->method('getProduct')->willReturn($childProduct);
-        $configurableProduct->expects($this->once())
-            ->method('setSelectedConfigurableOption')
-            ->with($childProduct)
-            ->willReturnSelf();
-        $childProduct->expects($this->once())->method('getPriceInfo')->willReturn($priceInfo);
+            ->willReturnMap([['simple_product', false], ['option_ids', false]]);
+        $customOption->expects($this->never())->method('getProduct');
+        $configurableProduct->expects($this->once())->method('getPriceInfo')->willReturn($priceInfo);
         $priceInfo->expects($this->once())->method('getPrice')->with('final_price')->willReturn($price);
         $price->expects($this->once())->method('getAmount')->willReturn($amount);
         $amount->expects($this->once())->method('getValue')->willReturn($finalPrice);
-        $configurableProduct->expects($this->at(3))->method('getCustomOption')->with('option_ids')->willReturn(false);
         $configurableProduct->expects($this->once())->method('setFinalPrice')->with($finalPrice)->willReturnSelf();
 
         $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty, $configurableProduct));

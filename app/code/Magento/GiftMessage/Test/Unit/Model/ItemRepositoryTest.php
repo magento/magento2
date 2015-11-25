@@ -69,7 +69,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->messageFactoryMock = $this->getMock(
             'Magento\GiftMessage\Model\MessageFactory',
             [

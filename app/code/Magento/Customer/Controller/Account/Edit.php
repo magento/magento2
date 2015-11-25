@@ -7,14 +7,12 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-class Edit extends Action implements AccountInterface
+class Edit extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var CustomerRepositoryInterface  */
     protected $customerRepository;

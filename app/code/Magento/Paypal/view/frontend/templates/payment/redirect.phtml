@@ -12,7 +12,7 @@
 $code = $block->escapeHtml($block->getBillingAgreementCode());
 ?>
 <fieldset class="fieldset paypal items redirect" style="display:none;"
-          id="payment_form_<?php /* @noEscape */ echo $block->getMethodCode(); ?>">
+          id="payment_form_<?php echo $block->escapeHtml($block->getMethodCode()); ?>">
     <div><?php echo $block->escapeHtml($block->getRedirectMessage()); ?></div>
     <?php  ?>
     <?php if ($code): ?>

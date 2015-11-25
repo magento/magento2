@@ -71,9 +71,11 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
         $addJsObserver = false;
         if ($attribute = $this->getEntityAttribute()) {
             $store = $this->getStore($attribute);
-            $html .= '<strong>' . $this->_localeCurrency->getCurrency(
-                $store->getBaseCurrencyCode()
-            )->getSymbol() . '</strong>';
+            if ($this->getType() !== 'hidden') {
+                $html .= '<strong>'
+                    . $this->_localeCurrency->getCurrency($store->getBaseCurrencyCode())->getSymbol()
+                    . '</strong>';
+            }
             if ($this->_taxData->priceIncludesTax($store)) {
                 if ($attribute->getAttributeCode() !== 'cost') {
                     $addJsObserver = true;

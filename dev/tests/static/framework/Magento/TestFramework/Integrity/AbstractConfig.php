@@ -35,6 +35,9 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
 
     public function testSchemaUsingInvalidXml($expectedErrors = null)
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-44919');
+        }
         $xmlFile = $this->_getKnownInvalidXml();
         $schema = $this->_getXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
@@ -42,6 +45,9 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
 
     public function testFileSchemaUsingPartialXml()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-44919');
+        }
         $xmlFile = $this->_getKnownValidPartialXml();
         if ($xmlFile === null) {
             $this->markTestSkipped('No Partial File');
@@ -53,6 +59,9 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
 
     public function testFileSchemaUsingInvalidXml($expectedErrors = null)
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-45033');
+        }
         $xmlFile = $this->_getKnownInvalidPartialXml();
         if ($xmlFile === null) {
             $this->markTestSkipped('No Partial File');
@@ -64,6 +73,9 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
 
     public function testSchemaUsingPartialXml($expectedErrors = null)
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-45033');
+        }
         $xmlFile = $this->_getKnownValidPartialXml();
         if ($xmlFile === null) {
             $this->markTestSkipped('No Partial File');

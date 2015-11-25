@@ -219,7 +219,6 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $this->getProduct();
 
-        $config = [];
         if (!$this->hasOptions()) {
             $config = [
                 'productId' => $product->getId(),

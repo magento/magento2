@@ -61,20 +61,19 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      */
     public function getValue()
     {
-        $selectedConfigurableOption = $this->product->getSelectedConfigurableOption();
-        $productId = $selectedConfigurableOption ? $selectedConfigurableOption->getId() : $this->product->getId();
-        if (!isset($this->values[$productId])) {
-            $this->values[$productId] = $this->priceResolver->resolvePrice($this->product);
+        if (!isset($this->values[$this->product->getId()])) {
+            $this->values[$this->product->getId()] = $this->priceResolver->resolvePrice($this->product);
         }
 
-        return $this->values[$productId];
+        return $this->values[$this->product->getId()];
     }
+
     /**
      * {@inheritdoc}
      */
     public function getAmount()
     {
-        return $this->getMinRegularAmount($this->product);
+        return $this->getMinRegularAmount();
     }
 
     /**
@@ -116,7 +115,6 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
             $this->minRegularAmount = $this->doGetMinRegularAmount() ?: false;
         }
         return $this->minRegularAmount;
-
     }
 
     /**

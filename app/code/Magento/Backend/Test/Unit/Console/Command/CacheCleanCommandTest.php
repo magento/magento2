@@ -13,8 +13,9 @@ class CacheCleanCommandTest extends AbstractCacheManageCommandTest
 {
     public function setUp()
     {
+        $this->cacheEventName = 'adminhtml_cache_flush_system';
         parent::setUp();
-        $this->command = new CacheCleanCommand($this->cacheManager);
+        $this->command = new CacheCleanCommand($this->cacheManagerMock, $this->eventManagerMock);
     }
 
     /**
@@ -25,8 +26,9 @@ class CacheCleanCommandTest extends AbstractCacheManageCommandTest
      */
     public function testExecute($param, $types, $output)
     {
-        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $this->cacheManager->expects($this->once())->method('clean')->with($types);
+        $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
+        $this->cacheManagerMock->expects($this->once())->method('clean')->with($types);
+        $this->eventManagerMock->expects($this->once())->method('dispatch')->with($this->cacheEventName);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);

@@ -67,8 +67,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Filesystem'
         );
+        $path = ini_get('session.save_path') ?:
+            $filesystem->getDirectoryRead(DirectoryList::SESSION)->getAbsolutePath();
+
         $this->assertEquals(
-            $filesystem->getDirectoryRead(DirectoryList::SESSION)->getAbsolutePath(),
+            $path,
             $this->_model->getSavePath()
         );
         $this->assertEquals(

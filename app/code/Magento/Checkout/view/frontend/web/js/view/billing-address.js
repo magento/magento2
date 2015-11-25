@@ -46,8 +46,9 @@ define(
             },
             countryData = customerData.get('directory-data'),
             addressOptions = addressList().filter(function (address) {
-            return address.getType() == 'customer-address';
-        });
+                return address.getType() == 'customer-address';
+            });
+
         addressOptions.push(newAddressOption);
 
         return Component.extend({
@@ -82,14 +83,19 @@ define(
                     });
 
                 quote.billingAddress.subscribe(function (newAddress) {
-                    this.isAddressSameAsShipping(
-                        newAddress != null &&
-                            newAddress.getCacheKey() == quote.shippingAddress().getCacheKey() &&
-                            !quote.isVirtual()
-                    );
+                    if (quote.isVirtual()) {
+                        this.isAddressSameAsShipping(false);
+                    } else {
+                        this.isAddressSameAsShipping(
+                            newAddress != null &&
+                            newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()
+                        );
+                    }
 
                     if (newAddress != null && newAddress.saveInAddressBook !== undefined) {
                         this.saveInAddressBook(newAddress.saveInAddressBook);
+                    } else {
+                        this.saveInAddressBook(true);
                     }
                     this.isAddressDetailsVisible(true);
                 }, this);
@@ -115,6 +121,9 @@ define(
             useShippingAddress: function () {
                 if (this.isAddressSameAsShipping()) {
                     selectBillingAddress(quote.shippingAddress());
+                    if (window.checkoutConfig.reloadOnBillingAddress) {
+                        setBillingAddressAction(globalMessageList);
+                    }
                     this.isAddressDetailsVisible(true);
                 } else {
                     lastSelectedBillingAddress = quote.billingAddress();
@@ -139,15 +148,19 @@ define(
                 } else {
                     this.source.set('params.invalid', false);
                     this.source.trigger(this.dataScopePrefix + '.data.validate');
+                    if (this.source.get(this.dataScopePrefix + '.custom_attributes')) {
+                        this.source.trigger(this.dataScopePrefix + '.custom_attributes.data.validate');
+                    };
 
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get(this.dataScopePrefix),
-                            newBillingAddress = createBillingAddress(addressData);
+                            newBillingAddress;
 
-                        if (this.isCustomerLoggedIn && !this.customerHasAddresses) {
+                        if (customer.isLoggedIn() && !this.customerHasAddresses) {
                             this.saveInAddressBook(true);
                         }
                         addressData.save_in_address_book = this.saveInAddressBook();
+                        newBillingAddress = createBillingAddress(addressData);
 
                         // New address must be selected as a billing address
                         selectBillingAddress(newBillingAddress);
