@@ -111,6 +111,18 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Yes' => 1,
             'No' => 0,
         ],
+        'use_config_min_sale_qty' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
+        'use_config_max_sale_qty' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
+        'use_config_enable_qty_increments' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
     ];
 
     /**

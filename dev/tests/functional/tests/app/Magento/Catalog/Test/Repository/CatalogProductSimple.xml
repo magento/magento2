@@ -874,7 +874,9 @@
                 <item name="dataset" xsi:type="string">simple_order_default</item>
             </field>
             <field name="stock_data" xsi:type="array">
+                <item name="use_config_min_sale_qty" xsi:type="string">No</item>
                 <item name="min_sale_qty" xsi:type="string">2</item>
+                <item name="use_config_max_sale_qty" xsi:type="string">No</item>
                 <item name="max_sale_qty" xsi:type="string">5</item>
             </field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
@@ -933,7 +935,9 @@
                 <item name="dataset" xsi:type="string">simple_order_default</item>
             </field>
             <field name="stock_data" xsi:type="array">
+                <item name="use_config_enable_qty_increments" xsi:type="string">No</item>
                 <item name="enable_qty_increments" xsi:type="string">Yes</item>
+                <item name="use_config_qty_increments" xsi:type="string">No</item>
                 <item name="qty_increments" xsi:type="string">2</item>
             </field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
