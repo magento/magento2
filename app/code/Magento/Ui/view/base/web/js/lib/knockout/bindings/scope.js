@@ -67,5 +67,7 @@ define([
 
     renderer
         .addNode('scope')
-        .addAttribute('scope');
+        .addAttribute('scope', {
+            name: 'ko-scope'
+        });
 });
