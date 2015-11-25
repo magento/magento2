@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 
+/* global $break $ $$ */
+
 define([
     'jquery',
     'mage/template',

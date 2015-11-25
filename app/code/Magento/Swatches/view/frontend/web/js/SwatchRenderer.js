@@ -100,19 +100,21 @@ define([
                                 left,
                                 $window;
 
-                            // Image
                             if (type === 2) {
+                                // Image
                                 $image.css({
                                     'background': 'url("' + thumb + '") no-repeat center', //Background case
                                     'background-size': 'initial'
                                 });
                                 $image.show();
                             } else if (type === 1) {
+                                // Color
                                 $image.css({
                                     background: value
                                 });
                                 $image.show();
                             } else if (type === 0 || type === 3) {
+                                // Default
                                 $image.hide();
                             }
 
@@ -352,7 +354,7 @@ define([
         _RenderSwatchOptions: function (config) {
             var optionConfig = this.options.jsonSwatchConfig[config.id],
                 optionClass = this.options.classes.optionClass,
-                moreLimit = this.options.numberToShow,
+                moreLimit = parseInt(this.options.numberToShow, 10),
                 moreClass = this.options.classes.moreButton,
                 moreText = this.options.moreButtonText,
                 countAttributes = 0,
@@ -375,12 +377,12 @@ define([
                 }
 
                 // Add more button
-                if (moreLimit !== false && moreLimit === countAttributes++) {
+                if (moreLimit === countAttributes++) {
                     html += '<a href="#" class="' + moreClass + '">' + moreText + '</a>';
                 }
 
                 id = this.id;
-                type = optionConfig[id].type;
+                type = parseInt(optionConfig[id].type, 10);
                 value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
                 thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
                 label = this.label ? this.label : '';
