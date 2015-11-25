@@ -91,4 +91,38 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
         unset($this->fields['bundle_selections']);
         unset($this->fields['product']['bundle_selections']);
     }
+
+    /**
+     * Parse response.
+     *
+     * @param array $response
+     * @return array
+     */
+    protected function parseResponse(array $response)
+    {
+        return array_replace_recursive(parent::parseResponse($response), $this->parseResponseSelections($response));
+    }
+
+    /**
+     * Parse bundle selections in response.
+     *
+     * @param array $response
+     * @return array
+     */
+    protected function parseResponseSelections(array $response)
+    {
+        $bundleSelections = $this->fixture->getBundleSelections();
+
+        foreach ($response['extension_attributes']['bundle_product_options'] as $optionKey => $option) {
+            foreach ($option['product_links'] as $assignedKey => $optionValue) {
+                $bundleSelections['bundle_options'][$optionKey]['assigned_products'][$assignedKey] += [
+                    'selection_id' => (int)$optionValue['id'],
+                    'option_id' => $option['option_id']
+                ];
+
+            }
+        }
+
+        return ['bundle_selections' => $bundleSelections];
+    }
 }
