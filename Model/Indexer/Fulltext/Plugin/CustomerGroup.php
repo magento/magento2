@@ -55,7 +55,8 @@ class CustomerGroup extends AbstractPlugin
         \Closure $proceed,
         AbstractModel $group
     ) {
-        $needInvalidation = ($this->engineResolver->getCurrentSearchEngine() != EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE)
+        $needInvalidation =
+            ($this->engineResolver->getCurrentSearchEngine() != EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE)
             && ($group->isObjectNew() || $group->dataHasChangedFor('tax_class_id'));
         $result = $proceed($group);
         if ($needInvalidation) {
