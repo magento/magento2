@@ -10,11 +10,11 @@
         <each args="getRegion('dataGridFilters')" render=""/>
     </div>
     <div class="admin__data-grid-header-row row row-gutter">
-        <div class="col-xs-2" if="hasChild('listing_massaction')" scope="requestChild('listing_massaction')" render=""/>
+        <div class="col-xs-2" if="hasChild('listing_massaction')" ko-scope="requestChild('listing_massaction')" render=""/>
         <div css="
             'col-xs-10': hasChild('listing_massaction'),
             'col-xs-12': !hasChild('listing_massaction')">
-            <div class="row" scope="requestChild('listing_paging')">
+            <div class="row" ko-scope="requestChild('listing_paging')">
                 <div class="col-xs-3" render="totalTmpl"/>
                 <div class="col-xs-9" render=""/>
             </div>

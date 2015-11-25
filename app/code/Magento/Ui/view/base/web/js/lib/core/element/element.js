@@ -62,6 +62,7 @@ define([
 
     Element = _.extend({
         defaults: {
+            name: '',
             template: '',
             containers: [],
             _requesetd: {},
