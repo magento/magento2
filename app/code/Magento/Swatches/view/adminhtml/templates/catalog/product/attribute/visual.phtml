@@ -11,8 +11,7 @@
 <fieldset class="fieldset">
     <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Manage Swatch (values of your attribute)') ?></span></legend>
     <div id="swatch-visual-options-panel">
-        <?php //@todo move style to css file ?>
-        <table class="data-table" style="clear: both;" cellspacing="0">
+        <table class="data-table clearfix" cellspacing="0">
             <thead>
             <tr id="swatch-visual-options-table">
                 <th class="col-draggable"></th>
@@ -64,20 +63,19 @@
             <td class="swatch-window-col-<%- data.id %> col-default <%- data.empty_class %>">
                 <?php //@todo add logic getting swatch value from db */ ?>
                 <input id="swatch_visual_value_<%- data.id %>" type="hidden" name="swatchvisual[value][<%- data.id %>]" value="<%- data.defaultswatch0 %>" />
-                <div class="swatch_window" id="swatch_window_option_<%- data.id %>" style="border: 1px solid black; width: 30px; height: 30px; overflow: hidden; <%- data.swatch0 %>" onClick="this.next('div').toggle()"></div>
-
-                <div id="swatch_container_option_<%- data.id %>" class="swatch_submenu_container" style="display: none;">
-                    <div class="swatch_row" style="border:1px solid black; position: relative;">
+                <div class="swatch_window" id="swatch_window_option_<%- data.id %>" style="<%- data.swatch0 %>"></div>
+                <div class="swatch_sub-menu_container" id="swatch_container_option_<%- data.id %>">
+                    <div class="swatch_row position-relative">
                         <div class="swatch_row_name colorpicker_handler">
                             <p>Choose a color</p>
                         </div>
                     </div>
-                    <div class="swatch_row" style="border:1px solid black;">
+                    <div class="swatch_row">
                         <div class="swatch_row_name btn_choose_file_upload" id="swatch_choose_file_option_<%- data.id %>">
                             <p>Upload a file</p>
                         </div>
                     </div>
-                    <div class="swatch_row" style="border:1px solid black;">
+                    <div class="swatch_row">
                         <div class="swatch_row_name btn_remove_swatch">
                             <p>Clear</p>
                         </div>

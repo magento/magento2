@@ -60,7 +60,7 @@ class Visual extends AbstractSwatch
     public function getJsonConfig()
     {
         $values = [];
-        foreach($this->getOptionValues() as $value) {
+        foreach ($this->getOptionValues() as $value) {
             $values[] = $value->getData();
         }
 
