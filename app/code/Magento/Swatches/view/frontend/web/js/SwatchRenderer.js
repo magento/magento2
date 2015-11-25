@@ -15,7 +15,7 @@ define([
      * @param {String} query
      * @returns {{}}
      */
-    $.parseParams = function (query) {
+    function parseParams(query) {
         var re = /([^&=]+)=?([^&]*)/g,
             decodeRE = /\+/g,  // Regex for replacing addition symbol with a space
 
@@ -47,7 +47,7 @@ define([
         }
 
         return params;
-    };
+    }
 
     /**
      * Render tooltips by attributes (only to up).
@@ -745,7 +745,7 @@ define([
                     .find('.price-box.price-final_price').attr('data-product-id');
             }
 
-            additional = $.parseParams(window.location.search.substring(1));
+            additional = parseParams(window.location.search.substring(1));
 
             $widget._XhrKiller();
             $widget._EnableProductMediaLoader($this);
@@ -826,7 +826,7 @@ define([
                     return e.hasOwnProperty('large') && e.hasOwnProperty('medium') && e.hasOwnProperty('small');
                 };
 
-            if ($widget._ObjectLength(response) < 1) {
+            if (_.size($widget) < 1) {
                 this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
 
                 return;
@@ -897,32 +897,12 @@ define([
         _EmulateSelected: function () {
             var $widget = this,
                 $this = $widget.element,
-                request = $.parseParams(window.location.search.substring(1));
+                request = parseParams(window.location.search.substring(1));
 
             $.each(request, function (key, value) {
                 $this.find('.' + $widget.options.classes.attributeClass +
                     '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
             });
-        },
-
-        /**
-         * Returns an array/object's length
-         * @param {Object} obj
-         * @returns {Number}
-         * @private
-         */
-        _ObjectLength: function (obj) {
-            var size = 0,
-                key;
-
-            for (key in obj) {
-
-                if (obj.hasOwnProperty(key)) {
-                    size++;
-                }
-            }
-
-            return size;
         }
     });
 });
