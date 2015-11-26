@@ -1120,7 +1120,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         foreach ($attributesData as $tableName => $skuData) {
             $tableData = [];
-            $where = [];
             foreach ($skuData as $sku => $attributes) {
                 $productId = $this->skuProcessor->getNewSku($sku)['entity_id'];
 
