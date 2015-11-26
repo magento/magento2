@@ -7,12 +7,12 @@
 
 <div
         class="admin__fieldset-wrapper"
-        data-bind="css: {'admin__collapsible-block-wrapper': collapsible, 'opened': opened}">
+        data-bind="css: {'admin__collapsible-block-wrapper': collapsible, 'opened': opened}, attr: { 'data-level': $data.level }">
     <div
             class="admin__fieldset-wrapper-title"
             tabindex="3"
-            data-bind="click: toggleOpened, keyboard: { 13: toggleOpened }">
-        <strong class="title">
+            data-bind="click: toggleOpened, keyboard: { 13: toggleOpened }, visible: label">
+        <strong data-bind="css: {'admin__collapsible-title': collapsible, title: !collapsible}">
             <span data-bind="text: label"></span>
         </strong>
     </div>
