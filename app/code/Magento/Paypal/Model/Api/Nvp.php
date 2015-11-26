@@ -1218,7 +1218,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             );
             $http->close();
 
-            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t contact the PayPal gateway.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment Gateway is unreachable at the moment. Please use another payment option.')
+            );
         }
 
         // cUrl resource must be closed after checking it for errors
