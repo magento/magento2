@@ -22,9 +22,7 @@ define([
                 component: 'Magento_Ui/js/grid/data-storage',
                 provider: '${ $.storageConfig.name }',
                 name: '${ $.name }_storage',
-                updateUrl: '${ $.update_url }',
-                indexField: 'entity_id',
-                cacheRequests: true
+                updateUrl: '${ $.update_url }'
             },
             listens: {
                 params: 'onParamsChange'
@@ -107,8 +105,8 @@ define([
          *
          * @returns {Promise} Reload promise object.
          */
-        reload: function () {
-            var request = this.storage().getData(this.params);
+        reload: function (options) {
+            var request = this.storage().getData(this.params, options);
 
             this.trigger('reload');
 
