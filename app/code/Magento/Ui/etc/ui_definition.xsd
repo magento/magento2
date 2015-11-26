@@ -54,7 +54,7 @@
             <xs:element type="bookmark" name="bookmark"/>
             <xs:element type="exportButton" name="exportButton"/>
             <xs:element type="columnsControls" name="columnsControls"/>
-            <xs:element type="listingToolbar" name="listingToolbar"/>
+            <xs:element type="container" name="listingToolbar"/>
             <xs:element type="action" name="action"/>
             <xs:element name="component" type="component" />
             <xs:element name="actionsColumn" type="actionsColumn" />
@@ -66,7 +66,7 @@
         <xs:complexContent>
             <xs:extension base="listing">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element type="listingToolbar" name="listingToolbar"/>
+                    <xs:element type="container" name="listingToolbar"/>
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="paging" name="paging"/>
                     <xs:element type="massaction" name="massaction"/>
