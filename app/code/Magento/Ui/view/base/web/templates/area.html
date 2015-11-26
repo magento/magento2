@@ -4,4 +4,6 @@
  * See COPYING.txt for license details.
  */
 -->
-<div if="wasActivated" each="elems" visible="active" render=""/>
+<if args="wasActivated">
+    <div each="elems" visible="active" attr="'data-area-active': active" render=""/>
+</if>
