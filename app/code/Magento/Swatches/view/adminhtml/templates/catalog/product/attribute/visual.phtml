@@ -17,13 +17,10 @@
                 <th class="col-draggable"></th>
                 <th class="col-default"><?php /* @escapeNotVerified */ echo __('Is Default') ?></th>
                 <th><?php /* @escapeNotVerified */ echo __('Swatch') ?></th>
-                <?php
-                $storelist = $block->getStores();
-                foreach ($storelist as $_store):
-                    ?>
+                <?php $stores = $block->getStores(); foreach ($stores as $_store): ?>
                     <th><?php /* @escapeNotVerified */ echo $_store->getName() ?></th>
                 <?php endforeach;
-                $storetotal = count($storelist) + 3;
+                $colTotal = count($stores) * 2 + 3;
                 ?>
                 <th class="col-delete">&nbsp;</th>
             </tr>
@@ -31,12 +28,12 @@
             <tbody data-role="swatch-visual-options-container" class="ignore-validate"></tbody>
             <tfoot>
             <tr>
-                <th colspan="<?php /* @escapeNotVerified */ echo $storetotal; ?>">
+                <th colspan="<?php echo (int)$colTotal; ?>">
                     <input type="hidden" class="required-visual-swatch-entry" name="visual_swatch_validation"/>
                 </th>
             </tr>
             <tr>
-                <th colspan="<?php /* @escapeNotVerified */ echo $storetotal; ?>" class="col-actions-add">
+                <th colspan="<?php /* @escapeNotVerified */ echo $colTotal; ?>" class="col-actions-add">
                     <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
                         <button id="add_new_swatch_visual_option_button" title="<?php /* @escapeNotVerified */ echo __('Add Swatch'); ?>"
                                 type="button" class="action- scalable add">
@@ -67,17 +64,17 @@
                 <div class="swatch_sub-menu_container" id="swatch_container_option_<%- data.id %>">
                     <div class="swatch_row position-relative">
                         <div class="swatch_row_name colorpicker_handler">
-                            <p>Choose a color</p>
+                            <p><?php /* @escapeNotVerified */ echo __('Choose a color'); ?></p>
                         </div>
                     </div>
                     <div class="swatch_row">
                         <div class="swatch_row_name btn_choose_file_upload" id="swatch_choose_file_option_<%- data.id %>">
-                            <p>Upload a file</p>
+                            <p><?php /* @escapeNotVerified */ echo __('Upload a file'); ?></p>
                         </div>
                     </div>
                     <div class="swatch_row">
                         <div class="swatch_row_name btn_remove_swatch">
-                            <p>Clear</p>
+                            <p><?php /* @escapeNotVerified */ echo __('Clear'); ?></p>
                         </div>
                     </div>
                 </div>
