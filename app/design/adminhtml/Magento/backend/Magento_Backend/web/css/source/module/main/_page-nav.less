@@ -205,22 +205,6 @@
     padding: @admin__page-nav-link__padding;
     transition: @admin__page-nav-transition;
     word-wrap: break-word;
-
-    &._changed {
-        .admin__page-nav-item-message {
-            &._changed {
-                display: inline-block;
-            }
-        }
-    }
-
-    &._error {
-        .admin__page-nav-item-message {
-            &._error {
-                display: inline-block;
-            }
-        }
-    }
 }
 
 //  Messages in tooltip
@@ -228,51 +212,111 @@
 .admin__page-nav-item-messages {
     display: inline-block;
 
-    .admin__page-nav-item-message {
-        position: relative;
-
-        &:hover {
-            z-index: @admin__page-nav-tooltip__z-index;
-
-            .admin__page-nav-item-message-tooltip {
-                display: block;
-            }
+    .admin__page-nav-item-message-tooltip {
+        background: @admin__page-nav-tooltip__background;
+        border-radius: 1px;
+        border: 1px solid @admin__page-nav-tooltip__background;
+        bottom: 3.7rem;
+        box-shadow: @admin__page-nav-tooltip__box-shadow;
+        display: none;
+        font-size: @font-size__base;
+        font-weight: @font-weight__regular;
+        left: -@indent__s;
+        line-height: @line-height__base;
+        padding: 1.5rem;
+        position: absolute;
+        text-transform: none;
+        width: 27rem;
+        word-break: normal;
+        z-index: 2;
+        &:after,
+        &:before {
+            .lib-arrow(
+            @_position: down,
+            @_size: 15px,
+            @_color: @admin__page-nav-tooltip__background
+            );
+            content: '';
+            display: block;
+            left: 2rem;
+            position: absolute;
+            top: 100%;
+            z-index: 3;
         }
-
-        &._error,
-        &._changed {
-            display: none;
-
-            .admin__page-nav-item-message-icon {
-                &:extend(.abs-icon all);
-                display: inline-block;
-                font-size: @admin__page-nav-title__font-size;
-                padding-left: .8em;
-                vertical-align: top;
-
-                &:after {
-                    color: @admin__page-nav-link__changed__color;
-                    content: @admin__page-nav-icon-changed__content;
-                }
-            }
+        &:after {
+            border-top-color: @admin__page-nav-tooltip__background;
+            margin-top: -1px;
+            z-index: 4;
         }
+        &:before {
+            border-top-color: @admin__page-nav-tooltip__border-color;
+            margin-top: 1px;
+        }
+    }
+}
 
-        &._error {
-            .admin__page-nav-item-message-icon {
-                &:after {
-                    color: @admin__page-nav-icon-error__color;
-                    content: @admin__page-nav-icon-error__content;
-                }
+.admin__page-nav-item-message-loader {
+    display: none;
+    margin-top: -(@admin__page-nav-item-message-loader__font-size/2);
+    position: absolute;
+    right: 0;
+    top: 50%;
+
+    .spinner {
+        font-size: @admin__page-nav-item-message-loader__font-size;
+        margin-right: 1.5rem;
+    }
+
+    ._loading > .admin__page-nav-item-messages & {
+        display: inline-block;
+    }
+}
+
+.admin__page-nav-item-message {
+    position: relative;
+
+    &:hover {
+        z-index: @admin__page-nav-tooltip__z-index;
+
+        .admin__page-nav-item-message-tooltip {
+            display: block;
+        }
+    }
+
+    &._error,
+    &._changed {
+        display: none;
+    }
+
+    .admin__page-nav-item-message-icon {
+        &:extend(.abs-icon all);
+        display: inline-block;
+        font-size: @admin__page-nav-title__font-size;
+        padding-left: .8em;
+        vertical-align: baseline;
+            &:after {
+                color: @admin__page-nav-link__changed__color;
+                content: @admin__page-nav-icon-changed__content;
             }
         }
     }
 
-    .admin__page-nav-item-message-loader {
-        display: none;
-        margin-top: -(@admin__page-nav-item-message-loader__font-size/2);
-        position: absolute;
-        right: 0;
-        top: 50%;
+    &._changed {
+        ._changed:not(._error) > .admin__page-nav-item-messages & {
+            display: inline-block;
+        }
+    }
+
+    &._error {
+        .admin__page-nav-item-message-icon {
+            &:after {
+                color: @admin__page-nav-icon-error__color;
+                content: @admin__page-nav-icon-error__content;
+            }
+        }
+
+        ._error > .admin__page-nav-item-messages & {
+            display: inline-block;
 
         .spinner {
             font-size: @admin__page-nav-item-message-loader__font-size;
