@@ -33,6 +33,9 @@
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="statefull">
+                        <item name="applied" xsi:type="boolean">false</item>
+                    </item>
                     <item name="params" xsi:type="array">
                         <item name="filters_modifier" xsi:type="array" />
                     </item>

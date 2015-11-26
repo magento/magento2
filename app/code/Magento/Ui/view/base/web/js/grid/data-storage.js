@@ -13,6 +13,7 @@ define([
     return Class.extend({
         defaults: {
             data: {
+                cacheRequests: false,
                 indexField: 'entity_id'
             }
         },
