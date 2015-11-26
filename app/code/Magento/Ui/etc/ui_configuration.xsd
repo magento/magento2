@@ -47,6 +47,7 @@
             <xs:extension base="container">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="containerConfiguration" name="container"/>
+                    <xs:element type="fieldsetConfiguration" name="fieldset"/>
                     <xs:element name="field" type="field" />
                 </xs:choice>
             </xs:extension>

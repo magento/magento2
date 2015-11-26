@@ -11,7 +11,8 @@ define([
         defaults: {
             template: 'ui/form/fieldset',
             collapsible: false,
-            opened: true
+            opened: true,
+            level: 0
         }
     });
 });
