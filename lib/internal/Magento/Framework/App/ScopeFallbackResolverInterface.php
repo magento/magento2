@@ -8,6 +8,8 @@ namespace Magento\Framework\App;
 interface ScopeFallbackResolverInterface
 {
     /**
+     * Return Scope and Scope ID of parent scope
+     *
      * @param string $scope
      * @param int|null $scopeId
      * @param bool $forConfig
