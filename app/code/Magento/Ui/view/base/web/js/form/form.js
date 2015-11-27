@@ -18,7 +18,7 @@ define([
         items = Array.prototype.slice.call(items);
 
         items.forEach(function (item) {
-            result[item.name] = item.value;
+            result[item.name] = 'checked' in item ? +item.checked : item.value;
         });
 
         return result;
