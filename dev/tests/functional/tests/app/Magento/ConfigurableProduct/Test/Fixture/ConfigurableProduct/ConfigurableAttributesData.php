@@ -356,7 +356,6 @@ class ConfigurableAttributesData extends DataSource
             'admin',
             'label',
             'pricing_value',
-            'is_percent',
             'include',
         ];
         $variationMatrixFields = [

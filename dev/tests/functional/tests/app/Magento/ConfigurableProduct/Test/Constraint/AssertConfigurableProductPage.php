@@ -70,9 +70,7 @@ class AssertConfigurableProductPage extends AssertProductPage
             ];
 
             foreach ($attributeData['options'] as $optionKey => $option) {
-                $price = ('Yes' == $option['is_percent'])
-                    ? ($this->product->getPrice() * $option['pricing_value']) / 100
-                    : $option['pricing_value'];
+                $price = $option['pricing_value'];
 
                 $optionData['options'][$optionKey] = [
                     'title' => $option['label'],

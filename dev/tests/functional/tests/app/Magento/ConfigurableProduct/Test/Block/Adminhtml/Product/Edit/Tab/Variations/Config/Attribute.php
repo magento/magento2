@@ -296,7 +296,10 @@ class Attribute extends Form
                 $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
             }
             //Select option
-            if (!$optionContainer->find('[type="checkbox"]')->isSelected()) {
+            $isOptionSelected = $optionContainer->find('[type="checkbox"]')->isSelected();
+            if (!$isOptionSelected && $option['include'] === 'Yes') {
+                $optionContainer->find('[type="checkbox"]')->click();
+            } elseif ($isOptionSelected && $option['include'] === 'No') {
                 $optionContainer->find('[type="checkbox"]')->click();
             }
         }
