@@ -22,11 +22,6 @@ class DataProvider extends AbstractDataProvider
     protected $metadataProvider;
 
     /**
-     * @var CollectionFactory
-     */
-    protected $configCollectionFactory;
-
-    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -52,7 +47,7 @@ class DataProvider extends AbstractDataProvider
             $data
         );
         $this->metadataProvider = $metadataProvider;
-        $this->configCollectionFactory = $configCollectionFactory;
+        $this->collection = $configCollectionFactory->create();
     }
 
     /**
@@ -69,15 +64,14 @@ class DataProvider extends AbstractDataProvider
             $value = $value['path'];
         });
 
-        /** @var Collection $collection */
-        $this->collection = $this->configCollectionFactory->create();
         $this->collection->addPathsFilter($metadata);
 
+        $metadata = array_flip($metadata);
+
         $items = $this->collection->getItems();
-        /** @var \Magento\Framework\App\Config\Value $item */
         foreach ($items as $item) {
-            $key = substr(str_replace('/', '_', $item['path']), 7);
-            $this->loadedData[1]['design'][$key] = $item->getValue();
+            /** @var \Magento\Framework\App\Config\Value $item */
+            $this->loadedData[1][$metadata[$item->getPath()]] = $item->getValue();
         }
 
         return $this->loadedData;

@@ -6,6 +6,7 @@
 namespace Magento\Theme\Model\ResourceModel\Design\Config;
 
 use Magento\Config\Model\ResourceModel\Config\Data\Collection as ConfigCollection;
+use Magento\Framework\DB\Select;
 
 class Collection extends ConfigCollection
 {
@@ -18,6 +19,19 @@ class Collection extends ConfigCollection
     public function addPathsFilter(array $paths)
     {
         $this->addFieldToFilter('path', ['in' => $paths]);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        $resultCondition = $this->_translateCondition($field, $condition);
+
+        $this->_select->reset(Select::WHERE);
+        $this->_select->where($resultCondition, null, Select::TYPE_CONDITION);
+
         return $this;
     }
 }
