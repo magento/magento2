@@ -12,10 +12,9 @@ define([
 
     return Class.extend({
         defaults: {
-            data: {
-                cacheRequests: true,
-                indexField: 'entity_id'
-            }
+            cacheRequests: true,
+            indexField: 'entity_id',
+            data: {}
         },
 
         /**
