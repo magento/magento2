@@ -26,8 +26,8 @@
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Theme\Model\Design\Config\DataProvider</argument>
             <argument name="name" xsi:type="string">design_config_form_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">design_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="primaryFieldName" xsi:type="string">scope</argument>
+            <argument name="requestFieldName" xsi:type="string">scope</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="submit_url" xsi:type="url" path="theme/design_config/save"/>

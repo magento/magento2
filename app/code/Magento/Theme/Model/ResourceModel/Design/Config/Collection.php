@@ -6,7 +6,6 @@
 namespace Magento\Theme\Model\ResourceModel\Design\Config;
 
 use Magento\Config\Model\ResourceModel\Config\Data\Collection as ConfigCollection;
-use Magento\Framework\DB\Select;
 
 class Collection extends ConfigCollection
 {
@@ -23,15 +22,14 @@ class Collection extends ConfigCollection
     }
 
     /**
-     * {@inheritdoc}
+     * Add scope ID filter to collection
+     *
+     * @param int $scopeId
+     * @return $this
      */
-    public function addFieldToFilter($field, $condition = null)
+    public function addScopeIdFilter($scopeId)
     {
-        $resultCondition = $this->_translateCondition($field, $condition);
-
-        $this->_select->reset(Select::WHERE);
-        $this->_select->where($resultCondition, null, Select::TYPE_CONDITION);
-
+        $this->addFieldToFilter('scope_id', (int)$scopeId);
         return $this;
     }
 }
