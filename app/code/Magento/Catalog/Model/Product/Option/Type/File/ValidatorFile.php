@@ -182,7 +182,7 @@ class ValidatorFile extends Validator
                         $imageSize = getimagesize($fileInfo['tmp_name']);
                     }
                 } else {
-                    throw new LocalizedException(__('You cannot upload empty file'));
+                    throw new LocalizedException(__('The file is empty. Please choose another one'));
                 }
 
                 if ($imageSize) {
