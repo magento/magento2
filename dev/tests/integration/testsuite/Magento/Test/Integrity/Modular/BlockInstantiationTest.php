@@ -56,6 +56,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
     public function allBlocksDataProvider()
     {
         $blockClass = '';
+        echo "allBlocksDataProvider Start\n";
         try {
             /** @var $website \Magento\Store\Model\Website */
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
