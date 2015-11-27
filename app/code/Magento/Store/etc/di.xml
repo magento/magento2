@@ -22,6 +22,7 @@
     <preference for="Magento\Store\Api\StoreManagementInterface" type="Magento\Store\Model\StoreManagement"/>
     <preference for="Magento\Store\Api\WebsiteManagementInterface" type="Magento\Store\Model\WebsiteManagement"/>
     <preference for="Magento\Framework\App\ScopeFallbackResolverInterface" type="Magento\Store\Model\ScopeFallbackResolver"/>
+    <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeFallbackResolver"/>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="xFrameOptionsHeader" type="Magento\Framework\App\Response\XFrameOptPlugin"/>
     </type>
