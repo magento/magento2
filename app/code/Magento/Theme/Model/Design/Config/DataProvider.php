@@ -22,6 +22,31 @@ class DataProvider extends AbstractDataProvider
     protected $metadataProvider;
 
     /**
+     * @var Collection
+     */
+    protected $collection;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var string
+     */
+    protected $scope;
+
+    /**
+     * @var int
+     */
+    protected $scopeId;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -36,6 +61,8 @@ class DataProvider extends AbstractDataProvider
         $requestFieldName,
         MetadataProvider $metadataProvider,
         CollectionFactory $configCollectionFactory,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         array $meta = [],
         array $data = []
     ) {
@@ -48,6 +75,12 @@ class DataProvider extends AbstractDataProvider
         );
         $this->metadataProvider = $metadataProvider;
         $this->collection = $configCollectionFactory->create();
+        $this->request = $request;
+        $this->scopeConfig = $scopeConfig;
+        $this->scope = $this->request->getParam('scope');
+        $this->scopeId = $this->request->getParam('scope_id');
+
+        $this->prepareDefaultValues($data);
     }
 
     /**
@@ -65,15 +98,38 @@ class DataProvider extends AbstractDataProvider
         });
 
         $this->collection->addPathsFilter($metadata);
+        $this->collection->addScopeIdFilter($this->scopeId);
 
         $metadata = array_flip($metadata);
 
         $items = $this->collection->getItems();
         foreach ($items as $item) {
             /** @var \Magento\Framework\App\Config\Value $item */
-            $this->loadedData[1][$metadata[$item->getPath()]] = $item->getValue();
+            $this->loadedData[$this->scope][$metadata[$item->getPath()]] = $item->getValue();
         }
 
+        $this->loadedData[$this->scope]['scope_id'] = $this->scopeId;
+
         return $this->loadedData;
+    }
+
+    /**
+     * Prepare default values
+     *
+     * @return void
+     */
+    protected function prepareDefaultValues()
+    {
+        $metadata = $this->metadataProvider->get();
+        if ($this->scope) {
+            foreach ($metadata as $key => $data) {
+                $defaultValue = $this->scopeConfig->getValue(
+                    $data['path'],
+                    $this->scope,
+                    $this->request->getParam('scope_id')
+                );
+                $this->meta[$data['fieldset']]['fields'][$key]['default'] = $defaultValue;
+            }
+        }
     }
 }
