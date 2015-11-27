@@ -47,16 +47,21 @@ define([
         generateGrid: function (variations, getSectionValue) {
             //['a1','b1','c1','d1'] option = {label:'a1', value:'', section:{img:'',inv:'',pri:''}}
             var productSku = this.variationsComponent().getProductValue('sku');
+            var productName = this.variationsComponent().getProductValue('name');
             var productPrice = this.variationsComponent().getProductValue('price');
             this.variations = [];
             return _.map(variations, function (options) {
-                var variation = [], images, sku, quantity, price;
+                var variation = [], images, sku, name, quantity, price;
                 images = getSectionValue('images', options);
                 variation.push(images);
-                sku = productSku + _.reduce(options, function (memo, option) {
+
+                var suffix = _.reduce(options, function (memo, option) {
                     return memo + '-' + option.label;
                 }, '');
+                sku = productSku + suffix;
                 variation.push(sku);
+                name = productName + suffix;
+
                 quantity = getSectionValue('quantity', options);
                 variation.push(quantity);
                 //attributes
@@ -66,7 +71,8 @@ define([
                 price = getSectionValue('price', options);
                 price = price || productPrice;
                 variation.push('$ ' + price);
-                this.variations.push({options: options, images: images, sku: sku, quantity: quantity, price: price});
+                this.variations.push({options: options, images: images, sku: sku, name: name,
+                    quantity: quantity, price: price});
                 return variation;
             }, this);
         },
