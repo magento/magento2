@@ -82,6 +82,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected $sessionMock;
 
     /**
+     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $categoryMock;
+
+    /**
      * Set up
      *
      * @return void
@@ -90,6 +95,22 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->categoryMock = $this->getMock(
+            'Magento\Catalog\Model\Category',
+            [
+                'getPath',
+                'addData',
+                'getId',
+                'getName',
+                'getResource',
+                'setStoreId',
+                'toArray'
+            ],
+            [],
+            '',
+            false
+        );
 
         $this->contextMock = $this->getMock(
             'Magento\Backend\App\Action\Context',
@@ -220,26 +241,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $rootCategoryId = 2;
 
-        /**
-         * @var \Magento\Catalog\Model\Category
-         * |\PHPUnit_Framework_MockObject_MockObject $categoryMock
-         */
-        $categoryMock = $this->getMock(
-            'Magento\Catalog\Model\Category',
-            [
-                'getPath',
-                'addData',
-                'getId',
-                'getName',
-                'getResource',
-                'setStoreId',
-                'toArray'
-            ],
-            [],
-            '',
-            false
-        );
-
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
             ->will(
@@ -255,7 +256,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with('isAjax')
             ->will($this->returnValue(false));
 
-        $this->mockInitCategoryCall($categoryMock);
+        $this->mockInitCategoryCall();
 
         $this->sessionMock->expects($this->once())
             ->method('__call')
@@ -330,10 +331,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Mock for method "_initCategory"
-     *
-     * @param $categoryMock
      */
-    private function mockInitCategoryCall($categoryMock)
+    private function mockInitCategoryCall()
     {
         /**
          * @var \Magento\Backend\Model\Auth\Session
@@ -384,7 +383,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($categoryMock));
+            ->will($this->returnValue($this->categoryMock));
 
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('get')
