@@ -36,6 +36,8 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                     \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
                     \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID
                 );
+                $log = "testBlockInstantiation: Module " . $module . ", Class " . $class . ", Area " . $area . "\n";
+                echo $log;
                 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 
                 try {
@@ -123,6 +125,8 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         ) {
             $area = 'adminhtml';
         }
+        $log = "_addBlock: Module " . $module . ", BlockClass " . $blockClass . ", Area " . $area . "\n";
+        echo $log;
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\AreaList'
         )->getArea(
