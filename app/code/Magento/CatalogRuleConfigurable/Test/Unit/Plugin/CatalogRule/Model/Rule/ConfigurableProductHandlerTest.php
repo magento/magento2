@@ -51,7 +51,6 @@ class ConfigurableProductHandlerTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false
-
         );
         $this->ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
 
