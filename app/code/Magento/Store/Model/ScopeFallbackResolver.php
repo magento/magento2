@@ -39,7 +39,7 @@ class ScopeFallbackResolver implements ScopeFallbackResolverInterface
                 break;
             case ScopeInterface::SCOPE_STORE:
                 $fallback = $forConfig
-                    ? [ScopeInterface::SCOPE_GROUP, $this->storeManager->getStore($scopeId)->getWebsiteId()]
+                    ? [ScopeInterface::SCOPE_WEBSITE, $this->storeManager->getStore($scopeId)->getWebsiteId()]
                     : [ScopeInterface::SCOPE_GROUP, $this->storeManager->getStore($scopeId)->getStoreGroupId()];
         }
         return $fallback;
