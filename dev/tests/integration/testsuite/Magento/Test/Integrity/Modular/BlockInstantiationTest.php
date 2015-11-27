@@ -17,6 +17,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 {
     public function testBlockInstantiation()
     {
+        echo "testBlockInstantiation Start\n";
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             function ($module, $class, $area) {
