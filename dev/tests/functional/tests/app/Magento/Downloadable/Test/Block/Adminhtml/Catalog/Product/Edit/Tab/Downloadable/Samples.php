@@ -68,9 +68,9 @@ class Samples extends Form
         foreach ($fields['downloadable']['sample'] as $index => $sample) {
             $element->find($this->addNewSampleRow, Locator::SELECTOR_XPATH)->click();
 
-            if (isset($link['sort_order'])) {
-                $currentSortOrder = (int)$link['sort_order'];
-                unset($link['sort_order']);
+            if (isset($sample['sort_order'])) {
+                $currentSortOrder = (int)$sample['sort_order'];
+                unset($sample['sort_order']);
             } else {
                 $currentSortOrder = 0;
             }
@@ -97,7 +97,7 @@ class Samples extends Form
             unset($sample['sort_order']);
             $processedSample = $this->getRowBlock($index, $element)
                 ->getDataSampleRow($sample);
-            $processedLink['sort_order'] = $index;
+            $processedSample['sort_order'] = $index;
             $newFields['downloadable']['sample'][$index] = $processedSample;
         }
         return $newFields;
