@@ -115,6 +115,13 @@
                     <item name="provider" xsi:type="string">ns = ${ $.ns }, index = bookmarks</item>
                     <item name="namespace" xsi:type="string">current</item>
                 </item>
+                <item name="childDefaults" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">ns = ${ $.ns }, index = bookmarks</item>
+                        <item name="root" xsi:type="string">columns.${ $.index }</item>
+                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root }</item>
+                    </item>
+                </item>
             </item>
         </argument>
     </columns>
@@ -125,11 +132,6 @@
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 <item name="componentType" xsi:type="string">column</item>
                 <item name="dataType" xsi:type="string">text</item>
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">ns = ${ $.ns }, index = bookmarks</item>
-                    <item name="root" xsi:type="string">columns.${ $.index }</item>
-                    <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
-                </item>
             </item>
         </argument>
     </column>
