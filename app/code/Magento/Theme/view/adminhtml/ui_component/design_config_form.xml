@@ -27,10 +27,13 @@
             <argument name="class" xsi:type="string">Magento\Theme\Model\Design\Config\DataProvider</argument>
             <argument name="name" xsi:type="string">design_config_form_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">design_id</argument>
-            <argument name="requestFieldName" xsi:type="string">design_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="submit_url" xsi:type="url" path="theme/design/config/save"/>
+                    <item name="submit_url" xsi:type="url" path="theme/design_config/save"/>
+                    <item name="clientConfig" xsi:type="array">
+                        <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                    </item>
                 </item>
             </argument>
         </argument>
@@ -48,7 +51,6 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="dataScope" xsi:type="string">theme_theme_schedule</item>
-                    <item name="source" xsi:type="string">design</item>
                     <item name="sortOrder" xsi:type="number">20</item>
                 </item>
             </argument>
@@ -76,7 +78,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">file</item>
                         <item name="dataScope" xsi:type="string">head_shortcut_icon</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="notice" xsi:type="string" translate="true">Allowed file types: ICO, PNG, GIF, JPG, JPEG, APNG, SVG. Not all browsers support all these formats!</item>
                     </item>
                 </argument>
@@ -88,7 +89,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">head_default_title</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>
@@ -99,7 +99,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">head_title_prefix</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>
@@ -110,7 +109,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">head_title_suffix</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>
@@ -121,7 +119,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">head_default_description</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>
@@ -132,7 +129,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">head_default_keywords</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>
@@ -143,7 +139,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">head_includes</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="notice" xsi:type="string" translate="true">This will be included before head closing tag in page HTML.</item>
                     </item>
                 </argument>
@@ -156,7 +151,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">select</item>
                         <item name="dataScope" xsi:type="string">head_demonotice</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>
@@ -176,7 +170,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">file</item>
                         <item name="dataScope" xsi:type="string">header_logo_src</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="notice" xsi:type="string" translate="true">Allowed file types:PNG, GIF, JPG, JPEG, SVG.</item>
                     </item>
                 </argument>
@@ -188,7 +181,6 @@
                         <item name="dataType" xsi:type="string">number</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_width</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="validation" xsi:type="array">
                             <item name="validate-number" xsi:type="boolean">true</item>
                         </item>
@@ -202,7 +194,6 @@
                         <item name="dataType" xsi:type="string">number</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_height</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="validation" xsi:type="array">
                             <item name="validate-number" xsi:type="boolean">true</item>
                         </item>
@@ -216,7 +207,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_welcome</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>
@@ -227,7 +217,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_alt</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>
@@ -247,7 +236,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">footer_absolute_footer</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="notice" xsi:type="string" translate="true">This will be displayed just before body closing tag.</item>
                     </item>
                 </argument>
@@ -259,7 +247,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">footer_copyright</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>

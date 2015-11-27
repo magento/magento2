@@ -17,10 +17,6 @@ define([
 
         data.form_key = window.FORM_KEY;
 
-        if (!url) {
-            save.resolve();
-        }
-
         $('body').trigger('processStart');
 
         $.ajax({
@@ -52,6 +48,9 @@ define([
     }
 
     return Class.extend({
+        defaults: {
+            validateBeforeSave: true
+        },
 
         /**
          * Assembles data and submits it using 'utils.submit' method
@@ -60,7 +59,11 @@ define([
             var url = this.urls.beforeSave,
                 save = this._save.bind(this, data, options);
 
-            beforeSave(data, url).then(save);
+            if (this.validateBeforeSave) {
+                beforeSave(data, url).then(save);
+            } else {
+                save();
+            }
 
             return this;
         },

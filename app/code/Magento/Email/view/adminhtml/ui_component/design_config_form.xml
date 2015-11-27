@@ -22,7 +22,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">file</item>
                         <item name="dataScope" xsi:type="string">email_logo</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="notice" xsi:type="string" translate="true">Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 3x normal size and then specify 1x dimensions in width/height fields below.</item>
                     </item>
                 </argument>
@@ -34,7 +33,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">email_logo_alt</item>
-                        <item name="source" xsi:type="string">design</item>
                     </item>
                 </argument>
             </field>
@@ -45,7 +43,6 @@
                         <item name="dataType" xsi:type="string">number</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">email_logo_width</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="validation" xsi:type="array">
                             <item name="validate-number" xsi:type="boolean">true</item>
                         </item>
@@ -60,7 +57,6 @@
                         <item name="dataType" xsi:type="string">number</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">email_logo_height</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="validation" xsi:type="array">
                             <item name="validate-number" xsi:type="boolean">true</item>
                         </item>
@@ -76,7 +72,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">select</item>
                         <item name="dataScope" xsi:type="string">email_header_template</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="notice" xsi:type="string" translate="true">Email template chosen based on theme fallback when "Default" option is selected.</item>
                     </item>
                 </argument>
@@ -89,7 +84,6 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">select</item>
                         <item name="dataScope" xsi:type="string">email_footer_template</item>
-                        <item name="source" xsi:type="string">design</item>
                         <item name="notice" xsi:type="string" translate="true">Email template chosen based on theme fallback when "Default" option is selected.</item>
                     </item>
                 </argument>

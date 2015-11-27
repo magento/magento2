@@ -30,7 +30,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">file</item>
                             <item name="dataScope" xsi:type="string">watermark_image_image</item>
-                            <item name="source" xsi:type="string">design</item>
                             <item name="notice" xsi:type="string" translate="true">Allowed file types: jpeg, gif, png.</item>
                         </item>
                     </argument>
@@ -42,7 +41,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_image_imageOpacity</item>
-                            <item name="source" xsi:type="string">design</item>
                         </item>
                     </argument>
                 </field>
@@ -53,7 +51,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_image_size</item>
-                            <item name="source" xsi:type="string">design</item>
                             <item name="tooltip" xsi:type="array">
                                 <item name="description" xsi:type="string" translate="true">Example format: 200x300.</item>
                             </item>
@@ -68,7 +65,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_image_position</item>
-                            <item name="source" xsi:type="string">design</item>
                         </item>
                     </argument>
                 </field>
@@ -88,7 +84,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">file</item>
                             <item name="dataScope" xsi:type="string">watermark_thumbnail_image</item>
-                            <item name="source" xsi:type="string">design</item>
                             <item name="notice" xsi:type="string" translate="true">Allowed file types: jpeg, gif, png.</item>
                         </item>
                     </argument>
@@ -100,7 +95,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_thumbnail_imageOpacity</item>
-                            <item name="source" xsi:type="string">design</item>
                         </item>
                     </argument>
                 </field>
@@ -111,7 +105,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_thumbnail_size</item>
-                            <item name="source" xsi:type="string">design</item>
                             <item name="tooltip" xsi:type="array">
                                 <item name="description" xsi:type="string" translate="true">Example format: 200x300.</item>
                             </item>
@@ -126,7 +119,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_thumbnail_position</item>
-                            <item name="source" xsi:type="string">design</item>
                         </item>
                     </argument>
                 </field>
@@ -146,7 +138,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">file</item>
                             <item name="dataScope" xsi:type="string">watermark_small_image_image</item>
-                            <item name="source" xsi:type="string">design</item>
                             <item name="notice" xsi:type="string" translate="true">Allowed file types: jpeg, gif, png.</item>
                         </item>
                     </argument>
@@ -158,7 +149,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_small_image_imageOpacity</item>
-                            <item name="source" xsi:type="string">design</item>
                         </item>
                     </argument>
                 </field>
@@ -169,7 +159,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_small_image_size</item>
-                            <item name="source" xsi:type="string">design</item>
                             <item name="tooltip" xsi:type="array">
                                 <item name="description" xsi:type="string" translate="true">Example format: 200x300.</item>
                             </item>
@@ -184,7 +173,6 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_small_image_position</item>
-                            <item name="source" xsi:type="string">design</item>
                         </item>
                     </argument>
                 </field>

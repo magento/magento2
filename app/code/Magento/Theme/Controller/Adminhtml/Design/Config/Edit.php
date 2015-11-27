@@ -9,12 +9,11 @@ use Magento\Theme\Controller\Adminhtml\Index;
 
 class Edit extends Index
 {
+    /**
+     * @return \Magento\Framework\View\Result\Page
+     */
     public function execute()
     {
-        $themeId = $this->initCurrentTheme();
-
-        // TODO:
-
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend(__('Theme Name'));
         return $resultPage;
