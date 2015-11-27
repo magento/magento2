@@ -14,48 +14,44 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for UpdateCategoryUrlRewritesEntity
- *
- * Test Flow:
- *
  * Precondition:
  * 1. SubCategory is created.
  * 2. Category URL Rewrite is created.
  *
  * Steps:
  * 1. Log in to backend as Admin.
- * 2. Go to the Marketing-> SEO & Search->URL Rewrites.
+ * 2. Go to the Marketing > SEO & Search > URL Rewrites.
  * 3. Click Category URL Rewrite from grid.
  * 4. Edit test value(s) according to dataset.
  * 5. Click 'Save' button.
  * 6. Perform all asserts.
  *
- * @group URL_Rewrites_(PS)
+ * @group URL_Rewrites_(MX)
  * @ZephyrId MAGETWO-24838
  */
 class UpdateCategoryUrlRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const DOMAIN = 'MX';
     /* end tags */
 
     /**
-     * Url rewrite index page
+     * Url rewrite index page.
      *
      * @var UrlRewriteIndex
      */
     protected $urlRewriteIndex;
 
     /**
-     * Url rewrite edit page
+     * Url rewrite edit page.
      *
      * @var UrlRewriteEdit
      */
     protected $urlRewriteEdit;
 
     /**
-     * Prepare datasets and pages
+     * Prepare datasets and pages.
      *
      * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewriteEdit $urlRewriteEdit
@@ -85,7 +81,7 @@ class UpdateCategoryUrlRewriteEntityTest extends Injectable
     }
 
     /**
-     * Update category URL rewrites
+     * Update category URL rewrites.
      *
      * @param UrlRewrite $categoryRedirect
      * @param UrlRewrite $urlRewrite
