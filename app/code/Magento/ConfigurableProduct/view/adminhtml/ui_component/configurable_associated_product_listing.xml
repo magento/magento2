@@ -33,7 +33,7 @@
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="statefull">
+                    <item name="statefull" xsi:type="array">
                         <item name="applied" xsi:type="boolean">false</item>
                     </item>
                     <item name="params" xsi:type="array">
