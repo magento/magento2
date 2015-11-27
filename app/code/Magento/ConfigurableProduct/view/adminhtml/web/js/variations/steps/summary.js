@@ -46,14 +46,14 @@ define([
         },
         generateGrid: function (variations, getSectionValue) {
             //['a1','b1','c1','d1'] option = {label:'a1', value:'', section:{img:'',inv:'',pri:''}}
-            var productName = this.variationsComponent().getProductValue('name');
+            var productSku = this.variationsComponent().getProductValue('sku');
             var productPrice = this.variationsComponent().getProductValue('price');
             this.variations = [];
             return _.map(variations, function (options) {
                 var variation = [], images, sku, quantity, price;
                 images = getSectionValue('images', options);
                 variation.push(images);
-                sku = productName + _.reduce(options, function (memo, option) {
+                sku = productSku + _.reduce(options, function (memo, option) {
                     return memo + '-' + option.label;
                 }, '');
                 variation.push(sku);
