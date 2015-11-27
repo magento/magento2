@@ -5,14 +5,15 @@
 define([
     'jquery',
     'underscore',
-    'uiClass',
-    'es6-collections'
-], function ($, _, Class) {
+    'mageUtils',
+    'uiClass'
+], function ($, _, utils, Class) {
     'use strict';
 
     return Class.extend({
         defaults: {
             cacheRequests: true,
+            cachedRequestDelay: 100,
             indexField: 'entity_id',
             data: {}
         },
@@ -25,7 +26,7 @@ define([
         initConfig: function () {
             this._super();
 
-            this._requests = new Map();
+            this._requests = [];
 
             return this;
         },
@@ -68,15 +69,17 @@ define([
         /**
          *
          * @param {Object} params
+         * @param {Object} [options={}]
+         * @returns {jQueryPromise}
          */
         getData: function (params, options) {
+            var cachedRequest = this.getCachedRequest(params);
+
             options = options || {};
 
-            if (!options.refresh && this.wasRequestCached(params)) {
-                return this.getCachedRequestData(params);
-            }
-
-            return this.requestData(params);
+            return !options.refresh && cachedRequest ?
+                this.getCachedRequestData(cachedRequest) :
+                this.requestData(params);
         },
 
         /**
@@ -95,43 +98,78 @@ define([
         },
 
         /**
+         * Sends request to the server with provided parameters.
          *
-         * @param {Object} params
+         * @param {Object} params - Request parameters.
          * @returns {jQueryPromise}
          */
         requestData: function (params) {
-            var handler = this.onRequestComplete.bind(this, params);
+            var handler = this.onRequestComplete.bind(this, params),
+                request;
 
-            if (this.request && this.request.readyState !== 4) {
-                this.request.abort();
-            }
-
-            this.request = $.ajax({
+            request = $.ajax({
                 url: this.updateUrl,
                 method: 'GET',
                 data: params,
                 dataType: 'json'
             }).done(handler);
 
-            return this.request;
+            return request;
+        },
+
+        /**
+         * Returns request's instance which
+         * contains provided parameters.
+         *
+         * @param {Object} params - Request parameters.
+         * @returns {Object} Instance of request.
+         */
+        getCachedRequest: function (params) {
+            return _.find(this._requests, function (request) {
+                return _.isEqual(params, request.params);
+            }, this);
+        },
+
+        /**
+         * Forms data object associated with a provided request.
+         *
+         * @param {Object} request - Request object.
+         * @returns {jQueryPromise}
+         */
+        getCachedRequestData: function (request) {
+            var defer   = $.Deferred(),
+                resolve = defer.resolve.bind(defer),
+                delay   = this.cachedRequestDelay,
+                result;
+
+            result = {
+                items: this.getByIds(request.ids),
+                totalRecords: request.totalRecords
+            };
+
+            delay ?
+                _.delay(resolve, delay, result) :
+                resolve(result);
+
+            return defer.promise();
         },
 
         /**
          *
-         * @param {Object} params
-         * @returns {jQueryPromise}
+         * @param {Object} data - Data associated with request.
+         * @param {Object} params - Request parameters.
+         * @returns {DataStorage} Chainable.
          */
-        getCachedRequestData: function (params) {
-            var request = this.getCachedRequest(params),
-                data    = this.getByIds(request.ids),
-                defer   = $.Deferred();
+        cacheRequest: function (data, params) {
+            var request = {
+                ids:            this.getIds(data.items),
+                params:         utils.copy(params),
+                totalRecords:   data.totalRecords
+            };
 
-            defer.resolve({
-                items: data,
-                totalRecords: request.totalRecords
-            });
+            this._requests.push(request);
 
-            return defer.promise();
+            return this;
         },
 
         /**
@@ -140,56 +178,35 @@ define([
          * @returns {DataStorage} Chainable.
          */
         clearCachedRequests: function () {
-            this._requests.clear();
+            this._requests.splice(0);
 
             return this;
         },
 
         /**
+         * Removes provided request object from cached requests list.
          *
-         * @param {Object} params
-         * @returns {Object}
-         */
-        getCachedRequest: function (params) {
-            var request = this.serializeRequest(params);
-
-            return this._requests.get(request);
-        },
-
-        /**
-         *
-         * @param {Object} data
-         * @param {Object} params
+         * @param {Object} request - Request object.
          * @returns {DataStorage} Chainable.
          */
-        cacheRequest: function (data, params) {
-            var request = this.serializeRequest(params),
-                ids     = this.getIds(data.items);
+        removeCachedRequest: function (request) {
+            var requests = this._requests,
+                index = requests.indexOf(request);
 
-            this._requests.set(request, {
-                ids: ids,
-                totalRecords: data.totalRecords
-            });
+            if (~index) {
+                requests.splice(index, 1);
+            }
 
             return this;
         },
 
         /**
-         *
-         * @param {Object} params
-         * @returns {String}
-         */
-        serializeRequest: function (params) {
-            return JSON.stringify(params);
-        },
-
-        /**
-         * Checks if request with a specified parameters was already processed.
+         * Checks if request with a specified parameters was cached.
          *
          * @param {Object} params - Parameters of the request.
          * @returns {Boolean}
          */
-        wasRequestCached: function (params) {
+        wasRequested: function (params) {
             return !!this.getCachedRequest(params);
         },
 
