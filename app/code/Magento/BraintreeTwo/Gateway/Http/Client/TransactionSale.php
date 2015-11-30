@@ -57,7 +57,7 @@ class TransactionSale implements ClientInterface
         } catch (\Exception $e) {
             throw new ClientException(__($e->getMessage()));
         } finally {
-            $log['response'] = json_decode(json_encode($response['object']), true);
+            $log['response'] = (array) $response['object'];
             $this->logger->debug($log);
         }
 
