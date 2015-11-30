@@ -211,7 +211,7 @@
                 <var name="thumbheight">150</var> <!-- Height of thumbnails in fullscreen -->
                 <var name="navigation_carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
                 <var name="transition">
-                    <var name="effect">dissolve</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
+                    <var name="effect">slide</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
                     <var name="duration">500</var> <!-- Sets transition duration in ms -->
                     <var name="carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
                 </var>
@@ -219,7 +219,7 @@
         </var>
 
         <var name="magnifier">
-            <var name="fullscreenzoom">5</var>  <!-- Zoom for fullscreen (integer)-->
+            <var name="fullscreenzoom">20</var>  <!-- Zoom for fullscreen (integer)-->
             <var name="top"></var> <!-- Top position of magnifier -->
             <var name="left"></var> <!-- Left position of magnifier -->
             <var name="width"></var> <!-- Width of magnifier block -->
