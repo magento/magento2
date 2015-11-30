@@ -68,9 +68,9 @@ require(['prototype'], function(){
     </label>
     <div class="admin__field-control control">
         <?php if ($_fileExists): ?>
-            <span class="<?php echo $_fileNamed ?>"><?php echo $_fileInfo->getTitle(); ?></span>
-            <a href="javascript:void(0)" class="label" onclick="opFile<?php echo $_rand; ?>.toggleFileChange($(this).next('.input-box'))">
-                <?php echo __('Change') ?>
+            <span class="<?php /* @escapeNotVerified */ echo $_fileNamed ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_fileInfo->getTitle()); ?></span>
+            <a href="javascript:void(0)" class="label" onclick="opFile<?php /* @escapeNotVerified */ echo $_rand; ?>.toggleFileChange($(this).next('.input-box'))">
+                <?php /* @escapeNotVerified */ echo __('Change') ?>
             </a>&nbsp;
             <?php if (!$_option->getIsRequire()): ?>
                 <input type="checkbox" onclick="opFile<?php echo $_rand; ?>.toggleFileDelete($(this), $(this).next('.input-box'))" price="<?php echo $block->getCurrencyPrice($_option->getPrice(true)) ?>"/>
