@@ -12,9 +12,7 @@ use Magento\Catalog\Model\Product;
  *
  * @method \Magento\CatalogRule\Model\ResourceModel\Rule _getResource()
  * @method \Magento\CatalogRule\Model\ResourceModel\Rule getResource()
- * @method string getFromDate()
  * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
- * @method string getToDate()
  * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
  * @method string getWebsiteIds()
@@ -792,6 +790,22 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     public function setSubDiscountAmount($subDiscountAmount)
     {
         return $this->setData(self::SUB_DISCOUNT_AMOUNT, $subDiscountAmount);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromDate()
+    {
+        return $this->getData('from_date');
+    }
+
+    /**
+     * @return string
+     */
+    public function getToDate()
+    {
+        return $this->getData('to_date');
     }
 
     /**
