@@ -89,7 +89,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
     protected $productForSalesRule2;
 
     /**
-     * Second product from precondition.
+     * Cart prices to compare.
      *
      * @array cartPrice
      */
