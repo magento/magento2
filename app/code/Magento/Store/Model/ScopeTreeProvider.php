@@ -38,7 +38,7 @@ class ScopeTreeProvider implements ScopeTreeProviderInterface
         /** @var \Magento\Store\Model\Website $website */
         foreach ($this->storeManager->getWebsites() as $website) {
             $websiteScope = [
-                'scope' => ScopeInterface::SCOPE_WEBSITE,
+                'scope' => ScopeInterface::SCOPE_WEBSITES,
                 'scope_id' => $website->getId(),
                 'scopes' => [],
             ];
@@ -54,7 +54,7 @@ class ScopeTreeProvider implements ScopeTreeProviderInterface
                 /** @var \Magento\Store\Model\Group $store */
                 foreach ($group->getStores() as $store) {
                     $storeScope = [
-                        'scope' => ScopeInterface::SCOPE_STORE,
+                        'scope' => ScopeInterface::SCOPE_STORES,
                         'scope_id' => $store->getId(),
                         'scopes' => [],
                     ];
