@@ -396,8 +396,9 @@ define([
             $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
             }, this));
-
-            this._startPrepareForPlayer(e, fotorama);
+            this._checkForVideo(e, fotorama, -1);
+            this._checkForVideo(e, fotorama, 0);
+            this._checkForVideo(e, fotorama, 1);
         },
 
         /**
@@ -516,8 +517,10 @@ define([
             $image.find('.magnify-lens').remove();
             $image.on('click tap', function () {
                 if ($(this).hasClass('video-unplayed') && $(this).find('iframe').length === 0) {
-                    $('.fotorama__arr--next').hide();
-                    $('.fotorama__arr--prev').hide();
+                    if ($('.fotorama-item').data('fotorama').options.arrows) {
+                        $('.fotorama__arr--next').hide();
+                        $('.fotorama__arr--prev').hide();
+                    }
 
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
@@ -563,11 +566,11 @@ define([
                             clearInterval(waitForFroogaloop);
                             fotorama.requestFullScreen();
                             $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
-                            $('.fotorama__fullscreen-icon').css({
+                            /*$('.fotorama__fullscreen-icon').css({
                                 opacity: '1',
                                 visibility: 'visible',
                                 display: 'block'
-                            });
+                            });*/
                             this.Base = false;
                         }
                     }, this), 50);
@@ -575,11 +578,11 @@ define([
                     setTimeout($.proxy(function () {
                         fotorama.requestFullScreen();
                         $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
-                        $('.fotorama__fullscreen-icon').css({
+                        /*$('.fotorama__fullscreen-icon').css({
                             opacity: '1',
                             visibility: 'visible',
                             display: 'block'
-                        });
+                        });*/
                         this.Base = false;
                     }, this), 50);
                 }
@@ -628,8 +631,10 @@ define([
                 $(this).remove();
                 $item.append(cloneVideoDiv);
                 $item.addClass('video-unplayed');
-                $('.fotorama__arr--next').show();
-                $('.fotorama__arr--prev').show();
+                if ($('.fotorama-item').data('fotorama').options.arrows) {
+                    $('.fotorama__arr--next').show();
+                    $('.fotorama__arr--prev').show();
+                }
                 self._hideCloseVideo();
 
             });
