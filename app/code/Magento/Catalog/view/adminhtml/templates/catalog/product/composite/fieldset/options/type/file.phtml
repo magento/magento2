@@ -68,7 +68,7 @@ require(['prototype'], function(){
     </label>
     <div class="admin__field-control control">
         <?php if ($_fileExists): ?>
-            <span class="<?php /* @escapeNotVerified */ echo $_fileNamed ?>"><?php /* @escapeNotVerified */ echo $_fileInfo->getTitle(); ?></span>
+            <span class="<?php /* @escapeNotVerified */ echo $_fileNamed ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_fileInfo->getTitle()); ?></span>
             <a href="javascript:void(0)" class="label" onclick="opFile<?php /* @escapeNotVerified */ echo $_rand; ?>.toggleFileChange($(this).next('.input-box'))">
                 <?php /* @escapeNotVerified */ echo __('Change') ?>
             </a>&nbsp;
