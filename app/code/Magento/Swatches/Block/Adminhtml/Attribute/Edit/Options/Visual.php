@@ -53,6 +53,28 @@ class Visual extends AbstractSwatch
     }
 
     /**
+     * Return json config for visual option JS initialization
+     *
+     * @return array
+     */
+    public function getJsonConfig()
+    {
+        $values = [];
+        foreach ($this->getOptionValues() as $value) {
+            $values[] = $value->getData();
+        }
+
+        $data = [
+            'attributesData' => $values,
+            'uploadActionUrl' => $this->getUrl('swatches/iframe/show'),
+            'isSortable' => (int)(!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()),
+            'isReadOnly' => (int)$this->getReadOnly()
+        ];
+
+        return json_encode($data);
+    }
+
+    /**
      * Parse swatch labels for template
      *
      * @codeCoverageIgnore
