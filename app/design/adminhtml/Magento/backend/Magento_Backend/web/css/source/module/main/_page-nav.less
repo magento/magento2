@@ -34,10 +34,11 @@
 @admin__page-nav-icon-error__color: @color-phoenix;
 
 @admin__page-nav-item-message-loader__font-size: 2rem;
+@admin__page-nav-tooltip-message__width: 27rem;
 @admin__page-nav-tooltip__background: @admin__page-nav__background-color;
+@admin__page-nav-tooltip__border-color: @color-gray75;
 @admin__page-nav-tooltip__box-shadow: 0 3px 9px 0 rgba(0, 0, 0, .3);
 @admin__page-nav-tooltip__z-index1: @field-tooltip__z-index;
-@admin__page-nav-tooltip__border-color: @color-gray75;
 
 @admin__page-nav-transition: border-color .1s ease-out, background-color .1s ease-out;
 
@@ -226,9 +227,10 @@
         padding: 1.5rem;
         position: absolute;
         text-transform: none;
-        width: 27rem;
+        width: @admin__page-nav-tooltip-message__width;
         word-break: normal;
         z-index: 2;
+
         &:after,
         &:before {
             .lib-arrow(
@@ -243,11 +245,13 @@
             top: 100%;
             z-index: 3;
         }
+
         &:after {
             border-top-color: @admin__page-nav-tooltip__background;
             margin-top: -1px;
             z-index: 4;
         }
+
         &:before {
             border-top-color: @admin__page-nav-tooltip__border-color;
             margin-top: 1px;
@@ -294,6 +298,7 @@
         font-size: @admin__page-nav-title__font-size;
         padding-left: .8em;
         vertical-align: baseline;
+
             &:after {
                 color: @admin__page-nav-link__changed__color;
                 content: @admin__page-nav-icon-changed__content;
