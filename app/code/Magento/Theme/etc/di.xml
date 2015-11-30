@@ -14,6 +14,10 @@
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection" />
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
+    <preference for="Magento\Theme\Api\Data\DesignConfigInterface" type="Magento\Theme\Model\Data\Design\Config"/>
+    <preference for="Magento\Theme\Api\Data\DesignConfigDataInterface" type="Magento\Theme\Model\Data\Design\Config\Data"/>
+    <preference for="Magento\Theme\Api\DesignConfigRepositoryInterface" type="Magento\Theme\Model\DesignConfigRepository"/>
+    <preference for="Magento\Theme\Model\Design\Config\ValueCheckerInterface" type="Magento\Theme\Model\Design\Config\ValueChecker"/>
     <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
         <arguments>
             <argument name="renderers" xsi:type="array">
@@ -99,6 +103,9 @@
                 <item name="theme_uninstall" xsi:type="object">Magento\Theme\Console\Command\ThemeUninstallCommand</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Theme\Model\DesignConfigRepository">
+        <plugin name="save_design_settings_event_dispatching" type="Magento\Theme\Model\Design\Config\Plugin"/>
     </type>
     <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
 </config>
