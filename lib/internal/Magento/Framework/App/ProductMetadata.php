@@ -20,6 +20,18 @@ class ProductMetadata implements ProductMetadataInterface
     protected $version;
 
     /**
+     * @var \Magento\Framework\Composer\ComposerJsonFinder
+     */
+    protected $composerJsonFinder;
+
+    /**
+     * @param \Magento\Framework\Composer\ComposerJsonFinder $composerJsonFinder
+     */
+    public function __construct(\Magento\Framework\Composer\ComposerJsonFinder $composerJsonFinder) {
+        $this->composerJsonFinder = $composerJsonFinder;
+    }
+
+    /**
      * Get Product version
      *
      * @return string
@@ -27,19 +39,27 @@ class ProductMetadata implements ProductMetadataInterface
     public function getVersion()
     {
         if (!$this->version) {
-            $composerJsonFile = realpath(BP . DIRECTORY_SEPARATOR . 'composer.json');
-            if (!$composerJsonFile || !is_file($composerJsonFile)) {
+            try {
+                $composerJsonFile = $this->composerJsonFinder->findComposerJson();
+
+                if (!$composerJsonFile || !is_file($composerJsonFile)) {
+                    return '';
+                }
+                $composerContent = file_get_contents($composerJsonFile);
+                if ($composerContent === false) {
+                    return '';
+                }
+                $composerContent = json_decode($composerContent, true);
+                if (!$composerContent
+                    || !is_array($composerContent)
+                    || !array_key_exists('version', $composerContent)
+                ) {
+                    return '';
+                }
+                $this->version = $composerContent['version'];
+            } catch (\Exception $e) {
                 return '';
             }
-            $composerContent = file_get_contents($composerJsonFile);
-            if ($composerContent === false) {
-                return '';
-            }
-            $composerContent = json_decode($composerContent, true);
-            if (!$composerContent || !is_array($composerContent) || !array_key_exists('version', $composerContent)) {
-                return '';
-            }
-            $this->version = $composerContent['version'];
         }
         return $this->version;
     }
