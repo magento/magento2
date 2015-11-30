@@ -56,7 +56,7 @@ define([
             template: 'ui/grid/toolbar',
             stickyTmpl: 'ui/grid/sticky/sticky',
             tableSelector: 'table',
-            columnsProvider: 'componentType = columns, ns = ${ $.ns }',
+            columnsProvider: 'ns = ${ $.ns }, componentType = columns',
             refreshFPS: 15,
             sticky: false,
             visible: false,
@@ -97,7 +97,7 @@ define([
          *      when all of the required DOM elements are defined.
          */
         waitDOMElements: function () {
-            var _domRequest = $.Deferred();
+            var _domPromise = $.Deferred();
 
             _.bindAll(this, 'setStickyTable', 'setTableNode');
 
@@ -113,12 +113,13 @@ define([
                 selector: this.tableSelector
             }, this.setStickyTable);
 
-            this._domRequest = _domRequest;
+            this._domPromise = _domPromise;
 
-            return _domRequest.promise();
+            return _domPromise.promise();
         },
 
         /**
+         * Defines left caption element.
          *
          * @param {HTMLElement} node
          */
@@ -127,6 +128,7 @@ define([
         },
 
         /**
+         * Defines right caption element.
          *
          * @param {HTMLElement} node
          */
@@ -185,9 +187,11 @@ define([
         },
 
         /**
+         * Sets provided node as a value of 'key' property and
+         * performs check for required DOM elements.
          *
-         * @param {String} key
-         * @param {HTMLElement} node
+         * @param {String} key - Properties key.
+         * @param {HTMLElement} node - DOM element.
          */
         setNode: function (key, node) {
             var nodes = this._requiredNodes,
@@ -200,7 +204,7 @@ define([
             }, this);
 
             if (defined) {
-                this._domRequest.resolve();
+                this._domPromise.resolve();
             }
         },
 
