@@ -36,6 +36,12 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlInterfaceMock;
 
+    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $layoutMock;
+
+    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    protected $filesystemMock;
+
     protected function setUp()
     {
         $this->backendHelperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
@@ -74,6 +80,16 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
+        $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             'Magento\User\Block\Role\Grid\User',
@@ -84,7 +100,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
                 'roleFactory' => $this->roleFactoryMock,
                 'userRolesFactory' => $this->userRolesFactoryMock,
                 'request' => $this->requestInterfaceMock,
-                'urlBuilder' => $this->urlInterfaceMock
+                'urlBuilder' => $this->urlInterfaceMock,
+                'layout' => $this->layoutMock,
+                'filesystem' => $this->filesystemMock
             ]
         );
     }
@@ -159,5 +177,48 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $roleModelMock->expects($this->once())->method('getRoleUsers')->willReturn($roles);
 
         $this->assertEquals($roles, $this->model->getUsers());
+    }
+
+    public function testPrepareColumns()
+    {
+        $this->requestInterfaceMock->expects($this->any())->method('getParam')->willReturn(1);
+        $layoutBlockMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
+            ->disableOriginalConstructor()
+            ->setMethods(['setGrid', 'setId', 'setData', 'getLayout', 'getChildNames', 'isAvailable'])
+            ->setMockClassName('mainblock')
+            ->getMock();
+        $blockMock->expects($this->any())->method('getLayout')->willReturn($layoutBlockMock);
+        $this->layoutMock->expects($this->any())->method('getChildName')->willReturn('name');
+        $this->layoutMock->expects($this->any())->method('getBlock')->willReturn($blockMock);
+        $this->layoutMock->expects($this->any())->method('createBlock')->willReturn($blockMock);
+        $blockMock->expects($this->any())->method('isAvailable')->willReturn(false);
+        $blockMock->expects($this->any())->method('setData')->willReturnSelf();
+        $blockMock->expects($this->any())->method('setGrid')->willReturnSelf();
+        $blockMock->expects($this->any())->method('getChildNames')->willReturn(['column']);
+        $layoutBlockMock->expects($this->any())->method('getChildName')->willReturn('name');
+        $layoutBlockMock->expects($this->any())->method('getBlock')->willReturn($blockMock);
+        $layoutBlockMock->expects($this->any())->method('createBlock')->willReturn($blockMock);
+        $directoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($directoryMock);
+        $directoryMock->expects($this->any())->method('getRelativePath')->willReturn('filename');
+
+        $blockMock->expects($this->exactly(7))->method('setId')->withConsecutive(
+            ['in_role_users'],
+            ['role_user_id'],
+            ['role_user_username'],
+            ['role_user_firstname'],
+            ['role_user_lastname'],
+            ['role_user_email'],
+            ['role_user_is_active']
+        )->willReturnSelf();
+
+        $this->model->toHtml();
     }
 }
