@@ -71,7 +71,7 @@ class ValueChecker implements ValueCheckerInterface
     {
         list($scope, $scopeId) = $this->fallbackResolver->getFallbackScope($this->scope, $this->scopeId);
         if ($scope) {
-            return (bool)$this->value !== $this->appConfig->getValue($this->path, $scope, $scopeId);
+            return $this->value !== $this->appConfig->getValue($this->path, $scope, $scopeId);
         }
         return true;
     }
