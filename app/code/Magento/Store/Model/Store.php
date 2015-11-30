@@ -1238,6 +1238,14 @@ class Store extends AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      */
+    public function getScopeType()
+    {
+        return ScopeInterface::SCOPE_STORE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getExtensionAttributes()
     {
         return $this->_getExtensionAttributes();

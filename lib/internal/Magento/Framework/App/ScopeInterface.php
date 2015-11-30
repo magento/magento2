@@ -20,4 +20,18 @@ interface ScopeInterface
      * @return  int
      */
     public function getId();
+
+    /**
+     * Get scope type
+     *
+     * @return  string
+     */
+    public function getScopeType();
+
+    /**
+     * Get scope name
+     *
+     * @return  string
+     */
+    public function getName();
 }
