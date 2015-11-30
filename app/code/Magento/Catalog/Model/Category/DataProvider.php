@@ -49,17 +49,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
-     * Checkbox fields to customize
-     *
-     * @var array
-     */
-    protected $checkboxFieldsToCustomize = [
-        'include_in_menu',
-        'is_active',
-        'is_anchor'
-    ];
-
-    /**
      * @var EavValidationRules
      */
     protected $eavValidationRules;
@@ -157,33 +146,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         foreach ($meta as $key => $item) {
             $result[$key] = $item;
             $result[$key]['sortOrder'] = 0;
-            if (in_array($key, $this->checkboxFieldsToCustomize)) {
-                $result[$key] = $this->customizeCheckboxField($result[$key]);
-            }
         }
 
         return $result;
-    }
-
-    /**
-     * Customize checkbox field
-     *
-     * @param array $metaField
-     * @return array
-     */
-    protected function customizeCheckboxField(array $metaField)
-    {
-        $switcherConfig = [
-            'elementTmpl' => 'ui/form/element/switcher',
-            'component' => 'Magento_Catalog/js/components/select-to-checkbox',
-            'validation' => []
-        ];
-
-        $metaField = array_merge(
-            $metaField,
-            $switcherConfig
-        );
-
-        return $metaField;
     }
 }

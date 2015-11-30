@@ -45,5 +45,65 @@
                 <item name="label" xsi:type="string" translate="true">Category Information</item>
             </item>
         </argument>
+        <field name="is_active">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                </item>
+            </argument>
+        </field>
+        <field name="include_in_menu">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_anchor">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                </item>
+            </argument>
+        </field>
+        <field name="custom_apply_to_products">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                </item>
+            </argument>
+        </field>
+        <field name="custom_use_parent_settings">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                </item>
+            </argument>
+        </field>
     </fieldset>
 </form>
