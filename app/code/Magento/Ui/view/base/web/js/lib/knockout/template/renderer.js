@@ -26,7 +26,9 @@ define([
          * @returns {jQueryPromise}
          */
         render: function (tmplPath) {
-            return loader.loadTemplate(tmplPath).then(renderer.parseTemplate);
+            var loadPromise = loader.loadTemplate(tmplPath);
+
+            return loadPromise.then(renderer.parseTemplate);
         },
 
         /**
