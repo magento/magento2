@@ -185,7 +185,7 @@ class ValidatorFile extends Validator
                     throw new LocalizedException(__('The file is empty. Please choose another one'));
                 }
 
-                if ($imageSize) {
+                if (!empty($imageSize)) {
                     $_width = $imageSize[0];
                     $_height = $imageSize[1];
                 }
