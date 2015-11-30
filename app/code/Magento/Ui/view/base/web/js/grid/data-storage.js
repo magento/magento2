@@ -13,7 +13,7 @@ define([
     return Class.extend({
         defaults: {
             cacheRequests: true,
-            cachedRequestDelay: 100,
+            cachedRequestDelay: 500,
             indexField: 'entity_id',
             data: {}
         },
