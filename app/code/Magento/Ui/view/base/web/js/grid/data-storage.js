@@ -13,7 +13,7 @@ define([
     return Class.extend({
         defaults: {
             cacheRequests: true,
-            cachedRequestDelay: 500,
+            cachedRequestDelay: 50,
             indexField: 'entity_id',
             data: {}
         },
@@ -61,24 +61,23 @@ define([
         getIds: function (data) {
             data = data || this.data;
 
-            return _.map(data, function (item) {
-                return item[this.indexField];
-            }, this);
+            return _.pluck(data, this.indexField);
         },
 
         /**
+         * Extracts data which matches specified parameters.
          *
-         * @param {Object} params
+         * @param {Object} params - Request parameters.
          * @param {Object} [options={}]
          * @returns {jQueryPromise}
          */
         getData: function (params, options) {
-            var cachedRequest = this.getCachedRequest(params);
+            var cachedRequest = this.getRequest(params);
 
             options = options || {};
 
             return !options.refresh && cachedRequest ?
-                this.getCachedRequestData(cachedRequest) :
+                this.getRequestData(cachedRequest) :
                 this.requestData(params);
         },
 
@@ -104,13 +103,14 @@ define([
          * @returns {jQueryPromise}
          */
         requestData: function (params) {
-            var handler = this.onRequestComplete.bind(this, params),
+            var query   = utils.copy(params),
+                handler = this.onRequestComplete.bind(this, query),
                 request;
 
             request = $.ajax({
                 url: this.updateUrl,
                 method: 'GET',
-                data: params,
+                data: query,
                 dataType: 'json'
             }).done(handler);
 
@@ -124,19 +124,19 @@ define([
          * @param {Object} params - Request parameters.
          * @returns {Object} Instance of request.
          */
-        getCachedRequest: function (params) {
+        getRequest: function (params) {
             return _.find(this._requests, function (request) {
                 return _.isEqual(params, request.params);
             }, this);
         },
 
         /**
-         * Forms data object associated with a provided request.
+         * Forms data object associated with provided request.
          *
          * @param {Object} request - Request object.
          * @returns {jQueryPromise}
          */
-        getCachedRequestData: function (request) {
+        getRequestData: function (request) {
             var defer   = $.Deferred(),
                 resolve = defer.resolve.bind(defer),
                 delay   = this.cachedRequestDelay,
@@ -155,19 +155,25 @@ define([
         },
 
         /**
+         * Caches requests object with provdided parameters
+         * and data object associated with it.
          *
          * @param {Object} data - Data associated with request.
          * @param {Object} params - Request parameters.
          * @returns {DataStorage} Chainable.
          */
         cacheRequest: function (data, params) {
-            var request = {
-                ids:            this.getIds(data.items),
-                params:         utils.copy(params),
-                totalRecords:   data.totalRecords
-            };
+            var cached = this.getRequest(params);
 
-            this._requests.push(request);
+            if (cached) {
+                this.removeRequest(cached);
+            }
+
+            this._requests.push({
+                ids:            this.getIds(data.items),
+                params:         params,
+                totalRecords:   data.totalRecords
+            });
 
             return this;
         },
@@ -177,7 +183,7 @@ define([
          *
          * @returns {DataStorage} Chainable.
          */
-        clearCachedRequests: function () {
+        clearRequests: function () {
             this._requests.splice(0);
 
             return this;
@@ -189,7 +195,7 @@ define([
          * @param {Object} request - Request object.
          * @returns {DataStorage} Chainable.
          */
-        removeCachedRequest: function (request) {
+        removeRequest: function (request) {
             var requests = this._requests,
                 index = requests.indexOf(request);
 
@@ -207,7 +213,7 @@ define([
          * @returns {Boolean}
          */
         wasRequested: function (params) {
-            return !!this.getCachedRequest(params);
+            return !!this.getRequest(params);
         },
 
         /**
