@@ -49,9 +49,6 @@ define([
             // re-init payment method events
             self.$selector.off('changePaymentMethod.' + this.code)
                 .on('changePaymentMethod.' + this.code, this.changePaymentMethod.bind(this));
-            $('#' + self.container).on('initBraintree', function () {
-                self.initBraintree();
-            });
 
             // listen block changes
             domObserver.get('#' + self.container, function () {
@@ -112,7 +109,7 @@ define([
             require([this.sdkUrl], function (braintree) {
                 state(true);
                 self.braintree = braintree;
-                $('#' + self.container).trigger('initBraintree');
+                self.initBraintree();
                 $('body').trigger('processStop');
             });
         },
