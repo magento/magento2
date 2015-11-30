@@ -9,8 +9,8 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
 
 class Edit extends Action
@@ -45,11 +45,45 @@ class Edit extends Action
      */
     public function execute()
     {
+        if (!$this->isValidScope()) {
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('theme/design_config/edit', ['scope' => 'default']);
+            return $resultRedirect;
+        }
+
         /** @var ResultPage $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Theme::design_config');
         $resultPage->getConfig()->getTitle()->prepend(__($this->getScopeTitle()));
         return $resultPage;
+    }
+
+    /**
+     * Validate the requested scope
+     *
+     * @return bool
+     */
+    protected function isValidScope()
+    {
+        $scope = $this->getRequest()->getParam('scope');
+        $scopeId = $this->getRequest()->getParam('scope_id');
+
+        if ($scope == ScopeConfigInterface::SCOPE_TYPE_DEFAULT && !$scopeId) {
+            return true;
+        }
+
+        try {
+            $scopeResolver = $this->scopeResolverPool->get($scope);
+            if (!$scopeResolver->getScope($scopeId)->getId()) {
+                return false;
+            }
+        } catch (\InvalidArgumentException $e) {
+            return false;
+        } catch (NoSuchEntityException $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -64,7 +98,6 @@ class Edit extends Action
 
         if ($scope != ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
             $scopeResolver = $this->scopeResolverPool->get($scope);
-            /** @var ScopeInterface $scopeObject */
             $scopeObject = $scopeResolver->getScope($scopeId);
             return sprintf('%s: %s', ucfirst($scopeObject->getScopeType()), $scopeObject->getName());
         }
