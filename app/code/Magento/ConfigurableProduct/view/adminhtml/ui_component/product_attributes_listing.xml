@@ -24,6 +24,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="indexField" xsi:type="string">attribute_id</item>
+                        <item name="cacheRequests" xsi:type="boolean">false</item>
                     </item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
                 </item>
