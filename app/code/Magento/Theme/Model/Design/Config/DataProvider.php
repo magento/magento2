@@ -5,6 +5,9 @@
  */
 namespace Magento\Theme\Model\Design\Config;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ScopeFallbackResolverInterface;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
@@ -27,12 +30,12 @@ class DataProvider extends AbstractDataProvider
     protected $collection;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
@@ -47,11 +50,19 @@ class DataProvider extends AbstractDataProvider
     protected $scopeId;
 
     /**
+     * @var ScopeFallbackResolverInterface
+     */
+    protected $scopeFallbackResolver;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param MetadataProvider $metadataProvider
      * @param CollectionFactory $configCollectionFactory
+     * @param RequestInterface $request
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeFallbackResolverInterface $scopeFallbackResolver
      * @param array $meta
      * @param array $data
      */
@@ -61,8 +72,9 @@ class DataProvider extends AbstractDataProvider
         $requestFieldName,
         MetadataProvider $metadataProvider,
         CollectionFactory $configCollectionFactory,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        RequestInterface $request,
+        ScopeConfigInterface $scopeConfig,
+        ScopeFallbackResolverInterface $scopeFallbackResolver,
         array $meta = [],
         array $data = []
     ) {
@@ -77,10 +89,12 @@ class DataProvider extends AbstractDataProvider
         $this->collection = $configCollectionFactory->create();
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
+        $this->scopeFallbackResolver = $scopeFallbackResolver;
+
         $this->scope = $this->request->getParam('scope');
         $this->scopeId = $this->request->getParam('scope_id');
 
-        $this->prepareDefaultValues($data);
+        $this->prepareDefaultValues();
     }
 
     /**
@@ -105,9 +119,11 @@ class DataProvider extends AbstractDataProvider
         $items = $this->collection->getItems();
         foreach ($items as $item) {
             /** @var \Magento\Framework\App\Config\Value $item */
-            $this->loadedData[$this->scope][$metadata[$item->getPath()]] = $item->getValue();
+            $this->loadedData[$this->scope][$metadata[$item->getPath()]] = $item->getValue()
+                ?: $this->getFallbackValue($item->getPath());
         }
 
+        $this->loadedData[$this->scope]['scope'] = $this->scope;
         $this->loadedData[$this->scope]['scope_id'] = $this->scopeId;
 
         return $this->loadedData;
@@ -123,13 +139,23 @@ class DataProvider extends AbstractDataProvider
         $metadata = $this->metadataProvider->get();
         if ($this->scope) {
             foreach ($metadata as $key => $data) {
-                $defaultValue = $this->scopeConfig->getValue(
-                    $data['path'],
-                    $this->scope,
-                    $this->request->getParam('scope_id')
-                );
-                $this->meta[$data['fieldset']]['fields'][$key]['default'] = $defaultValue;
+                $this->meta[$data['fieldset']]['fields'][$key]['default'] = $this->getFallbackValue($data['path']);
             }
         }
+    }
+
+    /**
+     * Retrieve default value for parent scope
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function getFallbackValue($path)
+    {
+        list($scope, $scopeId) = $this->scopeFallbackResolver->getFallbackScope($this->scope, $this->scopeId);
+        if ($scope) {
+            return $this->scopeConfig->getValue($path, $scope, $scopeId);
+        }
+        return '';
     }
 }
