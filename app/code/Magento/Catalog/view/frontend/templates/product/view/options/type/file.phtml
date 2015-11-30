@@ -23,7 +23,7 @@
     </label>
     <?php if ($_fileExists): ?>
     <div class="control">
-        <span class="<?php /* @escapeNotVerified */ echo $_fileNamed ?>"><?php /* @escapeNotVerified */ echo $_fileInfo->getTitle(); ?></span>
+        <span class="<?php /* @escapeNotVerified */ echo $_fileNamed ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_fileInfo->getTitle()); ?></span>
         <a href="javascript:void(0)" class="label" id="change-<?php /* @escapeNotVerified */ echo $_fileName ?>" >
             <?php /* @escapeNotVerified */ echo __('Change') ?>
         </a>
