@@ -7,13 +7,16 @@
 namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\LandingUpdater;
+use \Magento\Framework\App\ProductMetadata;
+use \Magento\Framework\Composer\ComposerJsonFinder;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class LandingUpdaterTest extends \PHPUnit_Framework_TestCase
 {
     public function testIndexAction()
     {
         /** @var $controller LandingUpdater */
-        $controller = new LandingUpdater();
+        $controller = new LandingUpdater(new ProductMetadata(new ComposerJsonFinder(new DirectoryList(BP))));
         $_SERVER['DOCUMENT_ROOT'] = 'some/doc/root/value';
         $viewModel = $controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);

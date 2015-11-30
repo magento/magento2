@@ -49,7 +49,7 @@ class Footer extends \Magento\Backend\Block\Template
      *
      * @return string
      */
-    public function magentoVersion()
+    public function getMagentoVersion()
     {
         return $this->productMetadata->getVersion();
     }
