@@ -90,7 +90,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID, [])
             ->willReturn($gridTable);
 
-        $this->connection->expects($this->exactly(2))
+        $this->resource->expects($this->exactly(2))
             ->method('getTableName')
             ->willReturnMap([
                 [$gridTable],
