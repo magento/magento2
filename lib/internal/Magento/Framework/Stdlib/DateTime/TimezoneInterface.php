@@ -8,9 +8,6 @@
 
 namespace Magento\Framework\Stdlib\DateTime;
 
-/**
- * @api
- */
 interface TimezoneInterface
 {
     /**
@@ -104,9 +101,11 @@ interface TimezoneInterface
     /**
      * Gets the scope config timezone
      *
+     * @param string $scopeType
+     * @param string $scopeCode
      * @return string
      */
-    public function getConfigTimezone();
+    public function getConfigTimezone($scopeType = null, $scopeCode = null);
 
     /**
      * Checks if current date of the given scope (in the scope timezone) is within the range
@@ -119,7 +118,7 @@ interface TimezoneInterface
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
 
     /**
-     * @param \DateTimeInterface $date
+     * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
      * @param null $locale
@@ -128,7 +127,7 @@ interface TimezoneInterface
      * @return string
      */
     public function formatDateTime(
-        \DateTimeInterface $date,
+        $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
