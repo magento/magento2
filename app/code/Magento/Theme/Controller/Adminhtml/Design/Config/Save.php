@@ -100,10 +100,8 @@ class Save extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-//            $scope = $this->getRequest()->getParam('scope');
-//            $scopeId = $this->getRequest()->getParam('scope_id');
-            $scope = 'default';
-            $scopeId = 0;
+            $scope = $this->getRequest()->getParam('scope');
+            $scopeId = $this->getRequest()->getParam('scope_id');
             if (!($scope && $scopeId) && $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
                 throw new LocalizedException(__('Scope and scope id is a required params'));
             }
