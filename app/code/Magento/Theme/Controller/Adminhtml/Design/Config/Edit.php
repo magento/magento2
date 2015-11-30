@@ -5,17 +5,80 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\Design\Config;
 
-use Magento\Theme\Controller\Adminhtml\Index;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page as ResultPage;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverPool;
+use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
 
-class Edit extends Index
+class Edit extends Action
 {
     /**
-     * @return \Magento\Framework\View\Result\Page
+     * @var ResultPageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var ScopeResolverPool
+     */
+    protected $scopeResolverPool;
+
+    /**
+     * @param Context $context
+     * @param ResultPageFactory $resultPageFactory
+     * @param ScopeResolverPool $scopeResolverPool
+     */
+    public function __construct(
+        Context $context,
+        ResultPageFactory $resultPageFactory,
+        ScopeResolverPool $scopeResolverPool
+    ) {
+        $this->resultPageFactory = $resultPageFactory;
+        $this->scopeResolverPool = $scopeResolverPool;
+        parent::__construct($context);
+    }
+
+    /**
+     * @return ResultPage
      */
     public function execute()
     {
+        /** @var ResultPage $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend(__('Theme Name'));
+        $resultPage->setActiveMenu('Magento_Theme::design_config');
+        $resultPage->getConfig()->getTitle()->prepend(__($this->getScopeTitle()));
         return $resultPage;
+    }
+
+    /**
+     * Retrieve scope title
+     *
+     * @return string
+     */
+    protected function getScopeTitle()
+    {
+        $scope = $this->getRequest()->getParam('scope');
+        $scopeId = $this->getRequest()->getParam('scope_id');
+
+        if ($scope != ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $scopeResolver = $this->scopeResolverPool->get($scope);
+            /** @var ScopeInterface $scopeObject */
+            $scopeObject = $scopeResolver->getScope($scopeId);
+            return sprintf('%s: %s', ucfirst($scopeObject->getScopeType()), $scopeObject->getName());
+        }
+
+        return 'Default';
+    }
+
+    /**
+     * Check the permission to run it
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Theme::theme');
     }
 }
