@@ -69,9 +69,9 @@ class ValueChecker implements ValueCheckerInterface
      */
     public function isValueChanged()
     {
-        $fallbackScope = $this->fallbackResolver->getFallbackScope($this->scope, $this->scopeId);
-        if (array_filter($fallbackScope)) {
-            return (bool)$this->value !== $this->appConfig->getValue($this->path, $fallbackScope[0], $fallbackScope[1]);
+        list($scope, $scopeId) = $this->fallbackResolver->getFallbackScope($this->scope, $this->scopeId);
+        if ($scope) {
+            return (bool)$this->value !== $this->appConfig->getValue($this->path, $scope, $scopeId);
         }
         return true;
     }
