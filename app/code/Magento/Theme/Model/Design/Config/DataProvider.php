@@ -119,7 +119,7 @@ class DataProvider extends AbstractDataProvider
         $items = $this->collection->getItems();
         foreach ($items as $item) {
             /** @var \Magento\Framework\App\Config\Value $item */
-            $this->loadedData[$this->scope][$metadata[$item->getPath()]] = $item->getValue()
+            $this->loadedData[$this->scope][$metadata[$item->getPath()]] = (string)$item->getValue()
                 ?: $this->getFallbackValue($item->getPath());
         }
 
@@ -154,7 +154,7 @@ class DataProvider extends AbstractDataProvider
     {
         list($scope, $scopeId) = $this->scopeFallbackResolver->getFallbackScope($this->scope, $this->scopeId);
         if ($scope) {
-            return $this->scopeConfig->getValue($path, $scope, $scopeId);
+            return (string)$this->scopeConfig->getValue($path, $scope, $scopeId);
         }
         return '';
     }

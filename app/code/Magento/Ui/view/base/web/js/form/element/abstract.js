@@ -27,10 +27,13 @@ define([
             warn: '',
             notice: '',
             customScope: '',
+            default: '',
+            isDifferedFromDefault: false,
             additionalClasses: {},
 
             listens: {
                 visible: 'setPreview',
+                value: 'setDifferedFromDefault',
                 '${ $.provider }:data.reset': 'reset',
                 '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
             },
@@ -64,7 +67,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value warn')
+            this.observe('error disabled focused preview visible value warn isDifferedFromDefault')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -153,6 +156,8 @@ define([
 
             return this.normalizeData(value);
         },
+
+
 
         /**
          * Sets 'value' as 'hidden' propertie's value, triggers 'toggle' event,
@@ -265,6 +270,20 @@ define([
             this.bubble('update', this.hasChanged());
 
             this.validate();
+        },
+
+        /**
+         * Restore value to default
+         */
+        restoreToDefault: function () {
+            this.value(this.default);
+        },
+
+        /**
+         * Update whether value differs from default value
+         */
+        setDifferedFromDefault: function () {
+            this.isDifferedFromDefault(this.value() !== this.default);
         }
     });
 });
