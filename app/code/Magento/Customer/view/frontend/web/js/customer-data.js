@@ -178,7 +178,7 @@ define([
          */
         init: function() {
             var privateContent = $.cookieStorage.get('private_content_version');
-            if (_.isEmpty(storage.keys()) && (typeof privateContent == 'object')) {
+            if (_.isEmpty(storage.keys()) && _.isObject(privateContent) {
                 this.reload([], false);
             } else if (this.needReload()) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
