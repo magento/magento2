@@ -15,7 +15,6 @@ require([
     "mage/backend/floating-header"
 ], function(jQuery, tinyMCE, confirm, alert){
 
-//<![CDATA[
     function categoryReset(url,useAjax){
         if(useAjax){
             var params = {active_tab_id:false};
@@ -163,6 +162,5 @@ require([
     window.categoryDelete = categoryDelete;
     window.categoryReset = categoryReset;
     window.displayLoadingMask = displayLoadingMask;
-//]]>
-
+    
 });

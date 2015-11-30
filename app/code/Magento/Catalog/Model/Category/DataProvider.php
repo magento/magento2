@@ -87,6 +87,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $this->eavConfig->getEntityType('catalog_category')
         );
     }
+
     /**
      * Get data
      *
