@@ -48,6 +48,7 @@
         (@_spinner-rotate - @spinner-rotate-step),
         (@_spinner-delay - @spinner-animation-step)
     );
+
     > span {
         &:nth-child(@{_spinner-spin-count}) {
             -webkit-animation-delay: @_spinner-delay;
