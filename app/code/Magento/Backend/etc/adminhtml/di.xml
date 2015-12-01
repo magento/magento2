@@ -140,6 +140,7 @@
                     <item name="path" xsi:type="string">design/theme/theme_id</item>
                     <item name="fieldset" xsi:type="string">theme</item>
                     <item name="backend_model" xsi:type="string">Magento\Theme\Model\Design\Backend\Theme</item>
+                    <item name="use_in_grid" xsi:type="boolean">true</item>
                 </item>
                 <item name="theme_ua_regexp" xsi:type="array">
                     <item name="path" xsi:type="string">design/theme/ua_regexp</item>
