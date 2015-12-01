@@ -10,17 +10,17 @@ use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder;
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     *  @var Builder
+     * @var Builder
      */
     private $model;
 
     /**
-     *  @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestInterface;
 
     /**
-     *  @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestBuckedInterface;
 
@@ -30,7 +30,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *  Test Build method
+     * Test Build method
      */
     public function testBuild()
     {

@@ -429,7 +429,7 @@ class Elasticsearch
     /**
      * Returns index pattern.
      *
-     * @param $storeId
+     * @param int $storeId
      *
      * @return string
      */
@@ -441,7 +441,7 @@ class Elasticsearch
     /**
      * Returns index for store in alias definition.
      *
-     * @param $storeId
+     * @param int $storeId
      *
      * @return string
      */

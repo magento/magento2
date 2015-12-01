@@ -36,8 +36,9 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param ProductRepositoryInterface $productRepository
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param Config $eavConfig
-     * @param string $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         Context $context,

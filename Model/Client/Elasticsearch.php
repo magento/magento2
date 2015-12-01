@@ -63,7 +63,7 @@ class Elasticsearch implements ClientInterface
      */
     public function ping()
     {
-        if (is_null($this->pingResult)) {
+        if ($this->pingResult === null) {
             $this->pingResult = $this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]]);
         }
         return $this->pingResult;
@@ -205,6 +205,7 @@ class Elasticsearch implements ClientInterface
      * @param string $alias
      * @param string $newIndex
      * @param string $oldIndex
+     * @return void
      */
     public function updateAlias($alias, $newIndex, $oldIndex = '')
     {
