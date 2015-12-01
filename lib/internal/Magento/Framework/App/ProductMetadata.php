@@ -36,31 +36,25 @@ class ProductMetadata implements ProductMetadataInterface
      * Get Product version
      *
      * @return string
+     * @throws \Exception
      */
     public function getVersion()
     {
         if (!$this->version) {
-            try {
                 $composerJsonFile = $this->composerJsonFinder->findComposerJson();
 
-                if (!$composerJsonFile || !is_file($composerJsonFile)) {
-                    return '';
-                }
                 $composerContent = file_get_contents($composerJsonFile);
                 if ($composerContent === false) {
-                    return '';
+                    throw new \Exception('Composer file content is empty');
                 }
                 $composerContent = json_decode($composerContent, true);
                 if (!$composerContent
                     || !is_array($composerContent)
                     || !array_key_exists('version', $composerContent)
                 ) {
-                    return '';
+                    throw new \Exception('Unable to decode Composer file');
                 }
                 $this->version = $composerContent['version'];
-            } catch (\Exception $e) {
-                return '';
-            }
         }
         return $this->version;
     }
