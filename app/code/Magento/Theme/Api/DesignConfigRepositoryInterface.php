@@ -19,5 +19,4 @@ interface DesignConfigRepositoryInterface
      * @return DesignConfigInterface
      */
     public function save(DesignConfigInterface $designConfig);
-
 }
