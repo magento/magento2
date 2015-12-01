@@ -50,12 +50,17 @@
     <type name="Magento\Store\Model\Config\Reader\Store">
         <arguments>
             <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
-        <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Resolver\Store">
         <arguments>
-        <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Resolver\Group">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Resolver\Website">
@@ -244,6 +249,7 @@
             <argument name="scopeResolvers" xsi:type="array">
                 <item name="store" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
                 <item name="stores" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
+                <item name="group" xsi:type="object">Magento\Store\Model\Resolver\Group</item>
                 <item name="website" xsi:type="object">Magento\Store\Model\Resolver\Website</item>
                 <item name="websites" xsi:type="object">Magento\Store\Model\Resolver\Website</item>
             </argument>

@@ -4110,4 +4110,5 @@ return [
         'Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface'
     ],
     ['Magento\Quote\Api\ShippingAddressManagementInterface', 'Magento\Quote\Model\ShippingAddressManagementInterface'],
+    ['Magento\Config\Block\System\Config\Form\Field\Regexceptions'],
 ];

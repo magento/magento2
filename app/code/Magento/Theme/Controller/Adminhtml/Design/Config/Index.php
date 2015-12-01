@@ -38,7 +38,7 @@ class Index extends Action
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Theme::design_config');
-        $resultPage->getConfig()->getTitle()->prepend(__('Design Config'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Design Configuration'));
 
         return $resultPage;
     }
@@ -50,6 +50,6 @@ class Index extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Theme::manage');
+        return $this->_authorization->isAllowed('Magento_Config::config_design');
     }
 }
