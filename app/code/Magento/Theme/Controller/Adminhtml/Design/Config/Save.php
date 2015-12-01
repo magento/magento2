@@ -76,7 +76,10 @@ class Save extends Action
         try {
             $scope = $this->getRequest()->getParam('scope');
             $scopeId = $this->getRequest()->getParam('scope_id');
-            if (!($scope && $scopeId) && $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+                $scopeId = 0;
+            }
+            if (!($scope && $scopeId)) {
                 throw new LocalizedException(__('Scope and scope id is a required params'));
             }
 
