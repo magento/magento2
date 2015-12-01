@@ -100,6 +100,7 @@ define([
          * @returns {Search} Chainable.
          */
         apply: function (value) {
+            //this is where we need to pass the search value
             value = value || this.inputValue;
 
             this.value = this.inputValue = value;

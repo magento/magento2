@@ -27,7 +27,23 @@
     </form>
     <script data-template="search-suggest" type="text/x-magento-template">
         <ul class="search-global-menu">
-        <% if (data.items.length) { %>
+        <li class="item">
+            <% %>
+            <a href="<?php /* @escapeNotVerified */ echo $this->getURL('catalog/product/index/'); ?><%- data.term%>" class="title">"<%- data.term%>" in Products</a>
+        </li>
+        <li class="item">
+            <% %>
+            <a href="<?php /* @escapeNotVerified */ echo $this->getURL('sales/order/index/'); ?><%- data.term%>" class="title">"<%- data.term%>" in Orders</a>
+        </li>
+        <li class="item">
+            <%  %>
+            <a href="<?php /* @escapeNotVerified */ echo $this->getURL('customer/index/index/'); ?><%- data.term%>" class="title">"<%- data.term%>" in Customers</a>
+        </li>
+        <li class="item">
+            <% %>
+            <a href="<?php /* @escapeNotVerified */ echo $this->getURL('cms/page/index/'); ?><%- data.term%>" class="title">"<%- data.term%>" in Pages</a>
+        </li>
+            <% if (data.items.length) { %>
             <% _.each(data.items, function(value){ %>
             <li class="item"
                 <%- data.optionData(value) %>
