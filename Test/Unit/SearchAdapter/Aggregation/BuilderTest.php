@@ -24,13 +24,18 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected $requestBuckedInterface;
 
+    /**
+     * Set up test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->model = new Builder();
     }
 
     /**
-     * Test Build method
+     * Test build() method
      */
     public function testBuild()
     {

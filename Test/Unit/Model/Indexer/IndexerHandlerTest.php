@@ -25,6 +25,11 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $batch;
 
+    /**
+     * Set up test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->adapter = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Elasticsearch')
@@ -112,6 +117,9 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model, $result);
     }
 
+    /**
+     * Test cleanIndex() method.
+     */
     public function testCleanIndex()
     {
         $dimensionValue = 'SomeDimension';

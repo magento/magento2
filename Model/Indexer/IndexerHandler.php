@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\Model\Indexer;
 
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
-use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch;
 use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
@@ -107,7 +106,7 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isAvailable()
     {

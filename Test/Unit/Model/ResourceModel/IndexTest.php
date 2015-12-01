@@ -366,6 +366,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * Test getFullProductIndexData method
      *
      * @dataProvider attributeCodeProvider
+     * @param string $frontendInput
+     * @return void
      */
     public function testGetFullProductIndexData($frontendInput)
     {

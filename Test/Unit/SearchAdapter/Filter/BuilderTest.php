@@ -32,7 +32,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected $wildcard;
 
     /**
-     * Setup
+     * Set up test environment.
+     *
+     * @return void
      */
     public function setUp()
     {

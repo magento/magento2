@@ -17,6 +17,11 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * Set up test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->moduleReaderMock = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
@@ -34,11 +39,17 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\Elasticsearch\Model\Adapter\Index\Config\SchemaLocator($this->moduleReaderMock);
     }
 
+    /**
+     * Test getSchema() method.
+     */
     public function testGetSchema()
     {
         $this->assertEquals('schema_dir/esconfig.xsd', $this->model->getSchema());
     }
 
+    /**
+     * Test getPerFileSchema() method.
+     */
     public function testGetPerFileSchema()
     {
         $this->assertEquals('schema_dir/esconfig.xsd', $this->model->getPerFileSchema());

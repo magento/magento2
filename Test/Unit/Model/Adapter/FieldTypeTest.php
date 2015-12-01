@@ -5,7 +5,6 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -21,9 +20,16 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected $eavConfig;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $eavAttributeResource;
 
+    /**
+     * Set up test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->eavConfig = $this->getMockBuilder('\Magento\Eav\Model\Config')
@@ -54,7 +60,12 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getFieldType() method.
+     *
      * @dataProvider attributeTypesProvider
+     * @param string $attributeCode
+     * @param string $backendType
+     * @param string $frontendType
      * @return array
      */
     public function testGetFieldType($attributeCode, $backendType, $frontendType)

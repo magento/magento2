@@ -18,7 +18,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected $converter;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function setUp()
     {

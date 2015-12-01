@@ -49,7 +49,7 @@ class Range implements FilterInterface
      */
     public function buildFilter(RequestFilterInterface $filter)
     {
-        $filterQuery = [];
+        $filterQuery = $from = $to = [];
         $fieldName = $this->fieldMapper->getFieldName($filter->getField());
         if ($fieldName == 'price') {
             $customerGroupId = $this->customerSession->getCustomerGroupId();

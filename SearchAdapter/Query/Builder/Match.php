@@ -51,7 +51,7 @@ class Match implements QueryInterface
     /**
      * @param string $queryValue
      * @param string $conditionType
-     * @return string
+     * @return array
      */
     protected function prepareQuery($queryValue, $conditionType)
     {
@@ -66,7 +66,7 @@ class Match implements QueryInterface
 
     /**
      * @param array $matches
-     * @param buildQueries $queryValue
+     * @param array $queryValue
      * @return array
      */
     protected function buildQueries($matches, $queryValue)

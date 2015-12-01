@@ -25,7 +25,9 @@ class MatchTest extends \PHPUnit_Framework_TestCase
     protected $queryInterface;
 
     /**
-     * Setup
+     * Set up test environment.
+     *
+     * @return void
      */
     public function setUp()
     {

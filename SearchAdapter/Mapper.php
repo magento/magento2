@@ -53,7 +53,7 @@ class Mapper
      * Build adapter dependent query
      *
      * @param RequestInterface $request
-     * @return void
+     * @return array
      */
     public function buildQuery(RequestInterface $request)
     {

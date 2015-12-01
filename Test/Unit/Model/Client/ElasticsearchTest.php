@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\Client;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
-use Elasticsearch\Common\Exceptions\Missing404Exception;
 
 class ElasticsearchTest extends \PHPUnit_Framework_TestCase
 {
@@ -462,6 +461,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test query() method
+     * @return void
      */
     public function testQuery()
     {
@@ -491,6 +491,9 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     protected function getEmptyIndexOption()
     {
         return [

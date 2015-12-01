@@ -60,6 +60,9 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
      */
     private $storeManagerMock;
 
+    /**
+     * Set up test environment.
+     */
     protected function setUp()
     {
         $this->builderMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Document\Builder')
@@ -112,8 +115,9 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
      * @param array $productData
      * @param int $productId
      * @param int $storeId
-     * @param array $productPriceIndexData
-     * @param array $productCategoryIndexData
+     * @param array $productPriceData
+     * @param array $productCategoryData
+     * @param bool $emptyData
      *
      * @return array
      */

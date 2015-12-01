@@ -41,10 +41,17 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
     protected $documentField;
 
     /**
-     *  Instance name
+     * Instance name
+     *
+     * @var string
      */
     protected $instanceName;
 
+    /**
+     * Set up test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->entityMetadata = $this->getMockBuilder('Magento\Framework\Search\EntityMetadata')

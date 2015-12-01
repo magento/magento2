@@ -43,6 +43,11 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeInterface;
 
+    /**
+     * Set up test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\FieldMapperInterface')

@@ -18,7 +18,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     private $builder;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function setUp()
     {

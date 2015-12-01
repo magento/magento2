@@ -24,7 +24,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     private $collectionMock;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function setUp()
     {
@@ -73,6 +73,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($attributeId, $result);
     }
 
+    /**
+     * Test getAttributeIdByCode() method.
+     */
     public function testGetOptionsAttributeIdByCode()
     {
         $attributeCode = 'options';
@@ -211,8 +214,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $attributeId
-     * @param $attributeCode
+     * @param int $attributeId
+     * @param string $attributeCode
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function createAttributeMock($attributeId, $attributeCode)

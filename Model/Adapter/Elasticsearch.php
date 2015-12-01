@@ -284,9 +284,9 @@ class Elasticsearch
      * Reformat documents array to bulk format
      *
      * @param array $documents
-     * @param string $action
      * @param string $indexName
      * @param string $entityType
+     * @param string $action
      * @return array
      */
     protected function getDocsArrayInBulkIndexFormat(

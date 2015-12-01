@@ -29,7 +29,7 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
     protected $cache;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function setUp()
     {

@@ -30,6 +30,11 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
+    /**
+     * Set up test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->documentFactory = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\DocumentFactory')

@@ -34,7 +34,7 @@ class ResponseFactory
     protected $aggregationFactory;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param DocumentFactory $documentFactory
      * @param AggregationFactory $aggregationFactory
      */

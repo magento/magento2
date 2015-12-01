@@ -8,7 +8,6 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class FieldMapperTest extends \PHPUnit_Framework_TestCase
@@ -33,9 +32,21 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeManager;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $eavAttributeResource;
 
+    /**
+     * @var \Magento\Elasticsearch\Model\Adapter\FieldType|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fieldType;
+
+    /**
+     * Set up test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->eavConfig = $this->getMockBuilder('\Magento\Eav\Model\Config')
@@ -77,9 +88,9 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider attributeCodeProvider
-     * @param $attributeCode
-     * @param $fieldName
-     * @param $fieldType
+     * @param string $attributeCode
+     * @param string $fieldName
+     * @param string $fieldType
      * @param array $context
      *
      * @return string
@@ -125,7 +136,7 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider attributeProvider
-     * @param $attributeCode
+     * @param string $attributeCode
      *
      * @return array
      */

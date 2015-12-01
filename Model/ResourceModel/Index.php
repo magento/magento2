@@ -62,6 +62,7 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      */
     public function getFullProductIndexData(array $productIds)
     {
+        $productAttributes = [];
         $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         foreach ($productIds as $productId) {
             $product = $this->productRepository->getById($productId);

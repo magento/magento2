@@ -23,6 +23,11 @@ class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * Set up test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
@@ -34,6 +39,9 @@ class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test create() method.
+     */
     public function testCreate()
     {
         $this->model->create(
