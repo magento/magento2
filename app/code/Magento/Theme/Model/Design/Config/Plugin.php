@@ -26,7 +26,7 @@ class Plugin
     public function __construct(
         EventManager $eventManager,
         StoreManager $storeManager
-    )  {
+    ) {
         $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
     }
@@ -39,15 +39,15 @@ class Plugin
      */
     public function afterSave(DesignConfigRepository $subject, DesignConfigInterface $designConfig)
     {
-        $website = $designConfig->getScope() == ScopeInterface::SCOPE_WEBSITE
+        $website = in_array($designConfig->getScope(), [ScopeInterface::SCOPE_WEBSITE, ScopeInterface::SCOPE_WEBSITES])
             ? $this->storeManager->getWebsite($designConfig->getScopeId())
             : '';
-        $store = $designConfig->getScope() == ScopeInterface::SCOPE_STORE
+        $store = in_array($designConfig->getScope(), [ScopeInterface::SCOPE_STORE, ScopeInterface::SCOPE_STORES])
             ? $this->storeManager->getStore($designConfig->getScopeId())
             : '';
         $this->eventManager->dispatch(
             'admin_system_config_changed_section_design',
-            ['website' => $website, 'store' =>$store]
+            ['website' => $website, 'store' => $store]
         );
     }
 }

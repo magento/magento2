@@ -8,7 +8,7 @@ namespace Magento\Theme\Model\Design\Config;
 use Magento\Framework\App\ScopeFallbackResolverInterface;
 use Magento\Framework\App\Config as AppConfig;
 
-class ValueChecker implements ValueCheckerInterface
+class ValueChecker
 {
     /**
      * @var ScopeFallbackResolverInterface
@@ -43,10 +43,10 @@ class ValueChecker implements ValueCheckerInterface
     /**
      * @param ScopeFallbackResolverInterface $fallbackResolver
      * @param AppConfig $appConfig
-     * @param $value
-     * @param $scope
-     * @param $scopeId
-     * @param $path
+     * @param string $value
+     * @param string $scope
+     * @param int $scopeId
+     * @param string $path
      */
     public function __construct(
         ScopeFallbackResolverInterface $fallbackResolver,
@@ -65,6 +65,8 @@ class ValueChecker implements ValueCheckerInterface
     }
 
     /**
+     * Check whether value differs from parent scope's one
+     *
      * @return bool
      */
     public function isValueChanged()

@@ -42,7 +42,7 @@ class Source implements ArrayInterface
         $scopes = $this->scopeResolverPool->get($this->scope)->getScopes();
         $array = [];
         foreach ($scopes as $scope) {
-            $array[] = $scope->getName();
+            $array[] = ['value' => $scope->getId(), 'label' => $scope->getName()];
         }
         return $array;
     }

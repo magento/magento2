@@ -17,7 +17,6 @@
     <preference for="Magento\Theme\Api\Data\DesignConfigInterface" type="Magento\Theme\Model\Data\Design\Config"/>
     <preference for="Magento\Theme\Api\Data\DesignConfigDataInterface" type="Magento\Theme\Model\Data\Design\Config\Data"/>
     <preference for="Magento\Theme\Api\DesignConfigRepositoryInterface" type="Magento\Theme\Model\DesignConfigRepository"/>
-    <preference for="Magento\Theme\Model\Design\Config\ValueCheckerInterface" type="Magento\Theme\Model\Design\Config\ValueChecker"/>
     <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
         <arguments>
             <argument name="renderers" xsi:type="array">
@@ -110,7 +109,22 @@
     <virtualType name="Magento\Theme\Model\ResourceModel\Design\Config\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">design_config_grid_flat</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Customer</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Theme\Model\ResourceModel\Design\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Theme\Model\Scope\WebsiteSource" type="Magento\Framework\App\Scope\Source">
+        <arguments>
+            <argument name="scope" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Theme\Model\Scope\GroupSource" type="Magento\Framework\App\Scope\Source">
+        <arguments>
+            <argument name="scope" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_GROUP</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Theme\Model\Scope\StoreSource" type="Magento\Framework\App\Scope\Source">
+        <arguments>
+            <argument name="scope" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">

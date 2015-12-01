@@ -14,7 +14,11 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      */
     public function getData()
     {
-        $data = ['items' => []];//@TODO prepare grid data;
+        $data = parent::getData();
+        foreach ($data['items'] as & $item) {
+            $item += ['default' => 'Global'];
+        }
+
         return $data;
     }
 }
