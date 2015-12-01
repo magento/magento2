@@ -30,9 +30,18 @@ class Sidebar extends Block
     protected $cartLink = 'a.showcart';
 
     /**
+     * Minicart items quantity
+     *
      * @var string
      */
-    protected $productCounter = '//*[@data-block="minicart"]//*[@class="counter-number"]';
+    protected $productCounter = './/*[@class="counter-number"]';
+
+    /**
+     * Empty minicart message
+     *
+     * @var string
+     */
+    protected $emptyCartMessage = './/*[@id="minicart-content-wrapper"]//*[@class="subtitle empty"]';
 
     /**
      * Mini cart content selector.
@@ -107,9 +116,20 @@ class Sidebar extends Block
     }
 
     /**
-     * Get cart items quantity
+     * Get empty minicart message
      *
      * @return string
+     */
+    public function getEmptyMessage()
+    {
+        $this->_rootElement->find($this->cartLink)->click();
+        return $this->_rootElement->find($this->emptyCartMessage, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * Is minicart items quantity block visible
+     *
+     * @return bool
      */
     public function isItemsQtyVisible()
     {
