@@ -17,21 +17,21 @@ interface ScopeInterface
     /**
      * Get scope identifier
      *
-     * @return  int
+     * @return int
      */
     public function getId();
 
     /**
      * Get scope type
      *
-     * @return  string
+     * @return string
      */
     public function getScopeType();
 
     /**
      * Get scope name
      *
-     * @return  string
+     * @return string
      */
     public function getName();
 }

@@ -91,7 +91,7 @@ class Save extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Backend::theme');
+        return $this->_authorization->isAllowed('Magento_Config::config_design');
     }
 
     /**
