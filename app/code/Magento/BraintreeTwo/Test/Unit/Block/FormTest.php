@@ -83,7 +83,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->willReturn($countryId);
 
         $this->gatewayConfig->expects(static::once())
-            ->method('getCcAvailableCardTypes')
+            ->method('getAvailableCardTypes')
             ->willReturn(self::$configCardTypes);
 
         $this->gatewayConfig->expects(static::once())
@@ -116,11 +116,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->ccType = $this->getMockBuilder(CcType::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCcTypes'])
+            ->setMethods(['getCcTypeLabelMap'])
             ->getMock();
 
         $this->ccType->expects(static::once())
-            ->method('getCcTypes')
+            ->method('getCcTypeLabelMap')
             ->willReturn(self::$baseCardTypes);
     }
 
@@ -149,7 +149,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->gatewayConfig = $this->getMockBuilder(GatewayConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCountryAvailableCardTypes', 'getCcAvailableCardTypes'])
+            ->setMethods(['getCountryAvailableCardTypes', 'getAvailableCardTypes'])
             ->getMock();
     }
 }

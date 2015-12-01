@@ -23,6 +23,9 @@ class DataAssignObserver extends AbstractDataAssignObserver
     {
         $method = $this->readMethodArgument($observer);
         $data = $this->readDataArgument($observer);
+        /**
+         * @TODO should be refactored after interface changes in payment and quote
+         */
         $paymentInfo = $method->getInfoInstance();
         if ($data->getDataByKey(self::PAYMENT_METHOD_NONCE) !== null) {
             $paymentInfo->setAdditionalInformation(

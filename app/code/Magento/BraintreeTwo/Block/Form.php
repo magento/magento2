@@ -39,6 +39,7 @@ class Form extends Cc
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\BraintreeTwo\Gateway\Config\Config $gatewayConfig
+     * @param \Magento\BraintreeTwo\Model\Adminhtml\Source\CcType $ccType
      * @param array $data
      */
     public function __construct(
@@ -72,7 +73,7 @@ class Form extends Cc
      */
     public function useCvv()
     {
-        return $this->gatewayConfig->useCvv();
+        return $this->gatewayConfig->isCvvEnabled();
     }
 
     /**
@@ -81,8 +82,8 @@ class Form extends Cc
      */
     private function getConfiguredCardTypes()
     {
-        $types = $this->ccType->getCcTypes();
-        $configCardTypes = array_fill_keys($this->gatewayConfig->getCcAvailableCardTypes(), '');
+        $types = $this->ccType->getCcTypeLabelMap();
+        $configCardTypes = array_fill_keys($this->gatewayConfig->getAvailableCardTypes(), '');
 
         return array_intersect_key($types, $configCardTypes);
     }

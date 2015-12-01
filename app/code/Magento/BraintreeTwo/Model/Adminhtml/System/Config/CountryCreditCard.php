@@ -64,9 +64,7 @@ class CountryCreditCard extends Value
             }
             $country = $data['country_id'];
             if (array_key_exists($country, $result)) {
-                $result[$country] = array_merge($result[$country], $data['cc_types']);
-                // filter and reindex array
-                $result[$country] = array_values(array_unique($result[$country]));
+                $result[$country] = $this->appendUniqueCountries($result[$country], $data['cc_types']);
             } else {
                 $result[$country] = $data['cc_types'];
             }
@@ -104,5 +102,18 @@ class CountryCreditCard extends Value
             $result[$id] = ['country_id' => $country, 'cc_types' => $creditCardType];
         }
         return $result;
+    }
+
+    /**
+     * Append unique countries to list of exists and reindex keys
+     *
+     * @param array $countriesList
+     * @param array $inputCountriesList
+     * @return array
+     */
+    private function appendUniqueCountries(array $countriesList, array $inputCountriesList)
+    {
+        $result = array_merge($countriesList, $inputCountriesList);
+        return array_values(array_unique($result));
     }
 }
