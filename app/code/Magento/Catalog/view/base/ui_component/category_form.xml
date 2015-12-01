@@ -105,5 +105,40 @@
                 </item>
             </argument>
         </field>
+        <container name="container_group">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">Available Product Listing Sort By</item>
+                    <item name="required" xsi:type="boolean">true</item>
+                    <item name="dataScope" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
+                </item>
+            </argument>
+            <field name="available_sort_by">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataType" xsi:type="string">number</item>
+                        <item name="formElement" xsi:type="string">multiselect</item>
+                        <item name="source" xsi:type="string">category</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="disabled" xsi:type="string">${ $.provider }:data.general.use_config.available_sort_by</item>
+                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.general.use_config.available_sort_by</item>
+                        </item>
+                        <item name="component" xsi:type="string">Magento_Catalog/js/components/multiselect-handle-required</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="use_config.available_sort_by">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Use All Available Attributes</item>
+                        <item name="dataType" xsi:type="string">boolean</item>
+                        <item name="formElement" xsi:type="string">checkbox</item>
+                    </item>
+                </argument>
+            </field>
+        </container>
     </fieldset>
 </form>
