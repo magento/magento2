@@ -15,13 +15,24 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertMinicartEmpty extends AbstractConstraint
 {
     /**
-     * Assert that customer cart is empty
+     * Empty cart message
+     */
+    const TEXT_EMPTY_MINICART = 'You have no items in your shopping cart.';
+
+    /**
+     * Assert that customer minicart is empty
      *
      * @param CmsIndex $cmsIndex
      */
     public function processAssert(
         CmsIndex $cmsIndex
     ) {
+        \PHPUnit_Framework_Assert::assertEquals(
+            self::TEXT_EMPTY_MINICART,
+            $cmsIndex->getCartSidebarBlock()->getEmptyMessage(),
+            'Empty minicart message not found'
+        );
+
         \PHPUnit_Framework_Assert::assertFalse(
             $cmsIndex->getCartSidebarBlock()->isItemsQtyVisible(),
             'Minicart is not empty'
@@ -35,6 +46,6 @@ class AssertMinicartEmpty extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Minicart  emptiness check';
+        return 'Minicart is empty';
     }
 }
