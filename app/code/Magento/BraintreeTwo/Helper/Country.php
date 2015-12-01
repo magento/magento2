@@ -5,7 +5,6 @@
  */
 namespace Magento\BraintreeTwo\Helper;
 
-use Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country as CountryConfig;
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 
 /**
@@ -20,16 +19,25 @@ class Country
     private $collectionFactory;
 
     /**
+     * @var \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country
+     */
+    private $countryConfig;
+
+    /**
      * @var array
      */
     private $countries;
 
     /**
-     * @param CollectionFactory $factory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $factory
+     * @param \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country $countryConfig
      */
-    public function __construct(CollectionFactory $factory)
-    {
+    public function __construct(
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $factory,
+        \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country $countryConfig
+    ) {
         $this->collectionFactory = $factory;
+        $this->countryConfig = $countryConfig;
     }
 
     /**
@@ -41,7 +49,7 @@ class Country
     {
         if (!$this->countries) {
             $this->countries = $this->collectionFactory->create()
-                ->addFieldToFilter('country_id', ['nin' => CountryConfig::$excludedCountries])
+                ->addFieldToFilter('country_id', ['nin' => $this->countryConfig->getExcludedCountries()])
                 ->loadData()
                 ->toOptionArray(false);
         }

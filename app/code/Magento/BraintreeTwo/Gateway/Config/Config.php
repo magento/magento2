@@ -90,7 +90,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Generate a new client token if necessary
-     *
+     * @TODO method should be moved to adapter
      * @return string
      */
     public function getClientToken()
@@ -119,7 +119,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return array
      */
-    public function getCcAvailableCardTypes()
+    public function getAvailableCardTypes()
     {
         $ccTypes = $this->getValue(self::KEY_CC_TYPES);
 
@@ -131,7 +131,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return array
      */
-    public function getCctypesMapper()
+    public function getCcTypesMapper()
     {
         $result = json_decode(
             $this->getValue(self::KEY_CC_TYPES_BRAINTREE_MAPPER),
@@ -156,7 +156,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Check if cvv field is enabled
      * @return boolean
      */
-    public function useCvv()
+    public function isCvvEnabled()
     {
         return (bool) $this->getValue(self::KEY_USE_CVV);
     }

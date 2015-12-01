@@ -29,8 +29,26 @@ class Country implements ArrayInterface
     /**
      * Countries not supported by Braintree
      */
-    public static $excludedCountries = [
-        'MM', 'IR', 'SD', 'BY', 'CI', 'CD', 'CG', 'IQ', 'LR', 'LB', 'KP', 'SL', 'SY', 'ZW', 'AL', 'BA', 'MK', 'ME', 'RS'
+    protected $excludedCountries = [
+        'MM',
+        'IR',
+        'SD',
+        'BY',
+        'CI',
+        'CD',
+        'CG',
+        'IQ',
+        'LR',
+        'LB',
+        'KP',
+        'SL',
+        'SY',
+        'ZW',
+        'AL',
+        'BA',
+        'MK',
+        'ME',
+        'RS'
     ];
 
     /**
@@ -49,7 +67,7 @@ class Country implements ArrayInterface
     {
         if (!$this->options) {
             $this->options = $this->countryCollection
-                ->addFieldToFilter('country_id', ['nin' => self::$excludedCountries])
+                ->addFieldToFilter('country_id', ['nin' => $this->getExcludedCountries()])
                 ->loadData()
                 ->toOptionArray(false);
         }
@@ -70,7 +88,15 @@ class Country implements ArrayInterface
      */
     public function isCountryRestricted($countryId)
     {
-        $keys = array_flip(self::$excludedCountries);
-        return isset($keys[$countryId]);
+        return in_array($countryId, $this->getExcludedCountries());
+    }
+
+    /**
+     * Return list of excluded countries
+     * @return array
+     */
+    public function getExcludedCountries()
+    {
+        return $this->excludedCountries;
     }
 }

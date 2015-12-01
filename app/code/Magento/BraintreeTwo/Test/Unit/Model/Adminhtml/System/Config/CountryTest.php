@@ -136,7 +136,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     {
         $this->countryCollectionMock->expects(static::once())
             ->method('addFieldToFilter')
-            ->with('country_id', ['nin' => Country::$excludedCountries])
             ->willReturnSelf();
         $this->countryCollectionMock->expects(static::once())
             ->method('loadData')

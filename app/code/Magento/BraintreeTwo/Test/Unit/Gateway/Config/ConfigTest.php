@@ -174,9 +174,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $value
      * @param array $expected
-     * @dataProvider getCcAvailableCardTypesDataProvider
+     * @dataProvider getAvailableCardTypesDataProvider
      */
-    public function testGetCcAvailableCardTypes($value, $expected)
+    public function testGetAvailableCardTypes($value, $expected)
     {
         $this->scopeConfigMock->expects(static::once())
             ->method('getValue')
@@ -185,14 +185,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         static::assertEquals(
             $expected,
-            $this->model->getCcAvailableCardTypes()
+            $this->model->getAvailableCardTypes()
         );
     }
 
     /**
      * @return array
      */
-    public function getCcAvailableCardTypesDataProvider()
+    public function getAvailableCardTypesDataProvider()
     {
         return [
             [
@@ -209,9 +209,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $value
      * @param array $expected
-     * @dataProvider getCctypesMapperDataProvider
+     * @dataProvider getCcTypesMapperDataProvider
      */
-    public function testGetCctypesMapper($value, $expected)
+    public function testGetCcTypesMapper($value, $expected)
     {
         $this->scopeConfigMock->expects(static::once())
             ->method('getValue')
@@ -227,7 +227,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getCctypesMapperDataProvider()
+    public function getCcTypesMapperDataProvider()
     {
         return [
             [
@@ -269,7 +269,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($this->getPath(Config::KEY_USE_CVV), ScopeInterface::SCOPE_STORE, null)
             ->willReturn(1);
 
-        static::assertEquals(true, $this->model->useCvv());
+        static::assertEquals(true, $this->model->isCvvEnabled());
     }
 
     /**
