@@ -12,179 +12,30 @@
             <item name="deps" xsi:type="string">design_config_listing.design_config_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">design_config_columns</item>
-        <item name="buttons" xsi:type="array">
-            <item name="add" xsi:type="array">
-                <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string" translate="true">Add New Page</item>
-                <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/*/new</item>
-            </item>
-        </item>
     </argument>
     <dataSource name="design_config_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Theme\Ui\Component\Design\Config\DataProvider</argument>
             <argument name="name" xsi:type="string">design_config_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">page_id</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                 </item>
             </argument>
-        </argument>
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
         </argument>
     </dataSource>
-    <container name="listing_top">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="template" xsi:type="string">ui/grid/toolbar</item>
-                <item name="stickyTmpl" xsi:type="string">ui/grid/sticky/toolbar</item>
-            </item>
-        </argument>
-        <bookmark name="bookmarks">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="namespace" xsi:type="string">design_config_listing</item>
-                    </item>
-                </item>
-            </argument>
-        </bookmark>
-        <component name="columns_controls">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns</item>
-                    </item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
-                </item>
-            </argument>
-        </component>
-        <!--<filterSearch name="fulltext">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="provider" xsi:type="string">design_config_listing.design_config_listing_data_source</item>-->
-                    <!--<item name="chipsProvider" xsi:type="string">design_config_listing.design_config_listing.listing_top.listing_filters_chips</item>-->
-                    <!--<item name="storageConfig" xsi:type="array">-->
-                        <!--<item name="provider" xsi:type="string">design_config_listing.design_config_listing.listing_top.bookmarks</item>-->
-                        <!--<item name="namespace" xsi:type="string">current.search</item>-->
-                    <!--</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-        <!--</filterSearch>-->
-        <filters name="listing_filters">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="columnsProvider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">design_config_listing.design_config_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.filters</item>
-                    </item>
-                    <item name="templates" xsi:type="array">
-                        <item name="filters" xsi:type="array">
-                            <item name="select" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
-                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
-                            </item>
-                        </item>
-                    </item>
-                    <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">design_config_listing.design_config_listing.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">design_config_listing.design_config_listing.design_config_columns.${ $.index }:visible</item>
-                        </item>
-                    </item>
-                </item>
-                <item name="observers" xsi:type="array">
-                    <item name="column" xsi:type="string">column</item>
-                </item>
-            </argument>
-        </filters>
-        <massaction name="listing_massaction">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns.ids</item>
-                    <item name="indexField" xsi:type="string">id</item>
-                </item>
-            </argument>
-            <action name="delete">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">delete</item>
-                        <item name="label" xsi:type="string" translate="true">Delete</item>
-                        <item name="url" xsi:type="url" path="cms/page/massDelete"/>
-                        <item name="confirm" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Delete items</item>
-                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected items?</item>
-                        </item>
-                    </item>
-                </argument>
-            </action>
-            <action name="disable">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">disable</item>
-                        <item name="label" xsi:type="string" translate="true">Disable</item>
-                        <item name="url" xsi:type="url" path="cms/page/massDisable"/>
-                    </item>
-                </argument>
-            </action>
-            <action name="enable">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">enable</item>
-                        <item name="label" xsi:type="string" translate="true">Enable</item>
-                        <item name="url" xsi:type="url" path="cms/page/massEnable"/>
-                    </item>
-                </argument>
-            </action>
-            <action name="edit">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">edit</item>
-                        <item name="label" xsi:type="string" translate="true">Edit</item>
-                        <item name="callback" xsi:type="array">
-                            <item name="provider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns_editor</item>
-                            <item name="target" xsi:type="string">editSelected</item>
-                        </item>
-                    </item>
-                </argument>
-            </action>
-        </massaction>
-        <paging name="listing_paging">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">design_config_listing.design_config_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.paging</item>
-                    </item>
-                    <item name="selectProvider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns.ids</item>
-                </item>
-            </argument>
-        </paging>
-    </container>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
     <columns name="design_config_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">design_config_listing.design_config_listing.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
-                <item name="editorConfig" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns.ids</item>
-                    <item name="enabled" xsi:type="boolean">true</item>
-                    <item name="indexField" xsi:type="string">page_id</item>
-                    <item name="clientConfig" xsi:type="array">
-                        <item name="saveUrl" xsi:type="url" path="cms/page/inlineEdit"/>
-                        <item name="validateBeforeSave" xsi:type="boolean">false</item>
-                    </item>
-                </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
                         <item name="provider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns_editor</item>
@@ -194,90 +45,61 @@
                             <item name="1" xsi:type="boolean">true</item>
                         </item>
                     </item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">design_config_listing.design_config_listing.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
-                    </item>
                 </item>
             </item>
         </argument>
-        <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
-                    <item name="indexField" xsi:type="string">id</item>
-                </item>
-            </argument>
-        </selectionsColumn>
         <column name="default">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="sorting" xsi:type="string">asc</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Default</item>
+                    <item name="sortOrder" xsi:type="number">0</item>
                 </item>
             </argument>
         </column>
-        <column name="website">
+        <column name="store_website_id">
             <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="editor" xsi:type="array">
-                        <item name="editorType" xsi:type="string">text</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="required-entry" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                    <item name="label" xsi:type="string" translate="true">Website</item>
-                </item>
-            </argument>
-        </column>
-        <column name="store">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="editor" xsi:type="array">
-                        <item name="editorType" xsi:type="string">text</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-identifier" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                    <item name="label" xsi:type="string" translate="true">Store</item>
-                </item>
-            </argument>
-        </column>
-        <column name="theme_name">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Cms\Model\Page\Source\Theme</item>
+                <item name="options" xsi:type="object">Magento\Theme\Model\Scope\WebsiteSource</item>
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="editor" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Website</item>
                     <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Theme Name</item>
-                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
         </column>
-        <actionsColumn name="actions">
+        <column name="store_group_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Theme\Model\Scope\GroupSource</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">Store</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </column>
+        <column name="store_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Theme\Model\Scope\StoreSource</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">Store View</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                </item>
+            </argument>
+        </column>
+        <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\EditAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
-                    <item name="indexField" xsi:type="string">id</item>
+                    <item name="indexField" xsi:type="string">entity_id</item>
+                    <item name="editUrlPath" xsi:type="string">theme/design_config/edit</item>
                 </item>
             </argument>
         </actionsColumn>
     </columns>
-    <container name="sticky">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>
-                <item name="toolbarProvider" xsi:type="string">design_config_listing.design_config_listing.listing_top</item>
-                <item name="listingProvider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns</item>
-            </item>
-        </argument>
-    </container>
 </listing>
