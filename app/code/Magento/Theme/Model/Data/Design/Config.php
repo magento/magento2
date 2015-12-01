@@ -11,6 +11,11 @@ use Magento\Theme\Api\Data\DesignConfigInterface;
 class Config extends AbstractExtensibleObject implements DesignConfigInterface
 {
     /**
+     * Design config grid indexer id
+     */
+    const DESIGN_CONFIG_GRID_INDEXER_ID = 'design_config_grid';
+
+    /**
      * @inheritDoc
      */
     public function getScope()
