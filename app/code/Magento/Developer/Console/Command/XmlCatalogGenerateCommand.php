@@ -110,9 +110,8 @@ class XmlCatalogGenerateCommand extends Command
 
         $urns = [];
         foreach ($files as $file) {
-            $fileParts = explode('/', $file[0]);
-            $fileName = array_pop($fileParts);
-            $fileDir = implode('/', $fileParts);
+            $fileDir = dirname($file[0]);
+            $fileName = basename($file[0]);
             $read = $this->readFactory->create($fileDir);
             $content = $read->readFile($fileName);
             $matches = [];
