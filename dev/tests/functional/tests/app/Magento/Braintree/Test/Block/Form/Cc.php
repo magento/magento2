@@ -28,7 +28,8 @@ class Cc extends CreditCard
      */
     protected $braintreeForm = [
         "credit_card_number" => "#braintree-hosted-field-number",
-        "expiration" => "#braintree-hosted-field-expirationDate",
+        "credit_card_exp_month" => "#braintree-hosted-field-expirationMonth",
+        "credit_card_exp_year" => "#braintree-hosted-field-expirationYear",
         "cvv" => "#braintree-hosted-field-cvv",
     ];
 

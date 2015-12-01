@@ -8,12 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="braintreetwo">
-            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo_required/merchant_account_id" xsi:type="array">
-                <item name="scope" xsi:type="string">payment</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Yes</item>
-                <item name="value" xsi:type="string">PAYMENT_BRAINTREETWO_MERCHANT_ACCOUNT_ID</item>
-            </field>
             <field name="payment/braintreetwo_section/braintreetwo/braintreetwo_required/merchant_id" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
@@ -31,6 +25,12 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="string">PAYMENT_BRAINTREETWO_PRIVATE_KEY</item>
+            </field>
+            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo_advanced/merchant_account_id" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">PAYMENT_BRAINTREETWO_MERCHANT_ACCOUNT_ID</item>
             </field>
             <field name="payment/braintreetwo/debug" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
