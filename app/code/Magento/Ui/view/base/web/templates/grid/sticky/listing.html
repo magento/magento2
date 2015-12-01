@@ -7,11 +7,8 @@
 <div class="admin__data-grid-wrap" data-role="sticky-el-root">
     <table class="data-grid">
         <thead>
-            <tr data-bind="foreach: {data: visibleColumns, as: '$col'}">
-                <!-- ko template: getHeader() --><!-- /ko -->
-            </tr>
+            <tr each="data: getVisible(), as: '$col'" render="getHeader()"/>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody/>
     </table>
 </div>
