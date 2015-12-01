@@ -30,6 +30,7 @@ define([
             default: '',
             isDifferedFromDefault: false,
             additionalClasses: {},
+            valueUpdate: 'input',
 
             listens: {
                 visible: 'setPreview',
@@ -83,17 +84,21 @@ define([
         initConfig: function () {
             var uid = utils.uniqueid(),
                 name,
+                valueUpdate,
                 scope;
 
             this._super();
 
-            scope   = this.dataScope,
+            scope   = this.dataScope;
             name    = scope.split('.').slice(1);
+
+            valueUpdate = this.showResetButton ? 'afterkeydown' : this.valueUpdate;
 
             _.extend(this, {
                 uid: uid,
                 noticeId: 'notice-' + uid,
-                inputName: utils.serializeName(name.join('.'))
+                inputName: utils.serializeName(name.join('.')),
+                valueUpdate: valueUpdate
             });
 
             return this;
@@ -283,7 +288,8 @@ define([
          * Update whether value differs from default value
          */
         setDifferedFromDefault: function () {
-            this.isDifferedFromDefault(this.value() !== this.default);
+            var value = typeof this.value() != 'undefined' ? this.value() : '';
+            this.isDifferedFromDefault(value !== this.default);
         }
     });
 });

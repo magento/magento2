@@ -39,7 +39,7 @@
             <div class="admin__field-note" data-bind="attr: { id: element.noticeId }"><span data-bind="text: element.notice"></span></div>
         <!-- /ko -->
 
-        <!-- ko if: element.isDifferedFromDefault -->
+        <!-- ko if: element.showResetButton && element.isDifferedFromDefault -->
             <a class="admin__field-reset-action action-reset" target="_blank" tabindex="0" data-bind="click: element.restoreToDefault">
                 RESET
             </a>
