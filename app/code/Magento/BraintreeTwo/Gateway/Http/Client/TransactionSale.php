@@ -55,9 +55,11 @@ class TransactionSale implements ClientInterface
         try {
             $response['object'] = $this->braintreeTransaction->sale($data);
         } catch (\Exception $e) {
-            throw new ClientException(__($e->getMessage()));
+            throw new ClientException(__(
+                $e->getMessage() ?: 'Sorry, but something went wrong'
+            ));
         } finally {
-            $log['response'] = json_decode(json_encode($response['object']), true);
+            $log['response'] = (array) $response['object'];
             $this->logger->debug($log);
         }
 

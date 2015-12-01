@@ -65,6 +65,7 @@
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="merchant_account_id" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Merchant Account ID</label>
+                            <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account</comment>
                             <config_path>payment/braintreetwo/merchant_account_id</config_path>
                         </field>
                         <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">

@@ -60,19 +60,19 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             [
                 'config' => [
                     'getClientToken' => 'token',
-                    'getCctypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
+                    'getCcTypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
                     'getCountrySpecificCardTypeConfig' => [
                         'GB' => ['VI', 'AE'],
                         'US' => ['DI', 'JCB']
                     ],
-                    'getCcAvailableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
-                    'useCvv' => true
+                    'getAvailableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
+                    'isCvvEnabled' => true
                 ],
                 'expected' => [
                     'payment' => [
                         ConfigProvider::CODE => [
                             'clientToken' => 'token',
-                            'cctypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
+                            'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                             'sdkUrl' => self::SDK_URL,
                             'countrySpecificCardTypes' =>[
                                 'GB' => ['VI', 'AE'],
