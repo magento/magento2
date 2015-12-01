@@ -22,7 +22,8 @@ class LandingUpdater extends AbstractActionController
     /**
      * @param \Magento\Framework\App\ProductMetadata $productMetadata
      */
-    public function __construct(\Magento\Framework\App\ProductMetadata $productMetadata) {
+    public function __construct(\Magento\Framework\App\ProductMetadata $productMetadata)
+    {
         $this->productMetadata = $productMetadata;
     }
 
