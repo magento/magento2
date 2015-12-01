@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\AppInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
