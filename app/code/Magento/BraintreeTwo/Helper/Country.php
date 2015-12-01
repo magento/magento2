@@ -20,6 +20,11 @@ class Country
     private $collectionFactory;
 
     /**
+     * @var \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country
+     */
+    private $countryConfig;
+
+    /**
      * @var array
      */
     private $countries;
@@ -27,9 +32,10 @@ class Country
     /**
      * @param CollectionFactory $factory
      */
-    public function __construct(CollectionFactory $factory)
+    public function __construct(CollectionFactory $factory, CountryConfig $countryConfig)
     {
         $this->collectionFactory = $factory;
+        $this->countryConfig = $countryConfig;
     }
 
     /**
@@ -41,7 +47,7 @@ class Country
     {
         if (!$this->countries) {
             $this->countries = $this->collectionFactory->create()
-                ->addFieldToFilter('country_id', ['nin' => CountryConfig::$excludedCountries])
+                ->addFieldToFilter('country_id', ['nin' => $this->countryConfig->getExcludedCountries()])
                 ->loadData()
                 ->toOptionArray(false);
         }
