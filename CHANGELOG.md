@@ -1,3 +1,16 @@
+1.0.0-beta8
+=============
+* Fixed bugs:
+    * Fixed an issue with redirect to blank page when canceling checkout with PayPal Express in Website Payments Pro Hosted Solution
+    * Fixed an issue "The stock item for Product in option is not valid." when adding configurable product on second website
+    * Fixed an issue where check javascript function calls and labels are translatable
+    * Fixed an issue with random exception during using admin "Unable to send the cookie. Maximum number of cookies would be exceeded."
+    * Fixed an issue where reset password page not displayed, instead user login page displayed.
+    * Fixed an issue where guests who already subscribed to the newsletter will always get a thank you message and receive a subscription success email if they subscribe again
+    * Fixed an issue with no possibility to import images when DocumentRoot is pub/index.php
+    * Fixed an issue when adding product configurations uses name based SKU
+    * Fixed an issue with error when capturing on partial shipment with bundle product in Braintree payment method
+
 1.0.0-beta7
 =============
 * Fixed bugs:

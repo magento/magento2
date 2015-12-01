@@ -176,7 +176,7 @@ if ($variations) {
                         </a>
                         <!-- /ko -->
                         <!-- ko ifnot: variation.readonly -->
-                        <input type="text" data-bind="attr: {id: $parent.getRowId(variation, 'name'), name: $parent.getVariationRowName(variation, 'name'), value: variation.sku}"/>
+                        <input type="text" data-bind="attr: {id: $parent.getRowId(variation, 'name'), name: $parent.getVariationRowName(variation, 'name'), value: variation.name}"/>
                         <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'configurable_attribute'), name: $parent.getVariationRowName(variation, 'configurable_attribute'), value: variation.attribute}"/>
                         <input type="hidden" data-role="status" data-bind="attr: {name: $parent.getVariationRowName(variation, 'status'), value: variation.status}"/>
                         <!-- /ko -->
