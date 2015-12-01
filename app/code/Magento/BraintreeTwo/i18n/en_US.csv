@@ -1,0 +1,8 @@
+"cc_type","Credit Card Type"
+"cc_number","Credit Card Number"
+"avsPostalCodeResponseCode","AVS Postal Code Response Code"
+"avsStreetAddressResponseCode","Avs Street Address Response Code"
+"cvvResponseCode","Cvv Response Code"
+"processorAuthorizationCode","Processor Authorization Code"
+"processorResponseCode","Processor Response Code"
+"processorResponseText","Processor Response Text"

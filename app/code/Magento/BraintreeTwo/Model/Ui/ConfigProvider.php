@@ -41,11 +41,11 @@ final class ConfigProvider implements ConfigProviderInterface
             'payment' => [
                 self::CODE => [
                     'clientToken' => $this->config->getClientToken(),
-                    'cctypesMapper' => $this->config->getCctypesMapper(),
+                    'ccTypesMapper' => $this->config->getCctypesMapper(),
                     'sdkUrl' => $this->config->getValue(Config::KEY_SDK_URL),
                     'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig(),
-                    'availableCardTypes' => $this->config->getCcAvailableCardTypes(),
-                    'useCvv' => $this->config->useCvv()
+                    'availableCardTypes' => $this->config->getAvailableCardTypes(),
+                    'useCvv' => $this->config->isCvvEnabled()
                 ],
             ]
         ];

@@ -97,9 +97,6 @@ class CountryCreditCard extends AbstractFieldArray
                 = 'selected="selected"';
 
             $ccTypes = $row->getCcTypes();
-            if (!is_array($ccTypes)) {
-                $ccTypes = [$ccTypes];
-            }
             foreach ($ccTypes as $cardType) {
                 $options['option_' . $this->getCcTypesRenderer()->calcOptionHash($cardType)]
                     = 'selected="selected"';

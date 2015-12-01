@@ -47,11 +47,14 @@ class CardDetailsHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $details = SubjectReader::readPayment($handlingSubject);
+        $paymentDO = SubjectReader::readPayment($handlingSubject);
         /** @var \Braintree_Transaction $transaction */
         $transaction = $response['object']->transaction;
+        /**
+         * @TODO after changes in sales module should be refactored for new interfaces
+         */
         /** @var \Magento\Sales\Model\Order\Payment $payment */
-        $payment = $details->getPayment();
+        $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
         $creditCard = $transaction->creditCard;
