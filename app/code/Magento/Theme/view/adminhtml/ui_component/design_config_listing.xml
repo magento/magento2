@@ -66,23 +66,6 @@
                         <item name="provider" xsi:type="string">design_config_listing.design_config_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.filters</item>
                     </item>
-                    <item name="templates" xsi:type="array">
-                        <item name="filters" xsi:type="array">
-                            <item name="select" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
-                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
-                            </item>
-                        </item>
-                    </item>
-                    <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">design_config_listing.design_config_listing.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">design_config_listing.design_config_listing.design_config_columns.${ $.index }:visible</item>
-                        </item>
-                    </item>
-                </item>
-                <item name="observers" xsi:type="array">
-                    <item name="column" xsi:type="string">column</item>
                 </item>
             </argument>
         </filters>
@@ -105,11 +88,6 @@
                     <item name="provider" xsi:type="string">design_config_listing.design_config_listing.listing_top.bookmarks</item>
                     <item name="namespace" xsi:type="string">current</item>
                 </item>
-                <item name="editorConfig" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns.ids</item>
-                    <item name="enabled" xsi:type="boolean">true</item>
-                    <item name="indexField" xsi:type="string">entity_id</item>
-                </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
                         <item name="provider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns_editor</item>
@@ -127,15 +105,15 @@
                 </item>
             </item>
         </argument>
-        <!--<column name="default">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="filter" xsi:type="string">textRange</item>-->
-                    <!--<item name="sorting" xsi:type="string">asc</item>-->
-                    <!--<item name="label" xsi:type="string" translate="true">Default</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-        <!--</column>-->
+        <column name="default">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Default</item>
+                    <item name="sortOrder" xsi:type="number">0</item>
+                </item>
+            </argument>
+        </column>
         <column name="store_website_id">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Theme\Model\Scope\WebsiteSource</item>
@@ -144,6 +122,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="label" xsi:type="string" translate="true">Website</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
         </column>
@@ -155,6 +134,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="label" xsi:type="string" translate="true">Store</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
                 </item>
             </argument>
         </column>
@@ -166,6 +146,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="label" xsi:type="string" translate="true">Store View</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
                 </item>
             </argument>
         </column>
@@ -178,13 +159,4 @@
             </argument>
         </actionsColumn>
     </columns>
-    <container name="sticky">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>
-                <item name="toolbarProvider" xsi:type="string">design_config_listing.design_config_listing.listing_top</item>
-                <item name="listingProvider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns</item>
-            </item>
-        </argument>
-    </container>
 </listing>
