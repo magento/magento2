@@ -101,7 +101,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $items = $this->collection->getItems();
         /** @var Category $category */
         foreach ($items as $category) {
-            $result['general'] = $category->getData();
+            $categoryData = $category->getData();
+            if (!$categoryData['available_sort_by']) {
+                $categoryData['use_config']['available_sort_by'] = true;
+            }
+            $result['general'] = $categoryData;
             $this->loadedData[$category->getId()] = $result;
         }
 
@@ -148,6 +152,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $result[$key]['sortOrder'] = 0;
         }
 
+        //print_r($result); exit;
         return $result;
     }
 }

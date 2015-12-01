@@ -108,8 +108,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Process "Use Config Settings" checkboxes
              */
-            $useConfig = $this->getRequest()->getPost('use_config');
-            if ($useConfig) {
+            $generalPost = $this->getRequest()->getPost('general');
+            if ($generalPost['use_config']) {
+                $useConfig = [];
+                foreach($generalPost['use_config'] as $attributeCode => $attributeValue) {
+                    if ($attributeValue !== 'false') {
+                        $useConfig[] = $attributeCode;
+                    }
+                }
                 foreach ($useConfig as $attributeCode) {
                     $category->setData($attributeCode, null);
                 }
@@ -143,7 +149,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
              * Proceed with $_POST['use_config']
              * set into category model for processing through validation
              */
-            $category->setData('use_post_data_config', $this->getRequest()->getPost('use_config'));
+            $category->setData('use_post_data_config', $useConfig);
 
             try {
                 $categoryResource = $category->getResource();
