@@ -43,7 +43,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "http://packages.magento.com/"
+            "url": "https://repo.magento.com/"
         }
     ]
 }
