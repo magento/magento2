@@ -42,7 +42,7 @@ class Group implements ScopeResolverInterface
     /**
      * Retrieve a list of available groups
      *
-     * @return ScopeInterface[]
+     * @return \Magento\Store\Model\Group[]
      */
     public function getScopes()
     {
