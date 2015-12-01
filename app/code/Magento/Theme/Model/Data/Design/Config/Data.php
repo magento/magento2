@@ -7,6 +7,7 @@ namespace Magento\Theme\Model\Data\Design\Config;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Theme\Api\Data\DesignConfigDataInterface;
+use Magento\Theme\Api\Data\DesignConfigDataExtensionInterface;
 
 class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
 {
@@ -56,5 +57,20 @@ class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
     public function setFieldConfig(array $config)
     {
         return $this->setData(self::FIELD_CONFIG, $config);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setExtensionAttributes(DesignConfigDataExtensionInterface $extensionAttributes) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

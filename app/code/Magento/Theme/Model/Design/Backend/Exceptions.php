@@ -54,6 +54,9 @@ class Exceptions extends ArraySerialized
         $design = clone $this->_design;
         // For value validations
         $exceptions = $this->getValue();
+        if (empty($exceptions)) {
+            return false;
+        }
         foreach ($exceptions as $rowKey => $row) {
             if ($rowKey === '__empty') {
                 continue;

@@ -119,8 +119,9 @@ class DataProvider extends AbstractDataProvider
         $items = $this->collection->getItems();
         foreach ($items as $item) {
             /** @var \Magento\Framework\App\Config\Value $item */
-            $this->loadedData[$this->scope][$metadata[$item->getPath()]] = (string)$item->getValue()
-                ?: $this->getFallbackValue($item->getPath());
+            $this->loadedData[$this->scope][$metadata[$item->getPath()]] = is_null((string)$item->getValue())
+                ? (string)$item->getValue()
+                : $this->getFallbackValue($item->getPath());
         }
 
         $this->loadedData[$this->scope]['scope'] = $this->scope;
