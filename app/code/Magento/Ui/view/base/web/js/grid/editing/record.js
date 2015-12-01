@@ -198,7 +198,8 @@ define([
             data = this.normalizeData(data);
             data = utils.extend({}, currentData, data);
 
-            this.set('data', data);
+            this.set('data', data)
+                .updateState();
 
             return this;
         },
