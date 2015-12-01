@@ -80,7 +80,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
             ->method('loadData')
             ->willReturnSelf();
 
-        $collectionFactory = $this->getMockBuilder('\Magento\Directory\Model\ResourceModel\Country\CollectionFactory')
+        $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

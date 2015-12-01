@@ -8,9 +8,14 @@ namespace Magento\BraintreeTwo\Test\Unit\Block;
 use Magento\Backend\Model\Session\Quote;
 use Magento\BraintreeTwo\Block\Form;
 use Magento\BraintreeTwo\Gateway\Config\Config as GatewayConfig;
+use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Config;
 
+/**
+ * Class FormTest
+ * @package Magento\BraintreeTwo\Test\Unit\Block
+ */
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     public static $baseCardTypes = [
@@ -19,6 +24,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         'MC' => 'MasterCard',
         'DI' => 'Discover',
         'JBC' => 'JBC',
+        'CUP' => 'China Union Pay',
+        'MI' => 'Maestro',
         'OT' => 'Other'
     ];
 
@@ -32,11 +39,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
     private $block;
 
     /**
-     * @var \Magento\Payment\Model\Config|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $paymentConfig;
-
-    /**
      * @var \Magento\Backend\Model\Session\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sessionQuote;
@@ -46,17 +48,24 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     private $gatewayConfig;
 
+    /**
+     * @var \Magento\BraintreeTwo\Model\Adminhtml\Source\CcType|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $ccType;
+
+
     protected function setUp()
     {
-        $this->initPaymentConfigMock();
+        $this->initCcTypeMock();
         $this->initSessionQuoteMock();
         $this->initGatewayConfigMock();
 
         $managerHelper = new ObjectManager($this);
         $this->block = $managerHelper->getObject(Form::class, [
-            'paymentConfig' => $this->paymentConfig,
+            'paymentConfig' => $managerHelper->getObject(Config::class),
             'sessionQuote' => $this->sessionQuote,
-            'gatewayConfig' => $this->gatewayConfig
+            'gatewayConfig' => $this->gatewayConfig,
+            'ccType' => $this->ccType
         ]);
     }
 
@@ -101,16 +110,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create mock for payment config
+     * Create mock for credit card type
      */
-    private function initPaymentConfigMock()
+    private function initCcTypeMock()
     {
-        $this->paymentConfig = $this->getMockBuilder(Config::class)
+        $this->ccType = $this->getMockBuilder(CcType::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCcTypes'])
             ->getMock();
 
-        $this->paymentConfig->expects(static::once())
+        $this->ccType->expects(static::once())
             ->method('getCcTypes')
             ->willReturn(self::$baseCardTypes);
     }

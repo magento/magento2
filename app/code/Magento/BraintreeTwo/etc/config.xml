@@ -17,9 +17,9 @@
                 <can_use_checkout>1</can_use_checkout>
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>
-                <cctypes>AE,VI,MC,DI,JCB</cctypes>
+                <cctypes>AE,VI,MC,DI,JCB,CUP,DN,MI</cctypes>
                 <useccv>1</useccv>
-                <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI"}]]></cctypes_braintree_mapper>
+                <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP"}]]></cctypes_braintree_mapper>
                 <useccv>1</useccv>
                 <order_status>processing</order_status>
                 <environment>sandbox</environment>

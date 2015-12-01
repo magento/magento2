@@ -55,7 +55,9 @@ class TransactionSale implements ClientInterface
         try {
             $response['object'] = $this->braintreeTransaction->sale($data);
         } catch (\Exception $e) {
-            throw new ClientException(__($e->getMessage()));
+            throw new ClientException(__(
+                $e->getMessage() ?: 'Transaction has been declined, please, try again later.'
+            ));
         } finally {
             $log['response'] = json_decode(json_encode($response['object']), true);
             $this->logger->debug($log);

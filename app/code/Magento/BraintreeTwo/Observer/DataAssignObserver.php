@@ -24,10 +24,10 @@ class DataAssignObserver extends AbstractDataAssignObserver
         $method = $this->readMethodArgument($observer);
         $data = $this->readDataArgument($observer);
         $paymentInfo = $method->getInfoInstance();
-        if ($data->getDataByKey('payment_method_nonce') !== null) {
+        if ($data->getDataByKey(self::PAYMENT_METHOD_NONCE) !== null) {
             $paymentInfo->setAdditionalInformation(
                 self::PAYMENT_METHOD_NONCE,
-                $data->getDataByKey('payment_method_nonce')
+                $data->getDataByKey(self::PAYMENT_METHOD_NONCE)
             );
         }
     }
