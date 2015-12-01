@@ -390,6 +390,8 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Date of Birth</item>
                     <item name="sortOrder" xsi:type="number">170</item>
+                    <item name="timezone" xsi:type="boolean">false</item>
+                    <item name="dateFormat" xsi:type="string">MMM d, y</item>
                 </item>
             </argument>
         </column>

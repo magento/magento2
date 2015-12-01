@@ -78,7 +78,7 @@
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
         </variation>
         <variation name="NavigateMenuTest69">
-            <data name="menuItem" xsi:type="string">Reports > Refresh statistics</data>
+            <data name="menuItem" xsi:type="string">Reports > Refresh Statistics</data>
             <data name="pageTitle" xsi:type="string">Refresh Statistics</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
         </variation>
