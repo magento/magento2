@@ -151,8 +151,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $result[$key] = $item;
             $result[$key]['sortOrder'] = 0;
         }
-
-        //print_r($result); exit;
+        
         return $result;
     }
 }
