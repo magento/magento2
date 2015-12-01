@@ -44,7 +44,6 @@ class Collection extends \Magento\Framework\Data\Collection
         ScopeTreeProviderInterface $scopeTree,
         MetadataProviderInterface $metadataProvider,
         ScopeConfigInterface $appConfig
-
     ) {
         parent::__construct($entityFactory);
         $this->scopeTree = $scopeTree;
@@ -97,6 +96,13 @@ class Collection extends \Magento\Framework\Data\Collection
         return $this;
     }
 
+    /**
+     * Retrieve fields metadata
+     *
+     * @param string $scope
+     * @param int $scopeId
+     * @return array
+     */
     protected function getMetadataValues($scope, $scopeId)
     {
         $result = [];

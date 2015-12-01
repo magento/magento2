@@ -12,9 +12,8 @@ use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Config\Model\Config\Loader as ConfigLoader;
-use Magento\Theme\Model\Design\Config\ValueCheckerInterfaceFactory as ValueCheckerFactory;
+use Magento\Theme\Model\Design\Config\ValueCheckerFactory;
 use Magento\Theme\Model\Design\BackendModelFactory;
-
 
 class DesignConfigRepository implements DesignConfigRepositoryInterface
 {
@@ -87,7 +86,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
                     'config' => $fieldData->getFieldConfig(),
                     'extendedConfig' => $extendedConfig
             ]);
-            /** @var \Magento\Theme\Model\Design\Config\ValueCheckerInterface $valueChecker */
+            /** @var \Magento\Theme\Model\Design\Config\ValueChecker $valueChecker */
             $valueChecker = $this->valueCheckerFactory->create([
                 'value' => $fieldData->getValue(),
                 'scope' => $designConfig->getScope(),

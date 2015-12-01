@@ -73,7 +73,6 @@ class Config implements ActionInterface
         HandlerPool $handlerPool,
         CollectionFactory $collectionFactory,
         $data = []
-
     ) {
         $this->structureFactory = $structureFactory;
         $this->saveHandlerFactory = $saveHandlerFactory;

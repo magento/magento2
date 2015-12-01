@@ -17,7 +17,6 @@
     <preference for="Magento\Theme\Api\Data\DesignConfigInterface" type="Magento\Theme\Model\Data\Design\Config"/>
     <preference for="Magento\Theme\Api\Data\DesignConfigDataInterface" type="Magento\Theme\Model\Data\Design\Config\Data"/>
     <preference for="Magento\Theme\Api\DesignConfigRepositoryInterface" type="Magento\Theme\Model\DesignConfigRepository"/>
-    <preference for="Magento\Theme\Model\Design\Config\ValueCheckerInterface" type="Magento\Theme\Model\Design\Config\ValueChecker"/>
     <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
         <arguments>
             <argument name="renderers" xsi:type="array">
