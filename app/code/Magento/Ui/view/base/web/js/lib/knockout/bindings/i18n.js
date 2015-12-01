@@ -7,8 +7,9 @@ define([
     'jquery',
     'ko',
     'module',
+    '../template/renderer',
     'mage/translate'
-], function ($, ko, module) {
+], function ($, ko, module, renderer) {
     'use strict';
 
     var locations = {
@@ -169,4 +170,12 @@ define([
     };
 
     ko.virtualElements.allowedBindings.i18n = true;
+
+    renderer
+        .addNode('translate', {
+            binding: 'i18n'
+        })
+        .addAttribute('translate', {
+            binding: 'i18n'
+        });
 });
