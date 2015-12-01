@@ -30,6 +30,11 @@ class Sidebar extends Block
     protected $cartLink = 'a.showcart';
 
     /**
+     * @var string
+     */
+    protected $productCounter = '//*[@data-block="minicart"]//*[@class="counter-number"]';
+
+    /**
      * Mini cart content selector.
      *
      * @var string
@@ -99,6 +104,16 @@ class Sidebar extends Block
                 return $counterQty->isVisible() ? true : null;
             }
         );
+    }
+
+    /**
+     * Get cart items quantity
+     *
+     * @return string
+     */
+    public function isItemsQtyVisible()
+    {
+        return $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->isVisible();
     }
 
     /**
