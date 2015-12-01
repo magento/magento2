@@ -27,7 +27,8 @@ class ProductMetadata implements ProductMetadataInterface
     /**
      * @param \Magento\Framework\Composer\ComposerJsonFinder $composerJsonFinder
      */
-    public function __construct(\Magento\Framework\Composer\ComposerJsonFinder $composerJsonFinder) {
+    public function __construct(\Magento\Framework\Composer\ComposerJsonFinder $composerJsonFinder)
+    {
         $this->composerJsonFinder = $composerJsonFinder;
     }
 
