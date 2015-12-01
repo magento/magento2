@@ -10,28 +10,6 @@ namespace Magento\Paypal\Controller;
  */
 class HostedproTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    public function testCancelActionIsContentGenerated()
-    {
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
-        $order->load('100000001', 'increment_id');
-        $order->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_HOSTEDPRO);
-
-        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Quote\Model\Quote'
-        )->setStoreId(
-            $order->getStoreId()
-        )->save();
-
-        $order->setQuoteId($quote->getId());
-        $order->save();
-
-        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Session');
-        $session->setLastRealOrderId($order->getRealOrderId())->setLastQuoteId($order->getQuoteId());
-
-        $this->dispatch('paypal/hostedpro/cancel');
-        $this->assertContains("goToSuccessPage = ''", $this->getResponse()->getBody());
-    }
-
     /**
      * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
      * @magentoConfigFixture current_store payment/paypal_hostedpro/active 1
