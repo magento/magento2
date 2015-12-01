@@ -112,6 +112,6 @@ class Edit extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Theme::theme');
+        return $this->_authorization->isAllowed('Magento_Config::config_design');
     }
 }
