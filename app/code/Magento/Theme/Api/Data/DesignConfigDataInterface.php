@@ -5,6 +5,8 @@
  */
 namespace Magento\Theme\Api\Data;
 
+use Magento\Theme\Api\Data\DesignConfigDataExtensionInterface;
+
 interface DesignConfigDataInterface
 {
     /**#@+
@@ -47,4 +49,19 @@ interface DesignConfigDataInterface
      * @return $this
      */
     public function setFieldConfig(array $config);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return DesignConfigDataExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param DesignConfigDataExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(DesignConfigDataExtensionInterface $extensionAttributes);
 }

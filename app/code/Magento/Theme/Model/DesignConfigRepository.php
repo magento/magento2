@@ -95,7 +95,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
                 'path' => $fieldData->getPath()
             ]);
 
-            if ($valueChecker->isValueChanged() && !empty($fieldData->getValue())) {
+            if ($valueChecker->isValueChanged()) {
                 $saveTransaction->addObject($backendModel);
             } else {
                 $deleteTransaction->addObject($backendModel);

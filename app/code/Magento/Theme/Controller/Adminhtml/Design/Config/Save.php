@@ -5,44 +5,22 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\Design\Config;
 
+use Magento\Backend\App\Action;
 use Magento\Theme\Model\DesignConfigRepository;
 use Magento\Backend\App\Action\Context;
 use Magento\Theme\Api\Data\DesignConfigInterface;
-use Magento\Theme\Api\Data\DesignConfigInterfaceFactory;
-use Magento\Theme\Api\Data\DesignConfigDataInterfaceFactory;
-use Magento\Theme\Api\Data\DesignConfigExtensionFactory;
-use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Theme\Model\Data\Design\ConfigFactory;
 
-class Save extends \Magento\Backend\App\Action
+class Save extends Action
 {
     /**
      * @var DesignConfigRepository
      */
     protected $designConfigRepository;
-
-    /**
-     * @var DesignConfigInterfaceFactory
-     */
-    protected $designConfigFactory;
-
-    /**
-     * @var DesignConfigDataInterfaceFactory
-     */
-    protected $designConfigDataFactory;
-
-    /**
-     * @var DesignConfigExtensionFactory
-     */
-    protected $configExtensionFactory;
-
-    /**
-     * @var MetadataProviderInterface
-     */
-    protected $metadataProvider;
 
     /**
      * @var StoreManager
@@ -55,33 +33,29 @@ class Save extends \Magento\Backend\App\Action
     protected $redirectFactory;
 
     /**
+     * @var ConfigFactory
+     */
+    protected $configFactory;
+
+    /**
      * @param DesignConfigRepository $designConfigRepository
-     * @param DesignConfigInterfaceFactory $designConfigFactory
-     * @param DesignConfigDataInterfaceFactory $designConfigDataFactory
-     * @param DesignConfigExtensionFactory $configExtensionFactory
-     * @param MetadataProviderInterface $metadataProvider
      * @param RedirectFactory $redirectFactory
      * @param StoreManager $storeManager
+     * @param ConfigFactory $configFactory
      * @param Context $context
      */
     public function __construct(
         DesignConfigRepository $designConfigRepository,
-        DesignConfigInterfaceFactory $designConfigFactory,
-        DesignConfigDataInterfaceFactory $designConfigDataFactory,
-        DesignConfigExtensionFactory $configExtensionFactory,
-        MetadataProviderInterface $metadataProvider,
         RedirectFactory $redirectFactory,
         StoreManager $storeManager,
+        ConfigFactory $configFactory,
         Context $context
     ) {
         parent::__construct($context);
         $this->designConfigRepository = $designConfigRepository;
-        $this->designConfigFactory = $designConfigFactory;
-        $this->designConfigDataFactory = $designConfigDataFactory;
-        $this->configExtensionFactory = $configExtensionFactory;
-        $this->metadataProvider = $metadataProvider;
         $this->storeManager = $storeManager;
         $this->redirectFactory = $redirectFactory;
+        $this->configFactory = $configFactory;
     }
 
     /**
@@ -105,27 +79,18 @@ class Save extends \Magento\Backend\App\Action
             if (!($scope && $scopeId) && $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
                 throw new LocalizedException(__('Scope and scope id is a required params'));
             }
-            /** @var DesignConfigInterface $designConfigData */
-            $designConfigData = $this->designConfigFactory->create();
-            $designConfigData->setScope($scope);
-            $designConfigData->setScopeId($scopeId);
+
+            $data = [
+                'scope' => $scope,
+                'scopeId' => $scopeId,
+                'params' => [],
+            ];
+            $data['params'] = array_merge(
+                $this->getRequest()->getParams(),
+                $this->getRequest()->getFiles()->toArray()
+            );
+            $designConfigData = $this->configFactory->create($data);
             $this->checkSingleStoreMode($designConfigData);
-
-            $configData = [];
-            foreach ($this->metadataProvider->get() as $name => $data) {
-                /** @var \Magento\Theme\Api\Data\DesignConfigDataInterface $configDataObject */
-                $configDataObject = $this->designConfigDataFactory->create();
-                $configDataObject->setPath($data['path']);
-                $configDataObject->setFieldConfig($data);
-                $value = $this->getRequest()->getFiles($name) ?: $this->getRequest()->getParam($name);
-                $configDataObject->setValue($value);
-                $configData[] = $configDataObject;
-            }
-            /** @var \Magento\Theme\Api\Data\DesignConfigExtension $designConfigExtension */
-            $designConfigExtension = $this->configExtensionFactory->create();
-            $designConfigExtension->setDesignConfigData($configData);
-            $designConfigData->setExtensionAttributes($designConfigExtension);
-
             $this->designConfigRepository->save($designConfigData);
 
             $this->messageManager->addSuccess(__('Configuration was saved'));

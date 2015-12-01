@@ -81,7 +81,9 @@ class Select extends AbstractElement
     protected function convertOptionsValueToString(array $options)
     {
         array_walk($options, function (&$value) {
-            $value['value'] = (string)$value['value'];
+            if (isset($value['value']) && is_scalar($value['value'])) {
+                $value['value'] = (string)$value['value'];
+            }
         });
         return $options;
     }
