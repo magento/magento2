@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'ko'
-], function (ko) {
+    'ko',
+    '../template/renderer'
+], function (ko, renderer) {
     'use strict';
 
     ko.bindingHandlers.afterRender = {
@@ -16,8 +17,10 @@ define([
             var callback = valueAccessor();
 
             if (typeof callback === 'function') {
-                callback(element, viewModel);
+                callback.call(viewModel, element, viewModel);
             }
         }
     };
+
+    renderer.addAttribute('afterRender');
 });
