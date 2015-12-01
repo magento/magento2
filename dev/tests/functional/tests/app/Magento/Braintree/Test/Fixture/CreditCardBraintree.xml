@@ -13,7 +13,8 @@
              repository_class="Magento\Braintree\Test\Repository\CreditCard"
              class="Magento\Braintree\Test\Fixture\CreditCardBraintree">
         <field name="credit_card_number" />
-        <field name="expiration" />
+        <field name="credit_card_exp_month" />
+        <field name="credit_card_exp_year" />
         <field name="cvv" />
     </fixture>
 </config>

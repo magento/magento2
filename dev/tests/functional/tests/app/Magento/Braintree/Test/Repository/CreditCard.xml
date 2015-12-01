@@ -9,7 +9,8 @@
     <repository class="Magento\Braintree\Test\Repository\CreditCard">
         <dataset name="visa_braintree">
             <field name="credit_card_number" xsi:type="string">4111111111111111</field>
-            <field name="expiration" xsi:type="string">01/2020</field>
+            <field name="credit_card_exp_month" xsi:type="string">01</field>
+            <field name="credit_card_exp_year" xsi:type="string">2020</field>
             <field name="cvv" xsi:type="string">123</field>
         </dataset>
     </repository>
