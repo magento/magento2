@@ -18,7 +18,7 @@ define([
             totalTmpl: 'ui/grid/paging-total',
             pageSize: 20,
             current: 1,
-            selectProvider: '',
+            selectProvider: 'ns = ${ $.ns }, index = ids',
 
             sizesConfig: {
                 component: 'Magento_Ui/js/grid/paging/sizes',
