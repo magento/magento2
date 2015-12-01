@@ -117,7 +117,8 @@ class Save extends \Magento\Backend\App\Action
                 $configDataObject = $this->designConfigDataFactory->create();
                 $configDataObject->setPath($data['path']);
                 $configDataObject->setFieldConfig($data);
-                $configDataObject->setValue($this->getRequest()->getParam($name));
+                $value = $this->getRequest()->getFiles($name) ?: $this->getRequest()->getParam($name);
+                $configDataObject->setValue($value);
                 $configData[] = $configDataObject;
             }
             /** @var \Magento\Theme\Api\Data\DesignConfigExtension $designConfigExtension */
