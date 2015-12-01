@@ -68,12 +68,12 @@ class IndexerHandler implements IndexerInterface
     public function saveIndex($dimensions, \Traversable $documents)
     {
         $dimension = current($dimensions);
-        $storeId = $this->getStoreIdByDimension($dimension);
-        $this->adapter->checkIndex();
+        $storeId = $dimension->getValue();
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $storeId);
-            $this->adapter->addDocs($docs);
+            $this->adapter->addDocs($docs, $storeId);
         }
+        $this->adapter->updateAlias($storeId);
         return $this;
     }
 
@@ -84,12 +84,13 @@ class IndexerHandler implements IndexerInterface
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
+        $dimension = current($dimensions);
+        $storeId = $dimension->getValue();
         $documentIds = [];
         foreach ($documents as $entityId => $document) {
-            $documentIds [$entityId]= $entityId;
+            $documentIds[$entityId] = $entityId;
         }
-        $this->adapter->checkIndex();
-        $this->adapter->deleteDocs($documentIds);
+        $this->adapter->deleteDocs($documentIds, $storeId);
         return $this;
     }
 
@@ -99,8 +100,9 @@ class IndexerHandler implements IndexerInterface
      */
     public function cleanIndex($dimensions)
     {
-        $this->adapter->checkIndex();
-        $this->adapter->cleanIndex();
+        $dimension = current($dimensions);
+        $storeId = $dimension->getValue();
+        $this->adapter->cleanIndex($storeId);
         return $this;
     }
 
@@ -110,14 +112,5 @@ class IndexerHandler implements IndexerInterface
     public function isAvailable()
     {
         return $this->adapter->ping();
-    }
-
-    /**
-     * @param Dimension $dimension
-     * @return int
-     */
-    private function getStoreIdByDimension($dimension)
-    {
-        return $dimension->getName() == self::SCOPE_FIELD_NAME ? $dimension->getValue() : Store::DEFAULT_STORE_ID;
     }
 }

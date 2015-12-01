@@ -109,6 +109,23 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
+    public function testBuildWithEmptyArrayField()
+    {
+        $document = [
+            'nameOfField' => []
+        ];
+        $field = 'nameOfField';
+        $values = [];
+
+        $this->builder->addField($field, $values);
+
+        $result = $this->builder->build();
+        $this->assertEquals($document, $result);
+    }
+
+    /**
+     * @return void
+     */
     public function testBuildTwoDocuments()
     {
         $documentOne = [

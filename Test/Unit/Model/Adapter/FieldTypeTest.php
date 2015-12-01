@@ -57,10 +57,10 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
      * @dataProvider attributeTypesProvider
      * @return array
      */
-    public function testGetFieldType($backendType, $frontendType)
+    public function testGetFieldType($attributeCode, $backendType, $frontendType)
     {
         $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
-            ->setMethods(['getBackendType', 'getFrontendInput'])
+            ->setMethods(['getBackendType', 'getFrontendInput', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -69,6 +69,9 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
 
         $attributeMock->expects($this->any())->method('getFrontendInput')
             ->will($this->returnValue($frontendType));
+
+        $attributeMock->expects($this->any())->method('getAttributeCode')
+            ->will($this->returnValue($attributeCode));
 
         $this->assertInternalType(
             'string',
@@ -82,12 +85,15 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
     public static function attributeTypesProvider()
     {
         return [
-            ['static', 'select'],
-            ['static', 'text'],
-            ['timestamp', 'select'],
-            ['int', 'select'],
-            ['decimal', 'select'],
-            ['varchar', 'select'],
+            ['attr1','static', 'select'],
+            ['attr1','static', 'text'],
+            ['attr1','timestamp', 'select'],
+            ['attr1','int', 'select'],
+            ['attr1','decimal', 'select'],
+            ['attr1','varchar', 'select'],
+            ['attr1','array', 'multiselect'],
+            ['price','int', 'text'],
+            ['tier_price','int', 'text'],
         ];
     }
 }

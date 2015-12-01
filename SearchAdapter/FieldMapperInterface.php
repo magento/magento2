@@ -7,6 +7,14 @@ namespace Magento\Elasticsearch\SearchAdapter;
 
 interface FieldMapperInterface
 {
+    /**#@+
+     * Text flags for field mapping context
+     */
+    const TYPE_QUERY = 'text';
+    const TYPE_SORT = 'sort';
+    const TYPE_FILTER = 'default';
+    /**#@-*/
+
     /**
      * Get field name
      *

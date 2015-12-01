@@ -66,17 +66,13 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteIndex()
     {
-        $dimensionName = IndexerHandler::SCOPE_FIELD_NAME;
         $dimensionValue = 3;
         $documentId = 123;
 
         $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
             ->disableOriginalConstructor()
             ->getMock();
-        $dimension->expects($this->any())
-            ->method('getName')
-            ->willReturn($dimensionName);
-        $dimension->expects($this->any())
+        $dimension->expects($this->once())
             ->method('getValue')
             ->willReturn($dimensionValue);
 
@@ -87,7 +83,6 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveIndex()
     {
-        $dimensionName = IndexerHandler::SCOPE_FIELD_NAME;
         $dimensionValue = 3;
         $documentId = 123;
         $documents = new \ArrayIterator([$documentId]);
@@ -96,9 +91,6 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $dimension->expects($this->once())
-            ->method('getName')
-            ->willReturn($dimensionName);
-        $dimension->expects($this->any())
             ->method('getValue')
             ->willReturn($dimensionValue);
 

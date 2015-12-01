@@ -6,14 +6,17 @@
 namespace Magento\Elasticsearch\Model\Adapter;
 
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContainer;
+use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Elasticsearch adapter
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Elasticsearch
 {
@@ -57,18 +60,37 @@ class Elasticsearch
     protected $clientConfig;
 
     /**
+     * @var ElasticsearchClient
+     */
+    protected $client;
+
+    /**
+     * @var BuilderInterface
+     */
+    protected $indexBuilder;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @param ConnectionManager $connectionManager
-     * @param Index $resourceIndex
-     * @param AttributeContainer $attributeContainer
-     * @param DocumentDataMapper $documentDataMapper
-     * @param FieldMapper $fieldMapper
+     * @var array
+     */
+    protected $preparedIndex = [];
+
+    /**
+     * @param ConnectionManager      $connectionManager
+     * @param Index                  $resourceIndex
+     * @param AttributeContainer     $attributeContainer
+     * @param DocumentDataMapper     $documentDataMapper
+     * @param FieldMapper            $fieldMapper
      * @param ClientOptionsInterface $clientConfig
-     * @param LoggerInterface $logger
+     * @param BuilderInterface       $indexBuilder
+     * @param LoggerInterface        $logger
+     * @param array                  $options
+     *
+     * @throws LocalizedException
      */
     public function __construct(
         ConnectionManager $connectionManager,
@@ -77,7 +99,9 @@ class Elasticsearch
         DocumentDataMapper $documentDataMapper,
         FieldMapper $fieldMapper,
         ClientOptionsInterface $clientConfig,
-        LoggerInterface $logger
+        BuilderInterface $indexBuilder,
+        LoggerInterface $logger,
+        $options = []
     ) {
         $this->connectionManager = $connectionManager;
         $this->resourceIndex = $resourceIndex;
@@ -85,7 +109,35 @@ class Elasticsearch
         $this->documentDataMapper = $documentDataMapper;
         $this->fieldMapper = $fieldMapper;
         $this->clientConfig = $clientConfig;
+        $this->indexBuilder = $indexBuilder;
         $this->logger = $logger;
+
+        try {
+            $this->connect($options);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            throw new LocalizedException(
+                __('We were unable to perform the search because of a search engine misconfiguration.')
+            );
+        }
+    }
+
+    /**
+     * Connect to Search Engine Client by specified options.
+     *
+     * @param array $options
+     * @return ElasticsearchClient
+     */
+    protected function connect($options = [])
+    {
+        try {
+            $this->client = $this->connectionManager->getConnection($options);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            throw new \RuntimeException('Elasticsearch client is not set.');
+        }
+
+        return $this->client;
     }
 
     /**
@@ -97,7 +149,7 @@ class Elasticsearch
     public function ping()
     {
         try {
-            $response = $this->connectionManager->getConnection()->ping();
+            $response = $this->client->ping();
         } catch (\Exception $e) {
             throw new LocalizedException(
                 __('Could not ping search engine: %1', $e->getMessage())
@@ -124,7 +176,7 @@ class Elasticsearch
         $priceIndexData = $this->attributeContainer->getAttribute('price')
             ? $this->resourceIndex->getPriceIndexData($productIds, $storeId)
             : [];
-        $categoryIndexData = $this->resourceIndex->getCategoryProductIndexData($storeId, $productIds);
+        $categoryIndexData = $this->resourceIndex->getFullCategoryProductIndexData($storeId, $productIds);
         $fullProductIndexData = $this->resourceIndex->getFullProductIndexData($productIds);
 
         foreach ($fullProductIndexData as $productId => $productIndexData) {
@@ -145,15 +197,19 @@ class Elasticsearch
      * Add prepared Elasticsearch documents to Elasticsearch index
      *
      * @param array $documents
+     * @param int $storeId
      * @return $this
      * @throws \Exception
      */
-    public function addDocs(array $documents)
+    public function addDocs(array $documents, $storeId)
     {
         if (count($documents)) {
             try {
-                $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents);
-                $this->connectionManager->getConnection()->bulkQuery($bulkIndexDocuments);
+                $this->checkIndex($storeId, false);
+                $indexName = $this->getIndexName($storeId);
+                $entityType = $this->clientConfig->getEntityType();
+                $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName, $entityType);
+                $this->client->bulkQuery($bulkIndexDocuments);
             } catch (\Exception $e) {
                 $this->logger->critical($e);
                 throw $e;
@@ -166,17 +222,31 @@ class Elasticsearch
     /**
      * Removes all documents from Elasticsearch index
      *
+     * @param int $storeId
      * @return $this
      * @throws \Exception
      */
-    public function cleanIndex()
+    public function cleanIndex($storeId)
     {
-        $indexName = $this->clientConfig->getIndexName();
-        $entityType = $this->clientConfig->getEntityType();
-        $documentIds = $this->connectionManager->getConnection()->getAllIds($indexName, $entityType);
-        if (count($documentIds) > 0) {
-            $this->deleteDocs($documentIds);
+        $this->checkIndex($storeId);
+        $indexName = $this->getIndexName($storeId);
+        if ($this->client->isEmptyIndex($indexName)) {
+            // use existing index if empty
+            return $this;
         }
+
+        // prepare new index name and increase version
+        $indexPattern = $this->getIndexPattern($storeId);
+        $version = intval(str_replace($indexPattern, '', $indexName));
+        $newIndexName = $indexPattern . ++$version;
+
+        // remove index if already exists
+        if ($this->client->indexExists($newIndexName)) {
+            $this->client->deleteIndex($newIndexName);
+        }
+
+        // prepare new index
+        $this->prepareIndex($storeId, $newIndexName);
 
         return $this;
     }
@@ -185,14 +255,23 @@ class Elasticsearch
      * Delete documents from Elasticsearch index by Ids
      *
      * @param array $documentIds
+     * @param int $storeId
      * @return $this
      * @throws \Exception
      */
-    public function deleteDocs(array $documentIds)
+    public function deleteDocs(array $documentIds, $storeId)
     {
         try {
-            $bulkDeleteDocuments = $this->getDocsArrayInBulkIndexFormat($documentIds, self::BULK_ACTION_DELETE);
-            $this->connectionManager->getConnection()->bulkQuery($bulkDeleteDocuments);
+            $this->checkIndex($storeId, false);
+            $indexName = $this->getIndexName($storeId);
+            $entityType = $this->clientConfig->getEntityType();
+            $bulkDeleteDocuments = $this->getDocsArrayInBulkIndexFormat(
+                $documentIds,
+                $indexName,
+                $entityType,
+                self::BULK_ACTION_DELETE
+            );
+            $this->client->bulkQuery($bulkDeleteDocuments);
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw $e;
@@ -206,12 +285,16 @@ class Elasticsearch
      *
      * @param array $documents
      * @param string $action
+     * @param string $indexName
+     * @param string $entityType
      * @return array
      */
-    protected function getDocsArrayInBulkIndexFormat($documents, $action = self::BULK_ACTION_INDEX)
-    {
-        $indexName = $this->clientConfig->getIndexName();
-        $entityType = $this->clientConfig->getEntityType();
+    protected function getDocsArrayInBulkIndexFormat(
+        $documents,
+        $indexName,
+        $entityType,
+        $action = self::BULK_ACTION_INDEX
+    ) {
         $bulkArray = [
             'index' => $indexName,
             'type' => $entityType,
@@ -235,21 +318,148 @@ class Elasticsearch
     }
 
     /**
-     * Checks whether Elasticsearch index exists. If not - creates one and put mapping.
+     * Checks whether Elasticsearch index and alias exists.
      *
-     * @return void
+     * @param int $storeId
+     * @param bool $checkAlias
+     * @return $this
      */
-    public function checkIndex()
+    protected function checkIndex($storeId, $checkAlias = true)
     {
-        $indexName = $this->clientConfig->getIndexName();
-        $entityType = $this->clientConfig->getEntityType();
-        if (!$this->connectionManager->getConnection()->indexExists($indexName)) {
-            $this->connectionManager->getConnection()->createIndex($indexName);
-            $this->connectionManager->getConnection()->addFieldsMapping(
-                $this->fieldMapper->getAllAttributesTypes(),
-                $indexName,
-                $entityType
-            );
+        // create new index for store
+        $indexName = $this->getIndexName($storeId);
+        if (!$this->client->indexExists($indexName)) {
+            $this->prepareIndex($storeId, $indexName);
         }
+
+        // add index to alias
+        if ($checkAlias) {
+            $namespace = $this->getIndexNamespace();
+            if (!$this->client->existsAlias($namespace, $indexName)) {
+                $this->client->updateAlias($namespace, $indexName);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Update Elasticsearch alias for new index.
+     *
+     * @param int $storeId
+     *
+     * @return $this
+     */
+    public function updateAlias($storeId)
+    {
+        if (!isset($this->preparedIndex[$storeId])) {
+            return $this;
+        }
+
+        $oldIndex = $this->getIndexFromAlias($storeId);
+        if ($oldIndex == $this->preparedIndex[$storeId]) {
+            $oldIndex = '';
+        }
+        $this->client->updateAlias(
+            $this->getIndexNamespace(),
+            $this->preparedIndex[$storeId],
+            $oldIndex
+        );
+
+        // remove obsolete index
+        if ($oldIndex) {
+            $this->client->deleteIndex($oldIndex);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Create new index with mapping.
+     *
+     * @param int $storeId
+     * @param string $indexName
+     *
+     * @return $this
+     */
+    protected function prepareIndex($storeId, $indexName)
+    {
+        $this->indexBuilder->setStoreId($storeId);
+        $this->client->createIndex(
+            $indexName,
+            ['settings' => $this->indexBuilder->build()]
+        );
+        $this->client->addFieldsMapping(
+            $this->fieldMapper->getAllAttributesTypes(),
+            $indexName,
+            $this->clientConfig->getEntityType()
+        );
+        $this->preparedIndex[$storeId] = $indexName;
+        return $this;
+    }
+
+    /**
+     * Get index namespace from config.
+     *
+     * @return string
+     */
+    protected function getIndexNamespace()
+    {
+        return $this->clientConfig->getIndexName();
+    }
+
+    /**
+     * Returns the index name.
+     *
+     * @param int $storeId
+     * @return string
+     */
+    protected function getIndexName($storeId)
+    {
+        if (isset($this->preparedIndex[$storeId])) {
+            return $this->preparedIndex[$storeId];
+        } else {
+            $indexName = $this->getIndexFromAlias($storeId);
+            if (empty($indexName)) {
+                $indexName = $this->getIndexPattern($storeId) . 1;
+            }
+        }
+        return $indexName;
+    }
+
+    /**
+     * Returns index pattern.
+     *
+     * @param $storeId
+     *
+     * @return string
+     */
+    protected function getIndexPattern($storeId)
+    {
+        return $this->getIndexNamespace() . '_' . $storeId . '_v';
+    }
+
+    /**
+     * Returns index for store in alias definition.
+     *
+     * @param $storeId
+     *
+     * @return string
+     */
+    protected function getIndexFromAlias($storeId)
+    {
+        $storeIndex = '';
+        $indexPattern = $this->getIndexPattern($storeId);
+        $namespace = $this->getIndexNamespace();
+        if ($this->client->existsAlias($namespace)) {
+            $alias = $this->client->getAlias($namespace);
+            $indices = array_keys($alias);
+            foreach ($indices as $index) {
+                if (strpos($index, $indexPattern) === 0) {
+                    $storeIndex = $index;
+                    break;
+                }
+            }
+        }
+        return $storeIndex;
     }
 }

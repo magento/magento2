@@ -88,7 +88,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturn('indexName');
-        $this->assertInternalType('string', $this->model->getIndexName());
+        $this->assertEquals('indexName', $this->model->getIndexName(1));
     }
 
     /**

@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
@@ -20,6 +21,11 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @var ProductRepositoryInterface
      */
     protected $productRepository;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryRepository;
 
     /**
      * @var Config
@@ -37,10 +43,12 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         Context $context,
         StoreManagerInterface $storeManager,
         ProductRepositoryInterface $productRepository,
+        CategoryRepositoryInterface $categoryRepository,
         Config $eavConfig,
         $connectionName = null
     ) {
         $this->productRepository = $productRepository;
+        $this->categoryRepository = $categoryRepository;
         $this->eavConfig = $eavConfig;
         parent::__construct($context, $storeManager, $connectionName);
     }
@@ -53,17 +61,24 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      */
     public function getFullProductIndexData(array $productIds)
     {
+        $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         foreach ($productIds as $productId) {
             $product = $this->productRepository->getById($productId);
-            $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
             $productAttributesWithValues = $product->getData();
             foreach ($productAttributesWithValues as $attributeCode => $value) {
+                $attribute = $this->eavConfig->getAttribute(
+                    ProductAttributeInterface::ENTITY_TYPE_CODE,
+                    $attributeCode
+                );
+                $frontendInput = $attribute->getFrontendInput();
                 if (in_array($attributeCode, $attributeCodes)) {
-                    if (is_array($value)) {
-                        $implodedValue = $this->recursiveImplode($value, ',');
-                        $productAttributes[$productId][$attributeCode] =  $implodedValue;
-                    } else {
-                        $productAttributes[$productId][$attributeCode] =  $value;
+                    $productAttributes[$productId][$attributeCode] = $value;
+                    if ($frontendInput == 'select') {
+                        foreach ($attribute->getOptions() as $option) {
+                            if ($option->getValue() == $value) {
+                                $productAttributes[$productId][$attributeCode . '_value'] = $option->getLabel();
+                            }
+                        }
                     }
                 }
             }
@@ -72,21 +87,28 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
     }
 
     /**
-     * @param array $array
-     * @param string $glue
-     * @param bool $includeKeys
-     * @param bool $trimAll
-     * @return string
+     * Prepare full category index data for products.
+     *
+     * @param int $storeId
+     * @param null|array $productIds
+     * @return array
      */
-    private function recursiveImplode(array $array, $glue = ',', $includeKeys = false, $trimAll = true)
+    public function getFullCategoryProductIndexData($storeId = null, $productIds = null)
     {
-        $gluedString = '';
-        array_walk_recursive($array, function ($value, $key) use ($glue, $includeKeys, &$gluedString) {
-            $includeKeys and $gluedString .= $key.$glue;
-            $gluedString .= $value.$glue;
-        });
-        strlen($glue) > 0 and $gluedString = substr($gluedString, 0, -strlen($glue));
-        $trimAll and $gluedString = preg_replace("/(\s)/ixsm", '', $gluedString);
-        return (string) $gluedString;
+        $categoryPositions = $this->getCategoryProductIndexData($storeId, $productIds);
+        $categoryData = [];
+
+        foreach ($categoryPositions as $productId => $positions) {
+            foreach ($positions as $categoryId => $position) {
+                $category = $this->categoryRepository->get($categoryId, $storeId);
+                $categoryName = $category->getName();
+                $categoryData[$productId][] = [
+                    'id' => $categoryId,
+                    'name' => $categoryName,
+                    'position' => $position
+                ];
+            }
+        }
+        return $categoryData;
     }
 }

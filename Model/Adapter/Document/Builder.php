@@ -42,8 +42,11 @@ class Builder
     private function addFieldToDocument($document, $field, $value)
     {
         if (is_array($value)) {
-            foreach ($value as $key => $val) {
-                if (!is_array($val)) {
+            if (empty($value)) {
+                $fields[$field] = $value;
+                $document = array_merge($document, $fields);
+            } else {
+                foreach ($value as $key => $val) {
                     $fields[$field][$key] = $val;
                     $document = array_merge($document, $fields);
                 }

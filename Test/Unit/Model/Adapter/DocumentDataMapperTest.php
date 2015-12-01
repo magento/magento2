@@ -163,12 +163,116 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public static function mapProvider()
     {
         return [
             [
-                ['price'=>'11','created_at'=>'00-00-00 00:00:00'],
+                ['price'=>'11','created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
+                '1',
+                '1',
+                ['1'=>['11','11','11','11']],
+                ['1' => ['2','1']],
+                true
+            ],
+            [
+                [
+                    'tier_price'=>
+                        [[
+                            'price_id'=>'1',
+                            'website_id'=>'1',
+                            'all_groups'=>'1',
+                            'cust_group'=>'1',
+                            'price_qty'=>'1',
+                            'website_price'=>'1',
+                            'price'=>'1'
+                        ]],
+                'created_at'=>'00-00-00 00:00:00'
+                ],
+                '1',
+                '1',
+                ['1'=>['11','11','11','11']],
+                ['1' => ['2','1']],
+                true
+            ],
+            [
+                ['image'=>'11','created_at'=>'00-00-00 00:00:00'],
+                '1',
+                '1',
+                ['1'=>['11','11','11','11']],
+                ['1' => ['2','1']],
+                true
+            ],
+            [
+                [
+                    'image' => '1',
+                    'small_image' => '1',
+                    'thumbnail' => '1',
+                    'swatch_image' => '1',
+                    'media_gallery'=>
+                        [
+                            'images' =>
+                            [[
+                                'file'=>'1',
+                                'media_type'=>'image',
+                                'position'=>'1',
+                                'disabled'=>'1',
+                                'label'=>'1',
+                                'title'=>'1',
+                                'base_image'=>'1',
+                                'small_image'=>'1',
+                                'thumbnail'=>'1',
+                                'swatch_image'=>'1'
+                            ]]
+                        ]
+                        ,
+                    'created_at'=>'00-00-00 00:00:00'
+                ],
+                '1',
+                '1',
+                ['1'=>['11','11','11','11']],
+                ['1' => ['2','1']],
+                true
+            ],
+            [
+                [
+                    'image' => '1',
+                    'small_image' => '1',
+                    'thumbnail' => '1',
+                    'swatch_image' => '1',
+                    'media_gallery'=>
+                        [
+                            'images' =>
+                                [[
+                                    'file'=>'1',
+                                    'media_type'=>'video',
+                                    'position'=>'1',
+                                    'disabled'=>'1',
+                                    'label'=>'1',
+                                    'title'=>'1',
+                                    'base_image'=>'1',
+                                    'small_image'=>'1',
+                                    'thumbnail'=>'1',
+                                    'swatch_image'=>'1',
+                                    'video_title'=>'1',
+                                    'video_url'=>'1',
+                                    'video_description'=>'1',
+                                    'video_metadata'=>'1',
+                                    'video_provider'=>'1'
+                                ]]
+                        ]
+                    ,
+                    'created_at'=>'00-00-00 00:00:00'
+                ],
+                '1',
+                '1',
+                ['1'=>['11','11','11','11']],
+                ['1' => ['2','1']],
+                true
+            ],
+            [
+                ['quantity_and_stock_status'=>'11','created_at'=>'00-00-00 00:00:00'],
                 '1',
                 '1',
                 ['1'=>['11','11','11','11']],

@@ -8,7 +8,6 @@ namespace Magento\Elasticsearch\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 
 /**
@@ -16,7 +15,6 @@ use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
  */
 class Config implements ClientOptionsInterface
 {
-
     /**
      * Elasticsearch Entity type for product
      */
