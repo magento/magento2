@@ -19,8 +19,6 @@ use Magento\Sales\Model\Order\Payment;
  */
 class CardDetailsHandler implements HandlerInterface
 {
-    const CARD_DETAILS = 'creditCard';
-
     const CARD_TYPE = 'cardType';
 
     const CARD_EXP_MONTH = 'expirationMonth';
@@ -56,8 +54,7 @@ class CardDetailsHandler implements HandlerInterface
         $payment = $details->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
-        $card = self::CARD_DETAILS;
-        $creditCard = $transaction->$card;
+        $creditCard = $transaction->creditCard;
         $payment->setCcLast4($creditCard[self::CARD_LAST4]);
         $payment->setCcExpMonth($creditCard[self::CARD_EXP_MONTH]);
         $payment->setCcExpYear($creditCard[self::CARD_EXP_YEAR]);
