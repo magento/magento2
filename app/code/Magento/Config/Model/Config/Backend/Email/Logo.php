@@ -70,7 +70,7 @@ class Logo extends \Magento\Config\Model\Config\Backend\Image
     {
         $value = $this->getValue();
         $deleteFlag = is_array($value) && !empty($value['delete']);
-        $fileTmpName = $this->getTmpFileName($this->getGroupId(), $this->getField());
+        $fileTmpName = $this->getTmpFileName();
 
         if ($this->getOldValue() && ($fileTmpName || $deleteFlag)) {
             $this->_mediaDirectory->delete(self::UPLOAD_DIR . '/' . $this->getOldValue());
