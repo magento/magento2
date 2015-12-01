@@ -65,10 +65,25 @@ class Select extends AbstractElement
             } else {
                 $options = array_values($this->options);
             }
+            $options = $this->convertOptionsValueToString($options);
             $config['options'] = array_values(array_merge_recursive($options, $config['options']));
         }
         $this->setData('config', (array)$config);
         parent::prepare();
+    }
+
+    /**
+     * Convert options value to string
+     *
+     * @param array $options
+     * @return array
+     */
+    protected function convertOptionsValueToString(array $options)
+    {
+        array_walk($options, function (&$value) {
+            $value['value'] = (string)$value['value'];
+        });
+        return $options;
     }
 
     /**
