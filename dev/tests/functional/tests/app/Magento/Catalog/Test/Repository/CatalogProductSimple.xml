@@ -398,7 +398,7 @@
 
         <dataset name="simple_for_salesrule_2">
             <field name="attribute_set_id" xsi:type="array">
-                <item name="dataset" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">custom_attribute_set_with_colors</item>
             </field>
             <field name="name" xsi:type="string">Simple Product %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
