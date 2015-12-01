@@ -107,5 +107,18 @@
     <type name="Magento\Theme\Model\DesignConfigRepository">
         <plugin name="save_design_settings_event_dispatching" type="Magento\Theme\Model\Design\Config\Plugin"/>
     </type>
+    <virtualType name="Magento\Theme\Model\ResourceModel\Design\Config\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">design_config_grid_flat</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Customer</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+             <argument name="collections" xsi:type="array">
+                 <item name="design_config_listing_data_source" xsi:type="string">Magento\Theme\Model\ResourceModel\Design\Config\Grid\Collection</item>
+             </argument>
+         </arguments>
+     </type>
     <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
 </config>
