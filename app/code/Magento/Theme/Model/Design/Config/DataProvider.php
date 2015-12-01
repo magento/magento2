@@ -94,7 +94,7 @@ class DataProvider extends AbstractDataProvider
         $this->scope = $this->request->getParam('scope');
         $this->scopeId = $this->request->getParam('scope_id');
 
-        $this->prepareDefaultValues();
+        $this->prepareMetadata();
     }
 
     /**
@@ -130,16 +130,22 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * Prepare default values
+     * Prepare metadata
      *
      * @return void
      */
-    protected function prepareDefaultValues()
+    protected function prepareMetadata()
     {
+        $showResetButton = true;
+        if ($this->scope == ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $showResetButton = false;
+        }
+
         $metadata = $this->metadataProvider->get();
         if ($this->scope) {
             foreach ($metadata as $key => $data) {
                 $this->meta[$data['fieldset']]['fields'][$key]['default'] = $this->getFallbackValue($data['path']);
+                $this->meta[$data['fieldset']]['fields'][$key]['showResetButton'] = $showResetButton;
             }
         }
     }
