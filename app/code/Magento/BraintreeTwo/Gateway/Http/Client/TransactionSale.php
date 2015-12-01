@@ -59,7 +59,7 @@ class TransactionSale implements ClientInterface
                 $e->getMessage() ?: 'Transaction has been declined, please, try again later.'
             ));
         } finally {
-            $log['response'] = json_decode(json_encode($response['object']), true);
+            $log['response'] = (array) $response['object'];
             $this->logger->debug($log);
         }
 
