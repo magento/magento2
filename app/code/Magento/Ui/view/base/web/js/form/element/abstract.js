@@ -20,6 +20,7 @@ define([
             disabled: false,
             elementTmpl: 'ui/form/element/input',
             tooltipTpl: 'ui/form/element/helper/tooltip',
+            fallbackResetTpl: 'ui/form/element/helper/fallback-reset',
             'input_type': 'input',
             placeholder: '',
             description: '',
@@ -30,6 +31,7 @@ define([
             customScope: '',
             default: '',
             isDifferedFromDefault: false,
+            showFallbackReset: false,
             additionalClasses: {},
             valueUpdate: 'input',
 
@@ -93,7 +95,7 @@ define([
             scope   = this.dataScope;
             name    = scope.split('.').slice(1);
 
-            valueUpdate = this.showResetButton ? 'afterkeydown' : this.valueUpdate;
+            valueUpdate = this.showFallbackReset ? 'afterkeydown' : this.valueUpdate;
 
             _.extend(this, {
                 uid: uid,
