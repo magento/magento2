@@ -140,5 +140,10 @@
                 </argument>
             </field>
         </container>
+        <container name="assign_products_container" >
+            <htmlContent name="html_content">
+                <argument name="block" xsi:type="object">Magento\Catalog\Block\Adminhtml\Category\AssignProducts</argument>
+            </htmlContent>
+        </container>
     </fieldset>
 </form>
