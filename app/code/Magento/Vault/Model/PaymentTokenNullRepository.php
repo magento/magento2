@@ -63,7 +63,7 @@ class PaymentTokenNullRepository implements PaymentTokenRepositoryInterface
      * @inheritdoc
      * @throws \LogicException
      */
-    public function delete(Data\PaymentTokenInterface $entity)
+    public function delete(Data\PaymentTokenInterface $paymentToken)
     {
         throw new \LogicException(sprintf('You must implement this operation. (%s)', __METHOD__));
     }
@@ -72,7 +72,7 @@ class PaymentTokenNullRepository implements PaymentTokenRepositoryInterface
      * @inheritdoc
      * @throws \LogicException
      */
-    public function save(Data\PaymentTokenInterface $entity)
+    public function save(Data\PaymentTokenInterface $paymentToken)
     {
         throw new \LogicException(sprintf('You must implement this operation. (%s)', __METHOD__));
     }

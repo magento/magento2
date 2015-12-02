@@ -108,17 +108,17 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function delete(PaymentTokenInterface $entity)
+    public function delete(PaymentTokenInterface $paymentToken)
     {
-        return $this->getRepository()->delete($entity);
+        return $this->getRepository()->delete($paymentToken);
     }
 
     /**
      * @inheritdoc
      */
-    public function save(PaymentTokenInterface $entity)
+    public function save(PaymentTokenInterface $paymentToken)
     {
-        return $this->getRepository()->save($entity);
+        return $this->getRepository()->save($paymentToken);
     }
 
     /**

@@ -31,16 +31,16 @@ interface PaymentTokenRepositoryInterface
     /**
      * Deletes a specified payment token.
      *
-     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $entity The invoice.
+     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $paymentToken The invoice.
      * @return bool
      */
-    public function delete(Data\PaymentTokenInterface $entity);
+    public function delete(Data\PaymentTokenInterface $paymentToken);
 
     /**
      * Performs persist operations for a specified payment token.
      *
-     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $entity The payment token.
+     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $paymentToken The payment token.
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface Payment token interface.
      */
-    public function save(Data\PaymentTokenInterface $entity);
+    public function save(Data\PaymentTokenInterface $paymentToken);
 }
