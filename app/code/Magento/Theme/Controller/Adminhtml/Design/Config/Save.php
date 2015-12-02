@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
+use Magento\Framework\App\ScopeValidatorInterface as ScopeValidator;
 
 class Save extends Action
 {
@@ -38,10 +39,16 @@ class Save extends Action
     protected $configFactory;
 
     /**
+     * @var ScopeValidator
+     */
+    protected $scopeValidator;
+
+    /**
      * @param DesignConfigRepository $designConfigRepository
      * @param RedirectFactory $redirectFactory
      * @param StoreManager $storeManager
      * @param ConfigFactory $configFactory
+     * @param ScopeValidator $scopeValidator
      * @param Context $context
      */
     public function __construct(
@@ -49,6 +56,7 @@ class Save extends Action
         RedirectFactory $redirectFactory,
         StoreManager $storeManager,
         ConfigFactory $configFactory,
+        ScopeValidator $scopeValidator,
         Context $context
     ) {
         parent::__construct($context);
@@ -56,6 +64,7 @@ class Save extends Action
         $this->storeManager = $storeManager;
         $this->redirectFactory = $redirectFactory;
         $this->configFactory = $configFactory;
+        $this->scopeValidator = $scopeValidator;
     }
 
     /**
@@ -73,13 +82,16 @@ class Save extends Action
      */
     public function execute()
     {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('theme/design_config/index');
         try {
             $scope = $this->getRequest()->getParam('scope');
             $scopeId = $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ? $this->getRequest()->getParam('scope_id')
                 : 0;
-            if (!($scope && $scopeId)) {
-                throw new LocalizedException(__('Scope and scope id is a required params'));
+            if ($this->scopeValidator->isValidScope($scope, $scopeId)) {
+                $this->messageManager->addError(__('Invalid scope or scope id'));
+                return $resultRedirect;
             }
 
             $data = [
@@ -99,7 +111,7 @@ class Save extends Action
         } catch (LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
-                $this->messageManager->addError($message);
+                $this->messageManager->addError(__($message));
             }
         } catch (\Exception $e) {
             $this->messageManager->addException(
@@ -107,11 +119,7 @@ class Save extends Action
                 __('Something went wrong while saving this configuration:') . ' ' . $e->getMessage()
             );
         }
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath(
-            'theme/design_config/edit',
-            ['scope' => '', 'scopeId' => '']
-        );
+
         return $resultRedirect;
     }
 

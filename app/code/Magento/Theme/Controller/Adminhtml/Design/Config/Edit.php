@@ -9,9 +9,9 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ScopeResolverPool;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\ScopeValidatorInterface as ScopeValidator;
 use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
+use Magento\Framework\App\ScopeResolverPool;
 
 class Edit extends Action
 {
@@ -21,6 +21,11 @@ class Edit extends Action
     protected $resultPageFactory;
 
     /**
+     * @var ScopeValidator
+     */
+    protected $scopeValidator;
+
+    /**
      * @var ScopeResolverPool
      */
     protected $scopeResolverPool;
@@ -28,14 +33,17 @@ class Edit extends Action
     /**
      * @param Context $context
      * @param ResultPageFactory $resultPageFactory
+     * @param ScopeValidator $scopeValidator
      * @param ScopeResolverPool $scopeResolverPool
      */
     public function __construct(
         Context $context,
         ResultPageFactory $resultPageFactory,
+        ScopeValidator $scopeValidator,
         ScopeResolverPool $scopeResolverPool
     ) {
         $this->resultPageFactory = $resultPageFactory;
+        $this->scopeValidator = $scopeValidator;
         $this->scopeResolverPool = $scopeResolverPool;
         parent::__construct($context);
     }
@@ -45,7 +53,12 @@ class Edit extends Action
      */
     public function execute()
     {
-        if (!$this->isValidScope()) {
+        if (
+            !$this->scopeValidator->isValidScope(
+                $this->getRequest()->getParam('scope'),
+                $this->getRequest()->getParam('scope_id')
+            )
+        ) {
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('theme/design_config/edit', ['scope' => 'default']);
             return $resultRedirect;
@@ -56,34 +69,6 @@ class Edit extends Action
         $resultPage->setActiveMenu('Magento_Theme::design_config');
         $resultPage->getConfig()->getTitle()->prepend(__($this->getScopeTitle()));
         return $resultPage;
-    }
-
-    /**
-     * Validate the requested scope
-     *
-     * @return bool
-     */
-    protected function isValidScope()
-    {
-        $scope = $this->getRequest()->getParam('scope');
-        $scopeId = $this->getRequest()->getParam('scope_id');
-
-        if ($scope == ScopeConfigInterface::SCOPE_TYPE_DEFAULT && !$scopeId) {
-            return true;
-        }
-
-        try {
-            $scopeResolver = $this->scopeResolverPool->get($scope);
-            if (!$scopeResolver->getScope($scopeId)->getId()) {
-                return false;
-            }
-        } catch (\InvalidArgumentException $e) {
-            return false;
-        } catch (NoSuchEntityException $e) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

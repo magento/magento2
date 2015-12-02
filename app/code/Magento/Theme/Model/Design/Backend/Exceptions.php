@@ -54,6 +54,8 @@ class Exceptions extends ArraySerialized
         $design = clone $this->_design;
         // For value validations
         $exceptions = $this->getValue();
+
+        //TODO Will be removed after MAGETWO-42389 will be done
         if (empty($exceptions)) {
             return false;
         }

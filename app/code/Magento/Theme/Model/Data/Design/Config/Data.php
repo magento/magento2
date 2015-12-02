@@ -70,7 +70,8 @@ class Data extends AbstractExtensibleObject implements DesignConfigDataInterface
     /**
      * @inheritDoc
      */
-    public function setExtensionAttributes(DesignConfigDataExtensionInterface $extensionAttributes) {
+    public function setExtensionAttributes(DesignConfigDataExtensionInterface $extensionAttributes)
+    {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
