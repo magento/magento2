@@ -61,9 +61,9 @@ class Dynamic implements BucketBuilderInterface
     private function getEntityStorage(array $queryResult)
     {
         $ids = [];
-        /*foreach ($queryResult as $document) {
-            $ids[] = $document->id;
-        }*/
+        foreach ($queryResult['hits']['hits'] as $document) {
+            $ids[] = $document['_id'];
+        }
 
         return $this->entityStorageFactory->create($ids);
     }
@@ -77,14 +77,14 @@ class Dynamic implements BucketBuilderInterface
     private function prepareData($data)
     {
         $resultData = [];
-        /*foreach ($data as $value) {
+        foreach ($data as $value) {
             $from = is_numeric($value['from']) ? $value['from'] : '*';
             $to = is_numeric($value['to']) ? $value['to'] : '*';
             unset($value['from'], $value['to']);
 
             $rangeName = "{$from}_{$to}";
             $resultData[$rangeName] = array_merge(['value' => $rangeName], $value);
-        }*/
+        }
 
         return $resultData;
     }
