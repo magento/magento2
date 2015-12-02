@@ -32,7 +32,7 @@ class DataLoader
     protected $collection;
 
     /**
-     * @var
+     * @var array
      */
     protected $metadata = [];
 
