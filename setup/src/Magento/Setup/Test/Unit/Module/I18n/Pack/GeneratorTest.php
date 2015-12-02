@@ -75,7 +75,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->with($dictionaryPath)
             ->will($this->returnValue($this->dictionaryMock));
         $this->packWriterMock->expects($this->once())
-            ->method('write')
+            ->method('writeDictionary')
             ->with($this->dictionaryMock, $localeMock, $mode);
 
         $this->_generator->generate($dictionaryPath, $localeString, $mode, $allowDuplicates);
