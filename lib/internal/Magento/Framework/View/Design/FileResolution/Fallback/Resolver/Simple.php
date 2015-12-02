@@ -91,8 +91,8 @@ class Simple implements Fallback\ResolverInterface
     {
         foreach ($fallbackRule->getPatternDirs($params) as $dir) {
             $path = "{$dir}/{$file}";
-            $read = $this->readFactory->create($dir);
-            if ($read->isExist($file)) {
+            $dirRead = $this->readFactory->create($dir);
+            if ($dirRead->isExist($file)) {
                 return $path;
             }
         }

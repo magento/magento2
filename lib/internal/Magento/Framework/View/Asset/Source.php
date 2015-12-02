@@ -136,9 +136,8 @@ class Source
         $dir = $this->rootDir->getAbsolutePath();
         $path = '';
         if ($sourceFile) {
-            $fileParts = explode('/', $sourceFile);
-            $path = array_pop($fileParts);
-            $dir = implode('/', $fileParts);
+            $path = basename($sourceFile);
+            $dir = dirname($sourceFile);
         }
 
         $chain = $this->createChain($asset, $dir, $path);
@@ -228,6 +227,21 @@ class Source
         $dir = $this->filesystem->getDirectoryRead($context->getBaseDirType());
         Simple::assertFilePathFormat($asset->getFilePath());
         return $dir->getAbsolutePath($asset->getPath());
+    }
+
+    /**
+     * @param \Magento\Framework\View\Asset\LocalInterface $asset
+     *
+     * @return bool|string
+     * @deprecated If custom vendor directory is outside Magento root, then this method will return unexpected result
+     */
+    public function findRelativeSourceFilePath(LocalInterface $asset)
+    {
+        $sourceFile = $this->findSourceFile($asset);
+        if (!$sourceFile) {
+            return false;
+        }
+        return $this->rootDir->getRelativePath($sourceFile);
     }
 
     /**
