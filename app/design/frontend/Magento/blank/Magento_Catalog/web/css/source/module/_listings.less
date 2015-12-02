@@ -38,8 +38,8 @@
             vertical-align: top;
             
             .products-grid & {
-                width: 100%/2;
                 display: inline-block;
+                width: 100%/2;
             }
             
             &:extend(.abs-add-box-sizing all);
@@ -56,8 +56,8 @@
             }
 
             &-info {
-                width: 152px;
                 max-width: 100%;
+                width: 152px;
                 
                 .page-products & {
                     width: 240px;
@@ -102,7 +102,7 @@
                 
                 .price {
                     .lib-font-size(14);
-                    font-weight: bold;
+                    font-weight: @font-weight__bold;
                 }
                 
                 .price-label {
@@ -117,7 +117,7 @@
             .minimal-price {
                 .price {
                     .lib-font-size(14);
-                    font-weight: bold;
+                    font-weight: @font-weight__bold;
                 }
                 
                 .price-wrapper {
@@ -165,6 +165,11 @@
                 white-space: nowrap;
             }
 
+            .price-from,
+            .price-to {
+                margin: 0;
+            }
+
             .tocompare {
                 .lib-icon-font-symbol(
                 @icon-compare-empty
@@ -180,11 +185,11 @@
     .column.main {
         .product {
             &-items {
-                margin-left: -20px;
+                margin-left: -@indent__base;
             }
             
             &-item {
-                padding-left: 20px;
+                padding-left: @indent__base;
             }
         }
         
@@ -197,7 +202,7 @@
 
         .price-including-tax + .price-excluding-tax,
         .weee {
-            margin-top: 5px;
+            margin-top: @indent__xs;
         }
 
         .price-including-tax + .price-excluding-tax,
@@ -280,9 +285,6 @@
                 margin-bottom: @indent__l;
             }
 
-            &-info {
-            }
-
             &-actions {
                 display: block;
 
@@ -297,9 +299,6 @@
                     width: 50%;
                     > * {
                         white-space: normal;
-                    }
-
-                    > .action {
                     }
                 }
                 
