@@ -6,13 +6,12 @@
 namespace Magento\Vault\Model;
 
 use Magento\Payment\Model\MethodInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Payment\Gateway\CommandExecuteInterface;
+use Magento\Payment\Gateway\CommandExecutorInterface;
 
 /**
  * Interface VaultPaymentInterface
  */
-interface VaultPaymentInterface extends MethodInterface, CommandExecuteInterface
+interface VaultPaymentInterface extends MethodInterface, CommandExecutorInterface
 {
     const VAULT_TOKEN_COMMAND = 'vault_token';
 

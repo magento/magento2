@@ -12,7 +12,7 @@ use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Payment\Gateway\CommandExecuteInterface;
+use Magento\Payment\Gateway\CommandExecutorInterface;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
@@ -24,7 +24,7 @@ use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class Adapter implements MethodInterface, CommandExecuteInterface
+final class Adapter implements MethodInterface, CommandExecutorInterface
 {
     /**
      * @var ValueHandlerPoolInterface
