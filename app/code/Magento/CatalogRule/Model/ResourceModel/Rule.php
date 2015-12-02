@@ -137,49 +137,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Add customer group ids and website ids to rule data after load
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     */
-    protected function _afterLoad(AbstractModel $object)
-    {
-        $object->setData('customer_group_ids', (array)$this->getCustomerGroupIds($object->getId()));
-        $object->setData('website_ids', (array)$this->getWebsiteIds($object->getId()));
-
-        return parent::_afterLoad($object);
-    }
-
-    /**
-     * Bind catalog rule to customer group(s) and website(s).
-     * Update products which are matched for rule.
-     *
-     * @param AbstractModel $object
-     * @return $this
-     */
-    protected function _afterSave(AbstractModel $object)
-    {
-        if ($object->hasWebsiteIds()) {
-            $websiteIds = $object->getWebsiteIds();
-            if (!is_array($websiteIds)) {
-                $websiteIds = explode(',', (string)$websiteIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $websiteIds, 'website');
-        }
-
-        if ($object->hasCustomerGroupIds()) {
-            $customerGroupIds = $object->getCustomerGroupIds();
-            if (!is_array($customerGroupIds)) {
-                $customerGroupIds = explode(',', (string)$customerGroupIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $customerGroupIds, 'customer_group');
-        }
-
-        parent::_afterSave($object);
-        return $this;
-    }
-
-    /**
      * @param \Magento\Framework\Model\AbstractModel $rule
      * @return $this
      */
@@ -284,6 +241,24 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         );
 
         return $connection->fetchAll($select);
+    }
+
+    /**
+     * Load an object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param mixed $value
+     * @param string $field field to load by (defaults to model id)
+     * @return $this
+     */
+    public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
+    {
+        $this->entityManager->load('Magento\CatalogRule\Api\Data\RuleInterface', $object, $value);
+
+        $this->unserializeFields($object);
+        $this->_afterLoad($object);
+
+        return $this;
     }
 
     /**
