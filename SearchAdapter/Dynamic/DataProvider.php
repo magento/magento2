@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
-use \Magento\Framework\Search\Dynamic\IntervalFactory;
+use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
 
@@ -21,22 +21,22 @@ class DataProvider implements DataProviderInterface
     /**
      * @var ConnectionManager
      */
-    private $connectionManager;
+    protected $connectionManager;
 
     /**
      * @var FieldMapperInterface
      */
-    private $fieldMapper;
+    protected $fieldMapper;
 
     /**
      * @var Range
      */
-    private $range;
+    protected $range;
 
     /**
      * @var IntervalFactory
      */
-    private $intervalFactory;
+    protected $intervalFactory;
 
     /**
      * @param ConnectionManager $connectionManager
@@ -69,7 +69,6 @@ class DataProvider implements DataProviderInterface
      */
     public function getAggregations(EntityStorage $entityStorage)
     {
-
         return [];
     }
 
@@ -81,7 +80,13 @@ class DataProvider implements DataProviderInterface
         array $dimensions,
         EntityStorage $entityStorage
     ) {
+        $query = [];
         $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
+//        $mergedEntityIds = implode(' ' . Query::QUERY_OPERATOR_OR . ' ', $entityStorage->getSource());
+//        $this->dimensionsBuilder->build($dimensions, $query);
+//        $query->addField($fieldName)
+//            ->createFilterQuery('interval')
+//            ->setQuery('id:(%1%)', [$mergedEntityIds]);
 
         return $this->intervalFactory->create(['query' => $query, 'fieldName' => $fieldName]);
     }
@@ -95,7 +100,39 @@ class DataProvider implements DataProviderInterface
         $range,
         EntityStorage $entityStorage
     ) {
-        return [];
+        $result = [];
+
+//        if (!$entityStorage->getSource()) {
+//            return $result;
+//        }
+//
+//        $query = $this->queryFactory->create();
+//        $query->createFilterQuery('ids')
+//            ->setQuery(
+//                'id:(%1%)',
+//                [
+//                    implode(' ' . Query::QUERY_OPERATOR_OR . ' ', $entityStorage->getSource()),
+//                ]
+//            );
+//        $this->dimensionsBuilder->build($dimensions, $query);
+//
+//        $facetSet = $query->getFacetSet();
+//        /** @var \Solarium\QueryType\Select\Query\Component\Facet\Range $facet */
+//        $facet = $facetSet->createFacetRange($bucket->getName());
+//        $facet->setField($this->fieldMapper->getFieldName($bucket->getField()));
+//        $facet->setStart(0);
+//        $facet->setEnd($this->getAggregations($entityStorage)['max']);
+//        $facet->setGap($range);
+//        $facet->setMinCount(1);
+//
+//        $resultBucket = $this->connectionManager->getConnection()
+//            ->query($query)
+//            ->getFacetSet()
+//            ->getFacet($bucket->getName());
+//        foreach ($resultBucket as $rangeStart => $count) {
+//            $result[$rangeStart / $range + 1] = $count;
+//        }
+        return $result;
     }
 
     /**
