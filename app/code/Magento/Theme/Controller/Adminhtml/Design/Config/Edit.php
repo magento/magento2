@@ -84,10 +84,10 @@ class Edit extends Action
         if ($scope != ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
             $scopeResolver = $this->scopeResolverPool->get($scope);
             $scopeObject = $scopeResolver->getScope($scopeId);
-            return sprintf('%s: %s', ucfirst($scopeObject->getScopeType()), $scopeObject->getName());
+            return __($scopeObject->getName());
         }
 
-        return 'Default';
+        return __('Default');
     }
 
     /**
