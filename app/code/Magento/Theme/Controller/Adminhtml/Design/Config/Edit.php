@@ -60,7 +60,7 @@ class Edit extends Action
             )
         ) {
             $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setPath('theme/design_config/edit', ['scope' => 'default']);
+            $resultRedirect->setPath('theme/design_config/');
             return $resultRedirect;
         }
 
