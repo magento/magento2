@@ -210,4 +210,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Store\Model\Website">
+        <plugin name="themeDesignConfigGridIndexerWebsite" type="Magento\Theme\Model\Indexer\Design\Config\Plugin\Website"/>
+    </type>
+    <type name="Magento\Store\Model\Store">
+        <plugin name="themeDesignConfigGridIndexerStore" type="Magento\Theme\Model\Indexer\Design\Config\Plugin\Store"/>
+    </type>
+    <type name="Magento\Store\Model\Group">
+        <plugin name="themeDesignConfigGridIndexerStoreGroup" type="Magento\Theme\Model\Indexer\Design\Config\Plugin\StoreGroup"/>
+    </type>
 </config>
