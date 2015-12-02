@@ -89,7 +89,7 @@ class Save extends Action
             $scopeId = $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ? $this->getRequest()->getParam('scope_id')
                 : 0;
-            if ($this->scopeValidator->isValidScope($scope, $scopeId)) {
+            if (!$this->scopeValidator->isValidScope($scope, $scopeId)) {
                 $this->messageManager->addError(__('Invalid scope or scope id'));
                 return $resultRedirect;
             }
