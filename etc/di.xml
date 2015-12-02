@@ -63,6 +63,18 @@
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Aggregation\Builder">
+        <arguments>
+            <argument name="dataProviderContainer" xsi:type="array">
+                <item name="catalogsearch_fulltext" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider</item>
+            </argument>
+            <argument name="aggregationContainer" xsi:type="array">
+                <item name="termBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term</item>
+                <item name="rangeBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Range</item>
+                <item name="dynamicBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Dynamic</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Elasticsearch\Model\Adapter\Elasticsearch">
         <arguments>
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
