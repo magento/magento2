@@ -75,11 +75,11 @@ class AggregatedFileCollector implements FileCollectorInterface
         }
         $files = $this->collectorAggregated->getFiles($this->design->getDesignTheme(), $searchPattern);
         foreach ($files as $file) {
-            $fileParts = explode('/', $file->getFileName());
-            $fileName = array_pop($fileParts);
-            $fileDir = implode('/', $fileParts);
-            $read = $this->readFactory->create($fileDir);
-            $result[sprintf('%x', crc32($file->getFileName()))] = $read->readFile($fileName);
+            $fullFileName = $file->getFileName();
+            $fileDir = dirname($fullFileName);
+            $fileName = basename($fullFileName);
+            $dirRead = $this->readFactory->create($fileDir);
+            $result[$fullFileName] = $dirRead->readFile($fileName);
         }
 
         return $result;
