@@ -63,6 +63,11 @@ class Aggregation
                 ];
                 break;
             case BucketInterface::TYPE_DYNAMIC:
+                $searchQuery['body']['aggregations'][$bucket->getName()]= [
+                    'stats' => [
+                        'field' => $this->fieldMapper->getFieldName($bucket->getField()),
+                    ],
+                ];
                 break;
         }
         return $searchQuery;
