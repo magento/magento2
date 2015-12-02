@@ -54,7 +54,7 @@ class Logo extends \Magento\Config\Model\Config\Backend\Image
         if (isset($_FILES['groups'])) {
             $tmpName = $_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value'];
         } else {
-            $tmpName = $this->getValue()['tmp_name'];
+            $tmpName = is_array($this->getValue()) ? $this->getValue()['tmp_name'] : null;
         }
         return $tmpName;
     }
