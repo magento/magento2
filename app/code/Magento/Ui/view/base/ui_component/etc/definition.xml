@@ -356,4 +356,11 @@
             </item>
         </argument>
     </listingToolbar>
+    <htmlContent class="Magento\Ui\Component\HtmlContent">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+            </item>
+        </argument>
+    </htmlContent>
 </components>
