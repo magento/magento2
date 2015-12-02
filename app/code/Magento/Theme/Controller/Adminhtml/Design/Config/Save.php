@@ -83,7 +83,7 @@ class Save extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('theme/design_config/index');
+        $resultRedirect->setPath('theme/design_config/');
         try {
             $scope = $this->getRequest()->getParam('scope');
             $scopeId = $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
@@ -103,6 +103,14 @@ class Save extends Action
                 $this->getRequest()->getParams(),
                 $this->getRequest()->getFiles()->toArray()
             );
+            $data['params'] = array_filter($data['params'], function (&$param) {
+                if (!$param
+                    || (is_array($param) && $param['error'] > 0)
+                ) {
+                    return false;
+                }
+                return true;
+            });
             $designConfigData = $this->configFactory->create($data);
             $this->checkSingleStoreMode($designConfigData);
             $this->designConfigRepository->save($designConfigData);
