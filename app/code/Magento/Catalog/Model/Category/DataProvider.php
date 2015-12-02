@@ -49,6 +49,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
+     * Elements with use config setting
+     *
+     * @var array
+     */
+    protected $elementsWithUseConfigSetting = [
+        'available_sort_by',
+        'default_sort_by',
+        'filter_price_range',
+    ];
+
+    /**
      * @var EavValidationRules
      */
     protected $eavValidationRules;
@@ -102,9 +113,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         /** @var Category $category */
         foreach ($items as $category) {
             $categoryData = $category->getData();
-            if (!$categoryData['available_sort_by']) {
-                $categoryData['use_config']['available_sort_by'] = true;
-            }
+            $categoryData = $this->addUseConfigSettings($categoryData);
             $result['general'] = $categoryData;
             $this->loadedData[$category->getId()] = $result;
         }
@@ -153,5 +162,21 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
         
         return $result;
+    }
+
+    /**
+     * Add use config settings
+     *
+     * @param Type $categoryData
+     * @return array
+     */
+    protected function addUseConfigSettings($categoryData)
+    {
+        foreach ($this->elementsWithUseConfigSetting as $elementsWithUseConfigSetting) {
+            if (!$categoryData[$elementsWithUseConfigSetting]) {
+                $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
+            }
+        }
+        return $categoryData;
     }
 }
