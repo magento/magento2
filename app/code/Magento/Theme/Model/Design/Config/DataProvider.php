@@ -5,9 +5,7 @@
  */
 namespace Magento\Theme\Model\Design\Config;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ScopeFallbackResolverInterface;
+use Magento\Theme\Model\Design\Config\MetadataLoader;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
@@ -20,61 +18,26 @@ class DataProvider extends AbstractDataProvider
     protected $loadedData;
 
     /**
-     * @var MetadataProvider
-     */
-    protected $metadataProvider;
-
-    /**
      * @var Collection
      */
     protected $collection;
 
     /**
-     * @var RequestInterface
+     * @var DataLoader
      */
-    protected $request;
-
+    protected $dataLoader;
     /**
-     * @var ScopeConfigInterface
+     * @var MetadataLoader
      */
-    protected $scopeConfig;
+    private $metadataLoader;
 
-    /**
-     * @var string
-     */
-    protected $scope;
-
-    /**
-     * @var int
-     */
-    protected $scopeId;
-
-    /**
-     * @var ScopeFallbackResolverInterface
-     */
-    protected $scopeFallbackResolver;
-
-    /**
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
-     * @param MetadataProvider $metadataProvider
-     * @param CollectionFactory $configCollectionFactory
-     * @param RequestInterface $request
-     * @param ScopeConfigInterface $scopeConfig
-     * @param ScopeFallbackResolverInterface $scopeFallbackResolver
-     * @param array $meta
-     * @param array $data
-     */
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
-        MetadataProvider $metadataProvider,
+        DataLoader $dataLoader,
+        MetadataLoader $metadataLoader,
         CollectionFactory $configCollectionFactory,
-        RequestInterface $request,
-        ScopeConfigInterface $scopeConfig,
-        ScopeFallbackResolverInterface $scopeFallbackResolver,
         array $meta = [],
         array $data = []
     ) {
@@ -85,16 +48,13 @@ class DataProvider extends AbstractDataProvider
             $meta,
             $data
         );
-        $this->metadataProvider = $metadataProvider;
+        $this->dataLoader = $dataLoader;
+        $this->metadataLoader = $metadataLoader;
+
         $this->collection = $configCollectionFactory->create();
-        $this->request = $request;
-        $this->scopeConfig = $scopeConfig;
-        $this->scopeFallbackResolver = $scopeFallbackResolver;
+        $this->dataLoader->setCollection($this->collection);
 
-        $this->scope = $this->request->getParam('scope');
-        $this->scopeId = $this->request->getParam('scope_id');
-
-        $this->prepareMetadata();
+        $this->meta = array_merge($this->meta, $this->metadataLoader->getData());
     }
 
     /**
@@ -106,63 +66,7 @@ class DataProvider extends AbstractDataProvider
             return $this->loadedData;
         }
 
-        $metadata = $this->metadataProvider->get();
-        array_walk($metadata, function (&$value) {
-            $value = $value['path'];
-        });
-
-        $this->collection->addPathsFilter($metadata);
-        $this->collection->addScopeIdFilter($this->scopeId);
-
-        $metadata = array_flip($metadata);
-
-        $items = $this->collection->getItems();
-        foreach ($items as $item) {
-            /** @var \Magento\Framework\App\Config\Value $item */
-            $this->loadedData[$this->scope][$metadata[$item->getPath()]] = $item->getValue()
-                ? (string)$item->getValue()
-                : $this->getFallbackValue($item->getPath());
-        }
-
-        $this->loadedData[$this->scope]['scope'] = $this->scope;
-        $this->loadedData[$this->scope]['scope_id'] = $this->scopeId;
-
+        $this->loadedData = $this->dataLoader->getData();
         return $this->loadedData;
-    }
-
-    /**
-     * Prepare metadata
-     *
-     * @return void
-     */
-    protected function prepareMetadata()
-    {
-        $showFallbackReset = true;
-        if ($this->scope == ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $showFallbackReset = false;
-        }
-
-        $metadata = $this->metadataProvider->get();
-        if ($this->scope) {
-            foreach ($metadata as $key => $data) {
-                $this->meta[$data['fieldset']]['fields'][$key]['default'] = $this->getFallbackValue($data['path']);
-                $this->meta[$data['fieldset']]['fields'][$key]['showFallbackReset'] = $showFallbackReset;
-            }
-        }
-    }
-
-    /**
-     * Retrieve default value for parent scope
-     *
-     * @param string $path
-     * @return string
-     */
-    protected function getFallbackValue($path)
-    {
-        list($scope, $scopeId) = $this->scopeFallbackResolver->getFallbackScope($this->scope, $this->scopeId);
-        if ($scope) {
-            return (string)$this->scopeConfig->getValue($path, $scope, $scopeId);
-        }
-        return '';
     }
 }

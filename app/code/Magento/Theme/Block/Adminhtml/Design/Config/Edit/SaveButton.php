@@ -7,10 +7,10 @@ namespace Magento\Theme\Block\Adminhtml\Design\Config\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
-class SaveButton extends GenericButton implements ButtonProviderInterface
+class SaveButton implements ButtonProviderInterface
 {
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getButtonData()
     {

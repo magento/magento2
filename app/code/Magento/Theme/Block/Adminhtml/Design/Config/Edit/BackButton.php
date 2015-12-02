@@ -5,12 +5,30 @@
  */
 namespace Magento\Theme\Block\Adminhtml\Design\Config\Edit;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
-class BackButton extends GenericButton implements ButtonProviderInterface
+class BackButton implements ButtonProviderInterface
 {
     /**
-     * @return array
+     * Url Builder
+     *
+     * @var UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
+     * @param Context $context
+     */
+    public function __construct(
+        Context $context
+    ) {
+        $this->urlBuilder = $context->getUrlBuilder();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getButtonData()
     {
@@ -29,6 +47,6 @@ class BackButton extends GenericButton implements ButtonProviderInterface
      */
     public function getBackUrl()
     {
-        return $this->getUrl('*/*/');
+        return $this->urlBuilder->getUrl('*/*/');
     }
 }
