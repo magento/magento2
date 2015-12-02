@@ -5,11 +5,11 @@
  */
 -->
 <div class="admin__field" visible="visible" css="_required: required, _disabled: disabled, _error: error">
-
     <label class="admin__field-label" if="$data.label" attr="for: uid">
         <span text="label"/>
     </label>
-    <div class="admin__field-control">
+
+    <div class="admin__field-control" css="'_with-tooltip': $data.tooltip, '_with-reset': element.showFallbackReset && element.isDifferedFromDefault">
         <render args="elementTmpl" ifnot="hasAddons()"/>
 
         <div class="admin__control-addon" if="hasAddons()">
@@ -18,6 +18,7 @@
             <label class="admin__addon-prefix" if="$data.addbefore" attr="for: uid">
                 <span text="addbefore"/>
             </label>
+
             <label class="admin__addon-suffix" if="$data.addafter" attr="for: uid">
                 <span text="addafter"/>
             </label>
@@ -25,13 +26,11 @@
 
         <render args="tooltipTpl" if="$data.tooltip"/>
 
+        <render args="fallbackResetTpl" if="element.showFallbackReset && element.isDifferedFromDefault"/>
+
         <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
             <span text="notice"/>
         </div>
-
-        <if args="element.showResetButton && element.isDifferedFromDefault">
-            <a class="admin__field-reset-action action-reset" target="_blank" tabindex="0" click="element.restoreToDefault" translate="RESET"/>
-        </if>
 
         <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
     </div>
