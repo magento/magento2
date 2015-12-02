@@ -86,8 +86,6 @@ define([
          */
         onContentLoading: function (isLoading) {
             this.loading(isLoading);
-            opened: true,
-            level: 0
         }
     });
 });

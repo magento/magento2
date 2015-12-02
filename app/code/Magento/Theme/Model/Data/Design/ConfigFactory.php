@@ -70,6 +70,9 @@ class ConfigFactory
             $configDataObject = $this->designConfigDataFactory->create();
             $configDataObject->setPath($metadata['path']);
             $configDataObject->setFieldConfig($metadata);
+            if (!isset($data['params'][$name])) {
+                continue;
+            }
             $configDataObject->setValue($data['params'][$name]);
             $configData[] = $configDataObject;
         }
