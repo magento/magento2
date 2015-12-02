@@ -63,6 +63,20 @@
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
+        <arguments>
+            <argument name="intervals" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Aggregation\Interval</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Search\Dynamic\DataProviderFactory">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Elasticsearch\SearchAdapter\Aggregation\Builder">
         <arguments>
             <argument name="dataProviderContainer" xsi:type="array">
