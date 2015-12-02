@@ -56,6 +56,7 @@ class Data
                     ? $baseImageUrl
                     : (string)$image;
                 $options['images'][$productAttributeId][$attributeValue][$productId] = $imageUrl;
+                $options['index'][$productId][$productAttributeId] = $attributeValue;
             }
         }
 
