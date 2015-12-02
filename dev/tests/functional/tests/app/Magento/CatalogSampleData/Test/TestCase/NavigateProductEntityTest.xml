@@ -13,6 +13,7 @@
             <data name="product/data/sku" xsi:type="string">24-WB07</data>
             <data name="product/data/price/value" xsi:type="string">45</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertImagesAreVisibleOnProductPage" />
         </variation>
         <variation name="NavigateProductsTest2">
             <data name="product/data/url_key" xsi:type="string">sprite-foam-roller</data>
@@ -20,6 +21,7 @@
             <data name="product/data/sku" xsi:type="string">24-WG088</data>
             <data name="product/data/price/value" xsi:type="string">19</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertImagesAreVisibleOnProductPage" />
         </variation>
         <variation name="NavigateProductsTest3">
             <data name="product/data/url_key" xsi:type="string">endurance-watch</data>
@@ -27,6 +29,39 @@
             <data name="product/data/sku" xsi:type="string">24-MG01</data>
             <data name="product/data/price/value" xsi:type="string">49</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertImagesAreVisibleOnProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest4">
+            <data name="product/data/url_key" xsi:type="string">joust-duffle-bag</data>
+            <data name="product/data/name" xsi:type="string">Joust Duffle Bag</data>
+            <data name="product/data/sku" xsi:type="string">24-MB01</data>
+            <data name="product/data/price/value" xsi:type="string">34</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertImagesAreVisibleOnProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest5">
+            <data name="product/data/url_key" xsi:type="string">dual-handle-cardio-ball</data>
+            <data name="product/data/name" xsi:type="string">Dual Handle Cardio Ball</data>
+            <data name="product/data/sku" xsi:type="string">24-UG07</data>
+            <data name="product/data/price/value" xsi:type="string">12</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertImagesAreVisibleOnProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest6">
+            <data name="product/data/url_key" xsi:type="string">clamber-watch</data>
+            <data name="product/data/name" xsi:type="string">Clamber Watch</data>
+            <data name="product/data/sku" xsi:type="string">24-WG03</data>
+            <data name="product/data/price/value" xsi:type="string">54</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertImagesAreVisibleOnProductPage" />
+        </variation>
+        <variation name="NavigateProductsTest7">
+            <data name="product/data/url_key" xsi:type="string">crown-summit-backpack</data>
+            <data name="product/data/name" xsi:type="string">Crown Summit Backpack</data>
+            <data name="product/data/sku" xsi:type="string">24-MB03</data>
+            <data name="product/data/price/value" xsi:type="string">38</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertImagesAreVisibleOnProductPage" />
         </variation>
     </testCase>
 </config>

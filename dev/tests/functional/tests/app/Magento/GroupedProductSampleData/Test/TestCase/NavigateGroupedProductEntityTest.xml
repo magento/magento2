@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\GroupedProductSampleData\Test\TestCase\NavigateGroupedProductEntityTest" summary="Install Magento via Web Interface with Sample Data" ticketId="MAGETWO-43636">
+        <variation name="NavigateProductsTest1">
+            <data name="product/data/url_key" xsi:type="string">set-of-sprite-yoga-straps</data>
+            <data name="product/data/name" xsi:type="string">Set of Sprite Yoga Straps</data>
+            <data name="product/data/sku" xsi:type="string">24-WG085_Group</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertImagesAreVisibleOnProductPage" />
+        </variation>
+    </testCase>
+</config>
