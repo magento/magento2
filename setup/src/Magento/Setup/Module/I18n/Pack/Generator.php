@@ -82,7 +82,7 @@ class Generator
             );
         }
 
-        $this->packWriter->write($dictionary, $locale, $mode);
+        $this->packWriter->writeDictionary($dictionary, $locale, $mode);
     }
 
     /**

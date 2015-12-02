@@ -68,7 +68,15 @@ abstract class AbstractFile implements WriterInterface
     /**
      * {@inheritdoc}
      */
-    public function write(Dictionary $dictionary, Locale $locale, $mode = self::MODE_REPLACE)
+    public function write(Dictionary $dictionary, $packPath, Locale $locale, $mode = self::MODE_REPLACE)
+    {
+        $this->writeDictionary($dictionary, $locale, $mode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeDictionary(Dictionary $dictionary, Locale $locale, $mode = self::MODE_REPLACE)
     {
         $this->_locale = $locale;
         $this->_mode = $mode;
