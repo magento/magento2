@@ -50,9 +50,9 @@
                             <item name="visible" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns.${ $.index }:visible</item>
                         </item>
                     </item>
-                    <item name="observers" xsi:type="array">
-                        <item name="filters" xsi:type="object">Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Filters</item>
-                    </item>
+                </item>
+                <item name="observers" xsi:type="array">
+                    <item name="filters" xsi:type="object">Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Filters</item>
                 </item>
             </argument>
             <filterSelect name="status">
