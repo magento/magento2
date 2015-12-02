@@ -187,22 +187,13 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     public function getRulePrices(\DateTime $date, $websiteId, $customerGroupId, $productIds)
     {
         $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            $this->getTable('catalogrule_product_price'),
-            ['product_id', 'rule_price']
-        )->where(
-            'rule_date = ?',
-            $date->format('Y-m-d')
-        )->where(
-            'website_id = ?',
-            $websiteId
-        )->where(
-            'customer_group_id = ?',
-            $customerGroupId
-        )->where(
-            'product_id IN(?)',
-            $productIds
-        );
+        $select = $connection->select()
+            ->from($this->getTable('catalogrule_product_price'), ['product_id', 'rule_price'])
+            ->where('rule_date = ?', $date->format('Y-m-d'))
+            ->where('website_id = ?', $websiteId)
+            ->where('customer_group_id = ?', $customerGroupId)
+            ->where('product_id IN(?)', $productIds);
+
         return $connection->fetchPairs($select);
     }
 
@@ -221,24 +212,13 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         if (is_string($date)) {
             $date = strtotime($date);
         }
-        $select = $connection->select()->from(
-            $this->getTable('catalogrule_product')
-        )->where(
-            'website_id = ?',
-            $websiteId
-        )->where(
-            'customer_group_id = ?',
-            $customerGroupId
-        )->where(
-            'product_id = ?',
-            $productId
-        )->where(
-            'from_time = 0 or from_time < ?',
-            $date
-        )->where(
-            'to_time = 0 or to_time > ?',
-            $date
-        );
+        $select = $connection->select()
+            ->from($this->getTable('catalogrule_product'))
+            ->where('website_id = ?', $websiteId)
+            ->where('customer_group_id = ?', $customerGroupId)
+            ->where('product_id = ?', $productId)
+            ->where('from_time = 0 or from_time < ?', $date)
+            ->where('to_time = 0 or to_time > ?', $date);
 
         return $connection->fetchAll($select);
     }
