@@ -5,10 +5,8 @@
  */
 namespace Magento\ConfigurableSampleData\Test\TestCase;
 
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
  * @ZephyrId MAGETWO-33559
@@ -25,16 +23,11 @@ class NavigateConfigurableProductEntityTest extends Injectable
     /**
      * Run test navigate products.
      *
-     * @return void
+     * @param ConfigurableProduct $product
+     * @return array
      */
-    public function test(ConfigurableProduct $product, CatalogProductView $productView, BrowserInterface $browser)
+    public function test(ConfigurableProduct $product)
     {
-        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        \PHPUnit_Framework_Assert::assertTrue(
-            $productView->getViewBlock()->isGalleryVisible(),
-            'Gallery for product ' . $product->getName() . ' is not visible.'
-        );
-
         return ['product' => $product];
     }
 }

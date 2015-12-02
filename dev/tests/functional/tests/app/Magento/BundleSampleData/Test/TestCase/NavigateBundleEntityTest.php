@@ -3,16 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\DownloadableSampleData\Test\TestCase;
+namespace Magento\BundleSampleData\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Downloadable\Test\Fixture\DownloadableProduct;
+use Magento\Bundle\Test\Fixture\BundleProduct;
 
 /**
  * @ZephyrId MAGETWO-33559
  * @group Catalog_Sample_Data(MX)
  */
-class NavigateDownloadableProductEntityTest extends Injectable
+class NavigateBundleEntityTest extends Injectable
 {
     /* tags */
     const TEST_TYPE = 'acceptance_test';
@@ -21,12 +21,12 @@ class NavigateDownloadableProductEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Run test navigate products.
+     * Run test navigate products
      *
-     * @param DownloadableProduct $product
+     * @param BundleProduct      $product
      * @return array
      */
-    public function test(DownloadableProduct $product)
+    public function test(BundleProduct $product)
     {
         return ['product' => $product];
     }
