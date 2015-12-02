@@ -97,20 +97,8 @@ class Save extends Action
             $data = [
                 'scope' => $scope,
                 'scopeId' => $scopeId,
-                'params' => [],
+                'params' => $this->getRequestData(),
             ];
-            $data['params'] = array_merge(
-                $this->getRequest()->getParams(),
-                $this->getRequest()->getFiles()->toArray()
-            );
-            $data['params'] = array_filter($data['params'], function (&$param) {
-                if (!$param
-                    || (is_array($param) && $param['error'] > 0)
-                ) {
-                    return false;
-                }
-                return true;
-            });
             $designConfigData = $this->configFactory->create($data);
             $this->checkSingleStoreMode($designConfigData);
             $this->designConfigRepository->save($designConfigData);
@@ -129,6 +117,23 @@ class Save extends Action
         }
 
         return $resultRedirect;
+    }
+
+    /**
+     * Extract data from request
+     *
+     * @return array
+     */
+    protected function getRequestData()
+    {
+        $data = array_merge(
+            $this->getRequest()->getParams(),
+            $this->getRequest()->getFiles()->toArray()
+        );
+        $data = array_filter($data, function ($param) {
+            return !$param || (is_array($param) && $param['error'] > 0) ? false : true;
+        });
+        return $data;
     }
 
     /**
