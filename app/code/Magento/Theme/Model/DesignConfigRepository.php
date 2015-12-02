@@ -114,10 +114,15 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
             }
         }
 
-        $deleteTransaction->delete();
-        $saveTransaction->save();
-        $this->reinitableConfig->reinit();
-        $this->reindexGrid();
+        try {
+            $deleteTransaction->delete();
+            $saveTransaction->save();
+            $this->reinitableConfig->reinit();
+            $this->reindexGrid();
+        } catch (\Exception $e) {
+            $this->reinitableConfig->reinit();
+            throw $e;
+        }
 
         return $designConfig;
     }
