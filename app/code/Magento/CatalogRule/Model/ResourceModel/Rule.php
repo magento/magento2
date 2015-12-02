@@ -244,11 +244,9 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Load an object
-     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param mixed $value
-     * @param string $field field to load by (defaults to model id)
+     * @param string $field
      * @return $this
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)

@@ -32,14 +32,20 @@ class ReadHandler
         $this->metadataPool = $metadataPool;
     }
 
-    public function execute($entityType, $entity)
+    /**
+     * @param string $entityType
+     * @param array $entityData
+     * @return array
+     * @throws \Exception
+     */
+    public function execute($entityType, $entityData)
     {
         $linkField = $this->metadataPool->getMetadata($entityType)->getLinkField();
-        $entityId = $entity[$linkField];
+        $entityId = $entityData[$linkField];
 
-        $entity['customer_group_ids'] = $this->ruleResource->getCustomerGroupIds($entityId);
-        $entity['website_ids'] = $this->ruleResource->getWebsiteIds($entityId);
+        $entityData['customer_group_ids'] = $this->ruleResource->getCustomerGroupIds($entityId);
+        $entityData['website_ids'] = $this->ruleResource->getWebsiteIds($entityId);
 
-        return $entity;
+        return $entityData;
     }
 }
