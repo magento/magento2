@@ -14,7 +14,7 @@ use Magento\Search\Model\SynonymReader as SynReaderModel;
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
 
 /**
- * Synonyms Reader resource model
+ * Synonym Reader resource model
 
  */
 class SynonymReader extends AbstractDb
