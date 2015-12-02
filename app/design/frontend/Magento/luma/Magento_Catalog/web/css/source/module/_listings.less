@@ -28,6 +28,7 @@
     .products {
         margin: @indent__l 0;
     }
+
     .product {
         &-items {
             &:extend(.abs-reset-list all);
@@ -37,8 +38,8 @@
             vertical-align: top;
             
             .products-grid & {
-                width: 100%/2;
                 display: inline-block;
+                width: 100%/2;
             }
             
             &:extend(.abs-add-box-sizing all);
@@ -100,7 +101,7 @@
                 margin: @indent__s 0 @indent__m;
                 
                 .price {
-                    font-weight: bold;
+                    font-weight: @font-weight__bold;
                 }
                 
                 .price-label {
@@ -152,11 +153,11 @@
     .column.main {
         .product {
             &-items {
-                margin-left: -20px;
+                margin-left: -@indent__base;
             }
             
             &-item {
-                padding-left: 20px;
+                padding-left: @indent__base;
             }
         }
     }
@@ -168,7 +169,7 @@
 
         .price-including-tax + .price-excluding-tax,
         .weee {
-            margin-top: 5px;
+            margin-top: @indent__xs;
         }
 
         .price-including-tax + .price-excluding-tax,
