@@ -137,16 +137,16 @@ class DataProvider extends AbstractDataProvider
      */
     protected function prepareMetadata()
     {
-        $showResetButton = true;
+        $showFallbackReset = true;
         if ($this->scope == ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $showResetButton = false;
+            $showFallbackReset = false;
         }
 
         $metadata = $this->metadataProvider->get();
         if ($this->scope) {
             foreach ($metadata as $key => $data) {
                 $this->meta[$data['fieldset']]['fields'][$key]['default'] = $this->getFallbackValue($data['path']);
-                $this->meta[$data['fieldset']]['fields'][$key]['showResetButton'] = $showResetButton;
+                $this->meta[$data['fieldset']]['fields'][$key]['showFallbackReset'] = $showFallbackReset;
             }
         }
     }
