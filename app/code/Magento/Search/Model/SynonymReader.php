@@ -77,11 +77,11 @@ class SynonymReader extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Search\Model\ResourceModel\SynonymsReader');
+        $this->_init('Magento\Search\Model\ResourceModel\SynonymReader');
     }
 
     /**
-     * Load synonyms by use query phrase in context of current store view
+     * Load synonyms by user query phrase in context of current store view
      *
      * @param string $phrase
      * @return $this
