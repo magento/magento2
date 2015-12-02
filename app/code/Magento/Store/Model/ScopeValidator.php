@@ -20,7 +20,8 @@ class ScopeValidator implements ScopeValidatorInterface
     /**
      * @param ScopeResolverPool $scopeResolverPool
      */
-    public function __construct(ScopeResolverPool $scopeResolverPool) {
+    public function __construct(ScopeResolverPool $scopeResolverPool)
+    {
         $this->scopeResolverPool = $scopeResolverPool;
     }
 
