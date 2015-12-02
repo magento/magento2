@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Theme\Model\Indexer\Action;
+namespace Magento\Theme\Model\Indexer\Design;
 
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\FieldsetPool;
