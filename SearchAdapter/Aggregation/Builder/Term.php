@@ -19,16 +19,13 @@ class Term implements BucketBuilderInterface
         array $queryResult,
         DataProviderInterface $dataProvider
     ) {
-        /*$facetSet = $baseQueryResult->getFacetSet();
         $values = [];
-        /** @var \Solarium\QueryType\Select\Result\Facet\Field $backet */
-        /*foreach ($facetSet->getFacet($bucket->getName()) as $name => $count) {
-            $values[$name] = [
-                'value' => $name,
-                'count' => $count,
+        foreach ($queryResult['aggregations'][$bucket->getName()]['buckets'] as $resultBucket) {
+            $values[$resultBucket['key']] = [
+                'value' => $resultBucket['key'],
+                'count' => $resultBucket['doc_count'],
             ];
         }
-        return $values;*/
-        return [];
+        return $values;
     }
 }
