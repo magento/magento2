@@ -350,7 +350,6 @@ define([
                     'filters_modifier': filterData['filters_modifier']
                 }, filterData.filters))
                     .apply();
-                /*filter.set('filters', filterData.filters).apply();*/
             });
         }
     });
