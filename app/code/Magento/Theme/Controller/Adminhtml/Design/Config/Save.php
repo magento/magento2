@@ -131,7 +131,7 @@ class Save extends Action
             $this->getRequest()->getFiles()->toArray()
         );
         $data = array_filter($data, function ($param) {
-            return !$param || (is_array($param) && $param['error'] > 0) ? false : true;
+            return is_array($param) && $param['error'] > 0 ? false : true;
         });
         return $data;
     }
