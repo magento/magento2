@@ -71,4 +71,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="catalogRule" xsi:type="array">
+                    <item name="Magento\CatalogRule\Api\Data\RuleInterface" xsi:type="array">
+                        <item name="read" xsi:type="string">Magento\CatalogRule\Model\ResourceModel\ReadHandler</item>
+                        <item name="create" xsi:type="string">Magento\CatalogRule\Model\ResourceModel\SaveHandler</item>
+                        <item name="update" xsi:type="string">Magento\CatalogRule\Model\ResourceModel\SaveHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
