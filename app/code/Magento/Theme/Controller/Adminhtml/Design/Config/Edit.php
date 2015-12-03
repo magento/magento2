@@ -10,6 +10,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeValidatorInterface as ScopeValidator;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
 use Magento\Framework\App\ScopeResolverPool;
 
@@ -49,16 +50,15 @@ class Edit extends Action
     }
 
     /**
-     * @return ResultPage
+     * @return ResultPage|ResultRedirect
      */
     public function execute()
     {
-        if (
-            !$this->scopeValidator->isValidScope(
-                $this->getRequest()->getParam('scope'),
-                $this->getRequest()->getParam('scope_id')
-            )
-        ) {
+        $scope = $this->getRequest()->getParam('scope');
+        $scopeId = $this->getRequest()->getParam('scope_id');
+
+        if (!$this->scopeValidator->isValidScope($scope, $scopeId)) {
+            /** @var ResultRedirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('theme/design_config/');
             return $resultRedirect;
@@ -87,7 +87,7 @@ class Edit extends Action
             return __($scopeObject->getName());
         }
 
-        return __('Default');
+        return __('Global');
     }
 
     /**
