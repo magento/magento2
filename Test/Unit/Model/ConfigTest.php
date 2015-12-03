@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\Model;
 
 use Magento\Elasticsearch\Model\Config;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
@@ -53,10 +54,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->model = new Config(
-            $this->scopeConfig,
-            $this->encryptor,
-            $this->adapterFactory
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Config',
+            [
+                'scopeConfig' => $this->scopeConfig,
+                'encryptor' => $this->encryptor,
+                'adapterFactory' => $this->adapterFactory
+            ]
         );
     }
 

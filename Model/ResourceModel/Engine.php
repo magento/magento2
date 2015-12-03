@@ -11,8 +11,6 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 /**
  * Search engine resource model
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Engine implements EngineInterface
 {

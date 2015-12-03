@@ -9,6 +9,7 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,10 +49,14 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new Builder(
-            $this->range,
-            $this->term,
-            $this->wildcard
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\Filter\Builder',
+            [
+                'range' => $this->range,
+                'term' => $this->term,
+                'wildcard' => $this->wildcard
+            ]
         );
     }
 

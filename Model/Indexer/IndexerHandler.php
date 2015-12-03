@@ -78,7 +78,6 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deleteIndex($dimensions, \Traversable $documents)
@@ -95,7 +94,6 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cleanIndex($dimensions)
     {

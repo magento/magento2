@@ -6,9 +6,15 @@
 namespace Magento\Elasticsearch\Model\Adapter\Index\Config;
 
 use Magento\Framework\Config\SchemaLocatorInterface;
+use Magento\Framework\Module\Dir;
 
 class SchemaLocator implements SchemaLocatorInterface
 {
+    /**
+     * XML schema for config file.
+     */
+    const CONFIG_FILE_SCHEMA = 'esconfig.xsd';
+
     /**
      * Path to corresponding XSD file with validation rules for merged config
      *
@@ -27,9 +33,9 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $configDir = $moduleReader->getModuleDir('etc', 'Magento_Elasticsearch');
-        $this->schema = $configDir . '/esconfig.xsd';
-        $this->perFileSchema = $configDir . '/esconfig.xsd';
+        $configDir = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Elasticsearch');
+        $this->schema = $configDir . DIRECTORY_SEPARATOR . self::CONFIG_FILE_SCHEMA;
+        $this->perFileSchema = $configDir . DIRECTORY_SEPARATOR . self::CONFIG_FILE_SCHEMA;
     }
 
     /**

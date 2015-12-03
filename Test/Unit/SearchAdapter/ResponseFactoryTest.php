@@ -7,6 +7,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
 use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,10 +50,14 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
-        $this->model = new ResponseFactory(
-            $this->objectManager,
-            $this->documentFactory,
-            $this->aggregationFactory
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\ResponseFactory',
+            [
+                'objectManager' => $this->objectManager,
+                'documentFactory' => $this->documentFactory,
+                'aggregationFactory' => $this->aggregationFactory
+            ]
         );
     }
 

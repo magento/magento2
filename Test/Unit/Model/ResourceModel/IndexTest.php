@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\ResourceModel;
 
 use Magento\Elasticsearch\Model\ResourceModel\Index;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -14,7 +15,7 @@ use Magento\Elasticsearch\Model\ResourceModel\Index;
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\ResourceModel\Index
+     * @var Index
      */
     private $model;
 
@@ -191,13 +192,17 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getTablePrefix')
             ->willReturn('');
 
-        $this->model = new Index(
-            $this->context,
-            $this->storeManager,
-            $this->productRepository,
-            $this->categoryRepository,
-            $this->eavConfig,
-            'default'
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
+            '\Magento\Elasticsearch\Model\ResourceModel\Index',
+            [
+                'context' => $this->context,
+                'storeManager' => $this->storeManager,
+                'productRepository' => $this->productRepository,
+                'categoryRepository' => $this->categoryRepository,
+                'eavConfig' => $this->eavConfig,
+                'connectionName' => 'default'
+            ]
         );
     }
 

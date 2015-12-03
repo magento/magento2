@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
 use Magento\Elasticsearch\SearchAdapter\Adapter;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -75,11 +76,15 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new Adapter(
-            $this->connectionManager,
-            $this->mapper,
-            $this->responseFactory,
-            $this->aggregationBuilder
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\Adapter',
+            [
+                'connectionManager' => $this->connectionManager,
+                'mapper' => $this->mapper,
+                'responseFactory' => $this->responseFactory,
+                'aggregationBuilder' => $this->aggregationBuilder
+            ]
         );
     }
 

@@ -6,7 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Container;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
-use Magento\Elasticsearch\Model\Adapter\Container\Attribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Unit test for Magento\Elasticsearch\Model\Adapter\Container\Attribute
@@ -32,8 +32,12 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attribute = new Attribute(
-            $this->collectionMock
+        $objectManager = new ObjectManagerHelper($this);
+        $this->attribute = $objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Adapter\Container\Attribute',
+            [
+                'attributeCollection' => $this->collectionMock,
+            ]
         );
     }
 

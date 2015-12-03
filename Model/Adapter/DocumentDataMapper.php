@@ -13,6 +13,7 @@ use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContaine
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Api\Data\GroupInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -20,6 +21,26 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class DocumentDataMapper
 {
+    /**
+     * Attribute code for image.
+     */
+    const MEDIA_ROLE_IMAGE = 'image';
+
+    /**
+     * Attribute code for small image.
+     */
+    const MEDIA_ROLE_SMALL_IMAGE = 'small_image';
+
+    /**
+     * Attribute code for thumbnail.
+     */
+    const MEDIA_ROLE_THUMBNAIL = 'thumbnail';
+
+    /**
+     * Attribute code for swatches.
+     */
+    const MEDIA_ROLE_SWATCH_IMAGE = 'swatch_image';
+
     /**
      * Array of \DateTime objects per store
      *
@@ -63,6 +84,13 @@ class DocumentDataMapper
     private $storeManager;
 
     /**
+     * Media gallery roles
+     *
+     * @var array
+     */
+    protected $mediaGalleryRoles;
+
+    /**
      * @param Builder $builder
      * @param AttributeContainer $attributeContainer
      * @param FieldMapper $fieldMapper
@@ -87,6 +115,13 @@ class DocumentDataMapper
         $this->localeDate = $localeDate;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
+
+        $this->mediaGalleryRoles = [
+            self::MEDIA_ROLE_IMAGE,
+            self::MEDIA_ROLE_SMALL_IMAGE,
+            self::MEDIA_ROLE_THUMBNAIL,
+            self::MEDIA_ROLE_SWATCH_IMAGE
+        ];
     }
 
     /**
@@ -111,12 +146,7 @@ class DocumentDataMapper
         array $productCategoryIndexData
     ) {
         $this->builder->addField('store_id', $storeId);
-        $mediaGalleryRoles = [
-            'image' => '',
-            'small_image' => '',
-            'thumbnail' => '',
-            'swatch_image' => ''
-        ];
+        $mediaGalleryRoles = array_fill_keys($this->mediaGalleryRoles, '');
         foreach ($productIndexData as $attributeCode => $value) {
             // Prepare processing attribute info
             if (strpos($attributeCode, '_value') !== false) {
@@ -130,7 +160,7 @@ class DocumentDataMapper
             }
 
             $attribute->setStoreId($storeId);
-            if (strpos($attributeCode, 'image') !== false || strpos($attributeCode, 'thumbnail') !== false) {
+            if (in_array($attributeCode, $this->mediaGalleryRoles)) {
                 $mediaGalleryRoles[$attributeCode] = $value;
             }
             if ($attributeCode === 'media_gallery') {
@@ -189,7 +219,8 @@ class DocumentDataMapper
                     'price_id' => $tierPrice['price_id'],
                     'website_id' => $tierPrice['website_id'],
                     'all_groups' => $tierPrice['all_groups'],
-                    'cust_group' => $tierPrice['cust_group'] == 32000 ? '' : $tierPrice['cust_group'],
+                    'cust_group' => $tierPrice['cust_group'] == GroupInterface::CUST_GROUP_ALL
+                        ? '' : $tierPrice['cust_group'],
                     'price_qty' => $tierPrice['price_qty'],
                     'website_price' => $tierPrice['website_price'],
                     'price' => $tierPrice['price'],
@@ -221,10 +252,10 @@ class DocumentDataMapper
                     'disabled' => $data['disabled'],
                     'label' => $data['label'],
                     'title' => $data['label'],
-                    'base_image' => $data['file'] == $roles['image'] ? '1' : '0',
-                    'small_image' => $data['file'] == $roles['small_image'] ? '1' : '0',
-                    'thumbnail' => $data['file'] == $roles['thumbnail'] ? '1' : '0',
-                    'swatch_image' => $data['file'] == $roles['swatch_image'] ? '1' : '0'
+                    'base_image' => $data['file'] == $roles[self::MEDIA_ROLE_IMAGE] ? '1' : '0',
+                    'small_image' => $data['file'] == $roles[self::MEDIA_ROLE_SMALL_IMAGE] ? '1' : '0',
+                    'thumbnail' => $data['file'] == $roles[self::MEDIA_ROLE_THUMBNAIL] ? '1' : '0',
+                    'swatch_image' => $data['file'] == $roles[self::MEDIA_ROLE_SWATCH_IMAGE] ? '1' : '0'
                 ];
                 if ($data['media_type'] !== 'image') {
                     $video = [

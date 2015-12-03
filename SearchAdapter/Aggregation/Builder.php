@@ -38,10 +38,8 @@ class Builder
      * @param array $queryResult
      * @return array
      */
-    public function build(
-        RequestInterface $request,
-        array $queryResult
-    ) {
+    public function build(RequestInterface $request, array $queryResult)
+    {
         $aggregations = [];
         $buckets = $request->getAggregation();
         $dataProvider = $this->dataProviderContainer[$request->getIndex()];

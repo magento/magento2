@@ -18,7 +18,7 @@ class EsConfig extends Data implements EsConfigInterface
     public function __construct(
         Reader $reader,
         CacheInterface $cache,
-        $cacheId = 'elasticsearch_index_config'
+        $cacheId
     ) {
         parent::__construct($reader, $cache, $cacheId);
     }

@@ -27,6 +27,8 @@ class Builder implements BuilderInterface
     protected $esConfig;
 
     /**
+     * Current store ID.
+     *
      * @var int
      */
     protected $storeId;

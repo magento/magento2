@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Aggregation;
 
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +32,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->model = new Builder();
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject('\Magento\Elasticsearch\SearchAdapter\Aggregation\Builder');
     }
 
     /**

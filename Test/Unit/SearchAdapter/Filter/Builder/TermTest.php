@@ -7,6 +7,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Filter\Builder;
 
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @see \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term
@@ -47,8 +48,12 @@ class TermTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->model = new Term(
-            $this->fieldMapper
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term',
+            [
+                'fieldMapper' => $this->fieldMapper
+            ]
         );
     }
 

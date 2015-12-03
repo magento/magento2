@@ -7,7 +7,6 @@ namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
-use Magento\Framework\Search\Request\Query\Match as MatchQuery;
 use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
 
 class Match implements QueryInterface
@@ -25,21 +24,16 @@ class Match implements QueryInterface
     /**
      * @param FieldMapperInterface $fieldMapper
      */
-    public function __construct(
-        FieldMapperInterface $fieldMapper
-    ) {
+    public function __construct(FieldMapperInterface $fieldMapper)
+    {
         $this->fieldMapper = $fieldMapper;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function build(
-        array $selectQuery,
-        RequestQueryInterface $requestQuery,
-        $conditionType
-    ) {
-        /** @var $query MatchQuery */
+    public function build(array $selectQuery, RequestQueryInterface $requestQuery, $conditionType)
+    {
         $queryValue = $this->prepareQuery($requestQuery->getValue(), $conditionType);
         $queries = $this->buildQueries($requestQuery->getMatches(), $queryValue);
         foreach ($queries as $query) {
