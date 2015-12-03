@@ -125,4 +125,12 @@ class Queue implements QueueInterface
             $this->queueManagement->changeStatus([$relationId], QueueManagement::MESSAGE_STATUS_ERROR);
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function push(EnvelopeInterface $envelope, $data)
+    {
+        //todo Implement logic here
+    }
 }

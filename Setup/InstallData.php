@@ -8,7 +8,7 @@ namespace Magento\MysqlMq\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\Framework\MessageQueue\Config\Converter as MessageQueueConfigConverter;
 
 /**
@@ -37,7 +37,7 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        $binds = $this->messageQueueConfig->get()[MessageQueueConfigConverter::BINDS];
+        $binds = $this->messageQueueConfig->getBinds();
         $queues = [];
         foreach ($binds as $bind) {
             $queues[] = $bind[MessageQueueConfigConverter::BIND_QUEUE];
