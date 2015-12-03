@@ -29,7 +29,7 @@
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
         </variation>
     </testCase>
 </config>

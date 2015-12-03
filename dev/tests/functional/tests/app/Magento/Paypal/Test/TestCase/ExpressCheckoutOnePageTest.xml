@@ -31,7 +31,7 @@
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
         </variation>
         <variation name="ExpressCheckoutOnePageTestVariation2" summary="Check Out as a Guest using Payflow Link - PayPal Express Checkout Payflow Edition and Offline Shipping" ticketId="MAGETWO-14359">
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
@@ -58,7 +58,7 @@
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
         </variation>
         <variation name="ExpressCheckoutOnePageTestVariation3" summary="Check Out as Guest User using PayPal Express and Offline Shipping Method" ticketId="MAGETWO-12996">
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
@@ -85,7 +85,7 @@
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
         </variation>
     </testCase>
 </config>
