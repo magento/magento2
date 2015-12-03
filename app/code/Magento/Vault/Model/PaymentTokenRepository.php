@@ -114,13 +114,13 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     /**
      * Deletes a specified payment token.
      *
-     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $entity The invoice.
+     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $paymentToken The invoice.
      * @return bool
      */
-    public function delete(Data\PaymentTokenInterface $entity)
+    public function delete(Data\PaymentTokenInterface $paymentToken)
     {
         /** @var PaymentToken $tokenModel */
-        $tokenModel = $this->getById($entity->getEntityId());
+        $tokenModel = $this->getById($paymentToken->getEntityId());
         if (empty($tokenModel->getPublicHash())) {
             return false;
         }
@@ -137,11 +137,11 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
      * @param \Magento\Vault\Api\Data\PaymentTokenInterface $entity The payment token.
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface Saved payment token data.
      */
-    public function save(Data\PaymentTokenInterface $entity)
+    public function save(Data\PaymentTokenInterface $paymentToken)
     {
-        /** @var PaymentToken $entity */
-        $this->resourceModel->save($entity);
-        return $entity;
+        /** @var PaymentToken $paymentToken */
+        $this->resourceModel->save($paymentToken);
+        return $paymentToken;
     }
 
     /**
