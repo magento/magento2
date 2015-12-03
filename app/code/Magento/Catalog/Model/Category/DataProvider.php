@@ -65,6 +65,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $eavValidationRules;
 
     /**
+     * @var \Magento\Framework\Registry
+     */
+    protected $registry;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -72,6 +77,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $requestFieldName
      * @param EavValidationRules $eavValidationRules
      * @param CategoryCollectionFactory $categoryCollectionFactory
+     * @param \Magento\Framework\Registry $registry,
      * @param Config $eavConfig
      * @param FilterPool $filterPool
      * @param array $meta
@@ -83,6 +89,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $requestFieldName,
         EavValidationRules $eavValidationRules,
         CategoryCollectionFactory $categoryCollectionFactory,
+        \Magento\Framework\Registry $registry,
         Config $eavConfig,
         FilterPool $filterPool,
         array $meta = [],
@@ -94,6 +101,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
+        $this->registry = $registry;
         $this->meta['general']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('catalog_category')
         );
@@ -109,15 +117,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-        $items = $this->collection->getItems();
-        /** @var Category $category */
-        foreach ($items as $category) {
+        $category = $this->getCurrentCategory();
+        if (!$category) {
+            return [];
+        } else {
             $categoryData = $category->getData();
             $categoryData = $this->addUseConfigSettings($categoryData);
             $result['general'] = $categoryData;
             $this->loadedData[$category->getId()] = $result;
         }
-
         return $this->loadedData;
     }
 
@@ -128,7 +136,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getAttributesMeta(Type $entityType)
+    public function getAttributesMeta(Type $entityType)
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
@@ -181,5 +189,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
         }
         return $categoryData;
+    }
+
+    /**
+     * Get current category
+     *
+     * @return mixed
+     */
+    public function getCurrentCategory()
+    {
+        return $this->registry->registry('category');
     }
 }
