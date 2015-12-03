@@ -5,16 +5,17 @@
  */
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Config\Model\Config\Loader as ConfigLoader;
 use Magento\Theme\Model\Data\Design\Config;
+use Magento\Theme\Model\Design\Config\ValueChecker;
 use Magento\Theme\Model\Design\Config\ValueCheckerFactory;
 use Magento\Theme\Model\Design\BackendModelFactory;
 
@@ -35,9 +36,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
     /** @var BackendModelFactory */
     protected $backendModelFactory;
 
-    /**
-     * @var IndexerRegistry
-     */
+    /** @var IndexerRegistry */
     protected $indexerRegistry;
 
     /**
@@ -91,15 +90,15 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
         );
 
         foreach ($fieldsData as $fieldData) {
-            /** @var \Magento\Framework\App\Config\ValueInterface $backendModel */
+            /** @var ValueInterface $backendModel */
             $backendModel = $this->backendModelFactory->create([
-                    'value' => $fieldData->getValue(),
-                    'scope' => $designConfig->getScope(),
-                    'scopeId' => $designConfig->getScopeId(),
-                    'config' => $fieldData->getFieldConfig(),
-                    'extendedConfig' => $extendedConfig
+                'value' => $fieldData->getValue(),
+                'scope' => $designConfig->getScope(),
+                'scopeId' => $designConfig->getScopeId(),
+                'config' => $fieldData->getFieldConfig(),
+                'extendedConfig' => $extendedConfig
             ]);
-            /** @var \Magento\Theme\Model\Design\Config\ValueChecker $valueChecker */
+            /** @var ValueChecker $valueChecker */
             $valueChecker = $this->valueCheckerFactory->create([
                 'value' => $fieldData->getValue(),
                 'scope' => $designConfig->getScope(),
