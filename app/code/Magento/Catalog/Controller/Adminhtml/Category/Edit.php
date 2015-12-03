@@ -107,7 +107,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
             }
 
             $eventResponse = new \Magento\Framework\DataObject([
-                'content' => $resultPage->getLayout()->getBlock('category.edit')->getFormHtml()
+                'content' => $resultPage->getLayout()->getUiComponent('category_form')->getFormHtml()
                     . $resultPage->getLayout()->getBlock('category.tree')
                         ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
                 'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),
