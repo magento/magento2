@@ -87,7 +87,7 @@ class Edit extends Action
             return __($scopeObject->getName());
         }
 
-        return __('Default');
+        return __('Global');
     }
 
     /**
