@@ -102,6 +102,7 @@ class Context implements ContextInterface
      * @param UiComponentFactory $uiComponentFactory
      * @param DataProviderInterface|null $dataProvider
      * @param null $namespace
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         PageLayoutInterface $pageLayout,

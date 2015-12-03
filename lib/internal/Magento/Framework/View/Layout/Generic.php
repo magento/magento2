@@ -196,7 +196,7 @@ class Generic implements LayoutInterface
     /**
      * Get config by name
      *
-     * @param $name
+     * @param string $name
      * @return mixed
      */
     protected function getConfig($name)
