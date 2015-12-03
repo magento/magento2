@@ -189,7 +189,8 @@ class WordsFinder
             if ($component) {
                 $componentType = $component[0]->xpath('@type')[0];
                 $componentName = $component[0]->xpath('@name')[0];
-                $path = $this->componentRegistrar->getPath((string)$componentType, (string)$componentName) . '/' . (string)$path[0];
+                $path = $this->componentRegistrar->getPath((string)$componentType, (string)$componentName)
+                    . '/' . (string)$path[0];
             } else {
                 $path = $this->_baseDir . '/' . (string)$path[0];
             }
