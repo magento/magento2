@@ -16,7 +16,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Elasticsearch adapter
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Elasticsearch
 {
@@ -226,7 +225,6 @@ class Elasticsearch
      *
      * @param int $storeId
      * @return $this
-     * @throws \Exception
      */
     public function cleanIndex($storeId)
     {

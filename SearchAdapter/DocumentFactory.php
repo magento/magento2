@@ -31,10 +31,8 @@ class DocumentFactory
      * @param ObjectManagerInterface $objectManager
      * @param EntityMetadata $entityMetadata
      */
-    public function __construct(
-        ObjectManagerInterface $objectManager,
-        EntityMetadata $entityMetadata
-    ) {
+    public function __construct(ObjectManagerInterface $objectManager, EntityMetadata $entityMetadata)
+    {
         $this->objectManager = $objectManager;
         $this->entityMetadata = $entityMetadata;
     }
@@ -58,6 +56,13 @@ class DocumentFactory
                 $fields['score'] = new DocumentField('score', $value);
             }
         }
-        return new Document($documentId, $fields);
+
+        return $this->objectManager->create(
+            'Magento\Framework\Search\Document',
+            [
+                'documentId' => $documentId,
+                'documentFields' => $fields
+            ]
+        );
     }
 }
