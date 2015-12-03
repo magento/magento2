@@ -94,7 +94,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function initResultPage()
     {
@@ -177,7 +177,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $scope = 'default';
         $scopeId = 0;
-        $scopeName = 'Default';
+        $scopeName = 'Global';
 
         $this->request->expects($this->exactly(4))
             ->method('getParam')
