@@ -6,7 +6,7 @@
 
 namespace Magento\Amqp\Model;
 
-use Magento\Framework\MessageQueue\Config\Data as QueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 
 /**
@@ -75,30 +75,27 @@ class Topology
      */
     public function install()
     {
-        $queueConfig = $this->getQueueConfigData();
-        if (isset($queueConfig[QueueConfigConverter::BINDS])) {
-            $availableQueues = $this->getQueuesList(self::AMQP_CONNECTION);
-            $availableExchanges = $this->getExchangesList(self::AMQP_CONNECTION);
-
-            foreach ($queueConfig[QueueConfigConverter::BINDS] as $bind) {
-                $queueName = $bind[QueueConfigConverter::BIND_QUEUE];
-                $exchangeName = $bind[QueueConfigConverter::BIND_EXCHANGE];
-                $topicName = $bind[QueueConfigConverter::BIND_TOPIC];
-                if (in_array($queueName, $availableQueues) && in_array($exchangeName, $availableExchanges)) {
-                    try {
-                        $this->declareQueue($queueName);
-                        $this->declareExchange($exchangeName);
-                        $this->bindQueue($queueName, $exchangeName, $topicName);
-                    } catch (\PhpAmqpLib\Exception\AMQPExceptionInterface $e) {
-                        $this->logger->error(
-                            sprintf(
-                                'There is a problem with creating or binding queue "%s" and an exchange "%s". Error:',
-                                $queueName,
-                                $exchangeName,
-                                $e->getTraceAsString()
-                            )
-                        );
-                    }
+        $availableQueues = $this->getQueuesList(self::AMQP_CONNECTION);
+        $availableExchanges = $this->getExchangesList(self::AMQP_CONNECTION);
+        foreach ($this->queueConfig->getBinds() as $bind) {
+            $queueName = $bind[QueueConfigConverter::BIND_QUEUE];
+            $exchangeName = $bind[QueueConfigConverter::BIND_EXCHANGE];
+            $topicName = $bind[QueueConfigConverter::BIND_TOPIC];
+            if (in_array($queueName, $availableQueues) && in_array($exchangeName, $availableExchanges)) {
+                try {
+                    $this->declareQueue($queueName);
+                    $this->declareCallbackQueue($topicName);
+                    $this->declareExchange($exchangeName);
+                    $this->bindQueue($queueName, $exchangeName, $topicName);
+                } catch (\PhpAmqpLib\Exception\AMQPExceptionInterface $e) {
+                    $this->logger->error(
+                        sprintf(
+                            'There is a problem with creating or binding queue "%s" and an exchange "%s". Error:',
+                            $queueName,
+                            $exchangeName,
+                            $e->getTraceAsString()
+                        )
+                    );
                 }
             }
         }
@@ -113,6 +110,32 @@ class Topology
     private function declareQueue($queueName)
     {
         $this->getChannel()->queue_declare($queueName, false, self::IS_DURABLE, false, false);
+    }
+
+    /**
+     * Declare Amqp Queue for Callback
+     *
+     * @param string $topicName
+     * @return void
+     */
+    private function declareCallbackQueue($topicName)
+    {
+        if ($this->isSynchronousModeTopic($topicName)) {
+            $callbackQueueName = $this->queueConfig->getResponseQueueName($topicName);
+            $this->declareQueue($callbackQueueName);
+        }
+    }
+
+    /**
+     * Check whether the topic is in synchronous mode
+     *
+     * @param $topicName
+     * @return bool
+     */
+    private function isSynchronousModeTopic($topicName)
+    {
+        $topic = $this->queueConfig->getTopic($topicName);
+        return $topic[\Magento\Framework\Communication\ConfigInterface::TOPIC_IS_SYNCHRONOUS];
     }
 
     /**
@@ -158,15 +181,12 @@ class Topology
     private function getQueuesList($connection)
     {
         $queues = [];
-        $queueConfig = $this->getQueueConfigData();
-        if (isset($queueConfig[QueueConfigConverter::CONSUMERS])) {
-            foreach ($queueConfig[QueueConfigConverter::CONSUMERS] as $consumer) {
-                if ($consumer[QueueConfigConverter::CONSUMER_CONNECTION] === $connection) {
-                    $queues[] = $consumer[QueueConfigConverter::CONSUMER_QUEUE];
-                }
+        foreach ($this->queueConfig->getConsumers() as $consumer) {
+            if ($consumer[QueueConfigConverter::CONSUMER_CONNECTION] === $connection) {
+                $queues[] = $consumer[QueueConfigConverter::CONSUMER_QUEUE];
             }
-            $queues = array_unique($queues);
         }
+        $queues = array_unique($queues);
         return $queues;
     }
 
@@ -179,28 +199,13 @@ class Topology
     private function getExchangesList($connection)
     {
         $exchanges = [];
-        $queueConfig = $this->getQueueConfigData();
-        if (isset($queueConfig[QueueConfigConverter::PUBLISHERS])) {
-            foreach ($queueConfig[QueueConfigConverter::PUBLISHERS] as $consumer) {
-                if ($consumer[QueueConfigConverter::PUBLISHER_CONNECTION] === $connection) {
-                    $exchanges[] = $consumer[QueueConfigConverter::PUBLISHER_EXCHANGE];
-                }
+        $queueConfig = $this->queueConfig->getPublishers();
+        foreach ($queueConfig as $consumer) {
+            if ($consumer[QueueConfigConverter::PUBLISHER_CONNECTION] === $connection) {
+                $exchanges[] = $consumer[QueueConfigConverter::PUBLISHER_EXCHANGE];
             }
-            $exchanges = array_unique($exchanges);
         }
+        $exchanges = array_unique($exchanges);
         return $exchanges;
-    }
-
-    /**
-     * Returns the queue configuration.
-     *
-     * @return array
-     */
-    private function getQueueConfigData()
-    {
-        if ($this->queueConfigData == null) {
-            $this->queueConfigData = $this->queueConfig->get();
-        }
-        return $this->queueConfigData;
     }
 }

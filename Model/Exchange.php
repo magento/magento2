@@ -7,7 +7,7 @@ namespace Magento\Amqp\Model;
 
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\ExchangeInterface;
-use Magento\Framework\MessageQueue\Config\Data as QueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Phrase;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -25,6 +25,7 @@ class Exchange implements ExchangeInterface
 
     /**
      * Exchange constructor.
+     *
      * @param Config $amqpConfig
      * @param QueueConfig $queueConfig
      */
@@ -41,11 +42,40 @@ class Exchange implements ExchangeInterface
     {
         $channel = $this->amqpConfig->getChannel();
         $exchange = $this->queueConfig->getExchangeByTopic($topic);
-
+        $correlationId = $envelope->getProperties()['correlation_id'];
+        $responseBody = null;
+        /** @var AMQPMessage $response */
+        $callback = function ($response) use ($correlationId, &$responseBody, $channel) {
+            if ($response->get('correlation_id') == $correlationId) {
+                $responseBody = $response->body;
+                $channel->basic_ack($response->delivery_info['delivery_tag']);
+            }
+        };
+        if ($envelope->getProperties()['reply_to']) {
+            $replyTo = $envelope->getProperties()['reply_to'];
+        } else {
+            $replyTo = to_snake_case($topic) . '.response';
+        }
+        $channel->basic_consume(
+            $replyTo,
+            '',
+            false,
+            false,
+            false,
+            false,
+            $callback
+        );
         $msg = new AMQPMessage(
             $envelope->getBody(),
-            ['delivery_mode' => 2]
+            $envelope->getProperties()
         );
         $channel->basic_publish($msg, $exchange, $topic);
+
+        // TODO: add ability to timeout
+        while ($responseBody === null) {
+            $channel->wait();
+        }
+        $channel->close();
+        return $responseBody;
     }
 }

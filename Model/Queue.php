@@ -144,4 +144,20 @@ class Queue implements QueueInterface
         $channel->basic_reject($properties['delivery_tag'], true);
         // @codingStandardsIgnoreEnd
     }
+
+    /**
+     * (@inheritdoc)
+     */
+    public function push(EnvelopeInterface $envelope, $data)
+    {
+        $messageProperties = $envelope->getProperties();
+        $msg = new AMQPMessage(
+            $data,
+            [
+                'correlation_id' => $messageProperties['correlation_id'],
+                'delivery_mode' => 2
+            ]
+        );
+        $this->amqpConfig->getChannel()->basic_publish($msg, '', $this->queueName);
+    }
 }
