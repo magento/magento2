@@ -22,7 +22,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
              */
             function ($path) {
                 $this->assertFileNotExists(
-                    \Magento\Framework\App\Utility\Files::init()->getPathToSource() . '/' . $path
+                    BP . '/' . $path
                 );
             },
             $this->relocationsDataProvider()
@@ -58,19 +58,22 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testObsoleteDirectories()
     {
-        $area = '*';
-        $theme = '*';
-        $root = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
-        $dirs = glob("{$root}/app/design/{$area}/{$theme}/template", GLOB_ONLYDIR);
+        $componentRegistrar = new ComponentRegistrar();
+        $dirs = [];
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $path) {
+            $dirs = array_merge($dirs, glob($path . '/template', GLOB_ONLYDIR));
+        }
         $msg = [];
         if ($dirs) {
             $msg[] = 'Theme "template" directories are obsolete. Relocate files as follows:';
             foreach ($dirs as $dir) {
-                $msg[] = str_replace($root, '', "{$dir} => " . realpath($dir . '/..') . '/Namespace_Module/*');
+                $msg[] = "{$dir} => " . realpath($dir . '/..') . '/Namespace_Module/*';
             }
         }
-
-        $dirs = glob("{$root}/app/design/{$area}/{$theme}/layout", GLOB_ONLYDIR);
+        $dirs = [];
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $path) {
+            $dirs = array_merge($dirs, glob($path . '/layout', GLOB_ONLYDIR));
+        }
         if ($dirs) {
             $msg[] = 'Theme "layout" directories are obsolete. Relocate layout files into the root of theme directory.';
             $msg = array_merge($msg, $dirs);
