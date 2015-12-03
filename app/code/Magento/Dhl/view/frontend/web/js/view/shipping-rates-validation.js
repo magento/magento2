@@ -9,8 +9,8 @@ define(
         'uiComponent',
         'Magento_Checkout/js/model/shipping-rates-validator',
         'Magento_Checkout/js/model/shipping-rates-validation-rules',
-        '../model/shipping-rates-validator',
-        '../model/shipping-rates-validation-rules'
+        'Magento_Dhl/js/model/shipping-rates-validator',
+        'Magento_Dhl/js/model/shipping-rates-validation-rules'
     ],
     function (
         Component,
@@ -19,7 +19,8 @@ define(
         dhlShippingRatesValidator,
         dhlShippingRatesValidationRules
     ) {
-        "use strict";
+        'use strict';
+
         defaultShippingRatesValidator.registerValidator('dhl', dhlShippingRatesValidator);
         defaultShippingRatesValidationRules.registerRules('dhl', dhlShippingRatesValidationRules);
         return Component;
