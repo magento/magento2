@@ -161,6 +161,27 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Layout\Generic">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+                    <item name="componentName" xsi:type="string">html_content</item>
+                    <item name="panelComponentName" xsi:type="string">fieldset</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Component\Layout\Tabs">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+                    <item name="componentName" xsi:type="string">html_content</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="arrayArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\Framework\Data\Argument\Interpreter\ArrayType</argument>

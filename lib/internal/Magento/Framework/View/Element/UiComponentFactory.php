@@ -18,6 +18,8 @@ use Magento\Framework\View\Element\UiComponent\ContextFactory;
  */
 class UiComponentFactory extends DataObject
 {
+    const CHILDREN_FROM_META = 'childrenFromMeta';
+
     /**
      * Object manager
      *
@@ -162,6 +164,7 @@ class UiComponentFactory extends DataObject
             }
             $components = array_filter($components);
             $componentArguments['components'] = $components;
+            $componentArguments['data'][self::CHILDREN_FROM_META] = true;
 
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create(
@@ -171,15 +174,69 @@ class UiComponentFactory extends DataObject
 
             return $component;
         } else {
-            $defaultData = $this->componentManager->createRawComponentData($name);
-            list($className, $componentArguments) = $this->argumentsResolver($identifier, $defaultData);
+            $rawComponentData = $this->componentManager->createRawComponentData($name);
+            list($className, $componentArguments) = $this->argumentsResolver($identifier, $rawComponentData);
+            $processedArguments = array_replace_recursive($componentArguments, $arguments);
+
+            if (isset($processedArguments['data']['config']['children'])) {
+                $components = [];
+                $bundleChildren = $this->getBundleChildren($processedArguments['data']['config']['children']);
+                foreach ($bundleChildren as $childrenIdentifier => $childrenData) {
+                    $children = $this->createChildComponent(
+                        $childrenData,
+                        $processedArguments['context'],
+                        $childrenIdentifier
+                    );
+                    $components[$childrenIdentifier] = $children;
+                }
+                $components = array_filter($components);
+                $processedArguments['components'] = $components;
+            }
+
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create(
                 $className,
-                array_replace_recursive($componentArguments, $arguments)
+                $processedArguments
             );
 
             return $component;
         }
+    }
+
+    /**
+     * Get bundle children
+     *
+     * @param array $children
+     * @return array
+     * @throws LocalizedException
+     */
+    protected function getBundleChildren(array $children = [])
+    {
+        $bundleChildren = [];
+
+        foreach ($children as $identifier => $config) {
+            if (!isset($config['componentType'])) {
+                throw new LocalizedException(__(
+                    'The configuration parameter "componentType" is a required for "%1" component.',
+                    $identifier
+                ));
+            }
+
+            $rawComponentData = $this->componentManager->createRawComponentData($config['componentType']);
+            list(, $componentArguments) = $this->argumentsResolver($identifier, $rawComponentData);
+            $arguments = array_replace_recursive($componentArguments, ['data' => ['config' => $config]]);
+            $rawComponentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $arguments;
+
+            $bundleChildren[$identifier] = $rawComponentData;
+            $bundleChildren[$identifier]['children'] = [];
+
+            if (isset($arguments['data']['config']['children'])) {
+                $bundleChildren[$identifier]['children'] = $this->getBundleChildren(
+                    $arguments['data']['config']['children']
+                );
+            }
+        }
+
+        return $bundleChildren;
     }
 }
