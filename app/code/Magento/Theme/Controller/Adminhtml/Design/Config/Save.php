@@ -8,10 +8,7 @@ namespace Magento\Theme\Controller\Adminhtml\Design\Config;
 use Magento\Backend\App\Action;
 use Magento\Theme\Model\DesignConfigRepository;
 use Magento\Backend\App\Action\Context;
-use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
 use Magento\Framework\App\ScopeValidatorInterface as ScopeValidator;
@@ -22,11 +19,6 @@ class Save extends Action
      * @var DesignConfigRepository
      */
     protected $designConfigRepository;
-
-    /**
-     * @var StoreManager
-     */
-    protected $storeManager;
 
     /**
      * @var RedirectFactory
@@ -46,7 +38,6 @@ class Save extends Action
     /**
      * @param DesignConfigRepository $designConfigRepository
      * @param RedirectFactory $redirectFactory
-     * @param StoreManager $storeManager
      * @param ConfigFactory $configFactory
      * @param ScopeValidator $scopeValidator
      * @param Context $context
@@ -54,14 +45,12 @@ class Save extends Action
     public function __construct(
         DesignConfigRepository $designConfigRepository,
         RedirectFactory $redirectFactory,
-        StoreManager $storeManager,
         ConfigFactory $configFactory,
         ScopeValidator $scopeValidator,
         Context $context
     ) {
         parent::__construct($context);
         $this->designConfigRepository = $designConfigRepository;
-        $this->storeManager = $storeManager;
         $this->redirectFactory = $redirectFactory;
         $this->configFactory = $configFactory;
         $this->scopeValidator = $scopeValidator;
@@ -86,9 +75,7 @@ class Save extends Action
         $resultRedirect->setPath('theme/design_config/');
         try {
             $scope = $this->getRequest()->getParam('scope');
-            $scopeId = $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-                ? $this->getRequest()->getParam('scope_id')
-                : 0;
+            $scopeId = (int)$this->getRequest()->getParam('scope_id');
             if (!$this->scopeValidator->isValidScope($scope, $scopeId)) {
                 $this->messageManager->addError(__('Invalid scope or scope id'));
                 return $resultRedirect;
@@ -100,7 +87,6 @@ class Save extends Action
                 'params' => $this->getRequestData(),
             ];
             $designConfigData = $this->configFactory->create($data);
-            $this->checkSingleStoreMode($designConfigData);
             $this->designConfigRepository->save($designConfigData);
 
             $this->messageManager->addSuccess(__('Configuration has been saved'));
@@ -134,21 +120,5 @@ class Save extends Action
             return is_array($param) && $param['error'] > 0 ? false : true;
         });
         return $data;
-    }
-
-    /**
-     * @param DesignConfigInterface $designConfigData
-     * @return void
-     */
-    protected function checkSingleStoreMode(DesignConfigInterface $designConfigData)
-    {
-        $isSingleStoreMode = $this->storeManager->isSingleStoreMode();
-        if (!$isSingleStoreMode) {
-            return;
-        }
-        $websites = $this->storeManager->getWebsites();
-        $singleStoreWebsite = array_shift($websites);
-        $designConfigData->setScope('websites');
-        $designConfigData->setScopeId($singleStoreWebsite->getId());
     }
 }

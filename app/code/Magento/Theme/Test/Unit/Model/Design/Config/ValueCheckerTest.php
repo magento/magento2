@@ -29,33 +29,32 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
         $this->appConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
     }
 
-    public function testIsValueChanged()
+    public function testIsDifferentFromDefault()
     {
         $valueChecker = new ValueChecker(
             $this->fallbackResolver,
-            $this->appConfig,
-            'value',
-            'default',
-            0,
-            'design/head/default_title'
+            $this->appConfig
         );
         $this->fallbackResolver->expects($this->once())
             ->method('getFallbackScope')
             ->with('default', 0)
             ->willReturn([null, null]);
 
-        $this->assertTrue($valueChecker->isValueChanged());
+        $this->assertTrue(
+            $valueChecker->isDifferentFromDefault(
+                'value',
+                'default',
+                0,
+                'design/head/default_title'
+            )
+        );
     }
 
-    public function testIsValueChangedWithWebsiteScope()
+    public function testIsDifferentFromDefaultWithWebsiteScope()
     {
         $valueChecker = new ValueChecker(
             $this->fallbackResolver,
-            $this->appConfig,
-            'value',
-            'website',
-            1,
-            'design/head/default_title'
+            $this->appConfig
         );
         $this->fallbackResolver->expects($this->once())
             ->method('getFallbackScope')
@@ -66,7 +65,14 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
             ->with('design/head/default_title', 'default', 0)
             ->willReturn('');
 
-        $this->assertTrue($valueChecker->isValueChanged());
+        $this->assertTrue(
+            $valueChecker->isDifferentFromDefault(
+                'value',
+                'website',
+                1,
+                'design/head/default_title'
+            )
+        );
     }
 }
 
