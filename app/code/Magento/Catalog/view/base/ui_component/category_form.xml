@@ -31,6 +31,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="submit_url" xsi:type="url" path="catalog/category/save"/>
+                    <item name="validate_url" xsi:type="url" path="catalog/category/validate"/>
                 </item>
             </argument>
         </argument>
