@@ -7,6 +7,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Filter\Builder;
 
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @see \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range
@@ -76,10 +77,14 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->model = new Range(
-            $this->fieldMapper,
-            $this->storeManager,
-            $this->customerSession
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range',
+            [
+                'fieldMapper' => $this->fieldMapper,
+                'storeManager' => $this->storeManager,
+                'customerSession' => $this->customerSession
+            ]
         );
     }
 

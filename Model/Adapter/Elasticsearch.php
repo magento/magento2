@@ -80,15 +80,15 @@ class Elasticsearch
     protected $preparedIndex = [];
 
     /**
-     * @param ConnectionManager      $connectionManager
-     * @param Index                  $resourceIndex
-     * @param AttributeContainer     $attributeContainer
-     * @param DocumentDataMapper     $documentDataMapper
-     * @param FieldMapper            $fieldMapper
+     * @param ConnectionManager $connectionManager
+     * @param Index $resourceIndex
+     * @param AttributeContainer $attributeContainer
+     * @param DocumentDataMapper $documentDataMapper
+     * @param FieldMapper $fieldMapper
      * @param ClientOptionsInterface $clientConfig
-     * @param BuilderInterface       $indexBuilder
-     * @param LoggerInterface        $logger
-     * @param array                  $options
+     * @param BuilderInterface $indexBuilder
+     * @param LoggerInterface $logger
+     * @param array $options
      *
      * @throws LocalizedException
      */
@@ -127,6 +127,8 @@ class Elasticsearch
      *
      * @param array $options
      * @return ElasticsearchClient
+     *
+     * @throws \RuntimeException
      */
     protected function connect($options = [])
     {

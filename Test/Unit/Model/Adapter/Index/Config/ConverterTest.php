@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index\Config;
 
 use Magento\Elasticsearch\Model\Adapter\Index\Config\Converter;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Unit test for Magento\Elasticsearch\Model\Adapter\Index\Config\Converter
@@ -22,7 +23,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->converter = new Converter;
+        $objectManager = new ObjectManagerHelper($this);
+        $this->converter = $objectManager->getObject('\Magento\Elasticsearch\Model\Adapter\Index\Config\Converter');
     }
 
     /**

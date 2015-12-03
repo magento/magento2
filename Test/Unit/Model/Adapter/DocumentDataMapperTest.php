@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -97,14 +98,18 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new DocumentDataMapper(
-            $this->builderMock,
-            $this->attributeContainerMock,
-            $this->fieldMapperMock,
-            $this->dateTimeMock,
-            $this->localeDateMock,
-            $this->scopeConfigMock,
-            $this->storeManagerMock
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Adapter\DocumentDataMapper',
+            [
+                'builder' => $this->builderMock,
+                'attributeContainer' => $this->attributeContainerMock,
+                'fieldMapper' => $this->fieldMapperMock,
+                'dateTime' => $this->dateTimeMock,
+                'localeDate' => $this->localeDateMock,
+                'scopeConfig' => $this->scopeConfigMock,
+                'storeManager' => $this->storeManagerMock
+            ]
         );
     }
 

@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
 use Magento\Elasticsearch\SearchAdapter\AggregationFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,8 +35,12 @@ class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new AggregationFactory(
-            $this->objectManager
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\AggregationFactory',
+            [
+                'objectManager' => $this->objectManager
+            ]
         );
     }
 

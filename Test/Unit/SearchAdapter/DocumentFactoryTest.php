@@ -7,6 +7,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
 use Magento\Elasticsearch\SearchAdapter\DocumentFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,9 +71,13 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->instanceName = '\Magento\Framework\Search\Document';
 
-        $this->model = new DocumentFactory(
-            $this->objectManager,
-            $this->entityMetadata
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\DocumentFactory',
+            [
+                'objectManager' => $this->objectManager,
+                'entityMetadata' => $this->entityMetadata
+            ]
         );
     }
 

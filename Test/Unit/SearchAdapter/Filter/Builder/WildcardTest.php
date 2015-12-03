@@ -7,6 +7,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Filter\Builder;
 
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @see \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard
@@ -47,8 +48,12 @@ class WildcardTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->model = new Wildcard(
-            $this->fieldMapper
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard',
+            [
+                'fieldMapper' => $this->fieldMapper
+            ]
         );
     }
 

@@ -5,6 +5,8 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index\Config;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -36,7 +38,13 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('schema_dir')
         );
 
-        $this->model = new \Magento\Elasticsearch\Model\Adapter\Index\Config\SchemaLocator($this->moduleReaderMock);
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Adapter\Index\Config\SchemaLocator',
+            [
+                'moduleReader' => $this->moduleReaderMock
+            ]
+        );
     }
 
     /**

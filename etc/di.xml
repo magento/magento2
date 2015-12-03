@@ -68,6 +68,11 @@
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </type>
+    <type name="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig">
+        <arguments>
+            <argument name="cacheId" xsi:type="string">elasticsearch_index_config</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Elasticsearch\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
         <arguments>
             <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Model\Client\Elasticsearch</argument>

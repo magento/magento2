@@ -10,6 +10,11 @@ use Magento\Framework\Config\SchemaLocatorInterface;
 class SchemaLocator implements SchemaLocatorInterface
 {
     /**
+     * XML schema for config file.
+     */
+    const CONFIG_FILE_SCHEMA = 'esconfig.xsd';
+
+    /**
      * Path to corresponding XSD file with validation rules for merged config
      *
      * @var string
@@ -28,8 +33,8 @@ class SchemaLocator implements SchemaLocatorInterface
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
         $configDir = $moduleReader->getModuleDir('etc', 'Magento_Elasticsearch');
-        $this->schema = $configDir . '/esconfig.xsd';
-        $this->perFileSchema = $configDir . '/esconfig.xsd';
+        $this->schema = $configDir . DIRECTORY_SEPARATOR . self::CONFIG_FILE_SCHEMA;
+        $this->perFileSchema = $configDir . DIRECTORY_SEPARATOR . self::CONFIG_FILE_SCHEMA;
     }
 
     /**

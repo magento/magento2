@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class MatchTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,9 +40,14 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new Match(
-            $this->fieldMapper
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\Query\Builder\Match',
+            [
+                'fieldMapper' => $this->fieldMapper
+            ]
         );
+
     }
 
     /**

@@ -15,6 +15,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper;
 use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ElasticsearchTest
@@ -72,6 +73,11 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     protected $client;
 
     /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManager;
+
+    /**
      * Setup
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -79,6 +85,8 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        $this->objectManager = new ObjectManagerHelper($this);
+
         $this->connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
             ->disableOriginalConstructor()
             ->setMethods([
@@ -172,15 +180,18 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityType')
             ->willReturn('product');
 
-        $this->model = new ElasticsearchAdapter(
-            $this->connectionManager,
-            $this->resourceIndex,
-            $this->attributeContainer,
-            $this->documentDataMapper,
-            $this->fieldMapper,
-            $this->clientConfig,
-            $this->indexBuilder,
-            $this->logger
+        $this->model = $this->objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Adapter\Elasticsearch',
+            [
+                'connectionManager' => $this->connectionManager,
+                'resourceIndex' => $this->resourceIndex,
+                'attributeContainer' => $this->attributeContainer,
+                'documentDataMapper' => $this->documentDataMapper,
+                'fieldMapper' => $this->fieldMapper,
+                'clientConfig' => $this->clientConfig,
+                'indexBuilder' => $this->indexBuilder,
+                'logger' => $this->logger
+            ]
         );
     }
 
@@ -200,15 +211,18 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willThrowException(new \Exception('Something went wrong'));
 
-        new ElasticsearchAdapter(
-            $connectionManager,
-            $this->resourceIndex,
-            $this->attributeContainer,
-            $this->documentDataMapper,
-            $this->fieldMapper,
-            $this->clientConfig,
-            $this->indexBuilder,
-            $this->logger
+        $this->objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Adapter\Elasticsearch',
+            [
+                'connectionManager' => $connectionManager,
+                'resourceIndex' => $this->resourceIndex,
+                'attributeContainer' => $this->attributeContainer,
+                'documentDataMapper' => $this->documentDataMapper,
+                'fieldMapper' => $this->fieldMapper,
+                'clientConfig' => $this->clientConfig,
+                'indexBuilder' => $this->indexBuilder,
+                'logger' => $this->logger
+            ]
         );
     }
 
@@ -388,15 +402,18 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateAliasEmpty()
     {
-        $model = new ElasticsearchAdapter(
-            $this->connectionManager,
-            $this->resourceIndex,
-            $this->attributeContainer,
-            $this->documentDataMapper,
-            $this->fieldMapper,
-            $this->clientConfig,
-            $this->indexBuilder,
-            $this->logger
+        $model = $this->objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Adapter\Elasticsearch',
+            [
+                'connectionManager' => $this->connectionManager,
+                'resourceIndex' => $this->resourceIndex,
+                'attributeContainer' => $this->attributeContainer,
+                'documentDataMapper' => $this->documentDataMapper,
+                'fieldMapper' => $this->fieldMapper,
+                'clientConfig' => $this->clientConfig,
+                'indexBuilder' => $this->indexBuilder,
+                'logger' => $this->logger
+            ]
         );
 
         $this->client->expects($this->never())

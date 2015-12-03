@@ -9,6 +9,7 @@ use Magento\Elasticsearch\Model\Adapter\Index\Builder;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,10 +49,14 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new Builder(
-            $this->storeRepository,
-            $this->storeConfig,
-            $this->esConfig
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Adapter\Index\Builder',
+            [
+                'storeRepository' => $this->storeRepository,
+                'storeConfig' => $this->storeConfig,
+                'esConfig' => $this->esConfig
+            ]
         );
     }
 

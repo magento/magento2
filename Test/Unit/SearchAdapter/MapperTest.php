@@ -9,6 +9,7 @@ use Magento\Elasticsearch\SearchAdapter\Mapper;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,10 +64,14 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->method('build')
             ->willReturn([]);
 
-        $this->model = new Mapper(
-            $this->clientConfig,
-            $this->matchQueryBuilder,
-            $this->filterBuilder
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\Mapper',
+            [
+                'clientConfig' => $this->clientConfig,
+                'matchQueryBuilder' => $this->matchQueryBuilder,
+                'filterBuilder' => $this->filterBuilder
+            ]
         );
     }
 
