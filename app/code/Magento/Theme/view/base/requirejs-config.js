@@ -7,9 +7,10 @@ var config = {
     "waitSeconds": 0,
     "map": {
         "*": {
-            "mageUtils": "mage/utils/main",
             "ko": "knockoutjs/knockout",
-            "knockout": "knockoutjs/knockout"
+            "knockout": "knockoutjs/knockout",
+            "mageUtils": "mage/utils/main",
+            "rjsResolver": "mage/requirejs/resolver"
         }
     },
     "shim": {
