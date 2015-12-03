@@ -491,7 +491,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
 
             $usedProducts = [];
-            $collection = $this->getUsedProductCollection($product)->addAttributeToSelect('*')
+            $collection = $this->getUsedProductCollection($product)
+                ->addAttributeToSelect('*')
+                ->addAttributeToSelect('media_gallery')
                 ->addFilterByRequiredOptions()
                 ->setStoreId($product->getStoreId());
 
@@ -505,6 +507,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
 
             foreach ($collection as $item) {
+                /** @var \Magento\Catalog\Model\Product $item */
+                $item->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($item);
                 $usedProducts[] = $item;
             }
 
@@ -1175,7 +1179,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $product->setStoreId(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )->setTypeId(
-            $postData['weight'] ? \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE : \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+            \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
         )->setAttributeSetId(
             $parentProduct->getNewVariationsAttributeSetId()
         );

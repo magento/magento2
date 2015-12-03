@@ -622,7 +622,7 @@ class Image extends AbstractHelper
      * @param string $file
      * @return $this
      */
-    protected function setImageFile($file)
+    public function setImageFile($file)
     {
         $this->_imageFile = $file;
         return $this;

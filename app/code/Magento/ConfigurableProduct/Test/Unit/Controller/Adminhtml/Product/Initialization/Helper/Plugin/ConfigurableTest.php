@@ -5,10 +5,12 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable;
+
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable
+     * @var Configurable
      */
     protected $plugin;
 
@@ -23,7 +25,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject | Magento\Catalog\Model\Product
      */
     protected $productMock;
 
@@ -46,6 +48,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'setNewVariationsAttributeSetId',
             'setAssociatedProductIds',
             'setCanSaveConfigurableAttributes',
+            'getTypeId',
             '__wakeup',
         ];
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, [], '', false);
@@ -56,7 +59,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->plugin = new \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable($this->productTypeMock, $this->requestMock);
+        $this->plugin = new Configurable($this->productTypeMock, $this->requestMock);
     }
 
     public function testAfterInitializeIfAttributesNotEmptyAndActionNameNotGenerateVariations()
@@ -86,6 +89,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $attributes,
             $this->productMock
         );
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
         $this->productMock->expects($this->once())->method('setNewVariationsAttributeSetId')->with($postValue);
         $this->productTypeMock->expects(
             $this->once()
@@ -118,6 +122,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ['attributes', null, $attributes],
         ];
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($paramValueMap));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
         $this->productTypeMock->expects(
             $this->once()
         )->method(
