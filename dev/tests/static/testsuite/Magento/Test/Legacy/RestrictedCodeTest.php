@@ -76,8 +76,8 @@ class RestrictedCodeTest extends \PHPUnit_Framework_TestCase
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $testFiles = \Magento\TestFramework\Utility\ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*');
         foreach (self::$_fixtureFiles as $fixtureFile) {
-            if (array_key_exists($fixtureFile, $testFiles)) {
-                unset($testFiles[$fixtureFile]);
+            if (array_key_exists(BP . $fixtureFile, $testFiles)) {
+                unset($testFiles[BP . $fixtureFile]);
             }
         }
         $invoker(
