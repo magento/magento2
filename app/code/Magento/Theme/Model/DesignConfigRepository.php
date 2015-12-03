@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Model;
 
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
@@ -51,11 +50,10 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
             throw new LocalizedException(__('Can not save empty config'));
         }
 
-        $this->configStorage->process($designConfig);
+        $this->configStorage->add($designConfig);
 
         try {
-            $this->configStorage->delete();
-            $this->configStorage->save();
+            $this->configStorage->flush();
             $this->reinitableConfig->reinit();
             $this->reindexGrid();
         } catch (\Exception $e) {
@@ -73,9 +71,6 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
      */
     protected function reindexGrid()
     {
-        $indexer = $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID);
-        if ($indexer instanceof IndexerInterface) {
-            $indexer->reindexAll();
-        }
+        $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID)->reindexAll();
     }
 }

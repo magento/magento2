@@ -11,7 +11,6 @@ use Magento\Framework\DB\Transaction;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Theme\Model\Design\BackendModelFactory;
 use Magento\Theme\Model\Design\Config\ValueChecker;
-use Magento\Theme\Model\Design\Config\ValueCheckerFactory;
 
 class Storage
 {
@@ -30,26 +29,28 @@ class Storage
     /**
      * @param TransactionFactory $transactionFactory
      * @param BackendModelFactory $backendModelFactory
-     * @param ValueCheckerFactory $valueCheckerFactory
+     * @param ValueChecker $valueChecker
      */
     public function __construct(
         TransactionFactory $transactionFactory,
         BackendModelFactory $backendModelFactory,
-        ValueCheckerFactory $valueCheckerFactory
+        ValueChecker $valueChecker
     ) {
         /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
         $this->deleteTransaction = $transactionFactory->create();
         /* @var $saveTransaction \Magento\Framework\DB\Transaction */
         $this->saveTransaction = $transactionFactory->create();
         $this->backendModelFactory = $backendModelFactory;
-        $this->valueChecker = $valueCheckerFactory->create();
+        $this->valueChecker = $valueChecker;
     }
 
     /**
+     * Add design config to storage
+     *
      * @param DesignConfigInterface $designConfig
      * @return void
      */
-    public function process(DesignConfigInterface $designConfig)
+    public function add(DesignConfigInterface $designConfig)
     {
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
         foreach ($fieldsData as $fieldData) {
@@ -76,24 +77,14 @@ class Storage
     }
 
     /**
-     * Save backend models
+     * Flush storage
      *
      * @return void
      * @throws \Exception
      */
-    public function save()
+    public function flush()
     {
         $this->saveTransaction->save();
-    }
-
-    /**
-     * Delete backend models
-     *
-     * @return void
-     * @throws \Exception
-     */
-    public function delete()
-    {
         $this->deleteTransaction->delete();
     }
 }

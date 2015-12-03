@@ -19,7 +19,7 @@ class BackendModelFactory extends ValueFactory
     /**
      * @var array
      */
-    protected $extendedConfig = null;
+    protected $extendedConfig = [];
 
     /**
      * @param ObjectManagerInterface $objectManager
@@ -29,8 +29,8 @@ class BackendModelFactory extends ValueFactory
         ObjectManagerInterface $objectManager,
         ConfigLoader $configLoader
     ) {
-        parent::__construct($objectManager);
         $this->configLoader = $configLoader;
+        parent::__construct($objectManager);
     }
 
     /**
@@ -52,12 +52,14 @@ class BackendModelFactory extends ValueFactory
         $backendModel = isset($data['config']['backend_model'])
             ? $this->_objectManager->create($data['config']['backend_model'], ['data' => $backendModelData])
             : parent::create(['data' => $backendModelData]);
-        $backendModel->setData('value', $data['value']);
+        $backendModel->setValue($data['value']);
 
         return $backendModel;
     }
 
     /**
+     * Receive config id for path
+     *
      * @param string $scope
      * @param string $scopeId
      * @param string $path
@@ -70,20 +72,22 @@ class BackendModelFactory extends ValueFactory
     }
 
     /**
+     * Receive extended config for scope and scope id
+     *
      * @param string $scope
      * @param string $scopeId
      * @return array
      */
     protected function getExtendedConfig($scope, $scopeId)
     {
-        if (!$this->extendedConfig) {
-            $this->extendedConfig = $this->configLoader->getConfigByPath(
+        if (!isset($this->extendedConfig[$scope][$scopeId])) {
+            $this->extendedConfig[$scope][$scopeId] = $this->configLoader->getConfigByPath(
                 'design',
                 $scope,
                 $scopeId,
                 true
             );
         }
-        return $this->extendedConfig;
+        return $this->extendedConfig[$scope][$scopeId];
     }
 }
