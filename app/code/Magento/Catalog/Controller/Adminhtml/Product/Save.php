@@ -69,6 +69,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $data = $this->getRequest()->getPostValue();
+        $productAttributeSetId = $this->getRequest()->getParam('set');
+        $productTypeId = $this->getRequest()->getParam('type');
         if ($data) {
             try {
                 $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
@@ -82,6 +84,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
                 $productId = $product->getId();
+                $productAttributeSetId = $product->getAttributeSetId();
+                $productTypeId = $product->getTypeId();
 
                 /**
                  * Do copying data to stores
@@ -132,10 +136,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             return $resultRedirect;
         }
 
-        if ($redirectBack === 'new' && isset($product)) {
+        if ($redirectBack === 'new') {
             $resultRedirect->setPath(
                 'catalog/*/new',
-                ['set' => $product->getAttributeSetId(), 'type' => $product->getTypeId()]
+                ['set' => $productAttributeSetId, 'type' => $productTypeId]
             );
         } elseif ($redirectBack === 'duplicate' && isset($newProduct)) {
             $resultRedirect->setPath(
@@ -143,7 +147,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 ['id' => $newProduct->getId(), 'back' => null, '_current' => true]
             );
         } elseif ($redirectBack) {
-            $resultRedirect->setPath('catalog/*/edit', ['id' => $productId, '_current' => true]);
+            $resultRedirect->setPath(
+                'catalog/*/edit',
+                ['id' => $productId, '_current' => true, 'set' => $productAttributeSetId]
+            );
         } else {
             $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
         }

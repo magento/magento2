@@ -207,6 +207,7 @@ define([
          * @param element The element associated with a configurable option.
          */
         _configureElement: function(element) {
+            this.inputSimpleProduct.val(null);
             if (element.value) {
                 this.options.state[element.config.id] = element.value;
                 if (element.nextSetting) {
@@ -231,24 +232,11 @@ define([
         _changeProductImage: function () {
             var images = this.options.spConfig.images,
                 imagesArray = null,
-                galleryElement = $(this.options.mediaGallerySelector);
-            $.each(this.options.settings, function (k, v) {
-                var selectValue = parseInt(v.value, 10),
-                    attributeId = v.id.replace(/[a-z]*/, '');
-                if (selectValue > 0 && attributeId) {
-                    if (!imagesArray) {
-                        imagesArray = images[attributeId][selectValue];
-                    } else {
-                        var intersectedArray = {};
-                        $.each(imagesArray, function (productId) {
-                            if (images[attributeId][selectValue][productId]) {
-                                intersectedArray[productId] = images[attributeId][selectValue][productId];
-                            }
-                        });
-                        imagesArray = intersectedArray;
-                    }
-                }
-            });
+                galleryElement = $(this.options.mediaGallerySelector),
+                productId = parseInt(this.inputSimpleProduct.val());
+            if (productId > 0) {
+                imagesArray = images[productId];
+            }
 
             var result = [];
             $.each(imagesArray || {}, function (k, v) {
