@@ -254,13 +254,28 @@ define([
          */
         _changeProductImage: function () {
             var images = this.options.spConfig.images[this.simpleProduct],
-                galleryObject = $(this.options.mediaGallerySelector).data('gallery');
+                initialImages = this.options.mediaGalleryInitial,
+                galleryObject = $(this.options.mediaGallerySelector).data('gallery'),
+                updateGallery;
+
+            updateGallery = function (imagesArr) {
+                var mainImg = imagesArr.filter(function (img) {
+                    return img.isMain;
+                });
+
+                galleryObject.updateDataByIndex(0, mainImg[0]);
+                galleryObject.seek(1);
+            };
 
             if (galleryObject) {
                 if (images) {
-                    galleryObject.updateData(images);
+                    this.options.onlyMainImg ?
+                        updateGallery(images) :
+                        galleryObject.updateData(images);
                 } else {
-                    galleryObject.updateData(this.options.mediaGalleryInitial);
+                    this.options.onlyMainImg ?
+                        updateGallery(initialImages) :
+                        galleryObject.updateData(this.options.mediaGalleryInitial);
                 }
             }
         },
