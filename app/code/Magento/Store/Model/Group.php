@@ -468,9 +468,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Get scope type
-     *
-     * @return  string
+     * {@inheritdoc}
      */
     public function getScopeType()
     {
@@ -478,9 +476,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Get scope type name
-     *
-     * @return  string
+     * {@inheritdoc}
      */
     public function getScopeTypeName()
     {

@@ -50,13 +50,11 @@ class Label implements \Magento\Framework\Option\ArrayInterface
      */
     public function getLabelsCollectionForSystemConfiguration()
     {
-        return $this->getLabelsCollection((string)new \Magento\Framework\Phrase('-- No Theme --'));
+        return $this->toOptionArray();
     }
 
     /**
-     * Options getter
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {
