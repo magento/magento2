@@ -7,8 +7,16 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProduct;
+
 class Configurable
 {
+    /** @var \Magento\Framework\App\RequestInterface */
+    protected $request;
+
+    /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable */
+    protected $productType;
+
     /**
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType
      * @param \Magento\Framework\App\RequestInterface $request
@@ -35,10 +43,12 @@ class Configurable
         \Magento\Catalog\Model\Product $product
     ) {
         $attributes = $this->request->getParam('attributes');
-        if (!empty($attributes)) {
+        if ($product->getTypeId() == ConfigurableProduct::TYPE_CODE && !empty($attributes)) {
+            $setId = $this->request->getPost('new-variations-attribute-set-id');
+            $product->setAttributeSetId($setId);
             $this->productType->setUsedProductAttributeIds($attributes, $product);
 
-            $product->setNewVariationsAttributeSetId($this->request->getPost('new-variations-attribute-set-id'));
+            $product->setNewVariationsAttributeSetId($setId);
             $associatedProductIds = $this->request->getPost('associated_product_ids', []);
             $variationsMatrix = $this->request->getParam('variations-matrix', []);
             if (!empty($variationsMatrix)) {
