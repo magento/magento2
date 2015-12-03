@@ -173,7 +173,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function addUseConfigSettings($categoryData)
     {
         foreach ($this->elementsWithUseConfigSetting as $elementsWithUseConfigSetting) {
-            if (!$categoryData[$elementsWithUseConfigSetting]) {
+            if (
+                !isset($categoryData[$elementsWithUseConfigSetting]) ||
+                ($categoryData[$elementsWithUseConfigSetting] == '')
+            ) {
                 $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
             }
         }
