@@ -170,6 +170,8 @@ class PageForm extends Form
      * @param FixtureInterface $fixture
      * @param SimpleElement|null $element
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
