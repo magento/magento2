@@ -71,6 +71,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_model->getAllowAttributes($this->_productMock);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetOptions()
     {
         $currentProductMock = $this->getMock(
