@@ -25,7 +25,7 @@ class Storage
     protected $backendModelFactory;
 
     /** @var ValueChecker */
-    private $valueChecker;
+    protected $valueChecker;
 
     /**
      * @param TransactionFactory $transactionFactory
