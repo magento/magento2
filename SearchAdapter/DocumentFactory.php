@@ -53,7 +53,10 @@ class DocumentFactory
             if ($fieldName === $entityId) {
                 $documentId = $value;
             } elseif ($fieldName === '_score') {
-                $fields['score'] = new DocumentField('score', $value);
+                $fields['score'] = $this->objectManager->create(
+                    'Magento\Framework\Search\DocumentField',
+                    ['name' => 'score', 'value' => $value]
+                );
             }
         }
 
