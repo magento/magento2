@@ -4,9 +4,10 @@
  */
 define([
     'ko',
+    'underscore',
     './observable_source',
     './renderer'
-], function (ko, Source, Renderer) {
+], function (ko, _, Source, renderer) {
     'use strict';
 
     var RemoteTemplateEngine,
@@ -49,7 +50,7 @@ define([
                 source = new Source(template);
                 sources[templateId] = source;
 
-                Renderer.render(template).done(function (rendered) {
+                renderer.render(template).done(function (rendered) {
                     source.nodes(rendered);
                 });
             }
