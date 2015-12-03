@@ -10,7 +10,7 @@ use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Theme\Model\Data\Design\Config;
+use Magento\Theme\Model\Data\Design\Config as DesignConfig;
 use Magento\Theme\Model\Design\Config\Storage as ConfigStorage;
 
 class DesignConfigRepository implements DesignConfigRepositoryInterface
@@ -71,6 +71,6 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
      */
     protected function reindexGrid()
     {
-        $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID)->reindexAll();
+        $this->indexerRegistry->get(DesignConfig::DESIGN_CONFIG_GRID_INDEXER_ID)->reindexAll();
     }
 }
