@@ -6,30 +6,39 @@
 namespace Magento\Theme\Model\Design;
 
 use Magento\Framework\App\Config\ValueFactory;
-use Magento\Config\Model\Config\Loader as ConfigLoader;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Theme\Model\Design\Config\MetadataProvider;
+use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 
 class BackendModelFactory extends ValueFactory
 {
     /**
-     * @var ConfigLoader
+     * @var array
      */
-    protected $configLoader;
+    protected $storedData = [];
 
     /**
      * @var array
      */
-    protected $extendedConfig = [];
+    protected $metadata = [];
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param ConfigLoader $configLoader
+     * @param MetadataProvider $metadataProvider
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ConfigLoader $configLoader
+        MetadataProvider $metadataProvider,
+        CollectionFactory $collectionFactory
     ) {
-        $this->configLoader = $configLoader;
+        $this->metadataProvider = $metadataProvider;
+        $this->collectionFactory = $collectionFactory;
         parent::__construct($objectManager);
     }
 
@@ -58,7 +67,7 @@ class BackendModelFactory extends ValueFactory
     }
 
     /**
-     * Receive config id for path
+     * Get config id for path
      *
      * @param string $scope
      * @param string $scopeId
@@ -67,27 +76,42 @@ class BackendModelFactory extends ValueFactory
      */
     protected function getConfigId($scope, $scopeId, $path)
     {
-        $extendedConfig = $this->getExtendedConfig($scope, $scopeId);
-        return isset($extendedConfig[$path]['config_id']) ? $extendedConfig[$path]['config_id'] : null;
+        $storedData = $this->getStoredData($scope, $scopeId);
+        return isset($storedData[$path]['config_id']) ? $storedData[$path]['config_id'] : null;
     }
 
     /**
-     * Receive extended config for scope and scope id
+     * Get stored data for scope and scope id
      *
      * @param string $scope
      * @param string $scopeId
      * @return array
      */
-    protected function getExtendedConfig($scope, $scopeId)
+    protected function getStoredData($scope, $scopeId)
     {
-        if (!isset($this->extendedConfig[$scope][$scopeId])) {
-            $this->extendedConfig[$scope][$scopeId] = $this->configLoader->getConfigByPath(
-                'design',
-                $scope,
-                $scopeId,
-                true
-            );
+        if (!isset($this->storedData[$scope][$scopeId])) {
+            $collection = $this->collectionFactory->create();
+            $collection->addPathsFilter($this->getMetadata());
+            $collection->addFieldToFilter('scope', $scope);
+            $collection->addScopeIdFilter($scopeId);
+            $this->storedData[$scope][$scopeId] = $collection->getData();
         }
-        return $this->extendedConfig[$scope][$scopeId];
+        return $this->storedData[$scope][$scopeId];
+    }
+
+    /**
+     * Retrieve metadata
+     *
+     * @return array
+     */
+    protected function getMetadata()
+    {
+        if (!$this->metadata) {
+            $this->metadata = $this->metadataProvider->get();
+            array_walk($this->metadata, function (&$value) {
+                $value = $value['path'];
+            });
+        }
+        return $this->metadata;
     }
 }
