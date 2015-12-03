@@ -13,11 +13,13 @@ use Magento\Framework\Autoload\ClassLoaderWrapper;
  */
 define('BP', dirname(__DIR__));
 
-if (!file_exists(BP . '/app/etc/vendor_path.php')) {
+define('VENDOR_PATH', BP . '/app/etc/vendor_path.php');
+
+if (!file_exists(VENDOR_PATH)) {
     throw new \Exception('Can not find vendor path.');
 }
 
-$vendorDir = require BP . '/app/etc/vendor_path.php';
+$vendorDir = require VENDOR_PATH;
 $vendorAutoload = BP . "/{$vendorDir}/autoload.php";
 
 /* 'composer install' validation */
