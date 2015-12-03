@@ -4,8 +4,9 @@
  */
 define([
     'ko',
-    'jquery'
-], function (ko, $) {
+    'jquery',
+    '../template/renderer'
+], function (ko, $, renderer) {
     'use strict';
 
     /**
@@ -31,4 +32,6 @@ define([
             }
         }
     };
+
+    renderer.addAttribute('autoselect');
 });
