@@ -40,4 +40,23 @@
             <xs:pattern value="[A-Z][A-Za-z0-9]*(\\[A-Z][A-Za-z0-9]*)*"/>
         </xs:restriction>
     </xs:simpleType>
+    <xs:complexType name="brokerConsumerType">
+        <xs:attribute type="xs:string" name="name" use="required" />
+        <xs:attribute type="xs:string" name="queue" use="required" />
+        <xs:attribute type="xs:string" name="executor" use="optional" />
+        <xs:attribute type="xs:integer" name="max_messages" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="brokerType">
+        <xs:annotation>
+            <xs:documentation>
+                Broker configuration describes relations for topic, published, consumer, queue and exchange server
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence  minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="consumer" type="brokerConsumerType" />
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="topic" use="required"/>
+        <xs:attribute type="xs:string" name="type" use="optional"/>
+        <xs:attribute type="xs:string" name="exchange" use="optional"/>
+    </xs:complexType>
 </xs:schema>

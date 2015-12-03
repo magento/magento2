@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue;
+namespace Magento\Framework\MessageQueue\Rpc;
+
+use \Magento\Framework\MessageQueue\MessageEncoder;
 
 /**
  * Client class which will publish any message
@@ -41,6 +43,7 @@ class PublisherProxy implements PublisherInterface
     {
         $publisher = $this->publisherFactory->create($topicName);
         $message = $this->messageEncoder->encode($topicName, $data);
-        return $publisher->publish($topicName, $message);
+        $responseMessage = $publisher->publish($topicName, $message);
+        return $this->messageEncoder->decode($topicName, $responseMessage, false);
     }
 }

@@ -20,7 +20,9 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         '/config/publisher' => 'name',
         '/config/consumer' => 'name',
         '/config/topic' => 'name',
-        '/config/bind' => ['queue', 'exchange', 'topic']
+        '/config/bind' => ['queue', 'exchange', 'topic'],
+        '/config/broker' => 'topic',
+        '/config/broker/consumer' => 'name'
     ];
 
     /**

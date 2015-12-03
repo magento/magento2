@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
-use Magento\Framework\MessageQueue\Config\Data as QueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\MessageQueue\ConsumerConfiguration;
 use Magento\Framework\MessageQueue\ConsumerFactory;
@@ -165,7 +165,7 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Framework\MessageQueue\ConsumerConfiguration', ['data' => [
                 ConsumerConfiguration::CONSUMER_NAME => self::TEST_CONSUMER_NAME,
                 ConsumerConfiguration::QUEUE_NAME => self::TEST_CONSUMER_QUEUE,
-                ConsumerConfiguration::CALLBACK => [
+                ConsumerConfiguration::HANDLERS => [
                     $dispatchInstanceMock,
                     self::TEST_CONSUMER_METHOD,
                 ],

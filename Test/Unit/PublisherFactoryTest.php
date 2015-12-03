@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
-use Magento\Framework\MessageQueue\Config\Data as QueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\MessageQueue\PublisherFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

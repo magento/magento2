@@ -38,4 +38,11 @@ interface QueueInterface
      * @return void
      */
     public function reject(EnvelopeInterface $envelope);
+
+    /**
+     * @param EnvelopeInterface $envelope
+     * @param mixed $data
+     * @return void
+     */
+    public function push(EnvelopeInterface $envelope, $data);
 }

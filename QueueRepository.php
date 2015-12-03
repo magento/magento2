@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\Config\Data as QueueConfig;
-
 /**
  * Queue factory
  */

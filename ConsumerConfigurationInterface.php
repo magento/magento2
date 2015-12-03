@@ -25,6 +25,13 @@ interface ConsumerConfigurationInterface
     public function getQueueName();
 
     /**
+     * Get consumer type sync|async.
+     *
+     * @return string
+     */
+    public function getType();
+
+    /**
      * Get maximum number of message, which will be read by consumer before termination of the process.
      *
      * @return int|null
@@ -32,9 +39,18 @@ interface ConsumerConfigurationInterface
     public function getMaxMessages();
 
     /**
-     * Get callback method to process message from the queue.
-     *
-     * @return callback
+     * @return callback[]
      */
-    public function getCallback();
+    public function getHandlers();
+
+    /**
+     * @param string $topicName
+     * @return string
+     */
+    public function getMessageSchemaType($topicName);
+
+    /**
+     * @return QueueInterface
+     */
+    public function getQueue();
 }

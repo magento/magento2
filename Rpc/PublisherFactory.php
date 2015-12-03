@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue;
+namespace Magento\Framework\MessageQueue\Rpc;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
@@ -30,19 +30,8 @@ class PublisherFactory
     /**
      * Initialize dependencies.
      *
-     * <type name="Magento\Framework\MessageQueue\PublisherFactory">
-     *     <arguments>
-     *         <argument name="publishers" xsi:type="array">
-     *             <item name="amqp" xsi:type="array">
-     *                 <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
-     *                 <item name="connectionName" xsi:type="string">amqp</item>
-     *             </item>
-     *         </argument>
-     *     </arguments>
-     * </type>
-     *
      * @param QueueConfig $queueConfig
-     * @param PublisherInterface[] $publishers
+     * @param array $publishers
      */
     public function __construct(
         QueueConfig $queueConfig,
