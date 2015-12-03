@@ -55,6 +55,9 @@
                     <item name="source" xsi:type="string">category</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
                     <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -67,6 +70,9 @@
                     <item name="source" xsi:type="string">category</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
                     <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
                 </item>
             </argument>
         </field>
