@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'ko'
-], function (ko) {
+    'ko',
+    '../template/renderer'
+], function (ko, renderer) {
     'use strict';
 
     ko.bindingHandlers.staticChecked = {
@@ -100,4 +101,6 @@ define([
     };
 
     ko.expressionRewriting.twoWayBindings.staticChecked = true;
+
+    renderer.addAttribute('staticChecked');
 });
