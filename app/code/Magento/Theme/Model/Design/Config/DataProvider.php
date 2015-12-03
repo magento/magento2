@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Model\Design\Config;
 
-use Magento\Theme\Model\Design\Config\MetadataLoader;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
@@ -31,6 +30,16 @@ class DataProvider extends AbstractDataProvider
      */
     private $metadataLoader;
 
+    /**
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param DataLoader $dataLoader
+     * @param MetadataLoader $metadataLoader
+     * @param CollectionFactory $configCollectionFactory
+     * @param array $meta
+     * @param array $data
+     */
     public function __construct(
         $name,
         $primaryFieldName,
