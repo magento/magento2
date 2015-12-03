@@ -9,12 +9,12 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 
 /**
- * Class ResetButton
+ * Class DeleteButton
  */
-class ResetButton extends AbstractCategory implements ButtonProviderInterface
+class DeleteButton extends AbstractCategory implements ButtonProviderInterface
 {
     /**
-     * Reset button
+     * Delete button
      *
      * @return array
      */
@@ -23,20 +23,27 @@ class ResetButton extends AbstractCategory implements ButtonProviderInterface
         $category = $this->getCategory();
         $categoryId = (int)$category->getId();
 
-        if (!$category->isReadonly() && $this->hasStoreRootCategory()) {
-            $resetPath = $categoryId ? 'catalog/*/edit' : 'catalog/*/add';
+        if ($categoryId && !in_array($categoryId, $this->getRootIds()) && $category->isDeleteable()) {
             return [
-                'id' => 'reset',
-                'label' => __('Reset'),
-                'on_click' => "categoryReset('"
-                    . $this->getUrl($resetPath, $this->getDefaultUrlParams())
-                    . "',true)",
-                'class' => 'reset',
-                'sort_order' => 20
+                'id' => 'delete',
+                'label' => __('Delete Category'),
+                'on_click' => "categoryDelete('" . $this->getDeleteUrl() . "')",
+                'class' => 'delete',
+                'sort_order' => 10
             ];
         }
 
         return [];
+    }
+
+    /**
+     * @param array $args
+     * @return string
+     */
+    public function getDeleteUrl(array $args = [])
+    {
+        $params = array_merge($this->getDefaultUrlParams(), $args);
+        return $this->getUrl('catalog/*/delete', $params);
     }
 
     /**

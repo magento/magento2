@@ -17,6 +17,7 @@
             <item name="type" xsi:type="string">tabs</item>
         </item>
         <item name="buttons" xsi:type="array">
+            <item name="delete" xsi:type="string">Magento\Catalog\Block\Adminhtml\Category\Edit\DeleteButton</item>
             <item name="back" xsi:type="string">Magento\Catalog\Block\Adminhtml\Category\Edit\ResetButton</item>
             <item name="save" xsi:type="string">Magento\Catalog\Block\Adminhtml\Category\Edit\SaveButton</item>
         </item>

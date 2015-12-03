@@ -6,26 +6,34 @@
 namespace Magento\Catalog\Block\Adminhtml\Category\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 
 /**
  * Class SaveButton
  */
-class SaveButton implements ButtonProviderInterface
+class SaveButton extends AbstractCategory implements ButtonProviderInterface
 {
     /**
+     * Save button
+     *
      * @return array
      */
     public function getButtonData()
     {
-        $data = [
-            'label' => __('Save Category'),
-            'class' => 'save primary',
-            'data_attribute' => [
-                'mage-init' => ['button' => ['event' => 'save']],
-                'form-role' => 'save',
-            ],
-            'sort_order' => 90,
-        ];
-        return $data;
+        $category = $this->getCategory();
+
+        if (!$category->isReadonly() && $this->hasStoreRootCategory()) {
+            return [
+                'label' => __('Save Category'),
+                'class' => 'save primary',
+                'data_attribute' => [
+                    'mage-init' => ['button' => ['event' => 'save']],
+                    'form-role' => 'save',
+                ],
+                'sort_order' => 30,
+            ];
+        }
+
+        return [];
     }
 }
