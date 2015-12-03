@@ -6,14 +6,14 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="One page check out with Braintree payment method.">
-        <variation name="OnePageCheckoutBraintreeTestVariation1" summary="Checkout with Braintree Credit Card from Storefront (Payment Action = Authorize)" ticketId="MAGETWO-38313">
-            <data name="description" xsi:type="string">Create order using Fixed shipping method and Braintree payment method</data>
+    <testCase name="Magento\Sales\Test\TestCase\CreateOrderBackendTest" summary="Checkout with Braintree Credit Card from Admin">
+        <variation name="CreateOrderBackendTestVariation1" summary="Checkout with Braintree Credit Card from Admin (Payment Action = Authorize Only)" ticketId="MAGETWO-46294">
+            <data name="description" xsi:type="string">Create order in Admin using Fixed shipping method and Braintree payment method</data>
             <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
-            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="saveAddress" xsi:type="string">No</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
@@ -24,19 +24,21 @@
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
             <data name="configData" xsi:type="string">braintreetwo</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Reorder, Cancel, Send Email, Hold, Invoice, Ship, Edit</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
-        <variation name="OnePageCheckoutBraintreeTestVariation2" summary="Checkout with Braintree for payment action Authorize and Capture" ticketId="MAGETWO-38420">
-            <data name="description" xsi:type="string">Create order using Fixed shipping method and Braintree payment method with Payment action = Authorize and Capture</data>
+        <variation name="CreateOrderBackendTestVariation2" summary="Checkout with Braintree Credit Card from Admin (Payment Action = Authorize and Capture)" ticketId="MAGETWO-38316">
+            <data name="description" xsi:type="string">Create order in Admin using Fixed shipping method and Braintree payment method</data>
             <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
-            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="saveAddress" xsi:type="string">No</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
@@ -47,11 +49,13 @@
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
             <data name="configData" xsi:type="string">braintreetwo_sale</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Reorder, Cancel, Send Email, Hold, Invoice, Ship, Edit</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
-    </variation>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+        </variation>
     </testCase>
 </config>

@@ -26,8 +26,8 @@ class AssertGrandTotalOrderReview extends AbstractConstraint
         $checkoutReviewGrandTotal = $checkoutOnepage->getReviewBlock()->getGrandTotal();
 
         \PHPUnit_Framework_Assert::assertEquals(
-            $checkoutReviewGrandTotal,
             number_format($grandTotal, 2),
+            $checkoutReviewGrandTotal,
             "Grand Total price: $checkoutReviewGrandTotal not equals with price from data set: " . $grandTotal
         );
     }
