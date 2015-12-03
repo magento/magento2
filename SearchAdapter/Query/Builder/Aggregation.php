@@ -54,20 +54,36 @@ class Aggregation
         array $searchQuery,
         BucketInterface $bucket
     ) {
+        $field = $this->fieldMapper->getFieldName($bucket->getField());
         switch ($bucket->getType()) {
             case BucketInterface::TYPE_TERM:
                 $searchQuery['body']['aggregations'][$bucket->getName()]= [
                     'terms' => [
-                        'field' => $this->fieldMapper->getFieldName($bucket->getField()),
+                        'field' => $field,
                     ],
                 ];
                 break;
             case BucketInterface::TYPE_DYNAMIC:
-                $searchQuery['body']['aggregations'][$bucket->getName()]= [
-                    'stats' => [
-                        'field' => $this->fieldMapper->getFieldName($bucket->getField()),
-                    ],
-                ];
+                if ($field == 'price') {
+                    $searchQuery['body']['aggregations'][$bucket->getName()]= [
+                        'nested' => [
+                            'path' => $field,
+                        ],
+                        'aggregations' => [
+                            $bucket->getName() => [
+                                'stats' => [
+                                    'field' => $field . '.price',
+                                ],
+                            ],
+                        ],
+                    ];
+                } else {
+                    $searchQuery['body']['aggregations'][$bucket->getName()]= [
+                        'stats' => [
+                            'field' => $field,
+                        ],
+                    ];
+                }
                 break;
         }
         return $searchQuery;
