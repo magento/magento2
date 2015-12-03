@@ -11,99 +11,105 @@
 @braintree-focus__color: @color-blue-pure;
 @braintree-success__color: @color-green-apple;
 
-.hosted-date-wrap {
-    &:extend(.abs-clearfix all);
-}
+//
+//  Common
+//  _____________________________________________
 
-.hosted-control {
-    position: relative;
-    height: 3.4rem;
-
-    &.braintree-hosted-fields-focused {
-        border-color: @braintree-focus__color;
+& when (@media-common = true) {
+    .hosted-date-wrap {
+        &:extend(.abs-clearfix all);
     }
 
-    &.braintree-hosted-fields-invalid:not(.braintree-hosted-fields-focused) {
-        border-color: @braintree-error__color;
+    .hosted-control {
+        height: 3.4rem;
+        position: relative;
 
-        & ~ .hosted-error {
-            opacity: 1;
-            height: auto;
+        &.braintree-hosted-fields-focused {
+            border-color: @braintree-focus__color;
         }
-    }
 
-    &.braintree-hosted-fields-valid {
-        border-color: @braintree-success__color;
-    }
+        &.braintree-hosted-fields-invalid:not(.braintree-hosted-fields-focused) {
+            border-color: @braintree-error__color;
 
-    &.hosted-date {
-        @distance: 50px;
+            & ~ .hosted-error {
+                height: auto;
+                opacity: 1;
+            }
+        }
 
-        float: left;
-        width: 5rem;
+        &.braintree-hosted-fields-valid {
+            border-color: @braintree-success__color;
+        }
 
-        &:first-of-type {
-            margin-right: @distance;
+        &.hosted-date {
+            @distance: 50px;
 
-            &:after {
-                content: '/';
-                display: inline;
-                padding-top: inherit;
-                padding-bottom: inherit;
-                position: absolute;
-                right: -@distance / 2;
-                top: 0;
+            float: left;
+            width: 5rem;
+
+            &:first-of-type {
+                margin-right: @distance;
+
+                &:after {
+                    content: '/';
+                    display: inline;
+                    padding-top: inherit;
+                    padding-bottom: inherit;
+                    position: absolute;
+                    right: -@distance / 2;
+                    top: 0;
+                }
+            }
+        }
+
+        &.hosted-cid {
+            width: 6rem;
+        }
+
+        .icon-type {
+            background-image: url('@{baseDir}images/cards.png');
+            background-position: -1000px 0;
+            background-repeat: no-repeat;
+            height: 28px;
+            position: absolute;
+            right: 5px;
+            top: 2px;
+            width: 40px;
+
+            &.icon-type-discover {
+                background-position: 0 0;
+            }
+
+            &.icon-type-visa {
+                background-position: 0 -28px;
+            }
+
+            &.icon-type-master-card {
+                background-position: 0 -56px;
+            }
+
+            &.icon-type-maestro {
+                background-position: 0 -85px;
+            }
+
+            &.icon-type-american-express {
+                background-position: 0 -114px;
+            }
+
+            &.icon-type-unionpay {
+                background-position: 0 -143px;
+            }
+
+            &.icon-type-diners-club {
+                background-position: 0 -172px;
             }
         }
     }
 
-    &.hosted-cid {
-        width: 6rem;
+    .hosted-error {
+        clear: both;
+        color: @braintree-error__color;
+        height: 0;
+        opacity: 0;
     }
-
-    .icon-type {
-        position: absolute;
-        right: 5px;
-        top: 2px;
-        width: 40px;
-        height: 28px;
-        background-image: url('@{baseDir}images/cards.png');
-        background-position: -1000px 0;
-        background-repeat: no-repeat;
-
-        &.icon-type-discover {
-            background-position: 0 0;
-        }
-
-        &.icon-type-visa {
-            background-position: 0 -28px;
-        }
-
-        &.icon-type-master-card {
-            background-position: 0 -56px;
-        }
-
-        &.icon-type-maestro {
-            background-position: 0 -85px;
-        }
-
-        &.icon-type-american-express {
-            background-position: 0 -114px;
-        }
-
-        &.icon-type-unionpay {
-            background-position: 0 -143px;
-        }
-
-        &.icon-type-diners-club {
-            background-position: 0 -172px;
-        }
-    }
-}
-
-.hosted-error {
-    color: @braintree-error__color;
-    opacity: 0;
-    height: 0;
-    clear: both;
 }

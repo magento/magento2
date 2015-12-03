@@ -37,8 +37,8 @@
                 border-color: @braintree-error__color;
 
                 & ~ .hosted-error {
-                    opacity: 1;
                     height: auto;
+                    opacity: 1;
                 }
             }
 
@@ -53,8 +53,8 @@
             &.hosted-date {
                 @distance: 50px;
 
-                width: 6rem;
                 float: left;
+                width: 6rem;
 
                 &:first-of-type {
                     margin-right: @distance;
@@ -72,32 +72,15 @@
             }
         }
 
-        .month {
-            @distance: 50px;
-
-            margin-right: @distance;
-            position: relative;
-
-            &:after {
-                content: '/';
-                display: inline;
-                padding-top: inherit;
-                padding-bottom: inherit;
-                position: absolute;
-                right: -@distance * (2/3.5);
-                top: 5px;
-            }
-        }
-
         .field-tooltip {
             right: 0;
         }
 
         .hosted-error {
-            color: @braintree-error__color;
-            opacity: 0;
-            height: 0;
             clear: both;
+            color: @braintree-error__color;
+            height: 0;
+            opacity: 0;
         }
     }
 }
