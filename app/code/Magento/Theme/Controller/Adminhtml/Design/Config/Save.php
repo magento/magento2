@@ -73,22 +73,21 @@ class Save extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('theme/design_config/');
+        $scope = $this->getRequest()->getParam('scope');
+        $scopeId = (int)$this->getRequest()->getParam('scope_id');
+        if (!$this->scopeValidator->isValidScope($scope, $scopeId)) {
+            $this->messageManager->addError(__('Invalid scope or scope id'));
+            return $resultRedirect;
+        }
+
+        $data = [
+            'scope' => $scope,
+            'scopeId' => $scopeId,
+            'params' => $this->getRequestData(),
+        ];
+        $designConfigData = $this->configFactory->create($data);
         try {
-            $scope = $this->getRequest()->getParam('scope');
-            $scopeId = (int)$this->getRequest()->getParam('scope_id');
-            if (!$this->scopeValidator->isValidScope($scope, $scopeId)) {
-                $this->messageManager->addError(__('Invalid scope or scope id'));
-                return $resultRedirect;
-            }
-
-            $data = [
-                'scope' => $scope,
-                'scopeId' => $scopeId,
-                'params' => $this->getRequestData(),
-            ];
-            $designConfigData = $this->configFactory->create($data);
             $this->designConfigRepository->save($designConfigData);
-
             $this->messageManager->addSuccess(__('Configuration has been saved'));
         } catch (LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
