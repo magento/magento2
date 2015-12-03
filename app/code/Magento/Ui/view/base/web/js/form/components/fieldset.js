@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/lib/collapsible'
-], function (Collapsible) {
+    'Magento_Ui/js/lib/collapsible',
+    'underscore'
+], function (Collapsible, _) {
     'use strict';
 
     return Collapsible.extend({
@@ -17,13 +18,13 @@ define([
             opened: false,
             level: 0
         },
+
         /**
          * Extends instance with defaults. Invokes parent initialize method.
          * Calls initListeners and pushParams methods.
          */
         initialize: function () {
             _.bindAll(this, 'onChildrenUpdate', 'onChildrenError', 'onContentLoading');
-
             return this._super();
         },
 
@@ -77,7 +78,6 @@ define([
          */
         onChildrenError: function () {
             var hasErrors = this.elems.some('error');
-
             this.error(hasErrors);
         },
 
