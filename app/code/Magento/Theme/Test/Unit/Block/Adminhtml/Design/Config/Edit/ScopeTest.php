@@ -50,7 +50,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
     {
         $scope = 'websites';
         $scopeId = 1;
-        $scopeType = 'Website';
+        $scopeTypeName = 'Website';
 
         $this->request->expects($this->exactly(2))
             ->method('getParam')
@@ -62,8 +62,8 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $scopeObject = $this->getMockBuilder('Magento\Framework\App\ScopeInterface')
             ->getMockForAbstractClass();
         $scopeObject->expects($this->once())
-            ->method('getScopeType')
-            ->willReturn($scopeType);
+            ->method('getScopeTypeName')
+            ->willReturn($scopeTypeName);
 
         $scopeResolver = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')
             ->getMockForAbstractClass();
@@ -77,14 +77,14 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
             ->with($scope)
             ->willReturn($scopeResolver);
 
-        $this->assertEquals(__($scopeType), $this->block->getScopeTitle());
+        $this->assertEquals(__($scopeTypeName), $this->block->getScopeTitle());
     }
 
     public function testGetScopeTitleDefault()
     {
         $scope = 'default';
         $scopeId = 0;
-        $scopeType = 'Default';
+        $scopeTypeName = 'Default';
 
         $this->request->expects($this->exactly(2))
             ->method('getParam')
@@ -93,7 +93,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
                 ['scope_id', null, $scopeId],
             ]);
 
-        $this->assertEquals(__($scopeType), $this->block->getScopeTitle());
+        $this->assertEquals(__($scopeTypeName), $this->block->getScopeTitle());
     }
 
     protected function initContext()

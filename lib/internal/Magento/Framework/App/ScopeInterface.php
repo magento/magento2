@@ -29,7 +29,7 @@ interface ScopeInterface
     public function getScopeType();
 
     /**
-     * Get scope type
+     * Get scope type name
      *
      * @return string
      */

@@ -1246,6 +1246,14 @@ class Store extends AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      */
+    public function getScopeTypeName()
+    {
+        return 'Store View';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getExtensionAttributes()
     {
         return $this->_getExtensionAttributes();
@@ -1258,15 +1266,5 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * Get scope type name
-     *
-     * @return  string
-     */
-    public function getScopeTypeName()
-    {
-        return 'Store View';
     }
 }
