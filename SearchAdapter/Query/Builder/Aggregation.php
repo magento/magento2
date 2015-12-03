@@ -71,7 +71,7 @@ class Aggregation
                         ],
                         'aggregations' => [
                             $bucket->getName() => [
-                                'stats' => [
+                                'extended_stats' => [
                                     'field' => $field . '.price',
                                 ],
                             ],
@@ -79,7 +79,7 @@ class Aggregation
                     ];
                 } else {
                     $searchQuery['body']['aggregations'][$bucket->getName()]= [
-                        'stats' => [
+                        'extended_stats' => [
                             'field' => $field,
                         ],
                     ];

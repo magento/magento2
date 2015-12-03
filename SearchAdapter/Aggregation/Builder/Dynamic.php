@@ -11,7 +11,6 @@ use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Dynamic\EntityStorageFactory;
 use Magento\Framework\Search\Request\Aggregation\DynamicBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
-use Solarium\Core\Query\Result\ResultInterface;
 
 class Dynamic implements BucketBuilderInterface
 {
