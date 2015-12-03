@@ -253,10 +253,14 @@ define([
          * @private
          */
         _changeProductImage: function () {
-            var images = this.options.spConfig.images[this.simpleProduct],
-                initialImages = this.options.mediaGalleryInitial,
+            var images,
+                initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery'),
                 updateGallery;
+
+            if (this.options.spConfig.images[this.simpleProduct]) {
+                images = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
+            }
 
             updateGallery = function (imagesArr) {
                 var mainImg = imagesArr.filter(function (img) {
