@@ -108,7 +108,7 @@ class DataProvider implements DataProviderInterface
                     ],
                 ],
                 'aggregations' => [
-                    'price' => [
+                    'prices' => [
                         'nested' => [
                             'path' => $fieldName,
                         ],
@@ -126,12 +126,12 @@ class DataProvider implements DataProviderInterface
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
 
-        if (isset($queryResult['aggregations']['price']['price_stats'])) {
+        if (isset($queryResult['aggregations']['prices']['price_stats'])) {
             $aggregations = [
-                'count' => $queryResult['aggregations']['price']['price_stats']['count'],
-                'max' => $queryResult['aggregations']['price']['price_stats']['max'],
-                'min' => $queryResult['aggregations']['price']['price_stats']['min'],
-                'std' => $queryResult['aggregations']['price']['price_stats']['std_deviation'],
+                'count' => $queryResult['aggregations']['prices']['price_stats']['count'],
+                'max' => $queryResult['aggregations']['prices']['price_stats']['max'],
+                'min' => $queryResult['aggregations']['prices']['price_stats']['min'],
+                'std' => $queryResult['aggregations']['prices']['price_stats']['std_deviation'],
             ];
         }
 
@@ -167,37 +167,54 @@ class DataProvider implements DataProviderInterface
         EntityStorage $entityStorage
     ) {
         $result = [];
-
-//        if (!$entityStorage->getSource()) {
-//            return $result;
-//        }
-//
-//        $query = $this->queryFactory->create();
-//        $query->createFilterQuery('ids')
-//            ->setQuery(
-//                'id:(%1%)',
-//                [
-//                    implode(' ' . Query::QUERY_OPERATOR_OR . ' ', $entityStorage->getSource()),
-//                ]
-//            );
-//        $this->dimensionsBuilder->build($dimensions, $query);
-//
-//        $facetSet = $query->getFacetSet();
-//        /** @var \Solarium\QueryType\Select\Query\Component\Facet\Range $facet */
-//        $facet = $facetSet->createFacetRange($bucket->getName());
-//        $facet->setField($this->fieldMapper->getFieldName($bucket->getField()));
-//        $facet->setStart(0);
-//        $facet->setEnd($this->getAggregations($entityStorage)['max']);
-//        $facet->setGap($range);
-//        $facet->setMinCount(1);
-//
-//        $resultBucket = $this->connectionManager->getConnection()
-//            ->query($query)
-//            ->getFacetSet()
-//            ->getFacet($bucket->getName());
-//        foreach ($resultBucket as $rangeStart => $count) {
-//            $result[$rangeStart / $range + 1] = $count;
-//        }
+        $entityIds = $entityStorage->getSource();
+        $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
+        $requestQuery = [
+            'index' => $this->clientConfig->getIndexName(),
+            'type' => $this->clientConfig->getEntityType(),
+            'body' => [
+                'fields' => [
+                    '_id',
+                    '_score',
+                ],
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            [
+                                'term' => [
+                                    'store_id' => 1,
+                                ],
+                            ],
+                            [
+                                'terms' => [
+                                    '_id' => $entityIds,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'aggregations' => [
+                    'prices' => [
+                        'nested' => [
+                            'path' => $fieldName,
+                        ],
+                        'aggregations' => [
+                            'price_stats' => [
+                                'histogram' => [
+                                    'field' => $fieldName . '.price',
+                                    'interval' => $range,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $queryResult = $this->connectionManager->getConnection()
+            ->query($requestQuery);
+        foreach ($queryResult['aggregations']['prices']['price_stats']['buckets'] as $bucket) {
+            $result[$bucket['key'] / $range + 1] = $bucket['doc_count'];
+        }
         return $result;
     }
 
