@@ -12,6 +12,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 use Magento\Framework\View\Element\UiComponent\ContextFactory;
+use Magento\Framework\Phrase;
 
 /**
  * Class UiComponentFactory
@@ -216,7 +217,7 @@ class UiComponentFactory extends DataObject
 
         foreach ($children as $identifier => $config) {
             if (!isset($config['componentType'])) {
-                throw new LocalizedException(__(
+                throw new LocalizedException(new Phrase(
                     'The configuration parameter "componentType" is a required for "%1" component.',
                     $identifier
                 ));
