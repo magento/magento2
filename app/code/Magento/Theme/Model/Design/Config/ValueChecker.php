@@ -73,7 +73,7 @@ class ValueChecker
     {
         list($scope, $scopeId) = $this->fallbackResolver->getFallbackScope($this->scope, $this->scopeId);
         if ($scope) {
-            return $this->value !== $this->appConfig->getValue($this->path, $scope, $scopeId);
+            return $this->value !== (string)$this->appConfig->getValue($this->path, $scope, $scopeId);
         }
         return true;
     }

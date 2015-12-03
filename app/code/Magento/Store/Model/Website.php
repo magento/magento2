@@ -679,4 +679,14 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    /**
+     * Get scope type name
+     *
+     * @return  string
+     */
+    public function getScopeTypeName()
+    {
+        return 'Website';
+    }
 }

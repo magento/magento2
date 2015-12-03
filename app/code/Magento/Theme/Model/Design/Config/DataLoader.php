@@ -100,12 +100,10 @@ class DataLoader
         $items = $this->collection->getItems();
         foreach ($items as $item) {
             /** @var \Magento\Framework\App\Config\Value $item */
-            if ($item->getValue() !== null) {
-                $data[$scope][$metadata[$item->getPath()]] = (string)$item->getValue();
-            }
+            $data[$scope][$metadata[$item->getPath()]] = (string)$item->getValue();
         }
 
-        $metadataKeys = array_keys(array_diff($metadata, (isset($data[$scope]) ? $data[$scope] : [])));
+        $metadataKeys = array_diff_key($this->getMetadata(), (isset($data[$scope]) ? $data[$scope] : []));
         foreach ($metadataKeys as $path) {
             $data[$scope][$metadata[$path]] = (string)$this->scopeConfig->getValue($path, $scope, $scopeId);
         }

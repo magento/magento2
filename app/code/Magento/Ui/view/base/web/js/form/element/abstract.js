@@ -159,7 +159,11 @@ define([
                 value;
 
             values.some(function (v) {
-                return !utils.isEmpty(value = v);
+                if (v !== null) {
+                    value = v;
+                    return true;
+                }
+                return false;
             });
 
             return this.normalizeData(value);
