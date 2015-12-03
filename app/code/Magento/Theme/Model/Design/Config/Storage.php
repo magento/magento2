@@ -49,7 +49,7 @@ class Storage
      * @param DesignConfigInterface $designConfig
      * @return void
      */
-    public function set(DesignConfigInterface $designConfig)
+    public function save(DesignConfigInterface $designConfig)
     {
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
         foreach ($fieldsData as $fieldData) {
@@ -73,16 +73,6 @@ class Storage
                 $this->deleteTransaction->addObject($backendModel);
             }
         }
-    }
-
-    /**
-     * Flush storage
-     *
-     * @return void
-     * @throws \Exception
-     */
-    public function flush()
-    {
         $this->saveTransaction->save();
         $this->deleteTransaction->delete();
     }
