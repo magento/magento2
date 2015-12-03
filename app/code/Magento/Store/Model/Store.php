@@ -1259,4 +1259,14 @@ class Store extends AbstractExtensibleModel implements
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    /**
+     * Get scope type name
+     *
+     * @return  string
+     */
+    public function getScopeTypeName()
+    {
+        return 'Store View';
+    }
 }

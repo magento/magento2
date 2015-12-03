@@ -476,4 +476,14 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return ScopeInterface::SCOPE_GROUP;
     }
+
+    /**
+     * Get scope type name
+     *
+     * @return  string
+     */
+    public function getScopeTypeName()
+    {
+        return 'Store';
+    }
 }

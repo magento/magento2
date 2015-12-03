@@ -29,6 +29,13 @@ interface ScopeInterface
     public function getScopeType();
 
     /**
+     * Get scope type
+     *
+     * @return string
+     */
+    public function getScopeTypeName();
+
+    /**
      * Get scope name
      *
      * @return string
