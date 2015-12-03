@@ -37,6 +37,7 @@ class Maintenance extends AbstractActionController
     public function indexAction()
     {
         try {
+            echo $this->getRequest()->getContent();
             $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
             $action = isset($params['disable']) && $params['disable'] ? false : true;
             $this->maintenanceMode->set($action);
