@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Model\Adapter\Index\Config;
 
 use Magento\Framework\Config\SchemaLocatorInterface;
+use Magento\Framework\Module\Dir;
 
 class SchemaLocator implements SchemaLocatorInterface
 {
@@ -32,7 +33,7 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $configDir = $moduleReader->getModuleDir('etc', 'Magento_Elasticsearch');
+        $configDir = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Elasticsearch');
         $this->schema = $configDir . DIRECTORY_SEPARATOR . self::CONFIG_FILE_SCHEMA;
         $this->perFileSchema = $configDir . DIRECTORY_SEPARATOR . self::CONFIG_FILE_SCHEMA;
     }

@@ -25,21 +25,16 @@ class Match implements QueryInterface
     /**
      * @param FieldMapperInterface $fieldMapper
      */
-    public function __construct(
-        FieldMapperInterface $fieldMapper
-    ) {
+    public function __construct(FieldMapperInterface $fieldMapper)
+    {
         $this->fieldMapper = $fieldMapper;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function build(
-        array $selectQuery,
-        RequestQueryInterface $requestQuery,
-        $conditionType
-    ) {
-        /** @var $query MatchQuery */
+    public function build(array $selectQuery, RequestQueryInterface $requestQuery, $conditionType)
+    {
         $queryValue = $this->prepareQuery($requestQuery->getValue(), $conditionType);
         $queries = $this->buildQueries($requestQuery->getMatches(), $queryValue);
         foreach ($queries as $query) {
