@@ -9,7 +9,7 @@ use Magento\Elasticsearch\SearchAdapter\Adapter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Class AdapterTest
  */
 class AdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -90,6 +90,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test query() method
+     *
+     * @return void
      */
     public function testQuery()
     {
