@@ -103,7 +103,7 @@ class Save extends Action
             $this->checkSingleStoreMode($designConfigData);
             $this->designConfigRepository->save($designConfigData);
 
-            $this->messageManager->addSuccess(__('Configuration was saved'));
+            $this->messageManager->addSuccess(__('Configuration has been saved'));
         } catch (LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
