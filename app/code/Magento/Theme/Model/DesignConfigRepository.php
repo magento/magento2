@@ -50,7 +50,7 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
             throw new LocalizedException(__('Can not save empty config'));
         }
 
-        $this->configStorage->add($designConfig);
+        $this->configStorage->set($designConfig);
 
         try {
             $this->configStorage->flush();

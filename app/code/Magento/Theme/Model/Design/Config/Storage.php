@@ -10,7 +10,6 @@ use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Theme\Model\Design\BackendModelFactory;
-use Magento\Theme\Model\Design\Config\ValueChecker;
 
 class Storage
 {
@@ -45,12 +44,12 @@ class Storage
     }
 
     /**
-     * Add design config to storage
+     * Set design config to storage
      *
      * @param DesignConfigInterface $designConfig
      * @return void
      */
-    public function add(DesignConfigInterface $designConfig)
+    public function set(DesignConfigInterface $designConfig)
     {
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
         foreach ($fieldsData as $fieldData) {
