@@ -17,6 +17,9 @@
 @product-name-link__text-decoration__hover: @link__hover__text-decoration;
 @product-name-link__text-decoration__visited: @link__hover__text-decoration;
 
+@product-item__hover__background-color: @color-white;
+@product-item__hover__box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
+
 //
 
 //
@@ -252,14 +255,13 @@
         .products-grid & {
             &:hover,
             &.active {
+                .lib-css(background, @product-item__hover__background-color);
+                .lib-css(box-shadow, @product-item__hover__box-shadow);
+                border: 1px solid @color-gray-light2;
                 margin: -10px;
                 padding: 9px;
-                border: 1px solid @color-gray-light2;
-                @_shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
-                .lib-css(box-shadow, @_shadow);
                 position: relative;
                 z-index: 2;
-                .lib-css(background, @color-white);
 
                 .product-item-inner {
                     display: block;
@@ -270,17 +272,16 @@
 
     .product-item-inner {
         .products-grid & {
-            position: absolute;
-            left: 0;
-            right: -1px;
-            z-index: 2;
-            .lib-css(background, @color-white);
-            padding: 0 9px 9px 9px;
-            margin: 9px 0 0 -1px;
+            .lib-css(background, @product-item__hover__background-color);
+            .lib-css(box-shadow, @product-item__hover__box-shadow);
             border: 1px solid @color-gray-light2;
             border-top: none;
-            @_shadow: 3px 4px 4px 0 rgba(0, 0, 0, .3);
-            .lib-css(box-shadow, @_shadow);
+            left: 0;
+            margin: 9px 0 0 -1px;
+            padding: 0 9px 9px;
+            position: absolute;
+            right: -1px;
+            z-index: 2;
         }
     }
 
@@ -306,6 +307,28 @@
         }
 
         .actions-primary { display: table-cell; }
+    }
+
+    .page-products {
+        .products-grid {
+            .product-item-inner {
+                &:before {
+                    .lib-css(background, @product-item__hover__background-color);
+                    content: '';
+                    height: 3px;
+                    left: 0;
+                    position: absolute;
+                    top: -2px;
+                    width: 100%;
+                    z-index: 1;
+                }
+            }
+        }
+
+        .product-item-actions {
+            position: relative;
+            z-index: 2;
+        }
     }
 
     .products-grid {
