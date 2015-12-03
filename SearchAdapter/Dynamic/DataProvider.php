@@ -12,10 +12,8 @@ use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Config;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class DataProvider implements DataProviderInterface
 {
     /**
@@ -39,21 +37,29 @@ class DataProvider implements DataProviderInterface
     protected $intervalFactory;
 
     /**
+     * @var Config
+     */
+    protected $clientConfig;
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param Range $range
      * @param IntervalFactory $intervalFactory
+     * @param Config $clientConfig
      */
     public function __construct(
         ConnectionManager $connectionManager,
         FieldMapperInterface $fieldMapper,
         Range $range,
-        IntervalFactory $intervalFactory
+        IntervalFactory $intervalFactory,
+        Config $clientConfig
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
         $this->range = $range;
         $this->intervalFactory = $intervalFactory;
+        $this->clientConfig = $clientConfig;
     }
 
     /**
@@ -69,7 +75,67 @@ class DataProvider implements DataProviderInterface
      */
     public function getAggregations(EntityStorage $entityStorage)
     {
-        return [];
+        $aggregations = [
+            'count' => 0,
+            'max' => 0,
+            'min' => 0,
+            'std' => 0,
+        ];
+        $entityIds = $entityStorage->getSource();
+        $fieldName = $this->fieldMapper->getFieldName('price');
+        $requestQuery = [
+            'index' => $this->clientConfig->getIndexName(),
+            'type' => $this->clientConfig->getEntityType(),
+            'body' => [
+                'fields' => [
+                    '_id',
+                    '_score',
+                ],
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            [
+                                'term' => [
+                                    'store_id' => 1,
+                                ],
+                            ],
+                            [
+                                'terms' => [
+                                    '_id' => $entityIds,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'aggregations' => [
+                    'price' => [
+                        'nested' => [
+                            'path' => $fieldName,
+                        ],
+                        'aggregations' => [
+                            'price_stats' => [
+                                'extended_stats' => [
+                                    'field' => $fieldName . '.price',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $queryResult = $this->connectionManager->getConnection()
+            ->query($requestQuery);
+
+        if (isset($queryResult['aggregations']['price']['price_stats'])) {
+            $aggregations = [
+                'count' => $queryResult['aggregations']['price']['price_stats']['count'],
+                'max' => $queryResult['aggregations']['price']['price_stats']['max'],
+                'min' => $queryResult['aggregations']['price']['price_stats']['min'],
+                'std' => $queryResult['aggregations']['price']['price_stats']['std_deviation'],
+            ];
+        }
+
+        return $aggregations;
     }
 
     /**
