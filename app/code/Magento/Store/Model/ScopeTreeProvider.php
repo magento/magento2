@@ -7,6 +7,9 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeTreeProviderInterface;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
 
 class ScopeTreeProvider implements ScopeTreeProviderInterface
 {
@@ -35,7 +38,7 @@ class ScopeTreeProvider implements ScopeTreeProviderInterface
             'scopes' => [],
         ];
 
-        /** @var \Magento\Store\Model\Website $website */
+        /** @var Website $website */
         foreach ($this->storeManager->getWebsites() as $website) {
             $websiteScope = [
                 'scope' => ScopeInterface::SCOPE_WEBSITES,
@@ -43,7 +46,7 @@ class ScopeTreeProvider implements ScopeTreeProviderInterface
                 'scopes' => [],
             ];
 
-            /** @var \Magento\Store\Model\Group $group */
+            /** @var Group $group */
             foreach ($website->getGroups() as $group) {
                 $groupScope = [
                     'scope' => ScopeInterface::SCOPE_GROUP,
@@ -51,7 +54,7 @@ class ScopeTreeProvider implements ScopeTreeProviderInterface
                     'scopes' => [],
                 ];
 
-                /** @var \Magento\Store\Model\Group $store */
+                /** @var Store $store */
                 foreach ($group->getStores() as $store) {
                     $storeScope = [
                         'scope' => ScopeInterface::SCOPE_STORES,
