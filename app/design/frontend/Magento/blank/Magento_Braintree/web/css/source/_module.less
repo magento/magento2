@@ -1,0 +1,113 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@braintree-input-border__color: @color-gray76;
+
+@braintree-error__color: @color-red10;
+@braintree-focus__color: @color-blue2;
+@braintree-success__color: @color-dark-green1;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .payment-method-braintree {
+
+        .hosted-date-wrap {
+            &:extend(.abs-add-clearfix all);
+        }
+
+        .hosted-control {
+            .lib-form-element-input(@_type: input-text);
+            position: relative;
+            width: 225px;
+
+            &.braintree-hosted-fields-focused {
+                border-color: @braintree-focus__color;
+            }
+
+            &.braintree-hosted-fields-invalid:not(.braintree-hosted-fields-focused) {
+                border-color: @braintree-error__color;
+
+                & ~ .hosted-error {
+                    opacity: 1;
+                    height: auto;
+                }
+            }
+
+            &.braintree-hosted-fields-valid {
+                border-color: @braintree-success__color;
+            }
+
+            &.hosted-cid {
+                width: 5rem;
+            }
+
+            &.hosted-date {
+                @distance: 50px;
+
+                width: 6rem;
+                float: left;
+
+                &:first-of-type {
+                    margin-right: @distance;
+
+                    &:after {
+                        content: '/';
+                        display: inline;
+                        padding-top: inherit;
+                        padding-bottom: inherit;
+                        position: absolute;
+                        right: -@distance / 2;
+                        top: 5px;
+                    }
+                }
+            }
+        }
+
+        .month {
+            @distance: 50px;
+
+            margin-right: @distance;
+            position: relative;
+
+            &:after {
+                content: '/';
+                display: inline;
+                padding-top: inherit;
+                padding-bottom: inherit;
+                position: absolute;
+                right: -@distance * (2/3.5);
+                top: 5px;
+            }
+        }
+
+        .field-tooltip {
+            right: 0;
+        }
+
+        .hosted-error {
+            color: @braintree-error__color;
+            opacity: 0;
+            height: 0;
+            clear: both;
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .field-tooltip {
+        left: 6rem;
+    }
+}
