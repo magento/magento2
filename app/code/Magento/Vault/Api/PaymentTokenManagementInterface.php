@@ -19,7 +19,7 @@ interface PaymentTokenManagementInterface
      * Lists payment tokens that match specified search criteria.
      *
      * @param int $customerId Customer ID.
-     * @return \Magento\Vault\Api\Data\PaymentTokenSearchResultInterface Payment token search result interface.
+     * @return \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface Payment token search result interface.
      */
     public function getListByCustomerId($customerId);
 
