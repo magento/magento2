@@ -17,6 +17,9 @@
 @product-name-link__text-decoration__hover: @link__hover__text-decoration;
 @product-name-link__text-decoration__visited: @link__hover__text-decoration;
 
+@product-item__hover__background-color: @color-white;
+@product-item__hover__box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
+
 //
 
 //
@@ -250,10 +253,8 @@
         .products-grid & {
             &:hover,
             &.active {
-                @_shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
-                
-                .lib-css(background, @color-white);
-                .lib-css(box-shadow, @_shadow);
+                .lib-css(background, @product-item__hover__background-color);
+                .lib-css(box-shadow, @product-item__hover__box-shadow);
                 border: 1px solid @color-gray-light2;
                 margin: -10px;
                 padding: 9px;
@@ -269,15 +270,13 @@
 
     .product-item-inner {
         .products-grid & {
-            @_shadow: 3px 4px 4px 0 rgba(0, 0, 0, .3);
-            
-            .lib-css(background, @color-white);
-            .lib-css(box-shadow, @_shadow);
+            .lib-css(background, @product-item__hover__background-color);
+            .lib-css(box-shadow, @product-item__hover__box-shadow);
             border: 1px solid @color-gray-light2;
             border-top: none;
             left: 0;
             margin: 9px 0 0 -1px;
-            padding: 0 9px 9px 9px;
+            padding: 0 9px 9px;
             position: absolute;
             right: -1px;
             z-index: 2;
@@ -304,9 +303,31 @@
                 }
             }
         }
-        
+
         .actions-primary {
             display: table-cell;
+        }
+    }
+
+    .page-products {
+        .products-grid {
+            .product-item-inner {
+                &:before {
+                    .lib-css(background, @product-item__hover__background-color);
+                    content: '';
+                    height: 3px;
+                    left: 0;
+                    position: absolute;
+                    top: -2px;
+                    width: 100%;
+                    z-index: 1;
+                }
+            }
+        }
+
+        .product-item-actions {
+            position: relative;
+            z-index: 2;
         }
     }
 
