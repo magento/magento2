@@ -5,21 +5,20 @@
  */
 -->
 <div class="fieldset-wrapper"
-     data-bind="css: {'admin__collapsible-block-wrapper': collapsible, '_show': opened, '_hide': !opened}">
+     css="'admin__collapsible-block-wrapper': collapsible, '_show': opened, '_hide': !opened"
+     attr="'data-level': $data.level">
     <div class="fieldset-wrapper-title"
          tabindex="0"
-         data-bind="click: toggleOpened, keyboard: { 13: toggleOpened }, visible: label">
-        <strong data-bind="
-            css: {
-                'admin__collapsible-title': collapsible,
-                title: !collapsible,
-                '_changed': changed,
-                '_loading': loading,
-                '_error': error
-                }">
-            <span data-bind="text: label"></span>
-            <!-- ko if: element.collapsible -->
-            <span class="admin__page-nav-item-messages">
+         click="toggleOpened"
+         keyboard="13: toggleOpened"
+         visible="label">
+        <strong css="'admin__collapsible-title': collapsible,
+                      title: !collapsible,
+                      '_changed': changed,
+                      '_loading': loading,
+                      '_error': error">
+            <span text="label"/>
+            <span class="admin__page-nav-item-messages" if="element.collapsible">
                <span class="admin__page-nav-item-message _changed">
                    <span class="admin__page-nav-item-message-icon"></span>
                    <span class="admin__page-nav-item-message-tooltip"
@@ -30,21 +29,15 @@
                    <span class="admin__page-nav-item-message-icon"></span>
                </span>
                 <span class="admin__page-nav-item-message-loader">
-                   <span class="spinner">
-                       <span></span><span></span><span></span><span></span>
-                       <span></span><span></span><span></span><span></span>
-                   </span>
+                    <span class="spinner" repeat="8">
+                        <span/>
+                    </span>
                </span>
             </span>
-            <!-- /ko -->
         </strong>
     </div>
     <div class="admin__fieldset-wrapper-content"
-         data-bind="css: {'admin__collapsible-content': collapsible, '_show': opened, '_hide': !opened}">
-        <fieldset class="admin__fieldset">
-            <!-- ko foreach: { data: elems, as: 'element' } -->
-            <!-- ko template: element.getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-        </fieldset>
+         css="'admin__collapsible-content': collapsible, '_show': opened, '_hide': !opened">
+        <fieldset class="admin__fieldset" each="data: elems, as: 'element'" render=""/>
     </div>
 </div>

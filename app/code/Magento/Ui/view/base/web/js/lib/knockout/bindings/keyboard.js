@@ -4,8 +4,8 @@
  */
 define([
     'ko',
-    'underscore'
-], function (ko) {
+    '../template/renderer'
+], function (ko, renderer) {
     'use strict';
 
     ko.bindingHandlers.keyboard = {
@@ -29,4 +29,6 @@ define([
             });
         }
     };
+
+    renderer.addAttribute('keyboard');
 });
