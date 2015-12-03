@@ -5,17 +5,15 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\Model\ResourceModel;
 
-use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Index
+     * @var \Magento\Elasticsearch\Model\ResourceModel\Index
      */
     private $model;
 
@@ -207,7 +205,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getPriceIndexDataEmpty method wich return empty array
+     * Test getPriceIndexDataEmpty method which return empty array
      */
     public function testGetPriceIndexData()
     {
@@ -251,7 +249,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getPriceIndexDataEmpty method wich return empty array
+     * Test getPriceIndexDataEmpty method which return empty array
      */
     public function testGetPriceIndexDataEmpty()
     {
@@ -370,9 +368,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * Test getFullProductIndexData method
      *
-     * @dataProvider attributeCodeProvider
      * @param string $frontendInput
      * @return void
+     * @dataProvider attributeCodeProvider
      */
     public function testGetFullProductIndexData($frontendInput)
     {
@@ -470,6 +468,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Provides data for testGetFullProductIndexData method.
+     *
      * @return array
      */
     public static function attributeCodeProvider()

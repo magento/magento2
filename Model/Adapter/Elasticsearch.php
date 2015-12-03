@@ -5,6 +5,9 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;

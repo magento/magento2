@@ -9,7 +9,7 @@ use Magento\Elasticsearch\SearchAdapter\AggregationFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Class AggregationFactoryTest
  */
 class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,6 +46,8 @@ class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test create() method.
+     *
+     * @return void
      */
     public function testCreate()
     {
