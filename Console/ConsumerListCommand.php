@@ -5,9 +5,8 @@
  */
 namespace Magento\MessageQueue\Console;
 
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Symfony\Component\Console\Command\Command;
-use Magento\Framework\MessageQueue\Config\Data as QueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -62,7 +61,6 @@ HELP
      */
     private function getConsumers()
     {
-        $queueConfig = $this->queueConfig->get();
-        return array_keys($queueConfig[QueueConfigConverter::CONSUMERS]);
+        return $this->queueConfig->getConsumerNames();
     }
 }

@@ -7,13 +7,22 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\MessageQueue\PublisherInterface" type="Magento\Framework\MessageQueue\PublisherProxy"/>
+    <preference for="Magento\Framework\MessageQueue\Rpc\PublisherInterface" type="Magento\Framework\MessageQueue\Rpc\PublisherProxy"/>
+    <preference for="Magento\Framework\MessageQueue\ConfigInterface" type="Magento\Framework\MessageQueue\Config" />
     <preference for="Magento\Framework\MessageQueue\EnvelopeInterface" type="Magento\Framework\MessageQueue\Envelope"/>
-
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="startConsumerCommand" xsi:type="object">Magento\MessageQueue\Console\StartConsumerCommand</item>
                 <item name="consumerListCommand" xsi:type="object">Magento\MessageQueue\Console\ConsumerListCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\MessageQueue\PublisherPool">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="async" xsi:type="object">Magento\Framework\MessageQueue\PublisherInterface</item>
+                <item name="sync" xsi:type="object">Magento\Framework\MessageQueue\Rpc\PublisherInterface</item>
             </argument>
         </arguments>
     </type>
