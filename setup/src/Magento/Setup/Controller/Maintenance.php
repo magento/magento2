@@ -42,6 +42,7 @@ class Maintenance extends AbstractActionController
             $this->maintenanceMode->set($action);
             return new JsonModel(['responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]);
         } catch (\Exception $e) {
+            var_dump($e);
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
