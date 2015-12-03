@@ -46,6 +46,7 @@
         </arguments>
     </virtualType>
     <preference for="Magento\CatalogRule\Api\Data\RuleInterface" type="Magento\CatalogRule\Model\Rule" />
+    <preference for="Magento\CatalogRule\Api\CatalogRuleRepositoryInterface" type="Magento\CatalogRule\Model\CatalogRuleRepository" />
     <type name="Magento\Framework\Model\Entity\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
