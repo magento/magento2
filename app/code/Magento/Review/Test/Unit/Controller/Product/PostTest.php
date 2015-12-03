@@ -219,7 +219,13 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $ratingsData = ['ratings' => [1 => 1]];
+        $reviewData = [
+            'ratings' => [1 => 1]
+        ];
+        $reviewDataWithId = [
+            'ratings' => [1 => 1],
+            'review_id' => 2
+        ];
         $productId = 1;
         $customerId = 1;
         $storeId = 1;
@@ -230,7 +236,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->reviewSession->expects($this->any())->method('getFormData')
             ->with(true)
-            ->willReturn($ratingsData);
+            ->willReturn($reviewDataWithId);
         $this->request->expects($this->at(0))->method('getParam')
             ->with('category', false)
             ->willReturn(false);
@@ -260,7 +266,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->with('product', $product)
             ->willReturnSelf();
         $this->review->expects($this->once())->method('setData')
-            ->with($ratingsData)
+            ->with($reviewData)
             ->willReturnSelf();
         $this->review->expects($this->once())->method('validate')
             ->willReturn(true);
