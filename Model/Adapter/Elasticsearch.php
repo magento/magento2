@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Elasticsearch adapter
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Elasticsearch
 {

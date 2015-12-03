@@ -15,7 +15,7 @@ use Magento\Framework\Config\Data;
 class EsConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig
+     * @var EsConfig
      */
     protected $config;
 

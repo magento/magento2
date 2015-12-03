@@ -11,7 +11,6 @@ use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
 
 /**
  * Class FieldMapper
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FieldMapper implements FieldMapperInterface
 {
@@ -40,7 +39,6 @@ class FieldMapper implements FieldMapperInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getFieldName($attributeCode, $context = [])
     {

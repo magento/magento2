@@ -19,6 +19,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class ElasticsearchTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ElasticsearchTest extends \PHPUnit_Framework_TestCase
 {

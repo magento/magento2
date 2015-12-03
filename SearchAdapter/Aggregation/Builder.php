@@ -15,10 +15,8 @@ class Builder
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function build(
-        RequestInterface $request,
-        array $queryResult
-    ) {
+    public function build(RequestInterface $request, array $queryResult)
+    {
         $aggregations = [];
         $buckets = $request->getAggregation();
         foreach ($buckets as $bucket) {

@@ -22,7 +22,7 @@ use Magento\Elasticsearch\Model\Adapter\DocumentDataMapper;
 class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\DocumentDataMapper
+     * @var DocumentDataMapper
      */
     protected $model;
 

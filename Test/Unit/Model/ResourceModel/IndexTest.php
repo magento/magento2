@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\ResourceModel\Index
+     * @var Index
      */
     private $model;
 
