@@ -88,7 +88,9 @@ class ConfigurableOptions extends CustomOptions
     {
         $this->_rootElement->find(sprintf($this->optionSelector, $attributeTitle), Locator::SELECTOR_XPATH, 'select')
             ->setValue($optionTitle);
-        return $this->getPriceBlock()->getPrice();
+        $priceBlock = $this->getPriceBlock();
+        $price = ($priceBlock->isOldPriceVisible()) ? $priceBlock->getOldPrice() : $priceBlock->getPrice();
+        return $price;
     }
 
     /**
