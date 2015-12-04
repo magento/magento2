@@ -5,10 +5,8 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CatalogSampleData\Test\TestCase\NavigateProductEntityTest"
-              summary="Install Magento via Web Interface with Sample Data" ticketId="MAGETWO-33559">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CatalogSampleData\Test\TestCase\NavigateProductEntityTest" summary="Install Magento via Web Interface with Sample Data" ticketId="MAGETWO-33559">
         <variation name="NavigateProductsTest1">
             <data name="product/data/url_key" xsi:type="string">overnight-duffle</data>
             <data name="product/data/name" xsi:type="string">Overnight Duffle</data>

@@ -5,13 +5,9 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\SalesSampleData\Test\TestCase\CheckoutSalesSampleDataProductEntityTest"
-              summary="CheckoutSalesSampleDataProductEntityTest within Offline Payment Methods"
-              ticketId="MAGETWO-27485">
-        <variation name="CheckoutSalesSampleDataProductEntityTestVariation1"
-                   summary="US customer during checkout using coupon for all customer groups">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\SalesSampleData\Test\TestCase\CheckoutSalesSampleDataProductEntityTest" summary="CheckoutSalesSampleDataProductEntityTest within Offline Payment Methods" ticketId="MAGETWO-27485">
+        <variation name="CheckoutSalesSampleDataProductEntityTestVariation1" summary="US customer during checkout using coupon for all customer groups">
             <data name="products" xsi:type="string">catalogProductSimple::sample_data_simple_product</data>
             <data name="id" xsi:type="string">1</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
