@@ -77,6 +77,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getStoresStructureDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testGetStoresStructure(
         $isAll,
@@ -175,6 +176,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getStoreValuesForFormDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testGetStoreValuesForForm(
         $empty,
