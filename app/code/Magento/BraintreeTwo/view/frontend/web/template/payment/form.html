@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="payment-method payment-method-braintree" data-bind="css: {'_active': isActive() && scriptLoaded()}">
+<div data-bind="attr: {class: 'payment-method payment-method-' + getCode()}, css: {'_active': isActive() && scriptLoaded()}">
     <div class="payment-method-title field choice">
         <input type="radio"
                name="payment[method]"
