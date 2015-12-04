@@ -13,6 +13,7 @@ use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteNew;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Precondition:
@@ -96,36 +97,30 @@ class CreateSalesRuleEntityTest extends Injectable
      * Create Sales Price Rule.
      *
      * @param SalesRule $salesRule
-     * @param array $productQuantity
+     * @param Customer $customer
+     * @param CatalogProductSimple $productForSalesRule1
+     * @param CatalogProductSimple $productForSalesRule2
      * @param string $conditionEntity
-     * @return array
      */
-    public function testCreateSalesRule(SalesRule $salesRule, $productQuantity, $conditionEntity = null)
+    public function testCreateSalesRule(
+        SalesRule $salesRule,
+        Customer $customer = null,
+        CatalogProductSimple $productForSalesRule1,
+        CatalogProductSimple $productForSalesRule2 = null,
+        $conditionEntity = null)
     {
-        $result = [];
         $replace = null;
-        // Prepare data
-        $customer = $this->fixtureFactory->createByCode('customer', ['dataset' => 'default']);
-        $customer->persist();
-        $result['customer']=$customer;
         $this->salesRuleName = $salesRule->getName();
-        if(isset($productQuantity['productForSalesRule1'])){
-            $productForSalesRule1 = $this->fixtureFactory->createByCode(
-                'catalogProductSimple',
-                ['dataset' => 'simple_for_salesrule_1']
-            );
-            $productForSalesRule1->persist();
-            $result['productForSalesRule1'] = $productForSalesRule1;
-        }
-        if(isset($productQuantity['productForSalesRule2'])){
-            $productForSalesRule2 = $this->fixtureFactory->createByCode(
-                'catalogProductSimple',
-                ['dataset' => 'simple_for_salesrule_2']
-            );
+
+        // Prepare data
+        if ($customer !== null)
+            $customer->persist();
+        $productForSalesRule1->persist();
+        if ($productForSalesRule2 !== null) {
             $productForSalesRule2->persist();
-            if(!is_null($conditionEntity))
+            if (!is_null($conditionEntity)) {
                 $replace = $this->prepareCondition($productForSalesRule2, $conditionEntity);
-            $result['productForSalesRule2'] = $productForSalesRule2;
+            }
         }
 
         // Steps
@@ -133,11 +128,10 @@ class CreateSalesRuleEntityTest extends Injectable
         $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule,null,$replace);
         $this->promoQuoteNew->getFormPageActions()->save();
 
-        return $result;
     }
 
     /**
-     * Prepare condition for catalog price rule.
+     * Prepare condition for Sales rule.
      *
      * @param CatalogProductSimple $productSimple
      * @param string $conditionEntity
