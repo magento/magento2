@@ -17,7 +17,7 @@ class SuggestedQueries implements SuggestedQueriesInterface
     private $engineResolver;
 
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 

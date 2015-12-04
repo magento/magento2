@@ -3,10 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\AdvancedSearch\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Search\Model\EngineResolver;
+use Magento\Framework\ObjectManagerInterface;
 
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,12 +17,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Search\Model\EngineResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $engineResolverMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
@@ -49,13 +50,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|
          *     \PHPUnit_Framework_MockObject_MockObject
          */
-        $suggestedQueriesInterfaceMock = $this->getMock(
-            'Magento\AdvancedSearch\Model\SuggestedQueriesInterface'
-        );
-        $suggestedQueriesInterfaceMock->expects($this->any())
+        $suggestedQueriesMock = $this->getMock('Magento\AdvancedSearch\Model\SuggestedQueriesInterface');
+        $suggestedQueriesMock->expects($this->any())
             ->method('isResultsCountEnabled')
             ->willReturn(true);
-        $suggestedQueriesInterfaceMock->expects($this->any())
+        $suggestedQueriesMock->expects($this->any())
             ->method('getItems')
             ->willReturn([]);
 
@@ -65,7 +64,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->with('search_engine')
-            ->willReturn($suggestedQueriesInterfaceMock);
+            ->willReturn($suggestedQueriesMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -80,6 +79,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test isResultsCountEnabled method.
+     *
+     * @return void
      */
     public function testIsResultsCountEnabled()
     {
@@ -88,8 +89,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test isResultsCountEnabled() method failure
+     * Test isResultsCountEnabled() method failure.
      * @expectedException \InvalidArgumentException
+     *
+     * @return void
      */
     public function testIsResultsCountEnabledException()
     {
@@ -113,8 +116,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $model->isResultsCountEnabled();
     }
 
+    /**
+     * Test testGetItems() method.
+     *
+     * @return void
+     */
     public function testGetItems()
     {
+        /** @var $queryInterfaceMock \Magento\Search\Model\QueryInterface */
         $queryInterfaceMock = $this->getMock('Magento\Search\Model\QueryInterface');
         $result = $this->model->getItems($queryInterfaceMock);
         $this->assertEquals([], $result);
