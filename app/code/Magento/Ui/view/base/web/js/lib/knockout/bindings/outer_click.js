@@ -6,8 +6,9 @@
 define([
     'ko',
     'jquery',
-    'underscore'
-], function (ko, $, _) {
+    'underscore',
+    '../template/renderer'
+], function (ko, $, _, renderer) {
     'use strict';
 
     var defaults = {
@@ -77,4 +78,6 @@ define([
             });
         }
     };
+
+    renderer.addAttribute('outerClick');
 });
