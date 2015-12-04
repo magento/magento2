@@ -78,4 +78,11 @@
             <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Model\Client\Elasticsearch</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\AdvancedSearch\Model\SuggestedQueries">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\DataProvider\Suggestions</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
