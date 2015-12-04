@@ -11,8 +11,8 @@
 .admin__fieldset-wrapper-title {
     &:extend(.abs-clearfix all);
     border-bottom: 1px solid @color-gray80;
-    margin-bottom: 0;
     line-height: 1.2;
+    margin-bottom: 0;
     padding: 14px 0 16px;
 
     .title {
@@ -39,19 +39,21 @@
 
 .admin__fieldset-wrapper-content {
     .admin__fieldset {
-        padding-top: 3rem;
         padding-bottom: 3rem;
+        padding-top: 3rem;
+
         > .admin__collapsible-block-wrapper {
             &:first-child {
                 margin-top: -3rem;
             }
         }
-        :last-child {
-            margin-bottom: 0;
+
+        > *:first-child {
+            margin-top: 0;
         }
 
-        :first-child {
-            margin-top: 0;
+        > *:last-child {
+            margin-bottom: 0;
         }
     }
 }
