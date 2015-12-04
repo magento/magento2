@@ -169,4 +169,3 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->designConfig, $this->factory->create($data));
     }
 }
-
