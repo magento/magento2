@@ -94,29 +94,14 @@ class Suggestions implements SuggestedQueriesInterface
         if ($this->isSuggestionsAllowed()) {
             $isResultsCountEnabled = $this->isResultsCountEnabled();
 
-            $result[] = $this->queryResultFactory->create(
-                [
-                    'queryText' => 'test',
-                    'resultsCount' => 5,
-                ]
-            );
-            return $result;
-
-            // @TODO
             foreach ($this->getSuggestions($query) as $suggestion) {
-                /** @var Suggestion $suggestion */
                 $count = null;
                 if ($isResultsCountEnabled) {
-                    $this->requestBuilder->setRequestName('quick_search_container');
-                    $this->requestBuilder->bind('search_term', $suggestion->getWord());
-                    $request = $this->requestBuilder->create();
-                    /** @var \Magento\Framework\Search\ResponseInterface|\Countable $searchResult */
-                    $searchResult = $this->searchEngine->search($request);
-                    $count = $searchResult->count();
+                    $count = $suggestion['freq'];
                 }
                 $result[] = $this->queryResultFactory->create(
                     [
-                        'queryText' => $suggestion->getWord(),
+                        'queryText' => $suggestion['text'],
                         'resultsCount' => $count,
                     ]
                 );
@@ -139,39 +124,48 @@ class Suggestions implements SuggestedQueriesInterface
 
     /**
      * @param QueryInterface $query
-     * @return Suggestion[]|Result
+     * @return array
      */
     private function getSuggestions(QueryInterface $query)
     {
-        // @TODO
-        $request = $this->createQuery();
-        $request->setHandler($this->accessPointMapper->getHandler());
-        $request->setRows(0);
-        $spellcheck = $request->getSpellcheck();
-        $spellcheck->setQuery($query->getQueryText());
-        $spellcheck->setCount($this->getSearchSuggestionsCount());
-        /** @var \Solarium\QueryType\Select\Result\Result $resultSet */
-        $resultSet = $this->fetchQuery($request);
-        $suggestions = $resultSet->getSpellcheck() ?: [];
+        $suggestions = [];
+        $searchSuggestionsCount = $this->getSearchSuggestionsCount();
+
+        $suggestRequest = [
+            'index' => $this->config->getIndexName(),
+            'body' => [
+                'magento-suggest' => [
+                    'text' => $query->getQueryText(),
+                    'term' => [
+                        'field' => '_all',
+                        'size' => $searchSuggestionsCount
+                    ]
+                ]
+            ]
+        ];
+
+        $result = $this->fetchQuery($suggestRequest);
+
+        if (is_array($result)) {
+            foreach ($result['magento-suggest'] as $token) {
+                foreach ($token['options'] as $key => $suggestion) {
+                    $suggestions[$suggestion['score'] . '_' . $key] = $suggestion;
+                }
+            }
+            ksort($suggestions);
+            $suggestions = array_slice($suggestions, 0, $searchSuggestionsCount);
+        }
+
         return $suggestions;
     }
 
     /**
-     * @return Query
-     */
-    private function createQuery()
-    {
-        // @TODO
-        return $this->queryFactory->create();
-    }
-
-    /**
-     * @param Query $query
+     * @param array $query
      * @return array
      */
-    private function fetchQuery(Query $query)
+    private function fetchQuery(array $query)
     {
-        return $this->connectionManager->getConnection()->query($query);
+        return $this->connectionManager->getConnection()->suggest($query);
     }
 
     /**
