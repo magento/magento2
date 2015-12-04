@@ -142,4 +142,30 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $this;
     }
+
+    /**
+     * Add product relations
+     *
+     * @param int $parentId
+     * @param array $childIds
+     * @return $this
+     */
+    public function addProductRelations($parentId, $childIds)
+    {
+        $this->_productRelation->addRelations($parentId, $childIds);
+        return $this;
+    }
+
+    /**
+     * Remove product relations
+     *
+     * @param int $parentId
+     * @param array $childIds
+     * @return $this
+     */
+    public function removeProductRelations($parentId, $childIds)
+    {
+        $this->_productRelation->removeRelations($parentId, $childIds);
+        return $this;
+    }
 }
