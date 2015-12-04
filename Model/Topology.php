@@ -8,6 +8,7 @@ namespace Magento\Amqp\Model;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Class Topology creates topology for Amqp messaging
@@ -42,6 +43,11 @@ class Topology
     private $queueConfig;
 
     /**
+     * @var CommunicationConfig
+     */
+    private $communicationConfig;
+
+    /**
      * @var array
      */
     private $queueConfigData;
@@ -56,15 +62,18 @@ class Topology
      *
      * @param Config $amqpConfig
      * @param QueueConfig $queueConfig
+     * @param CommunicationConfig $communicationConfig
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         Config $amqpConfig,
         QueueConfig $queueConfig,
+        CommunicationConfig $communicationConfig,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->amqpConfig = $amqpConfig;
         $this->queueConfig = $queueConfig;
+        $this->communicationConfig = $communicationConfig;
         $this->logger = $logger;
     }
 
@@ -134,8 +143,8 @@ class Topology
      */
     private function isSynchronousModeTopic($topicName)
     {
-        $topic = $this->queueConfig->getTopic($topicName);
-        return $topic[\Magento\Framework\Communication\ConfigInterface::TOPIC_IS_SYNCHRONOUS];
+        $topic = $this->communicationConfig->getTopic($topicName);
+        return (bool)$topic[\Magento\Framework\Communication\ConfigInterface::TOPIC_IS_SYNCHRONOUS];
     }
 
     /**
