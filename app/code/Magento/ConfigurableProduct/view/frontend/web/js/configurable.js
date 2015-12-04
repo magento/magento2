@@ -7,11 +7,12 @@ define([
     'jquery',
     'underscore',
     'mage/template',
+    'mage/gallery/preloadImages',
     'priceUtils',
     'priceBox',
     'jquery/ui',
     'jquery/jquery.parsequery'
-], function ($, _, mageTemplate) {
+], function ($, _, mageTemplate, preloadImages) {
     'use strict';
 
     $.widget('mage.configurable', {
@@ -37,6 +38,10 @@ define([
         _create: function () {
             // Initial setting of various option values
             this._initializeOptions();
+
+            //Preload all gallery images
+            this._preloadImages();
+            this._preloadOptionalImages();
 
             // Override defaults with URL query parameters and/or inputs values
             this._overrideDefaults();
@@ -84,6 +89,43 @@ define([
             gallery.on('gallery:loaded', function () {
                 var galleryObject = gallery.data('gallery');
                 options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+            });
+        },
+
+        /**
+         * Preloads default configuration images.
+         * @private
+         */
+        _preloadImages: function () {
+            var options = this.options,
+                fullImagesList = [], 
+                imagesList = [];
+
+            _.each(options.mediaGalleryInitial, function (item) {
+                imagesList.push(item.img);
+                fullImagesList.push(item.full);
+            });
+            preloadImages(imagesList);
+            preloadImages(fullImagesList);
+        },
+
+        /**
+         * Preloads optional configuration images.
+         * @private
+         */
+        _preloadOptionalImages: function () {
+            var options = this.options;
+
+            _.each(options.spConfig.images, function (array) {
+                var fullImagesList = [], 
+                    imagesList = [];
+
+                _.each(array, function (item) {
+                    imagesList.push(item.img);
+                    fullImagesList.push(item.full);
+                });
+                preloadImages(imagesList);
+                preloadImages(fullImagesList);
             });
         },
 
