@@ -77,7 +77,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
                 ['role_id'],
                 ['in_role_user'],
                 ['in_role_user_old']
-        );
+            );
         $this->assertInstanceOf('Magento\User\Block\Role\Tab\Info', $this->model->_beforeToHtml());
     }
 }
