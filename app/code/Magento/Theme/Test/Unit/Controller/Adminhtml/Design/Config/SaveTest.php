@@ -8,6 +8,9 @@ namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Controller\Adminhtml\Design\Config\Save;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Theme\Model\DesignConfigRepository|\PHPUnit_Framework_MockObject_MockObject */
