@@ -48,7 +48,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->storeFactoryMock = $this->getMockBuilder('Magento\Store\Model\StoreFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
         $this->storeGroupFactoryMock = $this->getMockBuilder('Magento\Store\Model\GroupFactory')
             ->disableOriginalConstructor()
