@@ -6,6 +6,9 @@
 namespace Magento\CatalogRule\Model;
 
 use Magento\CatalogRule\Api\Data;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface
 {
@@ -38,7 +41,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     /**
      * {@inheritdoc}
      */
-    public function save(\Magento\CatalogRule\Api\Data\RuleInterface $rule)
+    public function save(Data\RuleInterface $rule)
     {
         if ($rule->getRuleId()) {
             $rule = $this->get($rule->getRuleId())->addData($rule->getData());
@@ -48,10 +51,9 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
 
         try {
             $this->ruleResource->save($rule);
+            unset($this->rules[$rule->getId()]);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Unable to save rule %1', $rule->getRuleId())
-            );
+            throw new CouldNotSaveException(__('Unable to save rule %1', $rule->getRuleId()));
         }
     }
 
@@ -67,9 +69,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
             /* TODO: change to resource model after entity manager will be fixed */
             $rule->load($ruleId);
             if (!$rule->getRuleId()) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException(
-                    __('Rule with specified ID "%1" not found.', $ruleId)
-                );
+                throw new NoSuchEntityException(__('Rule with specified ID "%1" not found.', $ruleId));
             }
             $this->rules[$ruleId] = $rule;
         }
@@ -79,14 +79,13 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     /**
      * {@inheritdoc}
      */
-    public function delete(\Magento\CatalogRule\Api\Data\RuleInterface $rule)
+    public function delete(Data\RuleInterface $rule)
     {
         try {
             $this->ruleResource->delete($rule);
+            unset($this->rules[$rule->getId()]);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotDeleteException(
-                __('Unable to remove rule %1', $rule->getRuleId())
-            );
+            throw new CouldNotDeleteException(__('Unable to remove rule %1', $rule->getRuleId()));
         }
         return true;
     }
