@@ -126,7 +126,7 @@ define([
                 });
                 preloadImages(imagesList);
                 preloadImages(fullImagesList);
-            }
+            });
         },
 
         /**
