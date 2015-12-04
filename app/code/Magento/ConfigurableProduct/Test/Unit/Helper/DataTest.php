@@ -71,6 +71,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_model->getAllowAttributes($this->_productMock);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetOptions()
     {
         $currentProductMock = $this->getMock(
@@ -152,6 +155,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'attribute_id_2' => [
                 'attribute_code_value_2' => ['product_id_1', 'product_id_2'],
+            ],
+            'index' => [
+                'product_id_1' => [
+                    'attribute_id_1' => 'attribute_code_value_1',
+                    'attribute_id_2' => 'attribute_code_value_2',
+                ],
+
+                'product_id_2' => [
+                    'attribute_id_1' => 'attribute_code_value_1',
+                    'attribute_id_2' => 'attribute_code_value_2',
+                ]
             ],
         ];
         $this->_imageHelperMock->expects($this->any())

@@ -50,6 +50,7 @@ class Data
                 $attributeValue = $product->getData($productAttribute->getAttributeCode());
 
                 $options[$productAttributeId][$attributeValue][] = $productId;
+                $options['index'][$productId][$productAttributeId] = $attributeValue;
             }
         }
         return $options;
