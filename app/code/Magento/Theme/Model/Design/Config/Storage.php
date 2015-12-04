@@ -62,12 +62,11 @@ class Storage
             ]);
 
             if ($this->valueChecker->isDifferentFromDefault(
-                    $fieldData->getValue(),
-                    $designConfig->getScope(),
-                    $designConfig->getScopeId(),
-                    $fieldData->getFieldConfig()['path']
-                )
-            ) {
+                $fieldData->getValue(),
+                $designConfig->getScope(),
+                $designConfig->getScopeId(),
+                $fieldData->getFieldConfig()['path']
+            )) {
                 $this->saveTransaction->addObject($backendModel);
             } else {
                 $this->deleteTransaction->addObject($backendModel);
