@@ -90,7 +90,9 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $postData = [
             1 => [
                 'title' => '404 Not Found',
-                'identifier' => 'no-route'
+                'identifier' => 'no-route',
+                'custom_theme' => '1',
+                'custom_root_template' => '2'
             ]
         ];
         $this->request->expects($this->any())
@@ -138,7 +140,9 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->with([
                 'layout' => '1column',
                 'title' => '404 Not Found',
-                'identifier' => 'no-route'
+                'identifier' => 'no-route',
+                'custom_theme' => '1',
+                'custom_root_template' => '2'
             ]);
         $this->jsonFactory->expects($this->once())
             ->method('create')

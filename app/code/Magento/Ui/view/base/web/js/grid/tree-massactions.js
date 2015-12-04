@@ -14,10 +14,6 @@ define([
         defaults: {
             template: 'ui/grid/tree-massactions',
             submenuTemplate: 'ui/grid/submenu',
-            selectProvider: '',
-            modules: {
-                selections: '${ $.selectProvider }'
-            },
             listens: {
                 opened: 'hideSubmenus'
             }
