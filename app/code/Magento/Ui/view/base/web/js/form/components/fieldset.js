@@ -25,6 +25,7 @@ define([
          */
         initialize: function () {
             _.bindAll(this, 'onChildrenUpdate', 'onChildrenError', 'onContentLoading');
+            
             return this._super();
         },
 

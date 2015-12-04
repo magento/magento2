@@ -75,4 +75,3 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-
