@@ -23,7 +23,7 @@ class NavigateBundleEntityTest extends Injectable
     /**
      * Run test navigate products
      *
-     * @param BundleProduct      $product
+     * @param BundleProduct $product
      * @return array
      */
     public function test(BundleProduct $product)

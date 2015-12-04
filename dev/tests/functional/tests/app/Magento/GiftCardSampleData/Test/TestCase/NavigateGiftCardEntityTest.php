@@ -23,7 +23,7 @@ class NavigateGiftCardEntityTest extends Injectable
     /**
      * Run test navigate products
      *
-     * @param GiftCardProduct    $product
+     * @param GiftCardProduct $product
      * @return array
      */
     public function test(GiftCardProduct $product)

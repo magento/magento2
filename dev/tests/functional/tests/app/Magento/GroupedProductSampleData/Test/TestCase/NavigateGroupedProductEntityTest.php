@@ -22,8 +22,8 @@ class NavigateGroupedProductEntityTest extends Injectable
 
     /**
      * Run test navigate products
-     * 
-     * @param GroupedProduct     $product
+     *
+     * @param GroupedProduct $product
      * @return array
      */
     public function test(GroupedProduct $product)

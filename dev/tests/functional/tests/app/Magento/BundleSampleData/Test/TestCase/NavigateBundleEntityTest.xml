@@ -5,8 +5,10 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\BundleSampleData\Test\TestCase\NavigateBundleEntityTest" summary="Install Magento via Web Interface with Sample Data" ticketId="MAGETWO-43636">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\BundleSampleData\Test\TestCase\NavigateBundleEntityTest"
+              summary="Install Magento via Web Interface with Sample Data" ticketId="MAGETWO-43636">
         <variation name="NavigateProductsTest1">
             <data name="product/data/url_key" xsi:type="string">sprite-yoga-companion-kit</data>
             <data name="product/data/name" xsi:type="string">Sprite Yoga Companion Kit</data>
