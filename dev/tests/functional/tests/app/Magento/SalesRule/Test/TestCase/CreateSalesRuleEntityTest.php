@@ -97,35 +97,36 @@ class CreateSalesRuleEntityTest extends Injectable
      * Create Sales Price Rule.
      *
      * @param SalesRule $salesRule
-     * @param Customer $customer
      * @param CatalogProductSimple $productForSalesRule1
      * @param CatalogProductSimple $productForSalesRule2
+     * @param Customer $customer
      * @param string $conditionEntity
      */
     public function testCreateSalesRule(
         SalesRule $salesRule,
-        Customer $customer = null,
         CatalogProductSimple $productForSalesRule1,
         CatalogProductSimple $productForSalesRule2 = null,
-        $conditionEntity = null)
-    {
+        Customer $customer = null,
+        $conditionEntity = null
+    ) {
         $replace = null;
         $this->salesRuleName = $salesRule->getName();
 
         // Prepare data
-        if ($customer !== null)
+        if ($customer !== null) {
             $customer->persist();
+        }
         $productForSalesRule1->persist();
         if ($productForSalesRule2 !== null) {
             $productForSalesRule2->persist();
-            if (!is_null($conditionEntity)) {
+            if ($conditionEntity !== null) {
                 $replace = $this->prepareCondition($productForSalesRule2, $conditionEntity);
             }
         }
 
         // Steps
         $this->promoQuoteNew->open();
-        $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule,null,$replace);
+        $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule, null, $replace);
         $this->promoQuoteNew->getFormPageActions()->save();
 
     }
