@@ -129,7 +129,7 @@ define(
                         },
                         expirationYear: {
                             selector: self.getSelector('expirationYear'),
-                            placeholder: $t('YYYY')
+                            placeholder: $t('YY')
                         },
 
                         /**
@@ -195,8 +195,13 @@ define(
              * @returns {Boolean}
              */
             validateCardType: function () {
+                var $selector = $(this.getSelector('cc_number')),
+                    invalidClass = 'braintree-hosted-fields-invalid';
+
+                $selector.removeClass(invalidClass);
+
                 if (this.selectedCardType() === null) {
-                    $(this.getSelector('cc_number')).attr('class', 'braintree-hosted-fields-invalid');
+                    $(this.getSelector('cc_number')).addClass('class', invalidClass);
 
                     return false;
                 }
