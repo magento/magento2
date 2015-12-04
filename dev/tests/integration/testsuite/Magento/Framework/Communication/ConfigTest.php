@@ -257,6 +257,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage The attribute "is_synchronous" for topic "customerCreated" should have the value of the
+     */
+    public function testGetTopicsExceptionIsNotBooleanTypeOfIsSynchronousInEnv()
+    {
+        $this->getConfigInstance(
+            __DIR__ . '/_files/valid_communication.xml',
+            __DIR__ . '/_files/communication_is_synchronous_is_not_boolean.php'
+        )->getTopics();
+    }
+
+    /**
      * Create config instance initialized with configuration from $configFilePath
      *
      * @param string $configFilePath
