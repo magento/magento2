@@ -6,7 +6,6 @@
 
 namespace Magento\Store\Test\Unit\Model;
 
-
 class StoreManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
