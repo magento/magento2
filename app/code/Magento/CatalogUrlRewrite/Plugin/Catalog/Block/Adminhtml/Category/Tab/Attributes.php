@@ -5,33 +5,32 @@
  */
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab;
 
+/**
+ * Class Attributes
+ */
 class Attributes
 {
     /**
-     * @param \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes $subject
-     * @param \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes $result
+     * @param \Magento\Catalog\Model\Category\DataProvider $subject
+     * @param $result
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes
+     * @return array
      */
-    public function afterSetForm(
-        \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes $subject,
-        \Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes $result
+    public function afterGetAttributesMeta(
+        \Magento\Catalog\Model\Category\DataProvider $subject,
+        $result
     ) {
-        $form = $subject->getForm();
-        $fieldset = $form->getElements()[0];
-        $field = $form->getElement('url_key');
-        if ($field) {
-            if ($subject->getCategory()->getLevel() == 1) {
-                $fieldset->removeField('url_key');
-                $fieldset->addField(
-                    'url_key',
-                    'hidden',
-                    ['name' => 'url_key', 'value' => $subject->getCategory()->getUrlKey()]
-                );
-            } else {
-                $field->setRenderer(
-                    $subject->getLayout()->createBlock('Magento\CatalogUrlRewrite\Block\UrlKeyRenderer')
-                );
+        /** @var \Magento\Catalog\Model\Category $category */
+        $category = $subject->getCurrentCategory();
+        if (isset($result['url_key'])) {
+            if ($category) {
+                if ($category->getLevel() == 1) {
+                    $result['url_key']['visible'] = false;
+                    $result['url_key_create_redirect']['visible'] = false;
+                } else {
+                    $result['url_key_create_redirect']['value'] = $category->getUrlKey();
+                    $result['url_key_create_redirect']['disabled'] = true;
+                }
             }
         }
         return $result;
