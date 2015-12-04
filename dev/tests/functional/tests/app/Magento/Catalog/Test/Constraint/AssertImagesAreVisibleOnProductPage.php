@@ -51,8 +51,8 @@ class AssertImagesAreVisibleOnProductPage extends AbstractAssertForm
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
-        $this->product      = $product;
-        $this->productView  = $catalogProductView->getViewBlock();
+        $this->product = $product;
+        $this->productView = $catalogProductView->getViewBlock();
 
         $errors = $this->verify();
         \PHPUnit_Framework_Assert::assertEmpty(
