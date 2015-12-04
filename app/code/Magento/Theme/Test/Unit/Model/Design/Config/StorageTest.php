@@ -38,6 +38,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->transactionFactoryMock = $this->getMockBuilder('Magento\Framework\DB\TransactionFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->transactionMock = $this->getMockBuilder('Magento\Framework\DB\Transaction')
             ->disableOriginalConstructor()

@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Theme\Model\Design;
+namespace Magento\Theme\Test\Unit\Model\Design;
+
+// @codingStandardsIgnoreFile
 
 class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,6 +40,7 @@ class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
                 'Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory'
             )
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->collection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design\Config\Collection')
             ->disableOriginalConstructor()
