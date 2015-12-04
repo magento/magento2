@@ -110,4 +110,3 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->plugin->afterSave($this->repository, $this->designConfig);
     }
 }
-
