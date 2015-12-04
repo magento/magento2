@@ -84,11 +84,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $storeId = $this->getRequest()->getParam('store');
         $refreshTree = false;
         $data = $this->getRequest()->getPostValue();
-        unset($data['general']['entity_id']);
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
             if (!$category->getId()) {
-                $parentId = $this->getRequest()->getParam('parent');
+                $parentId = $data['general']['parent'];
                 if (!$parentId) {
                     if ($storeId) {
                         $parentId = $this->_objectManager->get(
@@ -171,11 +170,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 }
 
                 $category->unsetData('use_post_data_config');
-                if (isset($data['general']['entity_id'])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Something went wrong while saving the category.')
-                    );
-                }
 
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));

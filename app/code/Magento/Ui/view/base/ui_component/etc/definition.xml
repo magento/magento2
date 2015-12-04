@@ -187,6 +187,14 @@
             </item>
         </argument>
     </input>
+    <hidden class="Magento\Ui\Component\Form\Element\Input">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                <item name="template" xsi:type="string">ui/form/element/hidden</item>
+            </item>
+        </argument>
+    </hidden>
     <checkbox class="Magento\Ui\Component\Form\Element\Checkbox">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
