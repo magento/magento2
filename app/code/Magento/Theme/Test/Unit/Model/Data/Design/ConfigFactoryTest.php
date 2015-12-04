@@ -35,14 +35,13 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->designConfigFactory = $this->getMockForAbstractClass(
+        $this->designConfigFactory = $this->getMock(
             'Magento\Theme\Api\Data\DesignConfigInterfaceFactory',
+            ['create'],
             [],
             '',
             false,
-            false,
-            true,
-            ['create']
+            false
         );
         $this->metadataProvider = $this->getMockForAbstractClass(
             'Magento\Theme\Model\Design\Config\MetadataProviderInterface',
@@ -50,23 +49,21 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->designConfigDataFactory = $this->getMockForAbstractClass(
+        $this->designConfigDataFactory = $this->getMock(
             'Magento\Theme\Api\Data\DesignConfigDataInterfaceFactory',
+            ['create'],
             [],
             '',
             false,
-            false,
-            true,
-            ['create']
+            false
         );
-        $this->configExtensionFactory = $this->getMockForAbstractClass(
+        $this->configExtensionFactory = $this->getMock(
             'Magento\Theme\Api\Data\DesignConfigExtensionFactory',
+            ['create'],
             [],
             '',
             false,
-            false,
-            true,
-            ['create']
+            false
         );
         $this->designConfig = $this->getMockForAbstractClass(
             'Magento\Theme\Api\Data\DesignConfigInterface',

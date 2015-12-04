@@ -64,30 +64,12 @@ class Collection extends \Magento\Framework\Data\Collection
     {
         if (!$this->isLoaded()) {
             $default = $this->scopeTree->get();
-            $data = [
-                'store_website_id' => null,
-                'store_group_id' => null,
-                'store_id' => null,
-            ];
-            $data = array_merge($data, $this->getMetadataValues($default['scope'], $default['scope_id']));
-            $this->_addItem($data);
+            $this->prepareItemData();
             foreach ($default['scopes'] as $website) {
-                $data = [
-                    'store_website_id' => $website['scope_id'],
-                    'store_group_id' => null,
-                    'store_id' => null,
-                ];
-                $data = array_merge($data, $this->getMetadataValues($website['scope'], $website['scope_id']));
-                $this->_addItem($data);
+                $this->prepareItemData($website);
                 foreach ($website['scopes'] as $group) {
                     foreach ($group['scopes'] as $store) {
-                        $data = [
-                            'store_website_id' => $website['scope_id'],
-                            'store_group_id' => $group['scope_id'],
-                            'store_id' => $store['scope_id'],
-                        ];
-                        $data = array_merge($data, $this->getMetadataValues($store['scope'], $store['scope_id']));
-                        $this->_addItem($data);
+                        $this->prepareItemData($website, $group, $store);
                     }
                 }
             }
@@ -103,7 +85,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param int $scopeId
      * @return array
      */
-    protected function getMetadataValues($scope, $scopeId)
+    protected function getMetadataValues($scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = null)
     {
         $result = [];
         foreach ($this->metadataProvider->get() as $itemName => $itemData) {
@@ -113,5 +95,37 @@ class Collection extends \Magento\Framework\Data\Collection
         }
 
         return $result;
+    }
+
+    /**
+     * Prepare item data depend on scope
+     *
+     * @param array $websiteScope
+     * @param array $groupScope
+     * @param array $storeScope
+     *
+     * @return void
+     */
+    protected function prepareItemData(array $websiteScope = [], array $groupScope = [], array $storeScope = [])
+    {
+        $result = [
+            'store_website_id' => isset($websiteScope['scope_id']) ? $websiteScope['scope_id'] : null,
+            'store_group_id' => isset($groupScope['scope_id']) ? $groupScope['scope_id'] : null,
+            'store_id' => isset($storeScope['scope_id']) ? $storeScope['scope_id'] : null,
+        ];
+
+        if (isset($storeScope['scope'])) {
+            $data = $this->getMetadataValues($storeScope['scope'], $storeScope['scope_id']);
+        } elseif (isset($groupScope['scope'])) {
+            $data = $this->getMetadataValues($groupScope['scope'], $groupScope['scope_id']);
+        } elseif (isset($websiteScope['scope'])) {
+            $data = $this->getMetadataValues($websiteScope['scope'], $websiteScope['scope_id']);
+        } else {
+            $data = $this->getMetadataValues();
+        }
+
+        $result = array_merge($result, $data);
+
+        $this->_addItem(new \Magento\Framework\DataObject($result));
     }
 }
