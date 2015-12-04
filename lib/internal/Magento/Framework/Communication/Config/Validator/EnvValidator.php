@@ -130,6 +130,19 @@ class EnvValidator
                 )
             );
         }
+        try {
+            $this->booleanUtils->toBoolean($configDataItem[ConfigInterface::TOPIC_IS_SYNCHRONOUS]);
+        } catch (\Exception $e) {
+            throw new \LogicException(
+                sprintf(
+                    'The attribute "%s" for topic "%s" should have the value of the boolean type. '
+                    . 'Given value is "%s"',
+                    ConfigInterface::TOPIC_IS_SYNCHRONOUS,
+                    $configDataItem[ConfigInterface::TOPIC_NAME],
+                    var_export($configDataItem[ConfigInterface::TOPIC_IS_SYNCHRONOUS], true)
+                )
+            );
+        }
     }
 
     /**
