@@ -21,9 +21,6 @@
     </type>
     <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
         <arguments>
-            <argument name="clients" xsi:type="array">
-                <item name="mysql" xsi:type="string">Magento\Framework\Search\Adapter\Mysql\Adapter</item>
-            </argument>
             <argument name="path" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="scopeType" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
