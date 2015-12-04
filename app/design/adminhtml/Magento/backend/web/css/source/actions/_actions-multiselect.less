@@ -26,34 +26,42 @@
        -moz-user-select: none;
         -ms-user-select: none;
             user-select: none;
+
     &.action-select-wrap {
         &:focus {
             box-shadow: none;
         }
+
         .action-menu {
             max-height: none;
             overflow-y: inherit;
         }
     }
+
     .action-menu-item {
         transition: background-color .1s linear;
+
         &._selected {
             background-color: @action-multiselect-menu-item__selected__background-color;
         }
+
         &._hover {
             background-color: @action__hover__background-color;
         }
     }
+
     .admin__action-multiselect {
         border: 1px solid @action__border-color;
         cursor: pointer;
         min-height: @action__height;
         padding: @action__padding-top + .1rem (@action__height + .4rem) @action__padding-bottom 1em;
         white-space: normal;
+
         &:after {
             bottom: @action__height / 2 - @button-marker-triangle__height / 2 - .1rem;
             top: auto;
         }
+
         &:before {
             height: @action__height;
             top: auto;
@@ -72,6 +80,7 @@
 .admin__action-multiselect-label {
     position: relative;
     z-index: 1;
+
     &:before {
         margin-right: .5rem;
     }
@@ -81,6 +90,7 @@
     margin-bottom: 1rem;
     padding: 1rem;
     position: relative;
+
     + .admin__action-multiselect-menu-inner {
         border-bottom: 1px solid @border__color;
         border-top: 1px solid @border__color;
@@ -108,6 +118,7 @@
     right: 2.2rem;
     top: 1.7rem;
     width: 1em;
+
     &:before {
         &:extend(.abs-icon all);
         content: @icon-search__content;
@@ -116,6 +127,7 @@
 
 .admin__action-multiselect-actions-wrap {
     text-align: center;
+
     .action-default {
         font-size: 1.3rem;
         min-width: 13rem;
@@ -133,9 +145,11 @@
     padding: .3rem (@action-multiselect-crumb-close-action__size + .4rem) .4rem 1rem;
     position: relative;
     transition: border-color .1s linear;
+
     &:hover {
         border-color: darken(@color-gray65-almost, 10%);
     }
+
     .action-close {
         bottom: 0;
         font-size: .5em;
@@ -143,13 +157,16 @@
         right: 0;
         top: 0;
         width: @action-multiselect-crumb-close-action__size;
+
         &:hover {
             color: darken(@text__color, 20%);
         }
+
         &:focus,
         &:active {
             background-color: transparent;
         }
+
         &:active {
             transform: scale(.9);
         }
