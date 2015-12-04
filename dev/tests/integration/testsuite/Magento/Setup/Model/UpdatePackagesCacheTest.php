@@ -93,7 +93,7 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
         $packages = [
             'packages' => [
                 $packageName => [
-                    'latestVersion' => '100.0.0'
+                    'latestVersion' => '1000.100.200'
                 ]
             ]
         ];
