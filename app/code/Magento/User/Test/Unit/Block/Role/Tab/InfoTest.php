@@ -70,8 +70,13 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->formFactoryMock->expects($this->any())->method('create')->willReturn($formMock);
         $formMock->expects($this->any())->method('addFieldSet')->willReturn($fieldsetMock);
-        $fieldsetMock->expects($this->exactly(4))->method('addField')->withConsecutive(
-            ['role_name'],['role_id'],['in_role_user'], ['in_role_user_old']
+        $fieldsetMock->expects($this->exactly(4))
+            ->method('addField')
+            ->withConsecutive(
+                ['role_name'],
+                ['role_id'],
+                ['in_role_user'],
+                ['in_role_user_old']
         );
         $this->assertInstanceOf('Magento\User\Block\Role\Tab\Info', $this->model->_beforeToHtml());
     }

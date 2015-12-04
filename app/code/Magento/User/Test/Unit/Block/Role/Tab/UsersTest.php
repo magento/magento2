@@ -61,11 +61,6 @@ class UsersTest extends \PHPUnit_Framework_TestCase
     public function testGetGridHtml()
     {
         $html = '<body></body>';
-        /** @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $blockMock */
-        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\BlockInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
         $this->layoutMock->expects($this->any())->method('getChildName')->willReturn('userGrid');
         $this->layoutMock->expects($this->any())->method('renderElement')->willReturn($html);
 
