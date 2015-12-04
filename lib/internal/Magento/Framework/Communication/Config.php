@@ -57,6 +57,6 @@ class Config implements ConfigInterface
      */
     public function getTopics()
     {
-        return $this->data->get(self::TOPICS);
+        return $this->data->get(self::TOPICS) ?: [];
     }
 }
