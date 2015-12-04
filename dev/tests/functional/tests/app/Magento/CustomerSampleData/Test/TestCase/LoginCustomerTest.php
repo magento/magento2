@@ -26,6 +26,7 @@ class LoginCustomerTest extends Injectable
      * Create Customer account on Storefront.
      *
      * @param Customer $customer
+     * @param CustomerAccountIndex $customerAccountIndex
      */
     public function test(Customer $customer, CustomerAccountIndex $customerAccountIndex)
     {
