@@ -26,6 +26,8 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     }
 
     /**
+     * Returns an array of arrays consisting of the synonyms found for each word in the input phrase
+     *
      * @param string $phrase
      * @return array
      */
@@ -37,9 +39,15 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
             return $synGroups;
         }
 
-        // strip off all the white spaces, comma, semicolons, hyphens and other such
+        // strip off all the white spaces, comma, semicolons, and other such
         // "non-word" characters. Then implode it into a single string using white space as delimiter
-        $words = preg_split('/\W+/', strtolower($phrase), -1, PREG_SPLIT_NO_EMPTY);
+        //$words = preg_split('/\W+/', strtolower($phrase), -1, PREG_SPLIT_NO_EMPTY);
+        $words = preg_split(
+            '/[~`!@#$%^&*()_+={}\[\]:"\',\s\.<>?\/\;\\\]+/',
+            strtolower($phrase),
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        );
         $phrase = implode(' ', $words);
 
         $rows = $this->synReaderModel->loadByPhrase($phrase)->getData();
@@ -63,9 +71,12 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     }
 
     /**
+     * Helper method to find the presence of $word in $wordsArray. If found, the particular array index is returned.
+     * Otherwise false will be returned.
+     *
      * @param string $word
      * @param $array $wordsArray
-     * @return boolean
+     * @return boolean | int
      */
     private function findInArray($word, $wordsArray)
     {

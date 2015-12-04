@@ -22,6 +22,13 @@ $synonymsModel->setSynonyms('british,english')
 $synonymsModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Search\Model\SynonymReader'
 );
+$synonymsModel->setSynonyms('schlicht,natürlich')
+    ->setStoreId(1)
+    ->save();
+
+$synonymsModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Search\Model\SynonymReader'
+);
 $synonymsModel->setSynonyms('universe,cosmos')
     ->setStoreId(0)
     ->save();
