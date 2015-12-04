@@ -8,6 +8,7 @@ namespace Magento\Config\Model\Config\Backend;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
  * System config file field backend model
@@ -88,6 +89,7 @@ class File extends \Magento\Framework\App\Config\Value
         if (!empty($file)) {
             $uploadDir = $this->_getUploadDir();
             try {
+                /** @var Uploader $uploader */
                 $uploader = $this->_uploaderFactory->create(['fileId' => $file]);
                 $uploader->setAllowedExtensions($this->_getAllowedExtensions());
                 $uploader->setAllowRenameFiles(true);
