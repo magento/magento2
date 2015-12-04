@@ -34,7 +34,7 @@ class Term implements FilterInterface
         if ($filter->getValue()) {
             $filterValues =  is_array($filter->getValue()) ? $filter->getValue() : [$filter->getValue()];
             foreach ($filterValues as $value) {
-                $filterQuery['or']['filters'][] = [
+                $filterQuery[] = [
                     'term' => [
                         $this->fieldMapper->getFieldName($filter->getField()) => $value,
                     ],
