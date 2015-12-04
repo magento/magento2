@@ -5,8 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
     <scenario name="CheckoutSalesSampleDataProductEntityTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createCustomer"/>
         <step name="createCustomer" module="Magento_Customer" next="createProducts"/>
