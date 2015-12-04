@@ -182,6 +182,11 @@
             <xs:extension base="input"/>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="hidden">
+        <xs:complexContent>
+            <xs:extension base="input"/>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="select">
         <xs:complexContent>
             <xs:extension base="input"/>
