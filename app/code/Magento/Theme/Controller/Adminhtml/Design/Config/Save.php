@@ -9,7 +9,6 @@ use Magento\Backend\App\Action;
 use Magento\Theme\Model\DesignConfigRepository;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
 use Magento\Framework\App\ScopeValidatorInterface as ScopeValidator;
 
@@ -19,11 +18,6 @@ class Save extends Action
      * @var DesignConfigRepository
      */
     protected $designConfigRepository;
-
-    /**
-     * @var RedirectFactory
-     */
-    protected $redirectFactory;
 
     /**
      * @var ConfigFactory
@@ -37,21 +31,18 @@ class Save extends Action
 
     /**
      * @param DesignConfigRepository $designConfigRepository
-     * @param RedirectFactory $redirectFactory
      * @param ConfigFactory $configFactory
      * @param ScopeValidator $scopeValidator
      * @param Context $context
      */
     public function __construct(
         DesignConfigRepository $designConfigRepository,
-        RedirectFactory $redirectFactory,
         ConfigFactory $configFactory,
         ScopeValidator $scopeValidator,
         Context $context
     ) {
         parent::__construct($context);
         $this->designConfigRepository = $designConfigRepository;
-        $this->redirectFactory = $redirectFactory;
         $this->configFactory = $configFactory;
         $this->scopeValidator = $scopeValidator;
     }
