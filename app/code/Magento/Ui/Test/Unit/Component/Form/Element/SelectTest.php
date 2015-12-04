@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Form\Element;
+namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
 class SelectTest extends \PHPUnit_Framework_TestCase
 {
