@@ -10,7 +10,7 @@ use Magento\GiftCard\Test\Fixture\GiftCardProduct;
 
 /**
  * @ZephyrId MAGETWO-33559
- * @group Catalog_Sample_Data(MX)
+ * @group Sample_Data_(MX)
  */
 class NavigateGiftCardEntityTest extends Injectable
 {

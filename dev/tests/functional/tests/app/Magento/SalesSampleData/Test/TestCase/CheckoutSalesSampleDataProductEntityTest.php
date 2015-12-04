@@ -30,7 +30,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 11. Place order.
  * 12. Perform assertions.
  *
- * @group Catalog_Sample_Data(MX)
+ * @group Sample_Data_(MX)
  * @ZephyrId MAGETWO-33559
  */
 class CheckoutSalesSampleDataProductEntityTest extends Scenario
