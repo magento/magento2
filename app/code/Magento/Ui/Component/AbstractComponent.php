@@ -87,7 +87,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function prepare()
     {
-        if ($this->getData(UiComponentFactory::CHILDREN_FROM_META)) {
+        if ($this->getData(UiComponentFactory::IMPORT_CHILDREN_FROM_META)) {
             $children = (array)$this->getContext()->getDataProvider()->getMeta();
             foreach ($children as $name => $childData) {
                 $this->createChildComponent($name, $childData);

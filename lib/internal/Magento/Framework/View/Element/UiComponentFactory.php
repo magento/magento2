@@ -19,7 +19,7 @@ use Magento\Framework\Phrase;
  */
 class UiComponentFactory extends DataObject
 {
-    const CHILDREN_FROM_META = 'childrenFromMeta';
+    const IMPORT_CHILDREN_FROM_META = 'childrenFromMeta';
 
     /**
      * Object manager
