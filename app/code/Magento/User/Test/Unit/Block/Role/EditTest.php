@@ -90,7 +90,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
      *
      * @return mixed Method return.
      */
-    private function invokeMethod(&$object, $methodName, array $parameters = array())
+    private function invokeMethod(&$object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
