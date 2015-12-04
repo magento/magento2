@@ -9,14 +9,6 @@
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="general">
         <container name="url_key_group">
-            <field name="url_key">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="source" xsi:type="string">category</item>
-                    </item>
-                </argument>
-            </field>
             <field name="url_key_create_redirect">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">

@@ -23,7 +23,7 @@ class Attributes
         /** @var \Magento\Catalog\Model\Category $category */
         $category = $subject->getCurrentCategory();
         if (isset($result['url_key'])) {
-            if ($category) {
+            if ($category && $category->getId()) {
                 if ($category->getLevel() == 1) {
                     $result['url_key']['visible'] = false;
                     $result['url_key_create_redirect']['visible'] = false;
@@ -31,6 +31,8 @@ class Attributes
                     $result['url_key_create_redirect']['value'] = $category->getUrlKey();
                     $result['url_key_create_redirect']['disabled'] = true;
                 }
+            } else {
+                $result['url_key_create_redirect']['visible'] = false;
             }
         }
         return $result;
