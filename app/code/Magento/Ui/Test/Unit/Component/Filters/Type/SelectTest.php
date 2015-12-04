@@ -154,7 +154,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
         $this->uiComponentFactory->expects($this->any())
             ->method('create')
-            ->with($name, Select::COMPONENT, ['context' => $this->contextMock, 'options' => $selectOptions])
+            ->with($name, Select::COMPONENT, ['context' => $this->contextMock, 'data'=> ['options' => $selectOptions]])
             ->willReturn($uiComponent);
 
         $date = new Select(
