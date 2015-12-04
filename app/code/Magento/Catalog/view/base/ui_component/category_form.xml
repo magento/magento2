@@ -47,6 +47,18 @@
                 <item name="label" xsi:type="string" translate="true">Category Information</item>
             </item>
         </argument>
+        <field name="description">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">description description</item>
+                    <item name="formElement" xsi:type="string">wysiwyg</item>
+                    <item name="source" xsi:type="string">page</item>
+                    <item name="wysiwyg" xsi:type="boolean">true</item>
+                    <item name="dataScope" xsi:type="string">description</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/textarea-wysiwyg</item>
+                </item>
+            </argument>
+        </field>
         <field name="is_active">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
