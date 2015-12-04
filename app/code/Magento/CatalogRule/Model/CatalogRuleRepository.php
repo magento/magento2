@@ -47,8 +47,6 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
             $rule = $this->get($rule->getRuleId())->addData($rule->getData());
         }
 
-        $rule->setIsActive(false);
-
         try {
             $this->ruleResource->save($rule);
             unset($this->rules[$rule->getId()]);
