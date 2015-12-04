@@ -210,7 +210,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ],
             ]
         ];
-        if (!$this->isPhp7OrHackLang()) {
+        if (!$this->isPhp7OrHhvm()) {
             $this->setUpNoPrettyVersionParser();
             $expected['data']['always_populate_raw_post_data'] = [
                 'message' => $rawPostMessage,
@@ -250,7 +250,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        if (!$this->isPhp7OrHackLang()) {
+        if (!$this->isPhp7OrHhvm()) {
             $this->setUpNoPrettyVersionParser();
             $expected['data']['always_populate_raw_post_data'] = [
                 'message' => $rawPostMessage,
@@ -277,7 +277,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
             'data' => []
         ];
-        if (!$this->isPhp7OrHackLang()) {
+        if (!$this->isPhp7OrHhvm()) {
             $this->setUpNoPrettyVersionParser();
             $expected['data'] = [
                 'always_populate_raw_post_data' => [
@@ -344,7 +344,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     /**
      * @return bool
      */
-    protected function isPhp7OrHackLang()
+    protected function isPhp7OrHhvm()
     {
         return version_compare(PHP_VERSION, '7.0.0-beta') >= 0 || defined('HHVM_VERSION');
     }
