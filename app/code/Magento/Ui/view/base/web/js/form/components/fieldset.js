@@ -25,14 +25,15 @@ define([
          */
         initialize: function () {
             _.bindAll(this, 'onChildrenUpdate', 'onChildrenError', 'onContentLoading');
-            
+
             return this._super();
         },
 
         /**
          * Calls initObservable of parent class.
          * Defines observable properties of instance.
-         * @return {Object} - reference to instance
+         *
+         * @returns {Object} Reference to instance
          */
         initObservable: function () {
             this._super()
@@ -44,6 +45,7 @@ define([
         /**
          * Calls parent's initElement method.
          * Assignes callbacks on various events of incoming element.
+         *
          * @param  {Object} elem
          * @return {Object} - reference to instance
          */
