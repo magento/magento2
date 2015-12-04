@@ -63,7 +63,8 @@ class LogoTest extends \PHPUnit_Framework_TestCase
         $this->uploaderFactoryMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\UploaderFactory')
             ->setMethods(['create'])
             ->getMock();
-        $this->requestDataMock = $this->getMockBuilder('Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface')
+        $this->requestDataMock
+            = $this->getMockBuilder('Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface')
             ->getMockForAbstractClass();
         $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
