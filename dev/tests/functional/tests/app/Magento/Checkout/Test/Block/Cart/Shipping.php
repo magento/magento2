@@ -93,29 +93,6 @@ class Shipping extends Form
     }
 
     /**
-     * Compare elements according to $this->estimationFields order
-     *
-     * @param $a
-     * @param $b
-     * @return int
-     */
-    public function compare($a, $b)
-    {
-        $a = array_search($a, $this->estimationFields);
-        $b = array_search($b, $this->estimationFields);
-        switch (true) {
-            case false !== $a && false !== $b:
-                return $a - $b;
-            case false !== $a:
-                return -1;
-            case false !== $b:
-                return 1;
-            default:
-                return 0;
-        }
-    }
-
-    /**
      * Fill shipping and tax form.
      *
      * @param Address $address
@@ -126,8 +103,21 @@ class Shipping extends Form
         $this->openEstimateShippingAndTax();
         $data = $address->getData();
         $mapping = $this->dataMapping(array_intersect_key($data, array_flip($this->estimationFields)));
-        // sort array according to $this->estimationFields element order
-        uksort($mapping, [$this, 'compare']);
+        // sort array according to $this->estimationFields elements order
+        uksort($mapping, function ($a, $b) {
+            $a = array_search($a, $this->estimationFields);
+            $b = array_search($b, $this->estimationFields);
+            switch (true) {
+                case false !== $a && false !== $b:
+                    return $a - $b;
+                case false !== $a:
+                    return -1;
+                case false !== $b:
+                    return 1;
+                default:
+                    return 0;
+            }
+        });
 
         // Test environment may become unstable when form fields are filled in a default manner.
         // Imitating behavior closer to the real user.
