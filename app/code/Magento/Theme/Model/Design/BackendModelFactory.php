@@ -77,7 +77,8 @@ class BackendModelFactory extends ValueFactory
     protected function getConfigId($scope, $scopeId, $path)
     {
         $storedData = $this->getStoredData($scope, $scopeId);
-        return isset($storedData[$path]['config_id']) ? $storedData[$path]['config_id'] : null;
+        $dataKey = array_search($path, array_column($storedData, 'path'));
+        return isset($storedData[$dataKey]['config_id']) ? $storedData[$dataKey]['config_id'] : null;
     }
 
     /**

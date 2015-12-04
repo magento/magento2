@@ -47,7 +47,7 @@ class BackButtonTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('label', $result);
         $this->assertEquals($result['label'], __('Back'));
         $this->assertArrayHasKey('on_click', $result);
-        $this->assertEquals($result['on_click'], "location.href = '$url';" );
+        $this->assertEquals($result['on_click'], "location.href = '$url';");
     }
 
     protected function initContext()

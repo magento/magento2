@@ -143,7 +143,8 @@ class DataLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
         $items[] = $objectManagerHelper->getObject(
-            'Magento\Framework\App\Config\Value', [
+            'Magento\Framework\App\Config\Value',
+            [
                 'data' => [
                     'path' => 'name/data_path',
                     'value' => 'data_value',
