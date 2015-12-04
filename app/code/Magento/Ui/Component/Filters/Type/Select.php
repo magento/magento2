@@ -64,7 +64,7 @@ class Select extends AbstractFilter
         $this->wrappedComponent = $this->uiComponentFactory->create(
             $this->getName(),
             static::COMPONENT,
-            ['context' => $this->getContext(), 'options' => $this->optionsProvider]
+            ['context' => $this->getContext(), 'data' => ['options' => $this->optionsProvider]]
         );
         $this->wrappedComponent->prepare();
         // Merge JS configuration with wrapped component configuration
