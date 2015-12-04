@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Search\Model\ResourceModel;
 
 use Magento\Framework\Model\AbstractModel;
@@ -15,7 +13,6 @@ use Magento\Framework\DB\Helper\Mysql\Fulltext;
 
 /**
  * Synonym Reader resource model
-
  */
 class SynonymReader extends AbstractDb
 {
@@ -27,6 +24,7 @@ class SynonymReader extends AbstractDb
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param Fulltext $fulltext
      * @param string $connectionName
      */
     public function __construct(
