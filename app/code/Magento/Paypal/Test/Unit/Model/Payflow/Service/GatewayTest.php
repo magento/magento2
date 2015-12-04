@@ -14,6 +14,11 @@ use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class GatewayTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GatewayTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Gateway|\PHPUnit_Framework_MockObject_MockObject */
