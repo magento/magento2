@@ -200,7 +200,10 @@ class Mapper
                 $selectQuery = $this->processQuery($query->getReference(), $selectQuery, $conditionType);
                 break;
             case FilterQuery::REFERENCE_FILTER:
-                $selectQuery['bool']['filter'][]= $this->filterBuilder->build($query->getReference(), $conditionType);
+                $selectQuery['bool']['must']= array_merge(
+                    isset($selectQuery['bool']['must']) ? $selectQuery['bool']['must'] : [],
+                    $this->filterBuilder->build($query->getReference(), $conditionType)
+                );
                 break;
         }
 

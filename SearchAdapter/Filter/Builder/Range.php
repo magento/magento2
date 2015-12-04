@@ -94,6 +94,6 @@ class Range implements FilterInterface
                 $filterQuery['range'][$fieldName]['lte'] = $filter->getTo();
             }
         }
-        return $filterQuery;
+        return [$filterQuery];
     }
 }
