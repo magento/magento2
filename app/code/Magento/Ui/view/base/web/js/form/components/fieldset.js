@@ -81,6 +81,7 @@ define([
          */
         onChildrenError: function () {
             var hasErrors = this.elems.some('error');
+
             this.error(hasErrors);
         },
 
