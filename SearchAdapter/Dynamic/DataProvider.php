@@ -13,6 +13,8 @@ use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Model\Session as CustomerSession;
 
 class DataProvider implements DataProviderInterface
 {
@@ -42,24 +44,40 @@ class DataProvider implements DataProviderInterface
     protected $clientConfig;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * @var CustomerSession
+     */
+    protected $customerSession;
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param Range $range
      * @param IntervalFactory $intervalFactory
      * @param Config $clientConfig
+     * @param StoreManagerInterface $storeManager
+     * @param CustomerSession $customerSession
      */
     public function __construct(
         ConnectionManager $connectionManager,
         FieldMapperInterface $fieldMapper,
         Range $range,
         IntervalFactory $intervalFactory,
-        Config $clientConfig
+        Config $clientConfig,
+        StoreManagerInterface $storeManager,
+        CustomerSession $customerSession
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
         $this->range = $range;
         $this->intervalFactory = $intervalFactory;
         $this->clientConfig = $clientConfig;
+        $this->storeManager = $storeManager;
+        $this->customerSession = $customerSession;
     }
 
     /**
@@ -83,6 +101,9 @@ class DataProvider implements DataProviderInterface
         ];
         $entityIds = $entityStorage->getSource();
         $fieldName = $this->fieldMapper->getFieldName('price');
+        $customerGroupId = $this->customerSession->getCustomerGroupId();
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $storeId = $this->storeManager->getStore()->getId();
         $requestQuery = [
             'index' => $this->clientConfig->getIndexName(),
             'type' => $this->clientConfig->getEntityType(),
@@ -96,7 +117,7 @@ class DataProvider implements DataProviderInterface
                         'must' => [
                             [
                                 'term' => [
-                                    'store_id' => 1,
+                                    'store_id' => $storeId,
                                 ],
                             ],
                             [
@@ -113,9 +134,29 @@ class DataProvider implements DataProviderInterface
                             'path' => $fieldName,
                         ],
                         'aggregations' => [
-                            'price_stats' => [
-                                'extended_stats' => [
-                                    'field' => $fieldName . '.price',
+                            'price_filter' => [
+                                'filter' => [
+                                    'bool' => [
+                                        'must' => [
+                                            [
+                                                'term' => [
+                                                    'price.customer_group_id' => $customerGroupId,
+                                                ],
+                                            ],
+                                            [
+                                                'term' => [
+                                                    'price.website_id' => $websiteId,
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'aggregations' => [
+                                    'price_stats' => [
+                                        'extended_stats' => [
+                                            'field' => $fieldName . '.price',
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -126,12 +167,12 @@ class DataProvider implements DataProviderInterface
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
 
-        if (isset($queryResult['aggregations']['prices']['price_stats'])) {
+        if (isset($queryResult['aggregations']['prices']['price_filter']['price_stats'])) {
             $aggregations = [
-                'count' => $queryResult['aggregations']['prices']['price_stats']['count'],
-                'max' => $queryResult['aggregations']['prices']['price_stats']['max'],
-                'min' => $queryResult['aggregations']['prices']['price_stats']['min'],
-                'std' => $queryResult['aggregations']['prices']['price_stats']['std_deviation'],
+                'count' => $queryResult['aggregations']['prices']['price_filter']['price_stats']['count'],
+                'max' => $queryResult['aggregations']['prices']['price_filter']['price_stats']['max'],
+                'min' => $queryResult['aggregations']['prices']['price_filter']['price_stats']['min'],
+                'std' => $queryResult['aggregations']['prices']['price_filter']['price_stats']['std_deviation'],
             ];
         }
 
@@ -169,6 +210,9 @@ class DataProvider implements DataProviderInterface
         $result = [];
         $entityIds = $entityStorage->getSource();
         $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
+        $customerGroupId = $this->customerSession->getCustomerGroupId();
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $storeId = $this->storeManager->getStore()->getId();
         $requestQuery = [
             'index' => $this->clientConfig->getIndexName(),
             'type' => $this->clientConfig->getEntityType(),
@@ -182,7 +226,7 @@ class DataProvider implements DataProviderInterface
                         'must' => [
                             [
                                 'term' => [
-                                    'store_id' => 1,
+                                    'store_id' => $storeId,
                                 ],
                             ],
                             [
@@ -199,10 +243,30 @@ class DataProvider implements DataProviderInterface
                             'path' => $fieldName,
                         ],
                         'aggregations' => [
-                            'price_stats' => [
-                                'histogram' => [
-                                    'field' => $fieldName . '.price',
-                                    'interval' => $range,
+                            'price_filter' => [
+                                'filter' => [
+                                    'bool' => [
+                                        'must' => [
+                                            [
+                                                'term' => [
+                                                    'price.customer_group_id' => $customerGroupId,
+                                                ],
+                                            ],
+                                            [
+                                                'term' => [
+                                                    'price.website_id' => $websiteId,
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'aggregations' => [
+                                    'price_stats' => [
+                                        'histogram' => [
+                                            'field' => $fieldName . '.price',
+                                            'interval' => $range,
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -212,7 +276,7 @@ class DataProvider implements DataProviderInterface
         ];
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
-        foreach ($queryResult['aggregations']['prices']['price_stats']['buckets'] as $bucket) {
+        foreach ($queryResult['aggregations']['prices']['price_filter']['price_stats']['buckets'] as $bucket) {
             $result[$bucket['key'] / $range + 1] = $bucket['doc_count'];
         }
         return $result;
