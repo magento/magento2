@@ -11,11 +11,10 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Fixture\FixtureFactory;
 
-
 /**
  * Preconditions:
  * 1. Execute before each variation:
- *  - Create sales  rule from dataset using Curl
+ *  - Create sales rule from dataset using Handler
  *
  * Steps:
  * 1. Create simple product.
@@ -33,52 +32,47 @@ class ApplySeveralSalesRuleEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Inject pages.
+     * Fixture factory instance.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
+     * Inject FixtureFactory.
      *
      * @param FixtureFactory $fixtureFactory
      * @return void
      */
-    public function __inject(
-        FixtureFactory $fixtureFactory
-    ) {
+    public function __inject(FixtureFactory $fixtureFactory)
+    {
         $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
      * Apply several sales rules.
      *
-     * @param array $salesRulesOriginal
-     * @return array
+     * @param array $salesRules
+     * @param CatalogProductSimple $productForSalesRule1
+     * @param CatalogProductSimple $productForSalesRule2
      */
-    public function testApplySeveralSalesRules(array $salesRulesOriginal)
-    {
-        foreach ($salesRulesOriginal as $key => $salesRule) {
-           $salesRules[$key] = $this->fixtureFactory->createByCode(
-               'salesRule',
-               ['dataset' => $salesRule]
-           );
-           $salesRules[$key]->persist();
-       }
-       $customer = $this->fixtureFactory->createByCode('customer', ['dataset' => 'default']);
-       $customer->persist();
+    public function testApplySeveralSalesRules(
+        array $salesRules,
+        CatalogProductSimple $productForSalesRule1,
+        CatalogProductSimple $productForSalesRule2
+    ) {
+        // Preconditions
+        $productForSalesRule1->persist();
+        $productForSalesRule2->persist();
 
-       $productForSalesRule1 = $this->fixtureFactory->createByCode(
-           'catalogProductSimple',
-           ['dataset' => 'simple_for_salesrule_1']
-       );
-       $productForSalesRule1->persist();
-
-       $productForSalesRule2 = $this->fixtureFactory->createByCode(
-           'catalogProductSimple',
-           ['dataset' => 'simple_for_salesrule_2']
-       );
-       $productForSalesRule2->persist();
-
-       return [
-           'customer' => $customer,
-           'productForSalesRule1' => $productForSalesRule1,
-           'productForSalesRule2' => $productForSalesRule2
-       ];
+        // Create sales rules
+        foreach ($salesRules as $key => $dataSet) {
+            $salesRule[$key] = $this->fixtureFactory->createByCode(
+                'salesRule',
+                ['dataset' => $dataSet]
+            );
+            $salesRule[$key]->persist();
+        }
     }
 
     /**

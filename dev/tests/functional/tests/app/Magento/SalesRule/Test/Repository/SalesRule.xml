@@ -217,6 +217,7 @@
                 <item name="1" xsi:type="string">Cart Price Rule with subselection</item>
             </field>
         </dataset>
+
         <dataset name="active_sales_rule_product_attribute">
             <field name="name" xsi:type="string">Cart price rule with attribute conditions %isolation%</field>
             <field name="is_active" xsi:type="string">Active</field>
@@ -237,6 +238,7 @@
             <field name="stop_rules_processing" xsi:type="string">No</field>
             <field name="simple_free_shipping" xsi:type="string">No</field>
         </dataset>
+
         <dataset name="active_sales_rule_row_total">
             <field name="name" xsi:type="string">Cart price rule with row total condition %isolation%</field>
             <field name="is_active" xsi:type="string">Active</field>
@@ -257,6 +259,7 @@
             <field name="stop_rules_processing" xsi:type="string">No</field>
             <field name="simple_free_shipping" xsi:type="string">No</field>
         </dataset>
+
         <dataset name="active_sales_total_items">
             <field name="name" xsi:type="string">Cart price rule with total items %isolation%</field>
             <field name="is_active" xsi:type="string">Active</field>

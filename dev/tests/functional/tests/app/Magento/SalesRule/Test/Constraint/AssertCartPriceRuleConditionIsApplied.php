@@ -22,13 +22,13 @@ class AssertCartPriceRuleConditionIsApplied extends AssertCartPriceRuleApplying
         $this->checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
         $actualPrices['sub_total'] = $this->checkoutCart->getTotalsBlock()->getSubtotal();
         $actualPrices['grand_total'] = $this->checkoutCart->getTotalsBlock()->getGrandTotal();
-        $actualPrices['discount'] =  $this->checkoutCart->getTotalsBlock()->getDiscount();
+        $actualPrices['discount'] = $this->checkoutCart->getTotalsBlock()->getDiscount();
         $expectedPrices = $this->cartPrice;
 
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedPrices,
             $actualPrices,
-            'Wrong total cart prices are displayed'
+            'Wrong total cart prices are displayed.'
         );
     }
 
