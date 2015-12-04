@@ -18,6 +18,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class PayflowproTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PayflowproTest extends \PHPUnit_Framework_TestCase
 {
