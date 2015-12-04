@@ -20,6 +20,15 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    var config = {
+            "width": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
+            "height": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_medium', 'height'); ?>
+        },
+        loader = document.querySelectorAll('[data-gallery-role="gallery-placeholder"] [data-role="loader"]')[0];
+
+    loader.style.paddingBottom = ( config.height / config.width * 100) + "%";
+</script>
 <script type="text/x-magento-init">
     {
         "[data-gallery-role=gallery-placeholder]": {
