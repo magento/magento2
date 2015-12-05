@@ -32,9 +32,11 @@ class Wildcard implements FilterInterface
     {
         $fieldName = $this->fieldMapper->getFieldName($filter->getField());
         return [
-            'wildcard' => [
-                $fieldName => $filter->getValue() . '*',
-            ],
+            [
+                'wildcard' => [
+                    $fieldName => $filter->getValue() . '*',
+                ],
+            ]
         ];
     }
 }

@@ -310,4 +310,15 @@ class Elasticsearch implements ClientInterface
     {
         return $this->client->search($query);
     }
+
+    /**
+     * Execute suggest query
+     *
+     * @param $query
+     * @return array
+     */
+    public function suggest($query)
+    {
+        return $this->client->suggest($query);
+    }
 }

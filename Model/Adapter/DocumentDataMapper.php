@@ -163,6 +163,10 @@ class DocumentDataMapper
             if (in_array($attributeCode, $this->mediaGalleryRoles)) {
                 $mediaGalleryRoles[$attributeCode] = $value;
             }
+            if ($attributeCode === 'category_ids') {
+                $this->builder->addField($attributeCode, implode(' ', $value));
+                continue;
+            }
             if ($attributeCode === 'media_gallery') {
                 $this->builder->addField(
                     'media_gallery',
