@@ -96,9 +96,21 @@ class FieldMapper implements FieldMapperInterface
                 && $attributeCode !=='category_ids') {
                 $notUsedInSearch = ['index' => 'no'];
             }
-            $allAttributes[$attributeCode] = [
-                'type' => $this->fieldType->getFieldType($attribute)
-            ];
+            if ($attributeCode == 'price') {
+                $allAttributes[$attributeCode] = [
+                    'type' => $this->fieldType->getFieldType($attribute),
+                    'properties' => [
+                        'price' => ['type' => FieldType::ES_DATA_TYPE_FLOAT],
+                        'customer_group_id' => ['type' => FieldType::ES_DATA_TYPE_INT],
+                        'website_id' => ['type' => FieldType::ES_DATA_TYPE_STRING]
+                    ]
+                ];
+            } else {
+                $allAttributes[$attributeCode] = [
+                    'type' => $this->fieldType->getFieldType($attribute)
+                ];
+            }
+
             if ($notUsedInSearch) {
                 $allAttributes[$attributeCode] = array_merge(
                     $allAttributes[$attributeCode],
