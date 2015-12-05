@@ -108,11 +108,13 @@ class ObsoleteConnectionTest extends \PHPUnit_Framework_TestCase
         $filesList = [];
         $componentRegistrar = new ComponentRegistrar();
         foreach ($this->getFilesData('whitelist/refactored_modules*') as $refactoredModule) {
-            $files = \Magento\Framework\App\Utility\Files::init()->getFiles(
-                [$componentRegistrar->getPath(ComponentRegistrar::MODULE, $refactoredModule)],
-                '*.php'
-            );
-            $filesList = array_merge($filesList, $files);
+            if ($componentRegistrar->getPath(ComponentRegistrar::MODULE, $refactoredModule)) {
+                $files = \Magento\Framework\App\Utility\Files::init()->getFiles(
+                    [$componentRegistrar->getPath(ComponentRegistrar::MODULE, $refactoredModule)],
+                    '*.php'
+                );
+                $filesList = array_merge($filesList, $files);
+            }
         }
 
         $result = array_map('realpath', $filesList);
