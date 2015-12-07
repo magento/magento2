@@ -57,11 +57,12 @@ class RendererProxy extends SelectRenderer
      */
     public function __sleep()
     {
-        return array('_subject', '_isShared');
+        return ['_subject', '_isShared'];
     }
 
     /**
      * Retrieve ObjectManager from global scope
+     * @return void
      */
     public function __wakeup()
     {
@@ -70,6 +71,7 @@ class RendererProxy extends SelectRenderer
 
     /**
      * Clone proxied instance
+     * @return void
      */
     public function __clone()
     {
