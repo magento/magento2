@@ -213,7 +213,8 @@ class DataProvider implements DataProviderInterface
         $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
         $customerGroupId = $this->customerSession->getCustomerGroupId();
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        $storeId = $this->storeManager->getStore()->getId();
+        $dimension = current($dimensions);
+        $storeId = $dimension->getValue();
         $requestQuery = [
             'index' => $this->clientConfig->getIndexName(),
             'type' => $this->clientConfig->getEntityType(),

@@ -248,7 +248,48 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAggregation()
     {
+        $expectedResult = [
+            1 => 1,
+        ];
+        $bucket = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dimension->expects($this->once())
+            ->method('getValue')
+            ->willReturn(1);
 
+        $this->clientMock->expects($this->once())
+            ->method('query')
+            ->willReturn([
+                'aggregations' => [
+                    'prices' => [
+                        'price_filter' => [
+                            'price_stats' => [
+                                'buckets' => [
+                                    [
+                                        'key' => 1,
+                                        'doc_count' => 1,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+
+        $this->assertEquals(
+            $expectedResult,
+            $this->model->getAggregation(
+                $bucket,
+                [$dimension],
+                10,
+                $this->entityStorage
+            )
+        );
     }
 
     /**
