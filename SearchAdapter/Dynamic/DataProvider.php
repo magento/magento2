@@ -189,39 +189,14 @@ class DataProvider implements DataProviderInterface
     ) {
         $entityIds = $entityStorage->getSource();
         $fieldName = $this->fieldMapper->getFieldName('price');
-        $customerGroupId = $this->customerSession->getCustomerGroupId();
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        $storeId = $this->storeManager->getStore()->getId();
-        $requestQuery = [
-            'index' => $this->clientConfig->getIndexName(),
-            'type' => $this->clientConfig->getEntityType(),
-            'body' => [
-                'fields' => [
-                    '_id',
-                    '_score',
-                ],
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            [
-                                'term' => [
-                                    'store_id' => $storeId,
-                                ],
-                            ],
-                            [
-                                'terms' => [
-                                    '_id' => $entityIds,
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        $dimension = current($dimensions);
+        $storeId = $dimension->getValue();
 
-        $queryResult = $this->connectionManager->getConnection()
-            ->query($requestQuery);
-        return $this->intervalFactory->create(['query' => $queryResult, 'fieldName' => $fieldName]);
+        return $this->intervalFactory->create([
+            'entityIds' => $entityIds,
+            'storeId' => $storeId,
+            'fieldName' => $fieldName
+        ]);
     }
 
     /**
@@ -229,7 +204,6 @@ class DataProvider implements DataProviderInterface
      */
     public function getAggregation(
         BucketInterface $bucket,
-
         array $dimensions,
         $range,
         EntityStorage $entityStorage

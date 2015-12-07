@@ -185,6 +185,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $filterQuery->expects($this->any())
             ->method('getType')
             ->willReturn('matchQuery');
+        $this->filterBuilder->expects(($this->any()))
+            ->method('build')
+            ->willReturn([]);
 
         $this->model->buildQuery($request);
     }
