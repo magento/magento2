@@ -84,7 +84,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $refreshTree = false;
         $data = $this->getRequest()->getPostValue();
         $data = $this->imagePreprocessing($data);
-        //print_r($data); exit;
+        
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
