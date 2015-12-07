@@ -73,7 +73,7 @@ class Column extends AbstractComponent implements ColumnInterface
             $this->wrappedComponent = $this->uiComponentFactory->create(
                 $this->getName(),
                 $dataType,
-                ['context' => $this->getContext(), 'data' => (array) $this->getData()]
+                array_merge(['context' => $this->getContext()], (array) $this->getData())
             );
             $this->wrappedComponent->prepare();
             $wrappedComponentConfig = $this->getJsConfig($this->wrappedComponent);

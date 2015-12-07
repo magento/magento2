@@ -147,7 +147,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
         $uiComponentFactoryMock->expects($this->once())
             ->method('create')
-            ->with('test_name', 'test_type', ['context' => $this->contextMock, 'data' => $data])
+            ->with('test_name', 'test_type', array_merge(['context' => $this->contextMock], $data))
             ->willReturn($wrappedComponentMock);
 
         $wrappedComponentMock->expects($this->once())

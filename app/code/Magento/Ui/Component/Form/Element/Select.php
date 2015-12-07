@@ -16,17 +16,25 @@ class Select extends AbstractElement
     const NAME = 'select';
 
     /**
+     * @var array|OptionSourceInterface|null
+     */
+    protected $options;
+
+    /**
      * Constructor
      *
      * @param ContextInterface $context
+     * @param array|OptionSourceInterface|null $options
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
+        $options = null,
         array $components = [],
         array $data = []
     ) {
+        $this->options = $options;
         parent::__construct($context, $components, $data);
     }
 
@@ -48,18 +56,16 @@ class Select extends AbstractElement
     public function prepare()
     {
         $config = $this->getData('config');
-        $options = $this->getData('options');
-
-        if ($options !== null) {
+        if (isset($this->options)) {
             if (!isset($config['options'])) {
                 $config['options'] = [];
             }
-            if ($options instanceof OptionSourceInterface) {
-                $optionsData = $options->toOptionArray();
+            if ($this->options instanceof OptionSourceInterface) {
+                $options = $this->options->toOptionArray();
             } else {
-                $optionsData = array_values($options);
+                $options = array_values($this->options);
             }
-            $config['options'] = array_values(array_merge_recursive($optionsData, $config['options']));
+            $config['options'] = array_values(array_merge_recursive($options, $config['options']));
         }
         $this->setData('config', (array)$config);
         parent::prepare();

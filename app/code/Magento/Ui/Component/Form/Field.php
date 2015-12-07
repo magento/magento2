@@ -78,7 +78,7 @@ class Field extends AbstractComponent
         $this->wrappedComponent = $this->uiComponentFactory->create(
             $this->getName(),
             $formElement,
-            array_merge(['context' => $this->getContext()], ['data' => (array)$this->getData()])
+            array_merge(['context' => $this->getContext()], (array)$this->getData())
         );
         $this->wrappedComponent->setData(
             'config',
@@ -87,7 +87,12 @@ class Field extends AbstractComponent
                 (array) $this->getData('config')
             )
         );
+
+        foreach ($this->components as $nameComponent => $component) {
+            $this->wrappedComponent->addComponent($nameComponent, $component);
+        }
         $this->prepareChildComponent($this->wrappedComponent);
+
         $this->components = $this->wrappedComponent->getChildComponents();
         // Merge JS configuration with wrapped component configuration
         $wrappedComponentConfig = $this->getJsConfig($this->wrappedComponent);
