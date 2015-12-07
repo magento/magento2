@@ -39,9 +39,6 @@
 
     php_value memory_limit 768M
     php_value max_execution_time 18000
-    php_value session.gc_probability 0
-    php_value session.gc_divisor 100000000
-    php_value session.save_path /var/tmp
 
 ############################################
 ## disable automatic session start
