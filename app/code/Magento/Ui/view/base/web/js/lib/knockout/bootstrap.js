@@ -7,25 +7,15 @@
 define([
     'ko',
     './template/engine',
-    'knockoutjs/knockout-repeat',
-    'knockoutjs/knockout-fast-foreach',
     'knockoutjs/knockout-es5',
-    './bind/scope',
-    './bind/staticChecked',
-    './bind/datepicker',
-    './bind/outer_click',
-    './bind/keyboard',
-    './bind/optgroup',
-    './bind/fadeVisible',
-    './bind/mage-init',
-    './bind/after-render',
-    './bind/i18n',
-    './bind/collapsible',
-    './bind/autoselect',
+    './bindings/bootstrap',
     './extender/observable_array',
-    './extender/bound-nodes'
+    './extender/bound-nodes',
+    'domReady!'
 ], function (ko, templateEngine) {
     'use strict';
+
+    ko.uid = 0;
 
     ko.setTemplateEngine(templateEngine);
     ko.applyBindings();
