@@ -33,22 +33,6 @@ class Cc extends CreditCard
         "cvv" => "#braintree-hosted-field-cvv",
     ];
 
-    /**
-     * Cc constructor.
-     * @param SimpleElement $element
-     * @param BlockFactory $blockFactory
-     * @param Mapper $mapper
-     * @param BrowserInterface $browser
-     */
-    public function __construct(
-        SimpleElement $element,
-        BlockFactory $blockFactory,
-        Mapper $mapper,
-        BrowserInterface $browser
-    ) {
-        parent::__construct($element, $blockFactory, $mapper, $browser);
-    }
-
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         $mapping = $this->dataMapping($fixture->getData());
