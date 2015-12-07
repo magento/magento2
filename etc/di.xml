@@ -89,11 +89,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Elasticsearch\Model\Adapter\Elasticsearch">
-        <arguments>
-            <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
-        </arguments>
-    </type>
     <virtualType name="Magento\Elasticsearch\Model\Adapter\Index\Config\Reader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Elasticsearch\Model\Adapter\Index\Config\Converter</argument>
