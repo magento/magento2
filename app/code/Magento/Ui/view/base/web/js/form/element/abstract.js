@@ -29,11 +29,13 @@ define([
             notice: '',
             customScope: '',
             additionalClasses: {},
+            isUseDefault: '',
 
             listens: {
                 visible: 'setPreview',
                 '${ $.provider }:data.reset': 'reset',
-                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
+                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
+                'isUseDefault': 'toggleUseDefault'
             },
 
             links: {
@@ -65,7 +67,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value warn')
+            this.observe('error disabled focused preview visible value warn isUseDefault')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -107,6 +109,7 @@ define([
 
             this.value(this.initialValue);
             this.on('value', this.onUpdate.bind(this));
+            this.isUseDefault(this.disabled());
 
             return this;
         },
@@ -178,6 +181,33 @@ define([
         },
 
         /**
+         * Checks if element has service setting
+         *
+         * @returns {Boolean}
+         */
+        hasService: function () {
+            return this.service && this.service.template;
+        },
+
+        /**
+         * Checks if element service can have default value
+         *
+         * @returns {Boolean}
+         */
+        canDisplayUseDefault: function () {
+            return this.hasService() && this.service.displayUseDefault;
+        },
+
+        /**
+         * Checks whether service is enabled
+         *
+         * @returns {Boolean}
+         */
+        isServiceEnabled: function () {
+            return this.hasService() && !this.service.disabled;
+        },
+
+        /**
          * Checkes if element has addons
          *
          * @returns {Boolean}
@@ -192,7 +222,7 @@ define([
          * @returns {Boolean}
          */
         hasChanged: function () {
-            var notEqual = this.value() != this.initialValue;
+            var notEqual = this.value() !== this.initialValue;
 
             return !this.visible() ? false : notEqual;
         },
@@ -267,6 +297,19 @@ define([
             this.bubble('update', this.hasChanged());
 
             this.validate();
+        },
+
+        /**
+         * Toggle enable/disabled for scoped fields
+         *
+         * @param {Bool} state
+         */
+        toggleUseDefault: function (state) {
+            state = !state;
+
+            this.disabled(!state);
+            this.required(state);
+            this.error(false);
         }
     });
 });

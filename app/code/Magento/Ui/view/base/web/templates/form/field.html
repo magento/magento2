@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field" visible="visible" css="_required: required, _disabled: disabled, _error: error">
+<div class="admin__field" visible="visible" css="$data.additionalClasses" attr="'data-config-scope': $data.scope_label">
 
     <label class="admin__field-label" if="$data.label" attr="for: uid">
         <span text="label"/>
@@ -30,5 +30,8 @@
         </div>
         
         <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
+        <div class="admin__additional-info" if="$data.additionalInfo" html="$data.additionalInfo"></div>
+
+        <render args="$data.service.template" if="$data.hasService() && $data.canDisplayUseDefault()"/>
     </div>
 </div>
