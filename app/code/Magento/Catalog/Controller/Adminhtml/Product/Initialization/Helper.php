@@ -6,7 +6,12 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
+use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 
+/**
+ * Class Helper
+ */
 class Helper
 {
     /**
@@ -45,6 +50,16 @@ class Helper
     protected $customOptionFactory;
 
     /**
+     * @var ProductLinkFactory
+     */
+    protected $productLinkFactory;
+
+    /**
+     * @var ProductRepository
+     */
+    protected $productRepository;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
@@ -52,6 +67,8 @@ class Helper
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param CustomOptionFactory $customOptionFactory
+     * @param ProductLinkFactory $productLinkFactory
+     * @param ProductRepository $productRepository
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -60,7 +77,9 @@ class Helper
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        CustomOptionFactory $customOptionFactory
+        CustomOptionFactory $customOptionFactory,
+        ProductLinkFactory $productLinkFactory,
+        ProductRepository $productRepository
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -69,6 +88,8 @@ class Helper
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
         $this->customOptionFactory = $customOptionFactory;
+        $this->productLinkFactory = $productLinkFactory;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -144,6 +165,43 @@ class Helper
             }
         }
         $product = $this->productLinks->initializeLinks($product, $links);
+        $productLinks = $product->getProductLinks();
+        if (isset($links['related']) && !$product->getRelatedReadonly()) {
+            foreach ($links['related'] as $linkId => $related) {
+                $linkProduct = $this->productRepository->getById($linkId);
+                $link = $this->productLinkFactory->create();
+                $link->setSku($product->getSku())
+                    ->setLinkedProductSku($linkProduct->getSku())
+                    ->setLinkType('related')
+                    ->setPosition(isset($related['position']) ? (int)$related['position'] : 0);
+                $productLinks[] = $link;
+            }
+        }
+
+        if (isset($links['upsell']) && !$product->getUpsellReadonly()) {
+            foreach ($links['upsell'] as $linkId => $related) {
+                $linkProduct = $this->productRepository->getById($linkId);
+                $link = $this->productLinkFactory->create();
+                $link->setSku($product->getSku())
+                    ->setLinkedProductSku($linkProduct->getSku())
+                    ->setLinkType('upsell')
+                    ->setPosition(isset($related['position']) ? (int)$related['position'] : 0);
+                $productLinks[] = $link;
+            }
+        }
+
+        if (isset($links['crosssell']) && !$product->getCrosssellReadonly()) {
+            foreach ($links['crosssell'] as $linkId => $related) {
+                $linkProduct = $this->productRepository->getById($linkId);
+                $link = $this->productLinkFactory->create();
+                $link->setSku($product->getSku())
+                    ->setLinkedProductSku($linkProduct->getSku())
+                    ->setLinkType('crosssell')
+                    ->setPosition(isset($related['position']) ? (int)$related['position'] : 0);
+                $productLinks[] = $link;
+            }
+        }
+        $product->setProductLinks($productLinks);
 
         /**
          * Initialize product options
@@ -166,7 +224,6 @@ class Helper
             }
             $product->setOptions($customOptions);
         }
-
 
         $product->setCanSaveCustomOptions(
             (bool)$this->request->getPost('affect_product_custom_options') && !$product->getOptionsReadonly()
