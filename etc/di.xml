@@ -68,8 +68,16 @@
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Elasticsearch\Model\Adapter\Index\Config\Reader" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Elasticsearch\Model\Adapter\Index\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Elasticsearch\Model\Adapter\Index\Config\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">esconfig.xml</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig">
         <arguments>
+            <argument name="reader" xsi:type="object">Magento\Elasticsearch\Model\Adapter\Index\Config\Reader</argument>
             <argument name="cacheId" xsi:type="string">elasticsearch_index_config</argument>
         </arguments>
     </type>
