@@ -16,7 +16,7 @@ return [
     'customerAdded' => [
         'name' => 'customerAdded',
         'is_synchronous' => false,
-        'request' => 'Magento\Customer\Api\Data\CustomerInterface',
+        'request' => 'string[]',
         'request_type' => 'object_interface',
         'response' => null,
         'handlers' => [
@@ -43,7 +43,7 @@ return [
         'is_synchronous' => true,
         'request' => 'Magento\Customer\Api\Data\CustomerInterface',
         'request_type' => 'object_interface',
-        'response' => 'Magento\Customer\Api\Data\CustomerInterface',
+        'response' => 'Magento\Customer\Api\Data\CustomerInterface[]',
         'handlers' => [
             'updateName' => [
                 'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
