@@ -60,6 +60,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
+     * List of fields that should not be added into the form
+     *
+     * @var array
+     */
+    protected $ignoreFields = [
+        'products_position'
+    ];
+
+    /**
      * @var EavValidationRules
      */
     protected $eavValidationRules;
@@ -123,6 +132,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         } else {
             $categoryData = $category->getData();
             $categoryData = $this->addUseConfigSettings($categoryData);
+            $categoryData = $this->filterFields($categoryData);
             $result['general'] = $categoryData;
             $this->loadedData[$category->getId()] = $result;
         }
@@ -199,5 +209,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function getCurrentCategory()
     {
         return $this->registry->registry('category');
+    }
+
+    /**
+     * Filter fields
+     *
+     * @param array $categoryData
+     * @return array
+     */
+    protected function filterFields($categoryData)
+    {
+        return array_diff_key($categoryData, array_flip($this->ignoreFields));
     }
 }
