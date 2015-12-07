@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Model\Adapter;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\ResourceModel\Index;
@@ -88,7 +88,7 @@ class Elasticsearch
      * @param AttributeContainer $attributeContainer
      * @param DocumentDataMapper $documentDataMapper
      * @param FieldMapper $fieldMapper
-     * @param ClientOptionsInterface $clientConfig
+     * @param Config $clientConfig
      * @param BuilderInterface $indexBuilder
      * @param LoggerInterface $logger
      * @param array $options
@@ -101,7 +101,7 @@ class Elasticsearch
         AttributeContainer $attributeContainer,
         DocumentDataMapper $documentDataMapper,
         FieldMapper $fieldMapper,
-        ClientOptionsInterface $clientConfig,
+        Config $clientConfig,
         BuilderInterface $indexBuilder,
         LoggerInterface $logger,
         $options = []
