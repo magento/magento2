@@ -31,7 +31,6 @@ class EnvValidator extends Validator
      */
     private $booleanUtils;
 
-
     /**
      * @param BooleanUtils $booleanUtils
      * @param TypeProcessor $typeProcessor
@@ -52,6 +51,7 @@ class EnvValidator extends Validator
      * Validate config data
      *
      * @param array $configData
+     * @return void
      */
     public function validate($configData)
     {
