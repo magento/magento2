@@ -134,7 +134,6 @@ class UpdateConfigurableProductStep implements TestStepInterface
 
         $dataProduct['configurable_attributes_data'] = [
             'attributes_data' => $attributesData,
-            'matrix' => $oldMatrix,
         ];
 
         if ($product->hasData('category_ids')) {
