@@ -23,7 +23,7 @@
             <data name="creditCard/dataset" xsi:type="string">visa_authorizenet</data>
             <data name="configData" xsi:type="string">authorizenet</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test_deprecated</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
