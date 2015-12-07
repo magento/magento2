@@ -38,7 +38,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ['query_text', 'store_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             );
+        }
 
+        if (version_compare($context->getVersion(), '2.0.2') < 0) {
             /**
              * Create table 'search_synonyms'
              */
