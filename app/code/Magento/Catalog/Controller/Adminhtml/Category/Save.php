@@ -84,6 +84,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $storeId = $this->getRequest()->getParam('store');
         $refreshTree = false;
         $data = $this->getRequest()->getPostValue();
+        $data = $this->imagePreprocessing($data);
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
             if (!$category->getId()) {
@@ -211,5 +212,32 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             'catalog/*/edit',
             $redirectParams
         );
+    }
+
+    /**
+     * Image data preprocessing
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function imagePreprocessing($data)
+    {
+        if (isset($_FILES['general']) && !empty($_FILES['general']['name']['image'])) {
+            $_FILES['image'] = $_FILES['general'];
+            foreach($_FILES['general'] as $key => $file) {
+                $_FILES['image'][$key] = $file['image'];
+            }
+            $data['image'] = $_FILES['image'];
+        } else {
+            unset($data['general']['image']);
+            if (isset($data['general']['savedImage']['value'])) {
+                $data['general']['image']['value'] = $data['general']['savedImage']['value'];
+            }
+            if (isset($data['general']['savedImage']['delete'])) {
+                $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
+            }
+        }
+        return $data;
     }
 }
