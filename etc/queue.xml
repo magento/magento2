@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:MessageQueue/etc/queue.xsd">
     <publisher name="test-queue" connection="amqp" exchange="magento"/>
     <publisher name="test-queue-2" connection="db" exchange="magento"/>
     <topic name="customer.created" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-queue"/>
