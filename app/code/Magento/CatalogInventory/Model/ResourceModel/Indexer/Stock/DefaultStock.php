@@ -46,6 +46,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
