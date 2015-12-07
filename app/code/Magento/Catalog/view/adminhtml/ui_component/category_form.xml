@@ -68,6 +68,7 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
+                    <item name="label" xsi:type="string" translate="true">Enable Category</item>
                 </item>
             </argument>
         </field>
@@ -83,42 +84,99 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
+                    <item name="label" xsi:type="string" translate="true">Include in Menu</item>
+                </item>
+            </argument>
+        </field>
+        <field name="name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Category Name</item>
+                </item>
+            </argument>
+        </field>
+        <container name="image_group">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">Category Image</item>
+                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="dataScope" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                </item>
+            </argument>
+            <field name="image">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">image</item>
+                        <item name="source" xsi:type="string">category</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="savedImage.delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Delete Image</item>
+                        <item name="dataType" xsi:type="string">boolean</item>
+                        <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${ $.provider }:data.general.savedImage.value</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="savedImage.value">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataType" xsi:type="string">string</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="elementTmpl" xsi:type="string">ui/form/element/preview</item>
+                    </item>
+                </argument>
+            </field>
+        </container>
+        <field name="description">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                </item>
+            </argument>
+        </field>
+        <field name="landing_page">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Add CMS Block</item>
+                </item>
+            </argument>
+        </field>
+        <field name="display_mode">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
                 </item>
             </argument>
         </field>
         <field name="is_anchor">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="sortOrder" xsi:type="number">80</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">category</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
                     <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
-                </item>
-            </argument>
-        </field>
-        <field name="custom_apply_to_products">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">40</item>
-                    <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="source" xsi:type="string">category</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
-                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
-                </item>
-            </argument>
-        </field>
-        <field name="custom_use_parent_settings">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">50</item>
-                    <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="source" xsi:type="string">category</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
-                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                    <item name="label" xsi:type="string" translate="true">Anchor</item>
                 </item>
             </argument>
         </field>
@@ -130,7 +188,8 @@
                     <item name="label" xsi:type="string" translate="true">Available Product Listing Sort By</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="sortOrder" xsi:type="number">90</item>
+                    <item name="label" xsi:type="string" translate="true">Sort Products By</item>
                 </item>
             </argument>
             <field name="available_sort_by">
@@ -149,7 +208,7 @@
             <field name="use_config.available_sort_by">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Use All Available Attributes</item>
+                        <item name="label" xsi:type="string" translate="true">Use All</item>
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                     </item>
@@ -161,10 +220,10 @@
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true">Default Product Listing Sort By</item>
+                    <item name="label" xsi:type="string" translate="true">Default Product Sorting</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
                 </item>
             </argument>
             <field name="default_sort_by">
@@ -195,10 +254,10 @@
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true">Default Product Listing Sort By</item>
+                    <item name="label" xsi:type="string" translate="true">Layered Navigation Price Step</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="number">80</item>
+                    <item name="sortOrder" xsi:type="number">110</item>
                 </item>
             </argument>
             <field name="filter_price_range">
@@ -232,7 +291,7 @@
                     <item name="label" xsi:type="string" translate="true">URL Key</item>
                     <item name="required" xsi:type="boolean">false</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="number">90</item>
+                    <item name="sortOrder" xsi:type="number">120</item>
                 </item>
             </argument>
             <field name="url_key">
@@ -244,47 +303,122 @@
                 </argument>
             </field>
         </container>
-        <container name="image_group">
+        <field name="meta_title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">130</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Meta Title</item>
+                </item>
+            </argument>
+        </field>
+        <field name="meta_keywords">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">140</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="label" xsi:type="string" translate="true">Meta Keywords</item>
+                </item>
+            </argument>
+        </field>
+        <field name="meta_description">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">150</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="label" xsi:type="string" translate="true">Meta Description</item>
+                </item>
+            </argument>
+        </field>
+        <field name="custom_use_parent_settings">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">160</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                    <item name="label" xsi:type="string" translate="true">Use Parent Category Settings</item>
+                </item>
+            </argument>
+        </field>
+        <field name="custom_apply_to_products">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">170</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                    <item name="label" xsi:type="string" translate="true">Apply to Products</item>
+                </item>
+            </argument>
+        </field>
+        <field name="page_layout">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">180</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Layout</item>
+                </item>
+            </argument>
+        </field>
+        <field name="custom_layout_update">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">190</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="label" xsi:type="string" translate="true">Layout Update XML</item>
+                </item>
+            </argument>
+        </field>
+        <container name="date_group">
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true">Image</item>
+                    <item name="label" xsi:type="string" translate="true">Time Frame</item>
                     <item name="required" xsi:type="boolean">false</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="number">90</item>
+                    <item name="sortOrder" xsi:type="number">200</item>
                 </item>
             </argument>
-            <field name="image">
+            <field name="custom_design_from">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="formElement" xsi:type="string">image</item>
-                        <item name="source" xsi:type="string">category</item>
-                    </item>
-                </argument>
-            </field>
-            <field name="savedImage.delete">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Delete Image</item>
-                        <item name="dataType" xsi:type="string">boolean</item>
-                        <item name="formElement" xsi:type="string">checkbox</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">${ $.provider }:data.general.savedImage.value</item>
-                        </item>
-                    </item>
-                </argument>
-            </field>
-            <field name="savedImage.value">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
+                        <item name="sortOrder" xsi:type="number">210</item>
                         <item name="dataType" xsi:type="string">string</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="elementTmpl" xsi:type="string">ui/form/element/preview</item>
+                        <item name="formElement" xsi:type="string">date</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="custom_design_to">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="sortOrder" xsi:type="number">220</item>
+                        <item name="dataType" xsi:type="string">string</item>
+                        <item name="formElement" xsi:type="string">date</item>
                     </item>
                 </argument>
             </field>
         </container>
+        <field name="custom_design">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">200</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">New Theme</item>
+                </item>
+            </argument>
+        </field>
         <container name="assign_products_container" >
             <htmlContent name="html_content">
                 <argument name="block" xsi:type="object">Magento\Catalog\Block\Adminhtml\Category\AssignProducts</argument>
