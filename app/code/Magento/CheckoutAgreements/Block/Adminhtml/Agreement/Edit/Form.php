@@ -121,7 +121,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $field = $fieldset->addField(
-                'store_id',
+                'stores',
                 'multiselect',
                 [
                     'name' => 'stores[]',
@@ -137,7 +137,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $field->setRenderer($renderer);
         } else {
             $fieldset->addField(
-                'store_id',
+                'stores',
                 'hidden',
                 ['name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId()]
             );
