@@ -244,6 +244,47 @@
                 </argument>
             </field>
         </container>
+        <container name="image_group">
+            <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="label" xsi:type="string" translate="true">Image</item>
+                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="dataScope" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">90</item>
+                </item>
+            </argument>
+            <field name="image">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">image</item>
+                        <item name="source" xsi:type="string">category</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="savedImage.delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Delete Image</item>
+                        <item name="dataType" xsi:type="string">boolean</item>
+                        <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${ $.provider }:data.general.savedImage.value</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="savedImage.value">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataType" xsi:type="string">string</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="elementTmpl" xsi:type="string">ui/form/element/preview</item>
+                    </item>
+                </argument>
+            </field>
+        </container>
         <container name="assign_products_container" >
             <htmlContent name="html_content">
                 <argument name="block" xsi:type="object">Magento\Catalog\Block\Adminhtml\Category\AssignProducts</argument>
