@@ -471,7 +471,7 @@ class View extends AbstractConfigureBlock
     /**
      * Get full image source from media gallery into product
      *
-     * @return bool
+     * @return string
      */
     public function getFullImageSource()
     {
@@ -491,7 +491,7 @@ class View extends AbstractConfigureBlock
     /**
      * Get full image source from media gallery into product
      *
-     * @return bool
+     * @return string
      */
     public function getBaseImageSource()
     {
