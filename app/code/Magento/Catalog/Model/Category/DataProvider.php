@@ -6,9 +6,13 @@
 namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Model\Category;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Helper\Toolkit;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
@@ -68,6 +72,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var \Magento\Framework\Registry
      */
     protected $registry;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+    /**
+     * @var Toolkit
+     */
+    private $eavToolkit;
+    /**
+     * @var Category
+     */
+    private $category;
 
     /**
      * Constructor
@@ -77,11 +93,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $requestFieldName
      * @param EavValidationRules $eavValidationRules
      * @param CategoryCollectionFactory $categoryCollectionFactory
-     * @param \Magento\Framework\Registry $registry,
+     * @param \Magento\Framework\Registry $registry ,
      * @param Config $eavConfig
      * @param FilterPool $filterPool
+     * @param StoreManagerInterface $storeManager
+     * @param Toolkit $eavToolkit
      * @param array $meta
      * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         $name,
@@ -92,16 +111,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \Magento\Framework\Registry $registry,
         Config $eavConfig,
         FilterPool $filterPool,
+        StoreManagerInterface $storeManager,
+        Toolkit $eavToolkit,
         array $meta = [],
         array $data = []
     ) {
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
         $this->registry = $registry;
+        $this->storeManager = $storeManager;
+        $this->eavToolkit = $eavToolkit;
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta['general']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('catalog_category')
         );
@@ -161,6 +184,19 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if (!empty($rules)) {
                 $meta[$code]['validation'] = $rules;
             }
+
+            $meta[$code]['scope_label'] = $this->getScopeLabel($attribute);
+            $meta[$code]['service'] = [
+                'template' => 'ui/form/element/helper/service',
+                'displayUseDefault' => $this->eavToolkit->canDisplayUseDefault($attribute),
+            ];
+            $meta[$code]['used_default'] = (int)($this->eavToolkit->canDisplayUseDefault($attribute) && $this->eavToolkit->usedDefault($attribute));
+            $meta[$code]['componentType'] = $meta[$code]['formElement'];
+            $meta[$code]['code'] = $code;
+
+            if ($this->getModel()->getStoreId() && !$attribute->isScopeGlobal()) {
+                $meta[$code]['disabled'] = $meta[$code]['used_default'];
+            }
         }
 
         $result = [];
@@ -199,5 +235,47 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function getCurrentCategory()
     {
         return $this->registry->registry('category');
+    }
+
+    /**
+     * Retrieve label of attribute scope
+     *
+     * GLOBAL | WEBSITE | STORE
+     *
+     * @param AbstractAttribute $attribute
+     * @return string
+     */
+    public function getScopeLabel(AbstractAttribute $attribute)
+    {
+        $html = '';
+        if (
+            !$attribute || $this->storeManager->isSingleStoreMode()
+            || $attribute->getFrontendInput() === AttributeInterface::FRONTEND_INPUT
+        ) {
+            return $html;
+        }
+        if ($attribute->isScopeGlobal()) {
+            $html .= __('[GLOBAL]');
+        } elseif ($attribute->isScopeWebsite()) {
+            $html .= __('[WEBSITE]');
+        } elseif ($attribute->isScopeStore()) {
+            $html .= __('[STORE VIEW]');
+        }
+
+        return $html;
+    }
+
+    /**
+     * Get model
+     *
+     * @return Category
+     */
+    public function getModel()
+    {
+        if (!$this->category && ($category = $this->registry->registry('current_category'))) {
+            $this->category = $category;
+        }
+
+        return $this->category;
     }
 }
