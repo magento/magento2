@@ -8,16 +8,19 @@ namespace Magento\Elasticsearch\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 
 /**
  * Elasticsearch config model
  */
 class Config implements ClientOptionsInterface
 {
+
     /**
-     * Current adapter name
+     * Elasticsearch Entity type for product
      */
-    const ELASTICSEARCH = 'elasticsearch';
+    const ELASTICSEARCH_TYPE_PRODUCT = 'product';
 
     /**
      * Default Elasticsearch server timeout
@@ -35,17 +38,25 @@ class Config implements ClientOptionsInterface
     protected $encryptor;
 
     /**
+     * @var ElasticsearchFactory
+     */
+    protected $adapterFactory;
+
+    /**
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param EncryptorInterface $encryptor
+     * @param ElasticsearchFactory $adapterFactory
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        ElasticsearchFactory $adapterFactory
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->encryptor = $encryptor;
+        $this->adapterFactory = $adapterFactory;
     }
 
     /**
@@ -76,5 +87,25 @@ class Config implements ClientOptionsInterface
     {
         $path = 'catalog/search/elasticsearch_' . $field;
         return $this->scopeConfig->getValue($path);
+    }
+
+    /**
+     * Get Elasticsearch index name
+     *
+     * @return string
+     */
+    public function getIndexName()
+    {
+        return $this->getElasticsearchConfigData('index_name');
+    }
+
+    /**
+     * get Elasticsearch entity type
+     *
+     * @return string
+     */
+    public function getEntityType()
+    {
+        return self::ELASTICSEARCH_TYPE_PRODUCT;
     }
 }

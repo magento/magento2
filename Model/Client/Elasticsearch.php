@@ -25,7 +25,6 @@ class Elasticsearch implements ClientInterface
      */
     protected $clientOptions;
 
-
     /**
      * Initialize Elasticsearch Client
      *
@@ -101,5 +100,116 @@ class Elasticsearch implements ClientInterface
             ]
         ];
         return $config;
+    }
+
+    /**
+     * Performs bulk query over Elasticsearch index
+     *
+     * @param array $query
+     * @return void
+     */
+    public function bulkQuery($query)
+    {
+        $this->client->bulk($query);
+    }
+
+    /**
+     * Gets all document Ids from specified index
+     *
+     * @param string $index
+     * @param string $entityType
+     * @return array
+     */
+    public function getAllIds($index, $entityType)
+    {
+        $ids = [];
+        $scrollData = $this->client->search([
+             'scroll' => '1m',
+             'search_type' => 'scan',
+             'index' => $index,
+             'type' => $entityType,
+             'body' => [
+                 'query' => [
+                     'match_all' => [],
+                 ],
+             ],
+        ]);
+        $scrollId = $scrollData['_scroll_id'];
+        $indexData = $this->client->scroll([
+            'scroll_id' => $scrollId,
+            'scroll' => '1m',
+        ]);
+        if (!empty($indexData['hits']['hits'])) {
+            foreach ($indexData['hits']['hits'] as $hit) {
+                $ids[$hit['_id']] = $hit['_id'];
+            }
+        }
+        return $ids;
+    }
+
+    /**
+     * Creates an Elasticsearch index
+     *
+     * @param string $index
+     * @return void
+     */
+    public function createIndex($index)
+    {
+        $this->client->indices()->create(['index' => $index]);
+    }
+
+    /**
+     * Checks whether Elasticsearch index exists
+     *
+     * @param string $index
+     * @return bool
+     */
+    public function indexExists($index)
+    {
+         return $this->client->indices()->exists(['index' => $index]);
+    }
+
+    /**
+     * Add mapping to Elasticsearch index
+     *
+     * @param array $fields
+     * @param string $index
+     * @param string $entityType
+     * @return void
+     */
+    public function addFieldsMapping(array $fields, $index, $entityType)
+    {
+        $params = [
+            'index' => $index,
+            'type' => $entityType,
+            'body' => [
+                $entityType => [
+                    '_all' => [
+                        'enabled' => true,
+                        'type' => 'string'
+                    ],
+                    'properties' => [],
+                ],
+            ],
+        ];
+        foreach ($fields as $field => $fieldInfo) {
+            $params['body'][$entityType]['properties'][$field] = $fieldInfo;
+        }
+        $this->client->indices()->putMapping($params);
+    }
+
+    /**
+     * Delete mapping in Elasticsearch index
+     *
+     * @param string $index
+     * @param string $entityType
+     * @return void
+     */
+    public function deleteMapping($index, $entityType)
+    {
+        $this->client->indices()->deleteMapping([
+            'index' => $index,
+            'type' => $entityType,
+        ]);
     }
 }

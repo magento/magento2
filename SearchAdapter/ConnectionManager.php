@@ -7,30 +7,30 @@ namespace Magento\Elasticsearch\SearchAdapter;
 
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
-use Psr\Log\LoggerInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch;
+use Psr\Log\LoggerInterface;
 
 class ConnectionManager
 {
     /**
      * @var Elasticsearch
      */
-    private $client;
+    protected $client;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @var ClientFactoryInterface
      */
-    private $clientFactory;
+    protected $clientFactory;
 
     /**
      * @var ClientOptionsInterface
      */
-    private $clientConfig;
+    protected $clientConfig;
 
     /**
      * @param ClientFactoryInterface $clientFactory
