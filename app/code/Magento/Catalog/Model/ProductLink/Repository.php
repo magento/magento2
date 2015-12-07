@@ -152,7 +152,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     /**
      * Get product links list
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
      */
     public function getList(\Magento\Catalog\Api\Data\ProductInterface $product)
