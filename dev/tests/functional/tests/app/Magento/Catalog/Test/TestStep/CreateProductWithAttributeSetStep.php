@@ -54,25 +54,35 @@ class CreateProductWithAttributeSetStep implements TestStepInterface
     protected $attributeSet;
 
     /**
+     * Custom attribute value to set while product creation.
+     *
+     * @var mixed
+     */
+    protected $attributeValue;
+
+    /**
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductIndex $catalogProductIndex
      * @param CatalogProductEdit $catalogProductEdit
      * @param CatalogProductAttribute $attribute
      * @param CatalogAttributeSet $attributeSet
+     * @param mixed $attributeValue [optional]
      */
     public function __construct(
         FixtureFactory $fixtureFactory,
         CatalogProductIndex $catalogProductIndex,
         CatalogProductEdit $catalogProductEdit,
         CatalogProductAttribute $attribute,
-        CatalogAttributeSet $attributeSet
+        CatalogAttributeSet $attributeSet,
+        $attributeValue = null
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductIndex = $catalogProductIndex;
         $this->catalogProductEdit = $catalogProductEdit;
         $this->attribute = $attribute;
         $this->attributeSet = $attributeSet;
+        $this->attributeValue = $attributeValue;
     }
 
     /**
@@ -82,13 +92,18 @@ class CreateProductWithAttributeSetStep implements TestStepInterface
      */
     public function run()
     {
+        // Create product with attribute set mentioned above:
+        $customAttribute = $this->attribute;
+        if ($this->attributeValue !== null) {
+            $customAttribute = ['value' => $this->attributeValue, 'attribute' => $customAttribute];
+        }
         $product = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
             [
                 'dataset' => 'product_with_category_with_anchor',
                 'data' => [
                     'attribute_set_id' => ['attribute_set' => $this->attributeSet],
-                    'custom_attribute' => $this->attribute
+                    'custom_attribute' => $customAttribute
                 ],
             ]
         );

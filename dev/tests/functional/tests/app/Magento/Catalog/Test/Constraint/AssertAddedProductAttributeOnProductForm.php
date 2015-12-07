@@ -53,7 +53,6 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
      * @param CatalogProductAttribute $attribute
      * @param CatalogAttributeSet $attributeSet
      * @param CatalogProductAttribute $productAttributeOriginal
-     * @param mixed $attributeValue [optional]
      * @throws \Exception
      * @return void
      */
@@ -64,8 +63,7 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
         CatalogProductEdit $catalogProductEdit,
         CatalogProductAttribute $attribute,
         CatalogAttributeSet $attributeSet,
-        CatalogProductAttribute $productAttributeOriginal = null,
-        $attributeValue = null
+        CatalogProductAttribute $productAttributeOriginal = null
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductIndex = $catalogProductIndex;
@@ -75,7 +73,14 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
             if (!$productAttributeOriginal) {
                 $productAttributeOriginal = $attribute;
             }
-            $product = $this->createProductWithAttributeSet($productAttributeOriginal, $attributeSet, $attributeValue);
+            $product = $this->objectManager->create(
+                'Magento\Catalog\Test\TestStep\CreateProductWithAttributeSetStep',
+                [
+                    'attribute' => $productAttributeOriginal,
+                    'attributeSet' => $attributeSet
+                ]
+            )->run();
+            $product = $product['product'];
         }
         $filterProduct = ['sku' => $product->getSku()];
         $catalogProductIndex->open();
@@ -89,34 +94,6 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
             $catalogProductEdit->getProductForm()->checkAttributeLabel($catalogProductAttribute),
             "Product Attribute is absent on Product form."
         );
-    }
-
-    /**
-     * Create Product With AttributeSet.
-     *
-     * @param CatalogProductAttribute $attribute
-     * @param CatalogAttributeSet $attributeSet
-     * @param mixed $attributeValue [optional]
-     * @return CatalogProductSimple
-     */
-    protected function createProductWithAttributeSet(
-        CatalogProductAttribute $attribute,
-        CatalogAttributeSet $attributeSet,
-        $attributeValue = null
-    ) {
-        if ($attributeValue !== null) {
-            $attribute = ['value' => $attributeValue, 'attribute' => $attribute];
-        }
-
-        $product = $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\CreateProductWithAttributeSetStep',
-            [
-                'attribute' => $attribute,
-                'attributeSet' => $attributeSet
-            ]
-        )->run();
-
-        return $product['product'];
     }
 
     /**

@@ -81,16 +81,13 @@ class UpdateProductAttributeEntityTest extends Injectable
             'attribute_code' => $productAttributeOriginal->getAttributeCode(),
         ];
 
-        //Steps
-        $attributeIndex->open();
-        $attributeIndex->getGrid()->searchAndOpen($filter);
-        $attributeNew->getAttributeForm()->fill($attribute);
-        $attributeNew->getPageActions()->save();
-        $attribute = $this->prepareAttribute($attribute, $productAttributeOriginal);
+        /** @var CatalogProductSimple $product */
         $product = $this->fixtureFactory->createByCode('catalogProductSimple',
             [
                 'dataset' => 'default',
-                'data' => ['attribute_set_id' => ['attribute_set' => $attributeSet]]]);
+                'data' => ['attribute_set_id' => ['attribute_set' => $attributeSet]]
+            ]
+        );
         $product->persist();
 
         $this->objectManager->create(
@@ -100,6 +97,13 @@ class UpdateProductAttributeEntityTest extends Injectable
                 'attributeSet' => $attributeSet
             ]
         )->run();
+
+        //Steps
+        $attributeIndex->open();
+        $attributeIndex->getGrid()->searchAndOpen($filter);
+        $attributeNew->getAttributeForm()->fill($attribute);
+        $attributeNew->getPageActions()->save();
+        $attribute = $this->prepareAttribute($attribute, $productAttributeOriginal);
 
         return ['product' => $this->prepareProduct($product, $attribute, $attributeSet)];
     }
