@@ -57,6 +57,11 @@ class Product extends AbstractResource
     protected $typeFactory;
 
     /**
+     * @var \Magento\Framework\Model\EntityManager
+     */
+    protected $entityManager;
+
+    /**
      * @var \Magento\Catalog\Model\Product\Attribute\DefaultAttributes
      */
     protected $defaultAttributes;
@@ -85,6 +90,7 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
+        \Magento\Framework\Model\EntityManager $entityManager,
         $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -92,6 +98,7 @@ class Product extends AbstractResource
         $this->eventManager = $eventManager;
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
+        $this->entityManager = $entityManager;
         $this->defaultAttributes = $defaultAttributes;
         parent::__construct(
             $context,
@@ -163,7 +170,7 @@ class Product extends AbstractResource
         $connection = $this->getConnection();
 
         if ($product instanceof \Magento\Catalog\Model\Product) {
-            $productId = $product->getId();
+            $productId = $product->getEntityId();
         } else {
             $productId = $product;
         }
@@ -318,14 +325,14 @@ class Product extends AbstractResource
         if (!empty($insert)) {
             $data = [];
             foreach ($insert as $websiteId) {
-                $data[] = ['product_id' => (int)$product->getId(), 'website_id' => (int)$websiteId];
+                $data[] = ['product_id' => (int)$product->getEntityId(), 'website_id' => (int)$websiteId];
             }
             $connection->insertMultiple($this->getProductWebsiteTable(), $data);
         }
 
         if (!empty($delete)) {
             foreach ($delete as $websiteId) {
-                $condition = ['product_id = ?' => (int)$product->getId(), 'website_id = ?' => (int)$websiteId];
+                $condition = ['product_id = ?' => (int)$product->getEntityId(), 'website_id = ?' => (int)$websiteId];
 
                 $connection->delete($this->getProductWebsiteTable(), $condition);
             }
@@ -370,7 +377,7 @@ class Product extends AbstractResource
                 }
                 $data[] = [
                     'category_id' => (int)$categoryId,
-                    'product_id' => (int)$object->getId(),
+                    'product_id' => (int)$object->getEntityId(),
                     'position' => 1,
                 ];
             }
@@ -381,7 +388,7 @@ class Product extends AbstractResource
 
         if (!empty($delete)) {
             foreach ($delete as $categoryId) {
-                $where = ['product_id = ?' => (int)$object->getId(), 'category_id = ?' => (int)$categoryId];
+                $where = ['product_id = ?' => (int)$object->getEntityId(), 'category_id = ?' => (int)$categoryId];
 
                 $connection->delete($this->getProductCategoryTable(), $where);
             }
@@ -413,7 +420,7 @@ class Product extends AbstractResource
             null
         )->addFieldToFilter(
             'product_id',
-            (int)$product->getId()
+            (int)$product->getEntityId()
         );
         return $collection;
     }
@@ -466,7 +473,7 @@ class Product extends AbstractResource
             'product_id'
         )->where(
             'product_id = ?',
-            (int)$product->getId()
+            (int)$product->getEntityId()
         )->where(
             'category_id = ?',
             (int)$categoryId
@@ -496,11 +503,11 @@ class Product extends AbstractResource
                 [
                     'attribute_id',
                     'store_id',
-                    'entity_id' => new \Zend_Db_Expr($connection->quote($newId)),
+                    $this->getLinkField() => new \Zend_Db_Expr($connection->quote($newId)),
                     'value'
                 ]
             )->where(
-                'entity_id = ?',
+                $this->getLinkField() . ' = ?',
                 $oldId
             )->where(
                 'store_id > ?',
@@ -511,7 +518,7 @@ class Product extends AbstractResource
                 $connection->insertFromSelect(
                     $select,
                     $tableName,
-                    ['attribute_id', 'store_id', 'entity_id', 'value'],
+                    ['attribute_id', 'store_id', $this->getLinkField(), 'value'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
@@ -522,7 +529,7 @@ class Product extends AbstractResource
         $statusAttributeId = $statusAttribute->getAttributeId();
         $statusAttributeTable = $statusAttribute->getBackend()->getTable();
         $updateCond[] = 'store_id > 0';
-        $updateCond[] = $connection->quoteInto('entity_id = ?', $newId);
+        $updateCond[] = $connection->quoteInto($this->getLinkField() . ' = ?', $newId);
         $updateCond[] = $connection->quoteInto('attribute_id = ?', $statusAttributeId);
         $connection->update(
             $statusAttributeTable,
@@ -561,7 +568,7 @@ class Product extends AbstractResource
     {
         $select = $this->getConnection()->select()->from(
             $this->getTable('catalog_product_entity'),
-            ['sku', 'entity_id']
+            ['sku', $this->getLinkField()]
         )->where(
             'sku IN (?)',
             $productSkuList
@@ -569,7 +576,7 @@ class Product extends AbstractResource
 
         $result = [];
         foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $result[$row['sku']] = $row['entity_id'];
+            $result[$row['sku']] = $row[$this->getLinkField()];
         }
         return $result;
     }
@@ -593,44 +600,6 @@ class Product extends AbstractResource
         $select = $connection->select()->from($this->getTable('catalog_product_entity'), $columns);
 
         return $connection->fetchAll($select);
-    }
-
-    /**
-     * Return assigned images for specific stores
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param int|array $storeIds
-     * @return array
-     *
-     */
-    public function getAssignedImages($product, $storeIds)
-    {
-        if (!is_array($storeIds)) {
-            $storeIds = [$storeIds];
-        }
-
-        $mainTable = $product->getResource()->getAttribute('image')->getBackend()->getTable();
-        $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            ['images' => $mainTable],
-            ['value as filepath', 'store_id']
-        )->joinLeft(
-            ['attr' => $this->getTable('eav_attribute')],
-            'images.attribute_id = attr.attribute_id',
-            ['attribute_code']
-        )->where(
-            'entity_id = ?',
-            $product->getId()
-        )->where(
-            'store_id IN (?)',
-            $storeIds
-        )->where(
-            'attribute_code IN (?)',
-            ['small_image', 'thumbnail', 'image']
-        );
-
-        $images = $connection->fetchAll($select);
-        return $images;
     }
 
     /**
@@ -660,5 +629,99 @@ class Product extends AbstractResource
         }
 
         return parent::validate($object);
+    }
+
+    /**
+     * Reset firstly loaded attributes
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @param integer $entityId
+     * @param array|null $attributes
+     * @return $this
+     */
+    public function load($object, $entityId, $attributes = [])
+    {
+        $this->loadAttributesMetadata($attributes);
+
+        $this->entityManager->load('Magento\Catalog\Api\Data\ProductInterface', $object, $entityId);
+
+        $this->_afterLoad($object);
+
+        return $this;
+    }
+
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /**
+         * Direct deleted items to delete method
+         */
+        if ($object->isDeleted()) {
+            return $this->delete($object);
+        }
+        if (!$object->hasDataChanges()) {
+            return $this;
+        }
+        $this->beginTransaction();
+        try {
+            $object->validateBeforeSave();
+            $object->beforeSave();
+            if ($object->isSaveAllowed()) {
+                if (!$this->isPartialSave()) {
+                    $this->loadAllAttributes($object);
+                }
+
+                if ($this->getEntityTable() ==  \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE
+                    && !$object->getEntityTypeId()
+                ) {
+                    $object->setEntityTypeId($this->getTypeId());
+                }
+
+                $object->setParentId((int)$object->getParentId());
+
+                $this->objectRelationProcessor->validateDataIntegrity($this->getEntityTable(), $object->getData());
+
+                $this->_beforeSave($object);
+                $this->entityManager->save(
+                    'Magento\Catalog\Api\Data\ProductInterface',
+                    $object
+                );
+                $this->_afterSave($object);
+
+                $object->afterSave();
+            }
+            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
+            $object->setHasDataChanges(false);
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function evaluateDelete($object, $id, $connection)
+    {
+        $where = [$this->getLinkField() . '=?' => $id];
+        $this->objectRelationProcessor->delete(
+            $this->transactionManager,
+            $connection,
+            $this->getEntityTable(),
+            $this->getConnection()->quoteInto(
+                $this->getLinkField() . '=?',
+                $id
+            ),
+            [$this->getLinkField() => $id]
+        );
+
+        $this->loadAllAttributes($object);
+        foreach ($this->getAttributesByTable() as $table => $attributes) {
+            $this->getConnection()->delete(
+                $table,
+                $where
+            );
+        }
     }
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
+
 class Helper
 {
     /**
@@ -38,12 +40,18 @@ class Helper
     protected $dateFilter;
 
     /**
+     * @var CustomOptionFactory
+     */
+    protected $customOptionFactory;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
      * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param CustomOptionFactory $customOptionFactory
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -51,7 +59,8 @@ class Helper
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        CustomOptionFactory $customOptionFactory
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -59,6 +68,7 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
+        $this->customOptionFactory = $customOptionFactory;
     }
 
     /**
@@ -145,7 +155,18 @@ class Helper
                 $this->request->getPost('options_use_default')
             );
             $product->setProductOptions($options);
+            $customOptions = [];
+            foreach ($options as $customOptionData) {
+                if (!(bool)$customOptionData['is_delete']) {
+                    $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
+                    $customOption->setProductSku($product->getSku());
+                    $customOption->setOptionId(null);
+                    $customOptions[] = $customOption;
+                }
+            }
+            $product->setOptions($customOptions);
         }
+
 
         $product->setCanSaveCustomOptions(
             (bool)$this->request->getPost('affect_product_custom_options') && !$product->getOptionsReadonly()

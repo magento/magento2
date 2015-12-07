@@ -492,12 +492,13 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $query = $select->deleteFromSelect('i');
         $connection->query($query);
 
+        $productIdField = $this->getProductIdFieldName();
         $select = $connection->select()->from(
             ['tp' => $this->getTable('catalog_product_entity_tier_price')],
-            ['entity_id']
+            [$productIdField]
         )->join(
             ['e' => $this->getTable('catalog_product_entity')],
-            'tp.entity_id=e.entity_id',
+            "tp.{$productIdField} = e.{$productIdField}",
             []
         )->join(
             ['cg' => $this->getTable('customer_group')],
@@ -515,16 +516,23 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         )->columns(
             new \Zend_Db_Expr('MIN(tp.value)')
         )->group(
-            ['tp.entity_id', 'cg.customer_group_id', 'cw.website_id']
+            ["tp.{$productIdField}", 'cg.customer_group_id', 'cw.website_id']
         );
 
         if (!empty($entityIds)) {
-            $select->where('tp.entity_id IN(?)', $entityIds);
+            $select->where("tp.{$productIdField} IN(?)", $entityIds);
         }
 
         $query = $select->insertFromSelect($this->_getTierPriceIndexTable());
         $connection->query($query);
 
         return $this;
+    }
+
+    protected function getProductIdFieldName()
+    {
+        $table = $this->getTable('catalog_product_entity');
+        $indexList = $this->getConnection()->getIndexList($table);
+        return $indexList[$this->getConnection()->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }

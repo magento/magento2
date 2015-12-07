@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Catalog product custom option resource model
  *
@@ -12,6 +14,11 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
     /**
      * Store manager
      *
@@ -40,6 +47,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -47,11 +55,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
+        $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
 
@@ -477,12 +487,19 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['option_title_default' => $this->getTable('catalog_product_option_title')],
             $defaultOptionJoin,
             []
+        )->join(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf(
+                'cpe.%s = product_option.product_id',
+                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+            ),
+            []
         )->joinLeft(
             ['option_title_store' => $this->getTable('catalog_product_option_title')],
             $storeOptionJoin,
             ['title' => $titleCheckSql]
         )->where(
-            'product_option.product_id = ?',
+            'cpe.entity_id = ?',
             $productId
         );
 
@@ -518,6 +535,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'option_type.option_id=product_option.option_id',
             []
         )->join(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf(
+                'cpe.%s = product_option.product_id',
+                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+            ),
+            []
+        )->join(
             ['option_title_default' => $this->getTable('catalog_product_option_type_title')],
             $defaultOptionJoin,
             []
@@ -526,7 +550,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $storeOptionJoin,
             ['title' => $titleCheckSql]
         )->where(
-            'product_option.product_id = ?',
+            'cpe.entity_id = ?',
             $productId
         );
 

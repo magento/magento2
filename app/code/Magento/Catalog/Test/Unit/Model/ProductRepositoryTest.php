@@ -137,6 +137,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Gallery\Processor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mediaGalleryProcessor;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -151,7 +156,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'load',
                 'getOptions',
                 'getSku',
-                'getGalleryAttributeBackend',
+                'hasGalleryAttribute',
                 'getMediaConfig',
                 'getMediaAttributes',
                 'getProductLinks',
@@ -163,6 +168,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->initializedProductMock->expects($this->any())
+            ->method('hasGalleryAttribute')
+            ->willReturn(true);
         $this->filterBuilderMock = $this->getMock('\Magento\Framework\Api\FilterBuilder', [], [], '', false);
         $this->initializationHelperMock = $this->getMock(
             '\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
@@ -236,6 +244,14 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->any())->method('getWebsiteId')->willReturn('1');
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
+        $this->mediaGalleryProcessor = $this->getMock(
+            'Magento\Catalog\Model\Product\Gallery\Processor',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
             [
@@ -256,6 +272,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'linkTypeProvider' => $this->linkTypeProviderMock,
                 'imageProcessor' => $this->imageProcessorMock,
                 'storeManager' => $this->storeManagerMock,
+                'mediaGalleryProcessor' => $this->mediaGalleryProcessor
             ]
         );
     }
@@ -1099,10 +1116,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         //setup media attribute backend
         $mediaTmpPath = '/tmp';
         $absolutePath = '/a/b/filename.jpg';
-        $galleryAttributeBackendMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Attribute\Backend\Media')
-            ->disableOriginalConstructor()->getMock();
-        $galleryAttributeBackendMock->expects($this->once())->method('clearMediaAttribute')
+
+        $this->mediaGalleryProcessor->expects($this->once())->method('clearMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image']);
+
         $mediaConfigMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Media\Config')
             ->disableOriginalConstructor()
             ->getMock();
@@ -1110,9 +1127,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getTmpMediaShortUrl')
             ->with($absolutePath)
             ->willReturn($mediaTmpPath . $absolutePath);
-        $this->initializedProductMock->expects($this->any())
-            ->method('getGalleryAttributeBackend')
-            ->willReturn($galleryAttributeBackendMock);
         $this->initializedProductMock->expects($this->once())
             ->method('getMediaConfig')
             ->willReturn($mediaConfigMock);
@@ -1131,10 +1145,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($absolutePath);
 
         $imageFileUri = "imageFileUri";
-        $galleryAttributeBackendMock->expects($this->once())->method('addImage')
+        $this->mediaGalleryProcessor->expects($this->once())->method('addImage')
             ->with($this->initializedProductMock, $mediaTmpPath . $absolutePath, ['image', 'small_image'], true, false)
             ->willReturn($imageFileUri);
-        $galleryAttributeBackendMock->expects($this->once())->method('updateImage')
+        $this->mediaGalleryProcessor->expects($this->once())->method('updateImage')
             ->with(
                 $this->initializedProductMock,
                 $imageFileUri,
@@ -1210,15 +1224,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getMediaAttributes')
             ->willReturn(["image" => "filename1", "small_image" => "filename2"]);
 
-        //setup media attribute backend
-        $galleryAttributeBackendMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Attribute\Backend\Media')
-            ->disableOriginalConstructor()->getMock();
-        $galleryAttributeBackendMock->expects($this->once())->method('clearMediaAttribute')
+        $this->mediaGalleryProcessor->expects($this->once())->method('clearMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image']);
-        $this->initializedProductMock->expects($this->once())
-            ->method('getGalleryAttributeBackend')
-            ->willReturn($galleryAttributeBackendMock);
-        $galleryAttributeBackendMock->expects($this->once())
+        $this->mediaGalleryProcessor->expects($this->once())
             ->method('setMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);

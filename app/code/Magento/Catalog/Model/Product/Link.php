@@ -55,11 +55,17 @@ class Link extends \Magento\Framework\Model\AbstractModel
     protected $stockHelper;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Action\SaveProductLinks
+     */
+    protected $saveProductLinks;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Action\SaveProductLinks $saveProductLinks
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -70,6 +76,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
         \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory $productCollectionFactory,
         \Magento\CatalogInventory\Helper\Stock $stockHelper,
+        \Magento\Catalog\Model\ResourceModel\Product\Link\Action\SaveProductLinks $saveProductLinks,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -77,6 +84,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
         $this->_linkCollectionFactory = $linkCollectionFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->stockHelper = $stockHelper;
+        $this->saveProductLinks = $saveProductLinks;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -177,15 +185,15 @@ class Link extends \Magento\Framework\Model\AbstractModel
     {
         $data = $product->getRelatedLinkData();
         if ($data !== null) {
-            $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_RELATED);
+            $this->saveProductLinks->execute($product, $data, self::LINK_TYPE_RELATED);
         }
         $data = $product->getUpSellLinkData();
         if ($data !== null) {
-            $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_UPSELL);
+            $this->saveProductLinks->execute($product, $data, self::LINK_TYPE_UPSELL);
         }
         $data = $product->getCrossSellLinkData();
         if ($data !== null) {
-            $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_CROSSSELL);
+            $this->saveProductLinks->execute($product, $data, self::LINK_TYPE_CROSSSELL);
         }
         return $this;
     }

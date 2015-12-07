@@ -6,11 +6,32 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-
+use Magento\Framework\Model\Entity\MetadataPool;
+/**
+ * Class Repository
+ */
 class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
 {
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @var JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\OptionFactory
+     */
+    protected $optionFactory;
+
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
@@ -27,18 +48,35 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     protected $converter;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource
+     * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
      * @param Converter $converter
+     * @param JoinProcessorInterface $joinProcessor
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource,
-        \Magento\Catalog\Model\Product\Option\Converter $converter
+        \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\Product\Option\Converter $converter,
+        JoinProcessorInterface $joinProcessor,
+        MetadataPool $metadataPool
     ) {
         $this->productRepository = $productRepository;
         $this->optionResource = $optionResource;
+        $this->optionFactory = $optionFactory;
         $this->converter = $converter;
+        $this->collectionFactory = $collectionFactory;
+        $this->joinProcessor = $joinProcessor;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -47,7 +85,34 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     public function getList($sku)
     {
         $product = $this->productRepository->get($sku, true);
-        return $product->getOptions();
+        return $product->getOptions() ?: [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductOptions(ProductInterface $product, $requiredOnly = false)
+    {
+        $collection = $this->collectionFactory->create()->addFieldToFilter(
+            'cpe.entity_id',
+            $product->getEntityId()
+        )->addTitleToResult(
+            $product->getStoreId()
+        )->addPriceToResult(
+            $product->getStoreId()
+        )->setOrder(
+            'sort_order',
+            'asc'
+        )->setOrder(
+            'title',
+            'asc'
+        );
+        if ($requiredOnly) {
+            $collection->addRequiredFilter();
+        }
+        $collection->addValuesToResult($product->getStoreId());
+        $this->joinProcessor->process($collection);
+        return $collection->getItems();
     }
 
     /**
@@ -75,48 +140,23 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     /**
      * {@inheritdoc}
      */
+    public function duplicate(
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        \Magento\Catalog\Api\Data\ProductInterface $duplicate
+    ) {
+        return $this->optionResource->duplicate($this->optionFactory->create([]), $product->getId(), $duplicate->getId());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
-        $sku = $option->getProductSku();
-        $product = $this->productRepository->get($sku, true);
-        $optionData = $this->converter->toArray($option);
-        if ($option->getOptionId()) {
-            if (!$product->getOptionById($option->getOptionId())) {
-                throw new NoSuchEntityException();
-            }
-            $originalValues = $product->getOptionById($option->getOptionId())->getValues();
-            if (!empty($optionData['values'])) {
-                $optionData['values'] = $this->markRemovedValues($optionData['values'], $originalValues);
-            }
-        }
-
-        unset($optionData['product_sku']);
-
-        $product->setProductOptions([$optionData]);
-        $existingOptions = $product->getOptions();
-        try {
-            $this->productRepository->save($product, true);
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save product option'));
-        }
-
-        $product = $this->productRepository->get($sku, true);
-        if (!$option->getOptionId()) {
-            $currentOptions = $product->getOptions();
-            if ($existingOptions == null) {
-                $newID = array_keys($currentOptions);
-            } else {
-                $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
-            }
-
-            if (empty($newID)) {
-                throw new CouldNotSaveException(__('Could not save product option'));
-            }
-            $newID = current($newID);
-        } else {
-            $newID = $option->getOptionId();
-        }
-        $option = $this->get($sku, $newID);
+        $product = $this->productRepository->get($option->getProductSku());
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $option->setData('product_id', $product->getData($metadata->getLinkField()));
+        $option->setOptionId(null);
+        $option->save();
         return $option;
     }
 

@@ -44,6 +44,18 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             '__wakeup',
         ];
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', $methods, [], '', false);
+        $optionInterfaceFactory = $this->getMockBuilder('Magento\Bundle\Api\Data\OptionInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $linkInterfaceFactory = $this->getMockBuilder('Magento\Bundle\Api\Data\LinkInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productRepository = $this->getMockBuilder('Magento\Catalog\Api\ProductRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->subjectMock = $this->getMock(
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
             [],
@@ -52,7 +64,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->model = new \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle(
-            $this->requestMock
+            $this->requestMock,
+            $optionInterfaceFactory,
+            $linkInterfaceFactory,
+            $productRepository,
+            $storeManager
         );
     }
 

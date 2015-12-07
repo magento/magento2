@@ -7,6 +7,8 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
+use Magento\Framework\Model\Entity\MetadataPool;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -74,6 +76,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
+        MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -98,6 +101,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
             $customerSession,
             $dateTime,
             $groupManagement,
+            $metadataPool,
             $connection
         );
     }

@@ -12,6 +12,11 @@ namespace Magento\Bundle\Test\Unit\Model;
 class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPoolMock;
+
+    /**
      * @var \Magento\Bundle\Model\OptionRepository
      */
     protected $model;
@@ -81,7 +86,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->optionResourceMock = $this->getMock(
             '\Magento\Bundle\Model\ResourceModel\Option',
-            ['delete', '__wakeup', 'save'],
+            ['delete', '__wakeup', 'save', 'removeOptionSelections'],
             [],
             '',
             false
@@ -90,6 +95,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->linkManagementMock = $this->getMock('\Magento\Bundle\Api\ProductLinkManagementInterface');
         $this->optionListMock = $this->getMock('\Magento\Bundle\Model\Product\OptionList', [], [], '', false);
         $this->linkListMock = $this->getMock('\Magento\Bundle\Model\Product\LinksList', [], [], '', false);
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
 
         $this->model = new \Magento\Bundle\Model\OptionRepository(
             $this->productRepositoryMock,
@@ -100,7 +106,8 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->linkManagementMock,
             $this->optionListMock,
             $this->linkListMock,
-            $this->dataObjectHelperMock
+            $this->dataObjectHelperMock,
+            $this->metadataPoolMock
         );
     }
 
@@ -266,30 +273,39 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 2;
         $optionId = 5;
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $productMock->expects($this->once())->method('getData')->willReturn($productId);
+        $productMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
         $optionMock = $this->getMock(
             '\Magento\Bundle\Model\Option',
-            ['setStoreId', 'setParentId', 'getProductLinks', 'getOptionId'],
+            ['setStoreId', 'setParentId', 'getProductLinks', 'getOptionId', 'getResource'],
             [],
             '',
             false
         );
-
+        $metadataMock = $this->getMock(
+            'Magento\Framework\Model\Entity\EntityMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->once())->method('getLinkField')->willReturn('product_option');
         $linkedProductMock = $this->getMock('Magento\Bundle\Api\Data\LinkInterface');
-        $optionMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
+        $optionMock->expects($this->once())->method('getResource')->willReturn($this->optionResourceMock);
+        $this->optionResourceMock->expects($this->once())->method('removeOptionSelections')
+            ->willReturnSelf();
+        $this->metadataPoolMock->expects($this->once())->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadataMock);
 
-        $optionIdsMap = [null, $optionId, $optionId];
-        $optionMock->expects($this->any())->method('getOptionId')->willReturnCallback(
-            function () use (&$optionIdsMap) {
-                return array_shift($optionIdsMap);
-            }
+        $optionMock->expects($this->atLeastOnce())->method('getOptionId')->willReturnOnConsecutiveCalls(
+            null,
+            null,
+            $optionId,
+            $optionId
         );
         $optionMock->expects($this->exactly(2))->method('getProductLinks')->willReturn([$linkedProductMock]);
 
@@ -311,24 +327,35 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 2;
         $optionId = 5;
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $productMock->expects($this->once())->method('getData')->willReturn($productId);
+        $productMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
         $optionMock = $this->getMock(
             '\Magento\Bundle\Model\Option',
-            ['setStoreId', 'setParentId', 'getProductLinks', 'getOptionId'],
+            ['setStoreId', 'setParentId', 'getProductLinks', 'getOptionId', 'getResource'],
             [],
             '',
             false
         );
-
-        $optionMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
+        $metadataMock = $this->getMock(
+            'Magento\Framework\Model\Entity\EntityMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->once())->method('getLinkField')->willReturn('product_option');
+        $linkedProductMock = $this->getMock('Magento\Bundle\Api\Data\LinkInterface');
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
-        $optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
+        $optionMock->expects($this->once())->method('getResource')->willReturn($this->optionResourceMock);
+        $this->optionResourceMock->expects($this->once())->method('removeOptionSelections')
+            ->willReturnSelf();
+        $this->metadataPoolMock->expects($this->once())->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadataMock);
+
+        $optionMock->expects($this->atLeastOnce())->method('getOptionId')->willReturn($optionId);
 
         $optCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $this->typeMock->expects($this->once())
@@ -359,19 +386,34 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $existingLinkToDeleteId = '24';
         $productSkuToDelete = 'simple2';
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $productMock->expects($this->once())->method('getId')->willReturn($productId);
-        $productMock->expects($this->any())->method('getSku')->willReturn($productSku);
+        $productMock->expects($this->once())->method('getData')->willReturn($productId);
+        $productMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $productMock->expects($this->atLeastOnce())->method('getSku')->willReturn($productSku);
 
-        $optionMock = $this->createOptionMock();
-        $optionMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
+        $optionMock = $this->getMock(
+            '\Magento\Bundle\Model\Option',
+            ['setStoreId', 'setParentId', 'getProductLinks', 'getOptionId', 'getResource'],
+            [],
+            '',
+            false
+        );
+        $metadataMock = $this->getMock(
+            'Magento\Framework\Model\Entity\EntityMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->once())->method('getLinkField')->willReturn('product_option');
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
-        $optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
-
+        $optionMock->expects($this->once())->method('getResource')->willReturn($this->optionResourceMock);
+        $this->optionResourceMock->expects($this->once())->method('removeOptionSelections')
+            ->willReturnSelf();
+        $this->metadataPoolMock->expects($this->once())->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadataMock);
+        $optionMock->expects($this->atLeastOnce())->method('getOptionId')->willReturn($optionId);
         $existingLinkToUpdate = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
         $existingLinkToUpdate->expects($this->any())->method('getId')->willReturn($existingLinkToUpdateId);
         $existingLinkToDelete = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
@@ -430,28 +472,35 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $productSku = 'bundle_sku';
         $storeId = 2;
         $optionId = 5;
-
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $productMock->expects($this->once())->method('getData')->willReturn($productId);
+        $productMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $productMock->expects($this->any())->method('getSku')->willReturn($productSku);
+
         $optionMock = $this->getMock(
             '\Magento\Bundle\Model\Option',
-            [
-                'setStoreId',
-                'setParentId',
-                'getOptionId',
-            ],
+            ['setStoreId', 'setParentId', 'getProductLinks', 'getOptionId', 'getResource'],
             [],
             '',
             false
         );
-        $optionMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
+        $metadataMock = $this->getMock(
+            'Magento\Framework\Model\Entity\EntityMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->once())->method('getLinkField')->willReturn('product_option');
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
-        $optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
+        $optionMock->expects($this->once())->method('getResource')->willReturn($this->optionResourceMock);
+        $this->optionResourceMock->expects($this->once())->method('removeOptionSelections')
+            ->willReturnSelf();
+        $this->metadataPoolMock->expects($this->once())->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadataMock);
+
+        $optionMock->expects($this->atLeastOnce())->method('getOptionId')->willReturn($optionId);
 
         $optCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
         $this->typeMock->expects($this->once())
@@ -480,13 +529,11 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 2;
         $optionId = 5;
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $productMock->expects($this->once())->method('getData')->willReturn($productId);
+        $productMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $productMock->expects($this->any())->method('getSku')->willReturn($productSku);
+
         $optionMock = $this->getMock(
             '\Magento\Bundle\Model\Option',
             [
@@ -496,16 +543,30 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getOptionId',
                 'setOptionId',
                 'setDefaultTitle',
-                'getTitle'
+                'getTitle',
+                'getResource'
             ],
             [],
             '',
             false
         );
-        $optionMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
+        $metadataMock = $this->getMock(
+            'Magento\Framework\Model\Entity\EntityMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->once())->method('getLinkField')->willReturn('product_option');
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
+        $optionMock->expects($this->once())->method('getResource')->willReturn($this->optionResourceMock);
+        $this->optionResourceMock->expects($this->once())->method('removeOptionSelections')
+            ->willReturnSelf();
+        $this->metadataPoolMock->expects($this->once())->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadataMock);
         $optionMock->method('getOptionId')
-            ->will($this->onConsecutiveCalls(null, $optionId, $optionId, $optionId, $optionId));
+            ->will($this->onConsecutiveCalls(null, null, $optionId, $optionId, $optionId, $optionId));
 
         $productLink1 = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
         $productLink2 = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
@@ -534,13 +595,11 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 2;
         $optionId = 5;
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $productMock->expects($this->once())->method('getData')->willReturn($productId);
+        $productMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $productMock->expects($this->any())->method('getSku')->willReturn($productSku);
+
         $optionMock = $this->getMock(
             '\Magento\Bundle\Model\Option',
             [
@@ -550,15 +609,30 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getOptionId',
                 'setOptionId',
                 'setDefaultTitle',
-                'getTitle'
+                'getTitle',
+                'getResource'
             ],
             [],
             '',
             false
         );
-        $optionMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
+        $metadataMock = $this->getMock(
+            'Magento\Framework\Model\Entity\EntityMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->once())->method('getLinkField')->willReturn('product_option');
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
-        $optionMock->method('getOptionId')->will($this->onConsecutiveCalls(null, $optionId, $optionId, $optionId));
+        $optionMock->expects($this->once())->method('getResource')->willReturn($this->optionResourceMock);
+        $this->optionResourceMock->expects($this->once())->method('removeOptionSelections')
+            ->willReturnSelf();
+        $this->metadataPoolMock->expects($this->once())->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadataMock);
+        $optionMock->method('getOptionId')
+            ->will($this->onConsecutiveCalls(null, null, $optionId, $optionId, $optionId));
 
         $productLink1 = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
         $productLink2 = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');

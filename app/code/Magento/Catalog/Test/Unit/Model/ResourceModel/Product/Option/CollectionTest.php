@@ -14,6 +14,11 @@ use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPoolMock;
+
+    /**
      * @var Collection
      */
     protected $collection;
@@ -88,7 +93,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'reset'], [], '', false);
+        $this->selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'reset', 'join'], [], '', false);
         $this->connection =
             $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['select'], [], '', false);
         $this->connection->expects($this->once())
@@ -100,11 +105,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())
             ->method('getMainTable')
             ->will($this->returnValue('test_main_table'));
-        $this->resourceMock->expects($this->once())
+        $this->resourceMock->expects($this->exactly(3))
             ->method('getTable')
-            ->with('test_main_table')
-            ->will($this->returnValue('test_main_table'));
-
+            ->withConsecutive(
+                ['test_main_table'],
+                ['catalog_product_entity'],
+                ['catalog_product_entity']
+            )->willReturnOnConsecutiveCalls(
+                $this->returnValue('test_main_table'),
+                'catalog_product_entity',
+                'catalog_product_entity'
+            );
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
+        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
+        $this->selectMock->expects($this->exactly(2))->method('join');
         $this->collection = new Collection(
             $this->entityFactoryMock,
             $this->loggerMock,
@@ -112,6 +128,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->eventManagerMock,
             $this->optionsFactoryMock,
             $this->storeManagerMock,
+            $this->metadataPoolMock,
             null,
             $this->resourceMock
         );

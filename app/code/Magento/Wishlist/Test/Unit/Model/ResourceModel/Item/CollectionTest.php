@@ -9,7 +9,7 @@ namespace Magento\Wishlist\Test\Unit\Model\ResourceModel\Item;
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Message\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $collection;
 
@@ -42,16 +42,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['quote'],
+            ['quote', 'select'],
             [],
             '',
             false
         );
+        $select = new \Zend_Db_Select($connection);
         $connection
             ->expects($this->any())
             ->method('quote')
             ->will($this->returnValue('\'TestProductName\''));
-
+        $connection
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($select);
         $resource = $this->getMock(
             'Magento\Wishlist\Model\ResourceModel\Item',
             ['getConnection', 'getMainTable', 'getTableName', 'getTable'],

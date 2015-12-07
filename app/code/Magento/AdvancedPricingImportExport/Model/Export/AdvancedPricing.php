@@ -95,6 +95,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param ImportProduct\StoreResolver $storeResolver
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -117,6 +118,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
     ) {
@@ -139,7 +141,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $attributeColFactory,
             $_typeFactory,
             $linkTypeProvider,
-            $rowCustomizer
+            $rowCustomizer,
+            $metadataPool
         );
     }
 

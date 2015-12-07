@@ -7,7 +7,6 @@
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
-    ->setId(21)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Virtual Product')
