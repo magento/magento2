@@ -412,7 +412,7 @@
         <field name="custom_design">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">200</item>
+                    <item name="sortOrder" xsi:type="number">230</item>
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">New Theme</item>
