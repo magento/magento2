@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
+define(['jquery', 'underscore', 'mage/gallery/preloadImages', 'jquery/ui'], function ($, _, preloadImages) {
     'use strict';
 
     /**
@@ -218,6 +218,27 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     'img': $main.find('.product-image-photo').attr('src')
                 }];
             }
+            this._preloadSwatchesImages();
+        },
+
+        /**
+         * Preloads optional configuration images.
+         * @private
+         */
+        _preloadSwatchesImages: function () {
+            var options = this.options;
+
+            _.each(options.jsonConfig.images, function (array) {
+                var fullImagesList = [], 
+                    imagesList = [];
+
+                _.each(array, function (item) {
+                    imagesList.push(item.img);
+                    fullImagesList.push(item.full);
+                });
+                preloadImages(imagesList);
+                preloadImages(fullImagesList);
+            });
         },
 
         /**
