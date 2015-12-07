@@ -7,16 +7,17 @@ namespace Magento\Elasticsearch\Model\Adapter\Index\Config;
 
 use Magento\Framework\Config\Data;
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Config\ReaderInterface;
 
 class EsConfig extends Data implements EsConfigInterface
 {
     /**
-     * @param Reader $reader
+     * @param ReaderInterface $reader
      * @param CacheInterface $cache
      * @param string $cacheId
      */
     public function __construct(
-        Reader $reader,
+        ReaderInterface $reader,
         CacheInterface $cache,
         $cacheId
     ) {
