@@ -6,15 +6,21 @@
 namespace Magento\Framework\Communication\Config\Validator;
 
 use Magento\Framework\Communication\ConfigInterface;
-use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Framework\Communication\Config\Validator;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Communication configuration validator. Validates data, that have been read from env.php.
  */
-class EnvValidator
+class EnvValidator extends Validator
 {
+    /**
+     * @var TypeProcessor
+     */
+    private $typeProcessor;
+
     /**
      * @var MethodsMap
      */
@@ -25,24 +31,21 @@ class EnvValidator
      */
     private $booleanUtils;
 
-    /**
-     * @var TypeProcessor
-     */
-    private $typeProcessor;
 
     /**
-     * @param MethodsMap $methodsMap
      * @param BooleanUtils $booleanUtils
      * @param TypeProcessor $typeProcessor
+     * @param MethodsMap $methodsMap
      */
     public function __construct(
-        MethodsMap $methodsMap,
         BooleanUtils $booleanUtils,
-        TypeProcessor $typeProcessor
+        TypeProcessor $typeProcessor,
+        MethodsMap $methodsMap
     ) {
-        $this->methodsMap = $methodsMap;
         $this->booleanUtils = $booleanUtils;
         $this->typeProcessor = $typeProcessor;
+        $this->methodsMap = $methodsMap;
+        parent::__construct($typeProcessor, $methodsMap);
     }
 
     /**
@@ -53,12 +56,23 @@ class EnvValidator
     public function validate($configData)
     {
         if (isset($configData[ConfigInterface::TOPICS])) {
-            foreach ($configData[ConfigInterface::TOPICS] as $topicName => $configDataItem) {
-                $this->validateTopicName($configDataItem, $topicName);
-                $this->validateTopic($configDataItem, $topicName);
+            foreach ($configData[ConfigInterface::TOPICS] as $topicNameKey => $configDataItem) {
+                $this->validateTopicName($configDataItem, $topicNameKey);
+                $this->validateTopic($configDataItem, $topicNameKey);
+
+                $topicName = $configDataItem[ConfigInterface::TOPIC_NAME];
+                $responseSchema = $configDataItem[ConfigInterface::TOPIC_RESPONSE];
+                $requestSchema = $configDataItem[ConfigInterface::TOPIC_REQUEST];
+                $requestType = $configDataItem[ConfigInterface::TOPIC_REQUEST_TYPE];
+
                 $this->validateTopicResponseHandler($configDataItem);
-                $this->validateRequestSchema($configDataItem);
-                $this->validateResponseSchema($configDataItem);
+                $this->validateRequestTypeValue($requestType, $topicName, $requestSchema);
+                if ($requestType == ConfigInterface::TOPIC_REQUEST_TYPE_CLASS) {
+                    $this->validateRequestSchemaType($requestSchema, $topicName);
+                }
+                if ($responseSchema) {
+                    $this->validateResponseSchemaType($responseSchema, $topicName);
+                }
             }
         }
     }
@@ -155,11 +169,12 @@ class EnvValidator
      */
     private function validateTopicResponseHandler($configDataItem)
     {
+        $topicName = $configDataItem[ConfigInterface::TOPIC_NAME];
         if (!is_array($configDataItem[ConfigInterface::TOPIC_HANDLERS])) {
             throw new \LogicException(
                 sprintf(
                     'Handlers in the topic "%s" must be an array',
-                    $configDataItem[ConfigInterface::TOPIC_NAME]
+                    $topicName
                 )
             );
         }
@@ -171,7 +186,7 @@ class EnvValidator
                 sprintf(
                     'Topic "%s" is configured for synchronous requests, that is why it must have exactly one '
                     . 'response handler declared. The following handlers declared: %s',
-                    $configDataItem[ConfigInterface::TOPIC_NAME],
+                    $topicName,
                     implode(', ', array_keys($configDataItem[ConfigInterface::TOPIC_HANDLERS]))
                 )
             );
@@ -187,39 +202,24 @@ class EnvValidator
                     sprintf(
                         'Disabled handler "%s" for topic "%s" cannot be added to the config file',
                         $handlerName,
-                        $configDataItem[ConfigInterface::TOPIC_NAME]
+                        $topicName
                     )
                 );
             }
-            try {
-                $this->methodsMap->getMethodParams($serviceName, $methodName);
-            } catch (\Exception $e) {
-                throw new \LogicException(
-                    sprintf(
-                        'Service method specified in the definition of handler "%s" for topic "%s"'
-                        . ' is not available. Given "%s"',
-                        $handlerName,
-                        $configDataItem[ConfigInterface::TOPIC_NAME],
-                        $serviceName . '::' . $methodName
-                    )
-                );
-            }
+            $this->validateResponseHandlersType($serviceName, $methodName, $handlerName, $topicName);
         }
     }
 
     /**
-     * Validate request schema from config data
-     *
-     * @param array $configDataItem
+     * @param string $requestType
+     * @param string $topicName
+     * @param string $requestSchema
      * @return void
      */
-    private function validateRequestSchema($configDataItem)
+    protected function validateRequestTypeValue($requestType, $topicName, $requestSchema)
     {
-        $topicName = $configDataItem[ConfigInterface::TOPIC_NAME];
-        $requestSchema = $configDataItem[ConfigInterface::TOPIC_REQUEST];
-
         if (!in_array(
-            $configDataItem[ConfigInterface::TOPIC_REQUEST_TYPE],
+            $requestType,
             [ConfigInterface::TOPIC_REQUEST_TYPE_CLASS, ConfigInterface::TOPIC_REQUEST_TYPE_METHOD]
         )
         ) {
@@ -233,69 +233,5 @@ class EnvValidator
                 )
             );
         }
-        {
-            if ($configDataItem[ConfigInterface::TOPIC_REQUEST_TYPE] == ConfigInterface::TOPIC_REQUEST_TYPE_CLASS) {
-                try {
-                    $this->validateType($requestSchema);
-                } catch (\Exception $e) {
-                    throw new \LogicException(
-                        sprintf(
-                            'Request schema definition for topic "%s" should reference existing service class. '
-                            . 'Given "%s"',
-                            $topicName,
-                            $requestSchema
-                        )
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Validate response schema from config data
-     *
-     * @param array $configDataItem
-     * @return void
-     */
-    private function validateResponseSchema($configDataItem)
-    {
-        $topicName = $configDataItem[ConfigInterface::TOPIC_NAME];
-        $responseSchema = $configDataItem[ConfigInterface::TOPIC_RESPONSE];
-        if ($responseSchema) {
-            try {
-                $this->typeProcessor->register($responseSchema);
-            } catch (\Exception $e) {
-                throw new \LogicException(
-                    sprintf(
-                        'Response schema definition for topic "%s" should reference existing type or service class. '
-                        . 'Given "%s"',
-                        $topicName,
-                        $responseSchema
-                    )
-                );
-            }
-        }
-    }
-
-    /**
-     * TODO: Move out to separate class and reuse from converter to avoid code duplication
-     * Ensure that specified type is either a simple type or a valid service data type.
-     *
-     * @param string $typeName
-     * @return $this
-     * @throws \Exception In case when type is invalid
-     */
-    protected function validateType($typeName)
-    {
-        if ($this->typeProcessor->isTypeSimple($typeName)) {
-            return $this;
-        }
-        if ($this->typeProcessor->isArrayType($typeName)) {
-            $arrayItemType = $this->typeProcessor->getArrayItemType($typeName);
-            $this->methodsMap->getMethodsMap($arrayItemType);
-        } else {
-            $this->methodsMap->getMethodsMap($typeName);
-        }
-        return $this;
     }
 }
