@@ -125,7 +125,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $categoryData = $this->addUseConfigSettings($categoryData);
             $result['general'] = $categoryData;
             if (isset($result['general']['image'])) {
-                $result['general']['savedImage']['value'] = $result['general']['image'];
+                $result['general']['savedImage']['value'] = '/pub/media/catalog/category/' . $result['general']['image'];
             }
             $this->loadedData[$category->getId()] = $result;
         }
