@@ -283,7 +283,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         foreach ($this->communicationConfig->getTopics() as $topicConfig) {
             $topicName = $topicConfig[Communication::TOPIC_NAME];
             $schemaType = $topicConfig[Communication::TOPIC_REQUEST_TYPE] == Communication::TOPIC_REQUEST_TYPE_CLASS
-                ? self::TOPIC_SCHEMA_TYPE_OBJECT 
+                ? self::TOPIC_SCHEMA_TYPE_OBJECT
                 : self::TOPIC_SCHEMA_TYPE_METHOD;
             $schemaValue = $topicConfig[Communication::TOPIC_REQUEST];
             $output[$topicName] = [
