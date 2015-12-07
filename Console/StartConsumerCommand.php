@@ -27,12 +27,18 @@ class StartConsumerCommand extends Command
     private $consumerFactory;
 
     /**
+     * StartConsumerCommand constructor.
      * {@inheritdoc}
      *
+     * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
      */
-    public function __construct(ConsumerFactory $consumerFactory, $name = null)
-    {
+    public function __construct(
+        $name = null,
+        \Magento\Framework\App\State $appState,
+        ConsumerFactory $consumerFactory
+    ) {
+        $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->consumerFactory = $consumerFactory;
         parent::__construct($name);
     }
