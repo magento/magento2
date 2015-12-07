@@ -20,11 +20,6 @@ class Interval implements IntervalInterface
     const DELTA = 0.005;
 
     /**
-     * Price field name
-     */
-    const PRICE = 'price';
-
-    /**
      * @var ConnectionManager
      */
     protected $connectionManager;
@@ -50,6 +45,21 @@ class Interval implements IntervalInterface
     protected $clientConfig;
 
     /**
+     * @var string
+     */
+    private $fieldName;
+
+    /**
+     * @var string
+     */
+    private $storeId;
+
+    /**
+     * @var array
+     */
+    private $entityIds;
+
+    /**
      * @param array $query
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
@@ -62,13 +72,19 @@ class Interval implements IntervalInterface
         FieldMapperInterface $fieldMapper,
         StoreManagerInterface $storeManager,
         CustomerSession $customerSession,
-        Config $clientConfig
+        Config $clientConfig,
+        $fieldName,
+        $storeId,
+        $entityIds
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
         $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
         $this->clientConfig = $clientConfig;
+        $this->fieldName = $fieldName;
+        $this->storeId = $storeId;
+        $this->entityIds = $entityIds;
     }
 
     /**
@@ -79,13 +95,12 @@ class Interval implements IntervalInterface
         $requestQuery = $from = $to = [];
         $customerGroupId = $this->customerSession->getCustomerGroupId();
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        $storeId = $this->storeManager->getStore()->getId();
 
         if ($lower) {
             $from = ['gte' => $lower - self::DELTA];
         }
         if ($upper) {
-            $to = ['lte' => $upper - self::DELTA];
+            $to = ['lt' => $upper - self::DELTA];
         }
 
         $requestQuery = [
@@ -105,12 +120,17 @@ class Interval implements IntervalInterface
                                 'must' => [
                                     [
                                         'term' => [
-                                            'store_id' => $storeId,
+                                            'store_id' => $this->storeId,
+                                        ],
+                                    ],
+                                    [
+                                        'terms' => [
+                                            '_id' => $this->entityIds,
                                         ],
                                     ],
                                     [
                                         'nested' => [
-                                            'path' => 'price',
+                                            'path' => $this->fieldName,
                                             'filter' => [
                                                 'bool' => [
                                                     'must' => [
@@ -126,7 +146,7 @@ class Interval implements IntervalInterface
                                                         ],
                                                         [
                                                             'range' => [
-                                                                'price.price' => array_merge($from, $to),
+                                                                $this->fieldName.'.price' => array_merge($from, $to),
                                                             ],
                                                         ],
                                                     ],
@@ -145,7 +165,7 @@ class Interval implements IntervalInterface
                         'mode' => 'min',
                         'nested_filter' => [
                             'range' => [
-                                'price.price' => array_merge($from, $to),
+                                $this->fieldName.'.price' => array_merge($from, $to),
                             ]
                         ]
                     ]
@@ -169,85 +189,95 @@ class Interval implements IntervalInterface
      */
     public function loadPrevious($data, $index, $lower = null)
     {
-        /*$fieldName = $this->fieldMapper->getFieldName('price');
         $customerGroupId = $this->customerSession->getCustomerGroupId();
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        $storeId = $this->storeManager->getStore()->getId();
 
         if ($lower) {
             $from = ['gte' => $lower - self::DELTA];
         }
         if ($data) {
-            $to = ['lte' => $upper - self::DELTA];
+            $to = ['lt' => $data - self::DELTA];
         }
 
         $requestQuery = [
             'index' => $this->clientConfig->getIndexName(),
             'type' => $this->clientConfig->getEntityType(),
+            'search_type' => 'count',
             'body' => [
                 'fields' => [
-                    '_id',
-                    '_score',
+                    '_id'
                 ],
                 'query' => [
-                    'bool' => [
-                        'must' => [
-                            [
-                                'term' => [
-                                    'store_id' => $storeId,
-                                ],
-                            ],
+                    'filtered' => [
+                        'query' => [
+                            'match_all' => [],
                         ],
-                    ],
-                ],
-                'aggregations' => [
-                    'prices' => [
-                        'nested' => [
-                            'path' => $fieldName,
-                        ],
-                        'aggregations' => [
-                            'price_filter' => [
-                                'filter' => [
-                                    'bool' => [
-                                        'must' => [
-                                            [
-                                                'term' => [
-                                                    'price.customer_group_id' => $customerGroupId,
-                                                ],
-                                            ],
-                                            [
-                                                'term' => [
-                                                    'price.website_id' => $websiteId,
-                                                ],
-                                            ],
-                                            [
-                                                'range' => [
-                                                    'price.price' => array_merge($from, $to),
+                        'filter' => [
+                            'bool' => [
+                                'must' => [
+                                    [
+                                        'term' => [
+                                            'store_id' => $this->storeId,
+                                        ],
+                                    ],
+                                    [
+                                        'terms' => [
+                                            '_id' => $this->entityIds,
+                                        ],
+                                    ],
+                                    [
+                                        'nested' => [
+                                            'path' => $this->fieldName,
+                                            'filter' => [
+                                                'bool' => [
+                                                    'must' => [
+                                                        [
+                                                            'term' => [
+                                                                'price.customer_group_id' => $customerGroupId,
+                                                            ],
+                                                        ],
+                                                        [
+                                                            'term' => [
+                                                                'price.website_id' => $websiteId,
+                                                            ],
+                                                        ],
+                                                        [
+                                                            'range' => [
+                                                                $this->fieldName.'.price' => array_merge($from, $to),
+                                                            ],
+                                                        ],
+                                                    ],
                                                 ],
                                             ],
                                         ],
                                     ],
                                 ],
-                                'aggregations' => [
-                                    'price_stats' => [
-                                        'extended_stats' => [
-                                            'field' => $fieldName . '.price',
-                                        ],
-                                    ],
-                                ],
                             ],
                         ],
                     ],
                 ],
-            ],
+                'sort' => [
+                    'price.price' => [
+                        'order' => 'asc',
+                        'mode' => 'min',
+                        'nested_filter' => [
+                            'range' => [
+                                $this->fieldName.'.price' => array_merge($from, $to),
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         ];
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
 
-        print '<pre>' . print_r($queryResult, true) . '</pre>';
-        die;*/
+        $offset = $queryResult['hits']['total'];
+        if (!$offset) {
+            return false;
+        }
 
-        return [];
+        return $this->load($index - $offset + 1, $offset - 1, $lower);
     }
 
     /**
@@ -255,7 +285,172 @@ class Interval implements IntervalInterface
      */
     public function loadNext($data, $rightIndex, $upper = null)
     {
-        return [];
+        $customerGroupId = $this->customerSession->getCustomerGroupId();
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+
+        $from = ['gt' => $data + self::DELTA];
+        $to = ['lt' => $data - self::DELTA];
+
+
+        $requestCountQuery = [
+            'index' => $this->clientConfig->getIndexName(),
+            'type' => $this->clientConfig->getEntityType(),
+            'search_type' => 'count',
+            'body' => [
+                'fields' => [
+                    '_id'
+                ],
+                'query' => [
+                    'filtered' => [
+                        'query' => [
+                            'match_all' => [],
+                        ],
+                        'filter' => [
+                            'bool' => [
+                                'must' => [
+                                    [
+                                        'term' => [
+                                            'store_id' => $this->storeId,
+                                        ],
+                                    ],
+                                    [
+                                        'terms' => [
+                                            '_id' => $this->entityIds,
+                                        ],
+                                    ],
+                                    [
+                                        'nested' => [
+                                            'path' => $this->fieldName,
+                                            'filter' => [
+                                                'bool' => [
+                                                    'must' => [
+                                                        [
+                                                            'term' => [
+                                                                'price.customer_group_id' => $customerGroupId,
+                                                            ],
+                                                        ],
+                                                        [
+                                                            'term' => [
+                                                                'price.website_id' => $websiteId,
+                                                            ],
+                                                        ],
+                                                        [
+                                                            'range' => [
+                                                                $this->fieldName.'.price' => array_merge($from, $to),
+                                                            ],
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'sort' => [
+                    'price.price' => [
+                        'order' => 'asc',
+                        'mode' => 'min',
+                        'nested_filter' => [
+                            'range' => [
+                                $this->fieldName.'.price' => array_merge($from, $to),
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $queryCountResult = $this->connectionManager->getConnection()
+            ->query($requestCountQuery);
+
+        $offset = $queryCountResult['hits']['total'];
+        if (!$offset) {
+            return false;
+        }
+
+        $from = ['gte' => $data - self::DELTA];
+        if ($upper !== null) {
+            $to = ['lt' => $data - self::DELTA];
+        }
+
+        $requestQuery = [
+            'index' => $this->clientConfig->getIndexName(),
+            'type' => $this->clientConfig->getEntityType(),
+            'search_type' => 'count',
+            'body' => [
+                'fields' => [
+                    '_id'
+                ],
+                'query' => [
+                    'filtered' => [
+                        'query' => [
+                            'match_all' => [],
+                        ],
+                        'filter' => [
+                            'bool' => [
+                                'must' => [
+                                    [
+                                        'term' => [
+                                            'store_id' => $this->storeId,
+                                        ],
+                                    ],
+                                    [
+                                        'terms' => [
+                                            '_id' => $this->entityIds,
+                                        ],
+                                    ],
+                                    [
+                                        'nested' => [
+                                            'path' => $this->fieldName,
+                                            'filter' => [
+                                                'bool' => [
+                                                    'must' => [
+                                                        [
+                                                            'term' => [
+                                                                'price.customer_group_id' => $customerGroupId,
+                                                            ],
+                                                        ],
+                                                        [
+                                                            'term' => [
+                                                                'price.website_id' => $websiteId,
+                                                            ],
+                                                        ],
+                                                        [
+                                                            'range' => [
+                                                                $this->fieldName.'.price' => array_merge($from, $to),
+                                                            ],
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'sort' => [
+                    'price.price' => [
+                        'order' => 'asc',
+                        'mode' => 'min',
+                        'nested_filter' => [
+                            'range' => [
+                                $this->fieldName.'.price' => array_merge($from, $to),
+                            ]
+                        ]
+                    ]
+                ],
+                'from' => $offset - 1,
+                'size' => $rightIndex - $offset + 1,
+            ]
+        ];
+        $queryResult = $this->connectionManager->getConnection()
+            ->query($requestQuery);
+
+        return array_reverse($this->arrayValuesToFloat($queryResult));
     }
 
     /**
