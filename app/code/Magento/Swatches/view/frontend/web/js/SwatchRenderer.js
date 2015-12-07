@@ -869,14 +869,14 @@ define([
          */
         updateBaseImage: function (images, context, isProductViewExist) {
             var justAnImage = images[0],
-                galleryApi = context.find(this.options.mediaGallerySelector).data('gallery');
+                gallery = context.find(this.options.mediaGallerySelector).data('gallery');
 
             if (isProductViewExist) {
                 if (this.options.onlyMainImg) {
-                    galleryApi.updateDataByIndex(0, images[0]);
-                    galleryApi.seek(1);
+                    gallery.updateDataByIndex(0, images[0]);
+                    gallery.seek(1);
                 } else {
-                    galleryApi.updateData(images);
+                    gallery.updateData(images);
                 }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
