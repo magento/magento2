@@ -64,7 +64,6 @@ class UpdateProductAttributeEntityTest extends Injectable
      * @param CatalogAttributeSet $attributeSet
      * @param CatalogProductAttributeIndex $attributeIndex
      * @param CatalogProductAttributeNew $attributeNew
-     * @param CatalogProductSimple $productSimple
      * @return array
      */
     public function testUpdateProductAttribute(
@@ -72,8 +71,7 @@ class UpdateProductAttributeEntityTest extends Injectable
         CatalogProductAttribute $attribute,
         CatalogAttributeSet $attributeSet,
         CatalogProductAttributeIndex $attributeIndex,
-        CatalogProductAttributeNew $attributeNew,
-        CatalogProductSimple $productSimple
+        CatalogProductAttributeNew $attributeNew
     ) {
         //Precondition
         $attributeSet->persist();
@@ -89,9 +87,21 @@ class UpdateProductAttributeEntityTest extends Injectable
         $attributeNew->getAttributeForm()->fill($attribute);
         $attributeNew->getPageActions()->save();
         $attribute = $this->prepareAttribute($attribute, $productAttributeOriginal);
-        $productSimple->persist();
+        $product = $this->fixtureFactory->createByCode('catalogProductSimple',
+            [
+                'dataset' => 'default',
+                'data' => ['attribute_set_id' => ['attribute_set' => $attributeSet]]]);
+        $product->persist();
 
-        return ['product' => $this->prepareProduct($productSimple, $attribute, $attributeSet)];
+        $this->objectManager->create(
+            'Magento\Catalog\Test\TestStep\AddAttributeToAttributeSetStep',
+            [
+                'attribute' => $productAttributeOriginal,
+                'attributeSet' => $attributeSet
+            ]
+        )->run();
+
+        return ['product' => $this->prepareProduct($product, $attribute, $attributeSet)];
     }
 
     /**
