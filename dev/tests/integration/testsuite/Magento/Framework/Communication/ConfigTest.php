@@ -18,7 +18,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetTopics()
     {
         $topics = $this->getConfigInstance(__DIR__ . '/_files/valid_communication.xml')->getTopics();
-        $expectedParsedTopics = include __DIR__ . '/_files/valid_communication.php';
+        $expectedParsedTopics = include __DIR__ . '/_files/valid_communication_expected.php';
         $this->assertEquals($expectedParsedTopics, $topics);
     }
 
@@ -28,7 +28,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetTopic()
     {
         $topics = $this->getConfigInstance(__DIR__ . '/_files/valid_communication.xml')->getTopic('customerCreated');
-        $expectedParsedTopics = include __DIR__ . '/_files/valid_communication.php';
+        $expectedParsedTopics = include __DIR__ . '/_files/valid_communication_expected.php';
         $this->assertEquals($expectedParsedTopics['customerCreated'], $topics);
     }
 
@@ -290,13 +290,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $envConfigFilePath = include $envConfigFilePath ?: __DIR__ . '/_files/valid_communication.php';
-        $deploymentConfigReader->expects($this->any())
-            ->method('load')
-            ->willReturn(
-                [
-                    \Magento\Framework\Communication\Config\Reader\EnvReader::ENV_COMMUNICATION => $envConfigFilePath
-                ]);
+        $envConfigData = include $envConfigFilePath ?: __DIR__ . '/_files/valid_communication_input.php';
+        $deploymentConfigReader->expects($this->any())->method('load')->willReturn($envConfigData);
         $deploymentConfig = $objectManager->create(
             'Magento\Framework\App\DeploymentConfig',
             ['reader' => $deploymentConfigReader]

@@ -5,5 +5,9 @@
  */
 
 return [
-    'customerCreated' => 1,
+    'communication' => [
+        'topics' => [
+            'customerCreated' => 1,
+        ]
+    ]
 ];
