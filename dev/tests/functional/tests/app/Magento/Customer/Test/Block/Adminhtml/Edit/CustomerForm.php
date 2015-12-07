@@ -28,7 +28,7 @@ class CustomerForm extends FormTabs
      *
      * @var string
      */
-    protected $activeFormTab = '#container [data-bind="visible: active"]:not([style="display: none;"])';
+    protected $activeFormTab = '#container [data-area-active="true"]';
 
     /**
      * Field wrapper with label on form.

@@ -1,0 +1,66 @@
+// /**
+// * Copyright © 2015 Magento. All rights reserved.
+// * See COPYING.txt for license details.
+// */
+
+.fotorama__fullscreen-icon:focus,
+.fotorama__zoom-out:focus,
+.fotorama__zoom-in:focus,
+.fotorama__arr:focus,
+.fotorama__stage__shaft:focus,
+.fotorama__nav__frame--thumb:focus .fotorama__thumb,
+.fotorama__nav__frame--dot:focus .fotorama__dot {
+    box-shadow: none;
+    &:after {
+        content: '';
+        border-radius: inherit;
+        position: absolute;
+        top: @fotorama-inner-box-shadow;
+        right: @fotorama-inner-box-shadow;
+        left: @fotorama-inner-box-shadow;
+        bottom: @fotorama-inner-box-shadow;
+        box-shadow: @focus__box-shadow;
+        z-index: @z-index-10;
+    }
+}
+
+.fotorama__nav__frame--thumb:focus,
+.fotorama__nav__frame--dot:focus {
+    .fotorama__thumb:after,
+    .fotorama__dot:after{
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+    }
+    .fotorama__thumb.fotorama_vertical_ratio:after {
+        left: 2px;
+        right: 2px;
+    }
+    .fotorama__thumb {
+        overflow: inherit;
+    }
+}
+
+.fotorama__nav__frame:nth-child(2):focus {
+    .fotorama__thumb:after{
+        left: 1px;
+    }
+    .fotorama__thumb.fotorama_vertical_ratio:after{
+        top: 1px;
+    }
+}
+
+.fotorama__nav__frame:last-child:focus {
+    .fotorama__thumb:after{
+        right: 1px;
+    }
+    .fotorama__thumb.fotorama_vertical_ratio:after{
+        bottom: 1px;
+    }
+}
+
+.fotorama__thumb__arr {
+    box-shadow: none;
+}
+

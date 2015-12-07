@@ -3,305 +3,24 @@
 // * See COPYING.txt for license details.
 // */
 
-@fotorama-duration-time: 0.3s;
-@fotorama-arw-size: 95px;
-@fotorama_close_size: 30px;
-@size-fotorama-block: 80px;
-@fotorama-thumb-arrow: 30px;
-@fotorama-fullscreen-zoom-time: 0.3s;
-
+@import 'module/_variables.less'; //Default gallery variables
 @import '../../css/source/lib/_lib.less'; // Global lib
 @import '../../css/source/_theme.less'; // Theme overrides
 @import '../../css/source/_variables.less'; // Local theme variables
 @import '../../css/source/lib/_responsive.less';
-
-.fotorama_spin {
-    display: none;
-    &.fotorama_spinner {
-        display: block;
-        width: 64px;
-        height: 64px;
-        background-image: url('@{baseDir}../images/loader-1.gif');
-        bottom: 0;
-        left: 0;
-        margin: auto;
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: @z-index-1;
-    }
-}
-
-.fotorama-translate3d(@x; @y; @z) {
-    -webkit-transform: translate3d(@x, @y, @z);
-    transform: translate3d(@x, @y, @z);
-}
-
-.fotorama-rotate (@deg) {
-    -webkit-transform: rotate(@deg);
-    -ms-transform: rotate(@deg);
-    transform: rotate(@deg);
-}
-
-.translateX(@value) {
-    -webkit-transform: translateX(@value);
-    -ms-transform: translateX(@value);
-    -o-transform: translateX(@value);
-    transform: translateX(@value);
-}
-
-.translateY(@value) {
-    -webkit-transform: translateY(@value);
-    -ms-transform: translateY(@value);
-    -o-transform: translateY(@value);
-    transform: translateY(@value);
-}
-
-.fotorama-shadow-gradient(@x, @y) {
-    background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.2) 25%, rgba(0, 0, 0, 0.3) 75%, transparent), radial-gradient(farthest-side at @x @y, rgba(0, 0, 0, 0.4), transparent);
-}
-
-.fotorama-inline-block(@va: middle) {
-    *display: inline;
-    *zoom: 1;
-    -moz-box-orient: vertical;
-    display: -moz-inline-box;
-    display: inline-block;
-    vertical-align: @va;
-}
+@import 'module/_mixins.less'; //Mixins in gallery
+@import 'module/_extends.less';
+@import 'module/_focus.less';
+@import 'module/_fullscreen.less';
 
 .fotorama__zoom-in,
 .fotorama__zoom-out {
     display: none;
 }
-.fotorama__fullscreen {
-    .fotorama__zoom-in,
-    .fotorama__zoom-out {
-        overflow: hidden;
-        position: absolute;
-        width: @size-fotorama-block;
-        height: @size-fotorama-block;
-        display: block;
-        cursor: pointer;
-
-    }
-    .fotorama__zoom-out {
-        top: 83px;
-        &:extend(.fotorama-sprite);
-        background-position: 0 (-@size-fotorama-block) !important;
-        &.fotorama__zoom-out--disabled {
-            display: none
-        }
-    }
-    .fotorama__zoom-in {
-        top: 2px;
-        &:extend(.fotorama-sprite);
-        background-position: 0 0 !important;
-        &.fotorama__zoom-in--disabled {
-            display: none
-        }
-    }
-}
-
-.fotorama-stretch {
-    bottom: 0;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 100%;
-}
-
-.fotorama-grab-cursor {
-    cursor: move;
-    cursor: -webkit-grab;
-    cursor: -moz-grab;
-    cursor: -o-grab;
-    cursor: -ms-grab;
-    cursor: grab;
-}
-
-.fotorama-grabbing-cursor {
-    cursor: move;
-    cursor: -webkit-grabbing;
-    cursor: -moz-grabbing;
-    cursor: -o-grabbing;
-    cursor: -ms-grabbing;
-    cursor: grabbing;
-}
-
-.fotorama-gpu {
-    transform: translateZ(0);
-}
-
-.fotorama-focus {
-    outline: 0;
-}
-
-.fotorama-focus-overlay {
-    &:after {
-        &:extend(.fotorama-stretch);
-        background-color: @color-blue2;
-        border-radius: inherit;
-        content: '';
-    }
-}
-
-.fotorama__fullscreen-icon:focus,
-.fotorama__zoom-out:focus,
-.fotorama__zoom-in:focus {
-    box-shadow:@focus__box-shadow;
-}
-
-.fotorama__arr:focus:after,
-.fotorama__stage__shaft:focus:after,
-.fotorama__nav__frame--thumb:focus .fotorama__thumb:after,
-.fotorama__nav__frame--dot:focus .fotorama__dot:after{
-    box-shadow: @focus__box-shadow;
-    border-radius: inherit;
-    content: '';
-    position: absolute;
-    left: 3px;
-    top: 3px;
-    bottom: 3px;
-    right: 3px;
-    z-index: 10;
-}
-.fotorama__nav__frame--thumb:focus,
-.fotorama__nav__frame--dot:focus {
-    .fotorama__thumb:after,
-    .fotorama__dot:after{
-        left: 0;
-        top: 0;
-        bottom: 0;
-        right: 0;
-    }
-    .fotorama__thumb.fotorama_vertical_ratio:after {
-        left: 2px;
-        right: 2px;
-    }
-    .fotorama__thumb {
-        overflow: inherit;
-    }
-}
-
-.fotorama__nav__frame:nth-child(2):focus {
-    .fotorama__thumb:after{
-        left: 1px;
-    }
-    .fotorama__thumb.fotorama_vertical_ratio:after{
-        top: 1px;
-    }
-}
-
-.fotorama__nav__frame:last-child:focus {
-    .fotorama__thumb:after{
-        right: 1px;
-    }
-    .fotorama__thumb.fotorama_vertical_ratio:after{
-        bottom: 1px;
-    }
-}
-
-.fotorama-transform-disabled {
-    transform: none !important;
-}
-
-.fotorama-transition-for-slide {
-    transition-duration: 0ms;
-    transition-property: transform, width;
-    transition-timing-function: cubic-bezier(0.1, 0, 0.25, 1);
-}
-
-.fotorama-no-select {
-    user-select: none;
-}
-
-.fotorama-select {
-    user-select: text;
-}
-
-.fotorama-empty-bg {
-    background: url(data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=);
-}
-
-.fotorama-auto-margin {
-    margin: auto;
-    padding: 0;
-}
-
-.fotorama-inline-block {
-    .fotorama-inline-block();
-}
-
-.fotorama-content-box {
-    box-sizing: content-box;
-}
-
-.fotorama-border-box {
-    box-sizing: border-box;
-}
-
-.fotorama-hidden {
-    left: -99999px;
-    position: absolute;
-    top: -99999px;
-    z-index: -@z-index-10;
-}
-
-.fotorama-visible {
-    left: auto;
-    opacity: 1;
-    position: relative;
-    top: auto;
-    z-index: auto;
-}
-
-.fotorama-no-tap {
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-.transitionDuration {
-    transition-duration: 333ms;
-}
-
-.transitionDurationZero {
-    transition-duration: 0ms;
-}
-
-.fotorama-sprite {
-    &:extend(.fotorama-print-background);
-    background-image: url('gallery.png');
-    background-repeat: no-repeat;
-}
-
-.fotorama-print-background {
-    @media print {
-        background: none !important;
-    }
-}
 
 .fotorama {
     min-width: 1px;
     overflow: hidden;
-}
-
-.fotorama--fullscreen {
-    background: @color-white;
-    bottom: 0 !important;
-    float: none !important;
-    height: 100% !important;
-    left: 0 !important;
-    margin: 0 !important;
-    position: absolute !important;
-    right: 0 !important;
-    top: 0 !important;
-    width: 100% !important;
-    z-index: @z-index-10 !important;
-    .fotorama__wrap {
-        max-width: 100% !important;
-    }
 }
 
 .fotorama__wrap {
@@ -401,15 +120,6 @@
 
 .fotorama__img--full {
     display: none;
-}
-
-.fotorama--fullscreen .fotorama__loaded--full {
-    .fotorama__img {
-        display: none;
-    }
-    .fotorama__img--full {
-        display: block;
-    }
 }
 
 .fotorama__html {
@@ -723,8 +433,8 @@
     &:extend(.fotorama-sprite);
     background-position: 0 0;
     height: @size-fotorama-block;
-    right: 2px;
-    top: 2px;
+    right: 0;
+    top: 0;
     width: @size-fotorama-block;
     z-index: @z-index-10;
     display:  none;
@@ -1161,7 +871,7 @@
             }
             &.fotorama__img--draggable {
                 cursor: move;
-                transition-property: width, height;
+                transition-property: none;
             }
         }
     }
@@ -1256,20 +966,10 @@
 .gallery-placeholder {
     .loading-mask {
         padding: 0 0 50%;
-        position: absolute;
+        position: static;
     }
     .loader img {
       position: absolute;
-    }
-}
-
-.fotorama__fullscreen {
-    overflow-y: hidden;
-    .magnify-fullimage {
-        display: inline-block;
-    }
-    .magnify-lens {
-        display: none !important;
     }
 }
 
@@ -1286,13 +986,20 @@
     }
 }
 
-.fotorama-button-background() {
-    background-color: rgba(255, 255, 255, 0.3);
-    transition: background-color @fotorama-duration-time ease-in-out;
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.5);
-    }
-    &:active {
-        background-color: rgba(213, 213, 213, 0.5);
+// Styles for spinner in gallery.
+.fotorama__spinner {
+    display: none;
+    width: @fotorama-spinner-size;
+    height: @fotorama-spinner-size;
+    background-image: url('@{baseDir}../images/loader-1.gif');
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: @z-index-1;
+    &.fotorama__spinner--show {
+        display: block;
     }
 }
