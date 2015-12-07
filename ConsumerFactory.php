@@ -78,7 +78,7 @@ class ConsumerFactory
     public function get($consumerName)
     {
         $consumerConfig = $this->queueConfig->getConsumer($consumerName);
-        if (is_null($consumerConfig)) {
+        if ($consumerConfig === null) {
             throw new LocalizedException(
                 new Phrase('Specified consumer "%consumer" is not declared.', ['consumer' => $consumerName])
             );

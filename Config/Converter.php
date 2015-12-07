@@ -176,6 +176,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $config
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function processBrokerConfiguration($config)
     {
@@ -238,7 +239,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     self::CONSUMER_NAME => $consumerKey,
                     self::CONSUMER_QUEUE => $consumerConfig[self::BROKER_CONSUMER_QUEUE],
                     self::CONSUMER_CONNECTION => $brokerConfig[self::BROKER_TYPE],
-                    self::CONSUMER_TYPE => $topicConfig[\Magento\Framework\Communication\ConfigInterface::TOPIC_IS_SYNCHRONOUS] ? self::CONSUMER_TYPE_SYNC : self::CONSUMER_TYPE_ASYNC,
+                    self::CONSUMER_TYPE =>
+                        $topicConfig[\Magento\Framework\Communication\ConfigInterface::TOPIC_IS_SYNCHRONOUS]
+                            ? self::CONSUMER_TYPE_SYNC : self::CONSUMER_TYPE_ASYNC,
                     self::CONSUMER_HANDLERS => $handlers,
                     self::CONSUMER_MAX_MESSAGES => $consumerConfig[self::BROKER_CONSUMER_MAX_MESSAGES],
                     self::CONSUMER_EXECUTOR => $consumerConfig[self::BROKER_CONSUMER_EXECUTOR],
@@ -290,10 +293,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     self::TOPIC_SCHEMA_VALUE => $schemaValue
                 ],
                 self::TOPIC_RESPONSE_SCHEMA => [
-                    self::TOPIC_SCHEMA_TYPE => isset($topicConfig[Communication::TOPIC_RESPONSE]) ? self::TOPIC_SCHEMA_TYPE_OBJECT : null,
+                    self::TOPIC_SCHEMA_TYPE =>
+                        isset($topicConfig[Communication::TOPIC_RESPONSE]) ? self::TOPIC_SCHEMA_TYPE_OBJECT : null,
                     self::TOPIC_SCHEMA_VALUE => $topicConfig[Communication::TOPIC_RESPONSE]
                 ],
-                self::TOPIC_PUBLISHER => $config[$topicName][self::BROKER_TYPE] . '-' . $config[$topicName][self::BROKER_EXCHANGE]
+                self::TOPIC_PUBLISHER =>
+                    $config[$topicName][self::BROKER_TYPE] . '-' . $config[$topicName][self::BROKER_EXCHANGE]
             ];
         }
         return $output;
@@ -309,7 +314,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $output = [];
         foreach ($config as $brokerConfig) {
-            foreach ($brokerConfig[self::BROKER_CONSUMERS] as $consumerKey => $consumerConfig) {
+            foreach ($brokerConfig[self::BROKER_CONSUMERS] as $consumerConfig) {
                 $output[] = [
                     self::BIND_QUEUE => $consumerConfig[self::BROKER_CONSUMER_QUEUE],
                     self::BIND_EXCHANGE => $brokerConfig[self::BROKER_EXCHANGE],
@@ -543,6 +548,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $config
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @deprecated
      */
     protected function extractConsumers(\DOMDocument $config)

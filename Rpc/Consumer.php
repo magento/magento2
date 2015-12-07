@@ -15,7 +15,7 @@ use Magento\Framework\MessageQueue\CallbackInvoker;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
-
+use Magento\Framework\Phrase;
 
 /**
  * A MessageQueue Consumer to handle receiving, processing and replying to an RPC message.
@@ -122,7 +122,7 @@ class Consumer implements ConsumerInterface
                     if (isset($result)) {
                         return $this->messageEncoder->encode($topicName, $result, false);
                     } else {
-                        throw new LocalizedException(__('No reply message resulted in RPC.'));
+                        throw new LocalizedException(new Phrase('No reply message resulted in RPC.'));
                     }
                 }
             } else {
@@ -131,7 +131,7 @@ class Consumer implements ConsumerInterface
                     if (isset($result)) {
                         return $this->messageEncoder->encode($topicName, $result, false);
                     } else {
-                        throw new LocalizedException(__('No reply message resulted in RPC.'));
+                        throw new LocalizedException(new Phrase('No reply message resulted in RPC.'));
                     }
                 }
             }

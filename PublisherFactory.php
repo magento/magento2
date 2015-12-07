@@ -112,7 +112,7 @@ class PublisherFactory
     private function getPublisherConfigForName($publisherName)
     {
         $publisherConfig = $this->queueConfig->getPublisher($publisherName);
-        if (is_null($publisherConfig)) {
+        if ($publisherConfig === null) {
             throw new LocalizedException(
                 new Phrase('Specified publisher "%publisher" is not declared.', ['publisher' => $publisherName])
             );
@@ -130,7 +130,7 @@ class PublisherFactory
     private function getPublisherNameForTopic($topicName)
     {
         $topicConfig = $this->queueConfig->getTopic($topicName);
-        if (is_null($topicConfig)) {
+        if ($topicConfig === null) {
             throw new LocalizedException(
                 new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topicName])
             );

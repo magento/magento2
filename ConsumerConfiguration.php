@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\Framework\MessageQueue\Config\Converter;
+
 /**
  * Value class which stores the configuration
  */

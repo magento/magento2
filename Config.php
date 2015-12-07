@@ -10,7 +10,6 @@ use Magento\Framework\MessageQueue\Config\Converter as QueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
-
 class Config implements ConfigInterface
 {
     /**
@@ -166,7 +165,7 @@ class Config implements ConfigInterface
     /**
      * Get publisher config by topic
      *
-     * @param $topicName
+     * @param string $topicName
      * @return array|mixed|null
      * @throws LocalizedException
      */

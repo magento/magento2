@@ -112,7 +112,7 @@ class MessageEncoder
     protected function getTopicSchema($topic, $requestType)
     {
         $topicConfig = $this->queueConfig->getTopic($topic);
-        if (is_null($topicConfig)) {
+        if ($topicConfig === null) {
             throw new LocalizedException(new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topic]));
         }
         return $requestType
