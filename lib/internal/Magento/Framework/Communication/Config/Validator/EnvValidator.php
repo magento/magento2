@@ -54,7 +54,7 @@ class EnvValidator
     {
         foreach ($configData as $topicName => $configDataItem) {
             $this->validateTopicName($configDataItem, $topicName);
-            $this->validateTopic($configDataItem,  $topicName);
+            $this->validateTopic($configDataItem, $topicName);
             $this->validateTopicResponseHandler($configDataItem);
             $this->validateRequestSchema($configDataItem);
             $this->validateResponseSchema($configDataItem);
@@ -234,7 +234,7 @@ class EnvValidator
         {
             if ($configDataItem[ConfigInterface::TOPIC_REQUEST_TYPE] == ConfigInterface::TOPIC_REQUEST_TYPE_CLASS) {
                 try {
-                    $this->methodsMap->getMethodsMap($requestSchema);
+                    $this->validateType($requestSchema);
                 } catch (\Exception $e) {
                     throw new \LogicException(
                         sprintf(
@@ -273,5 +273,27 @@ class EnvValidator
                 );
             }
         }
+    }
+
+    /**
+     * TODO: Move out to separate class and reuse from converter to avoid code duplication
+     * Ensure that specified type is either a simple type or a valid service data type.
+     *
+     * @param string $typeName
+     * @return $this
+     * @throws \Exception In case when type is invalid
+     */
+    protected function validateType($typeName)
+    {
+        if ($this->typeProcessor->isTypeSimple($typeName)) {
+            return $this;
+        }
+        if ($this->typeProcessor->isArrayType($typeName)) {
+            $arrayItemType = $this->typeProcessor->getArrayItemType($typeName);
+            $this->methodsMap->getMethodsMap($arrayItemType);
+        } else {
+            $this->methodsMap->getMethodsMap($typeName);
+        }
+        return $this;
     }
 }
