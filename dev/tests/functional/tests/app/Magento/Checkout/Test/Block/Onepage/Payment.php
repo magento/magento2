@@ -9,7 +9,6 @@ namespace Magento\Checkout\Test\Block\Onepage;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Payment\Test\Fixture\CreditCard;
-use Zend\Server\Reflection\ReflectionClass;
 
 /**
  * Checkout payment block.

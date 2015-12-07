@@ -51,7 +51,7 @@ class SelectPaymentMethodStep implements TestStepInterface
         array $payment,
         FixtureFactory $fixtureFactory,
         $creditCardClass = 'credit_card',
-        array $creditCard = null
+        $creditCard = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->payment = $payment;
