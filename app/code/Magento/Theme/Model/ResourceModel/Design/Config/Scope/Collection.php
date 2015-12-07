@@ -114,6 +114,21 @@ class Collection extends \Magento\Framework\Data\Collection
             'store_id' => isset($storeScope['scope_id']) ? $storeScope['scope_id'] : null,
         ];
 
+        $result = array_merge($result, $this->getScopeData($websiteScope, $groupScope, $storeScope));
+
+        $this->_addItem(new \Magento\Framework\DataObject($result));
+    }
+
+    /**
+     * Retrieve scope data
+     * 
+     * @param array $websiteScope
+     * @param array $groupScope
+     * @param array $storeScope
+     * @return array
+     */
+    protected function getScopeData(array $websiteScope, array $groupScope, array $storeScope)
+    {
         if (isset($storeScope['scope'])) {
             $data = $this->getMetadataValues($storeScope['scope'], $storeScope['scope_id']);
         } elseif (isset($groupScope['scope'])) {
@@ -124,8 +139,6 @@ class Collection extends \Magento\Framework\Data\Collection
             $data = $this->getMetadataValues();
         }
 
-        $result = array_merge($result, $data);
-
-        $this->_addItem(new \Magento\Framework\DataObject($result));
+        return $data;
     }
 }
