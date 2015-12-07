@@ -115,7 +115,6 @@ class UpdateConfigurableProductStep implements TestStepInterface
 
         $dataProduct = $product->getData();
         $dataInitialProduct = $initialProduct->getData();
-        $oldMatrix = [];
 
         if ($attributeTypeAction == 'deleteLast') {
             array_pop($dataInitialProduct['configurable_attributes_data']['attributes_data']);
@@ -126,7 +125,6 @@ class UpdateConfigurableProductStep implements TestStepInterface
 
         $attributesData = $dataInitialProduct['configurable_attributes_data']['attributes_data'];
         if ($attributeTypeAction == 'addOptions') {
-            $oldMatrix = $dataInitialProduct['configurable_attributes_data']['matrix'];
             $this->addOptions($attributesData, $dataProduct['configurable_attributes_data']['attributes_data']);
         } else {
             $this->addAttributes($attributesData, $dataProduct['configurable_attributes_data']['attributes_data']);
