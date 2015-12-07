@@ -29,7 +29,7 @@ class SelectRenderer implements RendererInterface
     /**
      * Sort renderers
      *
-     * @param $renders
+     * @param array $renders
      * @return array
      */
     protected function sort($renders)

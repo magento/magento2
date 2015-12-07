@@ -38,7 +38,8 @@ class SelectFactory
     }
 
     /**
-     * @return Select
+     * @param AdapterInterface $adapter
+     * @return \Magento\Framework\DB\Select
      */
     public function create(AdapterInterface $adapter)
     {

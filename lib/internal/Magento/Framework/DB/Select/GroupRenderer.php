@@ -38,7 +38,7 @@ class GroupRenderer implements RendererInterface
     public function render(Select $select, $sql = '')
     {
         if ($select->getPart(Select::FROM) && $select->getPart(Select::GROUP)) {
-            $group = array();
+            $group = [];
             foreach ($select->getPart(Select::GROUP) as $term) {
                 $group[] = $this->quote->quoteIdentifier($term);
             }

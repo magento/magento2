@@ -190,6 +190,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      * Load file and set path to sample
      *
      * @param SampleInterface $sample
+     * @return void
      */
     protected function setFiles(SampleInterface $sample)
     {
