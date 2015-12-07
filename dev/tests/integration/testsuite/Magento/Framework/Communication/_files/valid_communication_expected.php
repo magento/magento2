@@ -7,11 +7,16 @@
 return [
     'customerCreated' => [
         'name' => 'customerCreated',
-        'is_synchronous' => false,
+        'is_synchronous' => true,
         'request' => 'Magento\Customer\Api\Data\CustomerInterface',
         'request_type' => 'object_interface',
-        'response' => null,
-        'handlers' => [],
+        'response' => 'Magento\Customer\Api\Data\CustomerInterface',
+        'handlers' => [
+            'default' => [
+                'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
+                'method' => 'save',
+            ],
+        ],
     ],
     'customerAdded' => [
         'name' => 'customerAdded',
@@ -44,6 +49,19 @@ return [
         'request' => 'Magento\Customer\Api\Data\CustomerInterface',
         'request_type' => 'object_interface',
         'response' => 'Magento\Customer\Api\Data\CustomerInterface[]',
+        'handlers' => [
+            'updateName' => [
+                'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
+                'method' => 'save',
+            ],
+        ],
+    ],
+    'customerModified' => [
+        'name' => 'customerModified',
+        'is_synchronous' => false,
+        'request' => 'Magento\Customer\Api\Data\CustomerInterface',
+        'request_type' => 'object_interface',
+        'response' => null,
         'handlers' => [
             'updateName' => [
                 'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
