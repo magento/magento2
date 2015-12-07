@@ -33,6 +33,7 @@ class SaveHandler
     /**
      * @param MetadataPool $metadataPool
      * @param Link $linkResource
+     * @param ProductLinkRepositoryInterface $productLinkRepository
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -53,10 +54,10 @@ class SaveHandler
     public function execute($entityType, $entity)
     {
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
-        foreach($this->productLinkRepository->getList($entity) as $link) {
+        foreach ($this->productLinkRepository->getList($entity) as $link) {
             $this->productLinkRepository->delete($link);
         }
-        foreach($entity->getProductLinks() as $link) {
+        foreach ($entity->getProductLinks() as $link) {
             $this->productLinkRepository->save($link);
         }
         return $entity;

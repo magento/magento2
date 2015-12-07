@@ -108,7 +108,7 @@ class SaveHandler implements ProcessEntityRelationInterface
         $productSkuIds = [];
         $oldLinks = $this->productLinkRepository->getList($entity);
 
-        foreach($entity->getProductLinks() as $link) {
+        foreach ($entity->getProductLinks() as $link) {
             if ($link->getLinkType() == 'associated') {
                 $this->productLinkRepository->save($link);
                 $product = $this->productRepository->get($link->getLinkedProductSku());

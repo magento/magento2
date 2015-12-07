@@ -42,11 +42,11 @@ class Grouped
      * @param ProductRepositoryInterface $productRepository
      * @param ProductLinkExtensionFactory $productLinkExtensionFactory
      */
-    function __construct(
+    public function __construct(
         ProductLinkInterfaceFactory $productLinkFactory,
         ProductRepositoryInterface $productRepository,
-        ProductLinkExtensionFactory $productLinkExtensionFactory)
-    {
+        ProductLinkExtensionFactory $productLinkExtensionFactory
+    ) {
         $this->productLinkFactory = $productLinkFactory;
         $this->productRepository = $productRepository;
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;

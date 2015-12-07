@@ -158,7 +158,7 @@ class Source extends AbstractEav
         )->joinLeft(
             ['pis' => $this->getTable('catalog_product_entity_int')],
             "pis.{$productIdField} = pid.{$productIdField}"
-                . ' AND pis.attribute_id = pid.attribute_id AND pis.store_id = pid.store_id',
+            .' AND pis.attribute_id = pid.attribute_id AND pis.store_id = pid.store_id',
             []
         )->columns(
             [
@@ -246,7 +246,7 @@ class Source extends AbstractEav
         )->joinLeft(
             ['pvs' => $this->getTable('catalog_product_entity_varchar')],
             "pvs.{$productIdField} = pvd.{$productIdField} AND pvs.attribute_id = pvd.attribute_id"
-                . ' AND pvs.store_id=cs.store_id',
+            .' AND pvs.store_id=cs.store_id',
             ['value' => $productValueExpression]
         )->where(
             'pvd.store_id=?',

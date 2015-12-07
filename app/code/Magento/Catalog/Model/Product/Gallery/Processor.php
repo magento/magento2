@@ -390,7 +390,7 @@ class Processor
                 : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
             $destFile = dirname(
                     $file
-                ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+                ).'/'.\Magento\MediaStorage\Model\File\Uploader::getNewFileName(
                     $destinationFile
                 );
         }
@@ -407,18 +407,24 @@ class Processor
      */
     protected function getNotDuplicatedFilename($fileName, $dispretionPath)
     {
-        $fileMediaName = $dispretionPath . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+        $fileMediaName = $dispretionPath.'/'.\Magento\MediaStorage\Model\File\Uploader::getNewFileName(
                 $this->mediaConfig->getMediaPath($fileName)
             );
-        $fileTmpMediaName = $dispretionPath . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+        $fileTmpMediaName = $dispretionPath.'/'.\Magento\MediaStorage\Model\File\Uploader::getNewFileName(
                 $this->mediaConfig->getTmpMediaPath($fileName)
             );
 
         if ($fileMediaName != $fileTmpMediaName) {
             if ($fileMediaName != $fileName) {
-                return $this->getNotDuplicatedFilename($fileMediaName, $dispretionPath);
+                return $this->getNotDuplicatedFilename(
+                    $fileMediaName,
+                    $dispretionPath
+                );
             } elseif ($fileTmpMediaName != $fileName) {
-                return $this->getNotDuplicatedFilename($fileTmpMediaName, $dispretionPath);
+                return $this->getNotDuplicatedFilename(
+                    $fileTmpMediaName,
+                    $dispretionPath
+                );
             }
         }
 

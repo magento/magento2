@@ -30,7 +30,6 @@ class EntityManager
      */
     public function __construct(
         OrchestratorPool $orchestratorPool,
-
         MetadataPool $metadataPool
     ) {
         $this->orchestratorPool = $orchestratorPool;
@@ -82,7 +81,6 @@ class EntityManager
         $operation = $this->orchestratorPool->getWriteOperation($entityType, 'delete');
         return $operation->execute($entityType, $entity);
     }
-
 
     /**
      * @param string $entityType

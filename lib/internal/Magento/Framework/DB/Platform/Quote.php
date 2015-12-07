@@ -97,4 +97,3 @@ class Quote
         return '`';
     }
 }
-
