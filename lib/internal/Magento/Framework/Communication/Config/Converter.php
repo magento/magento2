@@ -9,7 +9,7 @@ use Magento\Framework\Communication\ConfigInterface as Config;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Stdlib\BooleanUtils;
-use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Communication\Config\Validator\XmlValidator as Validator;
 
 /**
  * Converts Communication config from \DOMDocument to array
@@ -29,25 +29,25 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $booleanUtils;
 
     /**
-     * @var TypeProcessor
+     * @var Validator
      */
-    private $typeProcessor;
+    private $validator;
 
     /**
      * Initialize dependencies
      *
      * @param MethodsMap $methodsMap
      * @param BooleanUtils $booleanUtils
-     * @param TypeProcessor $typeProcessor
+     * @param Validator $validator
      */
     public function __construct(
         MethodsMap $methodsMap,
         BooleanUtils $booleanUtils,
-        TypeProcessor $typeProcessor
+        Validator $validator
     ) {
         $this->methodsMap = $methodsMap;
         $this->booleanUtils = $booleanUtils;
-        $this->typeProcessor = $typeProcessor;
+        $this->validator = $validator;
     }
 
     /**
@@ -82,35 +82,19 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $requestSchema = $this->extractTopicRequestSchema($topicNode);
             $responseSchema = $this->extractTopicResponseSchema($topicNode);
             $handlers = $this->extractTopicResponseHandlers($topicNode);
-
-            /** Validate schema attributes */
-            if (!$requestResponseSchema && !$requestSchema) {
-                throw new \LogicException(
-                    sprintf(
-                        'Either "request" or "schema" attribute must be specified for topic "%s"',
-                        $topicName
-                    )
-                );
-            }
-            if ($responseSchema && !$handlers) {
-                throw new \LogicException(
-                    sprintf(
-                        '"handler" element must be declared for topic "%s", because it has "response" declared',
-                        $topicName
-                    )
-                );
-            }
-            if (($requestResponseSchema || $responseSchema) && (count($handlers) >= 2)) {
-                throw new \LogicException(
-                    sprintf(
-                        'Topic "%s" is configured for synchronous requests, that is why it must have exactly one '
-                        . 'response handler declared. The following handlers declared: %s',
-                        $topicName,
-                        implode(', ', array_keys($handlers))
-                    )
-                );
-            }
-
+            $this->validator->validateResponseRequest(
+                $requestResponseSchema,
+                $requestSchema,
+                $topicName,
+                $responseSchema,
+                $handlers
+            );
+            $this->validator->validateDeclarationOfTopic(
+                $requestResponseSchema,
+                $topicName,
+                $requestSchema,
+                $responseSchema
+            );
             if ($requestResponseSchema) {
                 $output[$topicName] = [
                     Config::TOPIC_NAME => $topicName,
@@ -139,13 +123,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     Config::TOPIC_RESPONSE => null,
                     Config::TOPIC_HANDLERS => $handlers
                 ];
-            } else {
-                throw new \LogicException(
-                    sprintf(
-                        'Declaration of topic "%s" is invalid. Specify at least "request" or "schema".',
-                        $topicName
-                    )
-                );
             }
         }
         return $output;
@@ -174,19 +151,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $handlerName = $handlerAttributes->getNamedItem('name')->nodeValue;
                 $serviceName = $handlerAttributes->getNamedItem('type')->nodeValue;
                 $methodName = $handlerAttributes->getNamedItem('method')->nodeValue;
-                try {
-                    $this->methodsMap->getMethodParams($serviceName, $methodName);
-                } catch (\Exception $e) {
-                    throw new \LogicException(
-                        sprintf(
-                            'Service method specified in the definition of handler "%s" for topic "%s"'
-                            . ' is not available. Given "%s"',
-                            $handlerName,
-                            $topicName,
-                            $serviceName . '::' . $methodName
-                        )
-                    );
-                }
+                $this->validator->validateResponseHandlersType($serviceName, $methodName, $handlerName, $topicName);
                 $handlerNodes[$handlerName] = [
                     Config::HANDLER_TYPE => $serviceName,
                     Config::HANDLER_METHOD => $methodName
@@ -210,17 +175,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
         $requestSchema = $topicAttributes->getNamedItem('request')->nodeValue;
-        try {
-            $this->validateType($requestSchema);
-        } catch (\Exception $e) {
-            throw new \LogicException(
-                sprintf(
-                    'Request schema definition for topic "%s" should reference existing service class. Given "%s"',
-                    $topicName,
-                    $requestSchema
-                )
-            );
-        }
+        $this->validator->validateRequestSchemaType($requestSchema, $topicName);
         return $requestSchema;
     }
 
@@ -238,17 +193,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
         $responseSchema = $topicAttributes->getNamedItem('response')->nodeValue;
-        try {
-            $this->validateType($responseSchema);
-        } catch (\Exception $e) {
-            throw new \LogicException(
-                sprintf(
-                    'Response schema definition for topic "%s" should reference existing service class. Given "%s"',
-                    $topicName,
-                    $responseSchema
-                )
-            );
-        }
+        $this->validator->validateResponseSchemaType($responseSchema, $topicName);
         return $responseSchema;
     }
 
@@ -298,38 +243,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         preg_match(self::SERVICE_METHOD_NAME_PATTERN, $serviceMethod, $matches);
         $className = $matches[1];
         $methodName = $matches[2];
-        try {
-            $this->methodsMap->getMethodParams($className, $methodName);
-        } catch (\Exception $e) {
-            throw new \LogicException(
-                sprintf(
-                    'Service method specified in the definition of topic "%s" is not available. Given "%s"',
-                    $topicName,
-                    $serviceMethod
-                )
-            );
-        }
+        $this->validator->validateServiceMethod($serviceMethod, $topicName, $className, $methodName);
         return [$className, $methodName];
-    }
-
-    /**
-     * Ensure that specified type is either a simple type or a valid service data type.
-     *
-     * @param string $typeName
-     * @return $this
-     * @throws \Exception In case when type is invalid
-     */
-    protected function validateType($typeName)
-    {
-        if ($this->typeProcessor->isTypeSimple($typeName)) {
-            return $this;
-        }
-        if ($this->typeProcessor->isArrayType($typeName)) {
-            $arrayItemType = $this->typeProcessor->getArrayItemType($typeName);
-            $this->methodsMap->getMethodsMap($arrayItemType);
-        } else {
-            $this->methodsMap->getMethodsMap($typeName);
-        }
-        return $this;
     }
 }
