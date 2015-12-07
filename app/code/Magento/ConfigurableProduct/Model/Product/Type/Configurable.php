@@ -271,7 +271,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *   group => array(ids)
      * )
      *
-     * @param  int $parentId
+     * @param  array|int $parentId
      * @param  bool $required
      * @return array
      */

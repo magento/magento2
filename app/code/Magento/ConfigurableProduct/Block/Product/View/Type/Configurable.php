@@ -217,9 +217,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $prices = [];
         foreach ($this->getAllowProducts() as $product) {
-            $priceInfo = $this->getProduct()
-                ->setSelectedConfigurableOption($product)
-                ->getPriceInfo();
+            $priceInfo = $product->getPriceInfo();
 
             $prices[$product->getId()] =
                 [
