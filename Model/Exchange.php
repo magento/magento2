@@ -5,6 +5,7 @@
  */
 namespace Magento\Amqp\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\ExchangeInterface;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
@@ -13,6 +14,8 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class Exchange implements ExchangeInterface
 {
+    const RPC_CONNECTION_TIMEOUT = 30;
+
     /**
      * @var Config
      */
@@ -71,9 +74,17 @@ class Exchange implements ExchangeInterface
         );
         $channel->basic_publish($msg, $exchange, $topic);
 
-        // TODO: add ability to timeout
         while ($responseBody === null) {
-            $channel->wait();
+            try {
+                $channel->wait(null, false, self::RPC_CONNECTION_TIMEOUT);
+            } catch (\PhpAmqpLib\Exception\AMQPTimeoutException $e) {
+                throw new LocalizedException(
+                    __(
+                        "RPC call failed, connection timed out after %time_out.",
+                        ['time_out' => self::RPC_CONNECTION_TIMEOUT]
+                    )
+                );
+            }
         }
         $channel->close();
         return $responseBody;
