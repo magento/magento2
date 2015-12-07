@@ -84,6 +84,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $refreshTree = false;
         $data = $this->getRequest()->getPostValue();
         $data = $this->imagePreprocessing($data);
+        //print_r($data); exit;
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
@@ -234,7 +235,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             if (isset($data['general']['savedImage']['value'])) {
                 $data['general']['image']['value'] = $data['general']['savedImage']['value'];
             }
-            if (isset($data['general']['savedImage']['delete'])) {
+            if (
+                isset($data['general']['savedImage']['delete']) &&
+                $data['general']['savedImage']['delete'] !== 'false'
+            ) {
                 $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
             }
         }
