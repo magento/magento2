@@ -9,6 +9,7 @@ namespace Magento\Amqp\Model;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Topology creates topology for Amqp messaging
@@ -138,8 +139,13 @@ class Topology
      */
     private function isSynchronousModeTopic($topicName)
     {
-        $topic = $this->communicationConfig->getTopic($topicName);
-        return (bool)$topic[\Magento\Framework\Communication\ConfigInterface::TOPIC_IS_SYNCHRONOUS];
+        $isSync = false;
+        try {
+            $topic = $this->communicationConfig->getTopic($topicName);
+            $isSync = (bool)$topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
+        } catch(LocalizedException $e) {
+        }
+        return $isSync;
     }
 
     /**
