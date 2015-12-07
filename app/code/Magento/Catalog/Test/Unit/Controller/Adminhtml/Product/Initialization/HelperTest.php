@@ -78,10 +78,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     {
         $this->productLinkFactoryMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->productRepositoryMock = $this->getMockBuilder('Magento\Catalog\Api\ProductRepositoryInterface\Proxy')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->jsHelperMock = $this->getMock('Magento\Backend\Helper\Js', [], [], '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
