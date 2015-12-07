@@ -28,8 +28,6 @@ class ApplyRulesAfterReindex
      * @param \Magento\Catalog\Model\Product $subject
      * @param callable $proceed
      * @return \Magento\Catalog\Model\Product
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundReindex(
         \Magento\Catalog\Model\Product $subject,

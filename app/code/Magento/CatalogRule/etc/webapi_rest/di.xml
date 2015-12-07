@@ -9,22 +9,4 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="apply_catalog_rules_after_product_save_and_reindex" type="Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRulesAfterReindex"/>
     </type>
-    <type name="Magento\Catalog\Model\Category">
-        <plugin name="apply_after_products_assign" type="Magento\CatalogRule\Plugin\Indexer\Category"/>
-    </type>
-    <type name="Magento\Store\Model\Website">
-        <plugin name="reindex_after_delete_website" type="Magento\CatalogRule\Plugin\Indexer\Website"/>
-    </type>
-    <type name="Magento\Customer\Model\Group">
-        <plugin name="reindex_after_delete_customer_group" type="Magento\CatalogRule\Plugin\Indexer\CustomerGroup"/>
-    </type>
-    <type name="Magento\ImportExport\Model\Import">
-        <plugin name="reindex_after_import" type="Magento\CatalogRule\Plugin\Indexer\ImportExport"/>
-    </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Eav\Attribute">
-        <plugin name="change_product_attribute" type="Magento\CatalogRule\Plugin\Indexer\Product\Attribute"/>
-    </type>
-    <type name="Magento\Catalog\Model\Product\Action">
-        <plugin name="price_plugin" type="Magento\CatalogRule\Plugin\Model\Product\Action"/>
-    </type>
 </config>
