@@ -136,14 +136,15 @@ class Topology
      *
      * @param string $topicName
      * @return bool
+     * @throws LocalizedException
      */
     private function isSynchronousModeTopic($topicName)
     {
-        $isSync = false;
         try {
             $topic = $this->communicationConfig->getTopic($topicName);
             $isSync = (bool)$topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
-        } catch(LocalizedException $e) {
+        } catch (LocalizedException $e) {
+            throw new LocalizedException(__('Error while checking if topic is synchronous'));
         }
         return $isSync;
     }
