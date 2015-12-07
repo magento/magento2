@@ -529,6 +529,9 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         return $this;
     }
 
+    /**
+     * @return string
+     */
     protected function getProductIdFieldName()
     {
         $table = $this->getTable('catalog_product_entity');

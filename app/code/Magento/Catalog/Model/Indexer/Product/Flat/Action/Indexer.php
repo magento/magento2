@@ -10,6 +10,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\Entity\MetadataPool;
 
+/**
+ * Class Indexer
+ */
 class Indexer
 {
     /**
@@ -31,9 +34,11 @@ class Indexer
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
+
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
