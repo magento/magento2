@@ -10,6 +10,8 @@ namespace Magento\Framework\Data\Test\Unit\Collection;
 
 class DbTest extends \PHPUnit_Framework_TestCase
 {
+    use \Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
+
     /**
      * @var \Magento\Framework\Data\Collection\AbstractDb
      */
@@ -69,7 +71,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $renderer = $this->getSelectRenderer();
+        $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
         $adapter
             ->expects($this->any())
@@ -102,7 +104,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnshiftOrder($adapter)
     {
-        $renderer = $this->getSelectRenderer();
+        $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
         $adapter
             ->expects($this->any())
@@ -141,7 +143,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('is_imported = 1')
         );
-        $renderer = $this->getSelectRenderer();
+        $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
         $adapter
             ->expects($this->any())
@@ -180,7 +182,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             "name like 'M%'",
             'is_imported = 1'
         );
-        $renderer = $this->getSelectRenderer();
+        $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
         $adapter
             ->expects($this->any())
@@ -227,7 +229,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('email LIKE \'%value?%\'')
         );
-        $renderer = $this->getSelectRenderer();
+        $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
         $adapter
             ->expects($this->any())
@@ -271,7 +273,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('`email` = "foo@example.com"')
         );
-        $renderer = $this->getSelectRenderer();
+        $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new \Magento\Framework\DB\Select($adapter, $renderer);
         $adapter
             ->expects($this->any())
@@ -373,7 +375,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             [],
-            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer()]
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $adapterMock->expects($this->once())
             ->method('query')
@@ -411,7 +413,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['orWhere', 'where', 'reset', 'columns'],
-            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer()]
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $selectMock->expects($this->exactly(4))
             ->method('reset');
@@ -466,7 +468,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['__toString'],
-            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer()]
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $adapterMock->expects($this->once())
             ->method('select')
@@ -494,7 +496,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['orWhere', 'where', 'reset', 'columns'],
-            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer()]
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $selectMock->expects($this->once())
             ->method('where')
@@ -526,7 +528,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['distinct'],
-            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer()]
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $adapterMock->expects($this->once())
             ->method('select')
@@ -555,7 +557,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             [],
-            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer()]
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $adapterMock->expects($this->once())
             ->method('select')
@@ -589,79 +591,5 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->loadData(false, false);
         $this->collection->loadData(false, false);
         $this->assertEquals($data, $this->collection->toOptionHash());
-    }
-
-    /**
-     * @return \Magento\Framework\DB\Select\SelectRenderer
-     */
-    protected function getSelectRenderer()
-    {
-        return $this->objectManager->getObject(
-            'Magento\Framework\DB\Select\SelectRenderer',
-            [
-                'renderers' => [
-                    'distinct' => [
-                        'renderer' => $this->objectManager->getObject(
-                            'Magento\Framework\DB\Select\DistinctRenderer'
-                        ),
-                        'sort' => 11,
-                    ],
-                    'columns' => [
-                        'renderer' => $this->objectManager->getObject(
-                            'Magento\Framework\DB\Select\ColumnsRenderer',
-                            [
-                                'quote' => $this->objectManager->getObject('Magento\Framework\DB\Platform\Quote')
-                            ]
-                        ),
-                        'sort' => 11,
-                    ],
-                    'union' => [
-                        'renderer' => $this->objectManager->getObject(
-                            'Magento\Framework\DB\Select\UnionRenderer'
-                        ),
-                        'sort' => 11,
-                    ],
-                    'from' => [
-                        'renderer' => $this->objectManager->getObject(
-                            'Magento\Framework\DB\Select\FromRenderer',
-                            [
-                                'quote' => $this->objectManager->getObject('Magento\Framework\DB\Platform\Quote')
-                            ]
-                        ),
-                        'sort' => 11,
-                    ],
-                    'where' => [
-                        'renderer' => $this->objectManager->getObject(
-                            'Magento\Framework\DB\Select\WhereRenderer'
-                        ),
-                        'sort' => 11,
-                    ],
-                    'group' => [
-                        'renderer' => $this->objectManager->getObject(
-                            'Magento\Framework\DB\Select\GroupRenderer'
-                        ),
-                        'sort' => 11,
-                    ],
-                    'having' => [
-                        'renderer' => $this->objectManager->getObject(
-                            'Magento\Framework\DB\Select\HavingRenderer'
-                        ),
-                        'sort' => 11,
-                    ],
-                    'order' => [
-                        'renderer' => $this->objectManager->getObject(
-                            'Magento\Framework\DB\Select\OrderRenderer'
-                        ),
-                        'sort' => 11,
-                    ],
-                    'limit' => [
-                        'renderer' => $this->objectManager->getObject(
-                            'Magento\Framework\DB\Select\LimitRenderer'
-                        ),
-                        'sort' => 11,
-                    ],
-                ],
-            ]
-        );
     }
 }

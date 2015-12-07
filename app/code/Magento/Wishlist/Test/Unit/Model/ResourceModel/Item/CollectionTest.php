@@ -8,6 +8,8 @@ namespace Magento\Wishlist\Test\Unit\Model\ResourceModel\Item;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
+    use \Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
+
     /**
      * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
@@ -47,7 +49,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $select = new \Zend_Db_Select($connection);
+        $select = new \Magento\Framework\DB\Select($connection, $this->getSelectRenderer($this->objectManager));
         $connection
             ->expects($this->any())
             ->method('quote')
