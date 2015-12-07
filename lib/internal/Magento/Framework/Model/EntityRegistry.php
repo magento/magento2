@@ -11,7 +11,10 @@ namespace Magento\Framework\Model;
  */
 class EntityRegistry
 {
-    protected $registry;
+    /**
+     * @var array
+     */
+    protected $registry = [];
 
     /**
      * Register entity
@@ -19,6 +22,7 @@ class EntityRegistry
      * @param string $entityType
      * @param string $identifier
      * @param object $entity
+     * @return void
      */
     public function register($entityType, $identifier, $entity)
     {

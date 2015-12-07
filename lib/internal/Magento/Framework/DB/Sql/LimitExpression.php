@@ -10,8 +10,19 @@ namespace Magento\Framework\DB\Sql;
  */
 class LimitExpression extends \Zend_Db_Expr
 {
+    /**
+     * @var string
+     */
     protected $sql;
+
+    /**
+     * @var int
+     */
     protected $count;
+
+    /**
+     * @var int
+     */
     protected $offset;
 
     /**
@@ -28,6 +39,11 @@ class LimitExpression extends \Zend_Db_Expr
         $this->count = $count;
         $this->offset =  $offset;
     }
+
+    /**
+     * @return string
+     * @throws \Zend_Db_Adapter_Exception
+     */
     public function __toString()
     {
         $sql = $this->sql;

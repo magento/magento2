@@ -44,6 +44,7 @@ abstract class AbstractTypeHandler
     /**
      * @param Data $jsonHelper
      * @param File $downloadableFile
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Data $jsonHelper,

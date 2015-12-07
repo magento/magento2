@@ -501,9 +501,4 @@ class Select extends \Zend_Db_Select
     {
         return $this->selectRenderer->render($this);
     }
-
-    public function oldassemble()
-    {
-        return parent::assemble();
-    }
 }
