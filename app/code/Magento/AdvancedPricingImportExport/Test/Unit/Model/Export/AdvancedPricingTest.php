@@ -355,9 +355,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             $this->typeFactory,
             $this->linkTypeProvider,
             $this->rowCustomizer,
+            $this->metadataPool,
             $this->storeResolver,
-            $this->groupRepository,
-            $this->metadataPool
+            $this->groupRepository
         );
     }
 
