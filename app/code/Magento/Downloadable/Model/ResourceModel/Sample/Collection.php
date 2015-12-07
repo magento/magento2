@@ -14,6 +14,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
     protected $metadataPool;
 
     /**
