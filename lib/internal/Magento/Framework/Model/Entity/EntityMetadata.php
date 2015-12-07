@@ -74,8 +74,7 @@ class EntityMetadata
         $connectionName = null,
         $entityContext = [],
         $fields = []
-    )
-    {
+    ) {
         $this->appResource = $appResource;
         $this->entityTableName = $entityTableName;
         $this->eavEntityType = $eavEntityType;

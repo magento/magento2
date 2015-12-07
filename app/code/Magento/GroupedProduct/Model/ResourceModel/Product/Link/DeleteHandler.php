@@ -71,7 +71,7 @@ class DeleteHandler implements ProcessEntityRelationInterface
             return $entity;
         }
 
-        foreach($entity->getProductLinks() as $link) {
+        foreach ($entity->getProductLinks() as $link) {
             if ($link->getLinkType() == 'associated') {
                 $this->productLinkRepository->delete($link);
             }

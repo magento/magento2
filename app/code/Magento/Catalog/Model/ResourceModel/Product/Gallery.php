@@ -53,7 +53,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * {@inheritdoc}
      */
-    public function getConnection() {
+    public function getConnection()
+    {
         return $this->metadata->getEntityConnection();
     }
 
@@ -80,9 +81,10 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $mainTableAlias = $this->getMainTableAlias();
         $select = $this->getConnection()->select()
             ->from(
-                [$mainTableAlias => $this->getTable($tableNameAlias)], $cols
+                [$mainTableAlias => $this->getTable($tableNameAlias)],
+                $cols
             )->where(
-                $mainTableAlias . '.value_id IN(?)',
+                $mainTableAlias.'.value_id IN(?)',
                 $ids
             );
         if (null !== $storeId) {

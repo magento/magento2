@@ -95,10 +95,11 @@ class StoreViewService
         }
         $select = $this->connection->select()
             ->from(['e' => $attribute->getEntity()->getEntityTable()], [])
-            ->join(['e_attr' => $attribute->getBackendTable()],
+            ->join(
+                ['e_attr' => $attribute->getBackendTable()],
                 "e.{$linkFieldName} = e_attr.{$linkFieldName}",
-                'store_id')
-            ->where('e_attr.attribute_id = ?', $attribute->getId())
+                'store_id'
+            )->where('e_attr.attribute_id = ?', $attribute->getId())
             ->where('e.entity_id = ?', $entityId);
 
         return in_array($storeId, $this->connection->fetchCol($select));

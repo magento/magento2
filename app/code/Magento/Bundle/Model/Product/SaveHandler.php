@@ -8,7 +8,6 @@ namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Framework\Model\ResourceModel\Db\ProcessEntityRelationInterface;
 
 /**
  * Class SaveHandler

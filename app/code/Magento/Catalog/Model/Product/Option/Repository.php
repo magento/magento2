@@ -6,12 +6,12 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
-use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Entity\MetadataPool;
+
 /**
  * Class Repository
  */
