@@ -187,15 +187,41 @@ class DataProvider implements DataProviderInterface
         array $dimensions,
         EntityStorage $entityStorage
     ) {
-        $query = [];
-        $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
-//        $mergedEntityIds = implode(' ' . Query::QUERY_OPERATOR_OR . ' ', $entityStorage->getSource());
-//        $this->dimensionsBuilder->build($dimensions, $query);
-//        $query->addField($fieldName)
-//            ->createFilterQuery('interval')
-//            ->setQuery('id:(%1%)', [$mergedEntityIds]);
+        $entityIds = $entityStorage->getSource();
+        $fieldName = $this->fieldMapper->getFieldName('price');
+        $customerGroupId = $this->customerSession->getCustomerGroupId();
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $storeId = $this->storeManager->getStore()->getId();
+        $requestQuery = [
+            'index' => $this->clientConfig->getIndexName(),
+            'type' => $this->clientConfig->getEntityType(),
+            'body' => [
+                'fields' => [
+                    '_id',
+                    '_score',
+                ],
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            [
+                                'term' => [
+                                    'store_id' => $storeId,
+                                ],
+                            ],
+                            [
+                                'terms' => [
+                                    '_id' => $entityIds,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
-        return $this->intervalFactory->create(['query' => $query, 'fieldName' => $fieldName]);
+        $queryResult = $this->connectionManager->getConnection()
+            ->query($requestQuery);
+        return $this->intervalFactory->create(['query' => $queryResult, 'fieldName' => $fieldName]);
     }
 
     /**
@@ -203,6 +229,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getAggregation(
         BucketInterface $bucket,
+
         array $dimensions,
         $range,
         EntityStorage $entityStorage
