@@ -14,6 +14,9 @@ use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 
+/**
+ * Class DeleteHandler
+ */
 class DeleteHandler
 {
     /**
@@ -36,6 +39,14 @@ class DeleteHandler
      */
     protected $linkResource;
 
+    /**
+     * DeleteHandler constructor.
+     *
+     * @param MetadataPool $metadataPool
+     * @param ProductRepositoryInterface $productRepository
+     * @param Link $linkResource
+     * @param LinkTypeProvider $linkTypeProvider
+     */
     public function __construct(
         MetadataPool $metadataPool,
         ProductRepositoryInterface $productRepository,
