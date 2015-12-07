@@ -52,6 +52,9 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
         return $connection->fetchAll($select);
     }
 
+    /**
+     * @return string
+     */
     protected function getProductIdFieldName()
     {
         $table = $this->getTable('catalog_product_entity');
