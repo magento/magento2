@@ -9,6 +9,7 @@ use Magento\Framework\Communication\ConfigInterface as Config;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Converts Communication config from \DOMDocument to array
@@ -28,17 +29,25 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $booleanUtils;
 
     /**
+     * @var TypeProcessor
+     */
+    private $typeProcessor;
+
+    /**
      * Initialize dependencies
      *
      * @param MethodsMap $methodsMap
      * @param BooleanUtils $booleanUtils
+     * @param TypeProcessor $typeProcessor
      */
     public function __construct(
         MethodsMap $methodsMap,
-        BooleanUtils $booleanUtils
+        BooleanUtils $booleanUtils,
+        TypeProcessor $typeProcessor
     ) {
         $this->methodsMap = $methodsMap;
         $this->booleanUtils = $booleanUtils;
+        $this->typeProcessor = $typeProcessor;
     }
 
     /**
@@ -202,7 +211,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
         $requestSchema = $topicAttributes->getNamedItem('request')->nodeValue;
         try {
-            $this->methodsMap->getMethodsMap($requestSchema);
+            $this->validateType($requestSchema);
         } catch (\Exception $e) {
             throw new \LogicException(
                 sprintf(
@@ -230,7 +239,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
         $responseSchema = $topicAttributes->getNamedItem('response')->nodeValue;
         try {
-            $this->methodsMap->getMethodsMap($responseSchema);
+            $this->validateType($responseSchema);
         } catch (\Exception $e) {
             throw new \LogicException(
                 sprintf(
@@ -301,5 +310,26 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             );
         }
         return [$className, $methodName];
+    }
+
+    /**
+     * Ensure that specified type is either a simple type or a valid service data type.
+     *
+     * @param string $typeName
+     * @return $this
+     * @throws \Exception In case when type is invalid
+     */
+    protected function validateType($typeName)
+    {
+        if ($this->typeProcessor->isTypeSimple($typeName)) {
+            return $this;
+        }
+        if ($this->typeProcessor->isArrayType($typeName)) {
+            $arrayItemType = $this->typeProcessor->getArrayItemType($typeName);
+            $this->methodsMap->getMethodsMap($arrayItemType);
+        } else {
+            $this->methodsMap->getMethodsMap($typeName);
+        }
+        return $this;
     }
 }
