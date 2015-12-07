@@ -52,12 +52,14 @@ class EnvValidator
      */
     public function validate($configData)
     {
-        foreach ($configData as $topicName => $configDataItem) {
-            $this->validateTopicName($configDataItem, $topicName);
-            $this->validateTopic($configDataItem, $topicName);
-            $this->validateTopicResponseHandler($configDataItem);
-            $this->validateRequestSchema($configDataItem);
-            $this->validateResponseSchema($configDataItem);
+        if (isset($configData[ConfigInterface::TOPICS])) {
+            foreach ($configData[ConfigInterface::TOPICS] as $topicName => $configDataItem) {
+                $this->validateTopicName($configDataItem, $topicName);
+                $this->validateTopic($configDataItem, $topicName);
+                $this->validateTopicResponseHandler($configDataItem);
+                $this->validateRequestSchema($configDataItem);
+                $this->validateResponseSchema($configDataItem);
+            }
         }
     }
 
