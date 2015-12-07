@@ -13,23 +13,6 @@
 @import 'module/_focus.less';
 @import 'module/_fullscreen.less';
 
-.fotorama_spin {
-    display: none;
-    &.fotorama_spinner {
-        display: block;
-        width: 64px;
-        height: 64px;
-        background-image: url('@{baseDir}../images/loader-1.gif');
-        bottom: 0;
-        left: 0;
-        margin: auto;
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: @z-index-1;
-    }
-}
-
 .fotorama__zoom-in,
 .fotorama__zoom-out {
     display: none;
@@ -983,7 +966,7 @@
 .gallery-placeholder {
     .loading-mask {
         padding: 0 0 50%;
-        position: absolute;
+        position: static;
     }
     .loader img {
       position: absolute;
@@ -1003,3 +986,20 @@
     }
 }
 
+// Styles for spinner in gallery.
+.fotorama__spinner {
+    display: none;
+    width: @fotorama-spinner-size;
+    height: @fotorama-spinner-size;
+    background-image: url('@{baseDir}../images/loader-1.gif');
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: @z-index-1;
+    &.fotorama__spinner--show {
+        display: block;
+    }
+}
