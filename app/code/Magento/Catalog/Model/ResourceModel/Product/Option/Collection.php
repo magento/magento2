@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Option;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Catalog product options collection
  *
@@ -12,6 +14,11 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Option;
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
     /**
      * Store manager
      *
@@ -43,11 +50,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $optionValueCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_optionValueCollectionFactory = $optionValueCollectionFactory;
         $this->_storeManager = $storeManager;
+        $this->metadataPool = $metadataPool;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -189,7 +198,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             foreach ($values as $value) {
                 $optionId = $value->getOptionId();
                 if ($this->getItemById($optionId)) {
+                    // @TODO fix with new storing mechanizm
                     $this->getItemById($optionId)->addValue($value);
+                    $value->setId(null);
                     $value->setOption($this->getItemById($optionId));
                 }
             }
@@ -219,6 +230,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         return $this;
     }
 
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+        $this->getSelect()->join(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf(
+                'cpe.%s = main_table.product_id',
+                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+            ),
+            []
+        );
+    }
+
+
     /**
      * Add is_required filter to select
      *
@@ -227,7 +252,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addRequiredFilter($required = true)
     {
-        $this->addFieldToFilter('main_table.is_require', (string)$required);
+        $this->addFieldToFilter('main_table.is_require', (int)$required);
         return $this;
     }
 

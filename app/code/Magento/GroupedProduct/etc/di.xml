@@ -84,4 +84,21 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool">
+        <arguments>
+            <argument name="relationActions" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="create" xsi:type="array">
+                        <item name="GroupedProductCreator" xsi:type="string">Magento\GroupedProduct\Model\ResourceModel\Product\Link\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="GroupedProductUpdater" xsi:type="string">Magento\GroupedProduct\Model\ResourceModel\Product\Link\SaveHandler</item>
+                    </item>
+                    <item name="delete" xsi:type="array">
+                        <item name="GroupedProductUpdater" xsi:type="string">Magento\GroupedProduct\Model\ResourceModel\Product\Link\DeleteHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

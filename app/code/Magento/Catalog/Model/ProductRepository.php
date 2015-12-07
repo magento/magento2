@@ -135,6 +135,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Gallery\Processor
+     */
+    protected $mediaGalleryProcessor;
+
+    /**
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -155,6 +160,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -177,7 +183,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ImageContentInterfaceFactory $contentFactory,
         MimeTypeExtensionMap $mimeTypeExtensionMap,
         ImageProcessorInterface $imageProcessor,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -199,6 +206,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->mimeTypeExtensionMap = $mimeTypeExtensionMap;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->mediaGalleryProcessor = $mediaGalleryProcessor;
     }
 
     /**
@@ -464,13 +472,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $relativeFilePath = $this->imageProcessor->processImageContent($mediaTmpPath, $contentDataObject);
         $tmpFilePath = $mediaConfig->getTmpMediaShortUrl($relativeFilePath);
 
-        /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Media $galleryAttributeBackend */
-        $galleryAttributeBackend = $product->getGalleryAttributeBackend();
-        if ($galleryAttributeBackend == null) {
+        if (!$product->hasGalleryAttribute()) {
             throw new StateException(__('Requested product does not support images.'));
         }
 
-        $imageFileUri = $galleryAttributeBackend->addImage(
+        $imageFileUri = $this->mediaGalleryProcessor->addImage(
             $product,
             $tmpFilePath,
             isset($newEntry['types']) ? $newEntry['types'] : [],
@@ -478,7 +484,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             isset($newEntry['disabled']) ? $newEntry['disabled'] : true
         );
         // Update additional fields that are still empty after addImage call
-        $galleryAttributeBackend->updateImage(
+        $this->mediaGalleryProcessor->updateImage(
             $product,
             $imageFileUri,
             [
@@ -527,14 +533,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $newEntries = $mediaGalleryEntries;
         }
 
-        /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Media $galleryAttributeBackend */
-        $galleryAttributeBackend = $product->getGalleryAttributeBackend();
-        $galleryAttributeBackend->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
+        $this->mediaGalleryProcessor->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
         $images = $product->getMediaGallery('images');
         if ($images) {
             foreach ($images as $image) {
                 if (!isset($image['removed']) && !empty($image['types'])) {
-                    $galleryAttributeBackend->setMediaAttribute($product, $image['types'], $image['file']);
+                    $this->mediaGalleryProcessor->setMediaAttribute($product, $image['types'], $image['file']);
                 }
             }
         }

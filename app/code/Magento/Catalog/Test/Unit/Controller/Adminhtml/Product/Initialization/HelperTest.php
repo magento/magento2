@@ -103,7 +103,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'setProductOptions',
                 'setCanSaveCustomOptions',
                 '__sleep',
-                '__wakeup'
+                '__wakeup',
+                'getSku'
             ],
             [],
             '',
@@ -131,20 +132,32 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->storeMock));
 
         $this->jsHelperMock = $this->getMock('\Magento\Backend\Helper\Js', [], [], '', false);
+        $customOptionFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $customOption = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->helper = new Helper(
             $this->requestMock,
             $this->storeManagerMock,
             $this->stockFilterMock,
             $this->productLinksMock,
             $this->jsHelperMock,
-            $this->dateFilterMock
+            $this->dateFilterMock,
+            $customOptionFactory
         );
 
         $productData = [
             'stock_data' => ['stock_data'],
-            'options' => ['option1', 'option2']
+            'options' => ['option1' => ['is_delete' => true], 'option2' => ['is_delete' => false]]
         ];
-
+        $customOptionFactory->expects($this->once())->method('create')
+            ->with(['data' => ['is_delete' => false]])
+            ->willReturn($customOption);
+        $customOption->expects($this->once())->method('setProductSku');
+        $customOption->expects($this->once())->method('setOptionId');
         $attributeNonDate = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $attributeDate = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
 
@@ -233,6 +246,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('addData')
             ->with($productData);
+        $this->productMock->expects($this->once())
+            ->method('getSku')->willReturn('sku');
 
         $this->productMock->expects($this->once())
             ->method('setWebsiteIds')
@@ -293,13 +308,17 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     public function testMergeProductOptions($productOptions, $defaultOptions, $expectedResults)
     {
         $this->jsHelperMock = $this->getMock('\Magento\Backend\Helper\Js', [], [], '', false);
+        $customOptionFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->helper = new Helper(
             $this->requestMock,
             $this->storeManagerMock,
             $this->stockFilterMock,
             $this->productLinksMock,
             $this->jsHelperMock,
-            $this->dateFilterMock
+            $this->dateFilterMock,
+            $customOptionFactory
         );
         $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
         $this->assertEquals($expectedResults, $result);

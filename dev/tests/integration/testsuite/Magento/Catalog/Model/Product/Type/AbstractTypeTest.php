@@ -70,10 +70,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSetAttributes()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
         $attributes = $this->_model->getSetAttributes($product);
         $this->assertArrayHasKey('sku', $attributes);
@@ -102,10 +102,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEditableAttributes()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
         $this->assertArrayNotHasKey('_cache_editable_attributes', $product->getData());
         $attributes = $this->_model->getEditableAttributes($product);
@@ -166,7 +166,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertTrue($this->_model->isSalable($product));
 
-        $product->load(1);
+        $product->loadByAttribute('sku', 'simple');
         // fixture
         $this->assertTrue((bool)$this->_model->isSalable($product));
     }
@@ -203,10 +203,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareForCartOptionsException()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
         $this->assertEquals(
             'Please specify product\'s required option(s).',
@@ -238,10 +238,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckProductBuyStateException()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
         $this->_model->checkProductBuyState($product);
     }
@@ -291,11 +291,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
         $product->setData('attribute_with_invalid_applyto', 'value');
         $this->_model->beforeSave($product);
@@ -308,10 +307,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSku()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
         $this->assertEquals('simple', $this->_model->getSku($product));
     }

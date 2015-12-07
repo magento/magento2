@@ -147,7 +147,7 @@ class Date extends AbstractElement
      */
     public function getElementHtml()
     {
-        $this->addClass('input-text');
+        $this->addClass('input-text admin__control-text');
         $dateFormat = $this->getDateFormat() ?: $this->getFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {

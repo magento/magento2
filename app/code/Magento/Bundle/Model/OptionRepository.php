@@ -61,6 +61,11 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Product\Type $type
      * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
@@ -80,8 +85,10 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement,
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
         \Magento\Bundle\Model\Product\LinksList $linkList,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
+        $this->metadataPool = $metadataPool;
         $this->productRepository = $productRepository;
         $this->type = $type;
         $this->optionFactory = $optionFactory;
@@ -166,8 +173,12 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Bundle\Api\Data\OptionInterface $option
     ) {
-        $option->setStoreId($this->storeManager->getStore()->getId());
-        $option->setParentId($product->getId());
+        $option->getResource()->removeOptionSelections($option->getOptionId());
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+
+
+        $option->setStoreId($product->getStoreId());
+        $option->setParentId($product->getData($metadata->getLinkField()));
 
         $optionId = $option->getOptionId();
         if (!$optionId) {

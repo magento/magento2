@@ -5,19 +5,43 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use Magento\Downloadable\Api\Data\SampleInterfaceFactory as SampleFactory;
+use Magento\Downloadable\Api\Data\LinkInterfaceFactory as LinkFactory;
+use Magento\Framework\App\RequestInterface;
+
+/**
+ * Class Downloadable
+ */
 class Downloadable
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @var SampleFactory
      */
-    public function __construct(\Magento\Framework\App\RequestInterface $request)
-    {
+    protected $sampleFactory;
+
+    /**
+     * @var LinkFactory
+     */
+    protected $linkFactory;
+
+    /**
+     * @param RequestInterface $request
+     * @param SampleFactory $sampleFactory
+     * @param LinkFactory $linkFactory
+     */
+    public function __construct(
+        RequestInterface $request,
+        SampleFactory $sampleFactory,
+        LinkFactory $linkFactory
+    ) {
         $this->request = $request;
+        $this->linkFactory = $linkFactory;
+        $this->sampleFactory = $sampleFactory;
     }
 
     /**
@@ -35,6 +59,64 @@ class Downloadable
     ) {
         if ($downloadable = $this->request->getPost('downloadable')) {
             $product->setDownloadableData($downloadable);
+            $extension = $product->getExtensionAttributes();
+            if (isset($downloadable['link']) && is_array($downloadable['link'])) {
+                $links = [];
+                foreach ($downloadable['link'] as $linkData) {
+                    if (!$linkData || (isset($linkData['is_delete']) && (bool)$linkData['is_delete'])) {
+                        continue;
+                    } else {
+                        unset($linkData['link_id']);
+                        // TODO: need to implement setLinkFileContent()
+                        $link = $this->linkFactory->create(['data' => $linkData]);
+                        $link->setId(null);
+                        $link->setSampleType($linkData['sample']['type']);
+                        $link->setSampleFileData($linkData['sample']['file']);
+                        $link->setSampleUrl($linkData['sample']['url']);
+                        $link->setLinkType($linkData['type']);
+                        $link->setStoreId($product->getStoreId());
+                        $link->setWebsiteId($product->getStore()->getWebsiteId());
+                        $link->setProductWebsiteIds($product->getWebsiteIds());
+                        if (!$link->getSortOrder()) {
+                            $link->setSortOrder(1);
+                        }
+                        if (null === $link->getPrice()) {
+                            $link->setPrice(0);
+                        }
+                        if ($link->getIsUnlimited()) {
+                            $link->setNumberOfDownloads(0);
+                        }
+                        $links[] = $link;
+                    }
+                }
+                $extension->setDownloadableProductLinks($links);
+            }
+            if (isset($downloadable['sample']) && is_array($downloadable['sample'])) {
+                $samples = [];
+                foreach ($downloadable['sample'] as $sampleData) {
+                    if (!$sampleData || (isset($sampleData['is_delete']) && (bool)$sampleData['is_delete'])) {
+                        continue;
+                    } else {
+                        unset($sampleData['sample_id']);
+                        $sample = $this->sampleFactory->create(['data' => $sampleData]);
+                        $sample->setId(null);
+                        $sample->setStoreId($product->getStoreId());
+                        $sample->setSampleType($sampleData['type']);
+                        $sample->setSampleUrl($sampleData['sample_url']);
+                        if (!$sample->getSortOrder()) {
+                            $sample->setSortOrder(1);
+                        }
+                        $samples[] = $sample;
+                    }
+                }
+                $extension->setDownloadableProductSamples($samples);
+            }
+            $product->setExtensionAttributes($extension);
+            if ($product->getLinksPurchasedSeparately()) {
+                $product->setTypeHasRequiredOptions(true)->setRequiredOptions(true);
+            } else {
+                $product->setTypeHasRequiredOptions(false)->setRequiredOptions(false);
+            }
         }
         return $product;
     }

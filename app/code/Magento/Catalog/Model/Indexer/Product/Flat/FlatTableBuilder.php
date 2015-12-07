@@ -5,13 +5,20 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Class FlatTableBuilder
  */
 class FlatTableBuilder
 {
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
     /**
      * Path to maximum available amount of indexes for flat indexer
      */
@@ -48,19 +55,22 @@ class FlatTableBuilder
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param TableDataInterface $tableData
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData
+        \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData,
+        MetadataPool $metadataPool
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->_connection = $resource->getConnection();
         $this->_config = $config;
         $this->_storeManager = $storeManager;
         $this->_tableData = $tableData;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -194,6 +204,7 @@ class FlatTableBuilder
      */
     protected function _fillTemporaryFlatTable(array $tables, $storeId, $valueFieldSuffix)
     {
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $this->_connection->select();
         $temporaryFlatTableName = $this->_getTemporaryTableName(
             $this->_productIndexerHelper->getFlatTableName($storeId)
@@ -212,7 +223,7 @@ class FlatTableBuilder
         $status = $this->_productIndexerHelper->getAttribute('status');
         $statusTable = $this->_getTemporaryTableName($status->getBackendTable());
         $statusConditions = [
-            'e.entity_id = dstatus.entity_id',
+            sprintf('e.%s = dstatus.%s', $linkField, $linkField),
             'dstatus.store_id = ' . (int)$storeId,
             'dstatus.attribute_id = ' . (int)$status->getId(),
         ];
@@ -244,7 +255,7 @@ class FlatTableBuilder
 
             $select->joinLeft(
                 $temporaryTableName,
-                'e.entity_id = ' . $temporaryTableName . '.entity_id',
+                "e.${linkField} = " . $temporaryTableName . ".${linkField}",
                 $columnsNames
             );
             $allColumns = array_merge($allColumns, $columnsNames);
@@ -258,7 +269,7 @@ class FlatTableBuilder
             if (!empty($columnValueNames)) {
                 $select->joinLeft(
                     $temporaryValueTableName,
-                    'e.entity_id = ' . $temporaryValueTableName . '.entity_id',
+                    "e.${linkField} = " . $temporaryValueTableName . ".${linkField}",
                     $columnValueNames
                 );
                 $allColumns = array_merge($allColumns, $columnValueNames);
@@ -287,13 +298,13 @@ class FlatTableBuilder
         $temporaryFlatTableName = $this->_getTemporaryTableName(
             $this->_productIndexerHelper->getFlatTableName($storeId)
         );
-
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         foreach ($tables as $tableName => $columns) {
             foreach ($columns as $attribute) {
                 /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
                 $attributeCode = $attribute->getAttributeCode();
                 if ($attribute->getBackend()->getType() != 'static') {
-                    $joinCondition = 't.entity_id = e.entity_id' .
+                    $joinCondition = sprintf('t.%s = e.%s', $linkField, $linkField) .
                         ' AND t.attribute_id=' .
                         $attribute->getId() .
                         ' AND t.store_id = ' .

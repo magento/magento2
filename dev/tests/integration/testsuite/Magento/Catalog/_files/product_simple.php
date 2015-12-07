@@ -4,9 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/** @var \Magento\TestFramework\ObjectManager $objectManager */
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$objectManager->removeSharedInstance('Magento\Catalog\Model\ProductRepository');
+$objectManager->removeSharedInstance('Magento\Catalog\Model\CategoryLinkRepository');
+$objectManager->removeSharedInstance('Magento\Catalog\Model\Product\Option\Repository');
+$objectManager->removeSharedInstance('Magento\Catalog\Model\Product\Option\SaveHandler');
+
+/** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
+$categoryLinkManagement = $objectManager->create('Magento\Catalog\Api\CategoryLinkManagementInterface');
+
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create('Magento\Catalog\Model\Product');
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(1)
@@ -46,7 +56,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setMetaDescription('meta description')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setCategoryIds([2])
     ->setStockData(
         [
             'use_config_manage_stock'   => 1,
@@ -55,12 +64,9 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             'is_in_stock'               => 1,
         ]
     )
-    ->setCanSaveCustomOptions(true)
     ->setProductOptions(
         [
             [
-                'id'        => 1,
-                'option_id' => 0,
                 'previous_group' => 'text',
                 'title'     => 'Test Field',
                 'type'      => 'field',
@@ -72,8 +78,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
                 'max_characters' => 100,
             ],
             [
-                'id'        => 2,
-                'option_id' => 0,
                 'previous_group' => 'date',
                 'title'     => 'Test Date and Time',
                 'type'      => 'date_time',
@@ -84,8 +88,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
                 'sku'       => '2-date',
             ],
             [
-                'id'        => 3,
-                'option_id' => 0,
                 'previous_group' => 'select',
                 'title'     => 'Test Select',
                 'type'      => 'drop_down',
@@ -109,8 +111,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
                 ]
             ],
             [
-                'id'        => 4,
-                'option_id' => 0,
                 'previous_group' => 'select',
                 'title'     => 'Test Radio',
                 'type'      => 'radio',
@@ -132,8 +132,28 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
                         'sku'           => '4-2-radio',
                     ],
                 ]
-            ],
+            ]
         ]
     )
-    ->setHasOptions(true)
-    ->save();
+    ->setCanSaveCustomOptions(true)
+    ->setHasOptions(true);
+
+$options = [];
+
+/** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
+$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+
+foreach ($product->getProductOptions() as $option) {
+    /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option */
+    $option = $customOptionFactory->create(['data' => $option]);
+    $option->setProductSku($product->getSku());
+
+    $options[] = $option;
+}
+
+$product->setOptions($options)->save();
+
+$categoryLinkManagement->assignProductToCategories(
+    $product->getSku(),
+    [2]
+);
