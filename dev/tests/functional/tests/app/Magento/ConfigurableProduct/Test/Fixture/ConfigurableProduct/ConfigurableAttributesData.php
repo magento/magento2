@@ -275,6 +275,7 @@ class ConfigurableAttributesData extends DataSource
                         'qty' => $quantityAndStockStatus['qty'],
                     ],
                     'weight' => $product->getWeight(),
+                    'price' => $product->getPrice()
                 ];
                 $this->variationsMatrix[$key] = array_replace_recursive($this->variationsMatrix[$key], $productData);
             } else {
@@ -319,13 +320,13 @@ class ConfigurableAttributesData extends DataSource
 
         foreach ($variationsMatrix as $rowKey => $row) {
             $randIsolation = mt_rand(1, 100);
-            $row['name'] .= ' ' . $randIsolation;
-            $row['sku'] .= '_' . $randIsolation;
+            $rowName = $row['name'];
+            $rowSku = $row['sku'];
             $index = 1;
             foreach ($attribute['options'] as $optionKey => $option) {
                 $compositeKey = "{$attributeKey}:{$optionKey}";
-                $row['name'] .= ' ' . $index;
-                $row['sku'] .= '_' . $index;
+                $row['name'] = $rowName . ' ' . $randIsolation . ' ' . $index;
+                $row['sku'] = $rowSku . '_' . $randIsolation . '_' . $index;
                 $row['price'] = $option['pricing_value'];
                 $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
                 $result[$newRowKey] = $row;
