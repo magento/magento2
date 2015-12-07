@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Link;
 
-
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
@@ -15,6 +14,9 @@ use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Class SaveHandler
+ */
 class SaveHandler
 {
     /**
@@ -42,6 +44,15 @@ class SaveHandler
      */
     protected $linkResource;
 
+    /**
+     * SaveHandler constructor.
+     *
+     * @param MetadataPool $metadataPool
+     * @param ProductRepositoryInterface $productRepository
+     * @param Link $linkResource
+     * @param DataObjectProcessor $dataObjectProcessor
+     * @param LinkTypeProvider $linkTypeProvider
+     */
     public function __construct(
         MetadataPool $metadataPool,
         ProductRepositoryInterface $productRepository,
