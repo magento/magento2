@@ -454,7 +454,8 @@ class Interval implements IntervalInterface
     }
 
     /**
-     * @param array $documents
+     * @param array $hits
+     * 
      * @return float[]
      */
     private function arrayValuesToFloat($hits)
