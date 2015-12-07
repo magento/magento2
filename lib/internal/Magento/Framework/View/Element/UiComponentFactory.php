@@ -165,7 +165,7 @@ class UiComponentFactory extends DataObject
             }
             $components = array_filter($components);
             $componentArguments['components'] = $components;
-            $componentArguments['data'][self::CHILDREN_FROM_META] = true;
+            $componentArguments['data'][self::IMPORT_CHILDREN_FROM_META] = true;
 
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create(
