@@ -8,7 +8,7 @@ namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
 /**
  * Unit test for plugin for catalog product gallery read handler.
  */
-class ReadHandler extends \PHPUnit_Framework_TestCase
+class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Subject of testing.

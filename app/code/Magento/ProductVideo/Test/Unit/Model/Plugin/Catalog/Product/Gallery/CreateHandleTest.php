@@ -8,7 +8,7 @@ namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
 /**
  * Unit test for plugin for catalog product gallery Create handler.
  */
-class CreateHandler extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Subject of testing.
