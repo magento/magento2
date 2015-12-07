@@ -204,6 +204,9 @@ define([
             // selector of price wrapper (need to know where set price)
             selectorProductPrice: '[data-role=priceBox]',
 
+            //selector of product images gallery wrapper
+            mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
+
             // number of controls to show (false or zero = show all)
             numberToShow: false,
 
@@ -865,13 +868,16 @@ define([
          * @param {Boolean} isProductViewExist
          */
         updateBaseImage: function (images, context, isProductViewExist) {
-            var justAnImage = images[0];
+            var justAnImage = images[0],
+                gallery = context.find(this.options.mediaGallerySelector).data('gallery');
 
             if (isProductViewExist) {
-                context
-                    .find('[data-gallery-role=gallery-placeholder]')
-                    .data('gallery')
-                    .updateData(images);
+                if (this.options.onlyMainImg) {
+                    gallery.updateDataByIndex(0, images[0]);
+                    gallery.seek(1);
+                } else {
+                    gallery.updateData(images);
+                }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
@@ -907,4 +913,6 @@ define([
             });
         }
     });
+
+    return $.custom.SwatchRenderer;
 });
