@@ -48,7 +48,7 @@ class Exchange implements ExchangeInterface
         $callback = function ($response) use ($correlationId, &$responseBody, $channel) {
             if ($response->get('correlation_id') == $correlationId) {
                 $responseBody = $response->body;
-                $channel->basic_ack($response->delivery_info['delivery_tag']);
+                $channel->basic_ack($response->get('delivery_tag'));
             }
         };
         if ($envelope->getProperties()['reply_to']) {

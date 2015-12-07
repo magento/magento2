@@ -48,11 +48,6 @@ class Topology
     private $communicationConfig;
 
     /**
-     * @var array
-     */
-    private $queueConfigData;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
@@ -138,7 +133,7 @@ class Topology
     /**
      * Check whether the topic is in synchronous mode
      *
-     * @param $topicName
+     * @param string $topicName
      * @return bool
      */
     private function isSynchronousModeTopic($topicName)
