@@ -16,7 +16,6 @@ use Magento\Framework\DB\Helper\Mysql\Fulltext;
  */
 class SynonymReader extends AbstractDb
 {
-
     /**
      * @var Fulltext $fullTextSelect
      */

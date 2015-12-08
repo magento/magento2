@@ -23,7 +23,6 @@ use Magento\Framework\Registry;
  * @method int getStoreId()
  * @method \Magento\Search\Model\SynonymReader setSynonyms(string $value)
  * @method string getSynonyms()
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SynonymReader extends AbstractModel
 {
@@ -46,7 +45,7 @@ class SynonymReader extends AbstractModel
      *
      * @var StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * Construct
@@ -66,7 +65,7 @@ class SynonymReader extends AbstractModel
         DbCollection $resourceCollection = null,
         array $data = []
     ) {
-        $this->_storeManager = $storeManager;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -115,7 +114,7 @@ class SynonymReader extends AbstractModel
      */
     public function getStoreViewId()
     {
-        $storeId = $this->_storeManager->getStore()->getId();
+        $storeId = $this->storeManager->getStore()->getId();
         return $storeId;
     }
 }
