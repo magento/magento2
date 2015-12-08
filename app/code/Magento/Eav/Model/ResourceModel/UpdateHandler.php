@@ -102,6 +102,8 @@ class UpdateHandler
      * @param array $data
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute($entityType, $data)
     {

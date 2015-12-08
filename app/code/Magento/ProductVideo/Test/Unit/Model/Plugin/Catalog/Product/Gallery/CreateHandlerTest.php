@@ -182,6 +182,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testBeforeExecute()
     {
         $mediaData = [
