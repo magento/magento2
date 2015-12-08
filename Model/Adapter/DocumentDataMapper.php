@@ -158,7 +158,7 @@ class DocumentDataMapper
             $storeId,
             [$productId => $productId]
         );
-        if (count($productIndexData[$productId])) {
+        if (count($productIndexData)) {
             $productIndexData = $this->resourceIndex->getFullProductIndexData([$productId]);
         }
 
