@@ -8,6 +8,10 @@
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Attribute;
 
+/**
+ * Class CollectionTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
