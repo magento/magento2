@@ -160,8 +160,11 @@ class Request extends \Magento\Framework\Object
      */
     protected function _getOrderData(\Magento\Sales\Model\Order $order)
     {
+        // PayPal denied transaction with 0 amount
+        $subtotal = $order->getBaseSubtotal() ? : $order->getPayment()->getBaseAmountAuthorized();
+
         $request = [
-            'subtotal' => $this->_formatPrice($order->getBaseSubtotal()),
+            'subtotal' => $this->_formatPrice($subtotal),
             'total' => $this->_formatPrice($order->getPayment()->getBaseAmountAuthorized()),
             'tax' => $this->_formatPrice($order->getBaseTaxAmount()),
             'shipping' => $this->_formatPrice($order->getBaseShippingAmount()),
