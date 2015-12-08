@@ -178,7 +178,7 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType(
             'array',
-            $this->model->map($productId, $data, $storeId)
+            $this->model->map($productId, $productData, $storeId)
         );
     }
 
