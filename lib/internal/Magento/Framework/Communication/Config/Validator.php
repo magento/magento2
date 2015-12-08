@@ -25,7 +25,7 @@ class Validator
 
     /**
      * Initialize dependencies.
-
+     *
      * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
      */
