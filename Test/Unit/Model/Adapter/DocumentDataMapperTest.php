@@ -37,6 +37,11 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
     private $attributeContainerMock;
 
     /**
+     * @var Index|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceIndex;
+
+    /**
      * @var FieldMapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fieldMapperMock;
@@ -76,6 +81,21 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->resourceIndex = $this->getMockBuilder('Magento\Elasticsearch\Model\ResourceModel\Index')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getPriceIndexData',
+                'getFullCategoryProductIndexData',
+                'getFullProductIndexData',
+            ])
+            ->getMock();
+        $this->resourceIndex->expects($this->any())
+            ->method('getPriceIndexData')
+            ->willReturn([]);
+        $this->resourceIndex->expects($this->any())
+            ->method('getFullCategoryProductIndexData')
+            ->willReturn([]);
+
         $this->fieldMapperMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapper')
             ->setMethods(['getFieldName'])
             ->disableOriginalConstructor()
@@ -104,6 +124,7 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
             [
                 'builder' => $this->builderMock,
                 'attributeContainer' => $this->attributeContainerMock,
+                'resourceIndex' => $this->resourceIndex,
                 'fieldMapper' => $this->fieldMapperMock,
                 'dateTime' => $this->dateTimeMock,
                 'localeDate' => $this->localeDateMock,
@@ -117,16 +138,13 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
      * Tests modules data returns array
      *
      * @dataProvider mapProvider
-     * @param array $productData
      * @param int $productId
+     * @param array $productData
      * @param int $storeId
-     * @param array $productPriceData
-     * @param array $productCategoryData
-     * @param bool $emptyData
      *
      * @return array
      */
-    public function testGetMap($productData, $productId, $storeId, $productPriceData, $productCategoryData, $emptyData)
+    public function testGetMap($productId, $productData, $storeId)
     {
         $this->attributeContainerMock->expects($this->any())->method('getAttribute')->will(
             $this->returnValue($this->attributeContainerMock)
@@ -143,9 +161,6 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->any())->method('getValue')->will(
             $this->returnValue('Europe/London')
         );
-        $this->dateTimeMock->expects($this->any())->method('isEmptyDate')->will(
-            $this->returnValue($emptyData)
-        );
         $this->builderMock->expects($this->any())->method('addField')->will(
             $this->returnValue([])
         );
@@ -156,17 +171,14 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
             $this->returnValue([])
         );
 
-        $store = $this->getMockBuilder('\Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteId'])
-            ->getMock();
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($store);
-        $store->expects($this->once())->method('getWebsiteId')->willReturn('website_id');
+        $data = [$productId => $productData];
+        $this->resourceIndex->expects($this->once())
+            ->method('getFullProductIndexData')
+            ->willReturn($data);
 
         $this->assertInternalType(
             'array',
-            $this->model->map($productData, $productId, $storeId, $productPriceData, $productCategoryData)
+            $this->model->map($productId, $productData, $storeId)
         );
     }
 
@@ -178,73 +190,34 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
+                '1',
                 ['price'=>'11','created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
-                '1',
-                '1',
-                ['1'=>['11','11','11','11']],
-                ['1' => ['2','1']],
-                true
+                '1'
             ],
             [
+                '1',
                 [
                     'tier_price'=>
                         [[
-                            'price_id'=>'1',
-                            'website_id'=>'1',
-                            'all_groups'=>'1',
-                            'cust_group'=>'1',
-                            'price_qty'=>'1',
-                            'website_price'=>'1',
-                            'price'=>'1'
-                        ]],
-                'created_at'=>'00-00-00 00:00:00'
-                ],
-                '1',
-                '1',
-                ['1'=>['11','11','11','11']],
-                ['1' => ['2','1']],
-                true
-            ],
-            [
-                ['image'=>'11','created_at'=>'00-00-00 00:00:00'],
-                '1',
-                '1',
-                ['1'=>['11','11','11','11']],
-                ['1' => ['2','1']],
-                true
-            ],
-            [
-                [
-                    'image' => '1',
-                    'small_image' => '1',
-                    'thumbnail' => '1',
-                    'swatch_image' => '1',
-                    'media_gallery'=>
-                        [
-                            'images' =>
-                            [[
-                                'file'=>'1',
-                                'media_type'=>'image',
-                                'position'=>'1',
-                                'disabled'=>'1',
-                                'label'=>'1',
-                                'title'=>'1',
-                                'base_image'=>'1',
-                                'small_image'=>'1',
-                                'thumbnail'=>'1',
-                                'swatch_image'=>'1'
-                            ]]
-                        ]
-                        ,
+                             'price_id'=>'1',
+                             'website_id'=>'1',
+                             'all_groups'=>'1',
+                             'cust_group'=>'1',
+                             'price_qty'=>'1',
+                             'website_price'=>'1',
+                             'price'=>'1'
+                         ]],
                     'created_at'=>'00-00-00 00:00:00'
                 ],
-                '1',
-                '1',
-                ['1'=>['11','11','11','11']],
-                ['1' => ['2','1']],
-                true
+                '1'
             ],
             [
+                '1',
+                ['image'=>'11','created_at'=>'00-00-00 00:00:00'],
+                '1'
+            ],
+            [
+                '1',
                 [
                     'image' => '1',
                     'small_image' => '1',
@@ -254,47 +227,65 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
                         [
                             'images' =>
                                 [[
-                                    'file'=>'1',
-                                    'media_type'=>'video',
-                                    'position'=>'1',
-                                    'disabled'=>'1',
-                                    'label'=>'1',
-                                    'title'=>'1',
-                                    'base_image'=>'1',
-                                    'small_image'=>'1',
-                                    'thumbnail'=>'1',
-                                    'swatch_image'=>'1',
-                                    'video_title'=>'1',
-                                    'video_url'=>'1',
-                                    'video_description'=>'1',
-                                    'video_metadata'=>'1',
-                                    'video_provider'=>'1'
-                                ]]
+                                     'file'=>'1',
+                                     'media_type'=>'image',
+                                     'position'=>'1',
+                                     'disabled'=>'1',
+                                     'label'=>'1',
+                                     'title'=>'1',
+                                     'base_image'=>'1',
+                                     'small_image'=>'1',
+                                     'thumbnail'=>'1',
+                                     'swatch_image'=>'1'
+                                 ]]
                         ]
                     ,
                     'created_at'=>'00-00-00 00:00:00'
                 ],
-                '1',
-                '1',
-                ['1'=>['11','11','11','11']],
-                ['1' => ['2','1']],
-                true
+                '1'
             ],
             [
+                '1',
+                [
+                    'image' => '1',
+                    'small_image' => '1',
+                    'thumbnail' => '1',
+                    'swatch_image' => '1',
+                    'media_gallery'=>
+                        [
+                            'images' =>
+                                [[
+                                     'file'=>'1',
+                                     'media_type'=>'video',
+                                     'position'=>'1',
+                                     'disabled'=>'1',
+                                     'label'=>'1',
+                                     'title'=>'1',
+                                     'base_image'=>'1',
+                                     'small_image'=>'1',
+                                     'thumbnail'=>'1',
+                                     'swatch_image'=>'1',
+                                     'video_title'=>'1',
+                                     'video_url'=>'1',
+                                     'video_description'=>'1',
+                                     'video_metadata'=>'1',
+                                     'video_provider'=>'1'
+                                 ]]
+                        ]
+                    ,
+                    'created_at'=>'00-00-00 00:00:00'
+                ],
+                '1'
+            ],
+            [
+                '1',
                 ['quantity_and_stock_status'=>'11','created_at'=>'00-00-00 00:00:00'],
-                '1',
-                '1',
-                ['1'=>['11','11','11','11']],
-                ['1' => ['2','1']],
-                true
+                '1'
             ],
             [
+                '1',
                 ['price'=>'11','created_at'=>'1995-12-31 23:59:59','options'=>['value1','value2']],
-                '1',
-                '1',
-                ['1'=>['11','11','11','11']],
-                ['1' => ['2','1']],
-                false
+                '1'
             ]
         ];
     }
