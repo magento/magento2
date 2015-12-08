@@ -322,10 +322,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $sampleId = 1;
         $productId = 1;
         $productSku = 'simple';
-        $basePath = 'downloadable/samples/';
-        $baseTmpPath = 'tmp/downloadable/samples/';
         $sampleFile = '/s/a/sample.jpg';
-        $encodedFile = 'something';
         $sampleData = [
             'id' => $sampleId,
             'title' => 'Updated Title',

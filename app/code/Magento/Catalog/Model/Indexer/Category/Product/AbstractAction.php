@@ -367,7 +367,6 @@ abstract class AbstractAction
             \Magento\Catalog\Model\Product::ENTITY,
             'visibility'
         )->getId();
-        $productIdFieldName = $this->getProductIdFieldName();
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
@@ -512,8 +511,6 @@ abstract class AbstractAction
                 'visibility'
             )->getId();
 
-            $productIdFieldName = $this->getProductIdFieldName();
-
             $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
             $linkField = $metadata->getLinkField();
 
@@ -626,12 +623,5 @@ abstract class AbstractAction
                 );
             }
         }
-    }
-
-    protected function getProductIdFieldName()
-    {
-        $table = $this->getTable('catalog_product_entity');
-        $indexList = $this->connection->getIndexList($table);
-        return $indexList[$this->connection->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }

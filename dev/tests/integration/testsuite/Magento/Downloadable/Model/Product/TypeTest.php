@@ -189,11 +189,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             'sort_order' => '1',
             'title' => 'Updated downloadable link #1',
         ];
-        $expectedExtensionAttributes = [
-            'firstname' => 'firstname',
-            'lastname' => 'lastname',
-            'email' => 'admin@example.com'
-        ];
         $links = $product->getExtensionAttributes()->getDownloadableProductLinks();
 
         $this->assertNotEmpty($links);
