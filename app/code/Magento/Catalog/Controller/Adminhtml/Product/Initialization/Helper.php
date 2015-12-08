@@ -167,39 +167,22 @@ class Helper
         }
         $product = $this->productLinks->initializeLinks($product, $links);
         $productLinks = $product->getProductLinks();
-        if (isset($links['related']) && !$product->getRelatedReadonly()) {
-            foreach ($links['related'] as $linkId => $related) {
-                $linkProduct = $this->productRepository->getById($linkId);
-                $link = $this->productLinkFactory->create();
-                $link->setSku($product->getSku())
-                    ->setLinkedProductSku($linkProduct->getSku())
-                    ->setLinkType('related')
-                    ->setPosition(isset($related['position']) ? (int)$related['position'] : 0);
-                $productLinks[] = $link;
-            }
-        }
-
-        if (isset($links['upsell']) && !$product->getUpsellReadonly()) {
-            foreach ($links['upsell'] as $linkId => $related) {
-                $linkProduct = $this->productRepository->getById($linkId);
-                $link = $this->productLinkFactory->create();
-                $link->setSku($product->getSku())
-                    ->setLinkedProductSku($linkProduct->getSku())
-                    ->setLinkType('upsell')
-                    ->setPosition(isset($related['position']) ? (int)$related['position'] : 0);
-                $productLinks[] = $link;
-            }
-        }
-
-        if (isset($links['crosssell']) && !$product->getCrosssellReadonly()) {
-            foreach ($links['crosssell'] as $linkId => $related) {
-                $linkProduct = $this->productRepository->getById($linkId);
-                $link = $this->productLinkFactory->create();
-                $link->setSku($product->getSku())
-                    ->setLinkedProductSku($linkProduct->getSku())
-                    ->setLinkType('crosssell')
-                    ->setPosition(isset($related['position']) ? (int)$related['position'] : 0);
-                $productLinks[] = $link;
+        $linkTypes = [
+            'related' => $product->getRelatedReadonly(),
+            'upsell' => $product->getUpsellReadonly(),
+            'crosssell' => $product->getCrosssellReadonly()
+        ];
+        foreach ($linkTypes as $linkType => $readonly) {
+            if (isset($links[$linkType]) && !$readonly) {
+                foreach ($links[$linkType] as $linkId => $linkData) {
+                    $linkProduct = $this->productRepository->getById($linkId);
+                    $link = $this->productLinkFactory->create();
+                    $link->setSku($product->getSku())
+                        ->setLinkedProductSku($linkProduct->getSku())
+                        ->setLinkType($linkType)
+                        ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
+                    $productLinks[] = $link;
+                }
             }
         }
         $product->setProductLinks($productLinks);
