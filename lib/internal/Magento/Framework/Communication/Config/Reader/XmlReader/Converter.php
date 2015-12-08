@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Communication\Config;
+namespace Magento\Framework\Communication\Config\Reader\XmlReader;
 
 use Magento\Framework\Communication\ConfigInterface as Config;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Stdlib\BooleanUtils;
-use Magento\Framework\Communication\Config\Validator\XmlValidator;
+use Magento\Framework\Communication\Config\Reader\XmlReader\Validator;
 
 /**
  * Converts Communication config from \DOMDocument to array
@@ -29,7 +29,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $booleanUtils;
 
     /**
-     * @var XmlValidator
+     * @var Validator
      */
     private $xmlValidator;
 
@@ -38,12 +38,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param MethodsMap $methodsMap
      * @param BooleanUtils $booleanUtils
-     * @param XmlValidator $xmlValidator
+     * @param Validator $xmlValidator
      */
     public function __construct(
         MethodsMap $methodsMap,
         BooleanUtils $booleanUtils,
-        XmlValidator $xmlValidator
+        Validator $xmlValidator
     ) {
         $this->methodsMap = $methodsMap;
         $this->booleanUtils = $booleanUtils;
