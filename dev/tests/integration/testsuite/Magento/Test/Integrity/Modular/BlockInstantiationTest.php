@@ -30,7 +30,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     'Magento\Framework\App\Http\Context'
                 );
-                
+
                 $context->setValue(Context::CONTEXT_AUTH, false, false);
                 $context->setValue(
                     Context::CONTEXT_GROUP,
