@@ -41,8 +41,7 @@ class LimitExpression extends \Zend_Db_Expr
     }
 
     /**
-     * @return string
-     * @throws \Zend_Db_Adapter_Exception
+     * {@inheritdoc}
      */
     public function __toString()
     {

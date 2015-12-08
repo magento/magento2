@@ -72,6 +72,7 @@ class SaveHandler
      * @param object $entity
      * @return object
      * @throws CouldNotSaveException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entity)
     {
