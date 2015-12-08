@@ -73,6 +73,7 @@ class SaveHandler
     /**
      * @param string $entitySku
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
+     * @return void
      */
     protected function removeOptionLinks($entitySku, $option)
     {
