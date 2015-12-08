@@ -84,6 +84,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $refreshTree = false;
         $data = $this->getRequest()->getPostValue();
         $data = $this->imagePreprocessing($data);
+
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
@@ -138,10 +139,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Check "Use Default Value" checkboxes values
              */
-            $useDefaults = $this->getRequest()->getPost('use_default_general');
-            if ($useDefaults) {
-                foreach ($useDefaults as $attributeCode => $value) {
-                    if ($value == '1') {
+            if ($generalPost['use_default']) {
+                foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
+                    if ($attributeValue !== 'false') {
                         $category->setData($attributeCode, false);
                     }
                 }
