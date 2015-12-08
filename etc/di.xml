@@ -23,7 +23,7 @@
         </arguments>
     </type>
 
-    <type name="Magento\Framework\MessageQueue\PublisherFactory">
+    <virtualType name="QueuePublisherFactory">
         <arguments>
             <argument name="publishers" xsi:type="array">
                 <item name="mysql" xsi:type="array">
@@ -32,7 +32,7 @@
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
     <type name="Magento\Framework\MessageQueue\ConsumerFactory">
         <arguments>
             <argument name="consumers" xsi:type="array">
