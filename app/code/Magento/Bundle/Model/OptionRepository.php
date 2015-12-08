@@ -176,7 +176,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $option->getResource()->removeOptionSelections($option->getOptionId());
         $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
-
         $option->setStoreId($product->getStoreId());
         $option->setParentId($product->getData($metadata->getLinkField()));
 
