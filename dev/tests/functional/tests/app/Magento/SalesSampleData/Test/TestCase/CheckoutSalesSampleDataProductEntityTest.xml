@@ -12,7 +12,7 @@
             <data name="id" xsi:type="string">1</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">53.71</item>
+                <item name="grandTotal" xsi:type="string">50.00</item>
             </data>
             <data name="status" xsi:type="string">Pending</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Hold, Ship, Invoice, Edit</data>
