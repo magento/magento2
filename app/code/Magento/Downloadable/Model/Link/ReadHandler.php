@@ -30,6 +30,7 @@ class ReadHandler
      * @param string $entityType
      * @param object $entity
      * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entity)
     {

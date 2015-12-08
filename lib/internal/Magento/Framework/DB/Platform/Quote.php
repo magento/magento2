@@ -45,6 +45,7 @@ class Quote
      * @param string $identifier
      * @param string|null $alias
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function quoteIdentifierAs($identifier, $alias = null)
     {

@@ -816,6 +816,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function beforeSave()
     {
