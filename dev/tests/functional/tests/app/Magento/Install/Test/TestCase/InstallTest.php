@@ -119,7 +119,8 @@ class InstallTest extends Injectable
         /** @var InstallConfig $installConfig */
         $installConfig = $fixtureFactory->create('Magento\Install\Test\Fixture\Install', ['data' => $dataConfig]);
         // Steps
-        $this->homePage->open();
+        // $this->homePage->open(); TODO: change installPage opening to homePage after fixing MAGETWO-46636
+        $this->installPage->open();
         // Verify license agreement.
         $this->installPage->getLandingBlock()->clickTermsAndAgreement();
         $assertLicense->processAssert($this->installPage);
