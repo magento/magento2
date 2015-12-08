@@ -342,7 +342,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $newFiles
      * @param int $originalProductId
      * @param int $newProductId
-     * @return $this
+     * @return array
      */
     public function duplicate($attributeId, $newFiles, $originalProductId, $newProductId)
     {
@@ -377,7 +377,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if (count($valueIdMap) == 0) {
-            return $this;
+            return [];
         }
 
         // Duplicate per store gallery values
@@ -397,7 +397,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->insertGalleryValueInStore($row);
         }
 
-        return $this;
+        return $valueIdMap;
     }
 
     /**
