@@ -40,10 +40,9 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
     /**
      * Read communication configuration from env.php
      *
-     * @param string|null $scope
      * @return array
      */
-    public function read($scope = null)
+    public function read()
     {
         $configData = $this->deploymentConfig->getConfigData(self::ENV_COMMUNICATION);
         if ($configData) {
@@ -51,5 +50,4 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
         }
         return $configData ?: [];
     }
-
 }

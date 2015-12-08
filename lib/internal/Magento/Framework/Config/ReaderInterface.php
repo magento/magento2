@@ -17,8 +17,7 @@ interface ReaderInterface
     /**
      * Read configuration scope
      *
-     * @param string|null $scope
      * @return array
      */
-    public function read($scope = null);
+    public function read();
 }
