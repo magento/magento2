@@ -82,7 +82,8 @@ class UpdateProductAttributeEntityTest extends Injectable
         ];
 
         /** @var CatalogProductSimple $product */
-        $product = $this->fixtureFactory->createByCode('catalogProductSimple',
+        $product = $this->fixtureFactory->createByCode(
+            'catalogProductSimple',
             [
                 'dataset' => 'default',
                 'data' => ['attribute_set_id' => ['attribute_set' => $attributeSet]]
