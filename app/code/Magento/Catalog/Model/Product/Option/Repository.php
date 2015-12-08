@@ -144,7 +144,11 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Catalog\Api\Data\ProductInterface $duplicate
     ) {
-        return $this->optionResource->duplicate($this->optionFactory->create([]), $product->getId(), $duplicate->getId());
+        return $this->optionResource->duplicate(
+            $this->optionFactory->create([]),
+            $product->getId(),
+            $duplicate->getId()
+        );
     }
 
     /**
