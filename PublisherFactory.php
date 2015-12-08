@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**
- * Class which creates Publishers
+ * Class which creates Publishers. This is generic implementation and should be used via virtual types.
  */
 class PublisherFactory
 {

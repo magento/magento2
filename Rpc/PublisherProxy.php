@@ -6,6 +6,7 @@
 namespace Magento\Framework\MessageQueue\Rpc;
 
 use \Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\PublisherFactory;
 
 /**
  * Client class which will publish any message
