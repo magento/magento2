@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Communication\Config\Reader;
 
-use Magento\Framework\Communication\Config\Validator\EnvValidator;
+use Magento\Framework\Communication\Config\Reader\EnvReader\Validator;
 use Magento\Framework\App\DeploymentConfig;
 
 /**
@@ -21,17 +21,17 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
     private $deploymentConfig;
 
     /**
-     * @var EnvValidator
+     * @var \Magento\Framework\Communication\Config\Reader\EnvReader\Validator
      */
     private $envValidator;
 
     /**
      * @param DeploymentConfig $deploymentConfig
-     * @param EnvValidator $envValidator
+     * @param \Magento\Framework\Communication\Config\Reader\EnvReader\Validator $envValidator
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
-        EnvValidator $envValidator
+        Validator $envValidator
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->envValidator = $envValidator;

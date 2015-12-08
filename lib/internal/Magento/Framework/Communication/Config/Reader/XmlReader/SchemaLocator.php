@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Communication\Config;
+namespace Magento\Framework\Communication\Config\Reader\XmlReader;
 
 /**
  * Schema locator for Publishers
