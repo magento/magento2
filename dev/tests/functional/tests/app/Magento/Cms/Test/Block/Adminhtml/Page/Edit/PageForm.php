@@ -75,6 +75,13 @@ class PageForm extends Form
     protected $contentHeading = '[name="content_heading"]';
 
     /**
+     * Collapsible Elements locator.
+     *
+     * @var string
+     */
+    protected $collapsibleElements = '.admin__collapsible-title';
+
+    /**
      * Fixture factory.
      *
      * @var FixtureFactory
@@ -163,6 +170,22 @@ class PageForm extends Form
             ['element' => $this->_rootElement->find($this->widgetBlock, Locator::SELECTOR_XPATH)]
         );
     }
+    /**
+     * Show collapsible elements.
+     *
+     * @param SimpleElement $element [optional]
+     * @return void
+     */
+    public function showCollapsible(SimpleElement $element = null)
+    {
+        $context = $element === null ? $this->_rootElement : $element;
+        $collapsibleElements = $context->getElements($this->collapsibleElements);
+        foreach ($collapsibleElements as $collapsibleElement) {
+            if ($collapsibleElement->isVisible()) {
+                $collapsibleElement->click();
+            }
+        }
+    }
 
     /**
      * Fill data to content fields on content tab.
@@ -170,11 +193,10 @@ class PageForm extends Form
      * @param FixtureInterface $fixture
      * @param SimpleElement|null $element
      * @return $this
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
+        $this->showCollapsible();
         $data = $fixture->getData();
         $fields = isset($data['fields']) ? $data['fields'] : $data;
         $context = $element === null ? $this->_rootElement : $element;
