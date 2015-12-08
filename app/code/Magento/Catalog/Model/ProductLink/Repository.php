@@ -16,6 +16,10 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Entity\MetadataPool;
 
+/**
+ * Class Repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 {
     /**

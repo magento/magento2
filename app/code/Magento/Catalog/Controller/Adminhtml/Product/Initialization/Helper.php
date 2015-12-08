@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 
 /**
  * Class Helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Helper
 {

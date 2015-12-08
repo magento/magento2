@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Catalog product options collection
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

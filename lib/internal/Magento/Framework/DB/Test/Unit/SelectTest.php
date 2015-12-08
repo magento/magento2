@@ -9,6 +9,10 @@ use \Magento\Framework\DB\Select;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Class SelectTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SelectTest extends \PHPUnit_Framework_TestCase
 {
     public function testWhere()

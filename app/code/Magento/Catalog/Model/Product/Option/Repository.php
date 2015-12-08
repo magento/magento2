@@ -14,6 +14,7 @@ use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Class Repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
 {
