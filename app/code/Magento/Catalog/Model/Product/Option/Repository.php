@@ -6,14 +6,15 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
-use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Entity\MetadataPool;
+
 /**
  * Class Repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
 {
@@ -144,7 +145,11 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Catalog\Api\Data\ProductInterface $duplicate
     ) {
-        return $this->optionResource->duplicate($this->optionFactory->create([]), $product->getId(), $duplicate->getId());
+        return $this->optionResource->duplicate(
+            $this->optionFactory->create([]),
+            $product->getId(),
+            $duplicate->getId()
+        );
     }
 
     /**

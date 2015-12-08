@@ -76,6 +76,7 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
+     * @param \Magento\Framework\Model\EntityManager $entityManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -650,6 +651,9 @@ class Product extends AbstractResource
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         /**

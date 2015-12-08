@@ -5,13 +5,15 @@
  */
 namespace Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-use \Magento\Bundle\Api\Data\OptionInterfaceFactory as OptionFactory;
-use \Magento\Bundle\Api\Data\LinkInterfaceFactory as LinkFactory;
+use Magento\Bundle\Api\Data\OptionInterfaceFactory as OptionFactory;
+use Magento\Bundle\Api\Data\LinkInterfaceFactory as LinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Framework\App\RequestInterface;
 
-
+/**
+ * Class Bundle
+ */
 class Bundle
 {
     /**
@@ -69,6 +71,7 @@ class Bundle
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function afterInitialize(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,

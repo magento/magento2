@@ -1206,18 +1206,21 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $entity = $this->getEntity();
         $linkField = $entity->getLinkField();
         $select = $this->getConnection()->select()
-            ->from(['e' => $this->getEntity()->getEntityTable()], ['entity_id'])
+            ->from(
+                ['e' => $this->getEntity()->getEntityTable()],
+                ['entity_id']
+            )
             ->join(
                 ['t_d' => $table],
-                "e.${linkField} = t_d.${linkField}",
-            ['t_d.attribute_id']
-        )->where(
-            " e.entity_id IN (?)",
-            array_keys($this->_itemsById)
-        )->where(
-            't_d.attribute_id IN (?)',
-            $attributeIds
-        );
+                "e.{$linkField} = t_d.{$linkField}",
+                ['t_d.attribute_id']
+            )->where(
+                " e.entity_id IN (?)",
+                array_keys($this->_itemsById)
+            )->where(
+                't_d.attribute_id IN (?)',
+                $attributeIds
+            );
 
         if ($entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE && $entity->getTypeId()) {
             $select->where(

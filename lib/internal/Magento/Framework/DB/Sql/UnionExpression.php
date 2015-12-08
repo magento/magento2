@@ -35,13 +35,13 @@ class UnionExpression extends \Zend_Db_Expr
     public function __toString()
     {
         $parts = [];
-            foreach ($this->parts as $part) {
-                if ($part instanceof Select) {
-                    $parts[] = sprintf('(%s)', $part->assemble());
-                } else {
-                    $parts[] = $part;
-                }
+        foreach ($this->parts as $part) {
+            if ($part instanceof Select) {
+                $parts[] = sprintf('(%s)', $part->assemble());
+            } else {
+                $parts[] = $part;
             }
+        }
         return implode($parts, $this->type);
     }
 }

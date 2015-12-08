@@ -11,6 +11,10 @@ use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\Stdlib;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class ConnectionFactory
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface
 {
     /**
@@ -91,7 +95,12 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
                 ]
             )
         );
-        $resourceInstance = new Mysql(new Stdlib\StringUtils(), new Stdlib\DateTime(), $selectFactory, $connectionConfig);
+        $resourceInstance = new Mysql(
+            new Stdlib\StringUtils(),
+            new Stdlib\DateTime(),
+            $selectFactory,
+            $connectionConfig
+        );
 
         return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));
     }

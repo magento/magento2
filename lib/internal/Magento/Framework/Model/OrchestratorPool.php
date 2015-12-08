@@ -18,7 +18,7 @@ class OrchestratorPool
 
 
     /**
-     * @param $operations
+     * @param array $operations
      */
     public function __construct(
         $operations
@@ -27,8 +27,8 @@ class OrchestratorPool
     }
 
     /**
-     * @param $entityType
-     * @param $operationName
+     * @param string $entityType
+     * @param string $operationName
      * @return Operation\WriteInterface
      * @throws \Exception
      */
@@ -38,13 +38,12 @@ class OrchestratorPool
             || !$this->operations[$entityType][$operationName] instanceof Operation\WriteInterface
         ) {
             return $this->operations['default'][$operationName];
-//            throw new \Exception('Requested operation is\'t implemented yet');
         }
         return $this->operations[$entityType][$operationName];
     }
 
     /**
-     * @param $entityType
+     * @param string $entityType
      * @return Operation\ReadInterface
      * @throws \Exception
      */
@@ -55,7 +54,6 @@ class OrchestratorPool
             || !$this->operations[$entityType]['read'] instanceof Operation\ReadInterface
         ) {
             return $this->operations['default']['read'];
-//            throw new \Exception('Requested operation doesn\'t implemented yet');
         }
         return $this->operations[$entityType]['read'];
     }

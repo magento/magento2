@@ -95,7 +95,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Save Product Links process
      *
-     * @param $parentId
+     * @param int $parentId
      * @param array $data
      * @param int $typeId
      * @return $this

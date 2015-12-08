@@ -220,7 +220,8 @@ abstract class AbstractAction
         );
         $linkField = $this->getProductIdFieldName();
         $select = $this->_connection->select()->from(
-            ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')], ['cpe.entity_id']
+            ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
+            ['cpe.entity_id']
         )->join(
             ['tp' => $this->_defaultIndexerResource->getTable(['catalog_product_entity', 'tier_price'])],
             'tp.' . $linkField . ' = cpe.' . $linkField,

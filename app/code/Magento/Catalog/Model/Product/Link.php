@@ -55,7 +55,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
     protected $stockHelper;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Action\SaveProductLinks
+     * @var \Magento\Catalog\Model\Product\Link\SaveHandler
      */
     protected $saveProductLinks;
 
@@ -65,7 +65,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Action\SaveProductLinks $saveProductLinks
+     * @param \Magento\Catalog\Model\Product\Link\SaveHandler $saveProductLinks
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -76,7 +76,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
         \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory $linkCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory $productCollectionFactory,
         \Magento\CatalogInventory\Helper\Stock $stockHelper,
-        \Magento\Catalog\Model\ResourceModel\Product\Link\Action\SaveProductLinks $saveProductLinks,
+        \Magento\Catalog\Model\Product\Link\SaveHandler $saveProductLinks,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -183,18 +183,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     public function saveProductRelations($product)
     {
-        $data = $product->getRelatedLinkData();
-        if ($data !== null) {
-            $this->saveProductLinks->execute($product, $data, self::LINK_TYPE_RELATED);
-        }
-        $data = $product->getUpSellLinkData();
-        if ($data !== null) {
-            $this->saveProductLinks->execute($product, $data, self::LINK_TYPE_UPSELL);
-        }
-        $data = $product->getCrossSellLinkData();
-        if ($data !== null) {
-            $this->saveProductLinks->execute($product, $data, self::LINK_TYPE_CROSSSELL);
-        }
+        $this->saveProductLinks->execute(\Magento\Catalog\Api\Data\ProductInterface::class, $product);
         return $this;
     }
 }

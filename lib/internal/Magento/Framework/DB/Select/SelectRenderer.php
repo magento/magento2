@@ -29,26 +29,30 @@ class SelectRenderer implements RendererInterface
     /**
      * Sort renderers
      *
-     * @param $renders
+     * @param array $renders
      * @return array
      */
     protected function sort($renders)
     {
         $length = count($renders);
-        if($length <= 1){
+        if ($length <= 1) {
             return $renders;
         } else {
             $pivot = array_shift($renders);
             $left = $right = [];
             foreach ($renders as $render) {
-                if($render['sort'] < $pivot['sort']){
+                if ($render['sort'] < $pivot['sort']) {
                     $left[] = $render;
-                }
-                else{
+                } else {
                     $right[] = $render;
                 }
             }
-            return array_merge($this->sort($left), [$pivot], $this->sort($right));
+
+            return array_merge(
+                $this->sort($left),
+                [$pivot],
+                $this->sort($right)
+            );
         }
     }
 

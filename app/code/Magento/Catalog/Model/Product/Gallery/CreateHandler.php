@@ -10,6 +10,7 @@ use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 
 /**
  * Create handler for catalog product gallery.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateHandler
 {
@@ -86,6 +87,8 @@ class CreateHandler
      * @param string $entityType
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $product)
     {

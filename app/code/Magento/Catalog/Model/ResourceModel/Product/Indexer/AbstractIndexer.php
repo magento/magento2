@@ -213,6 +213,9 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
         return $result;
     }
 
+    /**
+     * @return int
+     */
     protected function getProductIdFieldName()
     {
         $table = $this->getTable('catalog_product_entity');

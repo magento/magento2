@@ -41,13 +41,16 @@ $product->setTypeId('bundle')
         ]
     )
     ->setBundleSelectionsData(
-        [[[
-            'product_id' => $sampleProduct->getId(),
-            'selection_qty' => 1,
-            'selection_can_change_qty' => 1,
-            'delete' => ''
-        ]]]
-    // fixture product
+        [
+            [
+                [
+                    'product_id' => $sampleProduct->getId(),
+                    'selection_qty' => 1,
+                    'selection_can_change_qty' => 1,
+                    'delete' => '',
+                ],
+            ],
+        ]
     );
 
 if ($product->getBundleOptionsData()) {

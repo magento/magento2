@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Model\ResourceModel\Product\Link\Action;
+namespace Magento\Catalog\Model\Product\Link;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\Framework\Model\Entity\MetadataPool;
@@ -14,7 +13,7 @@ use Magento\Framework\Model\Entity\MetadataPool;
 /**
  * Class SaveProductLinks
  */
-class SaveProductLinks
+class SaveHandler
 {
     /**
      * @var ProductLinkRepositoryInterface
@@ -34,6 +33,7 @@ class SaveProductLinks
     /**
      * @param MetadataPool $metadataPool
      * @param Link $linkResource
+     * @param ProductLinkRepositoryInterface $productLinkRepository
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -47,18 +47,19 @@ class SaveProductLinks
     }
 
     /**
-     * @param $product
-     * @param $data
-     * @param $typeId
-     * @return mixed
-     * @throws \Exception
+     * @param string $entityType
+     * @param object $entity
+     * @return \Magento\Catalog\Api\Data\ProductInterface
      */
-    public function execute($product, $data, $typeId)
+    public function execute($entityType, $entity)
     {
-        //TODO remove after upsell, crosssell refactored
-        foreach($data as $link) {
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
+        foreach ($this->productLinkRepository->getList($entity) as $link) {
+            $this->productLinkRepository->delete($link);
+        }
+        foreach ($entity->getProductLinks() as $link) {
             $this->productLinkRepository->save($link);
         }
-        return $product;
+        return $entity;
     }
 }

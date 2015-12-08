@@ -57,7 +57,7 @@ class Quote
                 $identifier = explode('.', $identifier);
             }
             if (is_array($identifier)) {
-                $segments = array();
+                $segments = [];
                 foreach ($identifier as $segment) {
                     if ($segment instanceof \Zend_Db_Expr) {
                         $segments[] = $segment->__toString();
@@ -97,4 +97,3 @@ class Quote
         return '`';
     }
 }
-
