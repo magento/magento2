@@ -6,10 +6,10 @@
 namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Helper\Toolkit;
 use Magento\Eav\Model\Config;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -93,6 +93,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var Category
      */
     private $category;
+    /**
+     * @var array
+     */
+    private $usedDefault;
 
     /**
      * Constructor
@@ -106,7 +110,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Config $eavConfig
      * @param FilterPool $filterPool
      * @param StoreManagerInterface $storeManager
-     * @param Toolkit $eavToolkit
      * @param array $meta
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -121,7 +124,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         Config $eavConfig,
         FilterPool $filterPool,
         StoreManagerInterface $storeManager,
-        Toolkit $eavToolkit,
         array $meta = [],
         array $data = []
     ) {
@@ -132,7 +134,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->filterPool = $filterPool;
         $this->registry = $registry;
         $this->storeManager = $storeManager;
-        $this->eavToolkit = $eavToolkit;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta['general']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('catalog_category')
@@ -176,7 +177,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
-        /* @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        /* @var Attribute $attribute */
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
@@ -201,13 +202,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $meta[$code]['scope_label'] = $this->getScopeLabel($attribute);
             $meta[$code]['service'] = [
                 'template' => 'ui/form/element/helper/service',
-                'displayUseDefault' => $this->eavToolkit->canDisplayUseDefault($attribute),
+                'displayUseDefault' => $this->canDisplayUseDefault($attribute),
             ];
-            $meta[$code]['used_default'] = (int)($this->eavToolkit->canDisplayUseDefault($attribute) && $this->eavToolkit->usedDefault($attribute));
+            $meta[$code]['used_default'] =
+                (int)($this->canDisplayUseDefault($attribute) &&
+                    $this->usedDefault($attribute));
             $meta[$code]['componentType'] = $meta[$code]['formElement'];
             $meta[$code]['code'] = $code;
 
-            if ($this->getModel()->getStoreId() && !$attribute->isScopeGlobal()) {
+            if ($this->getCurrentCategory()->getStoreId() && !$attribute->isScopeGlobal()) {
                 $meta[$code]['disabled'] = $meta[$code]['used_default'];
             }
         }
@@ -243,7 +246,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Get current category
      *
-     * @return mixed
+     * @return Category
      */
     public function getCurrentCategory()
     {
@@ -255,10 +258,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * GLOBAL | WEBSITE | STORE
      *
-     * @param AbstractAttribute $attribute
+     * @param Attribute $attribute
      * @return string
      */
-    public function getScopeLabel(AbstractAttribute $attribute)
+    public function getScopeLabel(Attribute $attribute)
     {
         $html = '';
         if (
@@ -279,20 +282,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Get model
-     *
-     * @return Category
-     */
-    public function getModel()
-    {
-        if (!$this->category && ($category = $this->registry->registry('current_category'))) {
-            $this->category = $category;
-        }
-
-        return $this->category;
-    }
-
-    /**
      * Filter fields
      *
      * @param array $categoryData
@@ -301,5 +290,28 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function filterFields($categoryData)
     {
         return array_diff_key($categoryData, array_flip($this->ignoreFields));
+    }
+
+    /**
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function canDisplayUseDefault(Attribute $attribute)
+    {
+        return !$attribute->isScopeGlobal() &&
+            $this->getCurrentCategory() &&
+            $this->getCurrentCategory()->getId() &&
+            $this->getCurrentCategory()->getStoreId();
+    }
+
+    /**
+     * Check default value usage fact
+     *
+     * @param Attribute $attribute
+     * @return bool
+     */
+    public function usedDefault(Attribute $attribute)
+    {
+        return !$this->getCurrentCategory()->getExistsStoreValueFlag($attribute->getAttributeCode());
     }
 }

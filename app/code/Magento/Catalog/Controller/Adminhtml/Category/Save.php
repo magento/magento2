@@ -138,10 +138,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Check "Use Default Value" checkboxes values
              */
-            $useDefaults = $this->getRequest()->getPost('use_default');
+            $useDefaults = $this->getRequest()->getPost('use_default_general');
             if ($useDefaults) {
-                foreach ($useDefaults as $attributeCode) {
-                    $category->setData($attributeCode, false);
+                foreach ($useDefaults as $attributeCode => $value) {
+                    if ($value == '1') {
+                        $category->setData($attributeCode, false);
+                    }
                 }
             }
 
