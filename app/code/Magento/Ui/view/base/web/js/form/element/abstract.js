@@ -29,13 +29,11 @@ define([
             notice: '',
             customScope: '',
             additionalClasses: {},
-            isUseDefault: '',
 
             listens: {
                 visible: 'setPreview',
                 '${ $.provider }:data.reset': 'reset',
-                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
-                'isUseDefault': 'toggleUseDefault'
+                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
             },
 
             links: {
@@ -67,7 +65,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value warn isUseDefault')
+            this.observe('error disabled focused preview visible value warn')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -109,7 +107,6 @@ define([
 
             this.value(this.initialValue);
             this.on('value', this.onUpdate.bind(this));
-            this.isUseDefault(this.disabled());
 
             return this;
         },
@@ -178,33 +175,6 @@ define([
          */
         getPreview: function () {
             return this.value();
-        },
-
-        /**
-         * Checks if element has service setting
-         *
-         * @returns {Boolean}
-         */
-        hasService: function () {
-            return this.service && this.service.template;
-        },
-
-        /**
-         * Checks if element service can have default value
-         *
-         * @returns {Boolean}
-         */
-        canDisplayUseDefault: function () {
-            return this.hasService() && this.service.displayUseDefault;
-        },
-
-        /**
-         * Checks whether service is enabled
-         *
-         * @returns {Boolean}
-         */
-        isServiceEnabled: function () {
-            return this.hasService() && !this.service.disabled;
         },
 
         /**
@@ -297,19 +267,6 @@ define([
             this.bubble('update', this.hasChanged());
 
             this.validate();
-        },
-
-        /**
-         * Toggle enable/disabled for scoped fields
-         *
-         * @param {Bool} state
-         */
-        toggleUseDefault: function (state) {
-            state = !state;
-
-            this.disabled(!state);
-            this.required(state);
-            this.error(false);
         }
     });
 });
