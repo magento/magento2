@@ -22,7 +22,9 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->get('Magento\Search\Model\SynonymReader');
     }
 
-
+    /**
+     * @return array
+     */
     public static function loadByStoreViewIdDataProvider()
     {
         return [
@@ -44,6 +46,8 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int $storeviewId
+     * @param array $expectedResult
      * @dataProvider loadByStoreViewIdDataProvider
      */
     public function testloadByStoreViewId($storeViewId, $expectedResult)
@@ -55,6 +59,9 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult[1]['store_id'], $data[1]['store_id']);
     }
 
+    /**
+     * @return array
+     */
     public static function loadByPhraseDataProvider()
     {
         return [
@@ -83,6 +90,8 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $phrase
+     * @param array $expectedResult
      * @dataProvider loadByPhraseDataProvider
      */
     public function testLoadByPhrase($phrase, $expectedResult)
@@ -96,5 +105,4 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
             ++$i;
         }
     }
-
 }

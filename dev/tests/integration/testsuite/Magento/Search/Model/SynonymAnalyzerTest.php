@@ -22,30 +22,28 @@ class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
         $this->synAnalyzer = $objectManager->get('Magento\Search\Model\SynonymAnalyzer');
     }
 
-
+    /**
+     * Data provider for the test
+     *
+     * @return array
+     */
     public static function loadGetSynonymsForPhraseDataProvider()
     {
         return [
-
-            // Test for a sentence with synonym words
-            [
-                'Elizabeth is the English queen.',
-                [['elizabeth'],['is'],['the'],['british', 'english'],['queen', 'monarch']]
+            'withSynonyms' => [
+                'phrase' => 'Elizabeth is the English queen.',
+                'expectedResult' => [['elizabeth'],['is'],['the'],['british', 'english'],['queen', 'monarch']]
             ],
-
-            // Test for no synonyms match
-            [
-                'This sentence has no synonyms',
-                [['this'], ['sentence'], ['has'], ['no'], ['synonyms']]
+            'noSynonyms' => [
+                'phrase' => 'This sentence has no synonyms',
+                'expectedResult' => [['this'], ['sentence'], ['has'], ['no'], ['synonyms']]
             ],
-
-            //Test for all the special characters being excluded
-            [
-                '~tilde`backtic! exclamation@  at#hash\$dollar%percent^carat&ampersand*star(leftparan)rightparan'
-                . '_underscore+plus=equal{leftcurly}rightcurly[leftbracket]rightbracket:colon"doublequote'
-                . '\'singlequote,comma  space.period<leftangle>rightangle?questionmark\\backslash/forwardslash'
-                . '     tab;semicolon',
-                [
+            'specialCharacters' => [
+                'phrase' => '~tilde`backtic! exclamation@  at#hash\$dollar%percent^carat&ampersand*star(leftparan'
+                    . ')rightparan_underscore+plus=equal{leftcurly}rightcurly[leftbracket]rightbracket:colon'
+                    . '"doublequote\'singlequote,comma  space.period<leftangle>rightangle?questionmark\\backslash'
+                    . '/forwardslash   tab;semicolon',
+                'expectedResult' => [
                     ['tilde'],
                     ['backtic'],
                     ['exclamation'],
@@ -80,13 +78,15 @@ class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
                     ['semicolon']
                 ]
             ],
-
-            //Test for non-ascii character set. Let's learn German!
-            ['schlicht', [['schlicht', 'natürlich']]]
+            'oneMoreTest' => [
+                'phrase' => 'schlicht',
+                'expectedResult' => [['schlicht', 'natürlich']]]
         ];
     }
 
     /**
+     * @param string $phrase
+     * @param array $expectedResult
      * @dataProvider loadGetSynonymsForPhraseDataProvider
      */
     public function testGetSynonymsForPhrase($phrase, $expectedResult)
