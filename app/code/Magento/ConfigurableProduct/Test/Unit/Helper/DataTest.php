@@ -8,8 +8,15 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Helper;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
     /**
      * @var \Magento\ConfigurableProduct\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -25,12 +32,27 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $_productMock;
 
+    /**
+     * @var \Magento\Framework\Data\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mediaGalleryCollection;
+
     protected function setUp()
     {
         $this->_imageHelperMock = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
         $this->_productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->mediaGalleryCollection = $this->getMockBuilder('Magento\Framework\Data\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_model = new \Magento\ConfigurableProduct\Helper\Data($this->_imageHelperMock);
+        $this->objectManager = new ObjectManager($this);
+
+        $this->_model = $this->objectManager->getObject(
+            'Magento\ConfigurableProduct\Helper\Data',
+            [
+                'imageHelper' => $this->_imageHelperMock
+            ]
+        );
     }
 
     public function testGetAllowAttributes()
@@ -50,45 +72,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $expected
-     * @param array $data
-     * @dataProvider getOptionsDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testGetOptions(array $expected, array $data)
-    {
-        $this->_imageHelperMock->expects($this->at(0))
-            ->method('init')
-            ->will($this->returnValue('http://example.com/base_img_url'));
-
-        for ($i = 1; $i <= count($data['allowed_products']); $i++) {
-            $this->_imageHelperMock->expects($this->at($i))
-                ->method('init')
-                ->will($this->returnValue('http://example.com/base_img_url_' . $i));
-        }
-
-        $this->assertEquals(
-            $expected,
-            $this->_model->getOptions($data['current_product_mock'], $data['allowed_products'])
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptionsDataProvider()
+    public function testGetOptions()
     {
         $currentProductMock = $this->getMock(
             'Magento\Catalog\Model\Product', ['getTypeInstance', '__wakeup'], [], '', false
         );
-        $provider = [];
-        $provider[] = [
-            [],
-            [
-                'allowed_products' => [],
-                'current_product_mock' => $currentProductMock,
-            ],
-        ];
-
         $attributesCount = 3;
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
@@ -125,8 +115,22 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->getMock(
-                'Magento\Catalog\Model\Product', ['getData', 'getImage', 'getId', '__wakeup'], [], '', false
+                'Magento\Catalog\Model\Product',
+                ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages'], [], '', false
             );
+            $imageFile = 'http://example.com/base_img_url';
+            $imageItem = $this->objectManager->getObject(
+                'Magento\Framework\Object',
+                [
+                    'data' => ['file' => $imageFile]
+                ]
+            );
+            $this->mediaGalleryCollection->expects($this->any())
+                ->method('getIterator')
+                ->willReturn(new \ArrayIterator([$imageItem]));
+            $productMock->expects($this->any())
+                ->method('getMediaGalleryImages')
+                ->willReturn($this->mediaGalleryCollection);
             $productMock->expects($this->any())
                 ->method('getData')
                 ->will($this->returnCallback([$this, 'getDataCallback']));
@@ -140,35 +144,45 @@ class DataTest extends \PHPUnit_Framework_TestCase
             }
             $allowedProducts[] = $productMock;
         }
-        $provider[] = [
-            [
-                'attribute_id_1' => [
-                    'attribute_code_value_1' => ['product_id_1', 'product_id_2'],
-                ],
-                'images' => [
-                    'attribute_id_1' => [
-                        'attribute_code_value_1' => [
-                            'product_id_1' => 'http://example.com/base_img_url',
-                            'product_id_2' => 'http://example.com/base_img_url_2',
-                        ],
-                    ],
-                    'attribute_id_2' => [
-                        'attribute_code_value_2' => [
-                            'product_id_1' => 'http://example.com/base_img_url',
-                            'product_id_2' => 'http://example.com/base_img_url_2',
-                        ],
-                    ],
-                ],
-                'attribute_id_2' => [
-                    'attribute_code_value_2' => ['product_id_1', 'product_id_2'],
-                ],
+
+        $expected = [
+            'images' => [
+                'product_id_1' => ['http://example.com/base_img_url_1'],
+                'product_id_2' => ['http://example.com/base_img_url_2']
             ],
-            [
-                'allowed_products' => $allowedProducts,
-                'current_product_mock' => $currentProductMock,
+            'attribute_id_1' => [
+                'attribute_code_value_1' => ['product_id_1', 'product_id_2'],
+            ],
+            'attribute_id_2' => [
+                'attribute_code_value_2' => ['product_id_1', 'product_id_2'],
+            ],
+            'index' => [
+                'product_id_1' => [
+                    'attribute_id_1' => 'attribute_code_value_1',
+                    'attribute_id_2' => 'attribute_code_value_2',
+                ],
+
+                'product_id_2' => [
+                    'attribute_id_1' => 'attribute_code_value_1',
+                    'attribute_id_2' => 'attribute_code_value_2',
+                ]
             ],
         ];
-        return $provider;
+        $this->_imageHelperMock->expects($this->any())
+            ->method('init')
+            ->willReturnSelf();
+
+        $this->_imageHelperMock->expects($this->any())
+            ->method('setImageFile')
+            ->will($this->returnCallback(function ($baseUrl) {
+                static $i = 0;
+                return $baseUrl . '_' . ++$i;
+            }));
+
+        $this->assertEquals(
+            $expected,
+            $this->_model->getOptions($currentProductMock, $allowedProducts)
+        );
     }
 
     /**
@@ -182,5 +196,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $map['attribute_code_' . $k] = 'attribute_code_value_' . $k;
         }
         return $map[$key];
+    }
+
+    public function testGetOptionsEmptyImages()
+    {
+        $expected = [];
+        $allowedProducts = [];
+        $currentProductMock = $this->getMock(
+            'Magento\Catalog\Model\Product', ['getTypeInstance', '__wakeup'], [], '', false
+        );
+
+        $this->assertEquals(
+            $expected,
+            $this->_model->getOptions($currentProductMock, $allowedProducts)
+        );
     }
 }

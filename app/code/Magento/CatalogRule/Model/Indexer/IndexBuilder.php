@@ -240,7 +240,7 @@ class IndexBuilder
             [$write->quoteInto('rule_id = ?', $ruleId), $write->quoteInto('product_id = ?', $productId)]
         );
 
-        if (!$rule->getConditions()->validate($product)) {
+        if (!$rule->validate($product)) {
             $write->delete(
                 $this->resource->getTableName('catalogrule_product_price'),
                 [$write->quoteInto('product_id = ?', $productId)]

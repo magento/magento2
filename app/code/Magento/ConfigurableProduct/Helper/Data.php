@@ -40,26 +40,40 @@ class Data
     public function getOptions($currentProduct, $allowedProducts)
     {
         $options = [];
-        $baseImageUrl = (string)$this->imageHelper->init($currentProduct, 'image');
-
         foreach ($allowedProducts as $product) {
             $productId = $product->getId();
-            $image = (string)$this->imageHelper->init($product, 'image');
-
+            $images = $this->getGalleryImages($product);
+            $options['images'][$productId] = $images;
             foreach ($this->getAllowAttributes($currentProduct) as $attribute) {
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
                 $attributeValue = $product->getData($productAttribute->getAttributeCode());
 
                 $options[$productAttributeId][$attributeValue][] = $productId;
-                $imageUrl = (!$product->getImage() || $product->getImage() === 'no_selection')
-                    ? $baseImageUrl
-                    : (string)$image;
-                $options['images'][$productAttributeId][$attributeValue][$productId] = $imageUrl;
+                $options['index'][$productId][$productAttributeId] = $attributeValue;
+            }
+        }
+        return $options;
+    }
+
+    /**
+     * Retrieve collection of gallery images
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return \Magento\Catalog\Model\Product\Image[]|null
+     */
+    public function getGalleryImages(\Magento\Catalog\Api\Data\ProductInterface $product)
+    {
+        $images = [];
+        $imagesGallery = $product->getMediaGalleryImages();
+        if ($imagesGallery instanceof \Magento\Framework\Data\Collection) {
+            foreach ($imagesGallery as $image) {
+                /** @var $image \Magento\Catalog\Model\Product\Image */
+                $images[] = (string)$this->imageHelper->init($product, 'image')->setImageFile($image->getFile());
             }
         }
 
-        return $options;
+        return $images;
     }
 
     /**

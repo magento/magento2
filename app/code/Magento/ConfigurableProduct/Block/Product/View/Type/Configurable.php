@@ -198,6 +198,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
             'images' => isset($options['images']) ? $options['images'] : [],
+            'index' => isset($options['index']) ? $options['index'] : [],
         ];
 
         if ($currentProduct->hasPreconfiguredValues() && !empty($attributesData['defaultValues'])) {
@@ -216,9 +217,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $prices = [];
         foreach ($this->getAllowProducts() as $product) {
-            $priceInfo = $this->getProduct()
-                ->setSelectedConfigurableOption($product)
-                ->getPriceInfo();
+            $priceInfo = $product->getPriceInfo();
 
             $prices[$product->getId()] =
                 [
