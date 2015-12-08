@@ -36,7 +36,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
     protected $connection;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
