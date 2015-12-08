@@ -101,7 +101,7 @@ class ReadHandler
                         ->where('attribute_id = ?', $attribute->getAttributeId());
                     $context = $this->getActionContext($entityType, $entityData);
                     foreach ($context as $field => $value) {
-                    //TODO: if (in table exists context field)
+                        //TODO: if (in table exists context field)
                         $select->where(
                             $metadata->getEntityConnection()->quoteIdentifier($field) . ' IN (?)',
                             $value
