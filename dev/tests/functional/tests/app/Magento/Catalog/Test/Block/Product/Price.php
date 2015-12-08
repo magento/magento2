@@ -18,7 +18,7 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
      */
     protected $mapTypePrices = [
         'regular_price' => [
-            'selector' => '.price-box [data-price-type="finalPrice"]',
+            'selector' => '.price-final_price .price',
         ],
         'actual_price' => [
             'selector' => '.actual-price .price',
