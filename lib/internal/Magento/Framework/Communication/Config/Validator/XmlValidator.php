@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Communication\Config\Validator;
 
-use Magento\Framework\Communication\ConfigInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Communication\Config\Validator;
 use Magento\Framework\Reflection\TypeProcessor;
