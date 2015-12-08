@@ -60,12 +60,14 @@ class Interval implements IntervalInterface
     private $entityIds;
 
     /**
-     * @param array $query
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param StoreManagerInterface $storeManager
      * @param CustomerSession $customerSession
      * @param Config $clientConfig
+     * @param string $fieldName
+     * @param string $storeId
+     * @param array $entityIds
      */
     public function __construct(
         ConnectionManager $connectionManager,
@@ -450,7 +452,7 @@ class Interval implements IntervalInterface
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
 
-        return array_reverse($this->arrayValuesToFloat($queryResult));
+        return array_reverse($this->arrayValuesToFloat($queryResult['hits']['hits']));
     }
 
     /**
