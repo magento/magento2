@@ -11,6 +11,7 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
@@ -91,6 +92,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Framework\Registry $registry
      * @param Config $eavConfig
      * @param FilterPool $filterPool
+     * @param StoreManagerInterface $storeManager
      * @param array $meta
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -101,6 +103,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $requestFieldName,
         EavValidationRules $eavValidationRules,
         CategoryCollectionFactory $categoryCollectionFactory,
+        StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         Config $eavConfig,
         FilterPool $filterPool,
@@ -113,6 +116,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
         $this->registry = $registry;
+        $this->storeManager = $storeManager;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta['general']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('catalog_category')
