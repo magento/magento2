@@ -52,11 +52,9 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
-        <variation name="UpdateProductAttributeEntityTestVariation3" summary="False positive test: MAGETWO-46494">
+        <variation name="UpdateProductAttributeEntityTestVariation3">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttributeOriginal/dataset" xsi:type="string">tax_class_id</data>
-            <data name="productAttributeOriginal/data/is_searchable" xsi:type="string">No</data>
-            <data name="productAttributeOriginal/data/is_visible_in_advanced_search" xsi:type="string">No</data>
             <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
             <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
             <data name="cacheTags" xsi:type="array">
