@@ -16,18 +16,23 @@
         .action {
             &:extend(.abs-button-responsive all);
             margin-bottom: @indent__s;
+
             &:last-child {
                 margin-bottom: 0;
             }
+
             &.primary {
                 //&:extend(.abs-button-l all);
             }
         }
+
         margin-bottom: @indent__s;
+
         &:last-child {
             margin-bottom: 0;
         }
     }
+
     > .secondary {
         .action.back {
             display: none;
@@ -46,12 +51,14 @@
         > .primary,
         > .secondary {
             margin-bottom: 0;
+
             .action {
                 width: auto;
                 margin-bottom: 0;
             }
         }
     }
+
     form {
         .actions-toolbar {
             .column:not(.sidebar-main) &,
