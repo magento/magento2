@@ -16,19 +16,19 @@
         <arguments>
             <argument name="imageTypes" xsi:type="array">
                 <item name="small" xsi:type="array">
-                    <item name="title" xsi:type="string" translate="true">Small</item>
+                    <item name="title" xsi:type="string">Small</item>
                     <item name="attribute" xsi:type="string">small_image</item>
                 </item>
                 <item name="main" xsi:type="array">
-                    <item name="title" xsi:type="string" translate="true">Main</item>
+                    <item name="title" xsi:type="string">Main</item>
                     <item name="attribute" xsi:type="string">image</item>
                 </item>
                 <item name="cart" xsi:type="array">
-                    <item name="title" xsi:type="string" translate="true">Thumbnail</item>
+                    <item name="title" xsi:type="string">Thumbnail</item>
                     <item name="attribute" xsi:type="string">thumbnail</item>
                 </item>
                 <item name="custom" xsi:type="array">
-                    <item name="title" xsi:type="string" translate="true">Custom image</item>
+                    <item name="title" xsi:type="string">Custom image</item>
                     <item name="attribute" xsi:type="string">custom_image</item>
                 </item>
             </argument>
