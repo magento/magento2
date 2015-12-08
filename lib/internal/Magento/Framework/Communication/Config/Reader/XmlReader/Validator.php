@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Communication\Config\Validator;
+namespace Magento\Framework\Communication\Config\Reader\XmlReader;
 
 use Magento\Framework\Stdlib\BooleanUtils;
-use Magento\Framework\Communication\Config\Validator;
+use Magento\Framework\Communication\Config\Validator as ConfigValidator;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Communication configuration validator.
  */
-class XmlValidator extends Validator
+class Validator extends ConfigValidator
 {
     /**
      * @var TypeProcessor
