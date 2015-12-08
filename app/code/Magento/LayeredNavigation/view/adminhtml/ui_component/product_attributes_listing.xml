@@ -6,7 +6,7 @@
  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <container name="listing_top"></container>
+    <listingToolbar name="listing_top"></listingToolbar>
     <columns name="product_attributes_columns">
         <column name="is_filterable">
             <argument name="data" xsi:type="array">
