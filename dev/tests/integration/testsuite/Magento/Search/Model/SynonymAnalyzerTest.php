@@ -6,7 +6,7 @@
 namespace Magento\Search\Model;
 
 /**
- * @magentoDataFixture Magento/Search/_files/SynonymReader.php
+ * @magentoDataFixture Magento/Search/_files/synonym_reader.php
  * @magentoDbIsolation disabled
  */
 class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
