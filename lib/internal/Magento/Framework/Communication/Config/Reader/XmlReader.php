@@ -21,8 +21,8 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem
 
     /**
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Framework\Communication\Config\Converter $converter
-     * @param \Magento\Framework\Communication\Config\SchemaLocator $schemaLocator
+     * @param \Magento\Framework\Communication\Config\Reader\XmlReader\Converter $converter
+     * @param \Magento\Framework\Communication\Config\Reader\XmlReader\SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
@@ -31,8 +31,8 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Framework\Communication\Config\Converter $converter,
-        \Magento\Framework\Communication\Config\SchemaLocator $schemaLocator,
+        XmlReader\Converter $converter,
+        XmlReader\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'communication.xml',
         $idAttributes = [],
