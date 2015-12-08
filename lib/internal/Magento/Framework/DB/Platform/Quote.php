@@ -51,7 +51,7 @@ class Quote
     {
         if ($identifier instanceof \Zend_Db_Expr) {
             $quoted = $identifier->__toString();
-        } elseif ($identifier instanceof \Zend_Db_Select) {
+        } elseif ($identifier instanceof \Magento\Framework\DB\Select) {
             $quoted = '(' . $identifier->assemble() . ')';
         } else {
             if (is_string($identifier)) {
