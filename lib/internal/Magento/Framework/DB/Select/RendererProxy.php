@@ -62,6 +62,7 @@ class RendererProxy extends SelectRenderer
 
     /**
      * Retrieve ObjectManager from global scope
+     *
      * @return void
      */
     public function __wakeup()
@@ -71,6 +72,7 @@ class RendererProxy extends SelectRenderer
 
     /**
      * Clone proxied instance
+     *
      * @return void
      */
     public function __clone()

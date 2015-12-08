@@ -395,7 +395,8 @@ abstract class AbstractAction
             []
         )->joinInner(
             ['cpsd' => $this->getTable('catalog_product_entity_int')],
-            'cpsd.' . $linkField . ' = cpe.' . $linkField . ' AND cpsd.store_id = 0' . ' AND cpsd.attribute_id = ' . $statusAttributeId,
+            'cpsd.' . $linkField . ' = cpe.' . $linkField . ' AND cpsd.store_id = 0'
+                . ' AND cpsd.attribute_id = ' . $statusAttributeId,
             []
         )->joinLeft(
             ['cpss' => $this->getTable('catalog_product_entity_int')],

@@ -346,7 +346,6 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn('product_option');
-        $linkedProductMock = $this->getMock('Magento\Bundle\Api\Data\LinkInterface');
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
         $optionMock->expects($this->once())->method('getResource')->willReturn($this->optionResourceMock);
         $this->optionResourceMock->expects($this->once())->method('removeOptionSelections')
@@ -674,58 +673,5 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($productSku)
             ->willReturn($productMock);
         $this->assertEquals(['object'], $this->model->getList($productSku));
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createOptionMock()
-    {
-        $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
-        $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $extensionAttributesFactory = $this->getMock(
-            'Magento\Framework\Api\ExtensionAttributesFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $attributeValueFactoryMock = $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
-        $resourceMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
-            [
-                '_construct',
-                'getIdFieldName'
-            ],
-            [],
-            '',
-            false
-        );
-        $resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $optionMock = $this->getMock(
-            'Magento\Bundle\Model\Option',
-            [
-                'setStoreId',
-                'setParentId',
-                'getProductLinks',
-                'getOptionId',
-                'setOptionId',
-                'setDefaultTitle',
-                'getTitle'
-            ],
-            [
-                $contextMock,
-                $registryMock,
-                $extensionAttributesFactory,
-                $attributeValueFactoryMock,
-                $resourceMock,
-                $resourceCollectionMock
-            ],
-            '',
-            true
-        );
-        return $optionMock;
     }
 }

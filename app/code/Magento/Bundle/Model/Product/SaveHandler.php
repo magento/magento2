@@ -40,6 +40,7 @@ class SaveHandler
      * @param string $entityType
      * @param object $entity
      * @return object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entity)
     {

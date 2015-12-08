@@ -36,7 +36,7 @@ class Indexer
     protected $_connection;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param MetadataPool $metadataPool
      */
