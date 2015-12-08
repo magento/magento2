@@ -124,7 +124,7 @@ class UpdateHandler
                         $attribute->getAttributeCode()
                     );
                 }
-                if ((!isset($snapshot[$attribute->getAttributeCode()])
+                if ((!array_key_exists($attribute->getAttributeCode(), $snapshot)
                     || $snapshot[$attribute->getAttributeCode()] === false)
                     && !empty($data[$attribute->getAttributeCode()])
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
@@ -137,7 +137,8 @@ class UpdateHandler
                     );
                     $processed[$attribute->getAttributeCode()] = $data[$attribute->getAttributeCode()];
                 }
-                if (isset($snapshot[$attribute->getAttributeCode()]) && $snapshot[$attribute->getAttributeCode()] !== false
+                if (array_key_exists($attribute->getAttributeCode(), $snapshot)
+                    && $snapshot[$attribute->getAttributeCode()] !== false
                     && !empty($data[$attribute->getAttributeCode()])
                     && $snapshot[$attribute->getAttributeCode()] != $data[$attribute->getAttributeCode()]
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
