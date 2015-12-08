@@ -158,7 +158,9 @@ class DocumentDataMapper
             $storeId,
             [$productId => $productId]
         );
-        $productIndexData = $this->resourceIndex->getFullProductIndexData([$productId]);
+        if (count($productIndexData[$productId])) {
+            $productIndexData = $this->resourceIndex->getFullProductIndexData([$productId]);
+        }
 
         foreach ($productIndexData[$productId] as $attributeCode => $value) {
             // Prepare processing attribute info
