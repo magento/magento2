@@ -84,7 +84,6 @@
             </argument>
             <argument name="aggregationContainer" xsi:type="array">
                 <item name="termBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term</item>
-                <item name="rangeBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Range</item>
                 <item name="dynamicBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Dynamic</item>
             </argument>
         </arguments>
