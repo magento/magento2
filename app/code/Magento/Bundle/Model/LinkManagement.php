@@ -281,6 +281,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             foreach ($option->getSelections() as $selection) {
                 if ((strcasecmp($selection->getSku(), $childSku) == 0) && ($selection->getOptionId() == $optionId)) {
                     $removeSelectionIds[] = $selection->getSelectionId();
+                    $usedProductIds[] = $selection->getProductId();
                     continue;
                 }
                 $excludeSelectionIds[] = $selection->getSelectionId();
