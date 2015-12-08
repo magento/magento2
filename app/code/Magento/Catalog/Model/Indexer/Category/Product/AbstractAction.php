@@ -11,6 +11,10 @@ namespace Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\Entity\MetadataPool;
 
+/**
+ * Class AbstractAction
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class AbstractAction
 {
     /**
@@ -363,7 +367,6 @@ abstract class AbstractAction
             \Magento\Catalog\Model\Product::ENTITY,
             'visibility'
         )->getId();
-        $productIdFieldName = $this->getProductIdFieldName();
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
@@ -395,7 +398,8 @@ abstract class AbstractAction
             []
         )->joinInner(
             ['cpsd' => $this->getTable('catalog_product_entity_int')],
-            'cpsd.' . $linkField . ' = cpe.' . $linkField . ' AND cpsd.store_id = 0' . ' AND cpsd.attribute_id = ' . $statusAttributeId,
+            'cpsd.' . $linkField . ' = cpe.' . $linkField . ' AND cpsd.store_id = 0'
+                . ' AND cpsd.attribute_id = ' . $statusAttributeId,
             []
         )->joinLeft(
             ['cpss' => $this->getTable('catalog_product_entity_int')],
@@ -506,8 +510,6 @@ abstract class AbstractAction
                 \Magento\Catalog\Model\Product::ENTITY,
                 'visibility'
             )->getId();
-
-            $productIdFieldName = $this->getProductIdFieldName();
 
             $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
             $linkField = $metadata->getLinkField();
@@ -621,12 +623,5 @@ abstract class AbstractAction
                 );
             }
         }
-    }
-
-    protected function getProductIdFieldName()
-    {
-        $table = $this->getTable('catalog_product_entity');
-        $indexList = $this->connection->getIndexList($table);
-        return $indexList[$this->connection->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }

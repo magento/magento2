@@ -7,6 +7,7 @@ namespace Magento\Framework\DB\Select;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\LimitExpression;
+
 /**
  * Class LimitRenderer
  */

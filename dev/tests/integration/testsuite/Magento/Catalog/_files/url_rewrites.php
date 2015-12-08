@@ -54,4 +54,3 @@ $category3->setName('Old Root')
     ->setPosition(3)
     ->save();
 $category3->setPath('1/' . $category3->getId())->save();
-

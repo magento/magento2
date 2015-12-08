@@ -75,16 +75,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
-
         $data = $this->getRequest()->getPostValue();
         $productAttributeSetId = $this->getRequest()->getParam('set');
         $productTypeId = $this->getRequest()->getParam('type');
         if ($data) {
             try {
-                $product =
-                    $this->initializationHelper->initialize(
-                        $this->productBuilder->build($this->getRequest())
-                    );
+                $product = $this->initializationHelper->initialize(
+                    $this->productBuilder->build($this->getRequest())
+                );
                 $this->productTypeManager->processProduct($product);
 
                 if (isset($data['product'][$product->getIdFieldName()])) {
@@ -114,7 +112,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                             ->save();
                     }
                 }
-
                 $this->messageManager->addSuccess(__('You saved the product.'));
                 if ($product->getSku() != $originalSku) {
                     $this->messageManager->addNotice(
@@ -125,7 +122,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                         )
                     );
                 }
-
                 $this->_eventManager->dispatch(
                     'controller_action_catalog_product_save_entity_after',
                     ['controller' => $this]

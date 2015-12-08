@@ -10,7 +10,7 @@ use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Api\ProductLinkManagementInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Link\Action\SaveProductLinks;
+use \Magento\Catalog\Model\Product\Link\SaveHandler as SaveProductLinks;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
@@ -108,7 +108,7 @@ class SaveHandler implements ProcessEntityRelationInterface
         $productSkuIds = [];
         $oldLinks = $this->productLinkRepository->getList($entity);
 
-        foreach($entity->getProductLinks() as $link) {
+        foreach ($entity->getProductLinks() as $link) {
             if ($link->getLinkType() == 'associated') {
                 $this->productLinkRepository->save($link);
                 $product = $this->productRepository->get($link->getLinkedProductSku());

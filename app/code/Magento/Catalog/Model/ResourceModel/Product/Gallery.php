@@ -53,7 +53,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * {@inheritdoc}
      */
-    public function getConnection() {
+    public function getConnection()
+    {
         return $this->metadata->getEntityConnection();
     }
 
@@ -80,9 +81,10 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $mainTableAlias = $this->getMainTableAlias();
         $select = $this->getConnection()->select()
             ->from(
-                [$mainTableAlias => $this->getTable($tableNameAlias)], $cols
+                [$mainTableAlias => $this->getTable($tableNameAlias)],
+                $cols
             )->where(
-                $mainTableAlias . '.value_id IN(?)',
+                $mainTableAlias.'.value_id IN(?)',
                 $ids
             );
         if (null !== $storeId) {
@@ -340,7 +342,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $newFiles
      * @param int $originalProductId
      * @param int $newProductId
-     * @return $this
+     * @return array
      */
     public function duplicate($attributeId, $newFiles, $originalProductId, $newProductId)
     {
@@ -375,7 +377,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if (count($valueIdMap) == 0) {
-            return $this;
+            return [];
         }
 
         // Duplicate per store gallery values
@@ -395,7 +397,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->insertGalleryValueInStore($row);
         }
 
-        return $this;
+        return $valueIdMap;
     }
 
     /**

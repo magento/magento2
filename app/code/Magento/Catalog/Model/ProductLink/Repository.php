@@ -16,6 +16,10 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Entity\MetadataPool;
 
+/**
+ * Class Repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 {
     /**
@@ -152,7 +156,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     /**
      * Get product links list
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
      */
     public function getList(\Magento\Catalog\Api\Data\ProductInterface $product)

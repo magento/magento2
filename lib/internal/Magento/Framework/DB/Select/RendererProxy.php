@@ -45,8 +45,11 @@ class RendererProxy extends SelectRenderer
      * @param string $instanceName
      * @param bool $shared
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\Magento\\Framework\\DB\\Select\\SelectRenderer', $shared = true)
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $instanceName = '\\Magento\\Framework\\DB\\Select\\SelectRenderer',
+        $shared = true
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
         $this->_isShared = $shared;
@@ -57,11 +60,13 @@ class RendererProxy extends SelectRenderer
      */
     public function __sleep()
     {
-        return array('_subject', '_isShared');
+        return ['_subject', '_isShared'];
     }
 
     /**
      * Retrieve ObjectManager from global scope
+     *
+     * @return void
      */
     public function __wakeup()
     {
@@ -70,6 +75,8 @@ class RendererProxy extends SelectRenderer
 
     /**
      * Clone proxied instance
+     *
+     * @return void
      */
     public function __clone()
     {

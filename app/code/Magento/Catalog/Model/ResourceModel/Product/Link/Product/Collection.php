@@ -13,6 +13,7 @@ use Magento\Framework\Model\Entity\MetadataPool;
  * Catalog product linked products collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {

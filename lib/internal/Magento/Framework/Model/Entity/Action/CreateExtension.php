@@ -54,6 +54,4 @@ class CreateExtension
         $entity = $hydrator->hydrate($entity, $entityData);
         return $entity;
     }
-
-
 }

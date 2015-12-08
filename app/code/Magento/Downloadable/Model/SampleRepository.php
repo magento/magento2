@@ -169,9 +169,9 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         if ($product->getTypeId() !== Type::TYPE_DOWNLOADABLE) {
             throw new InputException(__('Product type of the product must be \'downloadable\'.'));
         }
-//        if (!$this->contentValidator->isValid($sample)) {
-//            throw new InputException(__('Provided sample information is invalid.'));
-//        }
+        //if (!$this->contentValidator->isValid($sample)) {
+        //    throw new InputException(__('Provided sample information is invalid.'));
+        //}
         if (!in_array($sample->getSampleType(), ['url', 'file'])) {
             throw new InputException(__('Invalid sample type.'));
         }
@@ -190,6 +190,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      * Load file and set path to sample
      *
      * @param SampleInterface $sample
+     * @return void
      */
     protected function setFiles(SampleInterface $sample)
     {

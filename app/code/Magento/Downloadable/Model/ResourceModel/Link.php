@@ -47,6 +47,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
