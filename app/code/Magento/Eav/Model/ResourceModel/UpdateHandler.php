@@ -116,7 +116,7 @@ class UpdateHandler
                     continue;
                 }
                 if (isset($snapshot[$attribute->getAttributeCode()]) && $snapshot[$attribute->getAttributeCode()] !== false
-                    && empty($data[$attribute->getAttributeCode()])
+                    && $attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerDelete(
                         $entityType,
