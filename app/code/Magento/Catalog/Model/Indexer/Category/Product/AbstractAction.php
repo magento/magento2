@@ -11,6 +11,10 @@ namespace Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\Entity\MetadataPool;
 
+/**
+ * Class AbstractAction
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class AbstractAction
 {
     /**

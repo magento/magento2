@@ -11,6 +11,10 @@ use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\Stdlib;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class ConnectionFactory
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface
 {
     /**
