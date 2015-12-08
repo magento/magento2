@@ -45,8 +45,11 @@ class RendererProxy extends SelectRenderer
      * @param string $instanceName
      * @param bool $shared
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\Magento\\Framework\\DB\\Select\\SelectRenderer', $shared = true)
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $instanceName = '\\Magento\\Framework\\DB\\Select\\SelectRenderer',
+        $shared = true
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
         $this->_isShared = $shared;

@@ -91,7 +91,12 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
                 ]
             )
         );
-        $resourceInstance = new Mysql(new Stdlib\StringUtils(), new Stdlib\DateTime(), $selectFactory, $connectionConfig);
+        $resourceInstance = new Mysql(
+            new Stdlib\StringUtils(),
+            new Stdlib\DateTime(),
+            $selectFactory,
+            $connectionConfig
+        );
 
         return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));
     }

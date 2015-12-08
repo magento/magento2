@@ -13,7 +13,8 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Subject of testing.
      *
-     * @var \Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery\ReadHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery\ReadHandler
+     *      |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subject;
 
