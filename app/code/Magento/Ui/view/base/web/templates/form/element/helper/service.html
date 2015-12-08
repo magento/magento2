@@ -6,11 +6,12 @@
 -->
 <div class="admin__field-service">
     <input type="checkbox"
-           name="use_default[]"
            class="admin__control-checkbox"
+           data-form-part="category_form"
            attr="
                 id: $data.uid + '_default',
-                disabled: !$data.isServiceEnabled()
+                disabled: !$data.isServiceEnabled(),
+                name: 'use_default_' +  $data.inputName
            "
            ko-checked="isUseDefault">
     <label translate="'Use Default Value'" attr="for: $data.uid + '_default'" class="admin__field-label"></label>
