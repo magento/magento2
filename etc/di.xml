@@ -21,7 +21,7 @@
         </arguments>
     </type>
 
-    <type name="Magento\Framework\MessageQueue\PublisherFactory">
+    <virtualType name="QueuePublisherFactory" type="Magento\Framework\MessageQueue\PublisherFactory">
         <arguments>
             <argument name="publishers" xsi:type="array">
                 <item name="amqp" xsi:type="array">
@@ -30,8 +30,14 @@
                 </item>
             </argument>
         </arguments>
+    </virtualType>
+    <type name="Magento\Framework\MessageQueue\PublisherProxy">
+        <arguments>
+            <argument name="publisherFactory" xsi:type="object">QueuePublisherFactory</argument>
+        </arguments>
     </type>
-    <type name="Magento\Framework\MessageQueue\Rpc\PublisherFactory">
+
+    <virtualType name="RpcPublisherFactory" type="Magento\Framework\MessageQueue\PublisherFactory">
         <arguments>
             <argument name="publishers" xsi:type="array">
                 <item name="amqp" xsi:type="array">
@@ -40,7 +46,13 @@
                 </item>
             </argument>
         </arguments>
+    </virtualType>
+    <type name="Magento\Framework\MessageQueue\Rpc\PublisherProxy">
+        <arguments>
+            <argument name="publisherFactory" xsi:type="object">RpcPublisherFactory</argument>
+        </arguments>
     </type>
+
     <type name="Magento\Framework\MessageQueue\ConsumerFactory">
         <arguments>
             <argument name="consumers" xsi:type="array">
