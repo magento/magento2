@@ -18,4 +18,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item xsi:type="object" name="braintree">BraintreeTwoFacade</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

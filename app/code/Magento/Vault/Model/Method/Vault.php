@@ -11,7 +11,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
-use Magento\Vault\Model\Adminhtml\Source\VaultPayment;
+use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 
 /**
@@ -76,7 +76,7 @@ final class Vault implements VaultPaymentInterface
     {
         if (!isset($this->paymentInstance)) {
             $this->config->setMethodCode(
-                $this->config->getValue(VaultPayment::VALUE_CODE, $this->storeId)
+                $this->config->getValue(VaultProvidersMap::VALUE_CODE, $this->storeId)
             );
             $this->paymentInstance = $this->objectManager->get($this->config->getValue('model'));
             $this->config->setMethodCode($this->code);

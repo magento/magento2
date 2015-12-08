@@ -9,7 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-use Magento\Vault\Model\Adminhtml\Source\VaultPayment;
+use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
 
 /**
  * Class PaymentTokenRepositoryProxy
@@ -90,7 +90,7 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
             return $this->nullRepository;
         }
 
-        $methodCode = $this->config->getValue(VaultPayment::VALUE_CODE);
+        $methodCode = $this->config->getValue(VaultProvidersMap::VALUE_CODE);
 
         return isset($this->repositories[$methodCode])
             ? $this->objectManager->get($this->repositories[$methodCode])
