@@ -35,9 +35,10 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
-        $ids = $collection->getConnection()->fetchPairs($collection->getConnection()->select()
+        $select = $collection->getConnection()->select()
             ->from(['p' => $collection->getTable('catalog_product_entity')], ['sku', 'entity_id'])
-            ->where('sku IN(?)', ['simple', 'custom-design-simple-product', 'bundle-product']));
+            ->where('sku IN(?)', ['simple', 'custom-design-simple-product', 'bundle-product']);
+        $ids = $collection->getConnection()->fetchPairs($select);
         $select = (string)$collection->getSelect();
         $this->model->prepareData($collection, array_values($ids));
         $this->assertEquals($select, (string)$collection->getSelect());
