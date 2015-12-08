@@ -59,6 +59,11 @@ class DocumentDataMapper
     private $attributeContainer;
 
     /**
+     * @var \Magento\Elasticsearch\Model\ResourceModel\Index
+     */
+    private $resourceIndex;
+
+    /**
      * @var FieldMapper
      */
     private $fieldMapper;
@@ -91,8 +96,11 @@ class DocumentDataMapper
     protected $mediaGalleryRoles;
 
     /**
+     * Construction for DocumentDataMapper
+     *
      * @param Builder $builder
      * @param AttributeContainer $attributeContainer
+     * @param \Magento\Elasticsearch\Model\ResourceModel\Index $resourceIndex
      * @param FieldMapper $fieldMapper
      * @param DateTime $dateTime
      * @param TimezoneInterface $localeDate
@@ -102,6 +110,7 @@ class DocumentDataMapper
     public function __construct(
         Builder $builder,
         AttributeContainer $attributeContainer,
+        \Magento\Elasticsearch\Model\ResourceModel\Index $resourceIndex,
         FieldMapper $fieldMapper,
         DateTime $dateTime,
         TimezoneInterface $localeDate,
@@ -110,6 +119,7 @@ class DocumentDataMapper
     ) {
         $this->builder = $builder;
         $this->attributeContainer = $attributeContainer;
+        $this->resourceIndex = $resourceIndex;
         $this->fieldMapper = $fieldMapper;
         $this->dateTime = $dateTime;
         $this->localeDate = $localeDate;
@@ -127,27 +137,32 @@ class DocumentDataMapper
     /**
      * Prepare index data for using in search engine metadata.
      *
-     * @param array $productIndexData
      * @param int $productId
+     * @param array $productIndexData
      * @param int $storeId
-     * @param array $productPriceIndexData
-     * @param array $productCategoryIndexData
      * @return array|false
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function map(
-        array $productIndexData,
-        $productId,
-        $storeId,
-        array $productPriceIndexData,
-        array $productCategoryIndexData
-    ) {
+    public function map($productId, array $productIndexData, $storeId)
+    {
         $this->builder->addField('store_id', $storeId);
         $mediaGalleryRoles = array_fill_keys($this->mediaGalleryRoles, '');
-        foreach ($productIndexData as $attributeCode => $value) {
+
+        $productPriceIndexData = $this->attributeContainer->getAttribute('price')
+            ? $this->resourceIndex->getPriceIndexData([$productId], $storeId)
+            : [];
+        $productCategoryIndexData = $this->resourceIndex->getFullCategoryProductIndexData(
+            $storeId,
+            [$productId => $productId]
+        );
+        if (count($productIndexData[$productId])) {
+            $productIndexData = $this->resourceIndex->getFullProductIndexData([$productId]);
+        }
+
+        foreach ($productIndexData[$productId] as $attributeCode => $value) {
             // Prepare processing attribute info
             if (strpos($attributeCode, '_value') !== false) {
                 $this->builder->addField($attributeCode, $value);

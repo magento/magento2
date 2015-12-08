@@ -5,21 +5,11 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\Model\ResourceModel\Index;
-use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContainer;
-use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface;
 
 /**
  * Elasticsearch adapter
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Elasticsearch
 {
@@ -38,16 +28,6 @@ class Elasticsearch
     protected $connectionManager;
 
     /**
-     * @var Index
-     */
-    protected $resourceIndex;
-
-    /**
-     * @var AttributeContainer
-     */
-    protected $attributeContainer;
-
-    /**
      * @var DocumentDataMapper
      */
     protected $documentDataMapper;
@@ -58,7 +38,7 @@ class Elasticsearch
     protected $fieldMapper;
 
     /**
-     * @var ClientOptionsInterface
+     * @var \Magento\Elasticsearch\Model\Config
      */
     protected $clientConfig;
 
@@ -68,12 +48,12 @@ class Elasticsearch
     protected $client;
 
     /**
-     * @var BuilderInterface
+     * @var \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface
      */
     protected $indexBuilder;
 
     /**
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -83,32 +63,28 @@ class Elasticsearch
     protected $preparedIndex = [];
 
     /**
+     * Constructor for Elasticsearch adapter.
+     *
      * @param ConnectionManager $connectionManager
-     * @param Index $resourceIndex
-     * @param AttributeContainer $attributeContainer
      * @param DocumentDataMapper $documentDataMapper
      * @param FieldMapper $fieldMapper
-     * @param Config $clientConfig
-     * @param BuilderInterface $indexBuilder
-     * @param LoggerInterface $logger
+     * @param \Magento\Elasticsearch\Model\Config $clientConfig
+     * @param \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $options
      *
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         ConnectionManager $connectionManager,
-        Index $resourceIndex,
-        AttributeContainer $attributeContainer,
         DocumentDataMapper $documentDataMapper,
         FieldMapper $fieldMapper,
-        Config $clientConfig,
-        BuilderInterface $indexBuilder,
-        LoggerInterface $logger,
+        \Magento\Elasticsearch\Model\Config $clientConfig,
+        \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder,
+        \Psr\Log\LoggerInterface $logger,
         $options = []
     ) {
         $this->connectionManager = $connectionManager;
-        $this->resourceIndex = $resourceIndex;
-        $this->attributeContainer = $attributeContainer;
         $this->documentDataMapper = $documentDataMapper;
         $this->fieldMapper = $fieldMapper;
         $this->clientConfig = $clientConfig;
@@ -116,47 +92,27 @@ class Elasticsearch
         $this->logger = $logger;
 
         try {
-            $this->connect($options);
+            $this->client = $this->connectionManager->getConnection($options);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new LocalizedException(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('We were unable to perform the search because of a search engine misconfiguration.')
             );
         }
     }
 
     /**
-     * Connect to Search Engine Client by specified options.
-     *
-     * @param array $options
-     * @return ElasticsearchClient
-     *
-     * @throws \RuntimeException
-     */
-    protected function connect($options = [])
-    {
-        try {
-            $this->client = $this->connectionManager->getConnection($options);
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
-            throw new \RuntimeException('Elasticsearch client is not set.');
-        }
-
-        return $this->client;
-    }
-
-    /**
      * Retrieve Elasticsearch server status
      *
      * @return bool
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function ping()
     {
         try {
             $response = $this->client->ping();
         } catch (\Exception $e) {
-            throw new LocalizedException(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Could not ping search engine: %1', $e->getMessage())
             );
         }
@@ -172,29 +128,17 @@ class Elasticsearch
      */
     public function prepareDocsPerStore(array $documentData, $storeId)
     {
-        if (0 === count($documentData)) {
-            return [];
-        }
-
         $documents = [];
-        $productIds = array_keys($documentData);
-        $priceIndexData = $this->attributeContainer->getAttribute('price')
-            ? $this->resourceIndex->getPriceIndexData($productIds, $storeId)
-            : [];
-        $categoryIndexData = $this->resourceIndex->getFullCategoryProductIndexData($storeId, $productIds);
-        $fullProductIndexData = $this->resourceIndex->getFullProductIndexData($productIds);
-
-        foreach ($fullProductIndexData as $productId => $productIndexData) {
-            $document = $this->documentDataMapper->map(
-                $productIndexData,
-                $productId,
-                $storeId,
-                $priceIndexData,
-                $categoryIndexData
-            );
-            $documents[$productId] = $document;
+        if (count($documentData)) {
+            foreach ($documentData as $documentId => $data) {
+                $document = $this->documentDataMapper->map(
+                    $documentId,
+                    $data,
+                    $storeId
+                );
+                $documents[$documentId] = $document;
+            }
         }
-
         return $documents;
     }
 
@@ -350,7 +294,6 @@ class Elasticsearch
      * Update Elasticsearch alias for new index.
      *
      * @param int $storeId
-     *
      * @return $this
      */
     public function updateAlias($storeId)
@@ -382,16 +325,12 @@ class Elasticsearch
      *
      * @param int $storeId
      * @param string $indexName
-     *
      * @return $this
      */
     protected function prepareIndex($storeId, $indexName)
     {
         $this->indexBuilder->setStoreId($storeId);
-        $this->client->createIndex(
-            $indexName,
-            ['settings' => $this->indexBuilder->build()]
-        );
+        $this->client->createIndex($indexName, ['settings' => $this->indexBuilder->build()]);
         $this->client->addFieldsMapping(
             $this->fieldMapper->getAllAttributesTypes(),
             $indexName,
@@ -434,7 +373,6 @@ class Elasticsearch
      * Returns index pattern.
      *
      * @param int $storeId
-     *
      * @return string
      */
     protected function getIndexPattern($storeId)
@@ -446,7 +384,6 @@ class Elasticsearch
      * Returns index for store in alias definition.
      *
      * @param int $storeId
-     *
      * @return string
      */
     protected function getIndexFromAlias($storeId)
