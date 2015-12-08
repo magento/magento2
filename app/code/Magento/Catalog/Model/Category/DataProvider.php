@@ -155,6 +155,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return [];
         } else {
             $categoryData = $category->getData();
+            $categoryData = $this->addUseDefaultSettings($category, $categoryData);
             $categoryData = $this->addUseConfigSettings($categoryData);
             $categoryData = $this->filterFields($categoryData);
             $result['general'] = $categoryData;
@@ -227,7 +228,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Add use config settings
      *
-     * @param Type $categoryData
+     * @param array $categoryData
      * @return array
      */
     protected function addUseConfigSettings($categoryData)
@@ -240,6 +241,27 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
             }
         }
+        return $categoryData;
+    }
+
+    /**
+     * Add use default settings
+     *
+     * @param \Magento\Catalog\Model\Category $category
+     * @param array $categoryData
+     * @return array
+     */
+    protected function addUseDefaultSettings($category, $categoryData)
+    {
+        if (
+            $category->getExistsStoreValueFlag('url_key') ||
+            $category->getStoreId() === \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        ) {
+            $categoryData['use_default']['url_key'] = false;
+        } else {
+            $categoryData['use_default']['url_key'] = true;
+        }
+
         return $categoryData;
     }
 
