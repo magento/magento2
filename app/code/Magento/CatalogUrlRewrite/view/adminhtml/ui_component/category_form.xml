@@ -19,6 +19,7 @@
                             <item name="handleChanges" xsi:type="string">${ $.provider }:data.general.url_key</item>
                         </item>
                         <item name="component" xsi:type="string">Magento_Catalog/js/components/url-key-handle-changes</item>
+                        <item name="sortOrder" xsi:type="number">15</item>
                     </item>
                 </argument>
             </field>
