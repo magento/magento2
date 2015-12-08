@@ -34,7 +34,7 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->reader = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Index\Config\Reader')
+        $this->reader = $this->getMockBuilder('Magento\Framework\Config\ReaderInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
