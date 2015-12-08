@@ -19,7 +19,7 @@ $gridJsObject = $blockGrid->getJsObjectName();
         'use strict';
 
         var assignProductsConfig = {
-            "selectedProducts": <?php /* @escapeNotVerified */ echo $block->getProductsJson() ?: '{}'; ?>,
+            "selectedProducts": <?php /* @escapeNotVerified */ echo $block->getProductsJson(); ?>,
             "gridJsObject": <?php /* @escapeNotVerified */ echo $gridJsObject ?: '{}'; ?>
         };
 
