@@ -127,7 +127,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             '\Magento\Review\Model\Review',
             [
                 'setData', 'validate', 'setEntityId', 'getEntityIdByCode', 'setEntityPkValue', 'setStatusId',
-                'setCustomerId', 'setStoreId', 'setStores', 'save', 'getId', 'aggregate'
+                'setCustomerId', 'setStoreId', 'setStores', 'save', 'getId', 'aggregate', 'unsetData'
             ],
             [],
             '',
@@ -220,9 +220,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $reviewData = [
-            'ratings' => [1 => 1]
-        ];
-        $reviewDataWithId = [
             'ratings' => [1 => 1],
             'review_id' => 2
         ];
@@ -236,7 +233,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->reviewSession->expects($this->any())->method('getFormData')
             ->with(true)
-            ->willReturn($reviewDataWithId);
+            ->willReturn($reviewData);
         $this->request->expects($this->at(0))->method('getParam')
             ->with('category', false)
             ->willReturn(false);
@@ -276,6 +273,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->review->expects($this->once())->method('setEntityId')
             ->with(1)
             ->willReturnSelf();
+        $this->review->expects($this->once())->method('unsetData')->with('review_id');
         $product->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($productId);
