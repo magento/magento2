@@ -261,7 +261,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $parent = $class->getParentClass();
         $file = false;
         if ($parent) {
-            $file = str_replace('\\', DIRECTORY_SEPARATOR, $parent->getName());
+            $file = str_replace('\\', DIRECTORY_SEPARATOR, $parent->getFileName());
         }
         /** Prevent analysis of non Magento classes  */
         if ($parent && in_array($file, $allowedFiles)) {
