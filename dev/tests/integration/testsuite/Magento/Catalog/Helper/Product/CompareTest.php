@@ -37,9 +37,8 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $id1 = $productRepository->get('simple1')->getId();
         $id2 = $productRepository->get('simple2')->getId();
         $this->assertRegExp(
-            '#/catalog/product_compare/index/items/(?:'
-            . $id1 . ',' . $id2 . '|' . $id2 . ',' . $id1
-            . ')/#', $this->_helper->getListUrl()
+            '#/catalog/product_compare/index/items/(?:' . $id1 . ',' . $id2 . '|' . $id2 . ',' . $id1. ')/#',
+            $this->_helper->getListUrl()
         );
     }
 

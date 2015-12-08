@@ -51,7 +51,6 @@ $product->setTypeId('bundle')
                 ],
             ],
         ]
-    // fixture product
     );
 
 if ($product->getBundleOptionsData()) {

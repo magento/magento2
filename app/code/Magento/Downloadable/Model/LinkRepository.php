@@ -175,10 +175,10 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     public function save($sku, LinkInterface $link, $isGlobalScopeContent = false)
     {
         $product = $this->productRepository->get($sku, true);
-//        ToDo: before validation link should have link_file_content
-//        if (!$this->contentValidator->isValid($link)) {
-//            throw new InputException(__('Provided link information is invalid.'));
-//        }
+        //ToDo: before validation link should have link_file_content
+        //if (!$this->contentValidator->isValid($link)) {
+        //    throw new InputException(__('Provided link information is invalid.'));
+        //}
 
         if (!in_array($link->getLinkType(), ['url', 'file'])) {
             throw new InputException(__('Invalid link type.'));
