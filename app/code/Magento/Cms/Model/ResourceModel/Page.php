@@ -8,10 +8,17 @@
 
 namespace Magento\Cms\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Model\EntityManager;
+use Magento\Cms\Api\Data\PageInterface;
+
 /**
  * Cms page mysql resource
  */
-class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Page extends AbstractDb
 {
     /**
      * Store model
@@ -23,32 +30,39 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateTime;
 
     /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
      * Construct
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        Context $context,
+        StoreManagerInterface $storeManager,
+        DateTime $dateTime,
+        EntityManager $entityManager,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_storeManager = $storeManager;
         $this->dateTime = $dateTime;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -378,5 +392,46 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getStore()
     {
         return $this->_storeManager->getStore($this->_store);
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->isDeleted()) {
+            return $this->delete($object);
+        }
+
+        $this->beginTransaction();
+
+        try {
+            if (!$this->isModified($object)) {
+                $this->processNotModifiedSave($object);
+                $this->commit();
+                $object->setHasDataChanges(false);
+                return $this;
+            }
+            $object->validateBeforeSave();
+            $object->beforeSave();
+            if ($object->isSaveAllowed()) {
+                $this->_serializeFields($object);
+                $this->_beforeSave($object);
+                $this->_checkUnique($object);
+                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
+                $this->entityManager->save(PageInterface::class, $object);
+                $this->unserializeFields($object);
+                $this->processAfterSaves($object);
+            }
+            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
+            $object->setHasDataChanges(false);
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
     }
 }
