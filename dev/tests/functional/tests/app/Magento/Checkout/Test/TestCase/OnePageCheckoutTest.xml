@@ -20,6 +20,7 @@
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Cancel, Hold, Invoice, Edit</data>
             <data name="configData" xsi:type="string">checkmo_specificcountry_gb</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
@@ -40,6 +41,7 @@
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Cancel, Hold, Ship, Invoice, Edit</data>
             <data name="configData" xsi:type="string">banktransfer</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
@@ -59,6 +61,7 @@
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Cancel, Hold, Ship, Invoice, Edit</data>
             <data name="configData" xsi:type="string">banktransfer_specificcountry_gb</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
@@ -81,6 +84,7 @@
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <data name="configData" xsi:type="string">checkmo</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
         </variation>
         <variation name="OnePageCheckoutTestVariation5" summary="Guest Checkout using Check/Money Order and Free Shipping with Prices/Taxes Verifications" ticketId="MAGETWO-12412">
@@ -102,6 +106,7 @@
             <data name="configData" xsi:type="string">checkmo, freeshipping_minimum_order_amount_100</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
         </variation>
     </testCase>
