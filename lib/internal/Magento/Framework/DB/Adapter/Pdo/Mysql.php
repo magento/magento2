@@ -3628,7 +3628,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $result = $this->formatDate($condition[$key]);
             }
         } else {
-            $result = $this->formatDate($condition[$key], false);
+            $result = $this->formatDate($condition[$key]);
         }
 
         return $result;
