@@ -89,6 +89,7 @@ class CreateHandler
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute($entityType, $product)
     {
@@ -196,6 +197,7 @@ class CreateHandler
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function processDeletedImages($product, array &$images)
     {

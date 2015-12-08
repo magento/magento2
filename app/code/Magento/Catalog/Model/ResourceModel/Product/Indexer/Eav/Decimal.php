@@ -147,6 +147,7 @@ class Decimal extends AbstractEav
      *
      * @param string $table
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getIdxTable($table = null)
     {

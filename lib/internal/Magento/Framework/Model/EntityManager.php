@@ -86,6 +86,7 @@ class EntityManager
      * @param string $entityType
      * @param SearchCriteria $searchCriteria
      * @return object[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function find($entityType, SearchCriteria $searchCriteria)
     {

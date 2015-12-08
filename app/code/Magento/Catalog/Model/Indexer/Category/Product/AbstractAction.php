@@ -355,6 +355,7 @@ abstract class AbstractAction
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function createAnchorSelect(\Magento\Store\Model\Store $store)
     {

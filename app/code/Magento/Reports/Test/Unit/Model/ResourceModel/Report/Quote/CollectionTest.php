@@ -153,12 +153,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $eavEntity->expects($this->once())
-            ->method('getLinkField')
-            ->willReturn('entity_id');
-        $productResourceMock->expects($this->once())
-            ->method('getEntity')
-            ->willReturn($eavEntity);
+        $eavEntity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
+        $productResourceMock->expects($this->once())->method('getEntity')->willReturn($eavEntity);
+
         $this->selectMock->expects($this->once())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('useStraightJoin')->willReturnSelf();
