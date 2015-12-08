@@ -9,7 +9,7 @@ use Magento\Framework\Communication\ConfigInterface as Config;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Stdlib\BooleanUtils;
-use Magento\Framework\Communication\Config\Validator\XmlValidator as Validator;
+use Magento\Framework\Communication\Config\Validator\XmlValidator;
 
 /**
  * Converts Communication config from \DOMDocument to array
@@ -29,25 +29,25 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $booleanUtils;
 
     /**
-     * @var Validator
+     * @var XmlValidator
      */
-    private $validator;
+    private $xmlValidator;
 
     /**
      * Initialize dependencies
      *
      * @param MethodsMap $methodsMap
      * @param BooleanUtils $booleanUtils
-     * @param Validator $validator
+     * @param XmlValidator $xmlValidator
      */
     public function __construct(
         MethodsMap $methodsMap,
         BooleanUtils $booleanUtils,
-        Validator $validator
+        XmlValidator $xmlValidator
     ) {
         $this->methodsMap = $methodsMap;
         $this->booleanUtils = $booleanUtils;
-        $this->validator = $validator;
+        $this->xmlValidator = $xmlValidator;
     }
 
     /**
@@ -82,14 +82,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $requestSchema = $this->extractTopicRequestSchema($topicNode);
             $responseSchema = $this->extractTopicResponseSchema($topicNode);
             $handlers = $this->extractTopicResponseHandlers($topicNode);
-            $this->validator->validateResponseRequest(
+            $this->xmlValidator->validateResponseRequest(
                 $requestResponseSchema,
                 $requestSchema,
                 $topicName,
                 $responseSchema,
                 $handlers
             );
-            $this->validator->validateDeclarationOfTopic(
+            $this->xmlValidator->validateDeclarationOfTopic(
                 $requestResponseSchema,
                 $topicName,
                 $requestSchema,
@@ -151,7 +151,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $handlerName = $handlerAttributes->getNamedItem('name')->nodeValue;
                 $serviceName = $handlerAttributes->getNamedItem('type')->nodeValue;
                 $methodName = $handlerAttributes->getNamedItem('method')->nodeValue;
-                $this->validator->validateResponseHandlersType($serviceName, $methodName, $handlerName, $topicName);
+                $this->xmlValidator->validateResponseHandlersType($serviceName, $methodName, $handlerName, $topicName);
                 $handlerNodes[$handlerName] = [
                     Config::HANDLER_TYPE => $serviceName,
                     Config::HANDLER_METHOD => $methodName
@@ -175,7 +175,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
         $requestSchema = $topicAttributes->getNamedItem('request')->nodeValue;
-        $this->validator->validateRequestSchemaType($requestSchema, $topicName);
+        $this->xmlValidator->validateRequestSchemaType($requestSchema, $topicName);
         return $requestSchema;
     }
 
@@ -193,7 +193,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
         $responseSchema = $topicAttributes->getNamedItem('response')->nodeValue;
-        $this->validator->validateResponseSchemaType($responseSchema, $topicName);
+        $this->xmlValidator->validateResponseSchemaType($responseSchema, $topicName);
         return $responseSchema;
     }
 
@@ -243,7 +243,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         preg_match(self::SERVICE_METHOD_NAME_PATTERN, $serviceMethod, $matches);
         $className = $matches[1];
         $methodName = $matches[2];
-        $this->validator->validateServiceMethod($serviceMethod, $topicName, $className, $methodName);
+        $this->xmlValidator->validateServiceMethod($serviceMethod, $topicName, $className, $methodName);
         return [$className, $methodName];
     }
 }
