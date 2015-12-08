@@ -486,7 +486,7 @@
 
         <xs:complexType mixed="true">
             <xs:sequence>
-                <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+                <xs:any minOccurs="0" maxOccurs="1" processContents="lax" />
             </xs:sequence>
             <xs:attributeGroup ref="commentAttributeGroup"/>
         </xs:complexType>
