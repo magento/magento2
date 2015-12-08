@@ -37,10 +37,10 @@ class Post extends ProductController
             $data = $this->getRequest()->getPostValue();
             $rating = $this->getRequest()->getParam('ratings', []);
         }
-        $data = $this->filterData($data);
         if (($product = $this->initProduct()) && !empty($data)) {
             /** @var \Magento\Review\Model\Review $review */
             $review = $this->reviewFactory->create()->setData($data);
+            $review->unsetData('review_id');
 
             $validate = $review->validate();
             if ($validate === true) {
@@ -81,17 +81,5 @@ class Post extends ProductController
         $redirectUrl = $this->reviewSession->getRedirectUrl(true);
         $resultRedirect->setUrl($redirectUrl ?: $this->_redirect->getRedirectUrl());
         return $resultRedirect;
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function filterData(array $data)
-    {
-        if (!empty($data['review_id'])) {
-            unset($data['review_id']);
-        }
-        return $data;
     }
 }
