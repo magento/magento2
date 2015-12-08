@@ -341,6 +341,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
     {

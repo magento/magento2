@@ -102,6 +102,8 @@ class UpdateHandler
      * @param array $data
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute($entityType, $data)
     {
@@ -115,7 +117,8 @@ class UpdateHandler
                 if ($attribute->isStatic()) {
                     continue;
                 }
-                if (isset($snapshot[$attribute->getAttributeCode()]) && $snapshot[$attribute->getAttributeCode()] !== false
+                if (isset($snapshot[$attribute->getAttributeCode()])
+                    && $snapshot[$attribute->getAttributeCode()] !== false
                     && empty($data[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerDelete(
