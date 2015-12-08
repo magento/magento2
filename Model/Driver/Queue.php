@@ -127,10 +127,15 @@ class Queue implements QueueInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function push(EnvelopeInterface $envelope, $data)
     {
-        //todo Implement logic here
+        $properties = $envelope->getProperties();
+        $this->queueManagement->addMessageToQueues(
+            $properties[QueueManagement::MESSAGE_TOPIC],
+            $envelope->getBody(),
+            [$this->queueName]
+        );
     }
 }
