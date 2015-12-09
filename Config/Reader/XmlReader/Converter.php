@@ -389,8 +389,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $consumerInstanceType = $consumerNode->attributes->getNamedItem('executor');
             $queueName = $consumerNode->attributes->getNamedItem('queue')->nodeValue;
             $handler = [
-                self::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
-                self::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
+                QueueConfig::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
+                QueueConfig::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
             ];
             $handlers = [];
             if (isset($map[$queueName])) {
@@ -402,7 +402,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 QueueConfig::CONSUMER_NAME => $consumerName,
                 QueueConfig::CONSUMER_QUEUE => $queueName,
                 QueueConfig::CONSUMER_CONNECTION => $connections ? $connections->nodeValue : null,
-                QueueConfig::CONSUMER_TYPE => self::CONSUMER_TYPE_ASYNC,
+                QueueConfig::CONSUMER_TYPE => QueueConfig::CONSUMER_TYPE_ASYNC,
                 QueueConfig::CONSUMER_HANDLERS => $handlers,
                 QueueConfig::CONSUMER_MAX_MESSAGES => $maxMessages ? $maxMessages->nodeValue : null,
                 QueueConfig::CONSUMER_INSTANCE_TYPE => $consumerInstanceType ? $consumerInstanceType->nodeValue : null,
