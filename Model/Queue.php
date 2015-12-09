@@ -120,7 +120,11 @@ class Queue implements QueueInterface
             // @codingStandardsIgnoreEnd
             $envelope = $this->envelopeFactory->create(['body' => $message->body, 'properties' => $properties]);
 
-            call_user_func($callback, $envelope);
+            if ($callback instanceof \Closure) {
+                $callback($envelope);
+            } else {
+                call_user_func($callback, $envelope);
+            }
         };
 
         $channel = $this->amqpConfig->getChannel();
