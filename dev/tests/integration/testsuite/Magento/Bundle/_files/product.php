@@ -9,7 +9,7 @@
  * bundled items should not contain products with required custom options.
  * However, if to create such a bundle product, it will be always out of stock.
  */
-require_once __DIR__ . '/../../../Magento/Catalog/_files/products.php';
+require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
