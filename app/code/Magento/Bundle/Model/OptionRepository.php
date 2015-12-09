@@ -6,6 +6,7 @@
  */
 namespace Magento\Bundle\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -138,6 +139,15 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     public function getList($sku)
     {
         $product = $this->getProduct($sku);
+        return $this->getListByProduct($product);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @return \Magento\Bundle\Api\Data\OptionInterface[]
+     */
+    public function getListByProduct(ProductInterface $product)
+    {
         return $this->productOptionList->getItems($product);
     }
 
