@@ -120,11 +120,8 @@ class Messages extends \Magento\Backend\Block\Template
         return $this->jsonHelper->jsonEncode(
             [
                 'systemMessageDialog' => [
-                    'autoOpen' => false,
-                    'width' => '75%',
-                    'modal' => true,
-                    'minHeight' => '0',
-                    'dialogClass' => 'ui-dialog-active ui-popup-message',
+                    'buttons' => [],
+                    'modalClass' => 'ui-dialog-active ui-popup-message',
                     'ajaxUrl' => $this->_getMessagesUrl()
                 ],
             ]

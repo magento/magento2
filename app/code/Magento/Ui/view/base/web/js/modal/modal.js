@@ -44,6 +44,7 @@ define([
             buttons: [{
                 text: $.mage.__('Ok'),
                 class: '',
+                attr: {},
                 click: function(){
                     this.closeModal();
                 }
@@ -188,6 +189,9 @@ define([
             _.each(this.options.buttons, function(btn, key) {
                 var button = that.buttons[key];
 
+                if (btn.attr) {
+                    $(button).attr(btn.attr);
+                }
                 $(button).on('click', _.bind(btn.click, that));
             });
         },

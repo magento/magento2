@@ -12,6 +12,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testIndexActionTranslation()
     {
+        $this->markTestSkipped('MAGETWO-44910');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Locale\ResolverInterface')->setLocale('de_DE');
 
