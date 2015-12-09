@@ -61,6 +61,7 @@ class Grouped
      *
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeInitializeLinks(
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $subject,

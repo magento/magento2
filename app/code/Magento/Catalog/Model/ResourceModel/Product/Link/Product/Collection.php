@@ -79,6 +79,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param GroupManagementInterface $groupManagement
      * @param MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,

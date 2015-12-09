@@ -91,6 +91,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
      * @param ProductLinkInterfaceFactory $productLinkFactory
      * @param ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param MetadataPool $metadataPool
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,

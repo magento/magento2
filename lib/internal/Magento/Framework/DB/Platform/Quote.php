@@ -45,12 +45,13 @@ class Quote
      * @param string $identifier
      * @param string|null $alias
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function quoteIdentifierAs($identifier, $alias = null)
     {
         if ($identifier instanceof \Zend_Db_Expr) {
             $quoted = $identifier->__toString();
-        } elseif ($identifier instanceof \Zend_Db_Select) {
+        } elseif ($identifier instanceof \Magento\Framework\DB\Select) {
             $quoted = '(' . $identifier->assemble() . ')';
         } else {
             if (is_string($identifier)) {
