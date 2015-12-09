@@ -37,8 +37,10 @@
         <arguments>
             <argument name="consumers" xsi:type="array">
                 <item name="mysql" xsi:type="array">
-                    <item name="type" xsi:type="string">Magento\Framework\MessageQueue\Consumer</item>
                     <item name="connectionName" xsi:type="string">db</item>
+                    <item name="type" xsi:type="array">
+                        <item name="async" xsi:type="string">Magento\Framework\MessageQueue\Consumer</item>
+                    </item>
                 </item>
             </argument>
         </arguments>
