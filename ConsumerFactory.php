@@ -140,11 +140,11 @@ class ConsumerFactory
     private function createConsumerConfiguration($consumerConfig)
     {
         $handlers = [];
-        foreach ($consumerConfig[QueueConfigConverter::CONSUMER_HANDLERS] as $topic => $topicHandlers) {
+        foreach ($consumerConfig[QueueConfig::CONSUMER_HANDLERS] as $topic => $topicHandlers) {
             foreach ($topicHandlers as $handlerConfig) {
                 $handlers[$topic][] = [
-                    $this->objectManager->create($handlerConfig[QueueConfigConverter::CONSUMER_CLASS]),
-                    $handlerConfig[QueueConfigConverter::CONSUMER_METHOD]
+                    $this->objectManager->create($handlerConfig[QueueConfig::CONSUMER_CLASS]),
+                    $handlerConfig[QueueConfig::CONSUMER_METHOD]
                 ];
             }
         }
