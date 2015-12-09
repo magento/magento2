@@ -85,12 +85,13 @@ class ConfigurableOptions extends CustomOptions
     public function getOptionsPrices(FixtureInterface $product)
     {
         /** @var ConfigurableProduct $product */
-        $attributesData = $product->hasData('configurable_attributes_data')
-            ? $product->getConfigurableAttributesData()['attributes_data']
-            : [];
-        $productVariations = $product->hasData('configurable_attributes_data')
-            ? $product->getConfigurableAttributesData()['matrix']
-            : [];
+        $attributesData = [];
+        $productVariations = [];
+        if ($product->hasData('configurable_attributes_data')) {
+            $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
+            $productVariations = $product->getConfigurableAttributesData()['matrix'];
+        }
+
         $productVariations = array_keys($productVariations);
 
         $result = [];
