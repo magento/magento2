@@ -33,7 +33,6 @@
             <constraint name="Magento\Install\Test\Constraint\AssertKeyCreated" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertCurrencySelected" />
-            <constraint name="Magento\Install\Test\Constraint\AssertLanguageSelected" />
         </variation>
         <variation name="InstallTestVariation4">
             <data name="description" xsi:type="string">Install with table prefix.</data>

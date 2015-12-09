@@ -17,7 +17,7 @@
             <fieldset class="fieldset">
                 <legend class="legend"><span><?php echo __('Import Tax Rates') ?></span></legend>
                 <input type="file" name="import_rates_file" class="input-file required-entry"/>
-                <?php echo $block->getButtonHtml('Import Tax Rates', '', 'import-submit') ?>
+                <?php echo $block->getButtonHtml(__('Import Tax Rates'), '', 'import-submit') ?>
             </fieldset>
         <?php if ($block->getUseContainer()): ?>
         </form>
@@ -49,7 +49,7 @@ require(['jquery', "mage/mage", "loadingPopup"], function(jQuery){
             <?php echo $block->getBlockHtml('formkey')?>
             <fieldset class="fieldset">
                 <legend class="legend"><span><?php echo __('Export Tax Rates') ?></span></legend>
-                <?php echo $block->getButtonHtml('Export Tax Rates', "this.form.submit()") ?>
+                <?php echo $block->getButtonHtml(__('Export Tax Rates'), "this.form.submit()") ?>
             </fieldset>
         <?php if ($block->getUseContainer()): ?>
         </form>

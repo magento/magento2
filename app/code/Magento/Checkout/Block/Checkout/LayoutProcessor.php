@@ -57,6 +57,10 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 continue;
             }
             $elements[$attribute->getAttributeCode()] = $this->attributeMapper->map($attribute);
+            if (isset($elements[$attribute->getAttributeCode()]['label'])) {
+                $label = $elements[$attribute->getAttributeCode()]['label'];
+                $elements[$attribute->getAttributeCode()]['label'] = __($label);
+            }
         }
 
         // The following code is a workaround for custom address attributes

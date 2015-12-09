@@ -129,8 +129,8 @@ class Minifier implements MinifierInterface
                             '#(?<!:|\\\\|\'|")//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
                             '',
                             preg_replace(
-                                '#(?<!:)//[^\n\r]*(\s\?\>)#',
-                                '$1',
+                                '#(?<!:)//((?!<\?php)[^\n\r])*(\s\?\>)#',
+                                '$2',
                                 $this->rootDirectory->readFile($file)
                             )
                         )
