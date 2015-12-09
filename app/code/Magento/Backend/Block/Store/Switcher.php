@@ -19,7 +19,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * URL for store switcher hint
      */
-    const HINT_URL = 'http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes';
+    const HINT_URL = 'http://docs.magento.com/m2/ce/user_guide/stores/configuration.html';
 
     /**
      * Name of website variable
