@@ -118,6 +118,76 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     */
+    public function testReindexRowAfterEdit()
+    {
+        $this->indexer->reindexAll();
+
+        $this->productApple->setData('name', 'Simple Product Cucumber');
+        $this->productApple->save();
+
+        $products = $this->searchByName('Apple');
+        $this->assertCount(0, $products);
+
+        $products = $this->searchByName('Cucumber');
+        $this->assertCount(1, $products);
+        $this->assertEquals($this->productApple->getId(), $products[0]['_id']);
+
+        $products = $this->searchByName('Simple Product');
+        $this->assertCount(5, $products);
+    }
+
+    /**
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     */
+    public function testReindexRowAfterMassAction()
+    {
+        $this->indexer->reindexAll();
+
+        $productIds = [
+            $this->productApple->getId(),
+            $this->productBanana->getId(),
+        ];
+        $attrData = [
+            'name' => 'Simple Product Common',
+        ];
+
+        /** @var \Magento\Catalog\Model\Product\Action $action */
+        $action = Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Product\Action'
+        );
+        $action->updateAttributes($productIds, $attrData, 1);
+
+        $products = $this->searchByName('Apple');
+        $this->assertCount(0, $products);
+
+        $products = $this->searchByName('Banana');
+        $this->assertCount(0, $products);
+
+        $products = $this->searchByName('Unknown');
+        $this->assertCount(0, $products);
+
+        $products = $this->searchByName('Common');
+        $this->assertCount(2, $products);
+
+        $products = $this->searchByName('Simple Product');
+        $this->assertCount(5, $products);
+    }
+
+    /**
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoAppArea adminhtml
+     */
+    public function testReindexRowAfterDelete()
+    {
+        $this->indexer->reindexAll();
+        $this->productBanana->delete();
+        $products = $this->searchByName('Simple Product');
+        $this->assertCount(4, $products);
+    }
+
+    /**
      * Search docs in Elasticsearch by name
      *
      * @param string $text
