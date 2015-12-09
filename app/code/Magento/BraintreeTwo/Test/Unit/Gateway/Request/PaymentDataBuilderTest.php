@@ -6,10 +6,13 @@
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
 
 use Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder;
+use Magento\Payment\Gateway\Config\ValueHandlerPool;
+use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Vault\Gateway\Config\ActiveHandler;
 
 class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,6 +30,11 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
     private $configMock;
 
     /**
+     * @var ValueHandlerPoolInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $valueHandlerPool;
+
+    /**
      * @var Payment|\PHPUnit_Framework_MockObject_MockObject
      */
     private $paymentMock;
@@ -35,6 +43,11 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $paymentDO;
+
+    /**
+     * @var ActiveHandler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $activeHandler;
 
     public function setUp()
     {
@@ -46,7 +59,16 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->builder = new PaymentDataBuilder($this->configMock);
+        $this->activeHandler = $this->getMockBuilder(ActiveHandler::class)
+            ->setMethods(['handle'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->valueHandlerPool = $this->getMockBuilder(ValueHandlerPool::class)
+            ->setMethods(['get'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->builder = new PaymentDataBuilder($this->configMock, $this->valueHandlerPool);
     }
 
     /**
@@ -79,7 +101,8 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             PaymentDataBuilder::AMOUNT  => 10.00,
             PaymentDataBuilder::PAYMENT_METHOD_NONCE  => self::PAYMENT_METHOD_NONCE,
-            PaymentDataBuilder::MERCHANT_ACCOUNT_ID  => self::MERCHANT_ACCOUNT_ID
+            PaymentDataBuilder::MERCHANT_ACCOUNT_ID  => self::MERCHANT_ACCOUNT_ID,
+            PaymentDataBuilder::OPTIONS => [PaymentDataBuilder::STORE_IN_VAULT_ON_SUCCESS => true]
         ];
 
         $buildSubject = [
@@ -100,6 +123,13 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->paymentDO->expects(static::once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
+
+        $this->activeHandler->expects($this->once())
+            ->method('handle')
+            ->willReturn(1);
+        $this->valueHandlerPool->expects($this->once())
+            ->method('get')
+            ->willReturn($this->activeHandler);
 
         static::assertEquals(
             $expectedResult,
