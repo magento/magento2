@@ -251,7 +251,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($tokenMock);
 
-        $paymentMock->expects(self::never())
+        $paymentMock->expects(self::once())
             ->method('getId');
 
         $this->paymentTokenManagement->saveTokenWithPaymentLink($tokenMock, $paymentMock);
