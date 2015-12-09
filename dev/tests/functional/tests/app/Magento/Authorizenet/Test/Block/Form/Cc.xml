@@ -8,9 +8,6 @@
 <mapping strict="1">
     <wrapper>payment</wrapper>
     <fields>
-        <cc_type>
-            <input>select</input>
-        </cc_type>
         <cc_number />
         <cc_exp_month>
             <input>select</input>
