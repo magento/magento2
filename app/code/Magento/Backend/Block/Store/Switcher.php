@@ -4,14 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Store switcher block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Backend\Block\Store;
 
 /**
+ * Store switcher block
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Switcher extends \Magento\Backend\Block\Template
