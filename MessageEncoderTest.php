@@ -129,7 +129,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Framework\MessageQueue\Config\Data
+     * @return \Magento\Framework\MessageQueue\ConfigInterface
      */
     protected function getConfig()
     {
@@ -139,18 +139,23 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn([$configPath => file_get_contents(($configPath))]);
 
-        /** @var \Magento\Framework\MessageQueue\Config\Reader $reader */
-        $reader = $this->objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader',
+        /** @var \Magento\Framework\MessageQueue\Config\Reader $xmlReader */
+        $xmlReader = $this->objectManager->create(
+            '\Magento\Framework\MessageQueue\Config\Reader\XmlReader',
             ['fileResolver' => $fileResolverMock]
         );
 
-        /** @var \Magento\Framework\MessageQueue\Config\Data $config */
+        $newData = $xmlReader->read();
+
+        /** @var \Magento\Framework\MessageQueue\Config\Data $configData */
+        $configData = $this->objectManager->create('Magento\Framework\MessageQueue\Config\Data');
+        $configData->reset();
+        $configData->merge($newData);
         $config = $this->objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Data',
-            ['reader' => $reader]
+            'Magento\Framework\MessageQueue\ConfigInterface',
+            ['queueConfigData' => $configData]
         );
-        $config->reset();
+
         return $config;
     }
 
