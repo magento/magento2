@@ -46,7 +46,6 @@
         <xs:attribute type="serviceTypeType" name="type" use="required"/>
         <xs:attribute type="serviceMethodType" name="method" use="required"/>
         <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
-        <xs:attribute type="serviceTypeType" name="executor" use="optional"/>
     </xs:complexType>
     <xs:simpleType name="schemaType">
         <xs:annotation>
