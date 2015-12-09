@@ -230,7 +230,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'class' => 'Data\Type',
                     'method' => 'processMessage',
                     'max_messages' => null,
-                    'executor' => 'Test\Executor',
+                    'instance_type' => 'Test\Executor',
                 ],
                 'customerDeletedListener' => [
                     'name' => 'customerDeletedListener',
@@ -239,7 +239,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'class' => 'Other\Type',
                     'method' => 'processMessage2',
                     'max_messages' => '98765',
-                    'executor' => null,
+                    'instance_type' => null,
                 ],
                 'cartCreatedListener' => [
                     'name' => 'cartCreatedListener',
@@ -248,7 +248,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'class' => 'Other\Type',
                     'method' => 'processMessage3',
                     'max_messages' => null,
-                    'executor' => null,
+                    'instance_type' => null,
                 ],
             ],
             'binds' => [

@@ -86,7 +86,9 @@ class ConsumerFactory
         $consumerConfigObject = $this->createConsumerConfiguration($consumerConfig);
         $consumer = $this->createConsumer(
             $consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION],
-            isset($consumerConfig['executor']) ? $consumerConfig['executor'] : null,
+            isset($consumerConfig[QueueConfigConverter::BROKER_CONSUMER_INSTANCE_TYPE])
+                ? $consumerConfig[QueueConfigConverter::BROKER_CONSUMER_INSTANCE_TYPE]
+                : null,
             $consumerConfigObject
         );
 
@@ -110,15 +112,15 @@ class ConsumerFactory
      * Return an instance of a consumer for a connection name.
      *
      * @param string $connectionName
-     * @param string|null $executorClass
+     * @param string|null $instanceType
      * @param ConsumerConfigurationInterface $configuration
      * @return ConsumerInterface
      * @throws LocalizedException
      */
-    private function createConsumer($connectionName, $executorClass, $configuration)
+    private function createConsumer($connectionName, $instanceType, $configuration)
     {
-        if ($executorClass !== null) {
-            $executorObject = $this->objectManager->create($executorClass, ['configuration' => $configuration]);
+        if ($instanceType !== null) {
+            $executorObject = $this->objectManager->create($instanceType, ['configuration' => $configuration]);
         } elseif (isset($this->consumers[$connectionName][$configuration->getType()])) {
             $typeName = $this->consumers[$connectionName][$configuration->getType()];
             $executorObject = $this->objectManager->create($typeName, ['configuration' => $configuration]);
@@ -139,11 +141,13 @@ class ConsumerFactory
     private function createConsumerConfiguration($consumerConfig)
     {
         $handlers = [];
-        foreach ($consumerConfig[QueueConfigConverter::CONSUMER_HANDLERS] as $handlerConfig) {
-            $handlers[] = [
-                $this->objectManager->create($handlerConfig[QueueConfigConverter::CONSUMER_CLASS]),
-                $handlerConfig[QueueConfigConverter::CONSUMER_METHOD]
-            ];
+        foreach ($consumerConfig[QueueConfigConverter::CONSUMER_HANDLERS] as $topic => $topicHandlers) {
+            foreach ($topicHandlers as $handlerConfig) {
+                $handlers[$topic][] = [
+                    $this->objectManager->create($handlerConfig[QueueConfigConverter::CONSUMER_CLASS]),
+                    $handlerConfig[QueueConfigConverter::CONSUMER_METHOD]
+                ];
+            }
         }
 
         $configData = [

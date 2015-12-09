@@ -112,7 +112,7 @@ class Consumer implements ConsumerInterface
     {
         $properties = $message->getProperties();
         $topicName = $properties['topic_name'];
-        $handlers = $this->configuration->getHandlers();
+        $handlers = $this->configuration->getHandlers($topicName);
         $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
         if (isset($decodedMessage)) {
             $messageSchemaType = $this->configuration->getMessageSchemaType($topicName);
