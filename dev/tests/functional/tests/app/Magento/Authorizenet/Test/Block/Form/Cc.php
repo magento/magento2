@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Authorizenet\Test\Block\Authorizenet\Form;
+namespace Magento\Authorizenet\Test\Block\Form;
 
 use Magento\Payment\Test\Block\Form\Cc as CreditCard;
 
