@@ -30,17 +30,25 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManagerConfiguration = [
-            'Magento\Framework\MessageQueue\Config\Reader' => [
-                'arguments' => [
-                    'fileResolver' => ['instance' => 'Magento\MysqlMq\Config\Reader\FileResolver'],
-                ],
-            ],
-        ];
-        $this->objectManager->configure($objectManagerConfiguration);
-        /** @var \Magento\Framework\MessageQueue\Config\Data $queueConfig */
-        $queueConfig = $this->objectManager->get('Magento\Framework\MessageQueue\Config\Data');
-        $queueConfig->reset();
+        $configPath = __DIR__ . '/../etc/queue.xml';
+        $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $fileResolverMock->expects($this->any())
+            ->method('get')
+            ->willReturn([$configPath => file_get_contents(($configPath))]);
+
+        /** @var \Magento\Framework\MessageQueue\Config\Reader $xmlReader */
+        $xmlReader = $this->objectManager->create(
+            '\Magento\Framework\MessageQueue\Config\Reader\XmlReader',
+            ['fileResolver' => $fileResolverMock]
+        );
+
+        $newData = $xmlReader->read();
+
+        /** @var \Magento\Framework\MessageQueue\Config\Data $configData */
+        $configData = $this->objectManager->get('Magento\Framework\MessageQueue\Config\Data');
+        $configData->reset();
+        $configData->merge($newData);
+
         $this->publisher = $this->objectManager->create('Magento\Framework\MessageQueue\PublisherInterface');
     }
 
