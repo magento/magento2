@@ -137,26 +137,31 @@ define(
                 if (this.validate() && additionalValidators.validate()) {
                     this.isPlaceOrderActionAllowed(false);
 
-                    $.when(
-                        placeOrderAction(this.getData(), this.messageContainer)
-                    ).fail(
-                        function () {
-                            self.isPlaceOrderActionAllowed(true);
-                        }
-                    ).done(
-                        function () {
-                            self.afterPlaceOrder();
-
-                            if (self.redirectAfterPlaceOrder) {
-                                redirectOnSuccessAction.execute();
+                    this.getPlaceOrderDeferredObject()
+                        .fail(
+                            function () {
+                                self.isPlaceOrderActionAllowed(true);
                             }
-                        }
-                    );
+                        ).done(
+                            function () {
+                                self.afterPlaceOrder();
+
+                                if (self.redirectAfterPlaceOrder) {
+                                    redirectOnSuccessAction.execute();
+                                }
+                            }
+                        );
 
                     return true;
                 }
 
                 return false;
+            },
+
+            getPlaceOrderDeferredObject: function () {
+                return $.when(
+                    placeOrderAction(this.getData(), this.messageContainer)
+                );
             },
 
             /**
