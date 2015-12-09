@@ -8,6 +8,8 @@ namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\ProcessEntityRelationInterface;
+use Magento\Bundle\Api\ProductLinkManagementInterface;
 
 /**
  * Class SaveHandler
@@ -25,15 +27,23 @@ class SaveHandler
     protected $optionRepository;
 
     /**
+     * @var ProductLinkManagementInterface
+     */
+    protected $productLinkManagement;
+
+    /**
      * @param OptionRepository $optionRepository
      * @param MetadataPool $metadataPool
+     * @param ProductLinkManagementInterface $productLinkManagement
      */
     public function __construct(
         OptionRepository $optionRepository,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        ProductLinkManagementInterface $productLinkManagement
     ) {
         $this->optionRepository = $optionRepository;
         $this->metadataPool = $metadataPool;
+        $this->productLinkManagement = $productLinkManagement;
     }
 
     /**
@@ -49,12 +59,29 @@ class SaveHandler
         }
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         foreach ($this->optionRepository->getList($entity->getSku()) as $option) {
+            $this->removeOptionLinks($entity->getSku(), $option);
             $this->optionRepository->delete($option);
         }
+
         $options = $entity->getExtensionAttributes()->getBundleProductOptions() ?: [];
         foreach ($options as $option) {
             $this->optionRepository->save($entity, $option);
         }
         return $entity;
+    }
+
+    /**
+     * @param string $entitySku
+     * @param \Magento\Bundle\Api\Data\OptionInterface $option
+     * @return void
+     */
+    protected function removeOptionLinks($entitySku, $option)
+    {
+        $links = $option->getProductLinks();
+        if (!empty($links)) {
+            foreach ($links as $link) {
+                $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
+            }
+        }
     }
 }

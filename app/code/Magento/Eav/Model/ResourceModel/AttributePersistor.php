@@ -113,7 +113,8 @@ class AttributePersistor
         }
         $metadata = $this->metadataPool->getMetadata($entityType);
         foreach ($this->delete[$entityType] as $link => $data) {
-            foreach ($data as $attributeCode => $attributeValue) {
+            $attributeCodes = array_keys($data);
+            foreach ($attributeCodes as $attributeCode) {
                 /** @var AbstractAttribute $attribute */
                 $attribute = $this->attributeRepository->get($metadata->getEavEntityType(), $attributeCode);
                 $conditions = [

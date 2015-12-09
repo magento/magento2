@@ -4110,4 +4110,8 @@ return [
         'Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface'
     ],
     ['Magento\Quote\Api\ShippingAddressManagementInterface', 'Magento\Quote\Model\ShippingAddressManagementInterface'],
+    [
+        'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
+        'Magento\Catalog\Model\ResourceModel\Product\Gallery'
+    ],
 ];

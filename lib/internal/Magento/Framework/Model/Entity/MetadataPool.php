@@ -58,6 +58,7 @@ class MetadataPool
      * @param string $entityType
      * @return EntityMetadata
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getMetadata($entityType)
     {
@@ -92,6 +93,7 @@ class MetadataPool
     /**
      * @param string $entityType
      * @return EntityHydrator
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getHydrator($entityType)
     {

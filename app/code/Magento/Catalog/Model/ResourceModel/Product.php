@@ -705,6 +705,7 @@ class Product extends AbstractResource
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function evaluateDelete($object, $id, $connection)
     {
