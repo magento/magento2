@@ -148,13 +148,7 @@ class AssertConfigurableProductForm extends AssertProductForm
      */
     protected function processFixture(FixtureInterface $product)
     {
-        $data = $product->getData();
-        $fields = ['price', 'special_price'];
-        foreach ($fields as $field) {
-            if (isset($data[$field])) {
-                unset($data[$field]);
-            }
-        }
+        $data = array_diff_key($product->getData(), ['price', 'special_price']);
         return $this->objectManager->create(
             'Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct',
             ['data' => $data]

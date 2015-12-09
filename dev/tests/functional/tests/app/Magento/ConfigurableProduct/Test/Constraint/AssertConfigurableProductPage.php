@@ -91,12 +91,14 @@ class AssertConfigurableProductPage extends AssertProductPage
             $configurableFormOptions[$key] = $this->sortDataByPath($formOption, 'options::title');
         }
 
-        //Verify Attribute and options
-        $errors = $this->verifyData($configurableOptions, $configurableFormOptions, true, false);
+        $errors = array_merge(
+            //Verify Attribute and options
+            $this->verifyData($configurableOptions, $configurableFormOptions, true, false),
+            //Verify Attribute options prices
+            $this->verifyAttributesMatrix($formOptions['matrix'], $attributesData['matrix'])
+        );
 
-        //Verify Attribute options prices
-        $errors += $this->verifyAttributesMatrix($formOptions['matrix'], $attributesData['matrix']);
-        return empty($errors) ? null : $this->prepareErrors($errors, 'Error configurable options:');
+        return $errors ? null : $this->prepareErrors($errors, 'Error configurable options:');
     }
 
     /**
@@ -106,9 +108,8 @@ class AssertConfigurableProductPage extends AssertProductPage
      */
     protected function verifyAttributesMatrix($variationsMatrix, $generatedMatrix)
     {
-        $allowedKeys = ['price'];
         foreach ($generatedMatrix as $key => $value) {
-            $generatedMatrix[$key] = array_intersect_key($value, array_flip($allowedKeys));
+            $generatedMatrix[$key] = array_intersect_key($value, ['price' => 0]);
         }
         return $this->verifyData($generatedMatrix, $variationsMatrix, true, false);
     }
