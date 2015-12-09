@@ -83,26 +83,27 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
         </variation>
-        <variation name="OnePageCheckoutTestVariation5" summary="Guest Checkout using Check/Money Order and Free Shipping with Prices/Taxes Verifications" ticketId="MAGETWO-12412">
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
-            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="checkoutMethod" xsi:type="string">guest</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
-            <data name="shipping/shipping_service" xsi:type="string">Free Shipping</data>
-            <data name="shipping/shipping_method" xsi:type="string">Free</data>
-            <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">130.98</item>
-            </data>
-            <data name="cart/data/subtotal" xsi:type="string">121.00</data>
-            <data name="cart/data/tax_amount" xsi:type="string">9.98</data>
-            <data name="cart/data/shipping_amount" xsi:type="string">0.00</data>
-            <data name="cart/data/grand_total" xsi:type="string">130.98</data>
-            <data name="billingCheckboxState" xsi:type="string">Yes</data>
-            <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="configData" xsi:type="string">checkmo, freeshipping_minimum_order_amount_100</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
-        </variation>
+        <!-- Must be reverted after fix https://jira.corp.x.com/browse/MAGETWO-46695 -->
+        <!--<variation name="OnePageCheckoutTestVariation5" summary="Guest Checkout using Check/Money Order and Free Shipping with Prices/Taxes Verifications" ticketId="MAGETWO-12412">-->
+            <!--<data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>-->
+            <!--<data name="taxRule" xsi:type="string">us_ca_ny_rule</data>-->
+            <!--<data name="checkoutMethod" xsi:type="string">guest</data>-->
+            <!--<data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>-->
+            <!--<data name="shipping/shipping_service" xsi:type="string">Free Shipping</data>-->
+            <!--<data name="shipping/shipping_method" xsi:type="string">Free</data>-->
+            <!--<data name="prices" xsi:type="array">-->
+                <!--<item name="grandTotal" xsi:type="string">130.98</item>-->
+            <!--</data>-->
+            <!--<data name="cart/data/subtotal" xsi:type="string">121.00</data>-->
+            <!--<data name="cart/data/tax_amount" xsi:type="string">9.98</data>-->
+            <!--<data name="cart/data/shipping_amount" xsi:type="string">0.00</data>-->
+            <!--<data name="cart/data/grand_total" xsi:type="string">130.98</data>-->
+            <!--<data name="billingCheckboxState" xsi:type="string">Yes</data>-->
+            <!--<data name="payment/method" xsi:type="string">checkmo</data>-->
+            <!--<data name="configData" xsi:type="string">checkmo, freeshipping_minimum_order_amount_100</data>-->
+            <!--<data name="tag" xsi:type="string">test_type:acceptance_test</data>-->
+            <!--<constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>-->
+            <!--<constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>-->
+        <!--</variation>-->
     </testCase>
 </config>
