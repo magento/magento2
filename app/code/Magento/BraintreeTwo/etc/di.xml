@@ -43,6 +43,13 @@
         </arguments>
     </virtualType>
 
+    <!-- Builders -->
+    <type name="Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder">
+        <arguments>
+            <argument name="vaultPaymentValueHandlerPool" xsi:type="object">VaultPaymentValueHandlerPool</argument>
+        </arguments>
+    </type>
+
     <!-- Authorization command  -->
     <virtualType name="BraintreeTwoAuthorizeGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
