@@ -84,11 +84,12 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     }
 
     /**
-     * @return \Closure[]
+     * {@inheritdoc}
      */
-    public function getHandlers()
+    public function getHandlers($topicName)
     {
-        return $this->getData(self::HANDLERS);
+        $output = $this->getData(self::HANDLERS);
+        return isset($output[$topicName]) ? $output[$topicName] : [];
     }
 
     /**

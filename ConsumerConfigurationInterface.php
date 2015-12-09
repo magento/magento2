@@ -39,9 +39,12 @@ interface ConsumerConfigurationInterface
     public function getMaxMessages();
 
     /**
+     * Get handlers by topic type.
+     *
+     * @param string $topicName
      * @return callback[]
      */
-    public function getHandlers();
+    public function getHandlers($topicName);
 
     /**
      * @param string $topicName

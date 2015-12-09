@@ -59,27 +59,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $brokerTopics = $this->processTopicsConfiguration($brokers);
         $topics = array_merge($topics, $brokerTopics);
 
+        $binds = $this->extractBinds($source);
+
         /** Process Consumers Configuration */
-        $consumers = $this->extractConsumers($source);
+        $consumers = $this->extractConsumers($source, $binds);
         $brokerConsumers = $this->processConsumerConfiguration($brokers);
         $consumers = array_merge($consumers, $brokerConsumers);
-        $consumers = array_map(
-            function ($cons) {
-                $cons[QueueConfig::CONSUMER_HANDLERS] = array_map(
-                    "unserialize",
-                    array_unique(
-                        array_map(
-                            "serialize",
-                            array_values($cons[QueueConfig::CONSUMER_HANDLERS])
-                        )
-                    )
-                );
-                return $cons;
-            },
-            $consumers
-        );
-
-        $binds = $this->extractBinds($source);
         $brokerBinds = $this->processBindsConfiguration($brokers);
         //nested unique array
         $binds = array_map("unserialize", array_unique(array_map("serialize", array_merge($binds, $brokerBinds))));
@@ -125,8 +110,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 }
                 $consumerName = $consumerNode->attributes->getNamedItem('name')->nodeValue;
                 $queue = $consumerNode->attributes->getNamedItem('queue')->nodeValue;
-                $executor = $consumerNode->attributes->getNamedItem('executor')
-                    ? $consumerNode->attributes->getNamedItem('executor')->nodeValue
+                $consumerInstanceType = $consumerNode->attributes->getNamedItem('instanceType')
+                    ? $consumerNode->attributes->getNamedItem('instanceType')->nodeValue
                     : null;
                 $maxMessages = $consumerNode->attributes->getNamedItem('max_messages')
                     ? $consumerNode->attributes->getNamedItem('max_messages')->nodeValue
@@ -135,7 +120,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $output[$topicName][QueueConfig::BROKER_CONSUMERS][$consumerName] = [
                     QueueConfig::BROKER_CONSUMER_NAME => $consumerName,
                     QueueConfig::BROKER_CONSUMER_QUEUE => $queue,
-                    QueueConfig::BROKER_CONSUMER_EXECUTOR => $executor,
+                    QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE => $consumerInstanceType,
                     QueueConfig::BROKER_CONSUMER_MAX_MESSAGES => $maxMessages,
                 ];
             }
@@ -154,7 +139,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $output = [];
         foreach ($config as $topicName => $brokerConfig) {
             foreach ($brokerConfig[QueueConfig::BROKER_CONSUMERS] as $consumerKey => $consumerConfig) {
-                $handlers = $this->communicationConfig->getTopicHandlers($topicName);
+                $handlers[$topicName] = $this->communicationConfig->getTopicHandlers($topicName);
                 $topicConfig = $this->communicationConfig->getTopic($topicName);
                 $output[$consumerKey] = [
                     QueueConfig::CONSUMER_NAME => $consumerKey,
@@ -165,7 +150,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                             ? QueueConfig::CONSUMER_TYPE_SYNC : QueueConfig::CONSUMER_TYPE_ASYNC,
                     QueueConfig::CONSUMER_HANDLERS => $handlers,
                     QueueConfig::CONSUMER_MAX_MESSAGES => $consumerConfig[QueueConfig::BROKER_CONSUMER_MAX_MESSAGES],
-                    QueueConfig::CONSUMER_EXECUTOR => $consumerConfig[QueueConfig::BROKER_CONSUMER_EXECUTOR],
+                    QueueConfig::CONSUMER_INSTANCE_TYPE => $consumerConfig[QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE],
                 ];
             }
         }
@@ -381,12 +366,17 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Extract consumers configuration.
      *
      * @param \DOMDocument $config
+     * @param array $binds
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @deprecated
      */
-    protected function extractConsumers(\DOMDocument $config)
+    protected function extractConsumers(\DOMDocument $config, $binds)
     {
+        $map = [];
+        foreach ($binds as $bind) {
+            $map[$bind['queue']][] = $bind['topic'];
+        }
         $output = [];
         /** @var $consumerNode \DOMNode */
         foreach ($config->documentElement->childNodes as $consumerNode) {
@@ -396,20 +386,26 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $consumerName = $consumerNode->attributes->getNamedItem('name')->nodeValue;
             $maxMessages = $consumerNode->attributes->getNamedItem('max_messages');
             $connections = $consumerNode->attributes->getNamedItem('connection');
-            $executor = $consumerNode->attributes->getNamedItem('executor');
+            $consumerInstanceType = $consumerNode->attributes->getNamedItem('executor');
+            $queueName = $consumerNode->attributes->getNamedItem('queue')->nodeValue;
+            $handler = [
+                self::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
+                self::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
+            ];
+            $handlers = [];
+            if (isset($map[$queueName])) {
+                foreach ($map[$queueName] as $topic) {
+                    $handlers[$topic][] = $handler;
+                }
+            }
             $output[$consumerName] = [
                 QueueConfig::CONSUMER_NAME => $consumerName,
-                QueueConfig::CONSUMER_QUEUE => $consumerNode->attributes->getNamedItem('queue')->nodeValue,
+                QueueConfig::CONSUMER_QUEUE => $queueName,
                 QueueConfig::CONSUMER_CONNECTION => $connections ? $connections->nodeValue : null,
-                QueueConfig::CONSUMER_TYPE => QueueConfig::CONSUMER_TYPE_ASYNC,
-                QueueConfig::CONSUMER_HANDLERS => [
-                    [
-                        QueueConfig::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
-                        QueueConfig::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
-                    ]
-                ],
+                QueueConfig::CONSUMER_TYPE => self::CONSUMER_TYPE_ASYNC,
+                QueueConfig::CONSUMER_HANDLERS => $handlers,
                 QueueConfig::CONSUMER_MAX_MESSAGES => $maxMessages ? $maxMessages->nodeValue : null,
-                QueueConfig::CONSUMER_EXECUTOR => $executor ? $executor->nodeValue : null,
+                QueueConfig::CONSUMER_INSTANCE_TYPE => $consumerInstanceType ? $consumerInstanceType->nodeValue : null,
             ];
         }
         return $output;

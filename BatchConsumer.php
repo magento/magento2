@@ -100,14 +100,16 @@ class BatchConsumer implements ConsumerInterface
     /**
      * Decode message and invoke callbacks method
      *
-     * @param object[] $messages
+     * @param EnvelopeInterface[] $messages
      * @return void
      * @throws LocalizedException
      */
     private function dispatchMessage(array $messages)
     {
-        $callbacks = $this->configuration->getHandlers();
         foreach ($messages as $message) {
+            $properties = $message->getProperties();
+            $topicName = $properties['topic_name'];
+            $callbacks = $this->configuration->getHandlers($message[$topicName]);
             foreach ($callbacks as $callback) {
                 call_user_func($callback, $message);
             }
