@@ -114,48 +114,4 @@ class Content extends Tab
             ['element' => $this->_rootElement->find($this->widgetBlock, Locator::SELECTOR_XPATH)]
         );
     }
-
-    /**
-     * Fill data to content fields on content tab.
-     *
-     * @param array $fields
-     * @param SimpleElement|null $element
-     * @return $this
-     */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
-    {
-        $element->find($this->content)->setValue($fields['content']['value']['content']);
-        if (isset($fields['content_heading']['value'])) {
-            $element->find($this->contentHeading)->setValue($fields['content_heading']['value']);
-        }
-        if (isset($fields['content']['value']['widget']['dataset'])) {
-            foreach ($fields['content']['value']['widget']['dataset'] as $widget) {
-                $this->clickInsertWidget();
-                $this->getWidgetBlock()->addWidget($widget);
-            }
-        }
-        if (isset($fields['content']['value']['variable'])) {
-            $this->clickInsertVariable();
-            $config = $this->getWysiwygConfig();
-            $config->selectVariableByName($fields['content']['value']['variable']);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get data of content tab.
-     *
-     * @param array|null $fields
-     * @param SimpleElement|null $element
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
-    {
-        return [
-            'content' => [],
-            'content_heading' => ''
-        ];
-    }
 }
