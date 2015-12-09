@@ -6,6 +6,7 @@
 namespace Magento\Paypal\Model;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
@@ -574,7 +575,14 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {
-        return $this->gateway->postRequest($request, $config);
+        try {
+            return $this->gateway->postRequest($request, $config);
+        } catch (\Zend_Http_Client_Exception $e) {
+            throw new LocalizedException(
+                __('Payment Gateway is unreachable at the moment. Please use another payment option.'),
+                $e
+            );
+        }
     }
 
     /**

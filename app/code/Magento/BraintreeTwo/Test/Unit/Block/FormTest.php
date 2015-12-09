@@ -26,7 +26,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
         'JBC' => 'JBC',
         'CUP' => 'China Union Pay',
         'MI' => 'Maestro',
-        'OT' => 'Other'
     ];
 
     public static $configCardTypes = [
