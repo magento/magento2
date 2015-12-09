@@ -117,7 +117,8 @@ class UpdateHandler
                 if ($attribute->isStatic()) {
                     continue;
                 }
-                if (isset($snapshot[$attribute->getAttributeCode()]) && $snapshot[$attribute->getAttributeCode()] !== false
+                if (isset($snapshot[$attribute->getAttributeCode()])
+                    && $snapshot[$attribute->getAttributeCode()] !== false
                     && $attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerDelete(
