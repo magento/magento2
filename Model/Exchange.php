@@ -98,7 +98,6 @@ class Exchange implements ExchangeInterface
                     );
                 }
             }
-            $channel->close();
         } else {
             $msg = new AMQPMessage($envelope->getBody(), ['delivery_mode' => 2]);
             $channel->basic_publish($msg, $exchange, $topic);
