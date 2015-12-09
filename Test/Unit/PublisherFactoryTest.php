@@ -7,7 +7,6 @@
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\MessageQueue\PublisherFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -56,7 +55,7 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queueConfigMock->expects($this->once())
             ->method('get')
             ->will($this->returnValue([
-                QueueConfigConverter::TOPICS => []
+                QueueConfig::TOPICS => []
             ]));
         $this->publisherFactory->create(self::TEST_TOPIC);
     }
@@ -70,12 +69,12 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queueConfigMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue([
-                QueueConfigConverter::TOPICS => [
+                QueueConfig::TOPICS => [
                     self::TEST_TOPIC => [
-                        QueueConfigConverter::TOPIC_PUBLISHER => self::TEST_PUBLISHER
+                        QueueConfig::TOPIC_PUBLISHER => self::TEST_PUBLISHER
                     ]
                 ],
-                QueueConfigConverter::PUBLISHERS => []
+                QueueConfig::PUBLISHERS => []
             ]));
         $this->publisherFactory->create(self::TEST_TOPIC);
     }
@@ -89,14 +88,14 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queueConfigMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue([
-                QueueConfigConverter::TOPICS => [
+                QueueConfig::TOPICS => [
                     self::TEST_TOPIC => [
-                        QueueConfigConverter::TOPIC_PUBLISHER => self::TEST_PUBLISHER
+                        QueueConfig::TOPIC_PUBLISHER => self::TEST_PUBLISHER
                     ]
                 ],
-                QueueConfigConverter::PUBLISHERS => [
+                QueueConfig::PUBLISHERS => [
                     self::TEST_PUBLISHER => [
-                        QueueConfigConverter::PUBLISHER_CONNECTION => self::TEST_PUBLISHER_CONNECTION
+                        QueueConfig::PUBLISHER_CONNECTION => self::TEST_PUBLISHER_CONNECTION
                     ]
                 ]
             ]));
@@ -112,14 +111,14 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queueConfigMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue([
-                QueueConfigConverter::TOPICS => [
+                QueueConfig::TOPICS => [
                     self::TEST_TOPIC => [
-                        QueueConfigConverter::TOPIC_PUBLISHER => self::TEST_PUBLISHER
+                        QueueConfig::TOPIC_PUBLISHER => self::TEST_PUBLISHER
                     ]
                 ],
-                QueueConfigConverter::PUBLISHERS => [
+                QueueConfig::PUBLISHERS => [
                     self::TEST_PUBLISHER => [
-                        QueueConfigConverter::PUBLISHER_CONNECTION => self::TEST_PUBLISHER_CONNECTION
+                        QueueConfig::PUBLISHER_CONNECTION => self::TEST_PUBLISHER_CONNECTION
                     ]
                 ]
             ]));
@@ -148,14 +147,14 @@ class PublisherFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queueConfigMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue([
-                QueueConfigConverter::TOPICS => [
+                QueueConfig::TOPICS => [
                     self::TEST_TOPIC => [
-                        QueueConfigConverter::TOPIC_PUBLISHER => self::TEST_PUBLISHER
+                        QueueConfig::TOPIC_PUBLISHER => self::TEST_PUBLISHER
                     ]
                 ],
-                QueueConfigConverter::PUBLISHERS => [
+                QueueConfig::PUBLISHERS => [
                     self::TEST_PUBLISHER => [
-                        QueueConfigConverter::PUBLISHER_CONNECTION => self::TEST_PUBLISHER_CONNECTION
+                        QueueConfig::PUBLISHER_CONNECTION => self::TEST_PUBLISHER_CONNECTION
                     ]
                 ]
             ]));

@@ -6,7 +6,6 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
@@ -81,7 +80,7 @@ class PublisherFactory
         $publisherName = $this->getPublisherNameForTopic($topicName);
 
         $publisherConfig = $this->getPublisherConfigForName($publisherName);
-        $publisher = $this->getPublisherForConnectionName($publisherConfig[QueueConfigConverter::PUBLISHER_CONNECTION]);
+        $publisher = $this->getPublisherForConnectionName($publisherConfig[QueueConfig::PUBLISHER_CONNECTION]);
         return $publisher;
     }
 
@@ -135,7 +134,7 @@ class PublisherFactory
                 new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topicName])
             );
         }
-        return $topicConfig[QueueConfigConverter::TOPIC_PUBLISHER];
+        return $topicConfig[QueueConfig::TOPIC_PUBLISHER];
 
     }
 }

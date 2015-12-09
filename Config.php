@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
@@ -31,8 +30,8 @@ class Config implements ConfigInterface
     public function getExchangeByTopic($topicName)
     {
         $publisherConfig = $this->getPublisherConfigByTopic($topicName);
-        return isset($publisherConfig[QueueConfig::PUBLISHER_EXCHANGE])
-            ? $publisherConfig[QueueConfig::PUBLISHER_EXCHANGE]
+        return isset($publisherConfig[ConfigInterface::PUBLISHER_EXCHANGE])
+            ? $publisherConfig[ConfigInterface::PUBLISHER_EXCHANGE]
             : null;
     }
 
@@ -47,7 +46,7 @@ class Config implements ConfigInterface
          * which is not currently associated with topic, but is configured in binds
          */
         $bindKey = $exchange . '--' . $topic;
-        $output = $this->queueConfigData->get(QueueConfig::EXCHANGE_TOPIC_TO_QUEUES_MAP . '/' . $bindKey);
+        $output = $this->queueConfigData->get(ConfigInterface::EXCHANGE_TOPIC_TO_QUEUES_MAP . '/' . $bindKey);
         if (!$output) {
             throw new LocalizedException(
                 new Phrase(
@@ -65,8 +64,8 @@ class Config implements ConfigInterface
     public function getConnectionByTopic($topic)
     {
         $publisherConfig = $this->getPublisherConfigByTopic($topic);
-        return isset($publisherConfig[QueueConfig::PUBLISHER_CONNECTION])
-            ? $publisherConfig[QueueConfig::PUBLISHER_CONNECTION]
+        return isset($publisherConfig[ConfigInterface::PUBLISHER_CONNECTION])
+            ? $publisherConfig[ConfigInterface::PUBLISHER_CONNECTION]
             : null;
     }
 
@@ -76,7 +75,7 @@ class Config implements ConfigInterface
     public function getConnectionByConsumer($consumer)
     {
         $connection = $this->queueConfigData->get(
-            QueueConfig::CONSUMERS . '/'. $consumer . '/'. QueueConfig::CONSUMER_CONNECTION
+            ConfigInterface::CONSUMERS . '/'. $consumer . '/'. ConfigInterface::CONSUMER_CONNECTION
         );
         if (!$connection) {
             throw new LocalizedException(
@@ -92,7 +91,8 @@ class Config implements ConfigInterface
     public function getMessageSchemaType($topic)
     {
         return $this->queueConfigData->get(
-            QueueConfig::TOPICS . '/'. $topic . '/'. QueueConfig::TOPIC_SCHEMA . '/'. QueueConfig::TOPIC_SCHEMA_TYPE
+            ConfigInterface::TOPICS . '/' .
+            $topic . '/' . ConfigInterface::TOPIC_SCHEMA . '/' . ConfigInterface::TOPIC_SCHEMA_TYPE
         );
     }
 
@@ -101,7 +101,7 @@ class Config implements ConfigInterface
      */
     public function getConsumerNames()
     {
-        $queueConfig = $this->queueConfigData->get(QueueConfig::CONSUMERS, []);
+        $queueConfig = $this->queueConfigData->get(ConfigInterface::CONSUMERS, []);
         return array_keys($queueConfig);
     }
 
@@ -111,7 +111,7 @@ class Config implements ConfigInterface
     public function getConsumer($name)
     {
 
-        return $this->queueConfigData->get(QueueConfig::CONSUMERS . '/' . $name);
+        return $this->queueConfigData->get(ConfigInterface::CONSUMERS . '/' . $name);
     }
 
     /**
@@ -119,7 +119,7 @@ class Config implements ConfigInterface
      */
     public function getBinds()
     {
-        return $this->queueConfigData->get(QueueConfig::BINDS);
+        return $this->queueConfigData->get(ConfigInterface::BINDS);
     }
 
     /**
@@ -127,7 +127,7 @@ class Config implements ConfigInterface
      */
     public function getPublishers()
     {
-        return $this->queueConfigData->get(QueueConfig::PUBLISHERS, []);
+        return $this->queueConfigData->get(ConfigInterface::PUBLISHERS, []);
     }
 
     /**
@@ -135,7 +135,7 @@ class Config implements ConfigInterface
      */
     public function getConsumers()
     {
-        return $this->queueConfigData->get(QueueConfig::CONSUMERS, []);
+        return $this->queueConfigData->get(ConfigInterface::CONSUMERS, []);
     }
 
     /**
@@ -143,7 +143,7 @@ class Config implements ConfigInterface
      */
     public function getTopic($name)
     {
-        return $this->queueConfigData->get(QueueConfig::TOPICS . '/' . $name);
+        return $this->queueConfigData->get(ConfigInterface::TOPICS . '/' . $name);
     }
 
     /**
@@ -151,7 +151,7 @@ class Config implements ConfigInterface
      */
     public function getPublisher($name)
     {
-        return $this->queueConfigData->get(QueueConfig::PUBLISHERS . '/' . $name);
+        return $this->queueConfigData->get(ConfigInterface::PUBLISHERS . '/' . $name);
     }
 
     /**
@@ -159,7 +159,7 @@ class Config implements ConfigInterface
      */
     public function getResponseQueueName($topicName)
     {
-        return str_replace('-', '_', $topicName) . QueueConfig::CONSUMER_RESPONSE_QUEUE_SUFFIX;
+        return str_replace('-', '_', $topicName) . ConfigInterface::CONSUMER_RESPONSE_QUEUE_SUFFIX;
     }
 
     /**
@@ -172,7 +172,7 @@ class Config implements ConfigInterface
     protected function getPublisherConfigByTopic($topicName)
     {
         $publisherName = $this->queueConfigData->get(
-            QueueConfig::TOPICS . '/' . $topicName . '/' . QueueConfig::TOPIC_PUBLISHER
+            ConfigInterface::TOPICS . '/' . $topicName . '/' . ConfigInterface::TOPIC_PUBLISHER
         );
 
         if (!$publisherName) {
@@ -181,7 +181,7 @@ class Config implements ConfigInterface
             );
         }
 
-        $publisherConfig = $this->queueConfigData->get(QueueConfig::PUBLISHERS . '/' . $publisherName);
+        $publisherConfig = $this->queueConfigData->get(ConfigInterface::PUBLISHERS . '/' . $publisherName);
         if (!$publisherConfig) {
             throw new LocalizedException(
                 new Phrase(

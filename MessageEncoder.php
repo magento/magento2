@@ -6,7 +6,6 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\ServicePayloadConverterInterface;
@@ -116,8 +115,8 @@ class MessageEncoder
             throw new LocalizedException(new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topic]));
         }
         return $requestType
-            ? $topicConfig[QueueConfigConverter::TOPIC_SCHEMA]
-            : $topicConfig[QueueConfigConverter::TOPIC_RESPONSE_SCHEMA];
+            ? $topicConfig[QueueConfig::TOPIC_SCHEMA]
+            : $topicConfig[QueueConfig::TOPIC_RESPONSE_SCHEMA];
     }
 
     /**
@@ -133,9 +132,9 @@ class MessageEncoder
     protected function convertMessage($topic, $message, $direction, $requestType)
     {
         $topicSchema = $this->getTopicSchema($topic, $requestType);
-        if ($topicSchema[QueueConfigConverter::TOPIC_SCHEMA_TYPE] == QueueConfigConverter::TOPIC_SCHEMA_TYPE_OBJECT) {
+        if ($topicSchema[QueueConfig::TOPIC_SCHEMA_TYPE] == QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT) {
             /** Convert message according to the data interface associated with the message topic */
-            $messageDataType = $topicSchema[QueueConfigConverter::TOPIC_SCHEMA_VALUE];
+            $messageDataType = $topicSchema[QueueConfig::TOPIC_SCHEMA_VALUE];
             try {
                 $convertedMessage = $this->getConverter($direction)->convertValue($message, $messageDataType);
             } catch (LocalizedException $e) {
@@ -152,12 +151,12 @@ class MessageEncoder
             $isIndexedArray = array_keys($message) == range(0, count($message) - 1);
             $convertedMessage = [];
             /** Message schema type is defined by method signature */
-            foreach ($topicSchema[QueueConfigConverter::TOPIC_SCHEMA_VALUE] as $methodParameterMeta) {
-                $paramName = $methodParameterMeta[QueueConfigConverter::SCHEMA_METHOD_PARAM_NAME];
-                $paramType = $methodParameterMeta[QueueConfigConverter::SCHEMA_METHOD_PARAM_TYPE];
+            foreach ($topicSchema[QueueConfig::TOPIC_SCHEMA_VALUE] as $methodParameterMeta) {
+                $paramName = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_NAME];
+                $paramType = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_TYPE];
                 if ($isIndexedArray) {
                     /** Encode parameters according to their positions in method signature */
-                    $paramPosition = $methodParameterMeta[QueueConfigConverter::SCHEMA_METHOD_PARAM_POSITION];
+                    $paramPosition = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_POSITION];
                     if (isset($message[$paramPosition])) {
                         $convertedMessage[$paramName] = $this->getConverter($direction)
                             ->convertValue($message[$paramPosition], $paramType);
@@ -171,7 +170,7 @@ class MessageEncoder
                 }
 
                 /** Ensure that all required params were passed */
-                if ($methodParameterMeta[QueueConfigConverter::SCHEMA_METHOD_PARAM_IS_REQUIRED]
+                if ($methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_IS_REQUIRED]
                     && !isset($convertedMessage[$paramName])
                 ) {
                     throw new LocalizedException(

@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\MessageQueue\Rpc;
 
-use Magento\Framework\MessageQueue\Config\Converter as MessageQueueConfigConverter;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\ConsumerInterface;
@@ -116,7 +116,7 @@ class Consumer implements ConsumerInterface
         $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
         if (isset($decodedMessage)) {
             $messageSchemaType = $this->configuration->getMessageSchemaType($topicName);
-            if ($messageSchemaType == MessageQueueConfigConverter::TOPIC_SCHEMA_TYPE_METHOD) {
+            if ($messageSchemaType == QueueConfig::TOPIC_SCHEMA_TYPE_METHOD) {
                 foreach ($handlers as $callback) {
                     $result = call_user_func_array($callback, $decodedMessage);
                     if (isset($result)) {

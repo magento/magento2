@@ -10,6 +10,61 @@ use Magento\Framework\Exception\LocalizedException;
 
 interface ConfigInterface
 {
+    const PUBLISHERS = 'publishers';
+    const PUBLISHER_NAME = 'name';
+    const PUBLISHER_CONNECTION = 'connection';
+    const PUBLISHER_EXCHANGE = 'exchange';
+
+    const TOPICS = 'topics';
+    const TOPIC_NAME = 'name';
+    const TOPIC_PUBLISHER = 'publisher';
+    const TOPIC_SCHEMA = 'schema';
+    const TOPIC_RESPONSE_SCHEMA = 'response_schema';
+    const TOPIC_SCHEMA_TYPE = 'schema_type';
+    const TOPIC_SCHEMA_VALUE = 'schema_value';
+
+    const TOPIC_SCHEMA_TYPE_OBJECT = 'object';
+    const TOPIC_SCHEMA_TYPE_METHOD = 'method_arguments';
+
+    const SCHEMA_METHOD_PARAM_NAME = 'param_name';
+    const SCHEMA_METHOD_PARAM_POSITION = 'param_position';
+    const SCHEMA_METHOD_PARAM_TYPE = 'param_type';
+    const SCHEMA_METHOD_PARAM_IS_REQUIRED = 'is_required';
+
+    const CONSUMERS = 'consumers';
+    const CONSUMER_NAME = 'name';
+    const CONSUMER_QUEUE = 'queue';
+    const CONSUMER_CONNECTION = 'connection';
+    const CONSUMER_EXECUTOR = 'executor';
+    const CONSUMER_CLASS = 'type';
+    const CONSUMER_METHOD = 'method';
+    const CONSUMER_MAX_MESSAGES = 'max_messages';
+    const CONSUMER_HANDLERS = 'handlers';
+    const CONSUMER_TYPE = 'consumer_type';
+    const CONSUMER_TYPE_SYNC = 'sync';
+    const CONSUMER_TYPE_ASYNC = 'async';
+    const CONSUMER_RESPONSE_QUEUE_SUFFIX = '.response';
+
+    const BINDS = 'binds';
+    const BIND_QUEUE = 'queue';
+    const BIND_EXCHANGE = 'exchange';
+    const BIND_TOPIC = 'topic';
+
+    const BROKER_TOPIC = 'topic';
+    const BROKER_TYPE = 'type';
+    const BROKER_EXCHANGE = 'exchange';
+    const BROKER_CONSUMERS = 'consumers';
+    const BROKER_CONSUMER_NAME = 'name';
+    const BROKER_CONSUMER_QUEUE = 'queue';
+    const BROKER_CONSUMER_EXECUTOR = 'executor';
+    const BROKER_CONSUMER_MAX_MESSAGES = 'max_messages';
+    const BROKERS = 'brokers';
+
+    /**
+     * Map which allows optimized search of queues corresponding to the specified exchange and topic pair.
+     */
+    const EXCHANGE_TOPIC_TO_QUEUES_MAP = 'exchange_topic_to_queues_map';
+
     /**
      * Identify configured exchange for the provided topic.
      *

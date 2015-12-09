@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue\Test\Unit\Config;
 
-use Magento\Framework\MessageQueue\Config\Converter;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\MessageQueue\Config\Reader\EnvReader;
 
 /**
  * @codingStandardsIgnoreFile
@@ -13,14 +14,14 @@ use Magento\Framework\MessageQueue\Config\Converter;
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Config\Converter
+     * @var \Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter
      */
     private $converter;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Communication\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $deploymentConfigMock;
+    private $communicationConfigMock;
 
     /**
      * Initialize parameters
@@ -28,13 +29,15 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->deploymentConfigMock = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
+        $this->communicationConfigMock = $this->getMockBuilder('Magento\Framework\Communication\ConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->converter = $objectManager->getObject(
-            'Magento\Framework\MessageQueue\Config\Converter',
-            ['deploymentConfig' => $this->deploymentConfigMock]
+            'Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter',
+            [
+                'communicationConfig' => $this->communicationConfigMock
+            ]
         );
     }
 
@@ -43,85 +46,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert()
     {
+        $this->communicationConfigMock->expects($this->any())->method('getTopics')->willReturn([]);
         $expected = $this->getConvertedQueueConfig();
-        $xmlFile = __DIR__ . '/_files/queue.xml';
-        $dom = new \DOMDocument();
-        $dom->loadXML(file_get_contents($xmlFile));
-        $result = $this->converter->convert($dom);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Test converting valid configuration with publisher for topic overridden in env.php
-     */
-    public function testConvertWithTopicsEnvOverride()
-    {
-        $customizedTopic = 'customer.deleted';
-        $customPublisher = 'test-publisher-1';
-        $envTopicsConfig = [
-            'topics' => [
-                'some_topic_name' => 'custom_publisher',
-                $customizedTopic => $customPublisher,
-            ]
-        ];
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('getConfigData')
-            ->with(Converter::ENV_QUEUE)
-            ->willReturn($envTopicsConfig);
-        $expected = $this->getConvertedQueueConfig();
-        $expected[Converter::TOPICS][$customizedTopic][Converter::TOPIC_PUBLISHER] = $customPublisher;
-        $xmlFile = __DIR__ . '/_files/queue.xml';
-        $dom = new \DOMDocument();
-        $dom->loadXML(file_get_contents($xmlFile));
-        $result = $this->converter->convert($dom);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Test converting valid configuration with invalid override configuration in env.php
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Publisher "invalid_publisher_name", specified in env.php for topic "customer.deleted" i
-     */
-    public function testConvertWithTopicsEnvOverrideException()
-    {
-        $customizedTopic = 'customer.deleted';
-        $envTopicsConfig = [
-            'topics' => [
-                'some_topic_name' => 'custom_publisher',
-                $customizedTopic => 'invalid_publisher_name',
-            ]
-        ];
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('getConfigData')
-            ->with(Converter::ENV_QUEUE)
-            ->willReturn($envTopicsConfig);
-        $xmlFile = __DIR__ . '/_files/queue.xml';
-        $dom = new \DOMDocument();
-        $dom->loadXML(file_get_contents($xmlFile));
-        $this->converter->convert($dom);
-    }
-
-    /**
-     * Test converting valid configuration with connection for consumer overridden in env.php
-     */
-    public function testConvertWithConsumersEnvOverride()
-    {
-        $customizedConsumer = 'customerDeletedListener';
-        $customConnection = 'test-queue-3';
-        $customMaxMessages = 5255;
-        $envConsumersConfig = [
-            'consumers' => [
-                $customizedConsumer => ['connection' => $customConnection, 'max_messages' => $customMaxMessages],
-            ]
-        ];
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('getConfigData')
-            ->with(Converter::ENV_QUEUE)
-            ->willReturn($envConsumersConfig);
-        $expected = $this->getConvertedQueueConfig();
-        $expected[Converter::CONSUMERS][$customizedConsumer][Converter::CONSUMER_CONNECTION] = $customConnection;
-        $expected[Converter::CONSUMERS][$customizedConsumer][Converter::CONSUMER_MAX_MESSAGES] = $customMaxMessages;
         $xmlFile = __DIR__ . '/_files/queue.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));

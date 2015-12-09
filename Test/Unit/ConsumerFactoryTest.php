@@ -7,7 +7,6 @@
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\MessageQueue\ConsumerConfiguration;
 use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -58,7 +57,7 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queueConfigMock->expects($this->once())
             ->method('get')
             ->will($this->returnValue([
-                QueueConfigConverter::CONSUMERS => []
+                QueueConfig::CONSUMERS => []
             ]));
         $this->consumerFactory->get(self::TEST_CONSUMER_NAME);
     }
@@ -72,9 +71,9 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queueConfigMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue([
-                QueueConfigConverter::CONSUMERS => [
+                QueueConfig::CONSUMERS => [
                     self::TEST_CONSUMER_NAME => [
-                        QueueConfigConverter::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION
+                        QueueConfig::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION
                     ]
                 ],
             ]));
@@ -90,9 +89,9 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queueConfigMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue([
-                QueueConfigConverter::CONSUMERS => [
+                QueueConfig::CONSUMERS => [
                     self::TEST_CONSUMER_NAME => [
-                        QueueConfigConverter::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION
+                        QueueConfig::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION
                     ]
                 ],
             ]));
@@ -123,13 +122,13 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->queueConfigMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue([
-                QueueConfigConverter::CONSUMERS => [
+                QueueConfig::CONSUMERS => [
                     self::TEST_CONSUMER_NAME => [
-                        QueueConfigConverter::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION,
-                        QueueConfigConverter::CONSUMER_NAME => self::TEST_CONSUMER_NAME,
-                        QueueConfigConverter::CONSUMER_QUEUE => self::TEST_CONSUMER_QUEUE,
-                        QueueConfigConverter::CONSUMER_CLASS => $dispatchTypeName,
-                        QueueConfigConverter::CONSUMER_METHOD => self::TEST_CONSUMER_METHOD,
+                        QueueConfig::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION,
+                        QueueConfig::CONSUMER_NAME => self::TEST_CONSUMER_NAME,
+                        QueueConfig::CONSUMER_QUEUE => self::TEST_CONSUMER_QUEUE,
+                        QueueConfig::CONSUMER_CLASS => $dispatchTypeName,
+                        QueueConfig::CONSUMER_METHOD => self::TEST_CONSUMER_METHOD,
                     ]
                 ],
             ]));

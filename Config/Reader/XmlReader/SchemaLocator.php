@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\MessageQueue\Config;
+namespace Magento\Framework\MessageQueue\Config\Reader\XmlReader;
 
 /**
  * Schema locator for Publishers

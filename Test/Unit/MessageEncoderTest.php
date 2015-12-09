@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -112,11 +112,11 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     private function getQueueConfigData()
     {
         return [
-            QueueConfigConverter::TOPICS => [
+            QueueConfig::TOPICS => [
                 'customer.created' => [
-                    QueueConfigConverter::TOPIC_SCHEMA => [
-                        QueueConfigConverter::TOPIC_SCHEMA_TYPE => QueueConfigConverter::TOPIC_SCHEMA_TYPE_OBJECT,
-                        QueueConfigConverter::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
+                    QueueConfig::TOPIC_SCHEMA => [
+                        QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                        QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
                     ]
                 ]
             ]

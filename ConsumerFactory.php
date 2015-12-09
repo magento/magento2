@@ -6,7 +6,6 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
@@ -85,7 +84,7 @@ class ConsumerFactory
         }
         $consumerConfigObject = $this->createConsumerConfiguration($consumerConfig);
         $consumer = $this->createConsumer(
-            $consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION],
+            $consumerConfig[QueueConfig::CONSUMER_CONNECTION],
             isset($consumerConfig['executor']) ? $consumerConfig['executor'] : null,
             $consumerConfigObject
         );
@@ -139,18 +138,18 @@ class ConsumerFactory
     private function createConsumerConfiguration($consumerConfig)
     {
         $handlers = [];
-        foreach ($consumerConfig[QueueConfigConverter::CONSUMER_HANDLERS] as $handlerConfig) {
+        foreach ($consumerConfig[QueueConfig::CONSUMER_HANDLERS] as $handlerConfig) {
             $handlers[] = [
-                $this->objectManager->create($handlerConfig[QueueConfigConverter::CONSUMER_CLASS]),
-                $handlerConfig[QueueConfigConverter::CONSUMER_METHOD]
+                $this->objectManager->create($handlerConfig[QueueConfig::CONSUMER_CLASS]),
+                $handlerConfig[QueueConfig::CONSUMER_METHOD]
             ];
         }
 
         $configData = [
-            ConsumerConfiguration::CONSUMER_NAME => $consumerConfig[QueueConfigConverter::CONSUMER_NAME],
-            ConsumerConfiguration::QUEUE_NAME => $consumerConfig[QueueConfigConverter::CONSUMER_QUEUE],
+            ConsumerConfiguration::CONSUMER_NAME => $consumerConfig[QueueConfig::CONSUMER_NAME],
+            ConsumerConfiguration::QUEUE_NAME => $consumerConfig[QueueConfig::CONSUMER_QUEUE],
             ConsumerConfiguration::CONSUMER_TYPE =>
-                $consumerConfig[QueueConfigConverter::CONSUMER_TYPE] == QueueConfigConverter::CONSUMER_TYPE_SYNC
+                $consumerConfig[QueueConfig::CONSUMER_TYPE] == QueueConfig::CONSUMER_TYPE_SYNC
                 ? ConsumerConfiguration::TYPE_SYNC
                 : ConsumerConfiguration::TYPE_ASYNC,
             ConsumerConfiguration::HANDLERS => $handlers,
