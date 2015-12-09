@@ -8,6 +8,8 @@
 
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
+use Magento\Quote\Model\Quote\Address;
+
 /**
  * Sales Rules resource collection model
  *
@@ -80,11 +82,18 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param int $customerGroupId
      * @param string $couponCode
      * @param string|null $now
+     * @param Address $address allow extensions to further filter out rules based on quote address
      * @use $this->addWebsiteGroupDateFilter()
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this
      */
-    public function setValidationFilter($websiteId, $customerGroupId, $couponCode = '', $now = null)
-    {
+    public function setValidationFilter(
+        $websiteId,
+        $customerGroupId,
+        $couponCode = '',
+        $now = null,
+        Address $address = null
+    ) {
         if (!$this->getFlag('validation_filter')) {
             /* We need to overwrite joinLeft if coupon is applied */
             $this->getSelect()->reset();

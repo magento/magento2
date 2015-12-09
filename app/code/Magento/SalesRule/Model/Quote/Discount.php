@@ -85,7 +85,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $this->calculator->initTotals($items, $address);
 
         $address->setDiscountDescription([]);
-        $items = $this->calculator->sortItemsByPriority($items);
+        $items = $this->calculator->sortItemsByPriority($items, $address);
 
         /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($items as $item) {
