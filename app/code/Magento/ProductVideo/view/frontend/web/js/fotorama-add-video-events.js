@@ -366,7 +366,8 @@ define([
                 t,
                 tmpVideoData,
                 currentItem,
-                iconClass = 'video-thumb-icon';
+                iconClass = 'video-thumb-icon',
+                videoContainerClass = 'fotorama-video-container';
 
             if (!fotorama.activeFrame.$navThumbFrame) {
                 $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
@@ -389,7 +390,8 @@ define([
                     currentItem.removeClass(iconClass);
                 }
 
-                if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs') {
+                if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs' &&
+                    fotorama.activeFrame.$stageFrame.hasClass(videoContainerClass)) {
                     currentItem.addClass(iconClass);
                 }
             }
