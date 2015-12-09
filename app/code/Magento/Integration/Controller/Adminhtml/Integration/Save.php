@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,6 +7,8 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Integration\Model\Integration as IntegrationModel;
 
 class Save extends \Magento\Integration\Controller\Adminhtml\Integration
 {
@@ -50,6 +51,9 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                     $this->messageManager->addError(__('Internal error. Check exception log for details.'));
                     $this->_redirect('*/*');
                     return;
+                }
+                if ($integrationData[Info::DATA_SETUP_TYPE] == IntegrationModel::TYPE_CONFIG) {
+                    throw new LocalizedException(__('Cannot edit integrations created via config file.'));
                 }
             }
             /** @var array $data */
