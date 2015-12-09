@@ -9,7 +9,6 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
-use Magento\Framework\MessageQueue\Config\Converter as MessageQueueConfigConverter;
 
 /**
  * @codeCoverageIgnore
@@ -40,7 +39,7 @@ class InstallData implements InstallDataInterface
         $binds = $this->messageQueueConfig->getBinds();
         $queues = [];
         foreach ($binds as $bind) {
-            $queues[] = $bind[MessageQueueConfigConverter::BIND_QUEUE];
+            $queues[] = $bind[MessageQueueConfig::BIND_QUEUE];
         }
         $queues = array_unique($queues);
         /** Populate 'queue' table */
