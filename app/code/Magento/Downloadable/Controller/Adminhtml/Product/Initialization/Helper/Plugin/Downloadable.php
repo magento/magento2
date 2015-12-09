@@ -72,10 +72,18 @@ class Downloadable
                         // TODO: need to implement setLinkFileContent()
                         $link = $this->linkFactory->create(['data' => $linkData]);
                         $link->setId(null);
-                        $link->setSampleType($linkData['sample']['type']);
-                        $link->setSampleFileData($linkData['sample']['file']);
-                        $link->setSampleUrl($linkData['sample']['url']);
-                        $link->setLinkType($linkData['type']);
+                        if (isset($linkData['sample']['type'])) {
+                            $link->setSampleType($linkData['sample']['type']);
+                        }
+                        if (isset($linkData['sample']['file'])) {
+                            $link->setSampleFileData($linkData['sample']['file']);
+                        }
+                        if (isset($linkData['sample']['url'])) {
+                            $link->setSampleUrl($linkData['sample']['url']);
+                        }
+                        if (isset($linkData['sample']['type'])) {
+                            $link->setLinkType($linkData['type']);
+                        }
                         $link->setStoreId($product->getStoreId());
                         $link->setWebsiteId($product->getStore()->getWebsiteId());
                         $link->setProductWebsiteIds($product->getWebsiteIds());
@@ -103,8 +111,12 @@ class Downloadable
                         $sample = $this->sampleFactory->create(['data' => $sampleData]);
                         $sample->setId(null);
                         $sample->setStoreId($product->getStoreId());
-                        $sample->setSampleType($sampleData['type']);
-                        $sample->setSampleUrl($sampleData['sample_url']);
+                        if (isset($sampleData['type'])) {
+                            $sample->setSampleType($sampleData['type']);
+                        }
+                        if (isset($sampleData['sample_url'])) {
+                            $sample->setSampleUrl($sampleData['sample_url']);
+                        }
                         if (!$sample->getSortOrder()) {
                             $sample->setSortOrder(1);
                         }
