@@ -70,7 +70,7 @@ define([
             hasActiveOptions: function() {
                 var regionData = this.getRegion('additionalOptions');
                 var options = regionData();
-                for (var i in options) {
+                for (var i = 0; i < options.length; i++) {
                     if (options[i].isActive()) {
                         return true;
                     }
