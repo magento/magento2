@@ -7,7 +7,6 @@
 namespace Magento\Amqp\Model;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -83,9 +82,9 @@ class Topology
         $availableQueues = $this->getQueuesList(self::AMQP_CONNECTION);
         $availableExchanges = $this->getExchangesList(self::AMQP_CONNECTION);
         foreach ($this->queueConfig->getBinds() as $bind) {
-            $queueName = $bind[QueueConfigConverter::BIND_QUEUE];
-            $exchangeName = $bind[QueueConfigConverter::BIND_EXCHANGE];
-            $topicName = $bind[QueueConfigConverter::BIND_TOPIC];
+            $queueName = $bind[QueueConfig::BIND_QUEUE];
+            $exchangeName = $bind[QueueConfig::BIND_EXCHANGE];
+            $topicName = $bind[QueueConfig::BIND_TOPIC];
             if (in_array($queueName, $availableQueues) && in_array($exchangeName, $availableExchanges)) {
                 try {
                     $this->declareQueue($queueName);
@@ -193,8 +192,8 @@ class Topology
     {
         $queues = [];
         foreach ($this->queueConfig->getConsumers() as $consumer) {
-            if ($consumer[QueueConfigConverter::CONSUMER_CONNECTION] === $connection) {
-                $queues[] = $consumer[QueueConfigConverter::CONSUMER_QUEUE];
+            if ($consumer[QueueConfig::CONSUMER_CONNECTION] === $connection) {
+                $queues[] = $consumer[QueueConfig::CONSUMER_QUEUE];
             }
         }
         $queues = array_unique($queues);
@@ -212,8 +211,8 @@ class Topology
         $exchanges = [];
         $queueConfig = $this->queueConfig->getPublishers();
         foreach ($queueConfig as $consumer) {
-            if ($consumer[QueueConfigConverter::PUBLISHER_CONNECTION] === $connection) {
-                $exchanges[] = $consumer[QueueConfigConverter::PUBLISHER_EXCHANGE];
+            if ($consumer[QueueConfig::PUBLISHER_CONNECTION] === $connection) {
+                $exchanges[] = $consumer[QueueConfig::PUBLISHER_EXCHANGE];
             }
         }
         $exchanges = array_unique($exchanges);
