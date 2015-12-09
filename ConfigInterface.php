@@ -35,7 +35,7 @@ interface ConfigInterface
     const CONSUMER_NAME = 'name';
     const CONSUMER_QUEUE = 'queue';
     const CONSUMER_CONNECTION = 'connection';
-    const CONSUMER_EXECUTOR = 'executor';
+    const CONSUMER_INSTANCE_TYPE = 'instance_type';
     const CONSUMER_CLASS = 'type';
     const CONSUMER_METHOD = 'method';
     const CONSUMER_MAX_MESSAGES = 'max_messages';
@@ -56,7 +56,7 @@ interface ConfigInterface
     const BROKER_CONSUMERS = 'consumers';
     const BROKER_CONSUMER_NAME = 'name';
     const BROKER_CONSUMER_QUEUE = 'queue';
-    const BROKER_CONSUMER_EXECUTOR = 'executor';
+    const BROKER_CONSUMER_INSTANCE_TYPE = 'instance_type';
     const BROKER_CONSUMER_MAX_MESSAGES = 'max_messages';
     const BROKERS = 'brokers';
 
