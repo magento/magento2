@@ -683,6 +683,10 @@ class TypeProcessor
     {
         foreach ($interface as $direction => $interfaceData) {
             $direction = ($direction == 'in') ? 'requiredInput' : 'returned';
+            if ($direction == 'returned' && !isset($interfaceData['parameters'])) {
+                /** No return value means that service method is asynchronous */
+                return $this;
+            }
             foreach ($interfaceData['parameters'] as $parameterData) {
                 if (!$this->isTypeSimple($parameterData['type']) && !$this->isTypeAny($parameterData['type'])) {
                     $operation = $this->getOperationName($serviceName, $methodName);
