@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response;
 
-use Magento\Framework\App\Response\HeaderProviderInterface;
+use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 

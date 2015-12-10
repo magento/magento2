@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\Test\Unit\Response;
+namespace Magento\Framework\App\Test\Unit\Response\HeaderProvider;
 
-use \Magento\Framework\App\Response\HstsHeaderProvider;
+use \Magento\Framework\App\Response\HeaderProvider\Hsts;
 use \Magento\Store\Model\Store;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 
-class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
+class HstsTest extends \PHPUnit_Framework_TestCase
 {
     /** Strict-Transport-Security (HSTS) Header name */
     const HEADER_NAME = 'Strict-Transport-Security';
@@ -22,7 +22,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
     const HEADER_VALUE = 'max-age=31536000';
 
     /**
-     * @var HstsHeaderProvider
+     * @var Hsts
      */
     protected $object;
 
@@ -38,7 +38,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $objectManager = new ObjectManagerHelper($this);
         $this->object = $objectManager->getObject(
-            '\Magento\Framework\App\Response\HstsHeaderProvider',
+            '\Magento\Framework\App\Response\HeaderProvider\Hsts',
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }
@@ -78,7 +78,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
-                    [HstsHeaderProvider::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
+                    [Hsts::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
                 ],
                 true
             ],
@@ -86,7 +86,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
-                    [HstsHeaderProvider::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
+                    [Hsts::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
                 ],
                 false
             ],
@@ -94,7 +94,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
-                    [HstsHeaderProvider::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
+                    [Hsts::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
                 ],
                 false
             ],
@@ -102,7 +102,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
-                    [HstsHeaderProvider::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
+                    [Hsts::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
                 ],
                 false
             ],
@@ -110,7 +110,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
-                    [HstsHeaderProvider::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
+                    [Hsts::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
                 ],
                 false
             ],
@@ -118,7 +118,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
-                    [HstsHeaderProvider::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
+                    [Hsts::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
                 ],
                 false
             ],
@@ -126,7 +126,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
-                    [HstsHeaderProvider::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
+                    [Hsts::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
                 ],
                 false
             ],
@@ -134,7 +134,7 @@ class HstsHeaderProviderTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
-                    [HstsHeaderProvider::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
+                    [Hsts::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
                 ],
                 false
             ],

@@ -1075,8 +1075,8 @@
     <type name="Magento\Framework\App\Response\HeaderManager">
         <arguments>
             <argument name="headerProviderList" xsi:type="array">
-                <item name="HSTSHeader" xsi:type="object">Magento\Framework\App\Response\HstsHeaderProvider</item>
-                <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\Header\XFrameOptions</item>
+                <item name="HSTSHeader" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\Hsts</item>
+                <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XFrameOptions</item>
             </argument>
         </arguments>
     </type>
