@@ -82,6 +82,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $registry;
 
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    private $request;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -93,6 +98,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Config $eavConfig
      * @param FilterPool $filterPool
      * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param array $meta
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -107,6 +113,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \Magento\Framework\Registry $registry,
         Config $eavConfig,
         FilterPool $filterPool,
+        \Magento\Framework\App\RequestInterface $request,
         array $meta = [],
         array $data = []
     ) {
@@ -117,6 +124,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->filterPool = $filterPool;
         $this->registry = $registry;
         $this->storeManager = $storeManager;
+        $this->request = $request;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
     }
@@ -146,8 +154,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this->loadedData;
         }
         $category = $this->getCurrentCategory();
-        if (!$category) {
-            return [];
+        if (!$category->getId()) {
+            $result = [];
+            $result['']['general']['parent'] = (int)$this->request->getParam('parent');
+            $result['']['general']['is_anchor'] = false;
+            return $result;
         } else {
             $categoryData = $category->getData();
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
