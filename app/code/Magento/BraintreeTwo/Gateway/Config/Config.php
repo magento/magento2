@@ -31,7 +31,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_THRESHOLD_AMOUNT = 'threshold_amount';
     const KEY_VERIFY_ALLOW_SPECIFIC = 'verify_all_countries';
     const KEY_VERIFY_SPECIFIC = 'verify_specific_countries';
-    const VALUE_3D_SECURE_ALL = 0;
+    const VALUE_3DSECURE_ALL = 0;
     const CODE_3DSECURE = 'three_d_secure';
 
     /**
@@ -192,7 +192,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function get3DSecureSpecificCountries()
     {
-        if ((int) $this->getValue(self::KEY_VERIFY_ALLOW_SPECIFIC) == self::VALUE_3D_SECURE_ALL) {
+        if ((int) $this->getValue(self::KEY_VERIFY_ALLOW_SPECIFIC) == self::VALUE_3DSECURE_ALL) {
             return [];
         }
         return explode(',', $this->getValue(self::KEY_VERIFY_SPECIFIC));

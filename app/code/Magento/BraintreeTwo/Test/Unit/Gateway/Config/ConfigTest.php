@@ -352,7 +352,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($this->getPath(Config::KEY_VERIFY_ALLOW_SPECIFIC), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($value);
 
-        if ($value !== Config::VALUE_3D_SECURE_ALL) {
+        if ($value !== Config::VALUE_3DSECURE_ALL) {
             $this->scopeConfigMock->expects(static::at(1))
                 ->method('getValue')
                 ->with($this->getPath(Config::KEY_VERIFY_SPECIFIC), ScopeInterface::SCOPE_STORE, null)
