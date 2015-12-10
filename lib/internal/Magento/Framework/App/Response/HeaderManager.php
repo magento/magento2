@@ -20,15 +20,15 @@ class HeaderManager
      * @param HeaderProviderInterface[]
      * @throws LocalizedException In case one of the header providers is invalid
      */
-    public function __construct($headerProviders)
+    public function __construct($headerProviderList)
     {
-        foreach ($headerProviders as $header)
+        foreach ($headerProviderList as $header)
         {
             if (!($header instanceof HeaderProviderInterface)) {
                 throw new LocalizedException(new Phrase('Invalid header provider'));
             }
         }
-        $this->headerProviders = $headerProviders;
+        $this->headerProviders = $headerProviderList;
     }
 
     /**
