@@ -88,6 +88,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Match">
+        <arguments>
+            <argument name="preprocessorContainer" xsi:type="array">
+                <item name="stopwordsPreprocessor" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Elasticsearch\Model\Adapter\Index\Config\Reader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Elasticsearch\Model\Adapter\Index\Config\Converter</argument>

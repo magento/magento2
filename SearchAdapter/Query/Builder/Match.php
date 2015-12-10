@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\PreprocessorInterface as PreprocessorInterface;
 
 class Match implements QueryInterface
 {
@@ -22,11 +23,20 @@ class Match implements QueryInterface
     private $fieldMapper;
 
     /**
-     * @param FieldMapperInterface $fieldMapper
+     * @var PreprocessorInterface[]
      */
-    public function __construct(FieldMapperInterface $fieldMapper)
-    {
+    protected $preprocessorContainer;
+
+    /**
+     * @param FieldMapperInterface $fieldMapper
+     * @param PreprocessorInterface[] $preprocessorContainer
+     */
+    public function __construct(
+        FieldMapperInterface $fieldMapper,
+        array $preprocessorContainer
+    ) {
         $this->fieldMapper = $fieldMapper;
+        $this->preprocessorContainer = $preprocessorContainer;
     }
 
     /**
@@ -50,6 +60,9 @@ class Match implements QueryInterface
     protected function prepareQuery($queryValue, $conditionType)
     {
         $queryValue = $this->escape($queryValue);
+        foreach ($this->preprocessorContainer as $preprocessor) {
+            $queryValue = $preprocessor->process($queryValue);
+        }
         $condition = $conditionType === BoolExpression::QUERY_CONDITION_NOT ?
             self::QUERY_CONDITION_MUST_NOT : $conditionType;
         return [
