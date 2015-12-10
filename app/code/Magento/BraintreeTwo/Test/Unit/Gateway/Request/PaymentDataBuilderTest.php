@@ -30,11 +30,6 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
     private $configMock;
 
     /**
-     * @var ValueHandlerPoolInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $valueHandlerPool;
-
-    /**
      * @var Payment|\PHPUnit_Framework_MockObject_MockObject
      */
     private $paymentMock;
@@ -59,16 +54,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->activeHandler = $this->getMockBuilder(ActiveHandler::class)
-            ->setMethods(['handle'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->valueHandlerPool = $this->getMockBuilder(ValueHandlerPool::class)
-            ->setMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->builder = new PaymentDataBuilder($this->configMock, $this->valueHandlerPool);
+        $this->builder = new PaymentDataBuilder($this->configMock);
     }
 
     /**
@@ -101,8 +87,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             PaymentDataBuilder::AMOUNT  => 10.00,
             PaymentDataBuilder::PAYMENT_METHOD_NONCE  => self::PAYMENT_METHOD_NONCE,
-            PaymentDataBuilder::MERCHANT_ACCOUNT_ID  => self::MERCHANT_ACCOUNT_ID,
-            PaymentDataBuilder::OPTIONS => [PaymentDataBuilder::STORE_IN_VAULT_ON_SUCCESS => true]
+            PaymentDataBuilder::MERCHANT_ACCOUNT_ID  => self::MERCHANT_ACCOUNT_ID
         ];
 
         $buildSubject = [
@@ -123,13 +108,6 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->paymentDO->expects(static::once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
-
-        $this->activeHandler->expects($this->once())
-            ->method('handle')
-            ->willReturn(1);
-        $this->valueHandlerPool->expects($this->once())
-            ->method('get')
-            ->willReturn($this->activeHandler);
 
         static::assertEquals(
             $expectedResult,
