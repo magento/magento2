@@ -146,6 +146,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $result = [];
             $result['']['general']['parent'] = (int)$this->request->getParam('parent');
             $result['']['general']['is_anchor'] = false;
+            $result['']['general']['use_config']['available_sort_by'] = true;
+            $result['']['general']['use_config']['default_sort_by'] = true;
+            $result['']['general']['use_config']['filter_price_range'] = true;
             return $result;
         } else {
             $categoryData = $category->getData();
