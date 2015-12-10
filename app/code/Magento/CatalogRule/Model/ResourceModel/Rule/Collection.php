@@ -14,7 +14,17 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      */
     protected $_associatedEntitiesMap;
 
-
+    /**
+     * Collection constructor.
+     *
+     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
+     * @param array $associatedEntitiesMap
+     */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
@@ -38,7 +48,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     /**
      * Set resource model
      *
-     * @param array $associatedEntitiesMap
      * @return void
      * @codeCoverageIgnore
      */
