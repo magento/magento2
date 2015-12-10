@@ -98,7 +98,7 @@ class LinkRepositoryTest extends WebapiAbstract
      */
     protected function getTargetLink(Product $product, $linkId = null)
     {
-        $links = $product->getTypeInstance()->getLinks($product);
+        $links = $product->getExtensionAttributes()->getDownloadableProductLinks();
         if ($linkId !== null) {
             return isset($links[$linkId]) ? $links[$linkId] : null;
         }

@@ -8,7 +8,6 @@ namespace Magento\Framework\Model;
 
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Model\EntityRegistry;
 
 /**
  * Class EntityManager
@@ -26,22 +25,15 @@ class EntityManager
     protected $metadataPool;
 
     /**
-     * @var EntityRegistry
-     */
-    protected $entityRegistry;
-
-    /**
      * @param OrchestratorPool $orchestratorPool
      * @param MetadataPool $metadataPool
      */
     public function __construct(
         OrchestratorPool $orchestratorPool,
-        MetadataPool $metadataPool,
-        EntityRegistry $entityRegistry
+        MetadataPool $metadataPool
     ) {
         $this->orchestratorPool = $orchestratorPool;
         $this->metadataPool = $metadataPool;
-        $this->entityRegistry = $entityRegistry;
     }
 
     /**
@@ -53,12 +45,8 @@ class EntityManager
      */
     public function load($entityType, $entity, $identifier)
     {
-        if (!$this->entityRegistry->retrieve($entityType, $identifier)) {
-            $operation = $this->orchestratorPool->getReadOperation($entityType);
-            $entity = $operation->execute($entityType, $entity, $identifier);
-            $this->entityRegistry->register($entityType, $identifier, $entity);
-        }
-        return $this->entityRegistry->retrieve($entityType, $identifier);
+        $operation = $this->orchestratorPool->getReadOperation($entityType);
+        return $operation->execute($entityType, $entity, $identifier);
     }
 
     /**
@@ -79,9 +67,7 @@ class EntityManager
         } else {
             $operation = $this->orchestratorPool->getWriteOperation($entityType, 'create');
         }
-        $entity = $operation->execute($entityType, $entity);
-        $this->entityRegistry->remove($entityType, $entityData[$metadata->getIdentifierField()]);
-        return $entity;
+        return $operation->execute($entityType, $entity);
     }
 
     /**
@@ -92,15 +78,7 @@ class EntityManager
      */
     public function delete($entityType, $entity)
     {
-        $hydrator = $this->metadataPool->getHydrator($entityType);
-        $metadata = $this->metadataPool->getMetadata($entityType);
-        $entityData = $hydrator->extract($entity);
-        if (empty($entityData[$metadata->getIdentifierField()])) {
-            return false;
-        }
-        $identifier = $entityData[$metadata->getIdentifierField()];
         $operation = $this->orchestratorPool->getWriteOperation($entityType, 'delete');
-        $this->entityRegistry->remove($entityType, $identifier);
         return $operation->execute($entityType, $entity);
     }
 
