@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\MysqlMq\Model\QueueManagement;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Queue based on MessageQueue protocol
@@ -41,6 +42,11 @@ class Queue implements QueueInterface
     private $maxNumberOfTrials;
 
     /**
+     * @var LoggerInterface $logger
+     */
+    private $logger;
+
+    /**
      * Queue constructor.
      *
      * @param QueueManagement $queueManagement
@@ -48,19 +54,22 @@ class Queue implements QueueInterface
      * @param string $queueName
      * @param int $interval
      * @param int $maxNumberOfTrials
+     * @param LoggerInterface $logger
      */
     public function __construct(
         QueueManagement $queueManagement,
         EnvelopeFactory $envelopeFactory,
         $queueName,
         $interval = 5,
-        $maxNumberOfTrials = 3
+        $maxNumberOfTrials = 3,
+        LoggerInterface $logger
     ) {
         $this->queueManagement = $queueManagement;
         $this->envelopeFactory = $envelopeFactory;
         $this->queueName = $queueName;
         $this->interval = $interval;
         $this->maxNumberOfTrials = $maxNumberOfTrials;
+        $this->logger = $logger;
     }
 
     /**
@@ -114,7 +123,7 @@ class Queue implements QueueInterface
     /**
      * {@inheritdoc}
      */
-    public function reject(EnvelopeInterface $envelope)
+    public function reject(EnvelopeInterface $envelope, $rejectionMessage = null)
     {
         $properties = $envelope->getProperties();
         $relationId = $properties[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
@@ -123,6 +132,9 @@ class Queue implements QueueInterface
             $this->queueManagement->pushToQueueForRetry($relationId);
         } else {
             $this->queueManagement->changeStatus([$relationId], QueueManagement::MESSAGE_STATUS_ERROR);
+            if ($rejectionMessage !== null) {
+                $this->logger->critical(__('Message has been rejected: %1', $rejectionMessage));
+            }
         }
     }
 }
