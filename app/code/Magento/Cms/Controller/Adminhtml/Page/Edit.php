@@ -7,6 +7,7 @@
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action;
+use Magento\Cms\Controller\RegistryConstants;
 
 class Edit extends \Magento\Backend\App\Action
 {
@@ -92,7 +93,7 @@ class Edit extends \Magento\Backend\App\Action
         }
 
         // 4. Register model to use later in blocks
-        $this->_coreRegistry->register('cms_page', $model);
+        $this->_coreRegistry->register(RegistryConstants::CMS_PAGE, $model);
 
         // 5. Build edit form
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
