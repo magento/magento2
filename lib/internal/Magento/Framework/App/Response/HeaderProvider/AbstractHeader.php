@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\Response\Header;
+namespace Magento\Framework\App\Response\HeaderProvider;
 
-use Magento\Framework\App\Response\HeaderProviderInterface;
+use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
 
 /**
  * Class to be used for setting headers with static values
@@ -30,7 +30,7 @@ abstract class AbstractHeader implements HeaderProviderInterface
     }
 
     /**
-     * Header name
+     * Get header name
      *
      * @return string
      */
@@ -40,7 +40,7 @@ abstract class AbstractHeader implements HeaderProviderInterface
     }
 
     /**
-     * Header value
+     * Get header value
      *
      * @return string
      */

@@ -4,27 +4,34 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\Response;
+namespace Magento\Framework\App\Response\HeaderProvider;
 
+use \Magento\Framework\App\Response\HeaderProvider\AbstractHeader;
 use \Magento\Store\Model\Store;
 
 /**
  * Adds an Strict-Transport-Security (HSTS) header to HTTP responses.
  */
-class HstsHeaderProvider implements \Magento\Framework\App\Response\HeaderProviderInterface
+class Hsts extends AbstractHeader
 {
     /**
      * Enable HSTS config path
      */
     const XML_PATH_ENABLE_HSTS = 'web/secure/enable_hsts';
 
-    /** Strict-Transport-Security (HSTS) Header name */
-    const HEADER_NAME = 'Strict-Transport-Security';
+    /**
+     * Strict-Transport-Security (HSTS) Header name
+     *
+     * @var string
+     */
+    protected $name = 'Strict-Transport-Security';
 
     /**
      * Strict-Transport-Security (HSTS) header value
+     *
+     * @var string
      */
-    const HEADER_VALUE = 'max-age=31536000';
+    protected $value = 'max-age=31536000';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -37,26 +44,6 @@ class HstsHeaderProvider implements \Magento\Framework\App\Response\HeaderProvid
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
-    }
-
-    /**
-     * Get header name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this::HEADER_NAME;
-    }
-
-    /**
-     * Get header value
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this::HEADER_VALUE;
     }
 
     public function canApply()
