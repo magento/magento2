@@ -281,6 +281,7 @@
                             <item name="handleRequired" xsi:type="string">${ $.provider }:data.general.use_config.filter_price_range</item>
                         </item>
                         <item name="component" xsi:type="string">Magento_Catalog/js/components/input-handle-required</item>
+                        <item name="addbefore" xsi:type="string">$</item>
                     </item>
                 </argument>
             </field>
