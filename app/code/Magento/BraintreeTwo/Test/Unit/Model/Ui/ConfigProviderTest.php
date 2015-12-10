@@ -66,7 +66,10 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                         'US' => ['DI', 'JCB']
                     ],
                     'getAvailableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
-                    'isCvvEnabled' => true
+                    'isCvvEnabled' => true,
+                    'isVerify3DSecure' => true,
+                    'getThresholdAmount' => 20,
+                    'get3DSecureSpecificCountries' => ['GB', 'US', 'CA']
                 ],
                 'expected' => [
                     'payment' => [
@@ -80,6 +83,11 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             ],
                             'availableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
                             'useCvv' => true
+                        ],
+                        Config::CODE_3DSECURE => [
+                            'enabled' => true,
+                            'thresholdAmount' => 20,
+                            'specificCountries' => ['GB', 'US', 'CA']
                         ]
                     ]
                 ]

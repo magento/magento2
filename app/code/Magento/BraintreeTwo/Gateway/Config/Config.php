@@ -27,6 +27,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_CC_TYPES_BRAINTREE_MAPPER = 'cctypes_braintree_mapper';
     const KEY_SDK_URL = 'sdk_url';
     const KEY_USE_CVV = 'useccv';
+    const KEY_VERIFY_3DSECURE = 'verify_3dsecure';
+    const KEY_THRESHOLD_AMOUNT = 'threshold_amount';
+    const KEY_VERIFY_ALLOW_SPECIFIC = 'verify_all_countries';
+    const KEY_VERIFY_SPECIFIC = 'verify_specific_countries';
+    const VALUE_3D_SECURE_ALL = 0;
+    const CODE_3DSECURE = 'three_d_secure';
 
     /**
      * @var string
@@ -149,6 +155,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getCountryAvailableCardTypes($country)
     {
         $types = $this->getCountrySpecificCardTypeConfig();
+
         return (!empty($types[$country])) ? $types[$country] : [];
     }
 
@@ -159,5 +166,35 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function isCvvEnabled()
     {
         return (bool) $this->getValue(self::KEY_USE_CVV);
+    }
+
+    /**
+     * Check if 3d secure verification enabled
+     * @return bool
+     */
+    public function isVerify3DSecure()
+    {
+        return (bool) $this->getValue(self::KEY_VERIFY_3DSECURE);
+    }
+
+    /**
+     * Get threshold amount for 3d secure
+     * @return double
+     */
+    public function getThresholdAmount()
+    {
+        return (double) $this->getValue(self::KEY_THRESHOLD_AMOUNT);
+    }
+
+    /**
+     * Get list of specific countries for 3d secure
+     * @return array
+     */
+    public function get3DSecureSpecificCountries()
+    {
+        if ((int) $this->getValue(self::KEY_VERIFY_ALLOW_SPECIFIC) == self::VALUE_3D_SECURE_ALL) {
+            return [];
+        }
+        return explode(',', $this->getValue(self::KEY_VERIFY_SPECIFIC));
     }
 }
