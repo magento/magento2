@@ -77,7 +77,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->paymentTokenMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(null)
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionFactoryMock = $this
@@ -95,6 +95,68 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->initPaymentMock();
+
+        $this->paymentHandler = new PaymentDetailsHandler(
+            $this->paymentTokenFactoryMock,
+            $this->paymentExtensionFactoryMock
+        );
+    }
+
+    /**
+     * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::handle
+     */
+    public function testHandle()
+    {
+        $paymentData = $this->getPaymentDataObjectMock();
+        $subject['payment'] = $paymentData;
+
+        $this->paymentExtension->expects(static::once())
+            ->method('setVaultPaymentToken')
+            ->with($this->paymentTokenMock);
+        $this->paymentExtension->expects(static::once())
+            ->method('getVaultPaymentToken')
+            ->willReturn($this->paymentTokenMock);
+
+        $response = [
+            'object' => $this->getBraintreeTransaction()
+        ];
+
+        $this->salesOrderMock->setCustomerId(10);
+
+        $this->paymentHandler->handle($subject, $response);
+
+        $this->assertEquals('rh3gd4', $this->paymentTokenMock->getGatewayToken());
+        $this->assertEquals('10', $this->paymentTokenMock->getCustomerId());
+        $this->assertSame($this->paymentTokenMock, $this->payment->getExtensionAttributes()->getVaultPaymentToken());
+    }
+
+    /**
+     * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::process3DSecure
+     */
+    public function testProcess3DSecure()
+    {
+        $paymentData = $this->getPaymentDataObjectMock();
+        $subject['payment'] = $paymentData;
+
+        $this->payment->expects(static::at(6))
+            ->method('setAdditionalInformation')
+            ->with('liabilityShifted', true);
+        $this->payment->expects(static::at(7))
+            ->method('setAdditionalInformation')
+            ->with('liabilityShiftPossible', true);
+
+        $response = [
+            'object' => $this->getBraintreeTransaction()
+        ];
+        $this->paymentHandler->handle($subject, $response);
+    }
+
+    /**
+     * Create mock for payment object
+     */
+    private function initPaymentMock()
+    {
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -111,21 +173,6 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         $this->payment->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->salesOrderMock);
-
-        $this->paymentHandler = new PaymentDetailsHandler(
-            $this->paymentTokenFactoryMock,
-            $this->paymentExtensionFactoryMock
-        );
-    }
-
-    /**
-     * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::handle
-     */
-    public function testHandle()
-    {
-        $paymentData = $this->getPaymentDataObjectMock();
-        $subject['payment'] = $paymentData;
-
         $this->payment->expects(static::once())
             ->method('setTransactionId');
         $this->payment->expects(static::once())
@@ -134,20 +181,8 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setLastTransId');
         $this->payment->expects(static::once())
             ->method('setIsTransactionClosed');
-        $this->payment->expects(static::exactly(6))
+        $this->payment->expects(static::any())
             ->method('setAdditionalInformation');
-
-        $response = [
-            'object' => $this->getBraintreeTransaction()
-        ];
-
-        $this->salesOrderMock->setCustomerId(10);
-
-        $this->paymentHandler->handle($subject, $response);
-
-        $this->assertEquals('rh3gd4', $this->paymentTokenMock->getGatewayToken());
-        $this->assertEquals('10', $this->paymentTokenMock->getCustomerId());
-        $this->assertSame($this->paymentTokenMock, $this->payment->getExtensionAttributes()->getVaultPaymentToken());
     }
 
     /**
@@ -182,12 +217,13 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'processorAuthorizationCode' => 'W1V8XK',
             'processorResponseCode' => '1000',
             'processorResponseText' => 'Approved',
-            'creditCardDetails' => $this->getCreditCardDetails()
+            'creditCardDetails' => $this->getCreditCardDetails(),
+            'threeDSecureInfo' => $this->getThreeDSecureInfo()
         ];
 
-        $transaction = Braintree_Transaction::factory($attributes);
+        $transaction = \Braintree\Transaction::factory($attributes);
 
-        $mock = $this->getMockBuilder(Braintree_Result_Successful::class)
+        $mock = $this->getMockBuilder(\Braintree\Result\Successful::class)
             ->disableOriginalConstructor()
             ->setMethods(['__get'])
             ->getMock();
@@ -202,7 +238,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Create Braintree transaction
-     * @return \Braintree_Transaction_CreditCardDetails
+     * @return \Braintree\Transaction\CreditCardDetails
      */
     private function getCreditCardDetails()
     {
@@ -215,7 +251,20 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'last4' => 1231
         ];
 
-        $creditCardDetails = new \Braintree_Transaction_CreditCardDetails($attributes);
+        $creditCardDetails = new \Braintree\Transaction\CreditCardDetails($attributes);
         return $creditCardDetails;
+    }
+
+    /**
+     * Get 3d secure details
+     * @return array
+     */
+    private function getThreeDSecureInfo()
+    {
+        $attributes = [
+            'liabilityShifted' => true,
+            'liabilityShiftPossible' => true
+        ];
+        return $attributes;
     }
 }

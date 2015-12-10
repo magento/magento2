@@ -22,6 +22,8 @@ define([
             var self = this,
                 fields = self.getHostedFields();
 
+            self._super();
+
             this.braintreeClient.getSdkClient().setup(this.braintreeClient.getClientToken(), 'custom', {
                 id: 'co-transparent-form-braintree',
                 hostedFields: fields,
@@ -37,13 +39,9 @@ define([
 
                 /**
                  * Triggers on any Braintree error
-                 * @param {Object} response
                  */
-                onError: function (response) {
+                onError: function () {
                     self.paymentMethodNonce = '';
-                    self.messageContainer.addErrorMessage({
-                        'message': response.message
-                    });
                 }
             });
         },
@@ -84,19 +82,24 @@ define([
                     self.validateCardType();
                 }
 
-                if (event.type === 'fieldStateChange') {
-                    // Handle a change in validation or card type
+                if (event.type !== 'fieldStateChange') {
+
+                    return false;
+                }
+
+                // Handle a change in validation or card type
+                if (event.target.fieldKey === 'number') {
                     self.selectedCardType(null);
+                }
 
-                    if (!event.isPotentiallyValid && !event.isValid) {
-                        return false;
-                    }
+                if (!event.isValid) {
+                    return false;
+                }
 
-                    if (event.card) {
-                        self.selectedCardType(
-                            validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
-                        );
-                    }
+                if (event.card) {
+                    self.selectedCardType(
+                        validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
+                    );
                 }
             };
 
@@ -114,7 +117,7 @@ define([
             $selector.removeClass(invalidClass);
 
             if (this.selectedCardType() === null) {
-                $(this.getSelector('cc_number')).addClass('class', invalidClass);
+                $(this.getSelector('cc_number')).addClass(invalidClass);
 
                 return false;
             }
@@ -128,10 +131,6 @@ define([
         placeOrderClick: function () {
             if (this.validateCardType()) {
                 $(this.getSelector('submit')).trigger('click');
-            } else {
-                this.messageContainer.addErrorMessage({
-                    'message': $t('Please enter a valid credit card type number')
-                });
             }
         }
     });

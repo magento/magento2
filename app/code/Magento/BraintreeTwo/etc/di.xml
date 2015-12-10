@@ -66,6 +66,7 @@
                 <item name="customer" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder</item>
                 <item name="payment" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\AddressDataBuilder</item>
+                <item name="3dsecure" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\ThreeDSecureDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
