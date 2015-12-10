@@ -152,11 +152,11 @@ class Queue implements QueueInterface
     /**
      * (@inheritdoc)
      */
-    public function push(EnvelopeInterface $envelope, $data)
+    public function push(EnvelopeInterface $envelope)
     {
         $messageProperties = $envelope->getProperties();
         $msg = new AMQPMessage(
-            $data,
+            $envelope->getBody(),
             [
                 'correlation_id' => $messageProperties['correlation_id'],
                 'delivery_mode' => 2
