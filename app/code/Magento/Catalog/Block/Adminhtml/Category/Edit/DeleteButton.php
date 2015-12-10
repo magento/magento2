@@ -26,7 +26,7 @@ class DeleteButton extends AbstractCategory implements ButtonProviderInterface
         if ($categoryId && !in_array($categoryId, $this->getRootIds()) && $category->isDeleteable()) {
             return [
                 'id' => 'delete',
-                'label' => __('Delete Category'),
+                'label' => __('Delete'),
                 'on_click' => "categoryDelete('" . $this->getDeleteUrl() . "')",
                 'class' => 'delete',
                 'sort_order' => 10

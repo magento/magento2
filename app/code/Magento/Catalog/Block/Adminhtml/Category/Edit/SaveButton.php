@@ -24,7 +24,7 @@ class SaveButton extends AbstractCategory implements ButtonProviderInterface
 
         if (!$category->isReadonly() && $this->hasStoreRootCategory()) {
             return [
-                'label' => __('Save Category'),
+                'label' => __('Save'),
                 'class' => 'save primary',
                 'data_attribute' => [
                     'mage-init' => ['button' => ['event' => 'save']],

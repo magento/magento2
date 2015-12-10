@@ -26,6 +26,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     protected $layoutFactory;
 
     /**
+     * The list of inputs that need to convert from string to boolean
+     * @var array
+     */
+    protected $stringToBoolInputs = [
+        'general' => [
+            'custom_use_parent_settings',
+            'custom_apply_to_products',
+            'is_active',
+            'include_in_menu',
+            'is_anchor',
+            'use_default' => ['url_key'],
+            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by'],
+            'savedImage' => ['delete']
+        ]
+    ];
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -83,8 +99,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $refreshTree = false;
         $data = $this->getRequest()->getPostValue();
+        $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
         $data = $this->imagePreprocessing($data);
-
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
@@ -113,7 +129,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             if ($generalPost['use_config']) {
                 $useConfig = [];
                 foreach($generalPost['use_config'] as $attributeCode => $attributeValue) {
-                    if ($attributeValue !== 'false') {
+                    if ($attributeValue) {
                         $useConfig[] = $attributeCode;
                     }
                 }
@@ -141,7 +157,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
              */
             if ($generalPost['use_default']) {
                 foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
-                    if ($attributeValue !== 'false') {
+                    if ($attributeValue) {
                         $category->setData($attributeCode, false);
                     }
                 }
@@ -238,9 +254,36 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             }
             if (
                 isset($data['general']['savedImage']['delete']) &&
-                $data['general']['savedImage']['delete'] !== 'false'
+                $data['general']['savedImage']['delete']
             ) {
                 $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Converting inputs from string to boolean
+     *
+     * @param array $stringToBoolInputs
+     * @param array $data
+     *
+     * @return array
+     */
+    public function stringToBoolConverting($stringToBoolInputs, $data)
+    {
+        foreach ($stringToBoolInputs as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->stringToBoolConverting($value, $data[$key]);
+            } else {
+                if (isset($data[$value])) {
+                    if ($data[$value] === 'true') {
+                        $data[$value] = true;
+                    }
+                    if ($data[$value] === 'false') {
+                        $data[$value] = false;
+                    }
+                }
             }
         }
         return $data;
