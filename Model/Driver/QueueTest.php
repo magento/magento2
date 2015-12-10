@@ -69,7 +69,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $topicName = 'some.topic';
         $envelop = $envelopFactory->create(['body' => $messageBody, 'properties' => ['topic_name' => $topicName]]);
 
-        $this->queue->push($envelop, ['dummy data, to be removed']);
+        $this->queue->push($envelop);
 
         $messageFromQueue = $this->queue->dequeue();
 
