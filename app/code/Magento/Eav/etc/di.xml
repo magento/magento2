@@ -75,4 +75,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Model\EntitySnapshot\AttributeProvider">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="providers" xsi:type="array">
+                    <item name="default" xsi:type="array">
+                        <item name="eav" xsi:type="string">\Magento\Eav\Model\AttributeProvider</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
