@@ -24,11 +24,11 @@
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="genericHeaderPlugin" type="Magento\Framework\App\Response\HeaderManager"/>
     </type>
-    <type name="Magento\Framework\App\Response\XFrameOptPlugin">
+    <type name="Magento\Framework\App\Response\Header\XFrameOptions">
         <arguments>
             <argument name="xFrameOpt" xsi:type="init_parameter">Magento\Framework\App\Response\Header\XFrameOptions::DEPLOYMENT_CONFIG_X_FRAME_OPT</argument>
-        </arguments>
-    </type>
+    </arguments>
+    </type>
     <type name="Magento\Framework\App\Config\ScopePool">
         <arguments>
             <argument name="readerPool" xsi:type="object">Magento\Store\Model\Config\Reader\ReaderPool\Proxy</argument>
