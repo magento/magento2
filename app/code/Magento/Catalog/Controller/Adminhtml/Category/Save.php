@@ -81,9 +81,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $storeId = $this->getRequest()->getParam('store');
         $refreshTree = false;
         $data = $this->getRequest()->getPostValue();
+        $data = $this->imagePreprocessing($data);
+
+        $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
             if (!$category->getId()) {
@@ -137,10 +139,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Check "Use Default Value" checkboxes values
              */
-            $useDefaults = $this->getRequest()->getPost('use_default');
-            if ($useDefaults) {
-                foreach ($useDefaults as $attributeCode) {
-                    $category->setData($attributeCode, false);
+            if ($generalPost['use_default']) {
+                foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
+                    if ($attributeValue !== 'false') {
+                        $category->setData($attributeCode, false);
+                    }
                 }
             }
 
@@ -211,5 +214,35 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             'catalog/*/edit',
             $redirectParams
         );
+    }
+
+    /**
+     * Image data preprocessing
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function imagePreprocessing($data)
+    {
+        if (isset($_FILES['general']) && !empty($_FILES['general']['name']['image'])) {
+            $_FILES['image'] = $_FILES['general'];
+            foreach($_FILES['general'] as $key => $file) {
+                $_FILES['image'][$key] = $file['image'];
+            }
+            $data['image'] = $_FILES['image'];
+        } else {
+            unset($data['general']['image']);
+            if (isset($data['general']['savedImage']['value'])) {
+                $data['general']['image']['value'] = $data['general']['savedImage']['value'];
+            }
+            if (
+                isset($data['general']['savedImage']['delete']) &&
+                $data['general']['savedImage']['delete'] !== 'false'
+            ) {
+                $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
+            }
+        }
+        return $data;
     }
 }
