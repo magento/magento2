@@ -73,6 +73,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
     /**
      * Save integration data.
      *
+     * @param array $integrationData
      * @return void
      */
     private function processData($integrationData)
