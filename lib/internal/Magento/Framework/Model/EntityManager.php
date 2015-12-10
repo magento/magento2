@@ -79,7 +79,9 @@ class EntityManager
         } else {
             $operation = $this->orchestratorPool->getWriteOperation($entityType, 'create');
         }
-        return $operation->execute($entityType, $entity);
+        $entity = $operation->execute($entityType, $entity);
+        $this->entityRegistry->remove($entityType, $entityData[$metadata->getIdentifierField()]);
+        return $entity;
     }
 
     /**
@@ -90,7 +92,15 @@ class EntityManager
      */
     public function delete($entityType, $entity)
     {
+        $hydrator = $this->metadataPool->getHydrator($entityType);
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $entityData = $hydrator->extract($entity);
+        if (empty($entityData[$metadata->getIdentifierField()])) {
+            return false;
+        }
+        $identifier = $entityData[$metadata->getIdentifierField()];
         $operation = $this->orchestratorPool->getWriteOperation($entityType, 'delete');
+        $this->entityRegistry->remove($entityType, $identifier);
         return $operation->execute($entityType, $entity);
     }
 
