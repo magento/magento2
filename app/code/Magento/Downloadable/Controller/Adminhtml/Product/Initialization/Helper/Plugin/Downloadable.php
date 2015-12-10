@@ -85,7 +85,7 @@ class Downloadable
                             $link->setSampleType($linkData['sample']['type']);
                         }
                         if (isset($linkData['sample']['file'])) {
-                            $link->setSampleFileData($linkData['sample']['file']);
+                            $link->setSampleFile($linkData['sample']['file']);
                         }
                         if (isset($linkData['sample']['url'])) {
                             $link->setSampleUrl($linkData['sample']['url']);
