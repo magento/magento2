@@ -24,6 +24,9 @@
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="xFrameOptionsHeader" type="Magento\Framework\App\Response\XFrameOptPlugin"/>
     </type>
+    <type name="Magento\Framework\App\Response\Http">
+        <plugin name="genericHeaderPlugin" type="\Magento\Framework\App\Response\HeaderManager"/>
+    </type>
     <type name="Magento\Framework\App\Response\XFrameOptPlugin">
         <arguments>
             <argument name="xFrameOpt" xsi:type="init_parameter">Magento\Framework\App\Response\XFrameOptPlugin::DEPLOYMENT_CONFIG_X_FRAME_OPT</argument>
