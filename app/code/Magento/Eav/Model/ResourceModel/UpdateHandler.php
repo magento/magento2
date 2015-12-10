@@ -119,7 +119,7 @@ class UpdateHandler
                 }
                 if (isset($snapshot[$attribute->getAttributeCode()])
                     && $snapshot[$attribute->getAttributeCode()] !== false
-                    && (isset($data[$attribute->getAttributeCode()]) && $attribute->isValueEmpty(
+                    && (array_key_exists($attribute->getAttributeCode(), $data) && $attribute->isValueEmpty(
                             $data[$attribute->getAttributeCode()]
                         ))
                 ) {
