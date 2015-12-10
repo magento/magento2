@@ -13,15 +13,17 @@ class Data extends \Magento\Framework\Config\Data
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Communication\Config\Reader $reader
+     * @param \Magento\Framework\Communication\Config\Reader\XmlReader $xmlReader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      */
     public function __construct(
-        \Magento\Framework\Communication\Config\Reader $reader,
+        \Magento\Framework\Communication\Config\Reader\XmlReader $xmlReader,
+        \Magento\Framework\Communication\Config\Reader\EnvReader $envReader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'communication_config_cache'
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($xmlReader, $cache, $cacheId);
+        $this->merge($envReader->read());
     }
 }
