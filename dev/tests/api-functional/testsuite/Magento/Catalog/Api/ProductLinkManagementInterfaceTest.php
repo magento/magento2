@@ -87,7 +87,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual_in_stock.php
      */
     public function testAssign()
