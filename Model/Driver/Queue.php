@@ -129,7 +129,7 @@ class Queue implements QueueInterface
     /**
      * {@inheritDoc}
      */
-    public function push(EnvelopeInterface $envelope, $data)
+    public function push(EnvelopeInterface $envelope)
     {
         $properties = $envelope->getProperties();
         $this->queueManagement->addMessageToQueues(
