@@ -83,6 +83,12 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAddActionProductNameXss()
     {
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
+        $this->getRequest()->setPostValue([
+            'form_key' => $formKey->getFormKey(),
+        ]);
+
         $this->dispatch('wishlist/index/add/product/1?nocookie=1');
         $messages = $this->_messages->getMessages()->getItems();
         $isProductNamePresent = false;
