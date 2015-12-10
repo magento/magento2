@@ -30,6 +30,7 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexerHandler</item>
+                <argument name="entityType" xsi:type="string">product</argument>
             </argument>
         </arguments>
     </type>
@@ -63,6 +64,31 @@
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
+        <arguments>
+            <argument name="intervals" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Aggregation\Interval</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Search\Dynamic\DataProviderFactory">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Aggregation\Builder">
+        <arguments>
+            <argument name="dataProviderContainer" xsi:type="array">
+                <item name="catalogsearch_fulltext" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider</item>
+            </argument>
+            <argument name="aggregationContainer" xsi:type="array">
+                <item name="termBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term</item>
+                <item name="dynamicBucket" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Dynamic</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Elasticsearch\Model\Adapter\Index\Config\Reader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Elasticsearch\Model\Adapter\Index\Config\Converter</argument>
@@ -81,4 +107,11 @@
             <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Model\Client\Elasticsearch</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\AdvancedSearch\Model\SuggestedQueries">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\DataProvider\Suggestions</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -44,20 +44,28 @@ class IndexerHandler implements IndexerInterface
     protected $batchSize;
 
     /**
+     * @var string
+     */
+    protected $entityType;
+
+    /**
      * @param ElasticsearchFactory $adapterFactory
      * @param Batch $batch
+     * @param string $entityType
      * @param array $data
      * @param int $batchSize
      */
     public function __construct(
         ElasticsearchFactory $adapterFactory,
         Batch $batch,
+        $entityType,
         array $data = [],
         $batchSize = self::DEFAULT_BATCH_SIZE
     ) {
         $this->adapter = $adapterFactory->create();
         $this->data = $data;
         $this->batch = $batch;
+        $this->entityType = $entityType;
         $this->batchSize = $batchSize;
     }
 
@@ -70,9 +78,9 @@ class IndexerHandler implements IndexerInterface
         $storeId = $dimension->getValue();
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $storeId);
-            $this->adapter->addDocs($docs, $storeId);
+            $this->adapter->addDocs($docs, $storeId, $this->entityType);
         }
-        $this->adapter->updateAlias($storeId);
+        $this->adapter->updateAlias($storeId, $this->entityType);
         return $this;
     }
 
@@ -88,7 +96,7 @@ class IndexerHandler implements IndexerInterface
         foreach ($documents as $entityId => $document) {
             $documentIds[$entityId] = $entityId;
         }
-        $this->adapter->deleteDocs($documentIds, $storeId);
+        $this->adapter->deleteDocs($documentIds, $storeId, $this->entityType);
         return $this;
     }
 
@@ -99,7 +107,7 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
-        $this->adapter->cleanIndex($storeId);
+        $this->adapter->cleanIndex($storeId, $this->entityType);
         return $this;
     }
 

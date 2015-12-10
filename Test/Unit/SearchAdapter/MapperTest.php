@@ -41,7 +41,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     {
         $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
             ->setMethods([
-                'getIndexName',
+                'getIndexerPrefix',
                 'getEntityType',
             ])
             ->disableOriginalConstructor()
@@ -55,8 +55,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->clientConfig->expects($this->any())
-            ->method('getIndexName')
-            ->willReturn('indexName');
+            ->method('getIndexerPrefix')
+            ->willReturn('indexerPrefix');
         $this->clientConfig->expects($this->any())
             ->method('getEntityType')
             ->willReturn('product');
@@ -185,6 +185,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $filterQuery->expects($this->any())
             ->method('getType')
             ->willReturn('matchQuery');
+        $this->filterBuilder->expects(($this->any()))
+            ->method('build')
+            ->willReturn([]);
 
         $this->model->buildQuery($request);
     }

@@ -96,7 +96,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getIndexName',
+                'getIndexerPrefix',
                 'getEntityType',
                 'getIndexSettings',
             ])
@@ -150,7 +150,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'name' => 'string',
             ]);
         $this->clientConfig->expects($this->any())
-            ->method('getIndexName')
+            ->method('getIndexerPrefix')
             ->willReturn('indexName');
         $this->clientConfig->expects($this->any())
             ->method('getEntityType')
