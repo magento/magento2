@@ -35,7 +35,8 @@ interface QueueInterface
     /**
      *
      * @param EnvelopeInterface $envelope
+     * @param string $rejectionMessage
      * @return void
      */
-    public function reject(EnvelopeInterface $envelope);
+    public function reject(EnvelopeInterface $envelope, $rejectionMessage = null);
 }
