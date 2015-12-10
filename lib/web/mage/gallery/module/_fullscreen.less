@@ -13,7 +13,6 @@
     right: 0 !important;
     top: 0 !important;
     width: 100% !important;
-    height: 100% !important;
     z-index: @z-index-10 !important;
     &:extend(.fotorama-gpu);
     .fotorama__wrap {
@@ -35,19 +34,19 @@
 
     }
     .fotorama__zoom-out {
-        top: 83px;
+        top: 80px;
         &:extend(.fotorama-sprite);
         background-position: 0 (-@size-fotorama-block) !important;
         &.fotorama__zoom-out--disabled {
-            display: none
+            display: none;
         }
     }
     .fotorama__zoom-in {
-        top: 2px;
+        top: 0;
         &:extend(.fotorama-sprite);
         background-position: 0 0 !important;
         &.fotorama__zoom-in--disabled {
-            display: none
+            display: none;
         }
     }
 }

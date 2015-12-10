@@ -5,27 +5,23 @@
 
 .fotorama__fullscreen-icon:focus,
 .fotorama__zoom-out:focus,
-.fotorama__zoom-in:focus {
-    box-shadow:@focus__box-shadow;
-}
-
-.fotorama__arr:focus {
+.fotorama__zoom-in:focus,
+.fotorama__arr:focus,
+.fotorama__stage__shaft:focus,
+.fotorama__nav__frame--thumb:focus .fotorama__thumb,
+.fotorama__nav__frame--dot:focus .fotorama__dot {
     box-shadow: none;
-}
-
-.fotorama__arr:focus:after,
-.fotorama__stage__shaft:focus:after,
-.fotorama__nav__frame--thumb:focus .fotorama__thumb:after,
-.fotorama__nav__frame--dot:focus .fotorama__dot:after{
-    box-shadow: @focus__box-shadow;
-    border-radius: inherit;
-    content: '';
-    position: absolute;
-    left: 3px;
-    top: 3px;
-    bottom: 3px;
-    right: 3px;
-    z-index: 10;
+    &:after {
+        content: '';
+        border-radius: inherit;
+        position: absolute;
+        top: @fotorama-inner-box-shadow;
+        right: @fotorama-inner-box-shadow;
+        left: @fotorama-inner-box-shadow;
+        bottom: @fotorama-inner-box-shadow;
+        box-shadow: @focus__box-shadow;
+        z-index: @z-index-10;
+    }
 }
 
 .fotorama__nav__frame--thumb:focus,
@@ -63,3 +59,8 @@
         bottom: 1px;
     }
 }
+
+.fotorama__thumb__arr {
+    box-shadow: none;
+}
+
