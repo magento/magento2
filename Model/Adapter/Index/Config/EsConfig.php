@@ -29,6 +29,14 @@ class EsConfig extends Data implements EsConfigInterface
      */
     public function getStemmerInfo()
     {
-        return $this->get();
+        return $this->get('stemmerInfo');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStopwordsInfo()
+    {
+        return $this->get('stopwordsInfo');
     }
 }

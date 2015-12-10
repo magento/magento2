@@ -14,12 +14,26 @@ class Converter implements ConverterInterface
      */
     public function convert($source)
     {
-        $output = [];
-        foreach ($source->getElementsByTagName('*') as $node) {
-            if (!in_array($node->nodeName, ['config', 'stemmer'])) {
-                $output[$node->nodeName]= $node->textContent;
+        $stemmer = $source->getElementsByTagName('stemmer');
+        $stemmerInfo = [];
+        foreach ($stemmer as $stemmerItem) {
+            foreach ($stemmerItem->childNodes as $childNode) {
+                if ($childNode->nodeType === XML_ELEMENT_NODE) {
+                    $stemmerInfo[$childNode->localName]= $childNode->textContent;
+                }
             }
         }
-        return $output;
+
+        $stopwords = $source->getElementsByTagName('stopwords_file');
+        $stopwordsInfo = [];
+        foreach ($stopwords as $stopwordsItem) {
+            foreach ($stopwordsItem->childNodes as $childNode) {
+                if ($childNode->nodeType === XML_ELEMENT_NODE) {
+                    $stopwordsInfo[$childNode->localName]= $childNode->textContent;;
+                }
+            }
+        }
+
+        return ['stemmerInfo' => $stemmerInfo, 'stopwordsInfo' => $stopwordsInfo];
     }
 }

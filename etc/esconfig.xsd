@@ -12,6 +12,7 @@
 <xs:complexType name="configType" mixed="true">
     <xs:choice maxOccurs="unbounded" minOccurs="1">
         <xs:element name="stemmer" type="mixedDataType" />
+        <xs:element name="stopwords_file" type="mixedDataType" />
     </xs:choice>
 </xs:complexType>
 <xs:complexType name="mixedDataType">
