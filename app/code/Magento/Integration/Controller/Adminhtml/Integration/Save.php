@@ -31,7 +31,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Save integration action.
      *
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
@@ -56,39 +55,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                     throw new LocalizedException(__('Cannot edit integrations created via config file.'));
                 }
             }
-            /** @var array $data */
-            $data = $this->getRequest()->getPostValue();
-            if (!empty($data)) {
-                if (!isset($data['resource'])) {
-                    $integrationData['resource'] = [];
-                }
-                $integrationData = array_merge($integrationData, $data);
-                if (!isset($integrationData[Info::DATA_ID])) {
-                    $integration = $this->_integrationService->create($integrationData);
-                } else {
-                    $integration = $this->_integrationService->update($integrationData);
-                }
-                if (!$this->getRequest()->isXmlHttpRequest()) {
-                    $this->messageManager->addSuccess(
-                        __(
-                            'The integration \'%1\' has been saved.',
-                            $this->escaper->escapeHtml($integration->getName())
-                        )
-                    );
-                }
-                if ($this->getRequest()->isXmlHttpRequest()) {
-                    $isTokenExchange = $integration->getEndpoint() && $integration->getIdentityLinkUrl() ? '1' : '0';
-                    $this->getResponse()->representJson(
-                        $this->jsonHelper->jsonEncode(
-                            ['integrationId' => $integration->getId(), 'isTokenExchange' => $isTokenExchange]
-                        )
-                    );
-                } else {
-                    $this->_redirect('*/*/');
-                }
-            } else {
-                $this->messageManager->addError(__('The integration was not saved.'));
-            }
+            $this->processData($integrationData);
         } catch (IntegrationException $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_getSession()->setIntegrationData($integrationData);
@@ -100,6 +67,46 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->_logger->critical($e);
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
+        }
+    }
+
+    /**
+     * Save integration data.
+     *
+     * @return void
+     */
+    private function processData($integrationData)
+    {
+        /** @var array $data */
+        $data = $this->getRequest()->getPostValue();
+        if (!empty($data)) {
+            if (!isset($data['resource'])) {
+                $integrationData['resource'] = [];
+            }
+            $integrationData = array_merge($integrationData, $data);
+            if (!isset($integrationData[Info::DATA_ID])) {
+                $integration = $this->_integrationService->create($integrationData);
+            } else {
+                $integration = $this->_integrationService->update($integrationData);
+            }
+            if (!$this->getRequest()->isXmlHttpRequest()) {
+                $this->messageManager->addSuccess(
+                    __(
+                        'The integration \'%1\' has been saved.',
+                        $this->escaper->escapeHtml($integration->getName())
+                    )
+                );
+                $this->_redirect('*/*/');
+            } else {
+                $isTokenExchange = $integration->getEndpoint() && $integration->getIdentityLinkUrl() ? '1' : '0';
+                $this->getResponse()->representJson(
+                    $this->jsonHelper->jsonEncode(
+                        ['integrationId' => $integration->getId(), 'isTokenExchange' => $isTokenExchange]
+                    )
+                );
+            }
+        } else {
+            $this->messageManager->addError(__('The integration was not saved.'));
         }
     }
 }
