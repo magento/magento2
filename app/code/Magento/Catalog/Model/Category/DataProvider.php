@@ -118,9 +118,21 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->registry = $registry;
         $this->storeManager = $storeManager;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->meta['general']['fields'] = $this->getAttributesMeta(
+        $this->meta = $this->prepareMeta($this->meta);
+    }
+
+    /**
+     * Prepatre meta data
+     *
+     * @param array $meta
+     * @return array
+     */
+    public function prepareMeta($meta)
+    {
+        $meta['general']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('catalog_category')
         );
+        return $meta;
     }
 
     /**
@@ -191,7 +203,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $result[$key] = $item;
             $result[$key]['sortOrder'] = 0;
         }
-        
+
         return $result;
     }
 
