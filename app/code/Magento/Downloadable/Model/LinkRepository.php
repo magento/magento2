@@ -190,7 +190,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $link->setProductId($product->getData($metadata->getLinkField()));
         $this->setFiles($link);
-        return $this->resourceModel->save($link);
+        $this->resourceModel->save($link);
+        return $link->getId();
     }
 
     /**

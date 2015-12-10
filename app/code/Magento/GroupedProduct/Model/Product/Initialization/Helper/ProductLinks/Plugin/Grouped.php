@@ -76,10 +76,15 @@ class Grouped
             $newLinks = [];
             $existingLinks =  $product->getProductLinks();
             if ($links) {
-                foreach ($links as $linkRaw) {
+                foreach ($links as $linkId => $linkRaw) {
                     /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
                     $productLink = $this->productLinkFactory->create();
-                    $linkedProduct = $this->productRepository->getById($linkRaw['id']);
+                    if (isset($linkRaw['id'])) {
+                        $productId = $linkRaw['id'];
+                    } else {
+                        $productId = $linkId;
+                    }
+                    $linkedProduct = $this->productRepository->getById($productId);
                     $productLink->setSku($product->getSku())
                         ->setLinkType(self::TYPE_NAME)
                         ->setLinkedProductSku($linkedProduct->getSku())
