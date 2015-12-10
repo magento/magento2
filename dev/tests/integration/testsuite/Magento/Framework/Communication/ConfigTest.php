@@ -304,15 +304,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'methodsMap' => $methodsMap
             ]
         );
-        $reader = $objectManager->create(
-            'Magento\Framework\Communication\Config\Reader',
+        /** @var \Magento\Framework\Communication\Config $config */
+        $configData = $objectManager->create(
+            'Magento\Framework\Communication\Config\Data',
             [
-                'xmlConfigReader' => $xmlReader,
-                'envConfigReader' => $envReader
+                'xmlReader' => $xmlReader,
+                'envReader' => $envReader
             ]
         );
-        /** @var \Magento\Framework\Communication\Config $config */
-        $configData = $objectManager->create('Magento\Framework\Communication\Config\Data', ['reader' => $reader]);
         return $objectManager->create(
             'Magento\Framework\Communication\ConfigInterface',
             ['configData' => $configData]
