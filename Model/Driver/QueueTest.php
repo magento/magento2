@@ -29,7 +29,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $objectManagerConfiguration = [
-            'Magento\Framework\MessageQueue\Config\Reader' => [
+            'Magento\Framework\MessageQueue\Config\Reader\XmlReader' => [
                 'arguments' => [
                     'fileResolver' => ['instance' => 'Magento\MysqlMq\Config\Reader\FileResolver'],
                 ],
@@ -46,7 +46,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $objectManagerConfiguration = [
-            'Magento\Framework\MessageQueue\Config\Reader' => [
+            'Magento\Framework\MessageQueue\Config\Reader\XmlReader' => [
                 'arguments' => [
                     'fileResolver' => ['instance' => 'Magento\Framework\Config\FileResolverInterface'],
                 ],
