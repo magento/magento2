@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
@@ -172,7 +172,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
-        /* @var Attribute $attribute */
+        /* @var EavAttribute $attribute */
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
@@ -261,10 +261,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * GLOBAL | WEBSITE | STORE
      *
-     * @param Attribute $attribute
+     * @param EavAttribute $attribute
      * @return string
      */
-    public function getScopeLabel(Attribute $attribute)
+    public function getScopeLabel(EavAttribute $attribute)
     {
         $html = '';
         if (
