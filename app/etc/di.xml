@@ -1076,6 +1076,8 @@
         <arguments>
             <argument name="headerProviderList" xsi:type="array">
                 <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\Header\XFrameOptions</item>
+                <item name="x-content-type-options" xsi:type="object">Magento\Framework\App\Response\Header\XContentTypeOptions</item>
+                <item name="x-xss-protection" xsi:type="object">Magento\Framework\App\Response\Header\XssProtection</item>
             </argument>
         </arguments>
     </type>
