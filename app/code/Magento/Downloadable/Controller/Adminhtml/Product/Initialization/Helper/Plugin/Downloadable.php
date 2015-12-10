@@ -71,6 +71,15 @@ class Downloadable
                         unset($linkData['link_id']);
                         // TODO: need to implement setLinkFileContent()
                         $link = $this->linkFactory->create(['data' => $linkData]);
+                        if (isset($linkData['type'])) {
+                            $link->setLinkType($linkData['type']);
+                        }
+                        if (isset($linkData['file'])) {
+                            $link->setLinkFile($linkData['file']);
+                        }
+                        if (isset($linkData['file_content'])) {
+                            $link->setLinkFileContent($linkData['file_content']);
+                        }
                         $link->setId(null);
                         if (isset($linkData['sample']['type'])) {
                             $link->setSampleType($linkData['sample']['type']);
@@ -81,8 +90,8 @@ class Downloadable
                         if (isset($linkData['sample']['url'])) {
                             $link->setSampleUrl($linkData['sample']['url']);
                         }
-                        if (isset($linkData['sample']['type'])) {
-                            $link->setLinkType($linkData['type']);
+                        if (isset($linkData['sample']['file_content'])) {
+                            $link->setSampleFileContent($linkData['file_content']);
                         }
                         $link->setStoreId($product->getStoreId());
                         $link->setWebsiteId($product->getStore()->getWebsiteId());
