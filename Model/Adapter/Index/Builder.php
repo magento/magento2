@@ -5,21 +5,15 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter\Index;
 
-use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Api\StoreConfigManagerInterface;
+use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 
 class Builder implements BuilderInterface
 {
     /**
-     * @var StoreRepositoryInterface
+     * @var LocaleResolver
      */
-    protected $storeRepository;
-
-    /**
-     * @var StoreConfigManagerInterface
-     */
-    protected $storeConfig;
+    protected $localeResolver;
 
     /**
      * @var EsConfigInterface
@@ -34,17 +28,14 @@ class Builder implements BuilderInterface
     protected $storeId;
 
     /**
-     * @param StoreRepositoryInterface $storeRepository
-     * @param StoreConfigManagerInterface $storeConfig
+     * @param LocaleResolver $localeResolver
      * @param EsConfigInterface $esConfig
      */
     public function __construct(
-        StoreRepositoryInterface $storeRepository,
-        StoreConfigManagerInterface $storeConfig,
+        LocaleResolver $localeResolver,
         EsConfigInterface $esConfig
     ) {
-        $this->storeRepository = $storeRepository;
-        $this->storeConfig = $storeConfig;
+        $this->localeResolver = $localeResolver;
         $this->esConfig = $esConfig;
     }
 
@@ -125,23 +116,13 @@ class Builder implements BuilderInterface
     }
 
     /**
-     * @return string
-     */
-    protected function getStoreLocale()
-    {
-        $store = $this->storeRepository->getById($this->storeId);
-        $storeConfigs = $this->storeConfig->getStoreConfigs([$store->getCode()]);
-        $storeConfig = array_shift($storeConfigs);
-        return $storeConfig->getLocale();
-    }
-
-    /**
      * @return array
      */
     protected function getStemmerConfig()
     {
         $stemmerInfo = $this->esConfig->getStemmerInfo();
-        $locale = $this->getStoreLocale();
+        $this->localeResolver->emulate($this->storeId);
+        $locale = $this->localeResolver->getLocale();
         if (isset($stemmerInfo[$locale])) {
             return [
                 'type' => $stemmerInfo['type'],
