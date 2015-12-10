@@ -90,6 +90,9 @@
                     <item name="update" xsi:type="array">
                         <item name="update_bundle_options" xsi:type="string">Magento\Bundle\Model\Product\SaveHandler</item>
                     </item>
+                    <item name="read" xsi:type="array">
+                        <item name="read_bundle_options" xsi:type="string">Magento\Bundle\Model\Product\ReadHandler</item>
+                    </item>
                 </item>
             </argument>
         </arguments>

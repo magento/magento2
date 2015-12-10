@@ -20,6 +20,7 @@ $sampleProduct = $productRepository->get('simple');
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create('Magento\Catalog\Model\Product');
 $product->setTypeId('bundle')
+    ->setId(3)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Bundle Product')
