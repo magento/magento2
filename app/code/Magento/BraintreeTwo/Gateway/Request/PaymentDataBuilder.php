@@ -5,14 +5,13 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Request;
 
-use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
 
 /**
- * Class PaymentDataBuilder
+ * Payment Data Builder
  */
 class PaymentDataBuilder implements BuilderInterface
 {
@@ -41,48 +40,16 @@ class PaymentDataBuilder implements BuilderInterface
     const MERCHANT_ACCOUNT_ID = 'merchantAccountId';
 
     /**
-     * Additional options in request to gateway
-     */
-    const OPTIONS = 'options';
-
-    /**
-     * The option that determines whether the payment method
-     * associated with the successful transaction should be stored in the Vault.
-     */
-    const STORE_IN_VAULT = 'storeInVault';
-
-    /**
-     * The option that determines whether the shipping address information
-     * provided with the transaction should be associated with the customer ID specified.
-     * When passed, the payment method will always be stored in the Vault.
-     */
-    const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
-
-    /**
-     * "Is active" vault module config option name
-     */
-    const CONFIG_PAYMENT_VAULT_ACTIVE = 'active';
-
-    /**
      * @var Config
      */
     private $config;
 
     /**
-     * @var ValueHandlerPoolInterface
-     */
-    private $vaultPaymentValueHandlerPool;
-
-    /**
      * @param Config $config
-     * @param ValueHandlerPoolInterface $vaultPaymentValueHandlerPool
      */
-    public function __construct(
-        Config $config,
-        ValueHandlerPoolInterface $vaultPaymentValueHandlerPool
-    ) {
+    public function __construct(Config $config)
+    {
         $this->config = $config;
-        $this->vaultPaymentValueHandlerPool = $vaultPaymentValueHandlerPool;
     }
 
     /**
@@ -107,23 +74,6 @@ class PaymentDataBuilder implements BuilderInterface
             $result[self::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
         }
 
-        $isActiveVaultModule = $this->getIsVaultModuleActive();
-        if ($isActiveVaultModule || true) { // TODO: Remove stub after activation of Vault module
-            $result[self::OPTIONS][self::STORE_IN_VAULT_ON_SUCCESS] = true;
-        }
-
         return $result;
-    }
-
-    /**
-     * Is vault module active
-     *
-     * @return bool
-     */
-    private function getIsVaultModuleActive()
-    {
-        $handler = $this->vaultPaymentValueHandlerPool->get(self::CONFIG_PAYMENT_VAULT_ACTIVE);
-        $subject = ['field' => self::CONFIG_PAYMENT_VAULT_ACTIVE];
-        return (bool) $handler->handle($subject);
     }
 }

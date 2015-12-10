@@ -5,17 +5,12 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler;
-use Magento\Sales\Api\Data\OrderPaymentExtension;
-use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Braintree_Transaction;
 use Braintree_Result_Successful;
-use Magento\Vault\Model\PaymentToken;
-use Magento\Vault\Model\PaymentTokenFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 
@@ -37,64 +32,8 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $payment;
 
-    /**
-     * @var \Magento\Vault\Model\PaymentTokenFactory|MockObject paymentTokenFactoryMock
-     */
-    protected $paymentTokenFactoryMock;
-
-    /**
-     * @var \Magento\Vault\Model\PaymentToken|MockObject paymentTokenMock
-     */
-    protected $paymentTokenMock;
-
-    /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtension|MockObject paymentExtension
-     */
-    protected $paymentExtension;
-
-    /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtensionFactory|MockObject paymentExtensionFactoryMock
-     */
-    protected $paymentExtensionFactoryMock;
-
-    /**
-     * @var \Magento\Sales\Model\Order|MockObject salesOrderMock
-     */
-    protected $salesOrderMock;
-
     protected function setUp()
     {
-        $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->setMethods(null)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentTokenFactoryMock = $this->getMockBuilder(PaymentTokenFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentTokenFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->paymentTokenMock);
-
-        $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(null)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentExtensionFactoryMock = $this
-            ->getMockBuilder(OrderPaymentExtensionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentExtensionFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->paymentExtension);
-
-        // Sales Order Model
-        $this->salesOrderMock = $this->getMockBuilder(Order::class)
-            ->setMethods(null)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -103,19 +42,11 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
                 'setLastTransId',
                 'setAdditionalInformation',
                 'setIsTransactionClosed',
-                'getMethod',
-                'getOrder'
+                'getMethod'
             ])
             ->getMock();
 
-        $this->payment->expects($this->once())
-            ->method('getOrder')
-            ->willReturn($this->salesOrderMock);
-
-        $this->paymentHandler = new PaymentDetailsHandler(
-            $this->paymentTokenFactoryMock,
-            $this->paymentExtensionFactoryMock
-        );
+        $this->paymentHandler = new PaymentDetailsHandler();
     }
 
     /**
@@ -141,13 +72,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'object' => $this->getBraintreeTransaction()
         ];
 
-        $this->salesOrderMock->setCustomerId(10);
-
         $this->paymentHandler->handle($subject, $response);
-
-        $this->assertEquals('rh3gd4', $this->paymentTokenMock->getGatewayToken());
-        $this->assertEquals('10', $this->paymentTokenMock->getCustomerId());
-        $this->assertSame($this->paymentTokenMock, $this->payment->getExtensionAttributes()->getVaultPaymentToken());
     }
 
     /**
@@ -161,7 +86,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects(static::once())
+        $mock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->payment);
 
@@ -192,7 +117,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__get'])
             ->getMock();
 
-        $mock->expects(static::once())
+        $mock->expects($this->once())
             ->method('__get')
             ->with('transaction')
             ->willReturn($transaction);
