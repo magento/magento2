@@ -1,3 +1,14 @@
+1.0.0-beta9
+=============
+* Fixed bugs:
+    * Fixed an issue when Catalog Price Rules don't work when based on configurable attribute
+    * Fixed an issue when Discount applied only for correct attribute, but price displaying for other atributes incorrect
+    * Fixed an issue with Java script error on CMS Hierarchy page: unable to add nodes
+    * Fixed an issue when Paypal doesn't work correctly if discount brings the subtotal to negative but the grand total is positive
+    * Fixed an issue when some javascript function calls and labels aren't translatable
+* GitHub issues and requests:
+    * [#2226](https://github.com/magento/magento2/issues/2226) -- Configurable product issues after saving
+
 1.0.0-beta8
 =============
 * Fixed bugs:
