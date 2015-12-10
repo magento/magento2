@@ -21,6 +21,10 @@ class XssProtection implements HeaderProviderInterface
      */
     const IE_8_USER_AGENT = 'MSIE 8';
 
+    const HEADER_ENABLED = '1; mode=block';
+
+    const HEADER_DISABLED = '0';
+
     /**
      * @var Header
      */
@@ -38,6 +42,7 @@ class XssProtection implements HeaderProviderInterface
      * Whether the header should be attached to the response
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function canApply()
     {
@@ -48,6 +53,7 @@ class XssProtection implements HeaderProviderInterface
      * Header name
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -62,7 +68,7 @@ class XssProtection implements HeaderProviderInterface
     public function getValue()
     {
         return strpos($this->headerService->getHttpUserAgent(), self::IE_8_USER_AGENT) === false
-            ? '1; mode=block'
-            : '0';
+            ? self::HEADER_ENABLED
+            : self::HEADER_DISABLED;
     }
 }
