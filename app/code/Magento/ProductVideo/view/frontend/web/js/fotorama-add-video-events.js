@@ -395,6 +395,11 @@ define([
                     currentItem.addClass(iconClass);
                 }
             }
+
+            fotorama.data.map($.proxy(function(item, i){
+                !item.type && (item.type = this.options.VideoData[i].mediaType);
+            }, this));
+
             $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
             }, this));
@@ -447,6 +452,7 @@ define([
                 $image = fotorama.data[frameNumber - 1 + number];
 
             if ($image) {
+                if ($image.type !== 'video') return;
                 $image = $image.$stageFrame;
             }
 
