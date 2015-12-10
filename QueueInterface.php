@@ -39,12 +39,10 @@ interface QueueInterface
     public function reject(EnvelopeInterface $envelope);
 
     /**
-     * TODO: $data argument should be removed, message body should be taken using $envelop->getBody()
      * Push message to queue directly, without using exchange
      *
      * @param EnvelopeInterface $envelope
-     * @param mixed $data
      * @return void
      */
-    public function push(EnvelopeInterface $envelope, $data);
+    public function push(EnvelopeInterface $envelope);
 }
