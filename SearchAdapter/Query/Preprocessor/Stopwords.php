@@ -8,10 +8,21 @@ namespace Magento\Elasticsearch\SearchAdapter\Query\Preprocessor;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 
 class Stopwords implements PreprocessorInterface
 {
+    /**
+     * Cache id for elasticsearch stopwords
+     */
+    const CACHE_ID = 'elasticsearch_stopwords';
+
+    /**
+     * Stopwords file modification time gap, seconds
+     */
+    const STOPWORDS_FILE_MODIFICATION_TIME_GAP = 900;
+
     /**
      * @var StoreManagerInterface
      */
@@ -28,6 +39,11 @@ class Stopwords implements PreprocessorInterface
     protected $readFactory;
 
     /**
+     * @var ConfigCache
+     */
+    protected $configCache;
+
+    /**
      * @var EsConfigInterface
      */
     protected $esConfig;
@@ -41,6 +57,7 @@ class Stopwords implements PreprocessorInterface
      * @param StoreManagerInterface $storeManager
      * @param LocaleResolver $localeResolver
      * @param ReadFactory $readFactory
+     * @param ConfigCache $configCache
      * @param EsConfigInterface $esConfig
      * @param string $fileDir
      */
@@ -48,12 +65,14 @@ class Stopwords implements PreprocessorInterface
         StoreManagerInterface $storeManager,
         LocaleResolver $localeResolver,
         ReadFactory $readFactory,
+        ConfigCache $configCache,
         EsConfigInterface $esConfig,
         $fileDir = ''
     ) {
         $this->storeManager = $storeManager;
         $this->localeResolver = $localeResolver;
         $this->readFactory = $readFactory;
+        $this->configCache = $configCache;
         $this->esConfig = $esConfig;
         $this->fileDir = $fileDir;
     }
@@ -78,9 +97,15 @@ class Stopwords implements PreprocessorInterface
     {
         $filename = $this->getStopwordsFile();
         $source = $this->readFactory->create($this->fileDir);
-        //$fileStats = $source->stat($filename);
-        $fileContent = $source->readFile($filename);
-        $stopwords = explode("\n", $fileContent);
+        $fileStats = $source->stat($filename);
+        if (((time() - $fileStats['mtime']) > self::STOPWORDS_FILE_MODIFICATION_TIME_GAP)
+            && ($cachedValue = $this->configCache->load(self::CACHE_ID))) {
+            $stopwords = unserialize($cachedValue);
+        } else {
+            $fileContent = $source->readFile($filename);
+            $stopwords = explode("\n", $fileContent);
+            $this->configCache->save(serialize($stopwords), self::CACHE_ID);
+        }
         return $stopwords;
     }
 
