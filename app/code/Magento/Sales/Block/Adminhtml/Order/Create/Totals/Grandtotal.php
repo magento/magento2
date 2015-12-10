@@ -70,6 +70,10 @@ class Grandtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defa
      */
     public function getTotalExclTax()
     {
+        // The tax key will not exist if a quote contains no items
+        if (!isset($this->getTotals()['tax'])) {
+            return $this->getTotals()['grand_total']->getValue();
+        }
         $excl = $this->getTotals()['grand_total']->getValue() - $this->getTotals()['tax']->getValue();
         $excl = max($excl, 0);
         return $excl;
