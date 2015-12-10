@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Framework\App\Response;
+
+use Magento\Framework\App\Response\HeaderProviderInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+
+class HeaderManager
+{
+    /**
+     * @var HeaderProviderInterface[]
+     */
+    private $headerProviders;
+
+    /**
+     * @param HeaderProviderInterface[]
+     * @throws LocalizedException In case one of the header providers is invalid
+     */
+    public function __construct($headerProviders)
+    {
+        foreach ($headerProviders as $header)
+        {
+            if (!($header instanceof HeaderProviderInterface)) {
+                throw new LocalizedException(new Phrase('Invalid header provider'));
+            }
+        }
+        $this->headerProviders = $headerProviders;
+    }
+
+    /**
+     * @param \Magento\Framework\App\Response\Http $subject
+     * @return void
+     * @codeCoverageIgnore
+     */
+    public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
+    {
+        foreach ($this->headerProviders as $provider) {
+            if ($provider->canApply()) {
+                $subject->setHeader($provider->getName(), $provider->getValue());
+            }
+        }
+    }
+}
