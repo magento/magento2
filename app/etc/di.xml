@@ -1072,4 +1072,11 @@
             <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolver</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Response\HeaderManager">
+        <arguments>
+            <argument name="headerProviderList" xsi:type="array">
+                <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\Header\XFrameOptions</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
