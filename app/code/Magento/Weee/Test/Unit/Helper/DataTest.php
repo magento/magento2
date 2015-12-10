@@ -395,4 +395,66 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $helperData->getTaxDisplayConfig());
     }
+
+    public function testGetTotalAmounts()
+    {
+        $item1Weee = 5;
+        $item2Weee = 7;
+        $expected = $item1Weee + $item2Weee;
+        $itemProductSimple1 = $this->getMock(
+            '\Magento\Quote\Model\Quote\Item',
+            ['getWeeeTaxAppliedRowAmount'],
+            [],
+            '',
+            false
+        );
+        $itemProductSimple2 = $this->getMock(
+            '\Magento\Quote\Model\Quote\Item',
+            ['getWeeeTaxAppliedRowAmount'],
+            [],
+            '',
+            false
+        );
+        $items = [$itemProductSimple1, $itemProductSimple2];
+
+        $itemProductSimple1->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->willReturn($item1Weee);
+        $itemProductSimple2->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->willReturn($item2Weee);
+
+        $this->assertEquals($expected, $this->helperData->getTotalAmounts($items));
+    }
+
+    public function testGetBaseTotalAmounts()
+    {
+        $item1BaseWeee = 4;
+        $item2BaseWeee = 3;
+        $expected = $item1BaseWeee + $item2BaseWeee;
+        $itemProductSimple1 = $this->getMock(
+            '\Magento\Quote\Model\Quote\Item',
+            ['getBaseWeeeTaxAppliedRowAmount'],
+            [],
+            '',
+            false
+        );
+        $itemProductSimple2 = $this->getMock(
+            '\Magento\Quote\Model\Quote\Item',
+            ['getBaseWeeeTaxAppliedRowAmount'],
+            [],
+            '',
+            false
+        );
+        $items = [$itemProductSimple1, $itemProductSimple2];
+
+        $itemProductSimple1->expects($this->any())
+            ->method('getBaseWeeeTaxAppliedRowAmount')
+            ->willReturn($item1BaseWeee);
+        $itemProductSimple2->expects($this->any())
+            ->method('getBaseWeeeTaxAppliedRowAmount')
+            ->willReturn($item2BaseWeee);
+
+        $this->assertEquals($expected, $this->helperData->getBaseTotalAmounts($items));
+    }
 }
