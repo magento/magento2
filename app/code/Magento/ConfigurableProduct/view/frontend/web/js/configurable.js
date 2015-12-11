@@ -327,7 +327,7 @@ define([
                 } else {
                     this.options.onlyMainImg ?
                         updateGallery(initialImages) :
-                        galleryObject.updateData(initialImages);
+                        galleryObject.updateData(this.options.mediaGalleryInitial);
                 }
             }
         },

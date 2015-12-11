@@ -643,7 +643,6 @@ define([
 
     return function (config, element) {
         $('.gallery-placeholder').on('fotorama:ready', function () {
-            console.log('readddddy')
             $(element).find('.fotorama').AddFotoramaVideoEvents({
                 VideoData: config.fotoramaVideoData || [],
                 VideoSettings: config.fotoramaVideoSettings || {}
