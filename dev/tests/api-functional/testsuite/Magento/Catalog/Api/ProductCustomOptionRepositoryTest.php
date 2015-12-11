@@ -248,9 +248,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             'product_sku' => $productSku,
             'title' => $option->getTitle() . "_updated",
             'type' => $option->getType(),
-            'sort_order' => $option->getSortOrder(),
-            'is_require' => $option->getIsRequire(),
-            'price' => $option->getPrice(),
+            'sort_order' => (int)$option->getSortOrder(),
+            'is_require' => (bool)$option->getIsRequire(),
+            'price' => (int)$option->getPrice(),
             'price_type' => $option->getPriceType(),
             'sku' => $option->getSku(),
             'max_characters' => 500,
@@ -278,7 +278,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         }
 
         unset($updatedOption['values']);
-        $optionDataPost['option_id'] = $option->getOptionId();
+        unset($updatedOption['option_id']);//update change option id now
         $this->assertEquals($optionDataPost, $updatedOption);
     }
 
