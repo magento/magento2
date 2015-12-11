@@ -10,8 +10,8 @@ namespace Magento\Setup\Console;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Setup\Console\Command\DiCompileCommand;
-use Magento\Setup\Console\Command\DiCompileMultiTenantCommand;
+use Magento\Setup\Console\Command\Setup\Di\CompileCommand;
+use Magento\Setup\Console\Command\Setup\Di\CompileMultiTenantCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
 
@@ -49,7 +49,7 @@ class CompilerPreparation
      */
     public function handleCompilerEnvironment()
     {
-        $compilationCommands = [DiCompileCommand::NAME, DiCompileMultiTenantCommand::NAME];
+        $compilationCommands = [CompileCommand::NAME, CompileMultiTenantCommand::NAME];
         $cmdName = $this->input->getFirstArgument();
         $isHelpOption = $this->input->hasParameterOption('--help') || $this->input->hasParameterOption('-h');
 
@@ -57,8 +57,8 @@ class CompilerPreparation
             return;
         }
 
-        $generationDir = ($cmdName === DiCompileMultiTenantCommand::NAME)
-            ? $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION)
+        $generationDir = ($cmdName === CompileMultiTenantCommand::NAME)
+            ? $this->input->getParameterOption(CompileMultiTenantCommand::INPUT_KEY_GENERATION)
             : null;
 
         if (!$generationDir) {
