@@ -58,7 +58,7 @@ define([
      *  - option-tooltip-thumb
      *  - option-tooltip-value
      */
-    $.widget('custom.SwatchRendererTooltip', {
+    $.widget('mage.SwatchRendererTooltip', {
         options: {
             delay: 200,                             //how much ms before tooltip to show
             tooltipClass: 'swatch-option-tooltip'  //configurable, but remember about css
@@ -180,7 +180,7 @@ define([
      *  - selectorProduct (selector for product container)
      *  - selectorProductPrice (selector for change price)
      */
-    $.widget('custom.SwatchRenderer', {
+    $.widget('mage.SwatchRenderer', {
         options: {
             classes: {
                 attributeClass: 'swatch-attribute',
@@ -224,7 +224,10 @@ define([
             mediaCallback: '',
 
             // Cache for BaseProduct images. Needed when option unset
-            mediaGalleryInitial: [{}]
+            mediaGalleryInitial: [{}],
+
+            //
+            onlyMainImg: false
         },
 
         /**
@@ -953,5 +956,5 @@ define([
         }
     });
 
-    return $.custom.SwatchRenderer;
+    return $.mage.SwatchRenderer;
 });
