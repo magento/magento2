@@ -336,7 +336,7 @@ define(['jquery', 'jquery/ui'], function ($) {
 
             // Froogaloop throws error without a registered ready event
             this._player.addEvent('ready', function (id) {
-                $('#'+id).closest('.fotorama-video-container').find('img').hide();
+                $('#' + id).closest('.fotorama-video-container').find('img').hide();
             });
         },
 
