@@ -29,7 +29,6 @@ define(
 
         return Component.extend({
             defaults: {
-                template: 'Magento_BraintreeTwo/payment/form',
                 active: false,
                 isInitialized: false,
                 braintreeClient: null,
