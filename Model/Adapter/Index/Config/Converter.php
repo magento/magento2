@@ -29,7 +29,7 @@ class Converter implements ConverterInterface
         foreach ($stopwords as $stopwordsItem) {
             foreach ($stopwordsItem->childNodes as $childNode) {
                 if ($childNode->nodeType === XML_ELEMENT_NODE) {
-                    $stopwordsInfo[$childNode->localName]= $childNode->textContent;;
+                    $stopwordsInfo[$childNode->localName]= $childNode->textContent;
                 }
             }
         }
