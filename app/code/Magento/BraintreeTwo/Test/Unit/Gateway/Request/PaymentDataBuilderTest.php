@@ -5,15 +5,15 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
 
-use Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder;
-use Magento\Payment\Gateway\Config\ValueHandlerPool;
-use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Vault\Gateway\Config\ActiveHandler;
 
+/**
+ * Class PaymentDataBuilderTest
+ */
 class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
 {
     const PAYMENT_METHOD_NONCE = 'nonce';
@@ -38,11 +38,6 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $paymentDO;
-
-    /**
-     * @var ActiveHandler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $activeHandler;
 
     public function setUp()
     {

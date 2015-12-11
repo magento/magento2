@@ -53,8 +53,8 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setLastTransId');
         $this->payment->expects(static::once())
             ->method('setIsTransactionClosed');
-//        $this->payment->expects(static::any())
-//            ->method('setAdditionalInformation');
+        $this->payment->expects(static::any())
+            ->method('setAdditionalInformation');
 
         $this->paymentHandler = new PaymentDetailsHandler();
     }
@@ -62,17 +62,17 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::handle
      */
-//    public function testHandle()
-//    {
-//        $paymentData = $this->getPaymentDataObjectMock();
-//        $subject['payment'] = $paymentData;
-//
-//        $response = [
-//            'object' => $this->getBraintreeTransaction()
-//        ];
-//
-//        $this->paymentHandler->handle($subject, $response);
-//    }
+    public function testHandle()
+    {
+        $paymentData = $this->getPaymentDataObjectMock();
+        $subject['payment'] = $paymentData;
+
+        $response = [
+            'object' => $this->getBraintreeTransaction()
+        ];
+
+        $this->paymentHandler->handle($subject, $response);
+    }
 
     /**
      * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::process3DSecure
@@ -127,7 +127,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'cvvResponseCode' => 'M',
             'processorAuthorizationCode' => 'W1V8XK',
             'processorResponseCode' => '1000',
-            'processorResponseText' => 'Approved2',
+            'processorResponseText' => 'Approved',
             'threeDSecureInfo' => $this->getThreeDSecureInfo()
         ];
 

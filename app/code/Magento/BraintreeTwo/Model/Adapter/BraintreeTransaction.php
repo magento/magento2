@@ -5,9 +5,9 @@
  */
 namespace Magento\BraintreeTwo\Model\Adapter;
 
-use \Braintree_Transaction;
-use \Braintree_Result_Error;
-use \Braintree_Result_Successful;
+use Braintree\Transaction;
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
 
 /**
  * BraintreeTransaction
@@ -17,59 +17,51 @@ use \Braintree_Result_Successful;
 class BraintreeTransaction
 {
     /**
-     * @param array $attribs
-     * @return \Braintree_Result_Successful|\Braintree_Result_Error
+     * @param array $attributes
+     * @return \Braintree\Result\Successful|\Braintree\Result\Error
      */
-    public function sale(array $attribs)
+    public function sale(array $attributes)
     {
-        return \Braintree_Transaction::sale($attribs);
+        return Transaction::sale($attributes);
     }
 
     /**
      * @param string $transactionId
      * @param null|float $amount
-     * @return \Braintree_Result_Successful|\Braintree_Result_Error
+     * @return \Braintree\Result\Successful|\Braintree\Result\Error
      */
     public function submitForSettlement($transactionId, $amount = null)
     {
-        return \Braintree_Transaction::submitForSettlement($transactionId, $amount);
-    }
-
-    /**
-     * @param string $id
-     * @return \Braintree_Transaction
-     */
-    public function find($id)
-    {
-        return \Braintree_Transaction::find($id);
+        return Transaction::submitForSettlement($transactionId, $amount);
     }
 
     /**
      * @param string $transactionId
-     * @return \Braintree_Result_Successful|\Braintree_Result_Error
+     * @return \Braintree\Result\Successful|\Braintree\Result\Error
      */
     public function void($transactionId)
     {
-        return \Braintree_Transaction::void($transactionId);
+        return Transaction::void($transactionId);
     }
 
     /**
      * @param string $transactionId
      * @param null|float $amount
-     * @return \Braintree_Result_Successful|\Braintree_Result_Error
+     * @return \Braintree\Result\Successful|\Braintree\Result\Error
      */
     public function refund($transactionId, $amount = null)
     {
-        return \Braintree_Transaction::refund($transactionId, $amount);
+        return Transaction::refund($transactionId, $amount);
     }
 
     /**
+     * Process request to process partial settlement
      * @param string $transactionId
-     * @param array $attribs
-     * @return \Braintree_Result_Successful|\Braintree_Result_Error
+     * @param float $amount
+     * @return Error|Successful
      */
-    public function cloneTransaction($transactionId, array $attribs)
+    public function submitForPartialSettlement($transactionId, $amount)
     {
-        return \Braintree_Transaction::cloneTransaction($transactionId, $attribs);
+        return Transaction::submitForPartialSettlement($transactionId, $amount);
     }
 }

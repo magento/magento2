@@ -5,41 +5,16 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Http\Client;
 
-use Magento\Payment\Model\Method\Logger;
+use Magento\BraintreeTwo\Gateway\Request\CaptureDataBuilder;
+use Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder;
 use Magento\Payment\Gateway\Http\ClientException;
-use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeTransaction;
 
 /**
- * Class TransactionSale
+ * Class TransactionSubmitForSettlement
  */
-class TransactionSale implements ClientInterface
+class TransactionSubmitForSettlement extends TransactionSale
 {
-    /**
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
-     * @var BraintreeTransaction
-     */
-    protected $transaction;
-
-    /**
-     * Constructor
-     *
-     * @param Logger $logger
-     * @param BraintreeTransaction $transaction
-     */
-    public function __construct(
-        Logger $logger,
-        BraintreeTransaction $transaction
-    ) {
-        $this->logger = $logger;
-        $this->transaction = $transaction;
-    }
-
     /**
      * @inheritdoc
      */
@@ -53,7 +28,10 @@ class TransactionSale implements ClientInterface
         $response['object'] = [];
 
         try {
-            $response['object'] = $this->transaction->sale($data);
+            $response['object'] = $this->transaction->submitForSettlement(
+                $data[CaptureDataBuilder::TRANSACTION_ID],
+                $data[PaymentDataBuilder::AMOUNT]
+            );
         } catch (\Exception $e) {
             throw new ClientException(__(
                 $e->getMessage() ?: 'Sorry, but something went wrong'
