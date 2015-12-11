@@ -45,11 +45,6 @@ class Consumer implements ConsumerInterface
     private $invoker;
 
     /**
-     * @var \Magento\Framework\MessageQueue\PublisherPool
-     */
-    private $publisherPool;
-
-    /**
      * @var \Magento\Framework\MessageQueue\QueueRepository
      */
     private $queueRepository;
@@ -72,7 +67,6 @@ class Consumer implements ConsumerInterface
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
      * @param \Magento\Framework\MessageQueue\QueueRepository $queueRepository
-     * @param \Magento\Framework\MessageQueue\PublisherPool $publisherPool
      * @param \Magento\Framework\MessageQueue\ConfigInterface $queueConfig
      * @param EnvelopeFactory $envelopeFactory
      */
@@ -82,7 +76,6 @@ class Consumer implements ConsumerInterface
         ResourceConnection $resource,
         ConsumerConfigurationInterface $configuration,
         \Magento\Framework\MessageQueue\QueueRepository $queueRepository,
-        \Magento\Framework\MessageQueue\PublisherPool $publisherPool,
         \Magento\Framework\MessageQueue\ConfigInterface $queueConfig,
         EnvelopeFactory $envelopeFactory
     ) {
@@ -90,7 +83,6 @@ class Consumer implements ConsumerInterface
         $this->messageEncoder = $messageEncoder;
         $this->resource = $resource;
         $this->configuration = $configuration;
-        $this->publisherPool = $publisherPool;
         $this->queueRepository = $queueRepository;
         $this->queueConfig = $queueConfig;
         $this->envelopeFactory = $envelopeFactory;

@@ -5,12 +5,14 @@
  */
 namespace Magento\Framework\MessageQueue\Rpc;
 
+use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\ExchangeRepository;
 use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use PhpAmqpLib\Message\AMQPMessage;
+use Magento\Framework\MessageQueue\MessageEncoder;
 
 /**
  * A MessageQueue Publisher to handle publishing a message.
@@ -37,6 +39,10 @@ class Publisher implements PublisherInterface
      */
     private $amqpConfig;
 
+    /**
+     * @var MessageEncoder
+     */
+    private $messageEncoder;
 
     /**
      * Initialize dependencies.
@@ -45,17 +51,20 @@ class Publisher implements PublisherInterface
      * @param EnvelopeFactory $envelopeFactory
      * @param MessageQueueConfig $messageQueueConfig
      * @param \Magento\Amqp\Model\Config $amqpConfig
+     * @param MessageEncoder $messageEncoder
      */
     public function __construct(
         ExchangeRepository $exchangeRepository,
         EnvelopeFactory $envelopeFactory,
         MessageQueueConfig $messageQueueConfig,
-        \Magento\Amqp\Model\Config $amqpConfig
+        \Magento\Amqp\Model\Config $amqpConfig,
+        MessageEncoder $messageEncoder
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
         $this->messageQueueConfig = $messageQueueConfig;
         $this->amqpConfig = $amqpConfig;
+        $this->messageEncoder = $messageEncoder;
     }
 
     /**
@@ -63,6 +72,7 @@ class Publisher implements PublisherInterface
      */
     public function publish($topicName, $data)
     {
+        $data = $this->messageEncoder->encode($topicName, $data);
         $replyTo = $this->messageQueueConfig->getResponseQueueName($topicName);
         $envelope = $this->envelopeFactory->create(
             [
@@ -76,7 +86,8 @@ class Publisher implements PublisherInterface
         );
         $connectionName = $this->messageQueueConfig->getConnectionByTopic($topicName);
         $exchange = $this->exchangeRepository->getByConnectionName($connectionName);
-        return $exchange->enqueue($topicName, $envelope);
+        $responseMessage = $exchange->enqueue($topicName, $envelope);
+        return $this->messageEncoder->decode($topicName, $responseMessage, false);
     }
 
     /**
