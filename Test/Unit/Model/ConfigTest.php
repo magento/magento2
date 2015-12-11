@@ -103,4 +103,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInternalType('string', $this->model->getEntityType());
     }
+
+    /**
+     * Test getEntityType() method
+     */
+    public function testIsElasticsearchEnabled()
+    {
+        $this->assertFalse($this->model->isElasticsearchEnabled());
+    }
 }
