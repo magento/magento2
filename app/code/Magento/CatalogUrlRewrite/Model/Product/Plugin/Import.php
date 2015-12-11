@@ -158,11 +158,83 @@ class Import
             foreach ($products as $product) {
                 $this->_populateForUrlGeneration($product);
             }
+            /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $productUrls */
             $productUrls = $this->generateUrls();
             if ($productUrls) {
-                $this->urlPersist->replace($productUrls);
+                try {
+                    $this->urlPersist->replace($productUrls);
+                } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                    $groupsOfUrls = $this->groupUrls($productUrls);
+                    foreach ($groupsOfUrls as $productUrls) {
+                        $this->replaceUrls($productUrls);
+                    }
+                }
             }
         }
+    }
+
+    /**
+     * Group URL keys by product id and store id
+     *
+     * @param  \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
+     * @return array
+     */
+    protected function groupUrls($urls)
+    {
+        $groups =[];
+        foreach ($urls as $url) {
+            $key = sprintf('%s-%s',
+                $url->getEntityId(),
+                $url->getStoreId()
+            );
+            $groups[$key][] = $url;
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Replace product URL by given set
+     *
+     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $productUrls
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @return $this
+     */
+    protected function replaceUrls(array $productUrls)
+    {
+        for ($i = 0; $i < 100; $i++) {
+            if ($i > 0) {
+                $this->addIncrementToUrls($productUrls, $i);
+            }
+            try {
+                $this->urlPersist->replace($productUrls);
+                break;
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                if ($i == 100) {
+                    throw $e;
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add increment to every URL in array
+     *
+     * @param $productUrls
+     * @param $increment
+     * @return $this
+     */
+    protected function addIncrementToUrls(array & $productUrls, $increment)
+    {
+        foreach($productUrls as $productUrl) {
+            $requestPath = substr($productUrl->getRequestPath(), 0, -strlen($productUrl->getUrlSuffix()));
+            $requestPath = sprintf('%s-%s%s', $requestPath, $increment, $productUrl->getUrlSuffix());
+            $productUrl->setRequestPath($requestPath);
+        }
+
+        return $this;
     }
 
     /**
@@ -310,7 +382,7 @@ class Import
      */
     protected function isGlobalScope($storeId)
     {
-        return null === $storeId || $storeId == Store::DEFAULT_STORE_ID;
+        return $storeId === Store::DEFAULT_STORE_ID;
     }
 
     /**
@@ -329,7 +401,8 @@ class Import
                         ->setEntityId($productId)
                         ->setRequestPath($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId))
                         ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product))
-                        ->setStoreId($storeId);
+                        ->setStoreId($storeId)
+                        ->setUrlSuffix($this->productUrlPathGenerator->getUrlSuffix($storeId));
                 }
             }
         }
@@ -356,7 +429,8 @@ class Import
                         ->setRequestPath($requestPath)
                         ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product, $category))
                         ->setStoreId($storeId)
-                        ->setMetadata(['category_id' => $category->getId()]);
+                        ->setMetadata(['category_id' => $category->getId()])
+                        ->setUrlSuffix($this->productUrlPathGenerator->getUrlSuffix($storeId));
                 }
             }
         }

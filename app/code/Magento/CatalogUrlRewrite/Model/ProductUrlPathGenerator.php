@@ -60,9 +60,16 @@ class ProductUrlPathGenerator
     {
         $path = $product->getData('url_path');
         if ($path === null) {
-            $path = $product->getUrlKey() === false
-                ? $this->prepareProductDefaultUrlKey($product)
-                : $this->prepareProductUrlKey($product);
+            if (!$product->getUrlKey()) {
+                try {
+                    $path = $this->prepareProductDefaultUrlKey($product);
+                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                    // in some cases during import we can face with situation when product does't created yet
+                    $path = $this->prepareProductUrlKey($product);
+                }
+            } else {
+                $path = $this->prepareProductUrlKey($product);
+            }
         }
         return $category === null
             ? $path
@@ -151,5 +158,16 @@ class ProductUrlPathGenerator
             );
         }
         return $this->productUrlSuffix[$storeId];
+    }
+
+    /**
+     * Get suffix thet used for URL generation
+     *
+     * @param null $storeId
+     * @return string
+     */
+    public function getUrlSuffix($storeId = null)
+    {
+        return $this->getProductUrlSuffix($storeId);
     }
 }

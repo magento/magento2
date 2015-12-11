@@ -44,11 +44,13 @@ class Storage
         $toSave = [];
         foreach ($this->filterUrls($urls) as $record) {
             $metadata = $record->getMetadata();
-            $toSave[] = [
-                'url_rewrite_id' => $record->getUrlRewriteId(),
-                'category_id' => $metadata['category_id'],
-                'product_id' => $record->getEntityId(),
-            ];
+            if (isset($metadata['category_id'])) {
+                $toSave[] = [
+                    'url_rewrite_id' => $record->getUrlRewriteId(),
+                    'category_id' => $metadata['category_id'],
+                    'product_id' => $record->getEntityId(),
+                ];
+            }
         }
         if ($toSave) {
             $this->productFactory->create()->getResource()->saveMultiple($toSave);

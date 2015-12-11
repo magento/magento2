@@ -446,9 +446,8 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                 [$this->products[0][ImportProduct::COL_SKU]],
                 [$this->products[1][ImportProduct::COL_SKU]]
             )->willReturn([]);
-        $getProductWebsitesCallsCount = $productsCount * 2;
         $this->importProduct
-            ->expects($this->exactly($getProductWebsitesCallsCount))
+            ->expects($this->exactly(3))
             ->method('getProductWebsites')
            ->willReturnOnConsecutiveCalls(
                [$newSku[0]['entity_id'] => $websiteId],
@@ -495,14 +494,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                $newSku[1]['entity_id']
            );
         $product
-            ->expects($this->exactly($productsCount))
+            ->expects($this->exactly(1))
             ->method('getSku')
             ->will($this->onConsecutiveCalls(
-                $this->products[0]['sku'],
-                $this->products[1]['sku']
+                $this->products[0]['sku']
             ));
         $product
-            ->expects($this->exactly($productsCount))
+            ->expects($this->any($productsCount))
             ->method('getStoreId')
             ->will($this->onConsecutiveCalls(
                 $this->products[0][ImportProduct::COL_STORE],
@@ -520,7 +518,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($product);
         $this->connection
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(2))
             ->method('quoteInto')
             ->withConsecutive(
                 [
@@ -562,8 +560,9 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->urlRewrite->expects($this->any())->method('setRequestPath')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setTargetPath')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('getTargetPath')->willReturn('targetPath');
+        $this->urlRewrite->expects($this->any())->method('setUrlSuffix')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('getStoreId')
-            ->willReturnOnConsecutiveCalls(0, 'not global');
+            ->willReturnOnConsecutiveCalls(0, 'not global', 0, 'not global');
 
         $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
 
@@ -685,13 +684,17 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlPathWithSuffix')
             ->will($this->returnValue($requestPath));
         $this->productUrlPathGenerator
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getUrlPath')
             ->will($this->returnValue('urlPath'));
         $this->productUrlPathGenerator
             ->expects($this->once())
             ->method('getCanonicalUrlPath')
             ->will($this->returnValue($targetPath));
+        $this->productUrlPathGenerator
+            ->expects($this->once())
+            ->method('getUrlSuffix')
+            ->will($this->returnValue('.html'));
         $this->urlRewrite
             ->expects($this->once())
             ->method('setStoreId')
@@ -716,6 +719,16 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('setTargetPath')
             ->with($targetPath)
+            ->will($this->returnSelf());
+        $this->urlRewrite
+            ->expects($this->once())
+            ->method('setStoreId')
+            ->with(10)
+            ->will($this->returnSelf());
+        $this->urlRewrite
+            ->expects($this->once())
+            ->method('setUrlSuffix')
+            ->with('.html')
             ->will($this->returnSelf());
         $this->urlRewriteFactory
             ->expects($this->once())
@@ -796,6 +809,10 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getCanonicalUrlPath')
             ->will($this->returnValue($canonicalUrlPathWithCategory));
+        $this->productUrlPathGenerator
+            ->expects($this->any())
+            ->method('getUrlSuffix')
+            ->will($this->returnValue('.html'));
         $category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
         $category
             ->expects($this->any())
@@ -830,6 +847,11 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('setMetadata')
             ->with(['category_id' => $this->categoryId])
+            ->will($this->returnSelf());
+        $this->urlRewrite
+            ->expects($this->any())
+            ->method('setUrlSuffix')
+            ->with('.html')
             ->will($this->returnSelf());
         $this->urlRewriteFactory
             ->expects($this->any())
