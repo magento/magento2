@@ -22,8 +22,7 @@ class HeaderManager
      */
     public function __construct($headerProviderList)
     {
-        foreach ($headerProviderList as $header)
-        {
+        foreach ($headerProviderList as $header) {
             if (!($header instanceof HeaderProviderInterface)) {
                 throw new LocalizedException(new Phrase('Invalid header provider'));
             }

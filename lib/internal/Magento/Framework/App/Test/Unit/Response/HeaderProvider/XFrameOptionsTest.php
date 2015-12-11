@@ -9,7 +9,6 @@ namespace Magento\Framework\App\Test\Unit\Response\HeaderProvider;
 use \Magento\Framework\App\Response\HeaderProvider\XFrameOptions;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-
 class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /** Strict-Transport-Security (HSTS) Header name */
