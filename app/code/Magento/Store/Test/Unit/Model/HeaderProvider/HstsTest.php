@@ -4,25 +4,25 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\Test\Unit\Response\HeaderProvider;
+namespace Magento\Store\Test\Unit\Model\HeaderProvider;
 
-use \Magento\Framework\App\Response\HeaderProvider\UpgradeInsecure;
+use \Magento\Store\Model\HeaderProvider\Hsts;
 use \Magento\Store\Model\Store;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 
-class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
+class HstsTest extends \PHPUnit_Framework_TestCase
 {
-    /** Content-Security-Policy Header name */
-    const HEADER_NAME = 'Content-Security-Policy';
+    /** Strict-Transport-Security (HSTS) Header name */
+    const HEADER_NAME = 'Strict-Transport-Security';
 
     /**
-     * Content-Security-Policy header value
+     * Strict-Transport-Security (HSTS) header value
      */
-    const HEADER_VALUE = 'upgrade-insecure-requests';
+    const HEADER_VALUE = 'max-age=31536000';
 
     /**
-     * @var UpgradeInsecure
+     * @var Hsts
      */
     protected $object;
 
@@ -38,7 +38,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $objectManager = new ObjectManagerHelper($this);
         $this->object = $objectManager->getObject(
-            '\Magento\Framework\App\Response\HeaderProvider\UpgradeInsecure',
+            '\Magento\Store\Model\HeaderProvider\Hsts',
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }
@@ -78,10 +78,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
-                    [
-                        UpgradeInsecure::XML_PATH_ENABLE_UPGRADE_INSECURE,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true
-                    ]
+                    [Store::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
                 ],
                 true
             ],
@@ -89,10 +86,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
-                    [
-                        UpgradeInsecure::XML_PATH_ENABLE_UPGRADE_INSECURE,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true
-                    ]
+                    [Store::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
                 ],
                 false
             ],
@@ -100,10 +94,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
-                    [
-                        UpgradeInsecure::XML_PATH_ENABLE_UPGRADE_INSECURE,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true
-                    ]
+                    [Store::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
                 ],
                 false
             ],
@@ -111,10 +102,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
-                    [
-                        UpgradeInsecure::XML_PATH_ENABLE_UPGRADE_INSECURE,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false
-                    ]
+                    [Store::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
                 ],
                 false
             ],
@@ -122,10 +110,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
-                    [
-                        UpgradeInsecure::XML_PATH_ENABLE_UPGRADE_INSECURE,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false
-                    ]
+                    [Store::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
                 ],
                 false
             ],
@@ -133,10 +118,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
-                    [
-                        UpgradeInsecure::XML_PATH_ENABLE_UPGRADE_INSECURE,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false
-                    ]
+                    [Store::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
                 ],
                 false
             ],
@@ -144,10 +126,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
-                    [
-                        UpgradeInsecure::XML_PATH_ENABLE_UPGRADE_INSECURE,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false
-                    ]
+                    [Store::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false]
                 ],
                 false
             ],
@@ -155,10 +134,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
                 [
                     [Store::XML_PATH_SECURE_IN_FRONTEND, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
                     [Store::XML_PATH_SECURE_IN_ADMINHTML, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, false],
-                    [
-                        UpgradeInsecure::XML_PATH_ENABLE_UPGRADE_INSECURE,
-                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true
-                    ]
+                    [Store::XML_PATH_ENABLE_HSTS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT , null, true]
                 ],
                 false
             ],
