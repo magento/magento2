@@ -128,7 +128,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             $generalPost = $this->getRequest()->getPost('general');
             if ($generalPost['use_config']) {
                 $useConfig = [];
-                foreach($generalPost['use_config'] as $attributeCode => $attributeValue) {
+                foreach ($generalPost['use_config'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
                         $useConfig[] = $attributeCode;
                     }
@@ -243,7 +243,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     {
         if (isset($_FILES['general']) && !empty($_FILES['general']['name']['image'])) {
             $_FILES['image'] = $_FILES['general'];
-            foreach($_FILES['general'] as $key => $file) {
+            foreach ($_FILES['general'] as $key => $file) {
                 $_FILES['image'][$key] = $file['image'];
             }
             $data['image'] = $_FILES['image'];
