@@ -8,17 +8,17 @@ namespace Magento\Vault\Model\Ui;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
+use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class ConfigProvider
  */
-final class ConfigProvider implements ConfigProviderInterface
+final class VaultCardsConfigProvider implements ConfigProviderInterface
 {
-    const CODE = 'vault';
-
     /**
      * @var PaymentTokenRepositoryInterface
      */
@@ -40,6 +40,16 @@ final class ConfigProvider implements ConfigProviderInterface
     private $customerSession;
 
     /**
+     * @var VaultPaymentInterface
+     */
+    private $vaultPayment;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Constructor
      *
      * @param Session $customerSession
@@ -51,12 +61,16 @@ final class ConfigProvider implements ConfigProviderInterface
         Session $customerSession,
         PaymentTokenRepositoryInterface $paymentTokenRepository,
         FilterBuilder $filterBuilder,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        StoreManagerInterface $storeManager,
+        VaultPaymentInterface $vaultPayment
     ) {
         $this->paymentTokenRepository = $paymentTokenRepository;
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->customerSession = $customerSession;
+        $this->vaultPayment = $vaultPayment;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -66,11 +80,14 @@ final class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
-        $index = 1;
         $vaultPayments = [];
-        $customerId = $this->customerSession->getCustomerId();
 
+        $customerId = $this->customerSession->getCustomerId();
         if (!$customerId) {
+            return $vaultPayments;
+        }
+
+        if (!$this->vaultPayment->isActive($this->storeManager->getStore()->getId())) {
             return $vaultPayments;
         }
 
@@ -80,8 +97,9 @@ final class ConfigProvider implements ConfigProviderInterface
         $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
             ->create();
 
+        $index = 1;
         foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $token) {
-            $vaultPayments[self::CODE . '-' . $index] = [
+            $vaultPayments[$this->vaultPayment->getCode() . '-' . $index] = [
                 'token' => $token->getPublicHash(),
                 'title' => __('Vault token - ' . $index)
             ];
@@ -91,7 +109,7 @@ final class ConfigProvider implements ConfigProviderInterface
 
         return [
             'payment' => [
-                self::CODE => $vaultPayments
+                VaultPaymentInterface::CODE => $vaultPayments
             ]
         ];
     }
