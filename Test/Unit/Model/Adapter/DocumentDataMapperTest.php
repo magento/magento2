@@ -15,6 +15,9 @@ use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\Model\Adapter\DocumentDataMapper;
+use Magento\Elasticsearch\Model\ResourceModel\Index;
+use Magento\AdvancedSearch\Model\ResourceModel\Index as AdvancedSearchIndex;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class DocumentDataMapperTest
@@ -37,9 +40,19 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
     private $attributeContainerMock;
 
     /**
+     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attribute;
+
+    /**
      * @var Index|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceIndex;
+
+    /**
+     * @var AdvancedSearchIndex|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $advancedSearchIndex;
 
     /**
      * @var FieldMapper|\PHPUnit_Framework_MockObject_MockObject
@@ -67,6 +80,11 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
     private $storeManagerMock;
 
     /**
+     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeInterface;
+
+    /**
      * Set up test environment.
      */
     protected function setUp()
@@ -89,12 +107,6 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
                 'getFullProductIndexData',
             ])
             ->getMock();
-        $this->resourceIndex->expects($this->any())
-            ->method('getPriceIndexData')
-            ->willReturn([]);
-        $this->resourceIndex->expects($this->any())
-            ->method('getFullCategoryProductIndexData')
-            ->willReturn([]);
 
         $this->fieldMapperMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapper')
             ->setMethods(['getFieldName'])
@@ -115,6 +127,18 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->advancedSearchIndex = $this->getMockBuilder('Magento\AdvancedSearch\Model\ResourceModel\Index')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->attribute = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->storeInterface = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -144,16 +168,52 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function testGetMap($productId, $productData, $storeId)
+    public function testGetMap($productId, $productData, $storeId, $emptyDate)
     {
         $this->attributeContainerMock->expects($this->any())->method('getAttribute')->will(
-            $this->returnValue($this->attributeContainerMock)
+            $this->returnValue($this->attribute)
         );
+        $this->resourceIndex->expects($this->any())
+            ->method('getPriceIndexData')
+            ->with([1, ], 1)
+            ->willReturn([
+                1 => [1]
+            ]);
+        $this->resourceIndex->expects($this->any())
+            ->method('getFullCategoryProductIndexData')
+            ->willReturn([
+                1 => [
+                    0 => [
+                        'id' => 2,
+                        'name' => 'Default Category',
+                        'position' => '1',
+                    ],
+                    1 => [
+                        'id' => 3,
+                        'name' => 'Gear',
+                        'position' => '1',
+                    ],
+                    2 => [
+                        'id' => 4,
+                        'name' => 'Bags',
+                        'position' => '1',
+                    ],
+                ],
+            ]);
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->storeInterface);
+        $this->storeInterface->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn(1);
         $this->attributeContainerMock->expects($this->any())->method('setStoreId')->will(
             $this->returnValue($this->attributeContainerMock)
         );
-        $this->attributeContainerMock->expects($this->any())->method('getBackendType')->will(
+        $this->attribute->expects($this->any())->method('getBackendType')->will(
             $this->returnValue('datetime')
+        );
+        $this->dateTimeMock->expects($this->any())->method('isEmptyDate')->will(
+            $this->returnValue($emptyDate)
         );
         $this->attributeContainerMock->expects($this->any())->method('getFrontendInput')->will(
             $this->returnValue('date')
@@ -192,29 +252,38 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
             [
                 '1',
                 ['price'=>'11','created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
-                '1'
+                '1',
+                false,
+            ],
+            [
+                '1',
+                ['price'=>'11','created_at'=>null,'color_value'=>'11', ],
+                '1',
+                true,
             ],
             [
                 '1',
                 [
                     'tier_price'=>
                         [[
-                             'price_id'=>'1',
-                             'website_id'=>'1',
-                             'all_groups'=>'1',
-                             'cust_group'=>'1',
-                             'price_qty'=>'1',
-                             'website_price'=>'1',
-                             'price'=>'1'
-                         ]],
+                            'price_id'=>'1',
+                            'website_id'=>'1',
+                            'all_groups'=>'1',
+                            'cust_group'=>'1',
+                            'price_qty'=>'1',
+                            'website_price'=>'1',
+                            'price'=>'1'
+                        ]],
                     'created_at'=>'00-00-00 00:00:00'
                 ],
-                '1'
+                '1',
+                false,
             ],
             [
                 '1',
                 ['image'=>'11','created_at'=>'00-00-00 00:00:00'],
-                '1'
+                '1',
+                false,
             ],
             [
                 '1',
@@ -227,22 +296,23 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
                         [
                             'images' =>
                                 [[
-                                     'file'=>'1',
-                                     'media_type'=>'image',
-                                     'position'=>'1',
-                                     'disabled'=>'1',
-                                     'label'=>'1',
-                                     'title'=>'1',
-                                     'base_image'=>'1',
-                                     'small_image'=>'1',
-                                     'thumbnail'=>'1',
-                                     'swatch_image'=>'1'
-                                 ]]
+                                    'file'=>'1',
+                                    'media_type'=>'image',
+                                    'position'=>'1',
+                                    'disabled'=>'1',
+                                    'label'=>'1',
+                                    'title'=>'1',
+                                    'base_image'=>'1',
+                                    'small_image'=>'1',
+                                    'thumbnail'=>'1',
+                                    'swatch_image'=>'1'
+                                ]]
                         ]
                     ,
                     'created_at'=>'00-00-00 00:00:00'
                 ],
-                '1'
+                '1',
+                false,
             ],
             [
                 '1',
@@ -255,38 +325,42 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
                         [
                             'images' =>
                                 [[
-                                     'file'=>'1',
-                                     'media_type'=>'video',
-                                     'position'=>'1',
-                                     'disabled'=>'1',
-                                     'label'=>'1',
-                                     'title'=>'1',
-                                     'base_image'=>'1',
-                                     'small_image'=>'1',
-                                     'thumbnail'=>'1',
-                                     'swatch_image'=>'1',
-                                     'video_title'=>'1',
-                                     'video_url'=>'1',
-                                     'video_description'=>'1',
-                                     'video_metadata'=>'1',
-                                     'video_provider'=>'1'
-                                 ]]
+                                    'file'=>'1',
+                                    'media_type'=>'video',
+                                    'position'=>'1',
+                                    'disabled'=>'1',
+                                    'label'=>'1',
+                                    'title'=>'1',
+                                    'base_image'=>'1',
+                                    'small_image'=>'1',
+                                    'thumbnail'=>'1',
+                                    'swatch_image'=>'1',
+                                    'video_title'=>'1',
+                                    'video_url'=>'1',
+                                    'video_description'=>'1',
+                                    'video_metadata'=>'1',
+                                    'video_provider'=>'1'
+                                ]]
                         ]
                     ,
                     'created_at'=>'00-00-00 00:00:00'
                 ],
-                '1'
+                '1',
+                false,
             ],
             [
                 '1',
                 ['quantity_and_stock_status'=>'11','created_at'=>'00-00-00 00:00:00'],
-                '1'
+                '1',
+                false,
             ],
             [
                 '1',
                 ['price'=>'11','created_at'=>'1995-12-31 23:59:59','options'=>['value1','value2']],
-                '1'
-            ]
+                '1',
+                false,
+            ],
         ];
     }
 }
+

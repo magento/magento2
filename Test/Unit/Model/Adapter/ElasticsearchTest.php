@@ -178,6 +178,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'getIndexName',
                 'getIndexNamespace',
                 'getIndexFromAlias',
+                'getIndexNameForAlias',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -324,10 +325,6 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanIndexTrue()
     {
-        $this->indexNameResolver->expects($this->once())
-            ->method('getIndexNamespace')
-            ->willReturn('');
-
         $this->indexNameResolver->expects($this->any())
             ->method('getIndexName')
             ->willReturn('indexName_product_1_v');
@@ -448,6 +445,10 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
 
         $this->indexNameResolver->expects($this->any())
             ->method('getIndexFromAlias')
+            ->willReturn('_product_1_v2');
+
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexNameForAlias')
             ->willReturn('_product_1_v2');
 
         $this->client->expects($this->any())
