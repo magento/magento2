@@ -20,39 +20,6 @@
             </argument>
         </arguments>
     </type>
-
-    <virtualType name="QueuePublisherFactory" type="Magento\Framework\MessageQueue\PublisherFactory">
-        <arguments>
-            <argument name="publishers" xsi:type="array">
-                <item name="amqp" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
-                    <item name="connectionName" xsi:type="string">amqp</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Framework\MessageQueue\PublisherProxy">
-        <arguments>
-            <argument name="publisherFactory" xsi:type="object">QueuePublisherFactory</argument>
-        </arguments>
-    </type>
-
-    <virtualType name="RpcPublisherFactory" type="Magento\Framework\MessageQueue\PublisherFactory">
-        <arguments>
-            <argument name="publishers" xsi:type="array">
-                <item name="amqp" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Rpc\Publisher</item>
-                    <item name="connectionName" xsi:type="string">amqp</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Framework\MessageQueue\Rpc\PublisherProxy">
-        <arguments>
-            <argument name="publisherFactory" xsi:type="object">RpcPublisherFactory</argument>
-        </arguments>
-    </type>
-
     <type name="Magento\Framework\MessageQueue\ConsumerFactory">
         <arguments>
             <argument name="consumers" xsi:type="array">
@@ -61,6 +28,24 @@
                     <item name="type" xsi:type="array">
                         <item name="async" xsi:type="string">Magento\Framework\MessageQueue\Consumer</item>
                         <item name="sync" xsi:type="string">Magento\Framework\MessageQueue\Rpc\Consumer</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\MessageQueue\PublisherPool">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="async" xsi:type="array">
+                    <item name="amqp" xsi:type="array">
+                        <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
+                        <item name="connectionName" xsi:type="string">amqp</item>
+                    </item>
+                </item>
+                <item name="sync" xsi:type="array">
+                    <item name="amqp" xsi:type="array">
+                        <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Rpc\Publisher</item>
+                        <item name="connectionName" xsi:type="string">amqp</item>
                     </item>
                 </item>
             </argument>
