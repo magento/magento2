@@ -27,7 +27,6 @@ class DataAssignObserverTest extends \PHPUnit_Framework_TestCase
         $event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentMethodFacade = $this->getMock(MethodInterface::class);
         $paymentInfoModel = $this->getMock(InfoInterface::class);
         $dataObject = new DataObject(
             [
@@ -41,13 +40,10 @@ class DataAssignObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getDataByKey')
             ->willReturnMap(
                 [
-                    [AbstractDataAssignObserver::METHOD_CODE, $paymentMethodFacade],
+                    [AbstractDataAssignObserver::MODEL_CODE, $paymentInfoModel],
                     [AbstractDataAssignObserver::DATA_CODE, $dataObject]
                 ]
             );
-        $paymentMethodFacade->expects(static::once())
-            ->method('getInfoInstance')
-            ->willReturn($paymentInfoModel);
         $paymentInfoModel->expects(static::once())
             ->method('setAdditionalInformation')
             ->with(

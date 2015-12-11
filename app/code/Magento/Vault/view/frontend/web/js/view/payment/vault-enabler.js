@@ -6,7 +6,7 @@
 /*global define*/
 define(
     [
-        'uiComponent'
+        'uiElement'
     ],
     function (
         Component
@@ -15,7 +15,11 @@ define(
 
         return Component.extend({
             defaults: {
-                isActivePaymentTokenEnabler: false
+                isActivePaymentTokenEnabler: true
+            },
+
+            setPaymentCode: function (paymentCode) {
+                this.paymentCode = paymentCode;
             },
 
             initObservable: function () {
@@ -26,17 +30,17 @@ define(
                 return this;
             },
 
-            visitAdditionalData: function(data, paymentProviderCode) {
-                if (!this.isVaultEnabled(paymentProviderCode)) {
+            visitAdditionalData: function(data) {
+                if (!this.isVaultEnabled()) {
                     return;
                 }
 
                 data.additional_data.is_active_payment_token_enabler = this.isActivePaymentTokenEnabler();
             },
 
-            isVaultEnabled: function(paymentProviderCode) {
+            isVaultEnabled: function() {
                 return window.checkoutConfig.vault.is_enabled == '1'
-                    && window.checkoutConfig.vault.vault_provider_code == paymentProviderCode;
+                    && window.checkoutConfig.vault.vault_provider_code == this.paymentCode;
             }
         });
     }
