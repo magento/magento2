@@ -382,6 +382,10 @@ define([
             thumbsParent = fotorama.activeFrame.$navThumbFrame.parent();
             thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
 
+            fotorama.data.map($.proxy(function(item, i){
+                !item.type && (item.type = this.options.VideoData[i].mediaType);
+            }, this));
+
             for (t = 0; t < thumbs.length; t++) {
                 tmpVideoData = this.options.VideoData[t];
                 currentItem = thumbs.eq(t);
@@ -391,14 +395,10 @@ define([
                 }
 
                 if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs' &&
-                    fotorama.activeFrame.$stageFrame.hasClass(videoContainerClass)) {
+                    fotorama.data[t].type ===  this.VID) {
                     currentItem.addClass(iconClass);
                 }
             }
-
-            fotorama.data.map($.proxy(function(item, i){
-                !item.type && (item.type = this.options.VideoData[i].mediaType);
-            }, this));
 
             $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
@@ -653,6 +653,7 @@ define([
 
     return function (config, element) {
         $('.gallery-placeholder').on('fotorama:ready', function () {
+            console.log('readddddy')
             $(element).find('.fotorama').AddFotoramaVideoEvents({
                 VideoData: config.fotoramaVideoData || [],
                 VideoSettings: config.fotoramaVideoSettings || {}
