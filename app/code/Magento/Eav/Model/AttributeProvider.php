@@ -8,7 +8,7 @@ namespace Magento\Eav\Model;
 
 use Magento\Framework\Model\EntitySnapshot\AttributeProviderInterface;
 use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
@@ -22,7 +22,7 @@ class AttributeProvider implements AttributeProviderInterface
     protected $metadataPool;
 
     /**
-     * @var AttributeRepository
+     * @var AttributeRepositoryInterface
      */
     protected $attributeRepository;
 
@@ -32,11 +32,15 @@ class AttributeProvider implements AttributeProviderInterface
     protected $searchCriteriaBuilder;
 
     /**
+     * AttributeProvider constructor.
+     *
      * @param MetadataPool $metadataPool
+     * @param AttributeRepositoryInterface $attributeRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         MetadataPool $metadataPool,
-        AttributeRepository $attributeRepository,
+        AttributeRepositoryInterface $attributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->metadataPool = $metadataPool;

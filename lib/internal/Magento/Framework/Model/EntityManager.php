@@ -8,7 +8,6 @@ namespace Magento\Framework\Model;
 
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Model\EntityRegistry;
 
 /**
  * Class EntityManager
@@ -26,22 +25,15 @@ class EntityManager
     protected $metadataPool;
 
     /**
-     * @var EntityRegistry
-     */
-    protected $entityRegistry;
-
-    /**
      * @param OrchestratorPool $orchestratorPool
      * @param MetadataPool $metadataPool
      */
     public function __construct(
         OrchestratorPool $orchestratorPool,
-        MetadataPool $metadataPool,
-        EntityRegistry $entityRegistry
+        MetadataPool $metadataPool
     ) {
         $this->orchestratorPool = $orchestratorPool;
         $this->metadataPool = $metadataPool;
-        $this->entityRegistry = $entityRegistry;
     }
 
     /**
@@ -53,12 +45,8 @@ class EntityManager
      */
     public function load($entityType, $entity, $identifier)
     {
-        if (!$this->entityRegistry->retrieve($entityType, $identifier)) {
-            $operation = $this->orchestratorPool->getReadOperation($entityType);
-            $entity = $operation->execute($entityType, $entity, $identifier);
-            $this->entityRegistry->register($entityType, $identifier, $entity);
-        }
-        return $this->entityRegistry->retrieve($entityType, $identifier);
+        $operation = $this->orchestratorPool->getReadOperation($entityType);
+        return $operation->execute($entityType, $entity, $identifier);
     }
 
     /**
