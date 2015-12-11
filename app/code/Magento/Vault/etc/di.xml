@@ -20,15 +20,13 @@
     <!-- Configuration payment -->
     <virtualType name="VaultPaymentConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Magento\Vault\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="methodCode" xsi:type="const">Magento\Vault\Model\VaultPaymentInterface::CODE</argument>
         </arguments>
     </virtualType>
 
     <!-- Payment Method configuration -->
     <type name="Magento\Vault\Model\Method\Vault">
         <arguments>
-            <argument name="code" xsi:type="const">Magento\Vault\Model\Ui\ConfigProvider::CODE</argument>
-            <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
             <argument name="valueHandlerPool" xsi:type="object">VaultPaymentValueHandlerPool</argument>
         </arguments>
     </type>
@@ -42,7 +40,7 @@
         </arguments>
     </type>
     
-    <type name="Magento\Vault\Model\Ui\ConfigProvider">
+    <type name="Magento\Vault\Model\Ui\VaultCardsConfigProvider">
         <arguments>
             <argument name="paymentTokenRepository" xsi:type="object">Magento\Vault\Model\PaymentTokenRepositoryProxy</argument>
         </arguments>

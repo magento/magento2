@@ -77,7 +77,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(null)
+            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionFactoryMock = $this
@@ -106,7 +106,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
 
         // Sales Order Payment Model
         $this->salesOrderPaymentMock = $this->getMockBuilder(Payment::class)
-            ->setMethods(null)
+            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesOrderPaymentMock->setOrder($this->salesOrderMock);
