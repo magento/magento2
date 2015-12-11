@@ -45,14 +45,34 @@ class SaveHandler
     public function execute($entityType, $entity)
     {
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-        foreach ($this->optionRepository->getProductOptions($entity) as $option) {
-            $this->optionRepository->delete($option);
-        }
-        if ($entity->getOptions()) {
-            foreach ($entity->getOptions() as $option) {
+        $options = $entity->getOptions();
+        if ($options) {
+            $this->deleteUnExistingOptions($options, $entity);
+            foreach ($options as $option) {
                 $this->optionRepository->save($option);
             }
         }
         return $entity;
+    }
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
+     * @param \Magento\Catalog\Api\Data\ProductInterface $entity
+     * @return void
+     */
+    protected function deleteUnExistingOptions($options, \Magento\Catalog\Api\Data\ProductInterface $entity)
+    {
+        foreach ($this->optionRepository->getProductOptions($entity) as $oldOption) {
+            $toDelete = true;
+            foreach ($options as $option) {
+                if ($oldOption->getOptionId() == $option->getOptionId()) {
+                    $toDelete = false;
+                }
+            }
+            if ($toDelete) {
+                $this->optionRepository->delete($oldOption);
+            }
+        }
+
     }
 }

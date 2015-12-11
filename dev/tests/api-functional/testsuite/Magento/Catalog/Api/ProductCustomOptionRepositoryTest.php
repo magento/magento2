@@ -39,9 +39,12 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     public function testRemove()
     {
         $sku = 'simple';
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(
+            'Magento\Catalog\Model\ProductRepository'
+        );
         /** @var  \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
-        $product->load(1);
+        $product = $productRepository->get($sku, false, null, true);
         $customOptions = $product->getOptions();
         $optionId = array_pop($customOptions)->getId();
         $serviceInfo = [
@@ -57,8 +60,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, ['sku' => $sku, 'optionId' => $optionId]));
         /** @var  \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
-        $product->load(1);
+        $product = $productRepository->get($sku, false, null, true);
         $this->assertNull($product->getOptionById($optionId));
         $this->assertEquals(9, count($product->getOptions()));
     }
@@ -234,7 +236,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     public function testUpdate()
     {
         $productSku = 'simple';
-        /** @var \Magento\Catalog\Model\ProductRepository $optionReadService */
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Model\ProductRepository'
         );
@@ -290,7 +292,6 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     public function testUpdateOptionAddingNewValue($optionType)
     {
-        $productId = 1;
         $fixtureOption = null;
         $valueData = [
             'price' => 100500,
@@ -300,8 +301,12 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             'sort_order' => 100,
         ];
 
-        $product = $this->productFactory->create();
-        $product->load($productId);
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(
+            'Magento\Catalog\Model\ProductRepository'
+        );
+        /** @var  \Magento\Catalog\Model\Product $product */
+        $product = $productRepository->get('simple', false, null, true);
 
         /**@var $option \Magento\Catalog\Model\Product\Option */
         foreach ($product->getOptions() as $option) {
