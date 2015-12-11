@@ -6,6 +6,8 @@
 namespace Magento\Ui\Component;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
@@ -85,6 +87,13 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function prepare()
     {
+        if ($this->getData(UiComponentFactory::IMPORT_CHILDREN_FROM_META)) {
+            $children = (array)$this->getContext()->getDataProvider()->getMeta();
+            foreach ($children as $name => $childData) {
+                $this->createChildComponent($name, $childData);
+            }
+        }
+
         $jsConfig = $this->getJsConfig($this);
         if (isset($jsConfig['provider'])) {
             unset($jsConfig['extends']);
@@ -92,10 +101,76 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
         } else {
             $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
         }
+
+        if ($this->hasData('actions')) {
+            $this->getContext()->addActions($this->getData('actions'), $this);
+        }
+
         if ($this->hasData('buttons')) {
             $this->getContext()->addButtons($this->getData('buttons'), $this);
         }
         $this->getContext()->getProcessor()->notify($this->getComponentName());
+    }
+
+    /**
+     * Create child Ui Component
+     *
+     * @param string $name
+     * @param array $childData
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function createChildComponent($name, array $childData)
+    {
+        if (empty($childData)) {
+            return $this;
+        }
+
+        $childComponent = $this->getComponent($name);
+        if ($childComponent === null) {
+            $argument = [
+                'context' => $this->getContext(),
+                'data' => [
+                    'name' => $name,
+                    'config' => $childData
+                ]
+            ];
+
+            if (!isset($childData['componentType'])) {
+                throw new LocalizedException(
+                    __('The configuration parameter "componentType" is a required for "%1" component.', $name)
+                );
+            }
+
+            $childComponent = $this->getContext()
+                ->getUiComponentFactory()
+                ->create($name, $childData['componentType'], $argument);
+            $this->prepareChildComponent($childComponent);
+            $this->addComponent($name, $childComponent);
+        } else {
+            $this->updateComponent($childData, $childComponent);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Call prepare method in the component UI
+     *
+     * @param UiComponentInterface $component
+     * @return $this
+     */
+    protected function prepareChildComponent(UiComponentInterface $component)
+    {
+        $childComponents = $component->getChildComponents();
+        if (!empty($childComponents)) {
+            foreach ($childComponents as $child) {
+                $this->prepareChildComponent($child);
+            }
+        }
+        $component->prepare();
+
+        return $this;
     }
 
     /**
@@ -182,7 +257,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function getConfiguration()
     {
-        return (array) $this->getData('config');
+        return (array)$this->getData('config');
     }
 
     /**
@@ -194,7 +269,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function getJsConfig(UiComponentInterface $component)
     {
-        $jsConfig = (array) $component->getData('js_config');
+        $jsConfig = (array)$component->getData('js_config');
         if (!isset($jsConfig['extends'])) {
             $jsConfig['extends'] = $component->getContext()->getNamespace();
         }
@@ -263,5 +338,37 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
                 unset($data['observers']);
             }
         }
+    }
+
+    /**
+     * Update component data
+     *
+     * @param array $componentData
+     * @param UiComponentInterface $component
+     * @return $this
+     */
+    protected function updateComponent(array $componentData, UiComponentInterface $component)
+    {
+        $config = $component->getData('config');
+        // XML data configuration override configuration coming from the DB
+        $config = array_replace_recursive($componentData, $config);
+        $component->setData('config', $config);
+
+        return $this;
+    }
+
+    /**
+     * Update DataScope
+     *
+     * @param array $data
+     * @param string $name
+     * @return array
+     */
+    protected function updateDataScope(array $data, $name)
+    {
+        if (!isset($data['dataScope'])) {
+            $data['dataScope'] = $name;
+        }
+        return $data;
     }
 }
