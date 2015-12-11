@@ -5,12 +5,12 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Validator;
 
+use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 
 /**
  * Class ResponseValidator
- * @package Magento\BraintreeTwo\Gateway\Validator
  */
 class ResponseValidator extends AbstractValidator
 {
@@ -57,7 +57,7 @@ class ResponseValidator extends AbstractValidator
     {
         return in_array(
             $response->transaction->status,
-            [\Braintree_Transaction::AUTHORIZED, \Braintree_Transaction::SUBMITTED_FOR_SETTLEMENT]
+            [Transaction::AUTHORIZED, Transaction::SUBMITTED_FOR_SETTLEMENT]
         );
     }
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Response;
 
-use Braintree_Transaction;
+use \Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
@@ -48,7 +48,7 @@ class CardDetailsHandler implements HandlerInterface
     public function handle(array $handlingSubject, array $response)
     {
         $paymentDO = SubjectReader::readPayment($handlingSubject);
-        /** @var \Braintree_Transaction $transaction */
+        /** @var \Braintree\Transaction $transaction */
         $transaction = $response['object']->transaction;
         /**
          * @TODO after changes in sales module should be refactored for new interfaces

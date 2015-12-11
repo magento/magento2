@@ -5,8 +5,8 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
-use Braintree_Result_Successful;
-use Braintree_Transaction;
+use Braintree\Result\Successful;
+use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Response\CardDetailsHandler;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
@@ -135,9 +135,9 @@ class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
                 'last4' => 1231
             ]
         ];
-        $transaction = Braintree_Transaction::factory($attributes);
+        $transaction = Transaction::factory($attributes);
 
-        $mock = $this->getMockBuilder(Braintree_Result_Successful::class)
+        $mock = $this->getMockBuilder(Successful::class)
             ->disableOriginalConstructor()
             ->setMethods(['__get'])
             ->getMock();
