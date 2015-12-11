@@ -14,6 +14,9 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MetadataProvider
 {
     /**
