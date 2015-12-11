@@ -28,7 +28,7 @@
         <arguments>
             <argument name="xFrameOpt" xsi:type="init_parameter">Magento\Framework\App\Response\HeaderProvider\XFrameOptions::DEPLOYMENT_CONFIG_X_FRAME_OPT</argument>
         </arguments>
-    </type>
+    </type>
     <type name="Magento\Framework\App\Config\ScopePool">
         <arguments>
             <argument name="readerPool" xsi:type="object">Magento\Store\Model\Config\Reader\ReaderPool\Proxy</argument>
