@@ -246,7 +246,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Config\Config::getCountryAvailableCardTypes
+     * @covers       \Magento\BraintreeTwo\Gateway\Config\Config::getCountryAvailableCardTypes
      * @dataProvider getCountrySpecificCardTypeConfigDataProvider
      */
     public function testCountryAvailableCardTypes($data, $countryData)
@@ -262,6 +262,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @covers \Magento\BraintreeTwo\Gateway\Config\Config::isCvvEnabled
+     */
     public function testUseCvv()
     {
         $this->scopeConfigMock->expects(static::any())
@@ -270,6 +273,104 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         static::assertEquals(true, $this->model->isCvvEnabled());
+    }
+
+    /**
+     * @param mixed $data
+     * @param boolean $expected
+     * @dataProvider verify3DSecureDataProvider
+     * @covers       \Magento\BraintreeTwo\Gateway\Config\Config::isVerify3DSecure
+     */
+    public function testIsVerify3DSecure($data, $expected)
+    {
+        $this->scopeConfigMock->expects(static::any())
+            ->method('getValue')
+            ->with($this->getPath(Config::KEY_VERIFY_3DSECURE), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($data);
+        static::assertEquals($expected, $this->model->isVerify3DSecure());
+    }
+
+    /**
+     * Get items to verify 3d secure testing
+     * @return array
+     */
+    public function verify3DSecureDataProvider()
+    {
+        return [
+            ['data' => 1, 'expected' => true],
+            ['data' => true, 'expected' => true],
+            ['data' => '1', 'expected' => true],
+            ['data' => 0, 'expected' => false],
+            ['data' => '0', 'expected' => false],
+            ['data' => false, 'expected' => false],
+        ];
+    }
+
+    /**
+     * @param mixed $data
+     * @param double $expected
+     * @covers \Magento\BraintreeTwo\Gateway\Config\Config::getThresholdAmount
+     * @dataProvider thresholdAmountDataProvider
+     */
+    public function testGetThresholdAmount($data, $expected)
+    {
+        $this->scopeConfigMock->expects(static::any())
+            ->method('getValue')
+            ->with($this->getPath(Config::KEY_THRESHOLD_AMOUNT), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($data);
+        static::assertEquals($expected, $this->model->getThresholdAmount());
+    }
+
+    /**
+     * Get items for testing threshold amount
+     * @return array
+     */
+    public function thresholdAmountDataProvider()
+    {
+        return [
+            ['data' => '23.01', 'expected' => 23.01],
+            ['data' => -1.02, 'expected' => -1.02],
+            ['data' => true, 'expected' => 1],
+            ['data' => 'true', 'expected' => 0],
+            ['data' => 'abc', 'expected' => 0],
+            ['data' => false, 'expected' => 0],
+            ['data' => 'false', 'expected' => 0],
+            ['data' => 1, 'expected' => 1],
+        ];
+    }
+
+    /**
+     * @param int $value
+     * @param array $expected
+     * @covers \Magento\BraintreeTwo\Gateway\Config\Config::get3DSecureSpecificCountries
+     * @dataProvider threeDSecureSpecificCountriesDataProvider
+     */
+    public function testGet3DSecureSpecificCountries($value, array $expected)
+    {
+        $this->scopeConfigMock->expects(static::at(0))
+            ->method('getValue')
+            ->with($this->getPath(Config::KEY_VERIFY_ALLOW_SPECIFIC), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($value);
+
+        if ($value !== Config::VALUE_3DSECURE_ALL) {
+            $this->scopeConfigMock->expects(static::at(1))
+                ->method('getValue')
+                ->with($this->getPath(Config::KEY_VERIFY_SPECIFIC), ScopeInterface::SCOPE_STORE, null)
+                ->willReturn('GB,US');
+        }
+        static::assertEquals($expected, $this->model->get3DSecureSpecificCountries());
+    }
+
+    /**
+     * Get variations to test specific countries for 3d secure
+     * @return array
+     */
+    public function threeDSecureSpecificCountriesDataProvider()
+    {
+        return [
+            ['configValue' => 0, 'expected' => []],
+            ['configValue' => 1, 'expected' => ['GB', 'US']],
+        ];
     }
 
     /**

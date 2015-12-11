@@ -82,7 +82,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->paymentTokenMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(null)
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionFactoryMock = $this
@@ -138,6 +138,13 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(Config::KEY_VAULT_PAYMENT)
             ->willReturn('braintreetwo');
+
+        $this->paymentExtension->expects($this->once())
+            ->method('setVaultPaymentToken')
+            ->with($this->paymentTokenMock);
+        $this->paymentExtension->expects($this->once())
+            ->method('getVaultPaymentToken')
+            ->willReturn($this->paymentTokenMock);
 
         $paymentData = $this->getPaymentDataObjectMock();
         $subject['payment'] = $paymentData;

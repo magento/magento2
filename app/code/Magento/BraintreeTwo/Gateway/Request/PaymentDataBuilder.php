@@ -5,16 +5,19 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Request;
 
+use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\BraintreeTwo\Helper\Formatter;
+use Magento\BraintreeTwo\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Observer\DataAssignObserver;
 
 /**
  * Payment Data Builder
  */
 class PaymentDataBuilder implements BuilderInterface
 {
+    use Formatter;
+
     /**
      * The billing amount of the request. This value must be greater than 0,
      * and must match the currency format of the merchant account.
@@ -63,7 +66,7 @@ class PaymentDataBuilder implements BuilderInterface
         $payment = $paymentDO->getPayment();
 
         $result = [
-            self::AMOUNT => sprintf('%.2F', SubjectReader::readAmount($buildSubject)),
+            self::AMOUNT => $this->formatPrice(SubjectReader::readAmount($buildSubject)),
             self::PAYMENT_METHOD_NONCE => $payment->getAdditionalInformation(
                 DataAssignObserver::PAYMENT_METHOD_NONCE
             )

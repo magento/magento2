@@ -16,10 +16,23 @@ define([
         validators: [],
 
         /**
+         * Get payment config
+         * @returns {Object}
+         */
+        getConfig: function () {
+            return window.checkoutConfig.payment;
+        },
+
+        /**
          * Init list of validators
          */
         initialize: function () {
-            this.add(verify3DSecure);
+            var config = this.getConfig();
+
+            if (config[verify3DSecure.getCode()].enabled) {
+                verify3DSecure.setConfig(config[verify3DSecure.getCode()]);
+                this.add(verify3DSecure);
+            }
         },
 
         /**
