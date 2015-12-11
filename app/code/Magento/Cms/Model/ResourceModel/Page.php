@@ -157,19 +157,6 @@ class Page extends AbstractDb
             $this->getConnection()->insertMultiple($table, $data);
         }
 
-        $this->getConnection()->query('SET foreign_key_checks = 0');
-        $this->getConnection()->update(
-            $this->getTable('cms_page'),
-            ['row_id' => new \Zend_Db_Expr('row_id+1000000')],
-            ['row_id = ?' => $object->getRowId()]
-        );
-        $this->getConnection()->update(
-            $this->getTable('cms_page_store'),
-            ['row_id' => new \Zend_Db_Expr('row_id+1000000')],
-            ['row_id = ?' => $object->getRowId()]
-        );
-        $this->getConnection()->query('SET foreign_key_checks = 1');
-
         return parent::_afterSave($object);
     }
 
