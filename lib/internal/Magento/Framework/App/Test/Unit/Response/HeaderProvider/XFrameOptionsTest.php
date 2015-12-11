@@ -11,11 +11,11 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerH
 
 class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
 {
-    /** Strict-Transport-Security (HSTS) Header name */
+    /** X-Frame-Option Header name */
     const HEADER_NAME = 'X-Frame-Options';
 
     /**
-     * Strict-Transport-Security (HSTS) header value
+     * X-Frame-Option header value
      */
     const HEADER_VALUE = 'TEST_OPTION';
 
