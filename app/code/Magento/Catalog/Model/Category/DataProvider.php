@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
@@ -155,10 +155,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
         $category = $this->getCurrentCategory();
         if (!$category->getId()) {
-            $result = [];
-            $result['']['general']['parent'] = (int)$this->request->getParam('parent');
-            $result['']['general']['is_anchor'] = false;
-            return $result;
+            return $this->getDefaultData();
         } else {
             $categoryData = $category->getData();
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
@@ -184,7 +181,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
-        /* @var Attribute $attribute */
+        /* @var EavAttribute $attribute */
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
@@ -273,10 +270,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * GLOBAL | WEBSITE | STORE
      *
-     * @param Attribute $attribute
+     * @param EavAttribute $attribute
      * @return string
      */
-    public function getScopeLabel(Attribute $attribute)
+    public function getScopeLabel(EavAttribute $attribute)
     {
         $html = '';
         if (
@@ -305,5 +302,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function filterFields($categoryData)
     {
         return array_diff_key($categoryData, array_flip($this->ignoreFields));
+    }
+
+    /**
+     * Category's fields default values
+     * @return array
+     */
+    public function getDefaultData()
+    {
+        $result = [];
+        $result['']['general']['parent'] = (int)$this->request->getParam('parent');
+        $result['']['general']['is_anchor'] = false;
+        $result['']['general']['use_config']['available_sort_by'] = true;
+        $result['']['general']['use_config']['default_sort_by'] = true;
+        $result['']['general']['use_config']['filter_price_range'] = true;
+        return $result;
     }
 }
