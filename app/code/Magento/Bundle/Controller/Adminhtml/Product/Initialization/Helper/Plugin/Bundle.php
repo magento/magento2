@@ -7,6 +7,7 @@ namespace Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plug
 
 use Magento\Bundle\Api\Data\OptionInterfaceFactory as OptionFactory;
 use Magento\Bundle\Api\Data\LinkInterfaceFactory as LinkFactory;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Framework\App\RequestInterface;
@@ -16,6 +17,11 @@ use Magento\Framework\App\RequestInterface;
  */
 class Bundle
 {
+    /**
+     * @var ProductCustomOptionInterfaceFactory
+     */
+    protected $customOptionFactory;
+
     /**
      * @var RequestInterface
      */
@@ -47,19 +53,22 @@ class Bundle
      * @param LinkFactory $linkFactory
      * @param ProductRepository $productRepository
      * @param StoreManager $storeManager
+     * @param ProductCustomOptionInterfaceFactory $customOptionFactory
      */
     public function __construct(
         RequestInterface $request,
         OptionFactory $optionFactory,
         LinkFactory $linkFactory,
         ProductRepository $productRepository,
-        StoreManager $storeManager
+        StoreManager $storeManager,
+        ProductCustomOptionInterfaceFactory $customOptionFactory
     ) {
         $this->request = $request;
         $this->optionFactory = $optionFactory;
         $this->linkFactory = $linkFactory;
         $this->productRepository = $productRepository;
-        $this->storeManager =$storeManager;
+        $this->storeManager = $storeManager;
+        $this->customOptionFactory = $customOptionFactory;
     }
 
     /**
@@ -123,7 +132,16 @@ class Bundle
                 foreach (array_keys($customOptions) as $key) {
                     $customOptions[$key]['is_delete'] = 1;
                 }
-                $product->setProductOptions($customOptions);
+                $newOptions = $product->getOptions();
+                foreach ($customOptions as $customOptionData) {
+                    if (!(bool)$customOptionData['is_delete']) {
+                        $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
+                        $customOption->setProductSku($product->getSku());
+                        $customOption->setOptionId(null);
+                        $newOptions[] = $customOption;
+                    }
+                }
+                $product->setOptions($newOptions);
             }
         }
 

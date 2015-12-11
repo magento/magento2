@@ -15,6 +15,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Converter
 {
     /**
+     * @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory
+     */
+    protected $productCustomOptionFactory;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
      */
     protected $collectionFactory;
@@ -25,9 +30,11 @@ class Converter
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $productCustomOptionFactory
     ) {
         $this->collectionFactory = $collectionFactory;
+        $this->productCustomOptionFactory = $productCustomOptionFactory;
     }
 
     /**
@@ -113,7 +120,16 @@ class Converter
             $optionDataArray['is_delete'] = 1;
             $newOptions[] = $optionDataArray;
         }
-        $product->setProductOptions($newOptions);
+        $customOptions = $product->getOptions();
+        foreach ($newOptions as $customOptionData) {
+            if (!(bool)$customOptionData['is_delete']) {
+                $customOption = $this->productCustomOptionFactory->create(['data' => $customOptionData]);
+                $customOption->setProductSku($product->getSku());
+                $customOption->setOptionId(null);
+                $customOptions[] = $customOption;
+            }
+        }
+        $product->setOptions($customOptions);
         return $this;
     }
 }
