@@ -31,12 +31,12 @@ class XFrameOptions extends AbstractHeader
      *
      * @var string
      */
-    protected $value = 'SAMEORIGIN';
+    protected $value;
 
     /**
      * @param string $xFrameOpt
      */
-    public function __construct($xFrameOpt)
+    public function __construct($xFrameOpt = 'SAMEORIGIN')
     {
         $this->value = $xFrameOpt;
     }
