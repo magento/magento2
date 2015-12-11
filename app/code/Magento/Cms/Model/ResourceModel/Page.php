@@ -161,6 +161,20 @@ class Page extends AbstractDb
     }
 
     /**
+     * Load an object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param mixed $value
+     * @param string $field field to load by (defaults to model id)
+     * @return $this
+     */
+    public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
+    {
+        $this->entityManager->load(PageInterface::class, $object, $value);
+        return $this;
+    }
+
+    /**
      * Perform operations after object load
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -415,20 +429,6 @@ class Page extends AbstractDb
             $object->setHasDataChanges(true);
             throw $e;
         }
-        return $this;
-    }
-
-    /**
-     * Load an object
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @param mixed $value
-     * @param string $field field to load by (defaults to model id)
-     * @return $this
-     */
-    public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
-    {
-        $this->entityManager->load(PageInterface::class, $object, $value);
         return $this;
     }
 }
