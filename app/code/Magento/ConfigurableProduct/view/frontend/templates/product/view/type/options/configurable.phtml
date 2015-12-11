@@ -34,7 +34,7 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
             "#product_addtocart_form": {
                 "configurable": {
                     "spConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>,
-                    "onlyMainImg": true
+                    "onlyMainImg": <?php /* @escapeNotVerified */ echo $block->getVar('change_only_base_image', 'Magento_ConfigurableProduct') ?: 'false'; ?>
                 }
             }
         }
