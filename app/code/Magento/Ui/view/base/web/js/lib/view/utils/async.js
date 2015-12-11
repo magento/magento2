@@ -8,7 +8,7 @@ define([
     'underscore',
     'uiRegistry',
     './dom-observer',
-    'Magento_Ui/js/lib/ko/extender/bound-nodes',
+    'Magento_Ui/js/lib/knockout/extender/bound-nodes',
     './bindings'
 ], function (ko, $, _, registry, domObserver, boundedNodes) {
     'use strict';
