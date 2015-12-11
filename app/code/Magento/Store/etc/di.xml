@@ -313,4 +313,12 @@
             <argument name="modulePrefix" xsi:type="string">store</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Response\HeaderManager">
+        <arguments>
+            <argument name="headerProviderList" xsi:type="array">
+                <item name="HSTSHeader" xsi:type="object">Magento\Store\Model\HeaderProvider\Hsts</item>
+                <item name="upgrade-insecure-requests" xsi:type="object">Magento\Store\Model\HeaderProvider\UpgradeInsecure</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

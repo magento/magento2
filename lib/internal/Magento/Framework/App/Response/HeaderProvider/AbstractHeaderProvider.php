@@ -6,12 +6,10 @@
 
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
-
 /**
  * Class to be used for setting headers with static values
  */
-abstract class AbstractHeader implements HeaderProviderInterface
+abstract class AbstractHeaderProvider implements \Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface
 {
     /** @var string */
     protected $name = '';
