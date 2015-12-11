@@ -9,11 +9,24 @@ define([
     'jquery',
     'Magento_BraintreeTwo/js/view/payment/method-renderer/cc-form',
     'Magento_BraintreeTwo/js/validator',
+    'Magento_Vault/js/view/payment/vault-enabler',
     'mage/translate'
-], function ($, Component, validator, $t) {
+], function ($, Component, validator, vaultEnabler, $t) {
     'use strict';
 
     return Component.extend({
+
+        defaults: {
+            template: 'Magento_BraintreeTwo/payment/form'
+        },
+
+        initialize: function () {
+            this._super();
+            this.vaultEnabler = vaultEnabler();
+            this.vaultEnabler.setPaymentCode(this.getCode());
+
+            return this;
+        },
 
         /**
          * Init Braintree client
@@ -44,6 +57,18 @@ define([
                     self.paymentMethodNonce = '';
                 }
             });
+        },
+
+        getData: function () {
+            var data = this._super();
+
+            this.vaultEnabler.visitAdditionalData(data);
+
+            return data;
+        },
+
+        isVaultEnabled: function() {
+            return this.vaultEnabler.isVaultEnabled();
         },
 
         /**
