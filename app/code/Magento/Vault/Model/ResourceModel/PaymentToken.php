@@ -47,18 +47,22 @@ class PaymentToken extends AbstractDb
     /**
      * Get payment token by gateway token.
      *
-     * @param int $customerId Customer ID.
      * @param string $token The gateway token.
+     * @param int $customerId Customer ID.
      * @return array
      */
-    public function getByGatewayToken($customerId, $token)
+    public function getByGatewayToken($token, $customerId = 0)
     {
         $connection = $this->getConnection();
         $select = $connection
             ->select()
             ->from($this->getMainTable())
-            ->where('customer_id = ?', $customerId, $token)
             ->where('gateway_token = ?', $token);
+        if ($customerId > 0) {
+            $select = $select->where('customer_id = ?', $customerId);
+        } else {
+            $select = $select->where('customer_id IS NULL');
+        }
         return $connection->fetchRow($select);
     }
 

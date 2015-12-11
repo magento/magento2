@@ -123,7 +123,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      */
     public function getByGatewayToken($customerId, $token)
     {
-        $tokenData = $this->paymentTokenResourceModel->getByGatewayToken($customerId, $token);
+        $tokenData = $this->paymentTokenResourceModel->getByGatewayToken($token, $customerId);
         $tokenModel = !empty($tokenData) ? $this->paymentTokenFactory->create(['data' => $tokenData]) : null;
         return $tokenModel;
     }
