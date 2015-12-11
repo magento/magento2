@@ -143,10 +143,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
         $category = $this->getCurrentCategory();
         if (!$category->getId()) {
-            $result = [];
-            $result['']['general']['parent'] = (int)$this->request->getParam('parent');
-            $result['']['general']['is_anchor'] = false;
-            return $result;
+            return $this->getDefaultData();
         } else {
             $categoryData = $category->getData();
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
@@ -293,5 +290,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function filterFields($categoryData)
     {
         return array_diff_key($categoryData, array_flip($this->ignoreFields));
+    }
+
+    /**
+     * Category's fields default values
+     * @return array
+     */
+    public function getDefaultData()
+    {
+        $result = [];
+        $result['']['general']['parent'] = (int)$this->request->getParam('parent');
+        $result['']['general']['is_anchor'] = false;
+        $result['']['general']['use_config']['available_sort_by'] = true;
+        $result['']['general']['use_config']['default_sort_by'] = true;
+        $result['']['general']['use_config']['filter_price_range'] = true;
+        return $result;
     }
 }
