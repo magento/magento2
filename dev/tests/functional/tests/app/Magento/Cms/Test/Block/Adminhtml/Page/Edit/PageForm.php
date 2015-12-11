@@ -82,6 +82,20 @@ class PageForm extends Form
     protected $collapsibleElements = '.admin__collapsible-title';
 
     /**
+     * Magento form loader.
+     *
+     * @var string
+     */
+    protected $spinner = '[data-role="spinner"]';
+
+    /**
+     * Customer form to load.
+     *
+     * @var string
+     */
+    protected $activeFormTab = '.form-inline';
+
+    /**
      * Fixture factory.
      *
      * @var FixtureFactory
@@ -170,6 +184,18 @@ class PageForm extends Form
             ['element' => $this->_rootElement->find($this->widgetBlock, Locator::SELECTOR_XPATH)]
         );
     }
+
+    /**
+     * Wait for User before fill form which calls JS validation on correspondent form.
+     *
+     * @return void
+     */
+    public function waitForm()
+    {
+        $this->waitForElementNotVisible($this->spinner);
+        $this->waitForElementVisible($this->activeFormTab);
+    }
+
     /**
      * Show collapsible elements.
      *
@@ -198,6 +224,7 @@ class PageForm extends Form
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
+        $this->waitForm();
         $this->showCollapsible();
         $data = $fixture->getData();
         $fields = isset($data['fields']) ? $data['fields'] : $data;
