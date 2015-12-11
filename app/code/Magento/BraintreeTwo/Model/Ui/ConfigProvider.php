@@ -7,6 +7,7 @@ namespace Magento\BraintreeTwo\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ConfigProvider
@@ -47,6 +48,11 @@ final class ConfigProvider implements ConfigProviderInterface
                     'availableCardTypes' => $this->config->getAvailableCardTypes(),
                     'useCvv' => $this->config->isCvvEnabled()
                 ],
+                Config::CODE_3DSECURE => [
+                    'enabled' => $this->config->isVerify3DSecure(),
+                    'thresholdAmount' => $this->config->getThresholdAmount(),
+                    'specificCountries' => $this->config->get3DSecureSpecificCountries()
+                ]
             ]
         ];
     }

@@ -1,0 +1,227 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
+
+use Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler;
+use Magento\Sales\Api\Data\OrderPaymentExtension;
+use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Braintree_Transaction;
+use Braintree_Result_Successful;
+use Magento\Vault\Gateway\Config\Config;
+use Magento\Vault\Model\PaymentToken;
+use Magento\Vault\Model\PaymentTokenFactory;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
+
+/**
+ * VaultDetailsHandler Test
+ * @package Magento\BraintreeTwo\Test\Unit\Gateway\Response
+ */
+class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+{
+    const TRANSACTION_ID = '432erwwe';
+
+    /**
+     * @var \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler
+     */
+    private $paymentHandler;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Payment|MockObject
+     */
+    private $payment;
+
+    /**
+     * @var \Magento\Vault\Model\PaymentTokenFactory|MockObject paymentTokenFactoryMock
+     */
+    protected $paymentTokenFactoryMock;
+
+    /**
+     * @var \Magento\Vault\Model\PaymentToken|MockObject paymentTokenMock
+     */
+    protected $paymentTokenMock;
+
+    /**
+     * @var \Magento\Sales\Api\Data\OrderPaymentExtension|MockObject paymentExtension
+     */
+    protected $paymentExtension;
+
+    /**
+     * @var \Magento\Sales\Api\Data\OrderPaymentExtensionFactory|MockObject paymentExtensionFactoryMock
+     */
+    protected $paymentExtensionFactoryMock;
+
+    /**
+     * @var \Magento\Sales\Model\Order|MockObject salesOrderMock
+     */
+    protected $salesOrderMock;
+
+    /**
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configMock;
+
+    protected function setUp()
+    {
+        $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
+            ->setMethods(null)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->paymentTokenFactoryMock = $this->getMockBuilder(PaymentTokenFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->paymentTokenFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->paymentTokenMock);
+
+        $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->paymentExtensionFactoryMock = $this
+            ->getMockBuilder(OrderPaymentExtensionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->paymentExtensionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->paymentExtension);
+
+        // Sales Order Model
+        $this->salesOrderMock = $this->getMockBuilder(Order::class)
+            ->setMethods(null)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->payment = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getMethod',
+                'getOrder'
+            ])
+            ->getMock();
+
+        $this->payment->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($this->salesOrderMock);
+
+        $this->configMock = $this->getMockBuilder(Config::class)
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->paymentHandler = new VaultDetailsHandler(
+            $this->configMock,
+            $this->paymentTokenFactoryMock,
+            $this->paymentExtensionFactoryMock
+        );
+    }
+
+    /**
+     * @covers \Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler::handle
+     */
+    public function testHandle()
+    {
+        $this->configMock->expects($this->at(0))
+            ->method('getValue')
+            ->with(Config::KEY_ACTIVE)
+            ->willReturn(1);
+
+        $this->configMock->expects($this->at(1))
+            ->method('getValue')
+            ->with(Config::KEY_VAULT_PAYMENT)
+            ->willReturn('braintreetwo');
+
+        $this->paymentExtension->expects($this->once())
+            ->method('setVaultPaymentToken')
+            ->with($this->paymentTokenMock);
+        $this->paymentExtension->expects($this->once())
+            ->method('getVaultPaymentToken')
+            ->willReturn($this->paymentTokenMock);
+
+        $paymentData = $this->getPaymentDataObjectMock();
+        $subject['payment'] = $paymentData;
+
+        $response = [
+            'object' => $this->getBraintreeTransaction()
+        ];
+
+        $this->salesOrderMock->setCustomerId(10);
+
+        $this->paymentHandler->handle($subject, $response);
+
+        $this->assertEquals('rh3gd4', $this->paymentTokenMock->getGatewayToken());
+        $this->assertEquals('10', $this->paymentTokenMock->getCustomerId());
+        $this->assertSame($this->paymentTokenMock, $this->payment->getExtensionAttributes()->getVaultPaymentToken());
+    }
+
+    /**
+     * Create mock for payment data object and order payment
+     * @return MockObject
+     */
+    private function getPaymentDataObjectMock()
+    {
+        $mock = $this->getMockBuilder(PaymentDataObject::class)
+            ->setMethods(['getPayment'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock->expects($this->once())
+            ->method('getPayment')
+            ->willReturn($this->payment);
+
+        return $mock;
+    }
+
+    /**
+     * Create Braintree transaction
+     * @return MockObject
+     */
+    private function getBraintreeTransaction()
+    {
+        $attributes = [
+            'id' => self::TRANSACTION_ID,
+            'creditCardDetails' => $this->getCreditCardDetails()
+        ];
+
+        $transaction = Braintree_Transaction::factory($attributes);
+
+        $mock = $this->getMockBuilder(Braintree_Result_Successful::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__get'])
+            ->getMock();
+
+        $mock->expects($this->once())
+            ->method('__get')
+            ->with('transaction')
+            ->willReturn($transaction);
+
+        return $mock;
+    }
+
+    /**
+     * Create Braintree transaction
+     * @return \Braintree_Transaction_CreditCardDetails
+     */
+    private function getCreditCardDetails()
+    {
+        $attributes = [
+            'token' => 'rh3gd4',
+            'bin' => '5421',
+            'cardType' => 'American Express',
+            'expirationMonth' => 12,
+            'expirationYear' => 21,
+            'last4' => 1231
+        ];
+
+        $creditCardDetails = new \Braintree_Transaction_CreditCardDetails($attributes);
+        return $creditCardDetails;
+    }
+}

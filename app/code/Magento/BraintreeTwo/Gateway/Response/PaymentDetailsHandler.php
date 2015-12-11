@@ -5,18 +5,15 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Response;
 
-use Braintree_Transaction;
+use Braintree\Transaction;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Model\PaymentTokenFactory;
 
 /**
- * Class PaymentDetailsHandler
+ * Payment Details Handler
  * @package Magento\BraintreeTwo\Gateway\Response
  */
 class PaymentDetailsHandler implements HandlerInterface
@@ -33,6 +30,10 @@ class PaymentDetailsHandler implements HandlerInterface
 
     const PROCESSOR_RESPONSE_TEXT = 'processorResponseText';
 
+    const LIABILITY_SHIFTED = 'liabilityShifted';
+
+    const LIABILITY_SHIFT_POSSIBLE = 'liabilityShiftPossible';
+
     /**
      * List of additional details
      * @var array
@@ -47,39 +48,17 @@ class PaymentDetailsHandler implements HandlerInterface
     ];
 
     /**
-     * @var PaymentTokenFactory
-     */
-    protected $paymentTokenFactory;
-
-    /**
-     * @var OrderPaymentExtensionFactory
-     */
-    protected $paymentExtensionFactory;
-
-    /**
-     * @param PaymentTokenFactory $paymentTokenFactory
-     * @param OrderPaymentExtensionFactory $paymentExtensionFactory
-     */
-    public function __construct(
-        PaymentTokenFactory $paymentTokenFactory,
-        OrderPaymentExtensionFactory $paymentExtensionFactory
-    ) {
-        $this->paymentTokenFactory = $paymentTokenFactory;
-        $this->paymentExtensionFactory = $paymentExtensionFactory;
-    }
-
-    /**
      * @inheritdoc
      */
     public function handle(array $handlingSubject, array $response)
     {
         $paymentDO = SubjectReader::readPayment($handlingSubject);
-        /** @var \Braintree_Transaction $transaction */
+        /** @var \Braintree\Transaction $transaction */
         $transaction = $response['object']->transaction;
         /**
          * @TODO after changes in sales module should be refactored for new interfaces
          */
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
+        /** @var Payment $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
@@ -88,17 +67,7 @@ class PaymentDetailsHandler implements HandlerInterface
         $payment->setLastTransId($transaction->id);
         $payment->setIsTransactionClosed(false);
 
-        // add vault payment token entity to extension attributes
-        $paymentToken = $this->getVaultPaymentToken($transaction, $payment);
-        if (null !== $paymentToken) {
-            $extensionAttributes = $payment->getExtensionAttributes();
-            if (null === $extensionAttributes) {
-                $extensionAttributes = $this->paymentExtensionFactory->create();
-                $payment->setExtensionAttributes($extensionAttributes);
-            }
-            $extensionAttributes->setVaultPaymentToken($paymentToken);
-        }
-
+        $this->process3DSecure($transaction, $payment);
         //remove previously set payment nonce
         $payment->unsAdditionalInformation(DataAssignObserver::PAYMENT_METHOD_NONCE);
         foreach ($this->additionalInformationMapping as $item) {
@@ -110,31 +79,21 @@ class PaymentDetailsHandler implements HandlerInterface
     }
 
     /**
-     * Get vault payment token entity
-     *
-     * @param Braintree_Transaction $transaction
-     * @param Payment $payment
-     * @return PaymentTokenInterface|null
+     * Process 3d secure details
+     * @param \Braintree\Transaction $transaction
+     * @param \Magento\Sales\Model\Order\Payment $payment
      */
-    protected function getVaultPaymentToken(
-        \Braintree_Transaction $transaction,
-        \Magento\Sales\Model\Order\Payment $payment
-    ) {
-        // Check token existing in gateway response
-        $token = $transaction->creditCardDetails->token;
-        if (empty($token)) {
-            return null;
+    protected function process3DSecure(Transaction $transaction, Payment $payment)
+    {
+        if (empty($transaction->threeDSecureInfo)) {
+            // remove 3d secure details if they were set previously
+            $payment->unsAdditionalInformation(self::LIABILITY_SHIFTED);
+            $payment->unsAdditionalInformation(self::LIABILITY_SHIFT_POSSIBLE);
+            return;
         }
-
-        $order = $payment->getOrder();
-
-        /** @var PaymentTokenInterface $paymentToken */
-        $paymentToken = $this->paymentTokenFactory->create();
-        $paymentToken->setGatewayToken($token);
-        $paymentToken->setCustomerId($order->getCustomerId());
-        $paymentToken->setPaymentMethodCode($payment->getMethod());
-        $paymentToken->setCreatedAt($order->getCreatedAt());
-
-        return $paymentToken;
+        /** @var \Braintree\ThreeDSecureInfo $info */
+        $info = $transaction->threeDSecureInfo;
+        $payment->setAdditionalInformation(self::LIABILITY_SHIFTED, $info->liabilityShifted);
+        $payment->setAdditionalInformation(self::LIABILITY_SHIFT_POSSIBLE, $info->liabilityShiftPossible);
     }
 }
