@@ -97,7 +97,7 @@ class Elasticsearch
         $this->clientConfig = $clientConfig;
         $this->indexBuilder = $indexBuilder;
         $this->logger = $logger;
-        $this->indexNameResolve = $indexNameResolver;
+        $this->indexNameResolver = $indexNameResolver;
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
@@ -164,7 +164,7 @@ class Elasticsearch
         if (count($documents)) {
             try {
                 $this->checkIndex($storeId, false, $entityType);
-                $indexName = $this->indexNameResolve->getIndexName($storeId, $entityType, $this->preparedIndex);
+                $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName, $entityType);
                 $this->client->bulkQuery($bulkIndexDocuments);
             } catch (\Exception $e) {
@@ -186,14 +186,14 @@ class Elasticsearch
     public function cleanIndex($storeId, $entityType)
     {
         $this->checkIndex($storeId, true, $entityType);
-        $indexName = $this->indexNameResolve->getIndexName($storeId, $entityType, $this->preparedIndex);
+        $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
         if ($this->client->isEmptyIndex($indexName)) {
             // use existing index if empty
             return $this;
         }
 
         // prepare new index name and increase version
-        $indexPattern = $this->indexNameResolve->getIndexPattern($storeId, $entityType);
+        $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $entityType);
         $version = intval(str_replace($indexPattern, '', $indexName));
         $newIndexName = $indexPattern . ++$version;
 
@@ -221,7 +221,7 @@ class Elasticsearch
     {
         try {
             $this->checkIndex($storeId, false, $entityType);
-            $indexName = $this->indexNameResolve->getIndexName($storeId, $entityType, $this->preparedIndex);
+            $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
             $bulkDeleteDocuments = $this->getDocsArrayInBulkIndexFormat(
                 $documentIds,
                 $indexName,
@@ -285,14 +285,14 @@ class Elasticsearch
     protected function checkIndex($storeId, $checkAlias = true, $entityType)
     {
         // create new index for store
-        $indexName = $this->indexNameResolve->getIndexName($storeId, $entityType, $this->preparedIndex);
+        $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
         if (!$this->client->indexExists($indexName)) {
             $this->prepareIndex($storeId, $indexName);
         }
 
         // add index to alias
         if ($checkAlias) {
-            $namespace = $this->indexNameResolve->getIndexNameForAlias($storeId, $entityType);
+            $namespace = $this->indexNameResolver->getIndexNameForAlias($storeId, $entityType);
             if (!$this->client->existsAlias($namespace, $indexName)) {
                 $this->client->updateAlias($namespace, $indexName);
             }
@@ -313,13 +313,13 @@ class Elasticsearch
             return $this;
         }
 
-        $oldIndex = $this->indexNameResolve->getIndexFromAlias($storeId, $entityType);
+        $oldIndex = $this->indexNameResolver->getIndexFromAlias($storeId, $entityType);
         if ($oldIndex == $this->preparedIndex[$storeId]) {
             $oldIndex = '';
         }
 
         $this->client->updateAlias(
-            $this->indexNameResolve->getIndexNameForAlias($storeId, $entityType),
+            $this->indexNameResolver->getIndexNameForAlias($storeId, $entityType),
             $this->preparedIndex[$storeId],
             $oldIndex
         );
