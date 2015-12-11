@@ -298,14 +298,13 @@ define([
         _changeProductImage: function () {
             var images,
                 initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
-                galleryObject = $(this.options.mediaGallerySelector).data('gallery'),
-                updateGallery;
+                galleryObject = $(this.options.mediaGallerySelector).data('gallery');
 
             if (this.options.spConfig.images[this.simpleProduct]) {
                 images = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
             }
 
-            updateGallery = function (imagesArr) {
+            function updateGallery(imagesArr) {
                 var mainImg = imagesArr.filter(function (img) {
                     return img.isMain;
                 });
@@ -313,20 +312,22 @@ define([
 
                 galleryObject.updateDataByIndex(0, mainImg[0]);
                 galleryObject.seek(1);
-            };
+            }
 
             if (galleryObject) {
                 if (images) {
-                    if(this.options.onlyMainImg) {
-                        updateGallery(images)
+                    if (this.options.onlyMainImg) {
+                        updateGallery(images);
                     } else {
-                        images.map(function(img) {img.type = 'image'});
+                        images.map(function (img) {
+                            img.type = 'image';
+                        });
                         galleryObject.updateData(images)
-                    };
+                    }
                 } else {
                     this.options.onlyMainImg ?
                         updateGallery(initialImages) :
-                        galleryObject.updateData(this.options.mediaGalleryInitial);
+                        galleryObject.updateData(initialImages);
                 }
             }
         },

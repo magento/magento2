@@ -887,18 +887,21 @@ define([
         },
 
         /**
-         * Check if image to update is from initial set
-         * @param {Object} img
+         * Check if images to update are initial and set their type
+         * @param {Array} images
          */
-        _checkIfInitial: function(img) {
-            var initial = this.options.mediaGalleryInitial[0];
-            if (img.img === initial.img) {
-                img.type = initial.type;
-                img.i = initial.i;
-            }
-            !img.type && (img.type = 'image');
+        _setImageType: function (images) {
+            var initial = this.options.mediaGalleryInitial[0].img;
 
-            return img;
+            if (images[0].img === initial) {
+                images = $.extend(true, [], this.options.mediaGalleryInitial);
+            } else {
+                images.map(function (img) {
+                    img.type = 'image';
+                });
+            }
+
+            return images;
         },
 
         /**
@@ -907,31 +910,24 @@ define([
          * @param {jQuery} context
          * @param {Boolean} isProductViewExist
          */
-        updateBaseImage: function (imgs, context, isProductViewExist) {
-            var justAnImage = imgs[0],
-                images,
+        updateBaseImage: function (images, context, isProductViewExist) {
+            var justAnImage = images[0],
+                imgs,
                 imgToUpdate,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery');
 
-            if(imgs) {
-                images =  $.extend(true, [], imgs);
+            if (images) {
+                imgs = $.extend(true, [], images);
+                imgToUpdate = this._setImageType(imgs);
             }
 
             if (isProductViewExist) {
                 if (this.options.onlyMainImg) {
-                    imgToUpdate = this._checkIfInitial(images[0]);
-                    gallery.updateDataByIndex(0, imgToUpdate);
+                    //to be refactored - main img instead of 0;
+                    gallery.updateDataByIndex(0, imgToUpdate[0]);
                     gallery.seek(1);
                 } else {
-                    if (this.options.mediaGalleryInitial[0].img === images[0].img) {
-                        images = this.options.mediaGalleryInitial;
-                        gallery.updateData(images);
-                    } else {
-                        images.map(function(img) {img.type = 'image'});
-                        gallery.updateData(images);
-                    }
-
-
+                    gallery.updateData(imgToUpdate);
                 }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
