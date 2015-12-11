@@ -55,6 +55,7 @@ define([
             // no available validators
             if (!self.validators.length) {
                 callback();
+                return;
             }
 
             // get list of deferred validators
