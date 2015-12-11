@@ -520,7 +520,27 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
                     <comment>Enter https protocol to use Secure URLs in Admin.</comment>
                 </field>
-                <field id="offloader_header" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enable_hsts" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable HTTP Strict Transport Security (HSTS)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
+                    <comment><![CDATA[See <a href="https://www.owasp.org/index.php/HTTP_Strict_Transport_Security" target="_blank">HTTP Strict Transport Security</a> page for details.]]></comment>
+                    <depends>
+                        <field id="use_in_frontend">1</field>
+                        <field id="use_in_adminhtml">1</field>
+                    </depends>
+                </field>
+                <field id="enable_upgrade_insecure" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Upgrade Insecure Requests</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
+                    <comment><![CDATA[See <a href="http://www.w3.org/TR/upgrade-insecure-requests/" target="_blank">Upgrade Insecure Requests</a> page for details.]]></comment>
+                    <depends>
+                        <field id="use_in_frontend">1</field>
+                        <field id="use_in_adminhtml">1</field>
+                    </depends>
+                </field>
+                <field id="offloader_header" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Offloader header</label>
                 </field>
             </group>
