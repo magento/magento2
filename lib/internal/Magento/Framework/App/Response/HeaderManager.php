@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response;
 
-use Magento\Framework\App\Response\HeaderProviderInterface;
+use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
@@ -17,13 +17,12 @@ class HeaderManager
     private $headerProviders;
 
     /**
-     * @param HeaderProviderInterface[]
+     * @param HeaderProviderInterface[] $headerProviderList
      * @throws LocalizedException In case one of the header providers is invalid
      */
     public function __construct($headerProviderList)
     {
-        foreach ($headerProviderList as $header)
-        {
+        foreach ($headerProviderList as $header) {
             if (!($header instanceof HeaderProviderInterface)) {
                 throw new LocalizedException(new Phrase('Invalid header provider'));
             }
