@@ -46,6 +46,9 @@ class Hsts extends AbstractHeader
         $this->scopeConfig = $scopeConfig;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function canApply()
     {
         return (bool)$this->scopeConfig->isSetFlag(Store::XML_PATH_SECURE_IN_FRONTEND)
