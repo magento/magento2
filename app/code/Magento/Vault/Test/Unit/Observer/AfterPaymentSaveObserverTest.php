@@ -77,7 +77,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(null)
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionFactoryMock = $this
@@ -146,13 +146,23 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         $this->paymentTokenMock->setPaymentMethodCode($method);
         $this->paymentTokenMock->setIsActive($isActive);
 
+        $this->paymentExtension->expects($this->exactly(2))
+            ->method('getVaultPaymentToken')
+            ->willReturn($this->paymentTokenMock);
+
         if (!empty($token)) {
             $this->paymentTokenManagementMock->expects($this->once())
                 ->method('saveTokenWithPaymentLink')
                 ->willReturn(true);
+            $this->paymentExtension->expects($this->once())
+                ->method('setVaultPaymentToken')
+                ->with($this->paymentTokenMock);
         } else {
             $this->paymentTokenManagementMock->expects($this->never())
                 ->method('saveTokenWithPaymentLink');
+            $this->paymentExtension->expects($this->never())
+                ->method('setVaultPaymentToken')
+                ->with($this->paymentTokenMock);
         }
 
         $this->assertSame($this->observer, $this->observer->execute($this->eventObserverArgMock));
