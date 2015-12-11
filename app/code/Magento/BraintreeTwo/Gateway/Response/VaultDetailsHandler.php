@@ -5,7 +5,7 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Response;
 
-use Braintree_Transaction;
+use Braintree\Transaction;
 use Magento\Vault\Gateway\Config\Config;
 use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\Payment\Gateway\Helper\SubjectReader;
@@ -62,7 +62,7 @@ class VaultDetailsHandler implements HandlerInterface
         }
 
         $paymentDO = SubjectReader::readPayment($handlingSubject);
-        /** @var \Braintree_Transaction $transaction */
+        /** @var \Braintree\Transaction $transaction */
         $transaction = $response['object']->transaction;
         /** @var Payment $payment */
         $payment = $paymentDO->getPayment();
@@ -82,12 +82,12 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * Get vault payment token entity
      *
-     * @param Braintree_Transaction $transaction
+     * @param \Braintree\Transaction $transaction
      * @param Payment $payment
      * @return PaymentTokenInterface|null
      */
     protected function getVaultPaymentToken(
-        \Braintree_Transaction $transaction,
+        \Braintree\Transaction $transaction,
         Payment $payment
     ) {
         // Check token existing in gateway response
