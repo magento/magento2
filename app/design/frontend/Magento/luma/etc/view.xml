@@ -256,7 +256,7 @@
     </vars>
 
     <vars module="Magento_ConfigurableProduct">
-        <var name="change_only_base_image">false</var>
+        <var name="change_only_base_image">true</var>
     </vars>
     <vars module="Magento_Swatches">
         <var name="change_only_base_image">true</var>

@@ -907,10 +907,15 @@ define([
          * @param {jQuery} context
          * @param {Boolean} isProductViewExist
          */
-        updateBaseImage: function (images, context, isProductViewExist) {
-            var justAnImage = images[0],
+        updateBaseImage: function (imgs, context, isProductViewExist) {
+            var justAnImage = imgs[0],
+                images,
                 imgToUpdate,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery');
+
+            if(imgs) {
+                images =  $.extend(true, [], imgs);
+            }
 
             if (isProductViewExist) {
                 if (this.options.onlyMainImg) {
@@ -918,7 +923,15 @@ define([
                     gallery.updateDataByIndex(0, imgToUpdate);
                     gallery.seek(1);
                 } else {
-                    gallery.updateData(images);
+                    if (this.options.mediaGalleryInitial[0].img === images[0].img) {
+                        images = this.options.mediaGalleryInitial;
+                        gallery.updateData(images);
+                    } else {
+                        images.map(function(img) {img.type = 'image'});
+                        gallery.updateData(images);
+                    }
+
+
                 }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);

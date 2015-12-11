@@ -317,9 +317,12 @@ define([
 
             if (galleryObject) {
                 if (images) {
-                    this.options.onlyMainImg ?
-                        updateGallery(images) :
-                        galleryObject.updateData(images);
+                    if(this.options.onlyMainImg) {
+                        updateGallery(images)
+                    } else {
+                        images.map(function(img) {img.type = 'image'});
+                        galleryObject.updateData(images)
+                    };
                 } else {
                     this.options.onlyMainImg ?
                         updateGallery(initialImages) :
