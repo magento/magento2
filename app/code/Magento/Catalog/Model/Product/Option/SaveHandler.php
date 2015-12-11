@@ -65,7 +65,7 @@ class SaveHandler
         foreach ($this->optionRepository->getProductOptions($entity) as $oldOption) {
             $toDelete = true;
             foreach ($options as $option) {
-                if ($oldOption->getOptionId() == $option->getOptionId()) {
+                if ($oldOption->getOptionId() === $option->getOptionId()) {
                     $toDelete = false;
                 }
             }
