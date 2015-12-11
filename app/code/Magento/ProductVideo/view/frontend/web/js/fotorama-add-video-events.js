@@ -524,7 +524,6 @@ define([
 
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
-                    $(this).find('img').hide();
 
                     if (!self.isFullscreen) {
                         self._showCloseVideo();
