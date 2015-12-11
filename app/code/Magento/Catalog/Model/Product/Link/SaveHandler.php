@@ -73,8 +73,8 @@ class SaveHandler
     {
         foreach ($this->productLinkRepository->getList($entity) as $oldLink) {
             $toDelete = true;
-            foreach ($links as $option) {
-                if ($oldLink->getLinkedProductSku() === $option->getLinkedProductSku()) {
+            foreach ($links as $link) {
+                if ($oldLink->getLinkedProductSku() === $link->getLinkedProductSku()) {
                     $toDelete = false;
                 }
             }
