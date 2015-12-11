@@ -5,10 +5,13 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\Console\Input;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Console\Command\AdminUserCreateCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\User\Model\UserValidationRules;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
@@ -27,6 +30,7 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->installerFactoryMock = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
         $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());
+        $this->command->setHelperSet(new HelperSet([new DialogHelper]));
     }
 
     public function testExecute()
@@ -118,5 +122,35 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
             ],
             [['John', 'Doe', 'admin', 'test@test.com', '123123q', '123123q'], []],
         ];
+    }
+
+    public function testExecuteWithPrompts()
+    {
+        $data = [
+            AdminAccount::KEY_USER => 'user',
+            AdminAccount::KEY_PASSWORD => '123123q',
+            AdminAccount::KEY_EMAIL => 'test@test.com',
+            AdminAccount::KEY_FIRST_NAME => 'John',
+            AdminAccount::KEY_LAST_NAME => 'Doe',
+        ];
+        $commandTester = new CommandTester($this->command);
+        $installerMock = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
+        $installerMock->expects($this->once())->method('installAdminUser')->with($data);
+        $this->installerFactoryMock->expects($this->once())->method('create')->willReturn($installerMock);
+
+        $helper = $this->command->getHelper('dialog');
+        $helper->setInputStream($this->getInputStream("John\nDoe\nuser\ntest@test.com\n123123q\n"));
+
+        $commandTester->execute([], ['interactive' => new Input]);
+        $this->assertContains('Created Magento administrator user named user', $commandTester->getDisplay());
+    }
+
+    protected function getInputStream($input)
+    {
+        $stream = fopen('php://memory', 'r+', false);
+        fputs($stream, $input);
+        rewind($stream);
+
+        return $stream;
     }
 }

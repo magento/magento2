@@ -45,7 +45,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this->setName('admin:user:create')
-            ->setDescription('Creates an administrator')
+            ->setDescription('Creates an administrator. Values for required options will be prompted, if not specified')
             ->setDefinition($this->getOptionsList());
         parent::configure();
     }
@@ -55,6 +55,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->setMissingValues($input, $output);
         $errors = $this->validate($input);
         if ($errors) {
             $output->writeln('<error>' . implode('</error>' . PHP_EOL .  '<error>', $errors) . '</error>');
@@ -122,5 +123,29 @@ class AdminUserCreateCommand extends AbstractSetupCommand
         }
 
         return $errors;
+    }
+
+    /**
+     * Get admin user data
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
+    protected function setMissingValues(InputInterface &$input, OutputInterface $output)
+    {
+        $dialog = $this->getHelper('dialog');
+        $keys = [
+            AdminAccount::KEY_FIRST_NAME,
+            AdminAccount::KEY_LAST_NAME,
+            AdminAccount::KEY_USER,
+            AdminAccount::KEY_EMAIL,
+            AdminAccount::KEY_PASSWORD,
+        ];
+        foreach ($keys as $key) {
+            if (!$input->getOption($key)) {
+                $input->promptForOption($dialog, $output, $key, $key === AdminAccount::KEY_PASSWORD);
+            }
+        }
     }
 }
