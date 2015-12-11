@@ -884,6 +884,21 @@ define([
         },
 
         /**
+         * Check if image to update is from initial set
+         * @param {Object} img
+         */
+        _checkIfInitial: function(img) {
+            var initial = this.options.mediaGalleryInitial[0];
+            if (img.img === initial.img) {
+                img.type = initial.type;
+                img.i = initial.i;
+            }
+            !img.type && (img.type = 'image');
+
+            return img;
+        },
+
+        /**
          * Update [gallery-placeholder] or [product-image-photo]
          * @param {Array} images
          * @param {jQuery} context
@@ -891,11 +906,13 @@ define([
          */
         updateBaseImage: function (images, context, isProductViewExist) {
             var justAnImage = images[0],
+                imgToUpdate,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery');
 
             if (isProductViewExist) {
                 if (this.options.onlyMainImg) {
-                    gallery.updateDataByIndex(0, images[0]);
+                    imgToUpdate = this._checkIfInitial(images[0]);
+                    gallery.updateDataByIndex(0, imgToUpdate);
                     gallery.seek(1);
                 } else {
                     gallery.updateData(images);
