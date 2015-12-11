@@ -5,6 +5,9 @@
  */
 namespace Magento\CatalogRule\Api\Data;
 
+/**
+ * @api
+ */
 interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**#@+
