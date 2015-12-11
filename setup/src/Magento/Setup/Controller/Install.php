@@ -18,7 +18,7 @@ use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Setup\Console\Command\Setup\InstallCommand;
 use Magento\SampleData;
 
 /**

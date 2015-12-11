@@ -15,7 +15,7 @@ use Magento\Framework\ObjectManagerInterface;
 abstract class AbstractJob
 {
     /**
-     * @var \Magento\Setup\Console\Command\AbstractSetupCommand
+     * @var \Magento\Setup\Console\Command\Setup\AbstractSetupCommand
      */
     protected $command;
 
