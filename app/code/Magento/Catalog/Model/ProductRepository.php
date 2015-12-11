@@ -301,6 +301,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product = $this->get($productData['sku']);
             $this->initializationHelper->initialize($product);
         }
+        unset($productData['options']);
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
