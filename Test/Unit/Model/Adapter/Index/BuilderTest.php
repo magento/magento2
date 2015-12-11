@@ -6,8 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index;
 
 use Magento\Elasticsearch\Model\Adapter\Index\Builder;
-use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Api\StoreConfigManagerInterface;
+use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -19,14 +18,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var StoreRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocaleResolver|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeRepository;
-
-    /**
-     * @var StoreConfigManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeConfig;
+    protected $localeResolver;
 
     /**
      * @var EsConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -39,11 +33,12 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->storeRepository = $this->getMockBuilder('Magento\Store\Api\StoreRepositoryInterface')
+        $this->localeResolver = $this->getMockBuilder('Magento\Framework\Locale\Resolver')
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeConfig = $this->getMockBuilder('Magento\Store\Api\StoreConfigManagerInterface')
-            ->disableOriginalConstructor()
+            ->setMethods([
+                'emulate',
+                'getLocale'
+            ])
             ->getMock();
         $this->esConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface')
             ->disableOriginalConstructor()
@@ -53,8 +48,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject(
             '\Magento\Elasticsearch\Model\Adapter\Index\Builder',
             [
-                'storeRepository' => $this->storeRepository,
-                'storeConfig' => $this->storeConfig,
+                'localeResolver' => $this->localeResolver,
                 'esConfig' => $this->esConfig
             ]
         );
@@ -68,24 +62,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuild($locale)
     {
-        $store = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeConfig = $this->getMockBuilder('Magento\Store\Api\Data\StoreConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeRepository->expects($this->once())
-            ->method('getById')
-            ->willReturn($store);
-        $store->expects($this->once())
-            ->method('getCode')
-            ->willReturn('code');
-        $this->storeConfig->expects($this->once())
-            ->method('getStoreConfigs')
-            ->willReturn([$storeConfig]);
-        $storeConfig->expects($this->once())
+        $this->localeResolver->expects($this->once())
             ->method('getLocale')
             ->willReturn($locale);
+
         $this->esConfig->expects($this->once())
             ->method('getStemmerInfo')
             ->willReturn([

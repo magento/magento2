@@ -6,7 +6,10 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match;
+use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\PreprocessorInterface;
 
 class MatchTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,14 +19,19 @@ class MatchTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fieldMapper;
 
     /**
-     * @var \Magento\Framework\Search\Request\QueryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $queryInterface;
+
+    /**
+     * @var PreprocessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $preprocessorInterface;
 
     /**
      * Set up test environment.
@@ -40,11 +48,17 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->preprocessorInterface = $this
+            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\PreprocessorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             '\Magento\Elasticsearch\SearchAdapter\Query\Builder\Match',
             [
-                'fieldMapper' => $this->fieldMapper
+                'fieldMapper' => $this->fieldMapper,
+                'preprocessorContainer' => [$this->preprocessorInterface],
             ]
         );
 
@@ -62,6 +76,12 @@ class MatchTest extends \PHPUnit_Framework_TestCase
 
         $query->expects($this->once())->method('getValue')->willReturn('query_value');
         $query->expects($this->once())->method('getMatches')->willReturn([['field' => 'some_field'], ]);
+
+        $this->preprocessorInterface->expects($this->any())
+            ->method('process')
+            ->with('query_value')
+            ->willReturn('query_value');
+
         $this->model->build([], $query, 'not');
     }
 }
