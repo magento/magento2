@@ -138,9 +138,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $output = [];
         foreach ($config as $topicName => $brokerConfig) {
+            $handlers = [];
+            $handlers[$topicName] = $this->communicationConfig->getTopicHandlers($topicName);
+            $topicConfig = $this->communicationConfig->getTopic($topicName);
+
             foreach ($brokerConfig[QueueConfig::BROKER_CONSUMERS] as $consumerKey => $consumerConfig) {
-                $handlers[$topicName] = $this->communicationConfig->getTopicHandlers($topicName);
-                $topicConfig = $this->communicationConfig->getTopic($topicName);
                 $output[$consumerKey] = [
                     QueueConfig::CONSUMER_NAME => $consumerKey,
                     QueueConfig::CONSUMER_QUEUE => $consumerConfig[QueueConfig::BROKER_CONSUMER_QUEUE],
