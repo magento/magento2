@@ -15,6 +15,7 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
      * @var DataProvider
      */
     private $dataProvider;
+
     /**
      * @var \Magento\Eav\Model\Entity\Type
      */
