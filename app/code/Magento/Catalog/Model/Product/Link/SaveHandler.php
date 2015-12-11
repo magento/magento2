@@ -54,13 +54,34 @@ class SaveHandler
      */
     public function execute($entityType, $entity)
     {
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
-        foreach ($this->productLinkRepository->getList($entity) as $link) {
-            $this->productLinkRepository->delete($link);
-        }
-        foreach ($entity->getProductLinks() as $link) {
-            $this->productLinkRepository->save($link);
+        $links = $entity->getProductLinks();
+        if ($links) {
+            $this->deleteUnExistingLinks($links, $entity);
+            foreach ($links as $link) {
+                $this->productLinkRepository->save($link);
+            }
         }
         return $entity;
+    }
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
+     * @param \Magento\Catalog\Api\Data\ProductInterface $entity
+     * @return void
+     */
+    protected function deleteUnExistingLinks($links, \Magento\Catalog\Api\Data\ProductInterface $entity)
+    {
+        foreach ($this->productLinkRepository->getList($entity) as $oldLink) {
+            $toDelete = true;
+            foreach ($links as $option) {
+                if ($oldLink->getLinkedProductSku() === $option->getLinkedProductSku()) {
+                    $toDelete = false;
+                }
+            }
+            if ($toDelete) {
+                $this->productLinkRepository->delete($oldLink);
+            }
+        }
+
     }
 }
