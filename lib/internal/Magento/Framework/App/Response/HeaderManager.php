@@ -17,7 +17,7 @@ class HeaderManager
     private $headerProviders;
 
     /**
-     * @param HeaderProviderInterface[]
+     * @param HeaderProviderInterface[] $headerProviderList
      * @throws LocalizedException In case one of the header providers is invalid
      */
     public function __construct($headerProviderList)
