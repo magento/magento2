@@ -24,11 +24,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     protected $collectionFactory;
 
     /**
-     * @var JoinProcessorInterface
-     */
-    protected $joinProcessor;
-
-    /**
      * @var \Magento\Catalog\Model\Product\OptionFactory
      */
     protected $optionFactory;
@@ -59,7 +54,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
      * @param Converter $converter
-     * @param JoinProcessorInterface $joinProcessor
      * @param MetadataPool $metadataPool
      */
     public function __construct(
@@ -68,7 +62,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory,
         \Magento\Catalog\Model\Product\Option\Converter $converter,
-        JoinProcessorInterface $joinProcessor,
         MetadataPool $metadataPool
     ) {
         $this->productRepository = $productRepository;
@@ -76,7 +69,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         $this->optionFactory = $optionFactory;
         $this->converter = $converter;
         $this->collectionFactory = $collectionFactory;
-        $this->joinProcessor = $joinProcessor;
         $this->metadataPool = $metadataPool;
     }
 
@@ -94,26 +86,11 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function getProductOptions(ProductInterface $product, $requiredOnly = false)
     {
-        $collection = $this->collectionFactory->create()->addFieldToFilter(
-            'cpe.entity_id',
-            $product->getEntityId()
-        )->addTitleToResult(
-            $product->getStoreId()
-        )->addPriceToResult(
-            $product->getStoreId()
-        )->setOrder(
-            'sort_order',
-            'asc'
-        )->setOrder(
-            'title',
-            'asc'
+        return $this->collectionFactory->create()->getProductOptions(
+            $product->getEntityId(),
+            $product->getStoreId(),
+            $requiredOnly
         );
-        if ($requiredOnly) {
-            $collection->addRequiredFilter();
-        }
-        $collection->addValuesToResult($product->getStoreId());
-        $this->joinProcessor->process($collection);
-        return $collection->getItems();
     }
 
     /**
