@@ -35,10 +35,7 @@ define(
                 braintreeClient: null,
                 paymentMethodNonce: null,
                 lastBillingAddress: null,
-                validatorManager: validatorManager,
-                imports: {
-                    onActiveChange: 'active'
-                }
+                validatorManager: validatorManager
             },
 
             /**
@@ -51,6 +48,7 @@ define(
                     .observe(['active', 'isInitialized']);
                 this.validatorManager.initialize();
                 this.braintreeClient = braintree;
+                this.initBraintree();
 
                 return this;
             },
@@ -76,14 +74,9 @@ define(
             },
 
             /**
-             * Triggers on payment change
-             * @param {Boolean} isActive
+             * Init Braintree handlers
              */
-            onActiveChange: function (isActive) {
-                if (!isActive) {
-                    return;
-                }
-
+            initBraintree: function () {
                 if (!this.braintreeClient.getClientToken()) {
                     this.showError($t('Sorry, but something went wrong'));
                 }
@@ -93,11 +86,6 @@ define(
                     this.initBraintree();
                 }
             },
-
-            /**
-             * Init Braintree handlers
-             */
-            initBraintree: function () {},
 
             /**
              * Show error message

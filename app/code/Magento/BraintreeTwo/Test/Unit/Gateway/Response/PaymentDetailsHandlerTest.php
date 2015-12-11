@@ -5,17 +5,12 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler;
-use Magento\Sales\Api\Data\OrderPaymentExtension;
-use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Braintree_Transaction;
 use Braintree_Result_Successful;
-use Magento\Vault\Model\PaymentToken;
-use Magento\Vault\Model\PaymentTokenFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 
@@ -37,64 +32,8 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $payment;
 
-    /**
-     * @var \Magento\Vault\Model\PaymentTokenFactory|MockObject paymentTokenFactoryMock
-     */
-    protected $paymentTokenFactoryMock;
-
-    /**
-     * @var \Magento\Vault\Model\PaymentToken|MockObject paymentTokenMock
-     */
-    protected $paymentTokenMock;
-
-    /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtension|MockObject paymentExtension
-     */
-    protected $paymentExtension;
-
-    /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtensionFactory|MockObject paymentExtensionFactoryMock
-     */
-    protected $paymentExtensionFactoryMock;
-
-    /**
-     * @var \Magento\Sales\Model\Order|MockObject salesOrderMock
-     */
-    protected $salesOrderMock;
-
     protected function setUp()
     {
-        $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->setMethods(null)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentTokenFactoryMock = $this->getMockBuilder(PaymentTokenFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentTokenFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->paymentTokenMock);
-
-        $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(null)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentExtensionFactoryMock = $this
-            ->getMockBuilder(OrderPaymentExtensionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentExtensionFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->paymentExtension);
-
-        // Sales Order Model
-        $this->salesOrderMock = $this->getMockBuilder(Order::class)
-            ->setMethods(null)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -102,29 +41,9 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
                 'setCcTransId',
                 'setLastTransId',
                 'setAdditionalInformation',
-                'setIsTransactionClosed',
-                'getMethod',
-                'getOrder'
+                'setIsTransactionClosed'
             ])
             ->getMock();
-
-        $this->payment->expects($this->once())
-            ->method('getOrder')
-            ->willReturn($this->salesOrderMock);
-
-        $this->paymentHandler = new PaymentDetailsHandler(
-            $this->paymentTokenFactoryMock,
-            $this->paymentExtensionFactoryMock
-        );
-    }
-
-    /**
-     * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::handle
-     */
-    public function testHandle()
-    {
-        $paymentData = $this->getPaymentDataObjectMock();
-        $subject['payment'] = $paymentData;
 
         $this->payment->expects(static::once())
             ->method('setTransactionId');
@@ -134,20 +53,47 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setLastTransId');
         $this->payment->expects(static::once())
             ->method('setIsTransactionClosed');
-        $this->payment->expects(static::exactly(6))
-            ->method('setAdditionalInformation');
+//        $this->payment->expects(static::any())
+//            ->method('setAdditionalInformation');
+
+        $this->paymentHandler = new PaymentDetailsHandler();
+    }
+
+    /**
+     * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::handle
+     */
+//    public function testHandle()
+//    {
+//        $paymentData = $this->getPaymentDataObjectMock();
+//        $subject['payment'] = $paymentData;
+//
+//        $response = [
+//            'object' => $this->getBraintreeTransaction()
+//        ];
+//
+//        $this->paymentHandler->handle($subject, $response);
+//    }
+
+    /**
+     * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::process3DSecure
+     */
+    public function testProcess3DSecure()
+    {
+        $paymentData = $this->getPaymentDataObjectMock();
+        $subject['payment'] = $paymentData;
 
         $response = [
             'object' => $this->getBraintreeTransaction()
         ];
 
-        $this->salesOrderMock->setCustomerId(10);
+        $this->payment->expects(static::at(4))
+            ->method('setAdditionalInformation')
+            ->with('liabilityShifted', true);
+        $this->payment->expects(static::at(5))
+            ->method('setAdditionalInformation')
+            ->with('liabilityShiftPossible', true);
 
         $this->paymentHandler->handle($subject, $response);
-
-        $this->assertEquals('rh3gd4', $this->paymentTokenMock->getGatewayToken());
-        $this->assertEquals('10', $this->paymentTokenMock->getCustomerId());
-        $this->assertSame($this->paymentTokenMock, $this->payment->getExtensionAttributes()->getVaultPaymentToken());
     }
 
     /**
@@ -181,13 +127,13 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'cvvResponseCode' => 'M',
             'processorAuthorizationCode' => 'W1V8XK',
             'processorResponseCode' => '1000',
-            'processorResponseText' => 'Approved',
-            'creditCardDetails' => $this->getCreditCardDetails()
+            'processorResponseText' => 'Approved2',
+            'threeDSecureInfo' => $this->getThreeDSecureInfo()
         ];
 
-        $transaction = Braintree_Transaction::factory($attributes);
+        $transaction = \Braintree\Transaction::factory($attributes);
 
-        $mock = $this->getMockBuilder(Braintree_Result_Successful::class)
+        $mock = $this->getMockBuilder(\Braintree\Result\Successful::class)
             ->disableOriginalConstructor()
             ->setMethods(['__get'])
             ->getMock();
@@ -201,21 +147,15 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create Braintree transaction
-     * @return \Braintree_Transaction_CreditCardDetails
+     * Get 3d secure details
+     * @return array
      */
-    private function getCreditCardDetails()
+    private function getThreeDSecureInfo()
     {
         $attributes = [
-            'token' => 'rh3gd4',
-            'bin' => '5421',
-            'cardType' => 'American Express',
-            'expirationMonth' => 12,
-            'expirationYear' => 21,
-            'last4' => 1231
+            'liabilityShifted' => true,
+            'liabilityShiftPossible' => true
         ];
-
-        $creditCardDetails = new \Braintree_Transaction_CreditCardDetails($attributes);
-        return $creditCardDetails;
+        return $attributes;
     }
 }
