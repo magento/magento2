@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
@@ -24,6 +25,11 @@ use Magento\Framework\Exception\StateException;
  */
 class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
 {
+    /**
+     * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
+     */
+    protected $optionRepository;
+
     /**
      * @var ProductFactory
      */
@@ -184,7 +190,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         MimeTypeExtensionMap $mimeTypeExtensionMap,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
+        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor,
+        \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface $optionRepository
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -207,6 +214,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->mediaGalleryProcessor = $mediaGalleryProcessor;
+        $this->optionRepository = $optionRepository;
     }
 
     /**
@@ -301,7 +309,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product = $this->get($productData['sku']);
             $this->initializationHelper->initialize($product);
         }
-        unset($productData['options']);
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
@@ -341,7 +348,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         //existing options by option_id
         /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $existingOptions */
-        $existingOptions = $product->getOptions();
+        $existingOptions = $this->optionRepository->getProductOptions($product);
         if ($existingOptions === null) {
             $existingOptions = [];
         }
