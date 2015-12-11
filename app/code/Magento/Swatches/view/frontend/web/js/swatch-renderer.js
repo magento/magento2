@@ -58,7 +58,7 @@ define([
      *  - option-tooltip-thumb
      *  - option-tooltip-value
      */
-    $.widget('custom.SwatchRendererTooltip', {
+    $.widget('mage.SwatchRendererTooltip', {
         options: {
             delay: 200,                             //how much ms before tooltip to show
             tooltipClass: 'swatch-option-tooltip'  //configurable, but remember about css
@@ -180,7 +180,7 @@ define([
      *  - selectorProduct (selector for product container)
      *  - selectorProductPrice (selector for change price)
      */
-    $.widget('custom.SwatchRenderer', {
+    $.widget('mage.SwatchRenderer', {
         options: {
             classes: {
                 attributeClass: 'swatch-attribute',
@@ -224,7 +224,10 @@ define([
             mediaCallback: '',
 
             // Cache for BaseProduct images. Needed when option unset
-            mediaGalleryInitial: [{}]
+            mediaGalleryInitial: [{}],
+
+            //
+            onlyMainImg: false
         },
 
         /**
@@ -884,6 +887,24 @@ define([
         },
 
         /**
+         * Check if images to update are initial and set their type
+         * @param {Array} images
+         */
+        _setImageType: function (images) {
+            var initial = this.options.mediaGalleryInitial[0].img;
+
+            if (images[0].img === initial) {
+                images = $.extend(true, [], this.options.mediaGalleryInitial);
+            } else {
+                images.map(function (img) {
+                    img.type = 'image';
+                });
+            }
+
+            return images;
+        },
+
+        /**
          * Update [gallery-placeholder] or [product-image-photo]
          * @param {Array} images
          * @param {jQuery} context
@@ -891,14 +912,22 @@ define([
          */
         updateBaseImage: function (images, context, isProductViewExist) {
             var justAnImage = images[0],
+                imgs,
+                imgToUpdate,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery');
+
+            if (images) {
+                imgs = $.extend(true, [], images);
+                imgToUpdate = this._setImageType(imgs);
+            }
 
             if (isProductViewExist) {
                 if (this.options.onlyMainImg) {
-                    gallery.updateDataByIndex(0, images[0]);
+                    //to be refactored - main img instead of 0;
+                    gallery.updateDataByIndex(0, imgToUpdate[0]);
                     gallery.seek(1);
                 } else {
-                    gallery.updateData(images);
+                    gallery.updateData(imgToUpdate);
                 }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
@@ -936,5 +965,5 @@ define([
         }
     });
 
-    return $.custom.SwatchRenderer;
+    return $.mage.SwatchRenderer;
 });

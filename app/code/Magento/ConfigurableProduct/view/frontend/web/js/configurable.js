@@ -28,7 +28,8 @@ define([
             ' <%- data.finalPrice.formatted %>' +
             '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
-            mediaGalleryInitial: null
+            mediaGalleryInitial: null,
+            onlyMainImg: false
         },
 
         /**
@@ -297,27 +298,32 @@ define([
         _changeProductImage: function () {
             var images,
                 initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
-                galleryObject = $(this.options.mediaGallerySelector).data('gallery'),
-                updateGallery;
+                galleryObject = $(this.options.mediaGallerySelector).data('gallery');
 
             if (this.options.spConfig.images[this.simpleProduct]) {
                 images = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
             }
 
-            updateGallery = function (imagesArr) {
+            function updateGallery(imagesArr) {
                 var mainImg = imagesArr.filter(function (img) {
                     return img.isMain;
                 });
+                !mainImg[0].type && (mainImg[0].type = 'image');
 
                 galleryObject.updateDataByIndex(0, mainImg[0]);
                 galleryObject.seek(1);
-            };
+            }
 
             if (galleryObject) {
                 if (images) {
-                    this.options.onlyMainImg ?
-                        updateGallery(images) :
-                        galleryObject.updateData(images);
+                    if (this.options.onlyMainImg) {
+                        updateGallery(images);
+                    } else {
+                        images.map(function (img) {
+                            img.type = 'image';
+                        });
+                        galleryObject.updateData(images)
+                    }
                 } else {
                     this.options.onlyMainImg ?
                         updateGallery(initialImages) :

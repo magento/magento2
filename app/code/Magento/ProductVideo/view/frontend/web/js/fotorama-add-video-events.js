@@ -366,7 +366,8 @@ define([
                 t,
                 tmpVideoData,
                 currentItem,
-                iconClass = 'video-thumb-icon';
+                iconClass = 'video-thumb-icon',
+                videoContainerClass = 'fotorama-video-container';
 
             if (!fotorama.activeFrame.$navThumbFrame) {
                 $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
@@ -381,6 +382,10 @@ define([
             thumbsParent = fotorama.activeFrame.$navThumbFrame.parent();
             thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
 
+            fotorama.data.map($.proxy(function(item, i){
+                !item.type && (item.type = this.options.VideoData[i].mediaType);
+            }, this));
+
             for (t = 0; t < thumbs.length; t++) {
                 tmpVideoData = this.options.VideoData[t];
                 currentItem = thumbs.eq(t);
@@ -389,10 +394,12 @@ define([
                     currentItem.removeClass(iconClass);
                 }
 
-                if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs') {
+                if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs' &&
+                    fotorama.data[t].type ===  this.VID) {
                     currentItem.addClass(iconClass);
                 }
             }
+
             $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
             }, this));
@@ -445,6 +452,7 @@ define([
                 $image = fotorama.data[frameNumber - 1 + number];
 
             if ($image) {
+                if ($image.type !== 'video') return;
                 $image = $image.$stageFrame;
             }
 
@@ -565,11 +573,6 @@ define([
                             clearInterval(waitForFroogaloop);
                             fotorama.requestFullScreen();
                             $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
-                            /*$('.fotorama__fullscreen-icon').css({
-                                opacity: '1',
-                                visibility: 'visible',
-                                display: 'block'
-                            });*/
                             this.Base = false;
                         }
                     }, this), 50);
@@ -577,11 +580,6 @@ define([
                     setTimeout($.proxy(function () {
                         fotorama.requestFullScreen();
                         $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
-                        /*$('.fotorama__fullscreen-icon').css({
-                            opacity: '1',
-                            visibility: 'visible',
-                            display: 'block'
-                        });*/
                         this.Base = false;
                     }, this), 50);
                 }
