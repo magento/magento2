@@ -6,8 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\MessageQueue\PublisherInterface" type="Magento\Framework\MessageQueue\PublisherProxy"/>
-
     <type name="Magento\Framework\MessageQueue\QueueRepository">
         <arguments>
             <argument name="queues" xsi:type="array">
@@ -22,17 +20,18 @@
             </argument>
         </arguments>
     </type>
-
-    <virtualType name="QueuePublisherFactory">
+    <type name="Magento\Framework\MessageQueue\PublisherPool">
         <arguments>
             <argument name="publishers" xsi:type="array">
-                <item name="mysql" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
-                    <item name="connectionName" xsi:type="string">db</item>
+                <item name="async" xsi:type="array">
+                    <item name="mysql" xsi:type="array">
+                        <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
+                        <item name="connectionName" xsi:type="string">db</item>
+                    </item>
                 </item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Framework\MessageQueue\ConsumerFactory">
         <arguments>
             <argument name="consumers" xsi:type="array">
