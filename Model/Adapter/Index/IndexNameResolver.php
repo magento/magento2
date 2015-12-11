@@ -62,9 +62,22 @@ class IndexNameResolver
      *
      * @return string
      */
-    public function getIndexNamespace()
+    protected function getIndexNamespace()
     {
         return $this->clientConfig->getIndexerPrefix();
+    }
+
+    /**
+     * Get index namespace from config.
+     *
+     * @param int $storeId
+     * @param string $entityType
+     *
+     * @return string
+     */
+    public function getIndexNameForAlias($storeId, $entityType)
+    {
+        return $this->clientConfig->getIndexerPrefix() . '_' . $storeId . '_' . $entityType;
     }
 
     /**

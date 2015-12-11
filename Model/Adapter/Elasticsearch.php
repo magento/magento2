@@ -292,7 +292,7 @@ class Elasticsearch
 
         // add index to alias
         if ($checkAlias) {
-            $namespace = $this->indexNameResolve->getIndexNamespace();
+            $namespace = $this->indexNameResolve->getIndexNameForAlias($storeId, $entityType);
             if (!$this->client->existsAlias($namespace, $indexName)) {
                 $this->client->updateAlias($namespace, $indexName);
             }
@@ -317,8 +317,9 @@ class Elasticsearch
         if ($oldIndex == $this->preparedIndex[$storeId]) {
             $oldIndex = '';
         }
+
         $this->client->updateAlias(
-            $this->indexNameResolve->getIndexNamespace(),
+            $this->indexNameResolve->getIndexNameForAlias($storeId, $entityType),
             $this->preparedIndex[$storeId],
             $oldIndex
         );
