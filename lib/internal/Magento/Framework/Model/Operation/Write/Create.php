@@ -54,8 +54,8 @@ class Create implements WriteInterface
     public function execute($entityType, $entity)
     {
         $entity = $this->createMain->execute($entityType, $entity);
-        $entity = $this->createExtension->execute($entityType, $entity);
         $entity = $this->createRelation->execute($entityType, $entity);
+        $entity = $this->createExtension->execute($entityType, $entity);
         return $entity;
     }
 }
