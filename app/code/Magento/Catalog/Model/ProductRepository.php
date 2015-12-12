@@ -88,11 +88,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $metadataService;
 
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
-     */
-    protected $extensibleDataObjectConverter;
-
-    /**
      * @var \Magento\Framework\Filesystem
      */
     protected $fileSystem;
@@ -125,10 +120,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product $resourceModel
+     * @param Product\Initialization\Helper\ProductLinks $linkInitializer
+     * @param Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param \Magento\Framework\Filesystem $fileSystem
      * @param ImageContentInterfaceFactory $contentFactory
      * @param ImageProcessorInterface $imageProcessor
@@ -144,6 +140,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\ResourceModel\Product $resourceModel,
+        \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
@@ -160,6 +158,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceModel = $resourceModel;
+        $this->linkInitializer = $linkInitializer;
+        $this->linkTypeProvider = $linkTypeProvider;
         $this->storeManager = $storeManager;
         $this->attributeRepository = $attributeRepository;
         $this->filterBuilder = $filterBuilder;
@@ -265,8 +265,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $this->initializationHelper->initialize($product);
         }
 
-        unset($productData['options']);
-
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
         }
@@ -341,6 +339,64 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+     * Process product links, creating new links, updating and deleting existing links
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $newLinks
+     * @return $this
+     * @throws NoSuchEntityException
+     */
+    private function processLinks(\Magento\Catalog\Api\Data\ProductInterface $product, $newLinks)
+    {
+        if ($newLinks === null) {
+            // If product links were not specified, don't do anything
+            return $this;
+        }
+
+        // Clear all existing product links and then set the ones we want
+        $linkTypes = $this->linkTypeProvider->getLinkTypes();
+        foreach (array_keys($linkTypes) as $typeName) {
+            $this->linkInitializer->initializeLinks($product, [$typeName => []]);
+        }
+
+        // Set each linktype info
+        if (!empty($newLinks)) {
+            $productLinks = [];
+            foreach ($newLinks as $link) {
+                $productLinks[$link->getLinkType()][] = $link;
+            }
+
+            foreach ($productLinks as $type => $linksByType) {
+                $assignedSkuList = [];
+                /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $link */
+                foreach ($linksByType as $link) {
+                    $assignedSkuList[] = $link->getLinkedProductSku();
+                }
+                $linkedProductIds = $this->resourceModel->getProductsIdsBySkus($assignedSkuList);
+
+                $linksToInitialize = [];
+                foreach ($linksByType as $link) {
+                    $linkDataArray = $this->extensibleDataObjectConverter
+                        ->toNestedArray($link, [], 'Magento\Catalog\Api\Data\ProductLinkInterface');
+                    $linkedSku = $link->getLinkedProductSku();
+                    if (!isset($linkedProductIds[$linkedSku])) {
+                        throw new NoSuchEntityException(
+                            __('Product with SKU "%1" does not exist', $linkedSku)
+                        );
+                    }
+                    $linkDataArray['product_id'] = $linkedProductIds[$linkedSku];
+                    $linksToInitialize[$linkedProductIds[$linkedSku]] = $linkDataArray;
+                }
+
+                $this->linkInitializer->initializeLinks($product, [$type => $linksToInitialize]);
+            }
+        }
+
+        $product->setProductLinks($newLinks);
+        return $this;
+    }
+
+    /**
      * @param ProductInterface $product
      * @param array $mediaGalleryEntries
      * @return $this
@@ -411,12 +467,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tierPrices = $product->getData('tier_price');
 
         $productId = $this->resourceModel->getIdBySku($product->getSku());
-        $productDataArray = $this->extensibleDataObjectConverter
-            ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
-
+        $productDataArray = $product->getData();
+        $ignoreLinksFlag = $product->getData('ignore_links_flag');
+        $productLinks = null;
+        if (!$ignoreLinksFlag && $ignoreLinksFlag !== null) {
+            $productLinks = $product->getProductLinks();
+        }
         $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
         $product = $this->initializeProductData($productDataArray, empty($productId));
 
+        $this->processLinks($product, $productLinks);
         if (isset($productDataArray['media_gallery_entries'])) {
             $this->processMediaGallery($product, $productDataArray['media_gallery_entries']);
         }
