@@ -269,7 +269,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'entryId' => $this->getTargetGalleryEntryId(),
         ];
 
-        $this->assertTrue($this->_webApiCall($this->deleteServiceInfo, $requestData, null, 'all'));
+        $this->assertTrue($this->_webApiCall($this->deleteServiceInfo, $requestData));
         $targetProduct = $this->getTargetSimpleProduct();
         $mediaGallery = $targetProduct->getData('media_gallery');
         $this->assertCount(0, $mediaGallery['images']);
