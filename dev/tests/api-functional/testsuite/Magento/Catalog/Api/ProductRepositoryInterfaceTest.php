@@ -331,8 +331,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             "price_type" => "fixed",
             'sort_order' => 3,
         ];
-        $option1Id = $options[0]['option_id'];
-        $option2Id = $options[1]['option_id'];
         $options[1] = [
             "product_sku" => $productData['sku'],
             "title" => "DropdownOption2",
