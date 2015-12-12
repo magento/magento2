@@ -6,12 +6,17 @@
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Command;
 
 use Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\Command\GatewayCommand;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
 use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
 
 /**
  * Class CaptureStrategyCommandTest
@@ -29,10 +34,19 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     private $commandPool;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory|
-     * \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\TransactionRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $transactionCollection;
+    private $transactionRepository;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filterBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
@@ -52,10 +66,16 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->initCommandMock();
+        $this->initTransactionRepositoryMock();
+        $this->initFilterBuilderMock();
+        $this->initSearchCriteriaBuilderMock();
 
-        $factory = $this->getTransactionCollectionFactory();
-
-        $this->strategyCommand = new CaptureStrategyCommand($this->commandPool, $factory);
+        $this->strategyCommand = new CaptureStrategyCommand(
+            $this->commandPool,
+            $this->transactionRepository,
+            $this->filterBuilder,
+            $this->searchCriteriaBuilder
+        );
     }
 
     /**
@@ -100,12 +120,28 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $this->transactionCollection->expects(static::exactly(2))
-            ->method('addFieldToFilter')
+        $this->filterBuilder->expects(static::exactly(2))
+            ->method('setField')
+            ->willReturnSelf();
+        $this->filterBuilder->expects(static::exactly(2))
+            ->method('setValue')
             ->willReturnSelf();
 
-        $this->transactionCollection->expects(static::once())
-            ->method('getSize')
+        $searchCriteria = new SearchCriteria();
+        $this->searchCriteriaBuilder->expects(static::once())
+            ->method('addFilters')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilder->expects(static::once())
+            ->method('create')
+            ->willReturn($searchCriteria);
+
+        $this->transactionRepository->expects(static::once())
+            ->method('getList')
+            ->with($searchCriteria)
+            ->willReturnSelf();
+
+        $this->transactionRepository->expects(static::once())
+            ->method('getTotalCount')
             ->willReturn($size);
 
         $this->commandPool->expects(static::once())
@@ -166,25 +202,35 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get mock for transaction collection factory
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * Create mock for filter object
      */
-    private function getTransactionCollectionFactory()
+    private function initFilterBuilderMock()
     {
-        $this->transactionCollection = $this->getMockBuilder(Transaction::class)
+        $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getSize', '__wakeup'])
+            ->setMethods(['setField', 'setValue', 'create', '__wakeup'])
             ->getMock();
+    }
 
-        $mock = $this->getMockBuilder(CollectionFactory::class)
+    /**
+     * Create mock for search criteria object
+     */
+    private function initSearchCriteriaBuilderMock()
+    {
+        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['addFilters', 'create', '__wakeup'])
             ->getMock();
+    }
 
-        $mock->expects(static::any())
-            ->method('create')
-            ->willReturn($this->transactionCollection);
-
-        return $mock;
+    /**
+     * Create mock for transaction repository
+     */
+    private function initTransactionRepositoryMock()
+    {
+        $this->transactionRepository = $this->getMockBuilder(TransactionRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getList', 'getTotalCount', 'delete', 'get', 'save', 'create', '__wakeup'])
+            ->getMock();
     }
 }

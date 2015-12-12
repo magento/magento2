@@ -5,15 +5,17 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Command;
 
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
-use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
 
 /**
  * Class CaptureStrategyCommand
@@ -41,18 +43,34 @@ class CaptureStrategyCommand implements CommandInterface
     private $commandPool;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory
+     * @var \Magento\Sales\Api\TransactionRepositoryInterface
      */
-    private $transactionCollectionFactory;
+    private $transactionRepository;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @param CommandPoolInterface $commandPool
-     * @param CollectionFactory $factory
+     * @param TransactionRepositoryInterface $repository
      */
-    public function __construct(CommandPoolInterface $commandPool, CollectionFactory $factory)
-    {
+    public function __construct(
+        CommandPoolInterface $commandPool,
+        TransactionRepositoryInterface $repository,
+        FilterBuilder $filterBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder
+    ) {
         $this->commandPool = $commandPool;
-        $this->transactionCollectionFactory = $factory;
+        $this->transactionRepository = $repository;
+        $this->filterBuilder = $filterBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -83,14 +101,32 @@ class CaptureStrategyCommand implements CommandInterface
             return self::SALE;
         }
 
-        // if not exists capture transactions process submit for settlement
-        $collection = $this->transactionCollectionFactory->create();
-        $collection->addFieldToFilter('payment_id', $payment->getId())
-            ->addFieldToFilter('txn_type', Transaction::TYPE_CAPTURE);
-        if ($collection->getSize() == 0) {
+        if (!$this->isExistsCaptureTransaction($payment)) {
             return self::CAPTURE;
         }
 
         return self::CLONE_TRANSACTION;
+    }
+
+    /**
+     * Check if capture transaction already exists
+     * @param Payment $payment
+     * @return bool
+     */
+    private function isExistsCaptureTransaction(Payment $payment)
+    {
+        $filters[] = $this->filterBuilder->setField('payment_id')
+            ->setValue($payment->getId())
+            ->create();
+
+        $filters[] = $this->filterBuilder->setField('txn_type')
+            ->setValue(Transaction::TYPE_CAPTURE)
+            ->create();
+
+        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
+            ->create();
+
+        $count = $this->transactionRepository->getList($searchCriteria)->getTotalCount();
+        return (boolean) $count;
     }
 }

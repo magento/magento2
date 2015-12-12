@@ -34,6 +34,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const VALUE_3DSECURE_ALL = 0;
     const CODE_3DSECURE = 'three_d_secure';
     const KEY_KOUNT_MERCHANT_ID = 'kount_merchant_id';
+    const FRAUD_PROTECTION = 'fraud_protection';
 
     /**
      * @var string
@@ -233,5 +234,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getSdkUrl()
     {
         return $this->getValue(Config::KEY_SDK_URL);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsFraudProtection()
+    {
+        return (bool) $this->getValue(Config::FRAUD_PROTECTION);
     }
 }

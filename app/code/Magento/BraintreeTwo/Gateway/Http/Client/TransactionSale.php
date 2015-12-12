@@ -5,64 +5,16 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Http\Client;
 
-use Magento\Payment\Model\Method\Logger;
-use Magento\Payment\Gateway\Http\ClientException;
-use Magento\Payment\Gateway\Http\ClientInterface;
-use Magento\Payment\Gateway\Http\TransferInterface;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeTransaction;
-
 /**
  * Class TransactionSale
  */
-class TransactionSale implements ClientInterface
+class TransactionSale extends AbstractTransaction
 {
-    /**
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
-     * @var BraintreeTransaction
-     */
-    protected $transaction;
-
-    /**
-     * Constructor
-     *
-     * @param Logger $logger
-     * @param BraintreeTransaction $transaction
-     */
-    public function __construct(
-        Logger $logger,
-        BraintreeTransaction $transaction
-    ) {
-        $this->logger = $logger;
-        $this->transaction = $transaction;
-    }
-
     /**
      * @inheritdoc
      */
-    public function placeRequest(TransferInterface $transferObject)
+    protected function process(array $data)
     {
-        $data = $transferObject->getBody();
-        $log = [
-            'request' => $data,
-            'client' => self::class
-        ];
-        $response['object'] = [];
-
-        try {
-            $response['object'] = $this->transaction->sale($data);
-        } catch (\Exception $e) {
-            throw new ClientException(__(
-                $e->getMessage() ?: 'Sorry, but something went wrong'
-            ));
-        } finally {
-            $log['response'] = (array) $response['object'];
-            $this->logger->debug($log);
-        }
-
-        return $response;
+        return $this->transaction->sale($data);
     }
 }

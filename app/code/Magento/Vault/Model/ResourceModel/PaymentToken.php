@@ -48,16 +48,19 @@ class PaymentToken extends AbstractDb
      * Get payment token by gateway token.
      *
      * @param string $token The gateway token.
+     * @param string $paymentMethodCode
      * @param int $customerId Customer ID.
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getByGatewayToken($token, $customerId = 0)
+    public function getByGatewayToken($token, $paymentMethodCode, $customerId = 0)
     {
         $connection = $this->getConnection();
         $select = $connection
             ->select()
             ->from($this->getMainTable())
-            ->where('gateway_token = ?', $token);
+            ->where('gateway_token = ?', $token)
+            ->where('payment_method_code = ?', $paymentMethodCode);
         if ($customerId > 0) {
             $select = $select->where('customer_id = ?', $customerId);
         } else {
