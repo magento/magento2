@@ -36,6 +36,11 @@ class RiskDataHandler implements HandlerInterface
         $paymentDO = SubjectReader::readPayment($handlingSubject);
         /** @var \Braintree\Transaction $transaction */
         $transaction = $response['object']->transaction;
+
+        if (!isset($transaction->riskData)) {
+            return;
+        }
+
         /**
          * @TODO after changes in sales module should be refactored for new interfaces
          */

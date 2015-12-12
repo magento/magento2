@@ -32,13 +32,14 @@ interface PaymentTokenManagementInterface
     public function getByPaymentId($paymentId);
 
     /**
-     * Get payment token by gateway token Id.
+     * Get payment token by gateway token.
      *
-     * @param int $customerId Customer ID.
      * @param string $token The gateway token.
-     * @return \Magento\Vault\Api\Data\PaymentTokenInterface Payment token interface.
+     * @param string $paymentMethodCode
+     * @param int $customerId Customer ID.
+     * @return PaymentTokenInterface|null Payment token interface.
      */
-    public function getByGatewayToken($customerId, $token);
+    public function getByGatewayToken($token, $paymentMethodCode, $customerId);
 
     /**
      * @param PaymentTokenInterface $token

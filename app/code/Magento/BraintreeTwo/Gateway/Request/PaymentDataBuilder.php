@@ -43,11 +43,6 @@ class PaymentDataBuilder implements BuilderInterface
     const MERCHANT_ACCOUNT_ID = 'merchantAccountId';
 
     /**
-     * Additional data for Advanced Fraud Tools
-     */
-    const DEVICE_DATA = 'deviceData';
-
-    /**
      * @var Config
      */
     private $config;
@@ -75,9 +70,6 @@ class PaymentDataBuilder implements BuilderInterface
             self::PAYMENT_METHOD_NONCE => $payment->getAdditionalInformation(
                 DataAssignObserver::PAYMENT_METHOD_NONCE
             ),
-            self::DEVICE_DATA => $payment->getAdditionalInformation(
-                DataAssignObserver::DEVICE_DATA
-            )
         ];
 
         $merchantAccountId = $this->config->getValue(Config::KEY_MERCHANT_ACCOUNT_ID);

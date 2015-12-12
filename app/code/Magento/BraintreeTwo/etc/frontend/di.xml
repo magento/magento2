@@ -27,4 +27,11 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="BraintreeTwoAuthorizeDataBuilder">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="kount" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\KountPaymentDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
