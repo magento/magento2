@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Ihor Vansach (ihor@magefan.com). All rights reserved.
+ * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="formkey"/>
+    <update handle="loginascustomer_login_grid_block"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magefan\LoginAsCustomer\Block\Adminhtml\Login" name="loginascustomer.container"/>
+        </referenceContainer>
+    </body>
+</page>
