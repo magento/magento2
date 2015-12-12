@@ -7,11 +7,9 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
-use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
@@ -75,16 +73,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $resourceModel;
 
     /*
-     * @var \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks
-     */
-    protected $linkInitializer;
-
-    /*
-     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
-     */
-    protected $linkTypeProvider;
-
-    /*
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -105,29 +93,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $extensibleDataObjectConverter;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Option\Converter
-     */
-    protected $optionConverter;
-
-    /**
      * @var \Magento\Framework\Filesystem
      */
     protected $fileSystem;
 
     /**
-     * @var ImageContentValidatorInterface
-     */
-    protected $contentValidator;
-
-    /**
      * @var ImageContentInterfaceFactory
      */
     protected $contentFactory;
-
-    /**
-     * @var MimeTypeExtensionMap
-     */
-    protected $mimeTypeExtensionMap;
 
     /**
      * @var ImageProcessorInterface
@@ -152,17 +125,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product $resourceModel
-     * @param Product\Initialization\Helper\ProductLinks $linkInitializer
-     * @param Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
-     * @param Product\Option\Converter $optionConverter
      * @param \Magento\Framework\Filesystem $fileSystem
-     * @param ImageContentValidatorInterface $contentValidator
      * @param ImageContentInterfaceFactory $contentFactory
-     * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
@@ -176,17 +144,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\ResourceModel\Product $resourceModel,
-        \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
-        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        \Magento\Catalog\Model\Product\Option\Converter $optionConverter,
         \Magento\Framework\Filesystem $fileSystem,
-        ImageContentValidatorInterface $contentValidator,
         ImageContentInterfaceFactory $contentFactory,
-        MimeTypeExtensionMap $mimeTypeExtensionMap,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
@@ -197,18 +160,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceModel = $resourceModel;
-        $this->linkInitializer = $linkInitializer;
-        $this->linkTypeProvider = $linkTypeProvider;
         $this->storeManager = $storeManager;
         $this->attributeRepository = $attributeRepository;
         $this->filterBuilder = $filterBuilder;
         $this->metadataService = $metadataServiceInterface;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
-        $this->optionConverter = $optionConverter;
         $this->fileSystem = $fileSystem;
-        $this->contentValidator = $contentValidator;
         $this->contentFactory = $contentFactory;
-        $this->mimeTypeExtensionMap = $mimeTypeExtensionMap;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->mediaGalleryProcessor = $mediaGalleryProcessor;
