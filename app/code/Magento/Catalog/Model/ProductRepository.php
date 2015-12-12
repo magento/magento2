@@ -88,11 +88,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $metadataService;
 
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
-     */
-    protected $extensibleDataObjectConverter;
-
-    /**
      * @var \Magento\Framework\Filesystem
      */
     protected $fileSystem;
@@ -128,7 +123,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param \Magento\Framework\Filesystem $fileSystem
      * @param ImageContentInterfaceFactory $contentFactory
      * @param ImageProcessorInterface $imageProcessor
@@ -147,7 +141,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Framework\Filesystem $fileSystem,
         ImageContentInterfaceFactory $contentFactory,
         ImageProcessorInterface $imageProcessor,
@@ -164,7 +157,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->attributeRepository = $attributeRepository;
         $this->filterBuilder = $filterBuilder;
         $this->metadataService = $metadataServiceInterface;
-        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->fileSystem = $fileSystem;
         $this->contentFactory = $contentFactory;
         $this->imageProcessor = $imageProcessor;
@@ -264,8 +256,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product = $this->get($productData['sku']);
             $this->initializationHelper->initialize($product);
         }
-
-        unset($productData['options']);
 
         foreach ($productData as $key => $value) {
             $product->setData($key, $value);
@@ -411,8 +401,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tierPrices = $product->getData('tier_price');
 
         $productId = $this->resourceModel->getIdBySku($product->getSku());
-        $productDataArray = $this->extensibleDataObjectConverter
-            ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
+        $productDataArray = $product->getData();
 
         $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
         $product = $this->initializeProductData($productDataArray, empty($productId));
