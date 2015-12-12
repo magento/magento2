@@ -105,11 +105,15 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
         $visible = true;
         $storeId = 1;
         $vaultPaymentCode = "vault_decorator_code";
+        $vaultProviderCode = "cault_provider_code";
 
         $customerFilterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $visibilityFilterMock = $this->getMockBuilder(Filter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $codeFilterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
@@ -139,10 +143,15 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, $customerFilterMock, 0);
         $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, $visible, $visibilityFilterMock, 1);
 
+        $this->vaultPayment->expects(static::once())
+            ->method('getProviderCode')
+            ->willReturn($vaultProviderCode);
+
+        $this->createExpectedFilter(PaymentTokenInterface::PAYMENT_METHOD_CODE, $vaultProviderCode, $codeFilterMock, 2);
 
         $this->searchCriteriaBuilderMock->expects(self::once())
             ->method('addFilters')
-            ->with([$customerFilterMock, $visibilityFilterMock])
+            ->with([$customerFilterMock, $visibilityFilterMock, $codeFilterMock])
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects(self::once())
             ->method('create')

@@ -87,7 +87,8 @@ final class VaultCardsConfigProvider implements ConfigProviderInterface
             return $vaultPayments;
         }
 
-        if (!$this->vaultPayment->isActive($this->storeManager->getStore()->getId())) {
+        $storeId = $this->storeManager->getStore()->getId();
+        if (!$this->vaultPayment->isActive($storeId)) {
             return $vaultPayments;
         }
 
@@ -95,7 +96,10 @@ final class VaultCardsConfigProvider implements ConfigProviderInterface
             ->setValue($customerId)
             ->create();
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_VISIBLE)
-            ->setValue(true)
+            ->setValue(1)
+            ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
+            ->setValue($this->vaultPayment->getProviderCode($storeId))
             ->create();
         $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
             ->create();

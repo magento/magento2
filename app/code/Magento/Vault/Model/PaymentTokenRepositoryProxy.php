@@ -13,6 +13,7 @@ use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
 
 /**
  * Class PaymentTokenRepositoryProxy
+ * @api
  */
 class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
 {

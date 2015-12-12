@@ -85,7 +85,8 @@ class VaultDetailsHandler implements HandlerInterface
      * @param Payment $payment
      * @return PaymentTokenInterface|null
      */
-    protected function getVaultPaymentToken(Transaction $transaction, Payment $payment) {
+    protected function getVaultPaymentToken(Transaction $transaction, Payment $payment)
+    {
         // Check token existing in gateway response
         $token = $transaction->creditCardDetails->token;
         if (empty($token)) {
