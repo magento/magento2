@@ -34,6 +34,7 @@ class LinkRepositoryTest extends WebapiAbstract
 
     protected function setUp()
     {
+        $this->markTestSkipped('Test skiped due to MAGETWO-46832');
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/downloadable-product/downloadable-links',
@@ -177,7 +178,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $newLinkId = $this->_webApiCall($this->createServiceInfo, $requestData);
         $link = $this->getTargetLink($this->getTargetProduct(), $newLinkId);
         $globalScopeLink = $this->getTargetLink($this->getTargetProduct(true), $newLinkId);
-        $this->assertNotNull($link);
+-        $this->assertNotNull($link);
         $this->assertEquals($requestData['link']['title'], $link->getTitle());
         $this->assertEquals($requestData['link']['sort_order'], $link->getSortOrder());
         $this->assertEquals($requestData['link']['price'], $link->getPrice());
