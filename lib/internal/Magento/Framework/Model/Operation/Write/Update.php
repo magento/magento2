@@ -63,8 +63,8 @@ class Update implements WriteInterface
     public function execute($entityType, $entity)
     {
         $entity = $this->updateMain->execute($entityType, $entity);
-        $entity = $this->updateExtension->execute($entityType, $entity);
         $entity = $this->updateRelation->execute($entityType, $entity);
+        $entity = $this->updateExtension->execute($entityType, $entity);
         return $entity;
     }
 }
