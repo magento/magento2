@@ -467,7 +467,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tierPrices = $product->getData('tier_price');
 
         $productId = $this->resourceModel->getIdBySku($product->getSku());
-        $productDataArray = $product->getData();
+
+        $productDataArray = $this->extensibleDataObjectConverter
+            ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
+        $productDataArray['options'] = $product->getOptions();
+
         $ignoreLinksFlag = $product->getData('ignore_links_flag');
         $productLinks = null;
         if (!$ignoreLinksFlag && $ignoreLinksFlag !== null) {
