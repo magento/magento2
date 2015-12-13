@@ -209,7 +209,11 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         ];
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('SoapFault', 'Could not save product option');
+            if (isset($optionDataPost['title']) && empty($optionDataPost['title'])) {
+                $this->setExpectedException('SoapFault', 'Missed values for option required fields');
+            } else {
+                $this->setExpectedException('SoapFault', 'Invalid option');
+            }
         } else {
             $this->setExpectedException('Exception', '', 400);
         }
@@ -250,7 +254,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             'type' => $option->getType(),
             'sort_order' => (int)$option->getSortOrder(),
             'is_require' => (bool)$option->getIsRequire(),
-            'price' => (int)$option->getPrice(),
+            'price' => $option->getPrice(),
             'price_type' => $option->getPriceType(),
             'sku' => $option->getSku(),
             'max_characters' => 500,

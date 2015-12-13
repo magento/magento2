@@ -116,21 +116,21 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
+     * @param ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
-     * @param \Magento\Catalog\Model\ResourceModel\Product $resourceModel
+     * @param ResourceModel\Product $resourceModel
      * @param Product\Initialization\Helper\ProductLinks $linkInitializer
      * @param Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
+     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param \Magento\Framework\Filesystem $fileSystem
      * @param ImageContentInterfaceFactory $contentFactory
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param Product\Gallery\Processor $mediaGalleryProcessor
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -470,7 +470,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
-        $productDataArray['options'] = $product->getOptions();
+        $productDataArray = array_replace($productDataArray, $product->getData());
+        unset($productDataArray['media_gallery']);
 
         $ignoreLinksFlag = $product->getData('ignore_links_flag');
         $productLinks = null;
