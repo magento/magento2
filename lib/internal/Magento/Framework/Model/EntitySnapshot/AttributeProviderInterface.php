@@ -6,7 +6,9 @@
 
 namespace Magento\Framework\Model\EntitySnapshot;
 
-
+/**
+ * Interface AttributeProviderInterface
+ */
 interface AttributeProviderInterface
 {
     /**
