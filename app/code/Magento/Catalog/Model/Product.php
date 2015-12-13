@@ -1914,12 +1914,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get all options of product
      *
-     * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
+     * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]|null
      */
     public function getOptions()
     {
-        $options = $this->getData('options');
-        return $options === null ? [] : $options;
+        return $this->getData('options');
     }
 
     /**
@@ -1928,9 +1927,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setOptions(array $options = null)
     {
-        if ($options === null) {
-            $options = [];
-        }
         $this->setData('options', $options);
         return $this;
     }
