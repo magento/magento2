@@ -14,6 +14,7 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * Class Bundle
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bundle
 {
