@@ -28,6 +28,7 @@ class Converter
      * Converter constructor.
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $productCustomOptionFactory
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory,
@@ -64,6 +65,7 @@ class Converter
      * @return $this
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function processOptions(\Magento\Catalog\Api\Data\ProductInterface $product, $newOptions)
     {
