@@ -51,10 +51,10 @@ $productModel->setTypeId(
     ['qty' => 100, 'is_in_stock' => 1]
 )->setCanSaveCustomOptions(
     true
-)->setProductOptions(
-    $customOptions
 )->setCategoryIds(
     [333]
 )->setUpSellLinkData(
     [$product->getId() => ['position' => 1]]
-)->save();
+);
+
+$product->setOptions($customOptions)->save();

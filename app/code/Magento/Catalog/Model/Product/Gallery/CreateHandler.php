@@ -158,6 +158,12 @@ class CreateHandler
             if (in_array($attrData, array_keys($existImages))) {
                 $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             }
+
+            $product->addAttributeUpdate(
+                $mediaAttrCode,
+                $product->getData($mediaAttrCode),
+                $product->getStoreId()
+            );
         }
 
         $product->setData($attrCode, $value);

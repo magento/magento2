@@ -838,7 +838,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
          */
         $this->canAffectOptions($this->_canAffectOptions && $this->getCanSaveCustomOptions());
         if ($this->getCanSaveCustomOptions()) {
-            $options = $this->getProductOptions() ?: $this->getOptions();
+            $options = $this->getOptions();
             if (is_array($options)) {
                 $this->setIsCustomOptionChanged(true);
                 foreach ($options as $option) {
