@@ -470,7 +470,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
-        $productDataArray['options'] = $product->getOptions();
+        $productDataArray = array_replace($productDataArray, $product->getData());
+        unset($productDataArray['media_gallery']);
 
         $ignoreLinksFlag = $product->getData('ignore_links_flag');
         $productLinks = null;
