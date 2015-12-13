@@ -197,8 +197,7 @@ class Helper
                 $productData['options'],
                 $this->request->getPost('options_use_default')
             );
-            $product->setProductOptions($options);
-            $customOptions = [];
+            $customOptions = $product->getOptions();
             foreach ($options as $customOptionData) {
                 if (!(bool)$customOptionData['is_delete']) {
                     $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
