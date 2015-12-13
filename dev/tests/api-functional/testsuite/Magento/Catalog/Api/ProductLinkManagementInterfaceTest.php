@@ -19,7 +19,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/products/';
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
