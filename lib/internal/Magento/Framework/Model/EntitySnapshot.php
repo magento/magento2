@@ -8,6 +8,7 @@ namespace Magento\Framework\Model;
 
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\EntitySnapshot\AttributeProvider;
+
 /**
  * Class EntitySnapshot
  */
@@ -32,6 +33,7 @@ class EntitySnapshot
 
     /**
      * @param MetadataPool $metadataPool
+     * @param AttributeProvider $attributeProvider
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -44,6 +46,7 @@ class EntitySnapshot
     /**
      * @param string $entityType
      * @param object $entity
+     * @return void
      */
     public function registerSnapshot($entityType, $entity)
     {
