@@ -81,8 +81,6 @@ class CreateCmsPageEntityTest extends Injectable
         $cms = $this->fixtureFactory->createByCode($fixtureType, ['data' => $data]);
         $this->cmsIndex->open();
         $this->cmsIndex->getPageActionsBlock()->addNew();
-        //TODO: remove cms page new refresh after resolve issue with static js files publication (MAGETWO-37898)
-        $this->cmsPageNew->open();
         $this->cmsPageNew->getPageForm()->fill($cms);
         $this->cmsPageNew->getPageMainActions()->save();
 
