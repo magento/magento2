@@ -235,7 +235,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     /**
      * Get list of product options
      *
-     * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]|null
+     * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
      */
     public function getOptions();
 
