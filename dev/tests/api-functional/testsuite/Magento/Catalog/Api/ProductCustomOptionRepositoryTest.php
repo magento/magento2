@@ -209,7 +209,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         ];
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('SoapFault', 'Could not save product option');
+            $this->setExpectedException('SoapFault', 'Invalid option');
         } else {
             $this->setExpectedException('Exception', '', 400);
         }
