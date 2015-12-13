@@ -17,6 +17,11 @@ use Magento\Store\Model\StoreManagerInterface as StoreManager;
 class ReadHandler
 {
     /**
+     * @var StoreManager
+     */
+    protected $storeManager;
+
+    /**
      * @var AttributeRepository
      */
     protected $attributeRepository;
@@ -39,11 +44,13 @@ class ReadHandler
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -71,11 +78,11 @@ class ReadHandler
         $metadata = $this->metadataPool->getMetadata($entityType);
         $contextFields = $metadata->getEntityContext();
         $context = [];
-        // TODO: Implement context fallback handling
-        foreach ($contextFields as $field) {
-            if (isset($data[$field])) {
-                $context[$field] = [$data[$field], '0'];
-            }
+        if (isset($contextFields[\Magento\Store\Model\Store::STORE_ID])) {
+            $context[\Magento\Store\Model\Store::STORE_ID] = $this->addStoreIdContext(
+                $data,
+                \Magento\Store\Model\Store::STORE_ID
+            );
         }
         return $context;
     }
@@ -115,5 +122,27 @@ class ReadHandler
             }
         }
         return $data;
+    }
+
+    /**
+     * Add store_id filter to context from object data or store manager
+     *
+     * @param array $data
+     * @param string $field
+     * @return array
+     */
+    protected function addStoreIdContext(array $data, $field)
+    {
+        if (isset($data[$field])) {
+            $storeId = $data[$field];
+        } else {
+            $storeId = (int)$this->storeManager->getStore(true)->getId();
+        }
+        $storeIds = [\Magento\Store\Model\Store::DEFAULT_STORE_ID];
+        if ($storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+            $storeIds[] = $storeId;
+        }
+
+        return $storeIds;
     }
 }
