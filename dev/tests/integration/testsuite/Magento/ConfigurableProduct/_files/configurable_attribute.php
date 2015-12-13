@@ -5,18 +5,23 @@
  */
 $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
 $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
-if ($attribute instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
-    && $attribute->getId()
-) {
+
+//if ($attribute instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+//    && $attribute->getId()
+//) {
 //    $attribute->delete();
-}
-//$resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\CategorySetup');
+//}
+
+//$resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+//->create('Magento\Catalog\Model\CategorySetup');
+
 $eavConfig->clear();
+
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 if (!$attribute->getId()) {
-/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+    /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
     $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
         'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
     );
@@ -51,7 +56,6 @@ if (!$attribute->getId()) {
 
     $attribute->save();
 }
-
 
 /* Assign attribute to attribute set */
 $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
