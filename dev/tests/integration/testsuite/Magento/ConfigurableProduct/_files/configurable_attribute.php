@@ -21,7 +21,7 @@ $eavConfig->clear();
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 if (!$attribute->getId()) {
-/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+    /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
     $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
         'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
     );

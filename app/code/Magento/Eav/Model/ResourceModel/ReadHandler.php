@@ -40,6 +40,7 @@ class ReadHandler
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         AttributeRepository $attributeRepository,
