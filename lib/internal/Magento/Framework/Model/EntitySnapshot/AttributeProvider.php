@@ -8,6 +8,7 @@ namespace Magento\Framework\Model\EntitySnapshot;
 
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
+
 /**
  * Class EntitySnapshot
  */
