@@ -5,15 +5,23 @@
  */
 namespace Magento\Vault\Test\Unit\Model\Ui;
 
+use Magento\Customer\Model\Session;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetConfig()
+    /**
+     * @param int $id
+     * @param bool $isVaultEnabled
+     *
+     * @dataProvider customerIdProvider
+     */
+    public function testGetConfig($customerId, $vaultEnabled)
     {
         $storeId = 1;
-        $vaultEnabled = true;
         $paymentProviderCode = 'concrete_vault_provider';
 
         $expectedConfiguration = [
@@ -25,8 +33,14 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $vaultMethod = $this->getMock(VaultPaymentInterface::class);
         $storeManager = $this->getMock(StoreManagerInterface::class);
-        $store = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $store = $this->getMock(StoreInterface::class);
+        $customerSession = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
+        $customerSession->expects(static::once())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
         $storeManager->expects(static::once())
             ->method('getStore')
             ->with(null)
@@ -34,7 +48,7 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
         $store->expects(static::once())
             ->method('getId')
             ->willReturn($storeId);
-        $vaultMethod->expects(static::once())
+        $vaultMethod->expects($customerId !== null ? static::once() : static::never())
             ->method('isActive')
             ->with($storeId)
             ->willReturn($vaultEnabled);
@@ -43,11 +57,28 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->with($storeId)
             ->willReturn($paymentProviderCode);
 
-        $vaultCards = new \Magento\Vault\Model\Ui\VaultConfigProvider($storeManager, $vaultMethod);
+        $vaultCards = new VaultConfigProvider($storeManager, $vaultMethod, $customerSession);
 
         static::assertEquals(
             $expectedConfiguration,
             $vaultCards->getConfig()
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function customerIdProvider()
+    {
+        return [
+            [
+                'id' => 1,
+                'vault_enabled' => true
+            ],
+            [
+                'id' => null,
+                'vault_enabled' => false
+            ]
+        ];
     }
 }

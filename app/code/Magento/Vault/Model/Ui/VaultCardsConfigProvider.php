@@ -94,6 +94,9 @@ final class VaultCardsConfigProvider implements ConfigProviderInterface
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
             ->setValue($customerId)
             ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_VISIBLE)
+            ->setValue(true)
+            ->create();
         $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
             ->create();
 

@@ -55,6 +55,10 @@ interface PaymentTokenInterface
      * Is vault payment record active.
      */
     const IS_ACTIVE = 'is_active';
+    /*
+     * Is vault payment token visible.
+     */
+    const IS_VISIBLE = 'is_visible';
 
     /**
      * Gets the entity ID.
@@ -206,4 +210,20 @@ interface PaymentTokenInterface
      * @return $this
      */
     public function setIsActive($isActive);
+
+    /**
+     * Gets is vault payment record visible.
+     *
+     * @return bool Is visible.
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getIsVisible();
+
+    /**
+     * Sets is vault payment record visible.
+     *
+     * @param bool $isVisible
+     * @return $this
+     */
+    public function setIsVisible($isVisible);
 }
