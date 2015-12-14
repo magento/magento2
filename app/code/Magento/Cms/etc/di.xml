@@ -119,13 +119,13 @@
             <argument name="relationActions" xsi:type="array">
                 <item name="Magento\Cms\Api\Data\PageInterface" xsi:type="array">
                     <item name="read" xsi:type="array">
-                        <item name="optionReader" xsi:type="string">Magento\Cms\Model\Page\ReadHandler</item>
+                        <item name="optionReader" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Relation\Store\ReadHandler</item>
                     </item>
                     <item name="create" xsi:type="array">
-                        <item name="custom_options" xsi:type="string">Magento\Cms\Model\Page\SaveHandler</item>
+                        <item name="custom_options" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler</item>
                     </item>
                     <item name="update" xsi:type="array">
-                        <item name="optionUpdater" xsi:type="string">Magento\Cms\Model\Page\SaveHandler</item>
+                        <item name="optionUpdater" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler</item>
                     </item>
                 </item>
             </argument>
