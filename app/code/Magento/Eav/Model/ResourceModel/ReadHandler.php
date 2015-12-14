@@ -117,10 +117,6 @@ class ReadHandler
                     }
                     $value = $metadata->getEntityConnection()->fetchOne($select);
                     if ($value !== false) {
-                        //TODO: process EAV types as \Magento\Framework\Reflection\TypeCaster in API
-                        if ($attribute->getBackendType() === 'decimal') {
-                            $value = (float) $value;
-                        }
                         $data[$attribute->getAttributeCode()] = $value;
                     }
                 }
