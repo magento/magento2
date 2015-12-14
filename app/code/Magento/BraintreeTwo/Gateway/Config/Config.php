@@ -199,4 +199,36 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
         return explode(',', $this->getValue(self::KEY_VERIFY_SPECIFIC));
     }
+
+    /**
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return $this->getValue(Config::KEY_ENVIRONMENT);
+    }
+
+    /**
+     * @return string
+     */
+    public function getKountMerchantId()
+    {
+        return $this->getValue(Config::KEY_KOUNT_MERCHANT_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMerchantId()
+    {
+        return $this->getValue(Config::KEY_MERCHANT_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSdkUrl()
+    {
+        return $this->getValue(Config::KEY_SDK_URL);
+    }
 }

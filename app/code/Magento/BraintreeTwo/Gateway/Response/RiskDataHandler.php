@@ -5,12 +5,24 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Response;
 
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Helper\ContextHelper;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 
+/**
+ * Class RiskDataHandler
+ */
 class RiskDataHandler implements HandlerInterface
 {
+    /**
+     * Risk data id
+     */
+    const RISK_DATA_ID = 'riskDataId';
+
+    /**
+     * The possible values of the risk decision are Not Evaluated, Approve, Review, and Decline
+     */
+    const RISK_DATA_DECISION = 'riskDataDecision';
 
     /**
      * Handles response
@@ -22,7 +34,7 @@ class RiskDataHandler implements HandlerInterface
     public function handle(array $handlingSubject, array $response)
     {
         $paymentDO = SubjectReader::readPayment($handlingSubject);
-        /** @var \Braintree_Transaction $transaction */
+        /** @var \Braintree\Transaction $transaction */
         $transaction = $response['object']->transaction;
         /**
          * @TODO after changes in sales module should be refactored for new interfaces
@@ -31,7 +43,7 @@ class RiskDataHandler implements HandlerInterface
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
-        $payment->setAdditionalInformation('Risk ID', $transaction->riskData->id);
-        $payment->setAdditionalInformation('Risk Decision', $transaction->riskData->decision);
+        $payment->setAdditionalInformation(self::RISK_DATA_ID, $transaction->riskData->id);
+        $payment->setAdditionalInformation(self::RISK_DATA_DECISION, $transaction->riskData->decision);
     }
 }

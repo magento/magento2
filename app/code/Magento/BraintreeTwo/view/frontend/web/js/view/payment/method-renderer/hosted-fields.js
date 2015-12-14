@@ -20,6 +20,9 @@ define([
             template: 'Magento_BraintreeTwo/payment/form'
         },
 
+        /**
+         * @returns {exports.initialize}
+         */
         initialize: function () {
             this._super();
             this.vaultEnabler = vaultEnabler();
@@ -29,45 +32,18 @@ define([
         },
 
         /**
-         * Init Braintree client
+         * Init config
          */
-        initBraintree: function () {
-            var self = this,
-                fields = self.getHostedFields();
+        initClientConfig: function () {
+            this._super();
 
-            self._super();
-
-            this.braintreeClient.getSdkClient().setup(this.braintreeClient.getClientToken(), 'custom', {
-                id: 'co-transparent-form-braintree',
-                hostedFields: fields,
-
-                /**
-                 * Advanced fraud tools settings
-                 */
-                dataCollector: this.configureDeviceDataCollector(),
-
-                onReady: function (braintreeInstance) {
-                    self.braintreeDeviceData = braintreeInstance.deviceData;
-                },
-
-                /**
-                 * Triggers on payment nonce receive
-                 * @param {Object} response
-                 */
-                onPaymentMethodReceived: function (response) {
-                    self.paymentMethodNonce = response.nonce;
-                    self.placeOrder();
-                },
-
-                /**
-                 * Triggers on any Braintree error
-                 */
-                onError: function () {
-                    self.paymentMethodNonce = '';
-                }
-            });
+            // Hosted fields settings
+            this.clientConfig.hostedFields = this.getHostedFields();
         },
 
+        /**
+         * @returns {Object}
+         */
         getData: function () {
             var data = this._super();
 
@@ -76,22 +52,11 @@ define([
             return data;
         },
 
-        isVaultEnabled: function() {
+        /**
+         * @returns {Bool}
+         */
+        isVaultEnabled: function () {
             return this.vaultEnabler.isVaultEnabled();
-        },
-
-        configureDeviceDataCollector: function () {
-            var fields = {
-                kount: {
-                    environment: this.getEnvironment()
-                }
-            };
-
-            if (this.getKountMerchantId()) {
-                fields.kount.merchantId = this.getKountMerchantId()
-            }
-
-            return fields;
         },
 
         /**
