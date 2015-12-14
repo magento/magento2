@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Model\ResourceModel\Page;
 
+use Magento\Cms\Api\Data\PageInterface;
 use \Magento\Cms\Model\ResourceModel\AbstractCollection;
 
 /**
@@ -98,7 +99,9 @@ class Collection extends AbstractCollection
      */
     protected function _afterLoad()
     {
-        $this->performAfterLoad('cms_page_store', 'page_id');
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+
+        $this->performAfterLoad('cms_page_store', 'page_id', $entityMetadata->getLinkField());
         $this->_previewFlag = false;
 
         return parent::_afterLoad();
@@ -111,6 +114,8 @@ class Collection extends AbstractCollection
      */
     protected function _renderFiltersBefore()
     {
-        $this->joinStoreRelationTable('cms_page_store', 'page_id');
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+
+        $this->joinStoreRelationTable('cms_page_store', 'page_id', $entityMetadata->getLinkField());
     }
 }

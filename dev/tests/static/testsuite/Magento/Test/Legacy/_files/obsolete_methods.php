@@ -2505,4 +2505,7 @@ return [
     ['get', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['set', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['getTypeSwitcherData', 'Magento\Catalog\Block\Adminhtml\Product'],
+    ['_beforeDelete', 'Magento\Cms\Model\ResourceModel\Page'],
+    ['_afterSave', 'Magento\Cms\Model\ResourceModel\Page', 'Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler::execute'],
+    ['_afterLoad', 'Magento\Cms\Model\ResourceModel\Page', 'Magento\Cms\Model\ResourceModel\Page\Relation\Store\ReadHandler::execute'],
 ];
