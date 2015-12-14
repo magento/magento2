@@ -7,6 +7,7 @@ namespace Magento\Vault\Model;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -89,7 +90,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     public function getListByCustomerId($customerId)
     {
         $filters[] = $this->filterBuilder
-            ->setField(Data\PaymentTokenInterface::CUSTOMER_ID)
+            ->setField(PaymentTokenInterface::CUSTOMER_ID)
             ->setValue($customerId)
             ->create();
         $entities = $this->paymentTokenRepository->getList(
@@ -105,7 +106,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * Get payment token by token Id.
      *
      * @param int $paymentId The payment token ID.
-     * @return \Magento\Vault\Api\Data\PaymentTokenInterface|null Payment token interface.
+     * @return PaymentTokenInterface|null Payment token interface.
      */
     public function getByPaymentId($paymentId)
     {
@@ -119,7 +120,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      *
      * @param int $customerId Customer ID.
      * @param string $token The gateway token.
-     * @return \Magento\Vault\Api\Data\PaymentTokenInterface|null Payment token interface.
+     * @return PaymentTokenInterface|null Payment token interface.
      */
     public function getByGatewayToken($customerId, $token)
     {
@@ -130,10 +131,10 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
 
     /**
      * @param PaymentTokenInterface $token
-     * @param Payment $payment
+     * @param OrderPaymentInterface $payment
      * @return bool
      */
-    public function saveTokenWithPaymentLink(PaymentTokenInterface $token, Payment $payment)
+    public function saveTokenWithPaymentLink(PaymentTokenInterface $token, OrderPaymentInterface $payment)
     {
         $tokenDuplicate = $this->getByGatewayToken(
             $token->getCustomerId(),
@@ -146,7 +147,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
             $token->setEntityId($tokenDuplicate->getEntityId());
         }
 
-        $result = $this->addLinkToOrderPayment($token->getEntityId(), $payment->getId());
+        $result = $this->addLinkToOrderPayment($token->getEntityId(), $payment->getEntityId());
 
         return $result;
     }

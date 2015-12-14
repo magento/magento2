@@ -5,7 +5,7 @@
  */
 namespace Magento\Vault\Api;
 
-use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**
@@ -42,8 +42,8 @@ interface PaymentTokenManagementInterface
 
     /**
      * @param PaymentTokenInterface $token
-     * @param Payment $payment
+     * @param OrderPaymentInterface $payment
      * @return bool
      */
-    public function saveTokenWithPaymentLink(PaymentTokenInterface $token, Payment $payment);
+    public function saveTokenWithPaymentLink(PaymentTokenInterface $token, OrderPaymentInterface $payment);
 }

@@ -76,10 +76,9 @@ class PaymentToken extends AbstractDb
     public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
     {
         $connection = $this->getConnection();
-        $insertedRows = $connection->insert(
+        return 1 === $connection->insert(
             $this->getTable(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE),
-            ['order_payment_id' => intval($orderPaymentId), 'payment_token_id' => intval($paymentTokenId)]
+            ['order_payment_id' => (int) $orderPaymentId, 'payment_token_id' => (int) $paymentTokenId]
         );
-        return $insertedRows == 1;
     }
 }

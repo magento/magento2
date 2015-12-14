@@ -10,7 +10,7 @@ namespace Magento\Vault\Api\Data;
  *
  * @api
  */
-interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface PaymentTokenInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -206,19 +206,4 @@ interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @return $this
      */
     public function setIsActive($isActive);
-
-    /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @return \Magento\Vault\Api\Data\PaymentTokenExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\Vault\Api\Data\PaymentTokenExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(PaymentTokenExtensionInterface $extensionAttributes);
 }
