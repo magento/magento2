@@ -29,7 +29,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Framework\MessageQueue\Config\Reader\XmlReader $xmlReader,
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\MessageQueue\Config\Reader\EnvReader $envReader,
-        \Magento\Framework\MessageQueue\Config\Reader\EnvReader\ValidatorValidator $envValidator,
+        \Magento\Framework\MessageQueue\Config\Reader\EnvReader\Validator $envValidator,
         $cacheId = 'message_queue_config_cache'
     ) {
         parent::__construct($xmlReader, $cache, $cacheId);
