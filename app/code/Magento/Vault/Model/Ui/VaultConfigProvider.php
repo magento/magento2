@@ -6,6 +6,8 @@
 namespace Magento\Vault\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Customer\Model\Session;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 class VaultConfigProvider implements ConfigProviderInterface
@@ -13,21 +15,28 @@ class VaultConfigProvider implements ConfigProviderInterface
     const IS_ACTIVE_CODE = 'is_active_payment_token_enabler';
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Vault\Model\VaultPaymentInterface
+     * @var VaultPaymentInterface
      */
     private $vault;
 
+    /**
+     * @var Session
+     */
+    private $session;
+
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Vault\Model\VaultPaymentInterface $vault
+        StoreManagerInterface $storeManager,
+        VaultPaymentInterface $vault,
+        Session $session
     ) {
         $this->storeManager = $storeManager;
         $this->vault = $vault;
+        $this->session = $session;
     }
 
     /**
@@ -42,7 +51,7 @@ class VaultConfigProvider implements ConfigProviderInterface
         return [
             VaultPaymentInterface::CODE => [
                 'vault_provider_code' => $this->vault->getProviderCode($storeId),
-                'is_enabled' => $this->vault->isActive($storeId)
+                'is_enabled' => $this->session->getCustomerId() !== null && $this->vault->isActive($storeId)
             ]
         ];
     }

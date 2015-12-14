@@ -5,15 +5,15 @@
  */
 namespace Magento\Vault\Model;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\Vault\Api\Data\PaymentTokenExtensionInterface;
 use Magento\Vault\Model\ResourceModel;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Vault Payment Token extension attribute model
  */
-class PaymentToken extends AbstractExtensibleModel implements PaymentTokenInterface
+class PaymentToken extends AbstractModel implements PaymentTokenInterface
 {
     /**
      * @var string
@@ -189,6 +189,29 @@ class PaymentToken extends AbstractExtensibleModel implements PaymentTokenInterf
     public function setPublicHash($hash)
     {
         $this->setData(PaymentTokenInterface::PUBLIC_HASH, $hash);
+        return $this;
+    }
+
+    /**
+     * Gets is vault payment record visible.
+     *
+     * @return bool Is visible.
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getIsVisible()
+    {
+        return (bool) (int) $this->getData(PaymentTokenInterface::IS_VISIBLE);
+    }
+
+    /**
+     * Sets is vault payment record visible.
+     *
+     * @param bool $isVisible
+     * @return $this
+     */
+    public function setIsVisible($isVisible)
+    {
+        $this->setData(PaymentTokenInterface::IS_VISIBLE, (bool) $isVisible);
         return $this;
     }
 }

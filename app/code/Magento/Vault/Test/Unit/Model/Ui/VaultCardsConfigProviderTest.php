@@ -9,6 +9,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\Ui\VaultCardsConfigProvider;
@@ -101,10 +102,14 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetConfig()
     {
         $customerId = 1;
+        $visible = true;
         $storeId = 1;
         $vaultPaymentCode = "vault_decorator_code";
 
-        $filterMock = $this->getMockBuilder(Filter::class)
+        $customerFilterMock = $this->getMockBuilder(Filter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $visibilityFilterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
@@ -131,21 +136,13 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->filterBuilderMock->expects(self::once())
-            ->method('setField')
-            ->with(PaymentTokenInterface::CUSTOMER_ID)
-            ->willReturnSelf();
-        $this->filterBuilderMock->expects(self::once())
-            ->method('setValue')
-            ->with($customerId)
-            ->willReturnSelf();
-        $this->filterBuilderMock->expects(self::once())
-            ->method('create')
-            ->willReturn($filterMock);
+        $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, $customerFilterMock, 0);
+        $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, $visible, $visibilityFilterMock, 1);
+
 
         $this->searchCriteriaBuilderMock->expects(self::once())
             ->method('addFilters')
-            ->with([$filterMock])
+            ->with([$customerFilterMock, $visibilityFilterMock])
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects(self::once())
             ->method('create')
@@ -180,6 +177,27 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
                 self::assertArrayHasKey('title', $paymentToken);
             }
         }
+    }
+
+    /**
+     * @param string $field
+     * @param mixed $value
+     * @param \PHPUnit_Framework_MockObject_MockObject $filterObject
+     * @param int $atIndex
+     */
+    private function createExpectedFilter($field, $value, $filterObject, $atIndex)
+    {
+        $this->filterBuilderMock->expects(new MethodInvokedAtIndex($atIndex))
+            ->method('setField')
+            ->with($field)
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects(new MethodInvokedAtIndex($atIndex))
+            ->method('setValue')
+            ->with($value)
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects(new MethodInvokedAtIndex($atIndex))
+            ->method('create')
+            ->willReturn($filterObject);
     }
 
     /**

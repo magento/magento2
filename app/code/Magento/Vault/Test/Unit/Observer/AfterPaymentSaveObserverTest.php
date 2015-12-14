@@ -11,6 +11,7 @@ use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
+use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
 
 class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
@@ -45,11 +46,15 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
     {
         $expectedPublicHash = 'expected public hash';
         $isActive = true;
+        $isVisible = true;
 
         $customerId = 1;
         $gatewayToken = 'gateway token';
         $paymentMethodCode = 'vault provider payment code';
         $hashInput = $customerId . $gatewayToken . $paymentMethodCode;
+        $additionalInformation = [
+            VaultConfigProvider::IS_ACTIVE_CODE => "1"
+        ];
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
@@ -92,6 +97,14 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         $paymentToken->expects(static::once())
             ->method('setIsActive')
             ->with($isActive);
+
+        $orderPayment->expects(static::once())
+            ->method('getAdditionalInformation')
+            ->willReturn($additionalInformation);
+
+        $paymentToken->expects(static::once())
+            ->method('setIsVisible')
+            ->with(true);
 
         $this->paymentTokenManager->expects(static::once())
             ->method('saveTokenWithPaymentLink')

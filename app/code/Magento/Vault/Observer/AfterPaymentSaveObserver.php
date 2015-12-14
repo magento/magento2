@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
+use Magento\Vault\Model\Ui\VaultConfigProvider;
 
 /**
  * Order payment after save observer for storing payment vault record in db
@@ -64,6 +65,13 @@ class AfterPaymentSaveObserver implements ObserverInterface
 
         $paymentToken->setPublicHash($this->generatePublicHash($paymentToken));
         $paymentToken->setIsActive(true);
+
+        $additionalInformation = $payment->getAdditionalInformation();
+        if (isset($additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE])) {
+            $paymentToken->setIsVisible(
+                (bool) (int) $additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE]
+            );
+        }
 
         $this->paymentTokenManagement->saveTokenWithPaymentLink($paymentToken, $payment);
         $extensionAttributes->setVaultPaymentToken($paymentToken);
