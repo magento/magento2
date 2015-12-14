@@ -125,7 +125,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Process "Use Config Settings" checkboxes
              */
-            $generalPost = $this->getRequest()->getPost('general');
+            $generalPost = $data['general'];
             if ($generalPost['use_config']) {
                 $useConfig = [];
                 foreach ($generalPost['use_config'] as $attributeCode => $attributeValue) {
