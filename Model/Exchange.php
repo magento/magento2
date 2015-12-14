@@ -68,6 +68,9 @@ class Exchange implements ExchangeInterface
                 if ($response->get('correlation_id') == $correlationId) {
                     $responseBody = $response->body;
                     $channel->basic_ack($response->get('delivery_tag'));
+                } else {
+                    //push message back to the queue
+                    $channel->basic_reject($response->get('delivery_tag'), true);
                 }
             };
             if ($envelope->getProperties()['reply_to']) {
