@@ -87,6 +87,7 @@ define([
             var value = data !== undefined ? +data : !this.productHasWeightBySwitcher();
 
             $('input[value=' + value + ']', this.$weightSwitcher()).prop('checked', true);
+            this.switchWeight();
         },
 
         /**
