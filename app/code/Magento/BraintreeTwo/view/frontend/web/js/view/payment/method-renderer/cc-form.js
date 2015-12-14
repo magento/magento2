@@ -32,6 +32,7 @@ define(
                 active: false,
                 isInitialized: false,
                 braintreeClient: null,
+                braintreeDeviceData: null,
                 paymentMethodNonce: null,
                 lastBillingAddress: null,
                 validatorManager: validatorManager
@@ -131,6 +132,14 @@ define(
                 return availableTypes;
             },
 
+            getEnvironment: function () {
+                return window.checkoutConfig.payment[this.getCode()].environment;
+            },
+
+            getKountMerchantId: function () {
+                return window.checkoutConfig.payment[this.getCode()].kountMerchantId;
+            },
+
             /**
              * Get data
              * @returns {Object}
@@ -139,7 +148,8 @@ define(
                 return {
                     'method': this.item.method,
                     'additional_data': {
-                        'payment_method_nonce': this.paymentMethodNonce
+                        'payment_method_nonce': this.paymentMethodNonce,
+                        'device_data': this.braintreeDeviceData
                     }
                 };
             },
