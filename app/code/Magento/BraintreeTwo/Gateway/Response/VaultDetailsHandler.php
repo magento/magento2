@@ -17,7 +17,6 @@ use Magento\Vault\Model\PaymentTokenFactory;
 
 /**
  * Vault Details Handler
- * @package Magento\BraintreeTwo\Gateway\Response
  */
 class VaultDetailsHandler implements HandlerInterface
 {

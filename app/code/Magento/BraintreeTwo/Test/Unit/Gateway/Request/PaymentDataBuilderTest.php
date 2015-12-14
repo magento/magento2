@@ -18,6 +18,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
 {
     const PAYMENT_METHOD_NONCE = 'nonce';
     const MERCHANT_ACCOUNT_ID = '245345';
+    const DEVICE_DATA = '{"test": "test"}';
 
     /**
      * @var PaymentDataBuilder
@@ -79,10 +80,22 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuild()
     {
+        $additionalData = [
+            [
+                DataAssignObserver::PAYMENT_METHOD_NONCE,
+                self::PAYMENT_METHOD_NONCE
+            ],
+            [
+                DataAssignObserver::DEVICE_DATA,
+                self::DEVICE_DATA
+            ]
+        ];
+
         $expectedResult = [
             PaymentDataBuilder::AMOUNT  => 10.00,
             PaymentDataBuilder::PAYMENT_METHOD_NONCE  => self::PAYMENT_METHOD_NONCE,
-            PaymentDataBuilder::MERCHANT_ACCOUNT_ID  => self::MERCHANT_ACCOUNT_ID
+            PaymentDataBuilder::DEVICE_DATA  => self::DEVICE_DATA,
+            PaymentDataBuilder::MERCHANT_ACCOUNT_ID  => self::MERCHANT_ACCOUNT_ID,
         ];
 
         $buildSubject = [
@@ -90,10 +103,9 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
             'amount' => 10.00
         ];
 
-        $this->paymentMock->expects(static::once())
+        $this->paymentMock->expects(static::exactly(count($additionalData)))
             ->method('getAdditionalInformation')
-            ->with(DataAssignObserver::PAYMENT_METHOD_NONCE)
-            ->willReturn(self::PAYMENT_METHOD_NONCE);
+            ->willReturnMap($additionalData);
 
         $this->configMock->expects(static::once())
             ->method('getValue')

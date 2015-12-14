@@ -42,13 +42,13 @@ final class ConfigProvider implements ConfigProviderInterface
                 self::CODE => [
                     'clientToken' => $this->config->getClientToken(),
                     'ccTypesMapper' => $this->config->getCctypesMapper(),
-                    'sdkUrl' => $this->config->getValue(Config::KEY_SDK_URL),
+                    'sdkUrl' => $this->config->getSdkUrl(),
                     'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig(),
                     'availableCardTypes' => $this->config->getAvailableCardTypes(),
                     'useCvv' => $this->config->isCvvEnabled(),
-                    'environment' => $this->config->getValue(Config::KEY_ENVIRONMENT),
-                    'kountMerchantId' => $this->config->getValue(Config::KEY_KOUNT_MERCHANT_ID),
-                    'merchantId' => $this->config->getValue(Config::KEY_MERCHANT_ID),
+                    'environment' => $this->config->getEnvironment(),
+                    'kountMerchantId' => $this->config->getKountMerchantId(),
+                    'merchantId' => $this->config->getMerchantId(),
                 ],
                 Config::CODE_3DSECURE => [
                     'enabled' => $this->config->isVerify3DSecure(),
