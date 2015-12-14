@@ -11,9 +11,9 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that comment about authorized amount exist in Comments History section on order page in backend.
+ * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
  */
-class AssertOrderCommentsHistory extends AbstractConstraint
+class AssertAuthorizationInCommentsHistory extends AbstractConstraint
 {
     /**
      * Message about authorized amount in order.
@@ -21,7 +21,7 @@ class AssertOrderCommentsHistory extends AbstractConstraint
     const AUTHORIZED_AMOUNT = 'Authorized amount of $';
 
     /**
-     * Assert  that comment about authorized amount exist in Comments History section on order page in backend.
+     * Assert that comment about authorized amount exist in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
