@@ -33,6 +33,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_VERIFY_SPECIFIC = 'verify_specific_countries';
     const VALUE_3DSECURE_ALL = 0;
     const CODE_3DSECURE = 'three_d_secure';
+    const KEY_KOUNT_MERCHANT_ID = 'kount_merchant_id';
 
     /**
      * @var string
@@ -195,6 +196,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         if ((int) $this->getValue(self::KEY_VERIFY_ALLOW_SPECIFIC) == self::VALUE_3DSECURE_ALL) {
             return [];
         }
+
         return explode(',', $this->getValue(self::KEY_VERIFY_SPECIFIC));
     }
 }

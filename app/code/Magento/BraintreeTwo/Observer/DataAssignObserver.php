@@ -14,6 +14,12 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 class DataAssignObserver extends AbstractDataAssignObserver
 {
     const PAYMENT_METHOD_NONCE = 'payment_method_nonce';
+    const DEVICE_DATA = 'device_data';
+
+    protected $additionalInformationList = [
+        self::PAYMENT_METHOD_NONCE,
+        self::DEVICE_DATA
+    ];
 
     /**
      * @param Observer $observer
@@ -21,14 +27,20 @@ class DataAssignObserver extends AbstractDataAssignObserver
      */
     public function execute(Observer $observer)
     {
+        $method = $this->readMethodArgument($observer);
         $data = $this->readDataArgument($observer);
+        /**
+         * @TODO should be refactored after interface changes in payment and quote
+         */
+        $paymentInfo = $method->getInfoInstance();
 
-        $paymentInfo = $this->readPaymentModelArgument($observer);
-        if ($data->getDataByKey(self::PAYMENT_METHOD_NONCE) !== null) {
-            $paymentInfo->setAdditionalInformation(
-                self::PAYMENT_METHOD_NONCE,
-                $data->getDataByKey(self::PAYMENT_METHOD_NONCE)
-            );
+        foreach ($this->additionalInformationList as $additionalInformationKey) {
+            if ($data->getDataByKey($additionalInformationKey) !== null) {
+                $paymentInfo->setAdditionalInformation(
+                    $additionalInformationKey,
+                    $data->getDataByKey($additionalInformationKey)
+                );
+            }
         }
     }
 }
