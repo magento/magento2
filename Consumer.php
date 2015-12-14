@@ -107,9 +107,16 @@ class Consumer implements ConsumerInterface
     {
         return function (EnvelopeInterface $message) use ($queue) {
             try {
+                $topicName = $message->getProperties()['topic_name'];
+                $allowedTopics = $this->configuration->getTopicNames();
                 $this->resource->getConnection()->beginTransaction();
-                $this->dispatchMessage($message);
-                $queue->acknowledge($message);
+                if (in_array($topicName, $allowedTopics)) {
+                    $this->dispatchMessage($message);
+                    $queue->acknowledge($message);
+                } else {
+                    //push message back to the queue
+                    $queue->reject($message);
+                }
                 $this->resource->getConnection()->commit();
             } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();

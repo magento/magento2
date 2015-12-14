@@ -95,6 +95,15 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     /**
      * {@inheritdoc}
      */
+    public function getTopicNames()
+    {
+        $output = $this->getData(self::HANDLERS);
+        return is_array($output) && count($output) ? array_keys($output) : [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getQueue()
     {
         $connectionName = $this->messageQueueConfig->getConnectionByConsumer($this->getConsumerName());

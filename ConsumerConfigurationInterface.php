@@ -47,6 +47,13 @@ interface ConsumerConfigurationInterface
     public function getHandlers($topicName);
 
     /**
+     * Get topics.
+     *
+     * @return string[]
+     */
+    public function getTopicNames();
+
+    /**
      * @param string $topicName
      * @return string
      */
