@@ -8,7 +8,6 @@ namespace Magento\BraintreeTwo\Test\Unit\Observer;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Payment\Model\InfoInterface;
-use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
 
@@ -18,6 +17,7 @@ use Magento\BraintreeTwo\Observer\DataAssignObserver;
 class DataAssignObserverTest extends \PHPUnit_Framework_TestCase
 {
     const PAYMENT_METHOD_NONCE = 'nonce';
+    const DEVICE_DATA = '{"test": "test"}';
 
     public function testExecute()
     {
@@ -30,7 +30,8 @@ class DataAssignObserverTest extends \PHPUnit_Framework_TestCase
         $paymentInfoModel = $this->getMock(InfoInterface::class);
         $dataObject = new DataObject(
             [
-                'payment_method_nonce' => self::PAYMENT_METHOD_NONCE
+                'payment_method_nonce' => self::PAYMENT_METHOD_NONCE,
+                'device_data' => self::DEVICE_DATA,
             ]
         );
         $observerContainer->expects(static::atLeastOnce())
@@ -44,12 +45,13 @@ class DataAssignObserverTest extends \PHPUnit_Framework_TestCase
                     [AbstractDataAssignObserver::DATA_CODE, $dataObject]
                 ]
             );
-        $paymentInfoModel->expects(static::once())
+        $paymentInfoModel->expects(static::at(0))
             ->method('setAdditionalInformation')
-            ->with(
-                'payment_method_nonce',
-                self::PAYMENT_METHOD_NONCE
-            );
+            ->with('payment_method_nonce', self::PAYMENT_METHOD_NONCE);
+        $paymentInfoModel->expects(static::at(1))
+            ->method('setAdditionalInformation')
+            ->with('device_data', self::DEVICE_DATA);
+
         $observer = new DataAssignObserver();
         $observer->execute($observerContainer);
     }

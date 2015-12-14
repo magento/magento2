@@ -27,12 +27,8 @@ class DataAssignObserver extends AbstractDataAssignObserver
      */
     public function execute(Observer $observer)
     {
-        $method = $this->readMethodArgument($observer);
         $data = $this->readDataArgument($observer);
-        /**
-         * @TODO should be refactored after interface changes in payment and quote
-         */
-        $paymentInfo = $method->getInfoInstance();
+        $paymentInfo = $this->readPaymentModelArgument($observer);
 
         foreach ($this->additionalInformationList as $additionalInformationKey) {
             if ($data->getDataByKey($additionalInformationKey) !== null) {

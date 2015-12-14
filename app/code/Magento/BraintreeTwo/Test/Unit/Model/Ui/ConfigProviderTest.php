@@ -44,10 +44,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                 ->method($method)
                 ->willReturn($value);
         }
-        $this->configMock->expects(static::once())
-            ->method('getValue')
-            ->with(Config::KEY_SDK_URL)
-            ->willReturn(self::SDK_URL);
+
         static::assertEquals($expected, $configProvider->getConfig());
     }
 
@@ -61,6 +58,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'config' => [
                     'getClientToken' => 'token',
                     'getCcTypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
+                    'getSdkUrl' => self::SDK_URL,
                     'getCountrySpecificCardTypeConfig' => [
                         'GB' => ['VI', 'AE'],
                         'US' => ['DI', 'JCB']
@@ -69,7 +67,10 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'isCvvEnabled' => true,
                     'isVerify3DSecure' => true,
                     'getThresholdAmount' => 20,
-                    'get3DSecureSpecificCountries' => ['GB', 'US', 'CA']
+                    'get3DSecureSpecificCountries' => ['GB', 'US', 'CA'],
+                    'getEnvironment' => 'test-environment',
+                    'getKountMerchantId' => 'test-kount-merchant-id',
+                    'getMerchantId' => 'test-merchant-id',
                 ],
                 'expected' => [
                     'payment' => [
@@ -82,7 +83,10 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                                 'US' => ['DI', 'JCB']
                             ],
                             'availableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
-                            'useCvv' => true
+                            'useCvv' => true,
+                            'environment' => 'test-environment',
+                            'kountMerchantId' => 'test-kount-merchant-id',
+                            'merchantId' => 'test-merchant-id',
                         ],
                         Config::CODE_3DSECURE => [
                             'enabled' => true,
