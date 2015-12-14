@@ -5,9 +5,9 @@
  */
 namespace Magento\BraintreeTwo\Model\Adapter;
 
-use \Braintree_ClientToken;
-use \Braintree_Result_Error;
-use \Braintree_Result_Successful;
+use Braintree\ClientToken;
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
 
 /**
  * BraintreeClientToken
@@ -18,12 +18,12 @@ class BraintreeClientToken
 {
     /**
      * @param array $params
-     * @return \Braintree_Result_Successful|\Braintree_Result_Error|null
+     * @return \Braintree\Result\Successful|\Braintree\Result\Error|null
      */
     public function generate(array $params = [])
     {
         try {
-            return \Braintree_ClientToken::generate($params);
+            return ClientToken::generate($params);
         } catch (\Exception $e) {
             return null;
         }

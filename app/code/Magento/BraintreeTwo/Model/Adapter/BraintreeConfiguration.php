@@ -5,7 +5,7 @@
  */
 namespace Magento\BraintreeTwo\Model\Adapter;
 
-use \Braintree_Configuration;
+use Braintree\Configuration;
 
 /**
  * BraintreeConfiguration
@@ -20,7 +20,7 @@ class BraintreeConfiguration
      */
     public function environment($value = null)
     {
-        return \Braintree_Configuration::environment($value);
+        return Configuration::environment($value);
     }
 
     /**
@@ -29,7 +29,7 @@ class BraintreeConfiguration
      */
     public function merchantId($value = null)
     {
-        return \Braintree_Configuration::merchantId($value);
+        return Configuration::merchantId($value);
     }
 
     /**
@@ -38,7 +38,7 @@ class BraintreeConfiguration
      */
     public function publicKey($value = null)
     {
-        return \Braintree_Configuration::publicKey($value);
+        return Configuration::publicKey($value);
     }
 
     /**
@@ -47,6 +47,6 @@ class BraintreeConfiguration
      */
     public function privateKey($value = null)
     {
-        return \Braintree_Configuration::privateKey($value);
+        return Configuration::privateKey($value);
     }
 }
