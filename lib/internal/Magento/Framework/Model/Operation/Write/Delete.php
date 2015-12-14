@@ -62,8 +62,8 @@ class Delete implements WriteInterface
      */
     public function execute($entityType, $entity)
     {
-        $this->deleteRelation->execute($entity, $entity);
-        $this->deleteExtension->execute($entity, $entity);
+        $this->deleteRelation->execute($entityType, $entity);
+        $this->deleteExtension->execute($entityType, $entity);
         $this->deleteMain->execute($entityType, $entity);
         return true;
     }
