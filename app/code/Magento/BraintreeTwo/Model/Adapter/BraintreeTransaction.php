@@ -6,8 +6,6 @@
 namespace Magento\BraintreeTwo\Model\Adapter;
 
 use Braintree\Transaction;
-use Braintree\Result\Error;
-use Braintree\Result\Successful;
 
 /**
  * BraintreeTransaction
