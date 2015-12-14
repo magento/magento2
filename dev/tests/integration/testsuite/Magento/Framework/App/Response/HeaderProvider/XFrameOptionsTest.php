@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-class XFrameOptionsTest extends AbstractHeaderVerifier
+class XFrameOptionsTest extends AbstractHeaderTest
 {
     public function testHeaderPresent()
     {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-class UpgradeInsecureVerifier extends AbstractHeaderVerifier
+class UpgradeInsecureTest extends AbstractHeaderTest
 {
     /**
      * @magentoAdminConfigFixture web/secure/enable_upgrade_insecure 1

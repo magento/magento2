@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-class HstsVerifier extends AbstractHeaderVerifier
+class HstsTest extends AbstractHeaderTest
 {
     /**
      * @magentoAdminConfigFixture web/secure/enable_hsts 1

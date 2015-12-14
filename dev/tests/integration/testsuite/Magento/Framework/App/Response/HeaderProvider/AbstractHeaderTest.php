@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-abstract class AbstractHeaderVerifier extends \Magento\TestFramework\TestCase\AbstractController
+abstract class AbstractHeaderTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /** @var  \Magento\Framework\App\Response\Http */
     private $interceptedResponse;
