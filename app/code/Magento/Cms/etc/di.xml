@@ -107,6 +107,10 @@
                     <item name="entityTableName" xsi:type="string">cms_page</item>
                     <item name="identifierField" xsi:type="string">page_id</item>
                 </item>
+                <item name="Magento\Cms\Api\Data\BlockInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">cms_block</item>
+                    <item name="identifierField" xsi:type="string">block_id</item>
+                </item>
             </argument>
         </arguments>
     </type>

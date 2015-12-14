@@ -45,12 +45,11 @@ class Page extends AbstractDb
     protected $entityManager;
 
     /**
-     * Construct
-     *
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param DateTime $dateTime
-     * @param string $connectionName
+     * @param EntityManager $entityManager
+     * @param null $connectionName
      */
     public function __construct(
         Context $context,
