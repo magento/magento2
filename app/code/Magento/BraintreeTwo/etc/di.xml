@@ -130,6 +130,7 @@
             <argument name="handlers" xsi:type="array">
                 <item name="payment_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler</item>
                 <item name="card_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\CardDetailsHandler</item>
+                <item name="risk_data" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\RiskDataHandler</item>
                 <item name="vault_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler</item>
             </argument>
         </arguments>

@@ -68,6 +68,20 @@
                             <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
                             <config_path>payment/braintreetwo/merchant_account_id</config_path>
                         </field>
+                        <field id="fraud_protection" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Advanced Fraud Protection</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>Be sure to Enable Advanced Fraud Protection in Your Braintree Account in Settings/Processing Section</comment>
+                            <config_path>payment/braintreetwo/fraud_protection</config_path>
+                        </field>
+                        <field id="kount_merchant_id" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Kount Merchant ID</label>
+                            <comment><![CDATA[Used for direct fraud tool integration. Make sure you also contact <a href="mailto:accounts@braintreepayments.com">accounts@braintreepayments.com</a> to setup your Kount account.]]></comment>
+                            <depends>
+                                <field id="fraud_protection">1</field>
+                            </depends>
+                            <config_path>payment/braintreetwo/kount_merchant_id</config_path>
+                        </field>
                         <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Debug</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

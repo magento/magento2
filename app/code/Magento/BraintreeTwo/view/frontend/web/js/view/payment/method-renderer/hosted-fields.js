@@ -42,6 +42,15 @@ define([
                 hostedFields: fields,
 
                 /**
+                 * Advanced fraud tools settings
+                 */
+                dataCollector: this.configureDeviceDataCollector(),
+
+                onReady: function (braintreeInstance) {
+                    self.braintreeDeviceData = braintreeInstance.deviceData;
+                },
+
+                /**
                  * Triggers on payment nonce receive
                  * @param {Object} response
                  */
@@ -69,6 +78,20 @@ define([
 
         isVaultEnabled: function() {
             return this.vaultEnabler.isVaultEnabled();
+        },
+
+        configureDeviceDataCollector: function () {
+            var fields = {
+                kount: {
+                    environment: this.getEnvironment()
+                }
+            };
+
+            if (this.getKountMerchantId()) {
+                fields.kount.merchantId = this.getKountMerchantId()
+            }
+
+            return fields;
         },
 
         /**

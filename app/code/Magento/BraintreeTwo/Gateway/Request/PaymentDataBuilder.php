@@ -43,6 +43,34 @@ class PaymentDataBuilder implements BuilderInterface
     const MERCHANT_ACCOUNT_ID = 'merchantAccountId';
 
     /**
+     * Additional options in request to gateway
+     */
+    const OPTIONS = 'options';
+
+    /**
+     * The option that determines whether the payment method
+     * associated with the successful transaction should be stored in the Vault.
+     */
+    const STORE_IN_VAULT = 'storeInVault';
+
+    /**
+     * The option that determines whether the shipping address information
+     * provided with the transaction should be associated with the customer ID specified.
+     * When passed, the payment method will always be stored in the Vault.
+     */
+    const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
+
+    /**
+     * "Is active" vault module config option name
+     */
+    const CONFIG_PAYMENT_VAULT_ACTIVE = 'active';
+
+    /**
+     * Additional data for Advanced Fraud Tools
+     */
+    const DEVICE_DATA = 'deviceData';
+
+    /**
      * @var Config
      */
     private $config;
@@ -69,6 +97,9 @@ class PaymentDataBuilder implements BuilderInterface
             self::AMOUNT => $this->formatPrice(SubjectReader::readAmount($buildSubject)),
             self::PAYMENT_METHOD_NONCE => $payment->getAdditionalInformation(
                 DataAssignObserver::PAYMENT_METHOD_NONCE
+            ),
+            self::DEVICE_DATA => $payment->getAdditionalInformation(
+                DataAssignObserver::DEVICE_DATA
             )
         ];
 
