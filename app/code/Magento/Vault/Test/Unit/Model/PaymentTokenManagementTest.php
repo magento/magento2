@@ -6,6 +6,7 @@
 namespace Magento\Vault\Test\Unit\Model;
 
 use Magento\Framework\Api\Filter;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
@@ -236,10 +237,8 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveTokenWithPaymentLink()
     {
-        /** @var Payment|\PHPUnit_Framework_MockObject_MockObject $paymentMock */
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var OrderPaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentMock */
+        $paymentMock = $this->getMock(OrderPaymentInterface::class);
         /** @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject $tokenMock */
         $tokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
             ->getMockForAbstractClass();
@@ -252,7 +251,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->with($tokenMock);
 
         $paymentMock->expects(self::once())
-            ->method('getId');
+            ->method('getEntityId');
 
         $this->paymentTokenManagement->saveTokenWithPaymentLink($tokenMock, $paymentMock);
     }

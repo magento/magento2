@@ -191,25 +191,4 @@ class PaymentToken extends AbstractExtensibleModel implements PaymentTokenInterf
         $this->setData(PaymentTokenInterface::PUBLIC_HASH, $hash);
         return $this;
     }
-
-    /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @return \Magento\Vault\Api\Data\PaymentTokenExtensionInterface|null
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\Vault\Api\Data\PaymentTokenExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(PaymentTokenExtensionInterface $extensionAttributes)
-    {
-        return $this->_setExtensionAttributes($extensionAttributes);
-    }
 }
