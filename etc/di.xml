@@ -34,11 +34,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Elasticsearch\Model\Indexer\IndexerHandler">
-        <arguments>
-            <argument name="entityType" xsi:type="string">product</argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogSearch\Model\ResourceModel\EngineProvider">
         <arguments>
             <argument name="engines" xsi:type="array">

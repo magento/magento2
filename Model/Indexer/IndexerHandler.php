@@ -10,6 +10,7 @@ use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch;
 use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 use Magento\Store\Model\Store;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -44,11 +45,6 @@ class IndexerHandler implements IndexerInterface
     protected $batchSize;
 
     /**
-     * @var string
-     */
-    protected $entityType;
-
-    /**
      * @param ElasticsearchFactory $adapterFactory
      * @param Batch $batch
      * @param string $entityType
@@ -58,14 +54,12 @@ class IndexerHandler implements IndexerInterface
     public function __construct(
         ElasticsearchFactory $adapterFactory,
         Batch $batch,
-        $entityType,
         array $data = [],
         $batchSize = self::DEFAULT_BATCH_SIZE
     ) {
         $this->adapter = $adapterFactory->create();
         $this->data = $data;
         $this->batch = $batch;
-        $this->entityType = $entityType;
         $this->batchSize = $batchSize;
     }
 
@@ -76,11 +70,12 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
+        $indexName = $this->getIndexMapping($this->data['indexer_id']);
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $storeId);
-            $this->adapter->addDocs($docs, $storeId, $this->entityType);
+            $this->adapter->addDocs($docs, $storeId, $indexName);
         }
-        $this->adapter->updateAlias($storeId, $this->entityType);
+        $this->adapter->updateAlias($storeId, $indexName);
         return $this;
     }
 
@@ -92,11 +87,12 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
+        $indexName = $this->getIndexMapping($this->data['indexer_id']);
         $documentIds = [];
         foreach ($documents as $entityId => $document) {
             $documentIds[$entityId] = $entityId;
         }
-        $this->adapter->deleteDocs($documentIds, $storeId, $this->entityType);
+        $this->adapter->deleteDocs($documentIds, $storeId, $indexName);
         return $this;
     }
 
@@ -107,7 +103,8 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
-        $this->adapter->cleanIndex($storeId, $this->entityType);
+        $indexName = $this->getIndexMapping($this->data['indexer_id']);
+        $this->adapter->cleanIndex($storeId, $indexName);
         return $this;
     }
 
@@ -117,5 +114,20 @@ class IndexerHandler implements IndexerInterface
     public function isAvailable()
     {
         return $this->adapter->ping();
+    }
+
+    /**
+     * Taking index name by indexer ID
+     *
+     * @param string $indexerId
+     *
+     * @return string
+     */
+    private function getIndexMapping($indexerId)
+    {
+        if ($indexerId == Fulltext::INDEXER_ID) {
+            $indexName = 'product';
+        }
+        return $indexName;
     }
 }

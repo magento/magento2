@@ -53,6 +53,7 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
             [
                 'adapterFactory' => $adapterFactory,
                 'batch' => $this->batch,
+                'data' => ['indexer_id' => 'catalogsearch_fulltext'],
             ]
         );
     }
