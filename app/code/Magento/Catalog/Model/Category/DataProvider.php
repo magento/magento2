@@ -231,6 +231,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 ($categoryData[$elementsWithUseConfigSetting] == '')
             ) {
                 $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
+            } else {
+                $categoryData['use_config'][$elementsWithUseConfigSetting] = false;
             }
         }
         return $categoryData;
