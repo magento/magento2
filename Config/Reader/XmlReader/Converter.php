@@ -8,6 +8,7 @@ namespace Magento\Framework\MessageQueue\Config\Reader\XmlReader;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Communication\ConfigInterface as Communication;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\MessageQueue\Config\Validator;
 
 /**
  * Converts MessageQueue config from \DOMDocument to array
@@ -27,17 +28,25 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $communicationConfig;
 
     /**
+     * @var Validator
+     */
+    private $xmlValidator;
+
+    /**
      * Initialize dependencies
      *
      * @param MethodsMap $methodsMap
      * @param \Magento\Framework\Communication\ConfigInterface $communicationConfig
+     * @param Validator $xmlValidator
      */
     public function __construct(
         MethodsMap $methodsMap,
-        \Magento\Framework\Communication\ConfigInterface $communicationConfig
+        \Magento\Framework\Communication\ConfigInterface $communicationConfig,
+        Validator $xmlValidator
     ) {
         $this->methodsMap = $methodsMap;
         $this->communicationConfig = $communicationConfig;
+        $this->xmlValidator = $xmlValidator;
     }
 
     /**
@@ -55,11 +64,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $publishers = array_merge($publishers, $brokerPublishers);
 
         /** Process Topics Configuration */
-        $topics = $this->extractTopics($source);
+        $topics = $this->extractTopics($source, $publishers);
         $brokerTopics = $this->processTopicsConfiguration($brokers);
         $topics = array_merge($topics, $brokerTopics);
 
-        $binds = $this->extractBinds($source);
+        $binds = $this->extractBinds($source, $topics);
 
         /** Process Consumers Configuration */
         $consumers = $this->extractConsumers($source, $binds);
@@ -307,17 +316,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function getSchemaDefinedByMethod($schemaId, $topic)
     {
-        if (!preg_match(self::SERVICE_METHOD_NAME_PATTERN, $schemaId, $matches)) {
-            throw new \LogicException(
-                sprintf(
-                    'Message schema definition for topic "%s" should reference existing service method. Given "%s"',
-                    $topic,
-                    $schemaId
-                )
-            );
-        }
+        preg_match(self::SERVICE_METHOD_NAME_PATTERN, $schemaId, $matches);
         $serviceClass = $matches[1];
         $serviceMethod = $matches[2];
+        $this->xmlValidator->validateSchemaMethodType($serviceClass, $serviceMethod, $topic);
         $result = [];
         $paramsMeta = $this->methodsMap->getMethodParams($serviceClass, $serviceMethod);
         foreach ($paramsMeta as $paramPosition => $paramMeta) {
@@ -334,7 +336,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Identify which option is used to define message schema: data interface or service method params
      *
-     * @param string $schemaIdQueueConfig
+     * @param string $schemaId
      * @return string
      * @deprecatedQueueConfig
      */
@@ -397,6 +399,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 QueueConfig::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
                 QueueConfig::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
             ];
+            $this->xmlValidator->validateHandlerType(
+                $handler[QueueConfig::CONSUMER_CLASS],
+                $handler[QueueConfig::CONSUMER_METHOD],
+                $consumerName
+            );
             $handlers = [];
             if (isset($map[$queueName])) {
                 foreach ($map[$queueName] as $topic) {
@@ -420,10 +427,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Extract topics configuration.
      *
      * @param \DOMDocument $config
+     * @param array $publishers
      * @return array
      * @deprecated
      */
-    protected function extractTopics(\DOMDocument $config)
+    protected function extractTopics(\DOMDocument $config, $publishers)
     {
         $output = [];
         /** @var $topicNode \DOMNode */
@@ -434,6 +442,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $schemaValue = ($schemaType == QueueConfig::TOPIC_SCHEMA_TYPE_METHOD)
                 ? $this->getSchemaDefinedByMethod($schemaId, $topicName)
                 : $schemaId;
+            $publisherName = $topicNode->attributes->getNamedItem('publisher')->nodeValue;
+            $this->xmlValidator->validateTopicPublisher($publishers, $publisherName, $topicName);
+
             $output[$topicName] = [
                 QueueConfig::TOPIC_NAME => $topicName,
                 QueueConfig::TOPIC_SCHEMA => [
@@ -444,7 +455,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     QueueConfig::TOPIC_SCHEMA_TYPE => null,
                     QueueConfig::TOPIC_SCHEMA_VALUE => null
                 ],
-                QueueConfig::TOPIC_PUBLISHER => $topicNode->attributes->getNamedItem('publisher')->nodeValue
+                QueueConfig::TOPIC_PUBLISHER => $publisherName
             ];
         }
         return $output;
@@ -454,18 +465,21 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Extract binds configuration.
      *
      * @param \DOMDocument $config
+     * @param array $topics
      * @return array
      * @deprecated
      */
-    protected function extractBinds(\DOMDocument $config)
+    protected function extractBinds(\DOMDocument $config, $topics)
     {
         $output = [];
         /** @var $bindNode \DOMNode */
         foreach ($config->getElementsByTagName('bind') as $bindNode) {
+            $topicName = $bindNode->attributes->getNamedItem('topic')->nodeValue;
+            $this->xmlValidator->validateBindTopic($topics, $topicName);
             $output[] = [
                 QueueConfig::BIND_QUEUE => $bindNode->attributes->getNamedItem('queue')->nodeValue,
                 QueueConfig::BIND_EXCHANGE => $bindNode->attributes->getNamedItem('exchange')->nodeValue,
-                QueueConfig::BIND_TOPIC => $bindNode->attributes->getNamedItem('topic')->nodeValue,
+                QueueConfig::BIND_TOPIC => $topicName,
             ];
         }
         return $output;
