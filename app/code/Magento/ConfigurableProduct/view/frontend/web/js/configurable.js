@@ -305,12 +305,20 @@ define([
             }
 
             function updateGallery(imagesArr) {
-                var mainImg = imagesArr.filter(function (img) {
+                var imgToUpdate,
+                    mainImg = imagesArr.filter(function (img) {
                     return img.isMain;
                 });
-                !mainImg[0].type && (mainImg[0].type = 'image');
 
-                galleryObject.updateDataByIndex(0, mainImg[0]);
+                if (mainImg.length) {
+                    imgToUpdate = mainImg[0];
+                } else {
+                    imgToUpdate = imagesArr[0];
+                }
+
+                !imgToUpdate.type && (imgToUpdate.type = 'image');
+
+                galleryObject.updateDataByIndex(0, imgToUpdate);
                 galleryObject.seek(1);
             }
 
