@@ -39,7 +39,7 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
         $arrayInputFactory = $this
             ->getMock('Symfony\Component\Console\Input\ArrayInputFactory', ['create'], [], '', false);
 
-        array_walk($sampleDataPackages, function(&$v, $k){
+        array_walk($sampleDataPackages, function (&$v, $k) {
             $v = "$k:$v";
         });
 

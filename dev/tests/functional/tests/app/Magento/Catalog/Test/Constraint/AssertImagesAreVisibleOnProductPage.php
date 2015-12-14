@@ -136,8 +136,9 @@ class AssertImagesAreVisibleOnProductPage extends AbstractAssertForm
      * @param string $src
      * @return bool
      */
-    protected function isImageLoaded($src) {
-        return (bool) file_get_contents($src, 0, NULL, 0, 1);
+    protected function isImageLoaded($src)
+    {
+        return (bool) file_get_contents($src, 0, null, 0, 1);
     }
 
     /**
