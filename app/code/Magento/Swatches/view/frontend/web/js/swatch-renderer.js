@@ -866,7 +866,8 @@ define([
                 images.push({
                     full: response.large,
                     img: response.medium,
-                    thumb: response.small
+                    thumb: response.small,
+                    isMain: true
                 });
 
                 if (response.hasOwnProperty('gallery')) {
@@ -912,22 +913,29 @@ define([
          */
         updateBaseImage: function (images, context, isProductViewExist) {
             var justAnImage = images[0],
-                imgs,
-                imgToUpdate,
+                updateImg,
+                imagesToUpdate,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery');
 
             if (images) {
-                imgs = $.extend(true, [], images);
-                imgToUpdate = this._setImageType(imgs);
+                imagesToUpdate = this._setImageType($.extend(true, [], images));
             }
 
             if (isProductViewExist) {
                 if (this.options.onlyMainImg) {
-                    //to be refactored - main img instead of 0;
-                    gallery.updateDataByIndex(0, imgToUpdate[0]);
+                    updateImg = imagesToUpdate.filter(function (img) {
+                        return img.isMain;
+                    });
+
+                    if (updateImg.length) {
+                        gallery.updateDataByIndex(0, updateImg[0]);
+                    } else {
+                        gallery.updateDataByIndex(0, imagesToUpdate[0]);
+                    }
+
                     gallery.seek(1);
                 } else {
-                    gallery.updateData(imgToUpdate);
+                    gallery.updateData(imagesToUpdate);
                 }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
