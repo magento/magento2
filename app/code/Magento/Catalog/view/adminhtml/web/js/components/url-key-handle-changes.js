@@ -12,10 +12,8 @@ define([
 
         /**
          * Disable checkbox field, when 'url_key' field without changes
-         *
-         * @returns {Boolean}
          */
-        handleChanges : function (newValue) {
+        handleChanges: function (newValue) {
             if (newValue !== this.getInitialValue()) {
                 this.disabled(false);
             } else {
@@ -25,15 +23,14 @@ define([
 
         /**
          * Set real 'url_key' to 'url_key_create_redirect' when field is checked
-         *
-         * @returns {Boolean}
          */
         onUpdate: function () {
             this._super();
+
             if (this.value()) {
                 this.value(this.initialValue);
             } else {
-                this.value(0)
+                this.value(0);
             }
             this._super();
         }
