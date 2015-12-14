@@ -5,19 +5,18 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
+use Braintree\Result\Successful;
+use Braintree\Transaction;
+use Braintree\Transaction\CreditCardDetails;
 use Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler;
-use Magento\Sales\Api\Data\OrderPaymentExtension;
+use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Payment\Gateway\Data\PaymentDataObject;
-use Braintree_Transaction;
-use Braintree_Result_Successful;
 use Magento\Vault\Gateway\Config\Config;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-
 
 /**
  * VaultDetailsHandler Test
@@ -191,9 +190,9 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'creditCardDetails' => $this->getCreditCardDetails()
         ];
 
-        $transaction = Braintree_Transaction::factory($attributes);
+        $transaction = Transaction::factory($attributes);
 
-        $mock = $this->getMockBuilder(Braintree_Result_Successful::class)
+        $mock = $this->getMockBuilder(Successful::class)
             ->disableOriginalConstructor()
             ->setMethods(['__get'])
             ->getMock();
@@ -208,7 +207,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Create Braintree transaction
-     * @return \Braintree_Transaction_CreditCardDetails
+     * @return \Braintree\Transaction\CreditCardDetails
      */
     private function getCreditCardDetails()
     {
@@ -221,7 +220,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'last4' => 1231
         ];
 
-        $creditCardDetails = new \Braintree_Transaction_CreditCardDetails($attributes);
+        $creditCardDetails = new CreditCardDetails($attributes);
         return $creditCardDetails;
     }
 }

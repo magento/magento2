@@ -5,8 +5,8 @@
  */
 namespace Magento\BraintreeTwo\Model\Adapter;
 
-use \Braintree_Customer;
-use \Braintree_Result_Successful;
+use Braintree\Customer;
+use Braintree\Result\Successful;
 
 /**
  * BraintreeCustomer
@@ -17,28 +17,28 @@ class BraintreeCustomer
 {
     /**
      * @param string $customerId
-     * @return \Braintree_Customer
+     * @return \Braintree\Customer
      */
     public function find($customerId)
     {
-        return \Braintree_Customer::find($customerId);
+        return Customer::find($customerId);
     }
 
     /**
      * @param string $customerId
-     * @return \Braintree_Result_Successful
+     * @return \Braintree\Result\Successful
      */
     public function delete($customerId)
     {
-        return \Braintree_Customer::delete($customerId);
+        return Customer::delete($customerId);
     }
 
     /**
      * @param array $customerRequest
-     * @return \Braintree_Customer
+     * @return \Braintree\Customer
      */
     public function create(array $customerRequest)
     {
-        return \Braintree_Customer::create($customerRequest);
+        return Customer::create($customerRequest);
     }
 }

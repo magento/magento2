@@ -5,9 +5,9 @@
  */
 namespace Magento\BraintreeTwo\Model\Adapter;
 
-use \Braintree_CreditCard;
-use \Braintree_Result_Error;
-use \Braintree_Result_Successful;
+use Braintree\CreditCard;
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
 
 /**
  * BraintreeCreditCard
@@ -18,19 +18,19 @@ class BraintreeCreditCard
 {
     /**
      * @param string $id
-     * @return \Braintree_CreditCard
+     * @return \Braintree\CreditCard
      */
     public function find($token)
     {
-        return \Braintree_CreditCard::find($token);
+        return CreditCard::find($token);
     }
 
     /**
      * @param string $token
-     * @return \Braintree_Result_Successful
+     * @return \Braintree\Result\Successful
      */
     public function delete($token)
     {
-        return \Braintree_CreditCard::delete($token);
+        return CreditCard::delete($token);
     }
 }

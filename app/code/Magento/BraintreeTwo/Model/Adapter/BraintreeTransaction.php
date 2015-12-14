@@ -53,15 +53,4 @@ class BraintreeTransaction
     {
         return Transaction::refund($transactionId, $amount);
     }
-
-    /**
-     * Process request to process partial settlement
-     * @param string $transactionId
-     * @param float $amount
-     * @return Error|Successful
-     */
-    public function submitForPartialSettlement($transactionId, $amount)
-    {
-        return Transaction::submitForPartialSettlement($transactionId, $amount);
-    }
 }

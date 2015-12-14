@@ -5,6 +5,7 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Validator;
 
+use Braintree\Transaction;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use Magento\BraintreeTwo\Gateway\Validator\ResponseValidator;
@@ -102,7 +103,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
         $successTrue = new \stdClass();
         $successTrue->success = true;
         $successTrue->transaction = new \stdClass();
-        $successTrue->transaction->status = \Braintree_Transaction::AUTHORIZED;
+        $successTrue->transaction->status = Transaction::AUTHORIZED;
 
         $successFalse = new \stdClass();
         $successFalse->success = false;
@@ -110,7 +111,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
         $transactionDeclined = new \stdClass();
         $transactionDeclined->success = true;
         $transactionDeclined->transaction = new \stdClass();
-        $transactionDeclined->transaction->status = \Braintree_Transaction::SETTLEMENT_DECLINED;
+        $transactionDeclined->transaction->status = Transaction::SETTLEMENT_DECLINED;
 
         return [
             [

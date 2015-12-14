@@ -23,8 +23,6 @@ class CaptureDetailsHandler implements HandlerInterface
     public function handle(array $handlingSubject, array $response)
     {
         $paymentDO = SubjectReader::readPayment($handlingSubject);
-        /** @var \Braintree\Transaction $transaction */
-        $transaction = $response['object']->transaction;
         /**
          * @TODO after changes in sales module should be refactored for new interfaces
          */
