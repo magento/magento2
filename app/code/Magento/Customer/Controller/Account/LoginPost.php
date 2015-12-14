@@ -84,8 +84,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                 } catch (EmailNotConfirmedException $e) {
                     $value = $this->customerUrl->getEmailConfirmationUrl($login['username']);
                     $message = __(
-                        'This account is not confirmed.' .
-                        ' <a href="%1">Click here</a> to resend confirmation email.',
+                        'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
                         $value
                     );
                     $this->messageManager->addError($message);
@@ -95,7 +94,10 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(__('Invalid login or password.'));
+                    // PA DSS violation: throwing or logging an exception here can disclose customer password
+                    $this->messageManager->addError(
+                        __('An unspecified error occurred. Please contact us for assistance.')
+                    );
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));
