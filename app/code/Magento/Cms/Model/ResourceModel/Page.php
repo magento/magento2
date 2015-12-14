@@ -154,7 +154,7 @@ class Page extends AbstractDb
             ];
             $select->join(
                 ['cms_page_store' => $this->getTable('cms_page_store')],
-                $this->getMainTable() . '.' . $linkField . ' = cms_page_store.' . $linkField,
+                $this->getMainTable() . '.' . $linkField . ' = cms_page_store.page_id',
                 []
             )
                 ->where('is_active = ?', 1)
@@ -183,7 +183,7 @@ class Page extends AbstractDb
             ->from(['cp' => $this->getMainTable()])
             ->join(
                 ['cps' => $this->getTable('cms_page_store')],
-                'cp.' . $linkField . ' = cps.' . $linkField,
+                'cp.' . $linkField . ' = cps.page_id',
                 []
             )
             ->where('cp.identifier = ?', $identifier)
@@ -317,13 +317,13 @@ class Page extends AbstractDb
         $linkField = $entityMetadata->getLinkField();
 
         $select = $connection->select()
-            ->from(['page_store' => $this->getTable('cms_page_store')], 'store_id')
+            ->from(['cps' => $this->getTable('cms_page_store')], 'store_id')
             ->join(
-                ['page' => $this->getMainTable()],
-                'page_store.' . $linkField . ' = page.' . $linkField,
+                ['cp' => $this->getMainTable()],
+                'cps.page_id = cp.' . $linkField,
                 []
             )
-            ->where('page.' . $linkField . ' = :page_id');
+            ->where('cp.' . $linkField . ' = :page_id');
 
         return $connection->fetchCol($select, ['page_id' => (int)$pageId]);
     }
