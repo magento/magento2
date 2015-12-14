@@ -5,6 +5,11 @@
  */
 namespace Magento\Cms\Model\ResourceModel;
 
+use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Framework\Model\EntityManager;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * CMS block model
  */
@@ -13,24 +18,30 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param string $connectionName
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param EntityManager $entityManager
+     * @param null $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        Context $context,
+        StoreManagerInterface $storeManager,
+        EntityManager $entityManager,
         $connectionName = null
     ) {
-        parent::__construct($context, $connectionName);
         $this->_storeManager = $storeManager;
+        $this->entityManager = $entityManager;
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -110,20 +121,17 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Load an object using 'identifier' field if there's no field specified and value is not numeric
+     * Load an object
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param mixed $value
-     * @param string $field
+     * @param string $field field to load by (defaults to model id)
      * @return $this
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
-        if (!is_numeric($value) && $field === null) {
-            $field = 'identifier';
-        }
-
-        return parent::load($object, $value, $field);
+        $this->entityManager->load(BlockInterface::class, $object, $value);
+        return $this;
     }
 
     /**
@@ -238,5 +246,46 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $binds = [':block_id' => (int)$id];
 
         return $connection->fetchCol($select, $binds);
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->isDeleted()) {
+            return $this->delete($object);
+        }
+
+        $this->beginTransaction();
+
+        try {
+            if (!$this->isModified($object)) {
+                $this->processNotModifiedSave($object);
+                $this->commit();
+                $object->setHasDataChanges(false);
+                return $this;
+            }
+            $object->validateBeforeSave();
+            $object->beforeSave();
+            if ($object->isSaveAllowed()) {
+                $this->_serializeFields($object);
+                $this->_beforeSave($object);
+                $this->_checkUnique($object);
+                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
+                $this->entityManager->save(BlockInterface::class, $object);
+                $this->unserializeFields($object);
+                $this->processAfterSaves($object);
+            }
+            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
+            $object->setHasDataChanges(false);
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
     }
 }
