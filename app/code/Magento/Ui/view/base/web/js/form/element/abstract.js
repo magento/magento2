@@ -192,7 +192,7 @@ define([
          * @returns {Boolean}
          */
         hasChanged: function () {
-            var notEqual = this.value() != this.initialValue;
+            var notEqual = this.value() !== this.initialValue;
 
             return !this.visible() ? false : notEqual;
         },

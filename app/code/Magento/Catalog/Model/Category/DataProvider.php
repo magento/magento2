@@ -6,9 +6,12 @@
 namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
@@ -79,6 +82,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $registry;
 
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    private $request;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -86,11 +94,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $requestFieldName
      * @param EavValidationRules $eavValidationRules
      * @param CategoryCollectionFactory $categoryCollectionFactory
-     * @param \Magento\Framework\Registry $registry,
+     * @param \Magento\Framework\Registry $registry
      * @param Config $eavConfig
      * @param FilterPool $filterPool
+     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param array $meta
      * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         $name,
@@ -98,22 +109,38 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $requestFieldName,
         EavValidationRules $eavValidationRules,
         CategoryCollectionFactory $categoryCollectionFactory,
+        StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         Config $eavConfig,
         FilterPool $filterPool,
+        \Magento\Framework\App\RequestInterface $request,
         array $meta = [],
         array $data = []
     ) {
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
         $this->registry = $registry;
-        $this->meta['general']['fields'] = $this->getAttributesMeta(
+        $this->storeManager = $storeManager;
+        $this->request = $request;
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        $this->meta = $this->prepareMeta($this->meta);
+    }
+
+    /**
+     * Prepatre meta data
+     *
+     * @param array $meta
+     * @return array
+     */
+    public function prepareMeta($meta)
+    {
+        $meta['general']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('catalog_category')
         );
+        return $meta;
     }
 
     /**
@@ -127,8 +154,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this->loadedData;
         }
         $category = $this->getCurrentCategory();
-        if (!$category) {
-            return [];
+        if (!$category->getId()) {
+            return $this->getDefaultData();
         } else {
             $categoryData = $category->getData();
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
@@ -154,7 +181,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
-        /* @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        /* @var EavAttribute $attribute */
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
@@ -175,6 +202,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if (!empty($rules)) {
                 $meta[$code]['validation'] = $rules;
             }
+
+            $meta[$code]['scope_label'] = $this->getScopeLabel($attribute);
         }
 
         $result = [];
@@ -182,7 +211,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $result[$key] = $item;
             $result[$key]['sortOrder'] = 0;
         }
-        
+
         return $result;
     }
 
@@ -229,11 +258,39 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Get current category
      *
-     * @return mixed
+     * @return Category
      */
     public function getCurrentCategory()
     {
         return $this->registry->registry('category');
+    }
+
+    /**
+     * Retrieve label of attribute scope
+     *
+     * GLOBAL | WEBSITE | STORE
+     *
+     * @param EavAttribute $attribute
+     * @return string
+     */
+    public function getScopeLabel(EavAttribute $attribute)
+    {
+        $html = '';
+        if (
+            !$attribute || $this->storeManager->isSingleStoreMode()
+            || $attribute->getFrontendInput() === AttributeInterface::FRONTEND_INPUT
+        ) {
+            return $html;
+        }
+        if ($attribute->isScopeGlobal()) {
+            $html .= __('[GLOBAL]');
+        } elseif ($attribute->isScopeWebsite()) {
+            $html .= __('[WEBSITE]');
+        } elseif ($attribute->isScopeStore()) {
+            $html .= __('[STORE VIEW]');
+        }
+
+        return $html;
     }
 
     /**
@@ -245,5 +302,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function filterFields($categoryData)
     {
         return array_diff_key($categoryData, array_flip($this->ignoreFields));
+    }
+
+    /**
+     * Category's fields default values
+     * @return array
+     */
+    public function getDefaultData()
+    {
+        $result = [];
+        $result['']['general']['parent'] = (int)$this->request->getParam('parent');
+        $result['']['general']['is_anchor'] = false;
+        $result['']['general']['use_config']['available_sort_by'] = true;
+        $result['']['general']['use_config']['default_sort_by'] = true;
+        $result['']['general']['use_config']['filter_price_range'] = true;
+        return $result;
     }
 }
