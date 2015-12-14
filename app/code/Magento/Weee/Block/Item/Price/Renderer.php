@@ -196,7 +196,13 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseUnitDisplayPriceExclTax()
     {
-        $basePriceExclTax = $this->getItem()->getBasePrice();
+        // Getting the qty on the order page
+        $qty = $this->getItem()->getQtyOrdered();
+        if ($qty == 0 || $qty == null) {
+            // Getting the qty on the invoice and credit memo pages
+            $qty = $this->getItem()->getQty();
+        }
+        $basePriceExclTax = $this->getItem()->getBaseRowTotal() / $qty;
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
@@ -338,7 +344,13 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseFinalUnitDisplayPriceExclTax()
     {
-        $basePriceExclTax = $this->getItem()->getBasePrice();
+        // Getting the qty on the order page
+        $qty = $this->getItem()->getQtyOrdered();
+        if ($qty == 0 || $qty == null) {
+            // Getting the qty on the invoice and credit memo pages
+            $qty = $this->getItem()->getQty();
+        }
+        $basePriceExclTax = $this->getItem()->getBaseRowTotal() / $qty;
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
