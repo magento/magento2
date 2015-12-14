@@ -51,12 +51,11 @@ class Page extends AbstractDb
     protected $metadataPool;
 
     /**
-     * Construct
-     *
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param DateTime $dateTime
      * @param EntityManager $entityManager
+     * @param MetadataPool $metadataPool
      * @param null $connectionName
      */
     public function __construct(
