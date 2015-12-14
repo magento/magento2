@@ -12,7 +12,7 @@ class Attributes
 {
     /**
      * @param \Magento\Catalog\Model\Category\DataProvider $subject
-     * @param $result
+     * @param array $result
      *
      * @return array
      */
