@@ -71,7 +71,7 @@
     cursor: pointer;
     float: left;
     font-size: @staging-preview-header__font-size;
-    padding: 1.5rem @indent__xl 2.5rem;
+    padding: 1.5rem @indent__xl @indent__m;
     position: relative;
 
     &:hover {
@@ -95,6 +95,10 @@
     .subtitle {
         font-size: 1.1rem;
         font-style: italic;
+        max-width: 170px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 
@@ -123,7 +127,7 @@
         @_icon-font-line-height: 2rem,
         @_icon-font-text-hide: false,
         @_icon-font-position: before,
-        @_icon-font-margin: 0 @indent__s 0 0,
+        @_icon-font-margin: -.2rem @indent__s 0 0,
         @_icon-font-display: inline-block
         );
     }
@@ -138,7 +142,7 @@
         @_icon-font-line-height: 2rem,
         @_icon-font-text-hide: false,
         @_icon-font-position: before,
-        @_icon-font-margin: 0 @indent__s 0 0,
+        @_icon-font-margin: -.2rem @indent__s 0 0,
         @_icon-font-display: inline-block
         );
     }
@@ -153,7 +157,7 @@
         @_icon-font-line-height: 2rem,
         @_icon-font-text-hide: false,
         @_icon-font-position: before,
-        @_icon-font-margin: 0 @indent__s 0 0,
+        @_icon-font-margin: -.2rem @indent__s 0 0,
         @_icon-font-display: inline-block
         );
     }
@@ -262,6 +266,12 @@
             background-position+: ~'calc(100% - @{field-control__height})' 0;
 
             border-color: @staging-preview-form-element__focus__border-color;
+        }
+    }
+
+    .field-staging_date {
+        .admin__control-text {
+            width: 19rem;
         }
     }
 
