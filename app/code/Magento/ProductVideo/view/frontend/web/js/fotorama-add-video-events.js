@@ -108,10 +108,20 @@ define([
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
 
         /**
+         * Creates widget
+         * @private
+         */
+        _create: function () {
+            $(this.element).on('gallery:loaded',  $.proxy(function () {
+                this._initialize();
+            }, this));
+        },
+
+        /**
          *
          * @private
          */
-        _init: function () {
+        _initialize: function () {
             if (this._checkForVideoExist()) {
                 this._checkFullscreen();
                 this._listenForFullscreen();
@@ -127,7 +137,7 @@ define([
          * @private
          */
         _checkFullscreen: function () {
-            if ($(this.element).find('.fotorama__fullscreen-icon')) {
+            if ($(this.element).find('.fotorama-item').hasClass('fotorama--fullscreen')) {
                 this.isFullscreen = true;
             }
         },
@@ -208,8 +218,8 @@ define([
             var closeVideo;
 
             $(this.element).find('.' + this.FTVC).remove();
-            $(this.element).append('<div class="' + this.FTVC + '"></div>');
-            $(this.element).css('position', 'relative');
+            $(this.element).find('.fotorama-item').append('<div class="' + this.FTVC + '"></div>');
+            $(this.element).find('.fotorama-item').css('position', 'relative');
             closeVideo = $(this.element).find('.' + this.FTVC);
             this._closeVideoSetEvents(closeVideo, fotorama);
 
@@ -337,7 +347,7 @@ define([
             }
 
             if (!this.isFullscreen) {
-                this._createCloseVideo($(this.element).data('fotorama'), this.Base);
+                this._createCloseVideo($(this.element).find('.fotorama-item').data('fotorama'), this.Base);
             }
         },
 
@@ -360,7 +370,7 @@ define([
          * @private
          */
         _initFotoramaVideo: function (e) {
-            var fotorama = $(this.element).data('fotorama'),
+            var fotorama = $(this.element).find('.fotorama-item').data('fotorama'),
                 thumbsParent,
                 thumbs,
                 t,
@@ -541,10 +551,10 @@ define([
             });
 
             if (this.inFullscreen) {
-                $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+                $(this.element).find('.fotorama-item').data('fotorama').activeFrame.$stageFrame[0].click();
             }
             $(this.element).on('fotorama:fullscreenenter', $.proxy(function () {
-                $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+                $(this.element).find('.fotorama-item').data('fotorama').activeFrame.$stageFrame[0].click();
             }, this));
             this._handleBaseVideo(fotorama, number); //check for video is it base and handle it if it's base
         },
@@ -572,14 +582,14 @@ define([
                         if (window.Froogaloop) {
                             clearInterval(waitForFroogaloop);
                             fotorama.requestFullScreen();
-                            $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+                            $(this.element).find('.fotorama-item').data('fotorama').activeFrame.$stageFrame[0].click();
                             this.Base = false;
                         }
                     }, this), 50);
                 } else { //if not a vimeo - play it immediately with a little lag in case for fotorama fullscreen
                     setTimeout($.proxy(function () {
                         fotorama.requestFullScreen();
-                        $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
+                        $(this.element).find('.fotorama-item').data('fotorama').activeFrame.$stageFrame[0].click();
                         this.Base = false;
                     }, this), 50);
                 }
@@ -640,12 +650,14 @@ define([
         }
     });
 
-    return function (config, element) {
-        $('.gallery-placeholder').on('fotorama:ready', function () {
-            $(element).find('.fotorama').AddFotoramaVideoEvents({
-                VideoData: config.fotoramaVideoData || [],
-                VideoSettings: config.fotoramaVideoSettings || {}
-            });
-        });
-    };
+    //return function (config, element) {
+    //    $('.gallery-placeholder').on('fotorama:ready', function () {
+    //        $(element).find('.fotorama').AddFotoramaVideoEvents({
+    //            VideoData: config.fotoramaVideoData || [],
+    //            VideoSettings: config.fotoramaVideoSettings || {}
+    //        });
+    //    });
+    //};
+
+    return $.mage.AddFotoramaVideoEvents;
 });
