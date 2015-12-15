@@ -4,12 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
- * Template for \Magento\Catalog\Block\Adminhtml\Category\Cointainer
+ * Template for \Magento\Catalog\Block\Adminhtml\Category\Edit
  */
 ?>
 <div data-id="information-dialog-category" class="messages" style="display: none;">
@@ -20,7 +16,7 @@
 <script type="text/x-magento-init">
     {
         "*": {
-            "categoryForm": {}
+            "categoryForm": {"refreshUrl": "<?php /* @escapeNotVerified */ echo $block->getRefreshPathUrl() ?>"}
         }
     }
 </script>
