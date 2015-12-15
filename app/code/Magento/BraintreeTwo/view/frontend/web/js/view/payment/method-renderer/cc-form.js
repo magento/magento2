@@ -40,9 +40,16 @@ define(
                 validatorManager: validatorManager,
 
                 /**
+                 * Additional payment data
+                 *
+                 * {Object}
+                 */
+                additionalData: {},
+
+                /**
                  * {String}
                  */
-                connection: 'custom',
+                integration: 'custom',
 
                 /**
                  * Braintree client configuration
@@ -55,15 +62,6 @@ define(
                      * {String}
                      */
                     id: 'co-transparent-form-braintree',
-
-                    /**
-                     * Device data initialization
-                     *
-                     * @param {Object} braintreeInstance
-                     */
-                    onReady: function (braintreeInstance) {
-                        this.braintreeDeviceData = braintreeInstance.deviceData;
-                    },
 
                     /**
                      * Triggers on payment nonce receive
@@ -88,31 +86,44 @@ define(
              * Init config
              */
             initClientConfig: function () {
+                // Advanced fraud tools settings
+                if (this.getIsFraudProtection()) {
+                    this.clientConfig = _.extend(this.clientConfig, this.kountConfig());
+                }
+
                 _.each(this.clientConfig, function (fn, name) {
                     if (typeof fn === 'function') {
                         this.clientConfig[name] = fn.bind(this);
                     }
                 }, this);
-
-                // Advanced fraud tools settings
-                this.clientConfig.dataCollector = this.configureDeviceDataCollector();
             },
 
             /**
              * @returns {Object}
              */
-            configureDeviceDataCollector: function () {
-                var fields = {
-                    kount: {
-                        environment: this.getEnvironment()
+            kountConfig: function () {
+                var config = {
+                    dataCollector: {
+                        kount: {
+                            environment: this.getEnvironment()
+                        }
+                    },
+
+                    /**
+                     * Device data initialization
+                     *
+                     * @param {Object} braintreeInstance
+                     */
+                    onReady: function (braintreeInstance) {
+                        this.additionalData['device_data'] = braintreeInstance.deviceData;
                     }
                 };
 
                 if (this.getKountMerchantId()) {
-                    fields.kount.merchantId = this.getKountMerchantId();
+                    config.dataCollector.kount.merchantId = this.getKountMerchantId();
                 }
 
-                return fields;
+                return config;
             },
 
             /**
@@ -174,7 +185,7 @@ define(
                 this.initClientConfig();
                 this.braintreeClient.getSdkClient().setup(
                     this.braintreeClient.getClientToken(),
-                    this.connection,
+                    this.integration,
                     this.clientConfig
                 );
             },
@@ -229,6 +240,13 @@ define(
             },
 
             /**
+             * @returns {Boolean}
+             */
+            getIsFraudProtection: function () {
+                return window.checkoutConfig.payment[this.getCode()].isFraudProtection;
+            },
+
+            /**
              * @returns {String}
              */
             getEnvironment: function () {
@@ -248,13 +266,16 @@ define(
              * @returns {Object}
              */
             getData: function () {
-                return {
-                    'method': this.item.method,
+                var data = {
+                    'method': this.getCode(),
                     'additional_data': {
-                        'payment_method_nonce': this.paymentMethodNonce,
-                        'device_data': this.braintreeDeviceData
+                        'payment_method_nonce': this.paymentMethodNonce
                     }
                 };
+
+                data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
+
+                return data;
             },
 
             /**

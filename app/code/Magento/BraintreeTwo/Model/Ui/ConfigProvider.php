@@ -48,6 +48,7 @@ final class ConfigProvider implements ConfigProviderInterface
                     'useCvv' => $this->config->isCvvEnabled(),
                     'environment' => $this->config->getEnvironment(),
                     'kountMerchantId' => $this->config->getKountMerchantId(),
+                    'isFraudProtection' => $this->config->getIsFraudProtection(),
                     'merchantId' => $this->config->getMerchantId(),
                 ],
                 Config::CODE_3DSECURE => [
