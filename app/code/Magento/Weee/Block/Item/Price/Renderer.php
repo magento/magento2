@@ -197,8 +197,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     public function getBaseUnitDisplayPriceExclTax()
     {
         $orderItem = $this->getItem();
-        if (is_a($orderItem, '\Magento\Sales\Model\Order\Invoice\Item') ||
-            is_a($orderItem, '\Magento\Sales\Model\Order\CreditMemo\Item')) {
+        if ($orderItem instanceof InvoiceItem || $orderItem instanceof CreditMemoItem) {
             $orderItem = $orderItem->getOrderItem();
         }
 
@@ -346,8 +345,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     public function getBaseFinalUnitDisplayPriceExclTax()
     {
         $orderItem = $this->getItem();
-        if (is_a($orderItem, '\Magento\Sales\Model\Order\Invoice\Item') ||
-            is_a($orderItem, '\Magento\Sales\Model\Order\CreditMemo\Item')) {
+        if ($orderItem instanceof InvoiceItem || $orderItem instanceof CreditMemoItem) {
             $orderItem = $orderItem->getOrderItem();
         }
 
