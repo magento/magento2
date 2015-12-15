@@ -100,7 +100,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($productOptionsBefore)
         );
-        $this->productMock->expects($this->once())->method('setOptions')->with($productOptionsAfter);
+        $this->productMock->expects($this->once())->method('setOptions')->with(null);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
