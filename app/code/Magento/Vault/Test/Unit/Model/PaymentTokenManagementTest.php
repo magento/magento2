@@ -205,7 +205,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->paymentTokenResourceModelMock->expects(self::once())
             ->method('getByGatewayToken')
-            ->with(1, 'token')
+            ->with('token', 1, 1)
             ->willReturn(['token-data']);
 
         $this->paymentTokenFactoryMock->expects(self::once())
@@ -213,7 +213,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->with(['data' => ['token-data']])
             ->willReturn($tokenMock);
 
-        self::assertEquals($tokenMock, $this->paymentTokenManagement->getByGatewayToken('token', 1));
+        self::assertEquals($tokenMock, $this->paymentTokenManagement->getByGatewayToken('token', 1, 1));
     }
 
     /**
@@ -223,13 +223,13 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->paymentTokenResourceModelMock->expects(self::once())
             ->method('getByGatewayToken')
-            ->with('token', 1)
+            ->with('some-not-exists-token', 1, 1)
             ->willReturn([]);
 
         $this->paymentTokenFactoryMock->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByGatewayToken(1, 'token'));
+        self::assertEquals(null, $this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
     }
 
     /**

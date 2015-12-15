@@ -118,13 +118,14 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     /**
      * Get payment token by gateway token.
      *
-     * @param int $customerId Customer ID.
      * @param string $token The gateway token.
+     * @param string $paymentMethodCode
+     * @param int $customerId Customer ID.
      * @return PaymentTokenInterface|null Payment token interface.
      */
-    public function getByGatewayToken($customerId, $token)
+    public function getByGatewayToken($token, $paymentMethodCode, $customerId)
     {
-        $tokenData = $this->paymentTokenResourceModel->getByGatewayToken($token, $customerId);
+        $tokenData = $this->paymentTokenResourceModel->getByGatewayToken($token, $paymentMethodCode, $customerId);
         $tokenModel = !empty($tokenData) ? $this->paymentTokenFactory->create(['data' => $tokenData]) : null;
         return $tokenModel;
     }
@@ -137,8 +138,9 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     public function saveTokenWithPaymentLink(PaymentTokenInterface $token, OrderPaymentInterface $payment)
     {
         $tokenDuplicate = $this->getByGatewayToken(
-            $token->getCustomerId(),
-            $token->getGatewayToken()
+            $token->getGatewayToken(),
+            $token->getPaymentMethodCode(),
+            $token->getCustomerId()
         );
 
         if (null === $tokenDuplicate) {
