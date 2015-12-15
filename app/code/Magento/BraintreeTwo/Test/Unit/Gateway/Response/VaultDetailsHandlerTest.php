@@ -17,6 +17,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenFactory;
 use Magento\Vault\Model\VaultPaymentInterface;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -67,6 +68,11 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $vaultPaymentMock;
 
+    /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
     protected function setUp()
     {
         $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
@@ -113,10 +119,15 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->vaultPaymentMock = $this->getMock(VaultPaymentInterface::class);
 
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->paymentHandler = new VaultDetailsHandler(
             $this->vaultPaymentMock,
             $this->paymentTokenFactoryMock,
-            $this->paymentExtensionFactoryMock
+            $this->paymentExtensionFactoryMock,
+            $this->subjectReaderMock
         );
     }
 
@@ -137,11 +148,19 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->paymentTokenMock);
 
         $paymentData = $this->getPaymentDataObjectMock();
-        $subject['payment'] = $paymentData;
+        $transaction = $this->getBraintreeTransaction();
 
-        $response = [
-            'object' => $this->getBraintreeTransaction()
-        ];
+        $subject = ['payment' => $paymentData];
+        $response = ['object' => $transaction];
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($subject)
+            ->willReturn($paymentData);
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readTransaction')
+            ->with($response)
+            ->willReturn($transaction);
 
         $this->salesOrderMock->setCustomerId(10);
 
@@ -183,17 +202,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
         $transaction = Transaction::factory($attributes);
 
-        $mock = $this->getMockBuilder(Successful::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__get'])
-            ->getMock();
-
-        $mock->expects($this->once())
-            ->method('__get')
-            ->with('transaction')
-            ->willReturn($transaction);
-
-        return $mock;
+        return $transaction;
     }
 
     /**
@@ -212,6 +221,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $creditCardDetails = new CreditCardDetails($attributes);
+
         return $creditCardDetails;
     }
 }

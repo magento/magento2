@@ -6,7 +6,7 @@
 namespace Magento\BraintreeTwo\Gateway\Request;
 
 use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
@@ -26,11 +26,20 @@ class KountPaymentDataBuilder implements BuilderInterface
     private $config;
 
     /**
-     * @param Config $config
+     * @var SubjectReader
      */
-    public function __construct(Config $config)
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param Config $config
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(Config $config, SubjectReader $subjectReader)
     {
         $this->config = $config;
+        $this->subjectReader = $subjectReader;
     }
 
     /**
@@ -39,16 +48,17 @@ class KountPaymentDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $result = [];
-
-        if (!$this->config->getIsFraudProtection()) {
+        if (!$this->config->hasFraudProtection()) {
             return $result;
         }
-        $paymentDO = SubjectReader::readPayment($buildSubject);
+        $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $paymentDO->getPayment();
+        $data = $payment->getAdditionalInformation();
 
-        $result[self::DEVICE_DATA] = $payment->getAdditionalInformation(DataAssignObserver::DEVICE_DATA);
+        if (isset($data[DataAssignObserver::DEVICE_DATA])) {
+            $result[self::DEVICE_DATA] = $data[DataAssignObserver::DEVICE_DATA];
+        }
 
         return $result;
     }

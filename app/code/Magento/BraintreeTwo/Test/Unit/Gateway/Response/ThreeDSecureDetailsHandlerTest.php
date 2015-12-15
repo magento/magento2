@@ -5,12 +5,12 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
-use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -31,6 +31,11 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $payment;
 
+    /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
     protected function setUp()
     {
         $this->payment = $this->getMockBuilder(Payment::class)
@@ -42,7 +47,11 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->handler = new ThreeDSecureDetailsHandler();
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->handler = new ThreeDSecureDetailsHandler($this->subjectReaderMock);
     }
 
     /**
@@ -51,11 +60,19 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $paymentData = $this->getPaymentDataObjectMock();
-        $subject['payment'] = $paymentData;
+        $transaction = $this->getBraintreeTransaction();
 
-        $response = [
-            'object' => $this->getBraintreeTransaction()
-        ];
+        $subject = ['payment' => $paymentData];
+        $response = ['object' => $transaction];
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($subject)
+            ->willReturn($paymentData);
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readTransaction')
+            ->with($response)
+            ->willReturn($transaction);
 
         $this->payment->expects(static::at(1))
             ->method('setAdditionalInformation')
@@ -98,17 +115,7 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
         $transaction = Transaction::factory($attributes);
 
-        $mock = $this->getMockBuilder(Successful::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__get'])
-            ->getMock();
-
-        $mock->expects(static::once())
-            ->method('__get')
-            ->with('transaction')
-            ->willReturn($transaction);
-
-        return $mock;
+        return $transaction;
     }
 
     /**
@@ -121,6 +128,7 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'liabilityShifted' => true,
             'liabilityShiftPossible' => true
         ];
+
         return $attributes;
     }
 }

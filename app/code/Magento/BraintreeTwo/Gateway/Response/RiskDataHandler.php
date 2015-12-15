@@ -25,6 +25,21 @@ class RiskDataHandler implements HandlerInterface
     const RISK_DATA_DECISION = 'riskDataDecision';
 
     /**
+     * @var SubjectReader
+     */
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(SubjectReader $subjectReader)
+    {
+        $this->subjectReader = $subjectReader;
+    }
+
+    /**
      * Handles response
      *
      * @param array $handlingSubject
@@ -33,18 +48,15 @@ class RiskDataHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $paymentDO = SubjectReader::readPayment($handlingSubject);
+        $paymentDO = $this->subjectReader->readPayment($handlingSubject);
+
         /** @var \Braintree\Transaction $transaction */
-        $transaction = $response['object']->transaction;
+        $transaction = $this->subjectReader->readTransaction($response);
 
         if (!isset($transaction->riskData)) {
             return;
         }
 
-        /**
-         * @TODO after changes in sales module should be refactored for new interfaces
-         */
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 

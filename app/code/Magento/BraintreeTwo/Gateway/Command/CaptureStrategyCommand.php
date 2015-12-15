@@ -11,7 +11,7 @@ use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
-use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment\Transaction;
@@ -37,39 +37,51 @@ class CaptureStrategyCommand implements CommandInterface
     const CLONE_TRANSACTION = 'clone';
 
     /**
-     * @var \Magento\Payment\Gateway\Command\CommandPoolInterface
+     * @var CommandPoolInterface
      */
     private $commandPool;
 
     /**
-     * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     * @var TransactionRepositoryInterface
      */
     private $transactionRepository;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
     private $filterBuilder;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
+     * @var SubjectReader
+     */
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
      * @param CommandPoolInterface $commandPool
      * @param TransactionRepositoryInterface $repository
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SubjectReader $subjectReader
      */
     public function __construct(
         CommandPoolInterface $commandPool,
         TransactionRepositoryInterface $repository,
         FilterBuilder $filterBuilder,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SubjectReader $subjectReader
     ) {
         $this->commandPool = $commandPool;
         $this->transactionRepository = $repository;
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->subjectReader = $subjectReader;
     }
 
     /**
@@ -78,7 +90,7 @@ class CaptureStrategyCommand implements CommandInterface
     public function execute(array $commandSubject)
     {
         /** @var \Magento\Payment\Gateway\Data\PaymentDataObjectInterface $paymentDO */
-        $paymentDO = SubjectReader::readPayment($commandSubject);
+        $paymentDO = $this->subjectReader->readPayment($commandSubject);
 
         /** @var \Magento\Sales\Api\Data\OrderPaymentInterface $paymentInfo */
         $paymentInfo = $paymentDO->getPayment();
@@ -109,6 +121,7 @@ class CaptureStrategyCommand implements CommandInterface
 
     /**
      * Check if capture transaction already exists
+     *
      * @param OrderPaymentInterface $payment
      * @return bool
      */

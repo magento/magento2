@@ -5,12 +5,12 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
 
-
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Gateway\Request\ThreeDSecureDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Data\Order\OrderAdapter;
 use Magento\Payment\Gateway\Data\Order\AddressAdapter;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
 /**
  * Class ThreeDSecureDataBuilderTest
@@ -42,6 +42,11 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $billingAddress;
 
+    /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
     protected function setUp()
     {
         $this->initOrderMock();
@@ -58,8 +63,11 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['isVerify3DSecure', 'getThresholdAmount', 'get3DSecureSpecificCountries'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->builder = new ThreeDSecureDataBuilder($this->configMock);
+        $this->builder = new ThreeDSecureDataBuilder($this->configMock, $this->subjectReaderMock);
     }
 
     /**
@@ -93,6 +101,15 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->billingAddress->expects(static::any())
             ->method('getCountryId')
             ->willReturn($countryId);
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($buildSubject)
+            ->willReturn($this->paymentDO);
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readAmount')
+            ->with($buildSubject)
+            ->willReturn(25);
 
         $result = $this->builder->build($buildSubject);
         static::assertEquals($expected, $result);

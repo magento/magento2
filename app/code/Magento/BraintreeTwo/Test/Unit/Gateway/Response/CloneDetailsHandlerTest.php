@@ -5,11 +5,11 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
-use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Response\CloneDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -29,6 +29,11 @@ class CloneDetailsHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $payment;
 
+    /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
     protected function setUp()
     {
         $this->payment = $this->getMockBuilder(Payment::class)
@@ -37,8 +42,11 @@ class CloneDetailsHandlerTest extends \PHPUnit_Framework_TestCase
                 'setIsTransactionClosed', 'setTransactionId'
             ])
             ->getMock();
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->cloneHandler = new CloneDetailsHandler();
+        $this->cloneHandler = new CloneDetailsHandler($this->subjectReaderMock);
     }
 
     /**
@@ -47,6 +55,7 @@ class CloneDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $paymentData = $this->getPaymentDataObjectMock();
+        $transaction = $this->getBraintreeTransaction();
         $subject['payment'] = $paymentData;
 
         $this->payment->expects(static::once())
@@ -56,9 +65,16 @@ class CloneDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setTransactionId')
             ->with(self::TRANSACTION_ID);
 
-        $response = [
-            'object' => $this->getBraintreeTransaction()
-        ];
+        $response = ['object' => $transaction];
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($subject)
+            ->willReturn($paymentData);
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readTransaction')
+            ->with($response)
+            ->willReturn($transaction);
 
         $this->cloneHandler->handle($subject, $response);
     }
@@ -93,16 +109,6 @@ class CloneDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
         $transaction = Transaction::factory($attributes);
 
-        $mock = $this->getMockBuilder(Successful::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__get'])
-            ->getMock();
-
-        $mock->expects(static::once())
-            ->method('__get')
-            ->with('transaction')
-            ->willReturn($transaction);
-
-        return $mock;
+        return $transaction;
     }
 }

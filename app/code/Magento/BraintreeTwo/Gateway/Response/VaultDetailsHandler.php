@@ -7,10 +7,10 @@ namespace Magento\BraintreeTwo\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
-use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
-use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\PaymentTokenFactory;
 use Magento\Vault\Model\VaultPaymentInterface;
@@ -36,18 +36,28 @@ class VaultDetailsHandler implements HandlerInterface
     protected $vaultPayment;
 
     /**
+     * @var SubjectReader
+     */
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
      * @param VaultPaymentInterface $vaultPayment
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param OrderPaymentExtensionFactory $paymentExtensionFactory
+     * @param SubjectReader $subjectReader
      */
     public function __construct(
         VaultPaymentInterface $vaultPayment,
         PaymentTokenFactory $paymentTokenFactory,
-        OrderPaymentExtensionFactory $paymentExtensionFactory
+        OrderPaymentExtensionFactory $paymentExtensionFactory,
+        SubjectReader $subjectReader
     ) {
         $this->vaultPayment = $vaultPayment;
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
+        $this->subjectReader = $subjectReader;
     }
 
     /**
@@ -60,10 +70,8 @@ class VaultDetailsHandler implements HandlerInterface
             return;
         }
 
-        $paymentDO = SubjectReader::readPayment($handlingSubject);
-        /** @var \Braintree\Transaction $transaction */
-        $transaction = $response['object']->transaction;
-        /** @var Payment $payment */
+        $paymentDO = $this->subjectReader->readPayment($handlingSubject);
+        $transaction = $this->subjectReader->readTransaction($response);
         $payment = $paymentDO->getPayment();
 
         // add vault payment token entity to extension attributes
@@ -82,10 +90,10 @@ class VaultDetailsHandler implements HandlerInterface
      * Get vault payment token entity
      *
      * @param \Braintree\Transaction $transaction
-     * @param Payment $payment
+     * @param OrderPaymentInterface $payment
      * @return PaymentTokenInterface|null
      */
-    protected function getVaultPaymentToken(Transaction $transaction, Payment $payment)
+    protected function getVaultPaymentToken(Transaction $transaction, OrderPaymentInterface $payment)
     {
         // Check token existing in gateway response
         $token = $transaction->creditCardDetails->token;

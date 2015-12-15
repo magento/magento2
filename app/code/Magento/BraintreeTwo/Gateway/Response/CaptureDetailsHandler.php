@@ -7,27 +7,40 @@ namespace Magento\BraintreeTwo\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\Payment\Gateway\Helper\ContextHelper;
-use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class CaptureDetailsHandler
  */
 class CaptureDetailsHandler implements HandlerInterface
 {
+    /**
+     * @var SubjectReader
+     */
+    protected $subjectReader;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment
+     * @var \Magento\Payment\Model\InfoInterface
      */
     protected $payment;
+
+    /**
+     * Constructor
+     *
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(SubjectReader $subjectReader)
+    {
+        $this->subjectReader = $subjectReader;
+    }
 
     /**
      * @inheritdoc
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $paymentDO = SubjectReader::readPayment($handlingSubject);
+        $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         /**
          * @TODO after changes in sales module should be refactored for new interfaces
          */
