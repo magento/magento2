@@ -46,8 +46,7 @@ class SearchIndexNameResolver
         Config $clientConfig,
         LoggerInterface $logger,
         $options = []
-    )
-    {
+    ) {
         $this->connectionManager = $connectionManager;
         $this->clientConfig = $clientConfig;
         $this->logger = $logger;
