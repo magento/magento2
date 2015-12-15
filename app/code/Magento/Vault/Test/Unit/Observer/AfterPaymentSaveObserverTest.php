@@ -5,148 +5,179 @@
  */
 namespace Magento\Vault\Test\Unit\Observer;
 
-use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Event\Observer;
-use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
-use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\PaymentTokenManagementInterface;
-use Magento\Vault\Model\Ui\VaultConfigProvider;
+use Magento\Framework\Math\Random;
+use Magento\Sales\Api\Data\OrderPaymentExtension;
+use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Vault\Model\PaymentToken;
+use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|PaymentTokenManagementInterface
+     * @var \Magento\Framework\Event\Observer|MockObject
      */
-    private $paymentTokenManager;
+    protected $eventObserverArgMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EncryptorInterface
+     * @var \Magento\Vault\Observer\AfterPaymentSaveObserver
      */
-    private $encryptor;
+    protected $observer;
 
     /**
-     * @var AfterPaymentSaveObserver
+     * @var \Magento\Framework\Encryption\Encryptor
      */
-    private $observer;
+    protected $encryptorModel;
 
+    /**
+     * @var \Magento\Sales\Api\Data\OrderPaymentExtension|MockObject paymentExtension
+     */
+    protected $paymentExtension;
+
+    /**
+     * @var \Magento\Vault\Model\PaymentTokenManagement|MockObject paymentTokenManagementMock
+     */
+    protected $paymentTokenManagementMock;
+
+    /**
+     * @var \Magento\Vault\Model\PaymentToken|MockObject paymentTokenMock
+     */
+    protected $paymentTokenMock;
+
+    /**
+     * @var \Magento\Sales\Model\Order|MockObject salesOrderMock
+     */
+    protected $salesOrderMock;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Payment|MockObject salesOrderPaymentMock
+     */
+    protected $salesOrderPaymentMock;
+
+    /**
+     * @return void
+     */
     protected function setUp()
     {
-        $this->paymentTokenManager = $this->getMock(PaymentTokenManagementInterface::class);
-        $this->encryptor = $this->getMock(EncryptorInterface::class);
+        /** @var Random|MockObject $encryptorRandomGenerator */
+        $encryptorRandomGenerator = $this->getMock(Random::class, [], [], '', false);
+        /** @var DeploymentConfig|MockObject $deploymentConfigMock */
+        $deploymentConfigMock = $this->getMock(DeploymentConfig::class, [], [], '', false);
+        $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
+        $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->paymentTokenManagementMock = $this->getMockBuilder(PaymentTokenManagement::class)
+            ->setMethods(['saveTokenWithPaymentLink'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
+            ->setMethods(null)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->paymentExtension->setVaultPaymentToken($this->paymentTokenMock);
+
+        // Sales Order Model
+        $this->salesOrderMock = $this->getMock(Order::class, null, [], '', false);
+
+        // Sales Order Payment Model
+        $this->salesOrderPaymentMock = $this->getMockBuilder(Payment::class)
+            ->setMethods(null)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->salesOrderPaymentMock->setOrder($this->salesOrderMock);
+        $this->salesOrderPaymentMock->setExtensionAttributes($this->paymentExtension);
+
+        // Arguments to observer container
+        $this->eventObserverArgMock = $this->getMockBuilder(Observer::class)
+            ->setMethods(['getDataByKey'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->eventObserverArgMock->expects($this->any())
+            ->method('getDataByKey')
+            ->with(AfterPaymentSaveObserver::PAYMENT_OBJECT_DATA_KEY)
+            ->willReturn($this->salesOrderPaymentMock);
+
+        // Observer class
         $this->observer = new AfterPaymentSaveObserver(
-            $this->paymentTokenManager,
-            $this->encryptor
+            $this->paymentTokenManagementMock,
+            $this->encryptorModel
         );
     }
 
-    public function testExecutePositiveCase()
+    /**
+     * @param int $customerId
+     * @param string $createdAt
+     * @param string $token
+     * @param bool $isActive
+     * @param string $method
+     * @dataProvider testPositiveCaseDataProvider
+     */
+    public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method)
     {
-        $expectedPublicHash = 'expected public hash';
-        $isActive = true;
-        $isVisible = true;
+        $this->paymentTokenMock->setGatewayToken($token);
+        $this->paymentTokenMock->setCustomerId($customerId);
+        $this->paymentTokenMock->setCreatedAt($createdAt);
+        $this->paymentTokenMock->setPaymentMethodCode($method);
+        $this->paymentTokenMock->setIsActive($isActive);
 
-        $customerId = 1;
-        $gatewayToken = 'gateway token';
-        $paymentMethodCode = 'vault provider payment code';
-        $hashInput = $customerId . $gatewayToken . $paymentMethodCode;
-        $additionalInformation = [
-            VaultConfigProvider::IS_ACTIVE_CODE => "1"
-        ];
-
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderPayment = $this->getMock(OrderPaymentInterface::class);
-        $extensionAttributesI = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['getVaultPaymentToken', 'setVaultPaymentToken'])
-            ->getMock();
-        $paymentToken = $this->getMock(PaymentTokenInterface::class);
-
-        $observer->expects(static::once())
-            ->method('getDataByKey')
-            ->with(AfterPaymentSaveObserver::PAYMENT_OBJECT_DATA_KEY)
-            ->willReturn($orderPayment);
-        $orderPayment->expects(static::once())
-            ->method('getExtensionAttributes')
-            ->willReturn($extensionAttributesI);
-        $extensionAttributesI->expects(static::once())
+        $this->paymentExtension->expects($this->exactly(2))
             ->method('getVaultPaymentToken')
-            ->willReturn($paymentToken);
+            ->willReturn($this->paymentTokenMock);
 
-        $paymentToken->expects(static::atLeastOnce())
-            ->method('getCustomerId')
-            ->willReturn($customerId);
-        $paymentToken->expects(static::atLeastOnce())
-            ->method('getGatewayToken')
-            ->willReturn($gatewayToken);
-        $paymentToken->expects(static::atLeastOnce())
-            ->method('getPaymentMethodCode')
-            ->willReturn($paymentMethodCode);
+        if (!empty($token)) {
+            $this->paymentTokenManagementMock->expects($this->once())
+                ->method('saveTokenWithPaymentLink')
+                ->willReturn(true);
+            $this->paymentExtension->expects($this->once())
+                ->method('setVaultPaymentToken')
+                ->with($this->paymentTokenMock);
+        } else {
+            $this->paymentTokenManagementMock->expects($this->never())
+                ->method('saveTokenWithPaymentLink');
+            $this->paymentExtension->expects($this->never())
+                ->method('setVaultPaymentToken')
+                ->with($this->paymentTokenMock);
+        }
 
-        $this->encryptor->expects(static::once())
-            ->method('getHash')
-            ->with($hashInput)
-            ->willReturn($expectedPublicHash);
+        $this->assertSame($this->observer, $this->observer->execute($this->eventObserverArgMock));
 
-        $paymentToken->expects(static::once())
-            ->method('setPublicHash')
-            ->with($expectedPublicHash);
-        $paymentToken->expects(static::once())
-            ->method('setIsActive')
-            ->with($isActive);
-
-        $orderPayment->expects(static::once())
-            ->method('getAdditionalInformation')
-            ->willReturn($additionalInformation);
-
-        $paymentToken->expects(static::once())
-            ->method('setIsVisible')
-            ->with(true);
-
-        $this->paymentTokenManager->expects(static::once())
-            ->method('saveTokenWithPaymentLink')
-            ->with($paymentToken, $orderPayment);
-
-        $extensionAttributesI->expects(static::once())
-            ->method('setVaultPaymentToken')
-            ->with($paymentToken);
-
-        $this->observer->execute($observer);
+        $payment = $this->salesOrderPaymentMock->getExtensionAttributes()->getVaultPaymentToken();
+        $this->assertSame($payment, $this->paymentTokenMock);
+        $this->assertEquals($token, $payment->getGatewayToken());
+        $this->assertEquals($customerId, $payment->getCustomerId());
+        $this->assertEquals($isActive, $payment->getIsActive());
+        $this->assertEquals($createdAt, $payment->getCreatedAt());
     }
 
-    public function testExecuteEmptyGatewayToken()
+    public function testPositiveCaseDataProvider()
     {
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderPayment = $this->getMock(OrderPaymentInterface::class);
-        $extensionAttributesI = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['getVaultPaymentToken', 'setVaultPaymentToken'])
-            ->getMock();
-        $paymentToken = $this->getMock(PaymentTokenInterface::class);
-
-        $observer->expects(static::once())
-            ->method('getDataByKey')
-            ->with(AfterPaymentSaveObserver::PAYMENT_OBJECT_DATA_KEY)
-            ->willReturn($orderPayment);
-        $orderPayment->expects(static::once())
-            ->method('getExtensionAttributes')
-            ->willReturn($extensionAttributesI);
-        $extensionAttributesI->expects(static::once())
-            ->method('getVaultPaymentToken')
-            ->willReturn($paymentToken);
-
-        $paymentToken->expects(static::once())
-            ->method('getGatewayToken')
-            ->willReturn(null);
-
-        $this->paymentTokenManager->expects(static::never())
-            ->method('saveTokenWithPaymentLink')
-            ->with($paymentToken, $orderPayment);
-
-        $this->observer->execute($observer);
+        return [
+            [
+                1,
+                '10\20\2015',
+                'asdfg',
+                true,
+                'paypal'
+            ],
+            [
+                null,
+                null,
+                null,
+                false,
+                null
+            ],
+        ];
     }
 }

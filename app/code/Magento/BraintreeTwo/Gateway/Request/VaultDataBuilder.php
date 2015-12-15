@@ -9,6 +9,7 @@ use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Vault\Gateway\Config\Config;
+use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Vault Data Builder
@@ -39,16 +40,16 @@ class VaultDataBuilder implements BuilderInterface
     const CONFIG_PAYMENT_VAULT_ACTIVE = 'active';
 
     /**
-     * @var Config
+     * @var VaultPaymentInterface
      */
-    private $config;
+    protected $vaultPayment;
 
     /**
-     * @param Config $config
+     * @param VaultPaymentInterface $vaultPayment
      */
-    public function __construct(Config $config)
+    public function __construct(VaultPaymentInterface $vaultPayment)
     {
-        $this->config = $config;
+        $this->vaultPayment = $vaultPayment;
     }
 
     /**
@@ -58,7 +59,7 @@ class VaultDataBuilder implements BuilderInterface
     {
         $result = [];
 
-        $isActiveVaultModule = $this->config->isVaultEnabledForPaymentMethod(ConfigProvider::CODE);
+        $isActiveVaultModule = $this->vaultPayment->isActiveForPayment(ConfigProvider::CODE);
         if ($isActiveVaultModule) {
             $result[self::OPTIONS][self::STORE_IN_VAULT_ON_SUCCESS] = true;
         }
