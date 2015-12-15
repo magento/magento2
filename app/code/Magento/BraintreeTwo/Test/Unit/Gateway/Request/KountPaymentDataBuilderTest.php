@@ -5,22 +5,23 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
 
+use Magento\Sales\Model\Order\Payment;
 use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Magento\Sales\Model\Order\Payment;
+use Magento\BraintreeTwo\Gateway\Request\KountPaymentDataBuilder;
 
 /**
- * Class PaymentDataBuilderTest
+ * Class KountPaymentDataBuilderTest
+ *
+ * @see \Magento\BraintreeTwo\Gateway\Request\KountPaymentDataBuilder
  */
-class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
+class KountPaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    const PAYMENT_METHOD_NONCE = 'nonce';
-    const MERCHANT_ACCOUNT_ID = '245345';
+    const DEVICE_DATA = '{"test": "test"}';
 
     /**
-     * @var PaymentDataBuilder
+     * @var KountPaymentDataBuilder
      */
     private $builder;
 
@@ -49,7 +50,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->builder = new PaymentDataBuilder($this->configMock);
+        $this->builder = new KountPaymentDataBuilder($this->configMock);
     }
 
     /**
@@ -60,19 +61,9 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $buildSubject = [];
 
-        $this->builder->build($buildSubject);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Amount should be provided
-     */
-    public function testBuildReadAmountException()
-    {
-        $buildSubject = [
-            'payment' => $this->paymentDO,
-            'amount' => null
-        ];
+        $this->configMock->expects(static::once())
+            ->method('getIsFraudProtection')
+            ->willReturn(true);
 
         $this->builder->build($buildSubject);
     }
@@ -81,30 +72,24 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $additionalData = [
             [
-                DataAssignObserver::PAYMENT_METHOD_NONCE,
-                self::PAYMENT_METHOD_NONCE
+                DataAssignObserver::DEVICE_DATA,
+                self::DEVICE_DATA
             ]
         ];
 
         $expectedResult = [
-            PaymentDataBuilder::AMOUNT  => 10.00,
-            PaymentDataBuilder::PAYMENT_METHOD_NONCE  => self::PAYMENT_METHOD_NONCE,
-            PaymentDataBuilder::MERCHANT_ACCOUNT_ID  => self::MERCHANT_ACCOUNT_ID,
+            KountPaymentDataBuilder::DEVICE_DATA => self::DEVICE_DATA,
         ];
 
-        $buildSubject = [
-            'payment' => $this->paymentDO,
-            'amount' => 10.00
-        ];
+        $buildSubject = ['payment' => $this->paymentDO];
 
         $this->paymentMock->expects(static::exactly(count($additionalData)))
             ->method('getAdditionalInformation')
             ->willReturnMap($additionalData);
 
         $this->configMock->expects(static::once())
-            ->method('getValue')
-            ->with(Config::KEY_MERCHANT_ACCOUNT_ID)
-            ->willReturn(self::MERCHANT_ACCOUNT_ID);
+            ->method('getIsFraudProtection')
+            ->willReturn(true);
 
         $this->paymentDO->expects(static::once())
             ->method('getPayment')
