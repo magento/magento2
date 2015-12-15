@@ -10,6 +10,8 @@ use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\Command\GatewayCommand;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
+use Magento\Sales\Model\Order\Payment\Transaction;
 
 /**
  * Class CaptureStrategyCommandTest
@@ -25,6 +27,12 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Payment\Gateway\Command\CommandPoolInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $commandPool;
+
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory|
+     * \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $transactionCollection;
 
     /**
      * @var \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
@@ -45,7 +53,9 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->initCommandMock();
 
-        $this->strategyCommand = new CaptureStrategyCommand($this->commandPool);
+        $factory = $this->getTransactionCollectionFactory();
+
+        $this->strategyCommand = new CaptureStrategyCommand($this->commandPool, $factory);
     }
 
     /**
@@ -58,27 +68,10 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->payment->expects(static::once())
             ->method('getAuthorizationTransaction')
-            ->willReturn(true);
-
-        $this->commandPool->expects(static::once())
-            ->method('get')
-            ->with(CaptureStrategyCommand::CAPTURE)
-            ->willReturn($this->command);
-
-        $this->strategyCommand->execute($subject);
-    }
-
-    /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand::execute
-     */
-    public function testCaptureExecute()
-    {
-        $paymentData = $this->getPaymentDataObjectMock();
-        $subject['payment'] = $paymentData;
-
-        $this->payment->expects(static::once())
-            ->method('getAuthorizationTransaction')
             ->willReturn(false);
+
+        $this->payment->expects(static::never())
+            ->method('getId');
 
         $this->commandPool->expects(static::once())
             ->method('get')
@@ -89,6 +82,52 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int $size
+     * @param string $command
+     * @covers       \Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand::execute
+     * @dataProvider captureDataProvider
+     */
+    public function testCaptureExecute($size, $command)
+    {
+        $paymentData = $this->getPaymentDataObjectMock();
+        $subject['payment'] = $paymentData;
+
+        $this->payment->expects(static::once())
+            ->method('getAuthorizationTransaction')
+            ->willReturn(true);
+
+        $this->payment->expects(static::once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->transactionCollection->expects(static::exactly(2))
+            ->method('addFieldToFilter')
+            ->willReturnSelf();
+
+        $this->transactionCollection->expects(static::once())
+            ->method('getSize')
+            ->willReturn($size);
+
+        $this->commandPool->expects(static::once())
+            ->method('get')
+            ->with($command)
+            ->willReturn($this->command);
+
+        $this->strategyCommand->execute($subject);
+    }
+
+    /**
+     * Return variations for command testing
+     */
+    public function captureDataProvider()
+    {
+        return [
+            ['collectionSize' => 0, 'command' => CaptureStrategyCommand::CAPTURE],
+            ['collectionSize' => 1, 'command' => CaptureStrategyCommand::CLONE_TRANSACTION]
+        ];
+    }
+
+    /**
      * Create mock for payment data object and order payment
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
@@ -96,7 +135,7 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAuthorizationTransaction'])
+            ->setMethods(['getAuthorizationTransaction', 'getId'])
             ->getMock();
 
         $mock = $this->getMockBuilder(PaymentDataObject::class)
@@ -124,5 +163,28 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
         $this->command->expects(static::once())
             ->method('execute')
             ->willReturn([]);
+    }
+
+    /**
+     * Get mock for transaction collection factory
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getTransactionCollectionFactory()
+    {
+        $this->transactionCollection = $this->getMockBuilder(Transaction::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['addFieldToFilter', 'getSize', '__wakeup'])
+            ->getMock();
+
+        $mock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $mock->expects(static::any())
+            ->method('create')
+            ->willReturn($this->transactionCollection);
+
+        return $mock;
     }
 }

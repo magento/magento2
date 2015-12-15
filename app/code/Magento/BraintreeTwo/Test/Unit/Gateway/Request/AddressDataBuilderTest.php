@@ -50,13 +50,17 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildNoAddresses()
     {
-        $this->paymentDOMock->expects($this->once())
+        $this->paymentDOMock->expects(static::once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->once())
+
+        $this->orderMock->expects(static::once())
+            ->method('getOrderIncrementId')
+            ->willReturn('000000100');
+        $this->orderMock->expects(static::once())
             ->method('getShippingAddress')
             ->willReturn(null);
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects(static::once())
             ->method('getBillingAddress')
             ->willReturn(null);
 
@@ -64,7 +68,7 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
             'payment' => $this->paymentDOMock,
         ];
 
-        static::assertEmpty($this->builder->build($buildSubject));
+        static::assertEquals(['orderId' => '000000100'], $this->builder->build($buildSubject));
     }
 
     /**
@@ -77,13 +81,17 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $addressMock = $this->getAddressMock($addressData);
 
-        $this->paymentDOMock->expects($this->once())
+        $this->paymentDOMock->expects(static::once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->once())
+
+        $this->orderMock->expects(static::once())
+            ->method('getOrderIncrementId')
+            ->willReturn('000000101');
+        $this->orderMock->expects(static::once())
             ->method('getShippingAddress')
             ->willReturn($addressMock);
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects(static::once())
             ->method('getBillingAddress')
             ->willReturn($addressMock);
 
@@ -113,6 +121,7 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
                     'post_code' => '00000'
                 ],
                 [
+                    AddressDataBuilder::ORDER_ID => '000000101',
                     AddressDataBuilder::SHIPPING_ADDRESS => [
                         AddressDataBuilder::FIRST_NAME => 'John',
                         AddressDataBuilder::LAST_NAME => 'Smith',

@@ -6,7 +6,6 @@
 namespace Magento\BraintreeTwo\Model\Adapter;
 
 use Braintree\Customer;
-use Braintree\Result\Successful;
 
 /**
  * BraintreeCustomer

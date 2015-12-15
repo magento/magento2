@@ -5,14 +5,12 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
+use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler;
+use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Payment\Gateway\Data\PaymentDataObject;
-use Braintree\Transaction;
-use Braintree\Result\Successful;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-
 
 /**
  * Class PaymentDetailsHandlerTest

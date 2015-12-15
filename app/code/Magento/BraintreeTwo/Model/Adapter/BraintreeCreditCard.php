@@ -6,8 +6,6 @@
 namespace Magento\BraintreeTwo\Model\Adapter;
 
 use Braintree\CreditCard;
-use Braintree\Result\Error;
-use Braintree\Result\Successful;
 
 /**
  * BraintreeCreditCard
@@ -18,11 +16,15 @@ class BraintreeCreditCard
 {
     /**
      * @param string $id
-     * @return \Braintree\CreditCard
+     * @return \Braintree\CreditCard|null
      */
     public function find($token)
     {
-        return CreditCard::find($token);
+        try {
+            return CreditCard::find($token);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
