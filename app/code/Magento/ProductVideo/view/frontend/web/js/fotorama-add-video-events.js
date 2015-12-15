@@ -608,7 +608,7 @@ define([
                     return;
                 }
 
-                if (!videoPreview.is(':visible') && !self.inFullscreen) {
+                if (!videoPreview.is(':visible')) {
                     videoPreview.show();
                 }
 
