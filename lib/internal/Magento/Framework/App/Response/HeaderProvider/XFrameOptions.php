@@ -5,13 +5,12 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-use \Magento\Framework\App\Response\HeaderProvider\AbstractHeader;
 use \Magento\Framework\App\Response\Http;
 
 /**
  * Adds an X-FRAME-OPTIONS header to HTTP responses to safeguard against click-jacking.
  */
-class XFrameOptions extends AbstractHeader
+class XFrameOptions extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider
 {
     /** Deployment config key for frontend x-frame-options header value */
     const DEPLOYMENT_CONFIG_X_FRAME_OPT = 'x-frame-options';
@@ -31,12 +30,12 @@ class XFrameOptions extends AbstractHeader
      *
      * @var string
      */
-    protected $value = 'SAMEORIGIN';
+    protected $value;
 
     /**
      * @param string $xFrameOpt
      */
-    public function __construct($xFrameOpt)
+    public function __construct($xFrameOpt = 'SAMEORIGIN')
     {
         $this->value = $xFrameOpt;
     }
