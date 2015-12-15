@@ -8,6 +8,7 @@ namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 use Braintree\RiskData;
 use Braintree\Transaction;
 use Magento\Sales\Model\Order\Payment;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\BraintreeTwo\Gateway\Response\RiskDataHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
@@ -24,11 +25,20 @@ class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
     private $riskDataHandler;
 
     /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
+    /**
      * Set up
      */
     public function setUp()
     {
-        $this->riskDataHandler = new RiskDataHandler();
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->riskDataHandler = new RiskDataHandler($this->subjectReaderMock);
     }
 
     /**
@@ -36,12 +46,24 @@ class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testHandle()
     {
+        $paymentData = $this->getPaymentDataObjectMock();
+        $transaction = $this->getBraintreeTransactionMock();
+
         $response = [
-            'object' => $this->getBraintreeTransactionMock()
+            'object' => $transaction
         ];
         $handlingSubject = [
-            'payment' => $this->getPaymentDataObjectMock(),
+            'payment' =>$paymentData,
         ];
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($handlingSubject)
+            ->willReturn($paymentData);
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readTransaction')
+            ->with($response)
+            ->willReturn($transaction);
 
         $this->riskDataHandler->handle($handlingSubject, $response);
     }
@@ -62,17 +84,7 @@ class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $mock = $this->getMockBuilder(\Braintree\Result\Successful::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__get'])
-            ->getMock();
-
-        $mock->expects(static::once())
-            ->method('__get')
-            ->with('transaction')
-            ->willReturn($transaction);
-
-        return $mock;
+        return $transaction;
     }
 
     /**

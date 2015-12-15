@@ -70,10 +70,23 @@
                 <item name="address" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\AddressDataBuilder</item>
                 <item name="vault" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\VaultDataBuilder</item>
                 <item name="3dsecure" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\ThreeDSecureDataBuilder</item>
+                <item name="kount" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\KountPaymentDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
     <type name="Magento\BraintreeTwo\Gateway\Http\Client\AbstractTransaction">
+
+    <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale">
+        <arguments>
+            <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionSubmitForSettlement">
+        <arguments>
+            <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionClone">
         <arguments>
             <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
         </arguments>

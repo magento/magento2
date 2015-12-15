@@ -239,7 +239,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return bool
      */
-    public function getIsFraudProtection()
+    public function hasFraudProtection()
     {
         return (bool) $this->getValue(Config::FRAUD_PROTECTION);
     }

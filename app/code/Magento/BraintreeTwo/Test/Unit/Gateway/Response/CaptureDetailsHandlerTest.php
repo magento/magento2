@@ -9,6 +9,7 @@ use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Response\CaptureDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -26,16 +27,22 @@ class CaptureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $payment;
 
+    /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
     protected function setUp()
     {
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'setIsTransactionClosed'
-            ])
+            ->setMethods(['setIsTransactionClosed'])
+            ->getMock();
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $this->captureHandler = new CaptureDetailsHandler();
+        $this->captureHandler = new CaptureDetailsHandler($this->subjectReaderMock);
     }
 
     /**
@@ -56,6 +63,11 @@ class CaptureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($subject)
+            ->willReturn($paymentData);
+
         $this->captureHandler->handle($subject, $response);
     }
 
@@ -75,12 +87,5 @@ class CaptureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->payment);
 
         return $mock;
-    }
-
-    private function getTransactionDetails()
-    {
-        $attrs = [
-            ''
-        ];
     }
 }

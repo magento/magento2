@@ -17,6 +17,7 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
 /**
  * Class CaptureStrategyCommandTest
@@ -58,11 +59,20 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $command;
 
+    /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
     protected function setUp()
     {
         $this->commandPool = $this->getMockBuilder(CommandPoolInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', '__wakeup'])
+            ->getMock();
+
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->initCommandMock();
@@ -74,7 +84,8 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
             $this->commandPool,
             $this->transactionRepository,
             $this->filterBuilder,
-            $this->searchCriteriaBuilder
+            $this->searchCriteriaBuilder,
+            $this->subjectReaderMock
         );
     }
 
@@ -85,6 +96,11 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     {
         $paymentData = $this->getPaymentDataObjectMock();
         $subject['payment'] = $paymentData;
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($subject)
+            ->willReturn($paymentData);
 
         $this->payment->expects(static::once())
             ->method('getAuthorizationTransaction')
@@ -111,6 +127,11 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     {
         $paymentData = $this->getPaymentDataObjectMock();
         $subject['payment'] = $paymentData;
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($subject)
+            ->willReturn($paymentData);
 
         $this->payment->expects(static::once())
             ->method('getAuthorizationTransaction')

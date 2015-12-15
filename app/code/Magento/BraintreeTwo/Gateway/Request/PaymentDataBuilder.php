@@ -7,7 +7,7 @@ namespace Magento\BraintreeTwo\Gateway\Request;
 
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
-use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 
@@ -48,11 +48,20 @@ class PaymentDataBuilder implements BuilderInterface
     private $config;
 
     /**
-     * @param Config $config
+     * @var SubjectReader
      */
-    public function __construct(Config $config)
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param Config $config
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(Config $config, SubjectReader $subjectReader)
     {
         $this->config = $config;
+        $this->subjectReader = $subjectReader;
     }
 
     /**
@@ -60,13 +69,12 @@ class PaymentDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        $paymentDO = SubjectReader::readPayment($buildSubject);
+        $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $paymentDO->getPayment();
 
         $result = [
-            self::AMOUNT => $this->formatPrice(SubjectReader::readAmount($buildSubject)),
+            self::AMOUNT => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
             self::PAYMENT_METHOD_NONCE => $payment->getAdditionalInformation(
                 DataAssignObserver::PAYMENT_METHOD_NONCE
             ),

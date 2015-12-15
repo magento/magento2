@@ -8,6 +8,7 @@ namespace Magento\BraintreeTwo\Gateway\Validator;
 use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
+use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
  * Class ResponseValidator
@@ -15,11 +16,28 @@ use Magento\Payment\Gateway\Validator\AbstractValidator;
 class ResponseValidator extends AbstractValidator
 {
     /**
+     * @var SubjectReader
+     */
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param ResultInterfaceFactory $resultFactory
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(ResultInterfaceFactory $resultFactory, SubjectReader $subjectReader)
+    {
+        parent::__construct($resultFactory);
+        $this->subjectReader = $subjectReader;
+    }
+
+    /**
      * @inheritdoc
      */
     public function validate(array $validationSubject)
     {
-        $response = SubjectReader::readResponseObject($validationSubject);
+        $response = $this->subjectReader->readResponseObject($validationSubject);
 
         $result = $this->createResult(
             $this->validateSuccess($response)

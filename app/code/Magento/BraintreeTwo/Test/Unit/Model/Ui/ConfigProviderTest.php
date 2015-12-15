@@ -71,7 +71,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'getEnvironment' => 'test-environment',
                     'getKountMerchantId' => 'test-kount-merchant-id',
                     'getMerchantId' => 'test-merchant-id',
-                    'getIsFraudProtection' => true
+                    'hasFraudProtection' => true
                 ],
                 'expected' => [
                     'payment' => [
@@ -88,7 +88,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'environment' => 'test-environment',
                             'kountMerchantId' => 'test-kount-merchant-id',
                             'merchantId' => 'test-merchant-id',
-                            'isFraudProtection' => true
+                            'hasFraudProtection' => true
                         ],
                         Config::CODE_3DSECURE => [
                             'enabled' => true,

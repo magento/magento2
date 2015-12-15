@@ -7,13 +7,12 @@ namespace Magento\BraintreeTwo\Gateway\Request;
 
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
-use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 
 /**
  * Class ThreeDSecureDataBuilder
- * @package Magento\BraintreeTwo\Gateway\Request
  */
 class ThreeDSecureDataBuilder implements BuilderInterface
 {
@@ -25,10 +24,19 @@ class ThreeDSecureDataBuilder implements BuilderInterface
     private $config;
 
     /**
-     * @param Config $config
+     * @var SubjectReader
      */
-    public function __construct(Config $config) {
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param Config $config
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(Config $config, SubjectReader $subjectReader) {
         $this->config = $config;
+        $this->subjectReader = $subjectReader;
     }
 
     /**
@@ -38,8 +46,8 @@ class ThreeDSecureDataBuilder implements BuilderInterface
     {
         $result = [];
 
-        $paymentDO = SubjectReader::readPayment($buildSubject);
-        $amount = $this->formatPrice(SubjectReader::readAmount($buildSubject));
+        $paymentDO = $this->subjectReader->readPayment($buildSubject);
+        $amount = $this->formatPrice($this->subjectReader->readAmount($buildSubject));
 
         if ($this->is3DSecureEnabled($paymentDO->getOrder(), $amount)) {
             $result['options'][Config::CODE_3DSECURE] = ['required' => true];

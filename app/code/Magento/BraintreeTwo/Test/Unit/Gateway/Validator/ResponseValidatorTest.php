@@ -9,6 +9,7 @@ use Braintree\Transaction;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use Magento\BraintreeTwo\Gateway\Validator\ResponseValidator;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
 /**
  * Class ResponseValidatorTest
@@ -26,6 +27,11 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
     private $resultInterfaceFactoryMock;
 
     /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
+    /**
      * Set up
      *
      * @return void
@@ -37,13 +43,18 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->responseValidator = new ResponseValidator($this->resultInterfaceFactoryMock);
+        $this->responseValidator = new ResponseValidator(
+            $this->resultInterfaceFactoryMock,
+            $this->subjectReaderMock
+        );
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Response does not exist
      */
     public function testValidateReadResponseException()
     {
@@ -51,12 +62,16 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
             'response' => null
         ];
 
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readResponseObject')
+            ->with($validationSubject)
+            ->willThrowException(new \InvalidArgumentException());
+
         $this->responseValidator->validate($validationSubject);
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Response object does not exist
      */
     public function testValidateReadResponseObjectException()
     {
@@ -64,9 +79,13 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
             'response' => ['object' => null]
         ];
 
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readResponseObject')
+            ->with($validationSubject)
+            ->willThrowException(new \InvalidArgumentException());
+
         $this->responseValidator->validate($validationSubject);
     }
-
 
     /**
      * Run test for validate method
@@ -82,7 +101,12 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
         /** @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
         $resultMock = $this->getMock(ResultInterface::class);
 
-        $this->resultInterfaceFactoryMock->expects($this->once())
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readResponseObject')
+            ->with($validationSubject)
+            ->willReturn($validationSubject['response']['object']);
+
+        $this->resultInterfaceFactoryMock->expects(self::once())
             ->method('create')
             ->with([
                 'isValid' => $isValid,
@@ -92,7 +116,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
 
         $actualMock = $this->responseValidator->validate($validationSubject);
 
-        $this->assertEquals($resultMock, $actualMock);
+        self::assertEquals($resultMock, $actualMock);
     }
 
     /**

@@ -7,7 +7,7 @@ namespace Magento\BraintreeTwo\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\Payment\Gateway\Helper\ContextHelper;
-use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
@@ -21,17 +21,32 @@ class ThreeDSecureDetailsHandler implements HandlerInterface
     const LIABILITY_SHIFT_POSSIBLE = 'liabilityShiftPossible';
 
     /**
+     * @var SubjectReader
+     */
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(SubjectReader $subjectReader)
+    {
+        $this->subjectReader = $subjectReader;
+    }
+
+    /**
      * @inheritdoc
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $paymentDO = SubjectReader::readPayment($handlingSubject);
+        $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         /** @var OrderPaymentInterface $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
         /** @var Transaction $transaction */
-        $transaction = $response['object']->transaction;
+        $transaction = $this->subjectReader->readTransaction($response);
 
         if ($payment->hasAdditionalInformation(self::LIABILITY_SHIFTED)) {
             // remove 3d secure details for reorder

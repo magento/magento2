@@ -87,7 +87,7 @@ define(
              */
             initClientConfig: function () {
                 // Advanced fraud tools settings
-                if (this.getIsFraudProtection()) {
+                if (this.hasFraudProtection()) {
                     this.clientConfig = _.extend(this.clientConfig, this.kountConfig());
                 }
 
@@ -242,8 +242,8 @@ define(
             /**
              * @returns {Boolean}
              */
-            getIsFraudProtection: function () {
-                return window.checkoutConfig.payment[this.getCode()].isFraudProtection;
+            hasFraudProtection: function () {
+                return window.checkoutConfig.payment[this.getCode()].hasFraudProtection;
             },
 
             /**
