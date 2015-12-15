@@ -12,7 +12,6 @@ use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
 use Magento\Framework\Search\Request\Query\Match as MatchQuery;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
 use Magento\Elasticsearch\Model\Adapter\Index\SearchIndexNameResolver;
 
@@ -37,11 +36,6 @@ class Mapper
     protected $filterBuilder;
 
     /**
-     * @var AggregationBuilder
-     */
-    protected $aggregationBuilder;
-
-    /**
      * @var SearchIndexNameResolver
      */
     protected $searchIndexNameResolver;
@@ -50,20 +44,17 @@ class Mapper
      * @param Config $clientConfig
      * @param MatchQueryBuilder $matchQueryBuilder
      * @param FilterBuilder $filterBuilder
-     * @param AggregationBuilder $aggregationBuilder
      * @param SearchIndexNameResolver $searchIndexNameResolver
      */
     public function __construct(
         Config $clientConfig,
         MatchQueryBuilder $matchQueryBuilder,
         FilterBuilder $filterBuilder,
-        AggregationBuilder $aggregationBuilder,
         SearchIndexNameResolver $searchIndexNameResolver
     ) {
         $this->clientConfig = $clientConfig;
         $this->matchQueryBuilder = $matchQueryBuilder;
         $this->filterBuilder = $filterBuilder;
-        $this->aggregationBuilder = $aggregationBuilder;
         $this->searchIndexNameResolver = $searchIndexNameResolver;
     }
 
@@ -97,7 +88,6 @@ class Mapper
                 'store_id' => $storeId,
             ]
         ];
-        $searchQuery = $this->aggregationBuilder->build($request, $searchQuery);
         return $searchQuery;
     }
 
