@@ -12,19 +12,21 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Vault\Model\Ui\VaultCardsConfigProvider;
+use Magento\Vault\Model\Ui\TokensConfigProvider;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class ConfigProviderTest
  *
- * @see \Magento\Vault\Model\Ui\ConfigProvider
+ * @see \Magento\Vault\Model\Ui\TokensConfigProvider
  */
-class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
+class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var PaymentTokenRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -47,11 +49,6 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
     private $customerSessionMock;
 
     /**
-     * @var VaultCardsConfigProvider
-     */
-    private $configProvider;
-
-    /**
      * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $storeManager;
@@ -66,9 +63,6 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $store;
 
-    /**
-     * Set up
-     */
     protected function setUp()
     {
         $this->paymentTokenRepositoryMock = $this->getMockBuilder(PaymentTokenRepositoryInterface::class)
@@ -85,37 +79,27 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->vaultPayment = $this->getMock(VaultPaymentInterface::class);
         $this->storeManager = $this->getMock(StoreManagerInterface::class);
         $this->store = $this->getMock(StoreInterface::class);
-
-        $this->configProvider = new VaultCardsConfigProvider(
-            $this->customerSessionMock,
-            $this->paymentTokenRepositoryMock,
-            $this->filterBuilderMock,
-            $this->searchCriteriaBuilderMock,
-            $this->storeManager,
-            $this->vaultPayment
-        );
     }
 
-    /**
-     * Run test for getConfig method
-     */
     public function testGetConfig()
     {
         $customerId = 1;
         $visible = true;
         $storeId = 1;
-        $vaultPaymentCode = "vault_decorator_code";
-        $vaultProviderCode = "cault_provider_code";
 
-        $customerFilterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $visibilityFilterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $codeFilterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $vaultProviderCode = "vault_provider_code";
+
+        $expectedConfig = [
+            'payment' => [
+                VaultPaymentInterface::CODE => [
+                    VaultPaymentInterface::CODE . '0' => [
+                        'config' => ['token_code' => 'code'],
+                        'component' => 'Vendor_Module/js/vault_component'
+                    ]
+                ]
+            ]
+        ];
+
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -123,6 +107,8 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $tokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
             ->getMockForAbstractClass();
+        $tokenUiComponentProvider = $this->getMock(TokenUiComponentProviderInterface::class);
+        $tokenUiComponent = $this->getMock(TokenUiComponentInterface::class);
 
         $this->storeManager->expects(static::once())
             ->method('getStore')
@@ -140,14 +126,18 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, $customerFilterMock, 0);
-        $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, $visible, $visibilityFilterMock, 1);
+        $customerFilterMock = $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, 0);
+        $visibilityFilterMock = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, $visible, 1);
 
         $this->vaultPayment->expects(static::once())
             ->method('getProviderCode')
             ->willReturn($vaultProviderCode);
 
-        $this->createExpectedFilter(PaymentTokenInterface::PAYMENT_METHOD_CODE, $vaultProviderCode, $codeFilterMock, 2);
+        $codeFilterMock = $this->createExpectedFilter(
+            PaymentTokenInterface::PAYMENT_METHOD_CODE,
+            $vaultProviderCode,
+            2
+        );
 
         $this->searchCriteriaBuilderMock->expects(self::once())
             ->method('addFilters')
@@ -166,36 +156,47 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->willReturn([$tokenMock]);
 
-        $this->vaultPayment->expects(static::exactly(1))
-            ->method('getCode')
-            ->willReturn($vaultPaymentCode);
+        $tokenUiComponentProvider->expects(static::once())
+            ->method('getComponentForToken')
+            ->with($tokenMock)
+            ->willReturn($tokenUiComponent);
+        $tokenUiComponent->expects(static::once())
+            ->method('getConfig')
+            ->willReturn(['token_code' => 'code']);
+        $tokenUiComponent->expects(static::once())
+            ->method('getName')
+            ->willReturn('Vendor_Module/js/vault_component');
 
-        $tokenMock->expects(self::once())
-            ->method('getPublicHash')
-            ->willReturn('test-hash');
+        $configProvider = new TokensConfigProvider(
+            $this->customerSessionMock,
+            $this->paymentTokenRepositoryMock,
+            $this->filterBuilderMock,
+            $this->searchCriteriaBuilderMock,
+            $this->storeManager,
+            $this->vaultPayment,
+            [
+                $vaultProviderCode => $tokenUiComponentProvider
+            ]
+        );
 
-        $config = $this->configProvider->getConfig();
-
-        self::assertNotEmpty($config);
-        self::assertArrayHasKey('payment', $config);
-        self::assertArrayHasKey(VaultPaymentInterface::CODE, $config['payment']);
-
-        foreach ($config['payment'] as $item) {
-            foreach ($item as $paymentToken) {
-                self::assertArrayHasKey('token', $paymentToken);
-                self::assertArrayHasKey('title', $paymentToken);
-            }
-        }
+        static::assertEquals(
+            $expectedConfig,
+            $configProvider->getConfig()
+        );
     }
 
     /**
      * @param string $field
      * @param mixed $value
-     * @param \PHPUnit_Framework_MockObject_MockObject $filterObject
      * @param int $atIndex
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function createExpectedFilter($field, $value, $filterObject, $atIndex)
+    private function createExpectedFilter($field, $value, $atIndex)
     {
+        $filterObject = $this->getMockBuilder(Filter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->filterBuilderMock->expects(new MethodInvokedAtIndex($atIndex))
             ->method('setField')
             ->with($field)
@@ -207,33 +208,64 @@ class VaultCardsConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilderMock->expects(new MethodInvokedAtIndex($atIndex))
             ->method('create')
             ->willReturn($filterObject);
+
+        return $filterObject;
     }
 
-    /**
-     * Run test for getConfig method
-     */
-    public function testGetConfigEmpty()
+    public function testGetConfigNonRegisteredCustomer()
     {
         $this->customerSessionMock->expects(self::once())
             ->method('getCustomerId')
             ->willReturn(null);
 
-        $this->filterBuilderMock->expects(self::never())
-            ->method('setField');
-        $this->filterBuilderMock->expects(self::never())
-            ->method('setValue');
-        $this->filterBuilderMock->expects(self::never())
-            ->method('create');
+        $this->paymentTokenRepositoryMock->expects(self::never())
+            ->method('getList');
 
-        $this->searchCriteriaBuilderMock->expects(self::never())
-            ->method('addFilters');
-        $this->searchCriteriaBuilderMock->expects(self::never())
-            ->method('create');
+        $configProvider = new TokensConfigProvider(
+            $this->customerSessionMock,
+            $this->paymentTokenRepositoryMock,
+            $this->filterBuilderMock,
+            $this->searchCriteriaBuilderMock,
+            $this->storeManager,
+            $this->vaultPayment
+        );
+        $config = $configProvider->getConfig();
+
+        self::assertEmpty($config);
+    }
+
+    public function testGetConfigNoActiveVaultProvider()
+    {
+        $customerId = 1;
+        $storeId = 1;
+        $this->customerSessionMock->expects(self::once())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+
+        $this->storeManager->expects(static::once())
+            ->method('getStore')
+            ->with(null)
+            ->willReturn($this->store);
+        $this->store->expects(static::once())
+            ->method('getId')
+            ->willReturn($storeId);
+        $this->vaultPayment->expects(static::once())
+            ->method('isActive')
+            ->with($storeId)
+            ->willReturn(false);
 
         $this->paymentTokenRepositoryMock->expects(self::never())
             ->method('getList');
 
-        $config = $this->configProvider->getConfig();
+        $configProvider = new TokensConfigProvider(
+            $this->customerSessionMock,
+            $this->paymentTokenRepositoryMock,
+            $this->filterBuilderMock,
+            $this->searchCriteriaBuilderMock,
+            $this->storeManager,
+            $this->vaultPayment
+        );
+        $config = $configProvider->getConfig();
 
         self::assertEmpty($config);
     }

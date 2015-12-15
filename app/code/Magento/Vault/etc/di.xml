@@ -40,7 +40,7 @@
         </arguments>
     </type>
 
-    <type name="Magento\Vault\Model\Ui\VaultCardsConfigProvider">
+    <type name="Magento\Vault\Model\Ui\TokensConfigProvider">
         <arguments>
             <argument name="paymentTokenRepository" xsi:type="object">Magento\Vault\Model\PaymentTokenRepositoryProxy</argument>
         </arguments>
