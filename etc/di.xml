@@ -30,7 +30,6 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexerHandler</item>
-                <item name="entityType" xsi:type="string">product</item>
             </argument>
         </arguments>
     </type>
