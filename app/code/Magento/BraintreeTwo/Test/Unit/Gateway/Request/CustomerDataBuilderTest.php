@@ -58,10 +58,10 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $billingMock = $this->getBillingMock($billingData);
 
-        $this->paymentDOMock->expects($this->once())
+        $this->paymentDOMock->expects(static::once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects(static::once())
             ->method('getBillingAddress')
             ->willReturn($billingMock);
 
