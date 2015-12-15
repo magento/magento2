@@ -686,7 +686,7 @@ class Product extends AbstractResource
 
                 $this->_beforeSave($object);
                 $this->entityManager->save(
-                    'Magento\Catalog\Api\Data\ProductInterface',
+                    \Magento\Catalog\Api\Data\ProductInterface::class,
                     $object
                 );
                 $this->_afterSave($object);
