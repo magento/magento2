@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Tab;
+namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section;
 
-use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Backend\Test\Block\Widget\Section;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Catalog\Test\Block\Adminhtml\Category\Tab\ProductGrid;
+use Magento\Catalog\Test\Block\Adminhtml\Category\Section\ProductGrid;
 
 /**
  * Products grid of Category Products tab.
  */
-class Product extends Tab
+class Product extends Section
 {
     /**
      * An element locator which allows to select entities in grid.
@@ -36,7 +36,7 @@ class Product extends Tab
      * @param SimpleElement|null $element
      * @return void
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function fillSection(array $fields, SimpleElement $element = null)
     {
         if (!isset($fields['category_products'])) {
             return;
@@ -47,13 +47,13 @@ class Product extends Tab
     }
 
     /**
-     * Get data of tab.
+     * Get data of the Category Products section.
      *
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getSectionData($fields = null, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
         $result = [];
@@ -78,7 +78,7 @@ class Product extends Tab
     public function getProductGrid()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Category\Tab\ProductGrid',
+            'Magento\Catalog\Test\Block\Adminhtml\Category\Section\ProductGrid',
             ['element' => $this->_rootElement->find($this->productGrid)]
         );
     }
