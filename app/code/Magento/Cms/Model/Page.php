@@ -13,6 +13,8 @@ use Magento\Framework\DataObject\IdentityInterface;
  *
  * @method \Magento\Cms\Model\ResourceModel\Page _getResource()
  * @method \Magento\Cms\Model\ResourceModel\Page getResource()
+ * @method Page setStoreId(array $storeId)
+ * @method array getStoreId()
  */
 class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
 {
