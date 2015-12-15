@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-class XFrameOptionsTest extends AbstractHeaderTest
+class XFrameOptionsTestCase extends AbstractHeaderTestCase
 {
     public function testHeaderPresent()
     {
-        parent::verifyHeader('X-Frame-Options', 'SAMEORIGIN');
+        $this->assertHeaderPresent('X-Frame-Options', 'SAMEORIGIN');
     }
 }
