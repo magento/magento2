@@ -6,7 +6,6 @@
 namespace Magento\BraintreeTwo\Gateway\Response;
 
 use Braintree\Transaction;
-use Magento\Vault\Gateway\Config\Config;
 use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
@@ -14,6 +13,7 @@ use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\PaymentTokenFactory;
+use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Vault Details Handler
@@ -31,21 +31,21 @@ class VaultDetailsHandler implements HandlerInterface
     protected $paymentExtensionFactory;
 
     /**
-     * @var Config
+     * @var VaultPaymentInterface
      */
-    private $config;
+    protected $vaultPayment;
 
     /**
-     * @param Config $config
+     * @param VaultPaymentInterface $vaultPayment
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param OrderPaymentExtensionFactory $paymentExtensionFactory
      */
     public function __construct(
-        Config $config,
+        VaultPaymentInterface $vaultPayment,
         PaymentTokenFactory $paymentTokenFactory,
         OrderPaymentExtensionFactory $paymentExtensionFactory
     ) {
-        $this->config = $config;
+        $this->vaultPayment = $vaultPayment;
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
     }
@@ -55,7 +55,7 @@ class VaultDetailsHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $isActiveVaultModule = $this->config->isVaultEnabledForPaymentMethod(ConfigProvider::CODE);
+        $isActiveVaultModule = $this->vaultPayment->isActiveForPayment(ConfigProvider::CODE);
         if (!$isActiveVaultModule) {
             return;
         }

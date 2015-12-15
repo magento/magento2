@@ -7,7 +7,7 @@ namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
 
 use Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder;
 use Magento\BraintreeTwo\Gateway\Request\VaultDataBuilder;
-use Magento\Vault\Gateway\Config\Config;
+use Magento\Vault\Model\VaultPaymentInterface;
 
 class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,18 +17,15 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
     private $builder;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var VaultPaymentInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configMock;
+    private $vaultPaymentMock;
 
     public function setUp()
     {
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->vaultPaymentMock = $this->getMock(VaultPaymentInterface::class);
 
-        $this->builder = new VaultDataBuilder($this->configMock);
+        $this->builder = new VaultDataBuilder($this->vaultPaymentMock);
     }
 
     public function testBuild()
@@ -39,15 +36,9 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
 
         $buildSubject = [];
 
-        $this->configMock->expects($this->at(0))
-            ->method('getValue')
-            ->with(Config::KEY_ACTIVE)
-            ->willReturn(1);
-
-        $this->configMock->expects($this->at(1))
-            ->method('getValue')
-            ->with(Config::KEY_VAULT_PAYMENT)
-            ->willReturn('braintreetwo');
+        $this->vaultPaymentMock->expects(self::once())
+            ->method('isActiveForPayment')
+            ->willReturn(true);
 
         static::assertEquals(
             $expectedResult,
@@ -61,15 +52,9 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
 
         $buildSubject = [];
 
-        $this->configMock->expects($this->at(0))
-            ->method('getValue')
-            ->with(Config::KEY_ACTIVE)
-            ->willReturn(1);
-
-        $this->configMock->expects($this->at(1))
-            ->method('getValue')
-            ->with(Config::KEY_VAULT_PAYMENT)
-            ->willReturn('anotherPaymentMethod');
+        $this->vaultPaymentMock->expects(self::once())
+            ->method('isActiveForPayment')
+            ->willReturn(false);
 
         static::assertEquals(
             $expectedResult,
