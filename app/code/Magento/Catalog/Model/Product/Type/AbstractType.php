@@ -609,8 +609,6 @@ abstract class AbstractType
      */
     public function checkProductBuyState($product)
     {
-        //@TODO use repository instead
-        return $this;
         if (!$product->getSkipCheckRequiredOption() && $product->getHasOptions()) {
             foreach ($product->getOptions() as $option) {
                 if ($option->getIsRequire()) {

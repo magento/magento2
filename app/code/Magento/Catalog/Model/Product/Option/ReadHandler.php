@@ -58,7 +58,7 @@ class ReadHandler
         /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
         foreach ($this->optionRepository->getProductOptions($entity) as $option) {
             $option->setProduct($entity);
-            $options[$option->getOptionId()] = $option;
+            $options[] = $option;
         }
         $entity->setOptions($options);
         return $entity;

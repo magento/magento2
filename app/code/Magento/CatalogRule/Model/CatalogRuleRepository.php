@@ -53,6 +53,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Unable to save rule %1', $rule->getRuleId()));
         }
+        return $rule;
     }
 
     /**
