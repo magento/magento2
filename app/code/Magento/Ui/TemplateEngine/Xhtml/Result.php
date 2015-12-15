@@ -81,6 +81,11 @@ class Result implements ResultInterface
     public function appendLayoutConfiguration()
     {
         $layoutConfiguration = $this->wrapContent(json_encode($this->structure->generate($this->component)));
+        //$formDataSource='"testform_form_data_source":{"type":"dataSource","name":"testform_form_data_source","dataScope":"testform_form","config":{"params":{"namespace":"testform_form"}}}';
+        $formDataSource2 = '"myyyyy_data_source":{"type":"dataSource","name":"myyyyy_data_source","dataScope":"testform_form","config":{"params":{"namespace":"testform_form"}}}';
+        $listingDataSource = '"listing_data_source":{"type":"dataSource","name":"listing_data_source","dataScope":"testform_form","config":{"update_url":"mui/index/render","component":"Magento_Ui\/js\/grid\/provider","storageConfig":{"indexField":"koala_id"},"params":{"namespace":"testform_form"},"data":{"items":[{"koala_id":1,"name":"Red Koala","id_field_name":"koala_id","positionFromGridSource":"111","positionFromFormSource":"999"}],"totalRecords":1}}}';
+        $layoutConfiguration = str_replace("}}}}}}]]></script>", ",".$formDataSource2."}}}}}}]]></script>", $layoutConfiguration);
+        $layoutConfiguration = str_replace("}}}}}}]]></script>", ",".$listingDataSource."}}}}}}]]></script>", $layoutConfiguration);
         $this->template->append($layoutConfiguration);
     }
 
