@@ -46,9 +46,14 @@ class AssertCmsPageForm extends AbstractAssertForm
         $filter = ['title' => $cms->getTitle()];
         $cmsIndex->getCmsPageGridBlock()->searchAndOpen($filter);
 
+        $cmsPageNew->getPageForm()->waitForm();
+        $cmsPageNew->getPageForm()->showCollapsible();
         $cmsFormData = $cmsPageNew->getPageForm()->getData($cms);
         $cmsFormData['store_id'] = implode('/', $cmsFormData['store_id']);
-        $errors = $this->verifyData($cms->getData(), $cmsFormData);
+        $cmsFixtureData = $cms->getData();
+        $storeId = explode('/', $cms->getStoreId());
+        $cmsFixtureData['store_id'] = array_pop($storeId);
+        $errors = $this->verifyData($cmsFixtureData, $cmsFormData);
         \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
     }
 

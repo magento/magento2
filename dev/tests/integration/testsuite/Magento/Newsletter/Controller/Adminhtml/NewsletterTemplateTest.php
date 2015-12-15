@@ -93,7 +93,6 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testSaveActionTemplateWithInvalidDataAndVerifySuccessMessage()
     {
