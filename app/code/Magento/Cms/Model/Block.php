@@ -13,6 +13,8 @@ use Magento\Framework\DataObject\IdentityInterface;
  *
  * @method \Magento\Cms\Model\ResourceModel\Block _getResource()
  * @method \Magento\Cms\Model\ResourceModel\Block getResource()
+ * @method Block setStoreId(array $storeId)
+ * @method array getStoreId()
  */
 class Block extends \Magento\Framework\Model\AbstractModel implements BlockInterface, IdentityInterface
 {

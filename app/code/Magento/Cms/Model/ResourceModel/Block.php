@@ -132,14 +132,32 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load an object
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Cms\Model\Block|\Magento\Framework\Model\AbstractModel $object
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
-        $this->entityManager->load(BlockInterface::class, $object, $value);
+        if (!is_numeric($value) && is_null($field)) {
+            $field = 'identifier';
+        }
+
+        $isId = true;
+        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+        if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
+            $select = $this->_getLoadSelect($field, $value, $object);
+            $select->reset(\Magento\Framework\DB\Select::COLUMNS)
+                ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
+                ->limit(1);
+            $result = $this->getConnection()->fetchCol($select);
+            $value = count($result) ? $result[0] : $value;
+            $isId = count($result);
+        }
+
+        if ($isId) {
+            $this->entityManager->load(BlockInterface::class, $object, $value);
+        }
         return $this;
     }
 
@@ -165,7 +183,7 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Cms\Model\Block $object
+     * @param \Magento\Cms\Model\Block|\Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)

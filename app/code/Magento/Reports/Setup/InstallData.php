@@ -77,21 +77,21 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
          * Cms Page  with 'home' identifier page modification for report pages
          */
         /** @var $cms \Magento\Cms\Model\Page */
-//        $cms = $this->pageFactory->create();
-//        $cms->load('home', 'identifier');
-//
-//        // @codingStandardsIgnoreStart
-//        $reportLayoutUpdate = '<!--
-//    <referenceContainer name="right">
-//        <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.viewed</argument></action>
-//        <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.compared</argument></action>
-//    </referenceContainer>-->';
-//        // @codingStandardsIgnoreEnd
-//
-//        /*
-//         * Merge and save old layout update data with report layout data
-//         */
-//        $cms->setLayoutUpdateXml($cms->getLayoutUpdateXml() . $reportLayoutUpdate)
-//            ->save();
+        $cms = $this->pageFactory->create();
+        $cms->load('home', 'identifier');
+
+        // @codingStandardsIgnoreStart
+        $reportLayoutUpdate = '<!--
+    <referenceContainer name="right">
+        <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.viewed</argument></action>
+        <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.compared</argument></action>
+    </referenceContainer>-->';
+        // @codingStandardsIgnoreEnd
+
+        /*
+         * Merge and save old layout update data with report layout data
+         */
+        $cms->setLayoutUpdateXml($cms->getLayoutUpdateXml() . $reportLayoutUpdate)
+            ->save();
     }
 }
