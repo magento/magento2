@@ -306,15 +306,13 @@ define([
 
             function updateGallery(imagesArr) {
                 var imgToUpdate,
-                    mainImg = imagesArr.filter(function (img) {
+                    mainImg;
+
+                mainImg = imagesArr.filter(function (img) {
                     return img.isMain;
                 });
 
-                if (mainImg.length) {
-                    imgToUpdate = mainImg[0];
-                } else {
-                    imgToUpdate = imagesArr[0];
-                }
+                imgToUpdate = mainImg.length ? mainImg[0] : imagesArr[0];
 
                 !imgToUpdate.type && (imgToUpdate.type = 'image');
 
