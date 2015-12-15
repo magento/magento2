@@ -12,9 +12,8 @@ use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 
 /**
@@ -81,7 +80,7 @@ class CaptureStrategyCommand implements CommandInterface
         /** @var \Magento\Payment\Gateway\Data\PaymentDataObjectInterface $paymentDO */
         $paymentDO = SubjectReader::readPayment($commandSubject);
 
-        /** @var \Magento\Sales\Model\Order\Payment $paymentInfo */
+        /** @var \Magento\Sales\Api\Data\OrderPaymentInterface $paymentInfo */
         $paymentInfo = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($paymentInfo);
 
@@ -91,10 +90,10 @@ class CaptureStrategyCommand implements CommandInterface
 
     /**
      * Get execution command name
-     * @param Payment $payment
+     * @param OrderPaymentInterface $payment
      * @return string
      */
-    private function getCommand(Payment $payment)
+    private function getCommand(OrderPaymentInterface $payment)
     {
         // if auth transaction is not exists execute authorize&capture command
         if (!$payment->getAuthorizationTransaction()) {
@@ -110,10 +109,10 @@ class CaptureStrategyCommand implements CommandInterface
 
     /**
      * Check if capture transaction already exists
-     * @param Payment $payment
+     * @param OrderPaymentInterface $payment
      * @return bool
      */
-    private function isExistsCaptureTransaction(Payment $payment)
+    private function isExistsCaptureTransaction(OrderPaymentInterface $payment)
     {
         $filters[] = $this->filterBuilder->setField('payment_id')
             ->setValue($payment->getId())

@@ -11,6 +11,7 @@ use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class AbstractTransaction
@@ -18,9 +19,14 @@ use Magento\Payment\Model\Method\Logger;
 abstract class AbstractTransaction implements ClientInterface
 {
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     protected $logger;
+
+    /**
+     * @var Logger
+     */
+    protected $customLogger;
 
     /**
      * @var BraintreeTransaction
@@ -30,12 +36,14 @@ abstract class AbstractTransaction implements ClientInterface
     /**
      * Constructor
      *
-     * @param Logger $logger
+     * @param LoggerInterface $logger
+     * @param Logger $customLogger
      * @param BraintreeTransaction $transaction
      */
-    public function __construct(Logger $logger, BraintreeTransaction $transaction)
+    public function __construct(LoggerInterface $logger, Logger $customLogger, BraintreeTransaction $transaction)
     {
         $this->logger = $logger;
+        $this->customLogger = $customLogger;
         $this->transaction = $transaction;
     }
 
@@ -54,12 +62,12 @@ abstract class AbstractTransaction implements ClientInterface
         try {
             $response['object'] = $this->process($data);
         } catch (\Exception $e) {
-            throw new ClientException(__(
-                $e->getMessage() ?: 'Sorry, but something went wrong'
-            ));
+            $message = __($e->getMessage() ?: 'Sorry, but something went wrong');
+            $this->logger->critical($message);
+            throw new ClientException($message);
         } finally {
-            $log['response'] = (array )$response['object'];
-            $this->logger->debug($log);
+            $log['response'] = (array) $response['object'];
+            $this->customLogger->debug($log);
         }
 
         return $response;

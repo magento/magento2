@@ -10,6 +10,7 @@ use Magento\BraintreeTwo\Gateway\Http\Client\TransactionSubmitForSettlement;
 use Magento\BraintreeTwo\Model\Adapter\BraintreeTransaction;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class TransactionSubmitForSettlementTest
@@ -33,6 +34,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->logger = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->setMethods(['debug'])
@@ -42,7 +44,11 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['submitForSettlement'])
             ->getMock();
 
-        $this->client = new TransactionSubmitForSettlement($this->logger, $this->braintreeTransaction);
+        $this->client = new TransactionSubmitForSettlement(
+            $criticalLoggerMock,
+            $this->logger,
+            $this->braintreeTransaction
+        );
     }
 
     /**

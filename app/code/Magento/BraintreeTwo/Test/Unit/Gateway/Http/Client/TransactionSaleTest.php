@@ -9,6 +9,7 @@ use Magento\BraintreeTwo\Model\Adapter\BraintreeTransaction;
 use Magento\Payment\Model\Method\Logger;
 use Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale;
 use Magento\Payment\Gateway\Http\TransferInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class TransactionSaleTest
@@ -37,13 +38,14 @@ class TransactionSaleTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->loggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->braintreeTransactionMock = $this->getMockBuilder(BraintreeTransaction::class)
             ->getMock();
 
-        $this->model = new TransactionSale($this->loggerMock, $this->braintreeTransactionMock);
+        $this->model = new TransactionSale($criticalLoggerMock, $this->loggerMock, $this->braintreeTransactionMock);
     }
 
     /**
