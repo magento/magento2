@@ -16,7 +16,8 @@ define([
          */
         init: function () {
 
-            if (weight.productHasWeight()) {
+            //not weight switcher giftcard, bundle
+            if (weight.productHasWeightBySwitcher() && weight.hasWeightSwither()) {
                 this.type = {
                     virtual: 'virtual',
                     real: this.$type.val() //simple, configurable
