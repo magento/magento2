@@ -78,7 +78,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $topicAttributes = $topicNode->attributes;
             $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
 
-            $requestResponseSchema = $this->extractSchemaDefinedByServiceMethod($topicNode);
+            $serviceMethod = $this->getServiceMethodBySchema($topicNode);
+            $requestResponseSchema = $serviceMethod
+                ? $this->extractMethodMetadata($serviceMethod['typeName'], $serviceMethod['methodName'])
+                : null;
             $requestSchema = $this->extractTopicRequestSchema($topicNode);
             $responseSchema = $this->extractTopicResponseSchema($topicNode);
             $handlers = $this->extractTopicResponseHandlers($topicNode);
@@ -95,16 +98,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $requestSchema,
                 $responseSchema
             );
-            if ($requestResponseSchema) {
-                $output[$topicName] = [
-                    Config::TOPIC_NAME => $topicName,
-                    Config::TOPIC_IS_SYNCHRONOUS => true,
-                    Config::TOPIC_REQUEST => $requestResponseSchema[Config::SCHEMA_METHOD_PARAMS],
-                    Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_METHOD,
-                    Config::TOPIC_RESPONSE => $requestResponseSchema[Config::SCHEMA_METHOD_RETURN_TYPE],
-                    Config::TOPIC_HANDLERS => $handlers
-                        ?: ['defaultHandler' => $requestResponseSchema[Config::SCHEMA_METHOD_HANDLER]]
-                ];
+            if ($serviceMethod) {
+                $output[$topicName] = $this->generateTopicConfigForServiceMethod(
+                    $topicName,
+                    $serviceMethod['typeName'],
+                    $serviceMethod['methodName'],
+                    $handlers
+                );
             } else if ($requestSchema && $responseSchema) {
                 $output[$topicName] = [
                     Config::TOPIC_NAME => $topicName,
@@ -149,11 +149,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     continue;
                 }
                 $handlerName = $handlerAttributes->getNamedItem('name')->nodeValue;
-                $serviceName = $handlerAttributes->getNamedItem('type')->nodeValue;
+                $serviceType = $handlerAttributes->getNamedItem('type')->nodeValue;
                 $methodName = $handlerAttributes->getNamedItem('method')->nodeValue;
-                $this->xmlValidator->validateResponseHandlersType($serviceName, $methodName, $handlerName, $topicName);
+                $this->xmlValidator->validateResponseHandlersType($serviceType, $methodName, $handlerName, $topicName);
                 $handlerNodes[$handlerName] = [
-                    Config::HANDLER_TYPE => $serviceName,
+                    Config::HANDLER_TYPE => $serviceType,
                     Config::HANDLER_METHOD => $methodName
                 ];
             }
@@ -198,22 +198,46 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Get message schema defined by service method signature.
+     * Get service class and method specified in schema attribute.
      *
      * @param \DOMNode $topicNode
-     * @return array
+     * @return array Contains class name and method name
      */
-    protected function extractSchemaDefinedByServiceMethod($topicNode)
+    protected function getServiceMethodBySchema($topicNode)
     {
         $topicAttributes = $topicNode->attributes;
         if (!$topicAttributes->getNamedItem('schema')) {
             return null;
         }
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
-        list($className, $methodName) = $this->parseServiceMethod(
-            $topicAttributes->getNamedItem('schema')->nodeValue,
-            $topicName
-        );
+        return $this->parseServiceMethod($topicAttributes->getNamedItem('schema')->nodeValue, $topicName);
+    }
+
+    /**
+     * Parse service method name, also ensure that it exists.
+     *
+     * @param string $serviceMethod
+     * @param string $topicName
+     * @return array Contains class name and method name
+     */
+    protected function parseServiceMethod($serviceMethod, $topicName)
+    {
+        preg_match(self::SERVICE_METHOD_NAME_PATTERN, $serviceMethod, $matches);
+        $className = $matches[1];
+        $methodName = $matches[2];
+        $this->xmlValidator->validateServiceMethod($serviceMethod, $topicName, $className, $methodName);
+        return ['typeName' => $className, 'methodName' => $methodName];
+    }
+
+    /**
+     * Extract service method metadata.
+     *
+     * @param string $className
+     * @param string $methodName
+     * @return array
+     */
+    protected function extractMethodMetadata($className, $methodName)
+    {
         $result = [
             Config::SCHEMA_METHOD_PARAMS => [],
             Config::SCHEMA_METHOD_RETURN_TYPE => $this->methodsMap->getMethodReturnType($className, $methodName),
@@ -232,18 +256,27 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Parse service method name, also ensure that it exists.
+     * Generate config data based on service method signature.
      *
-     * @param string $serviceMethod
+     * TODO: Add async methods support
+     * TODO: Move to separate class since should be reused by remote service
+     *
      * @param string $topicName
-     * @return string[] Contains class name and method name, in a call-back compatible format
+     * @param string $serviceType
+     * @param string $serviceMethod
+     * @param array|null $handlers
+     * @return array
      */
-    protected function parseServiceMethod($serviceMethod, $topicName)
+    public function generateTopicConfigForServiceMethod($topicName, $serviceType, $serviceMethod, $handlers = [])
     {
-        preg_match(self::SERVICE_METHOD_NAME_PATTERN, $serviceMethod, $matches);
-        $className = $matches[1];
-        $methodName = $matches[2];
-        $this->xmlValidator->validateServiceMethod($serviceMethod, $topicName, $className, $methodName);
-        return [$className, $methodName];
+        $methodMetadata = $this->extractMethodMetadata($serviceType, $serviceMethod);
+        return [
+            Config::TOPIC_NAME => $topicName,
+            Config::TOPIC_IS_SYNCHRONOUS => true,
+            Config::TOPIC_REQUEST => $methodMetadata[Config::SCHEMA_METHOD_PARAMS],
+            Config::TOPIC_REQUEST_TYPE => Config::TOPIC_REQUEST_TYPE_METHOD,
+            Config::TOPIC_RESPONSE => $methodMetadata[Config::SCHEMA_METHOD_RETURN_TYPE],
+            Config::TOPIC_HANDLERS => $handlers ?: ['defaultHandler' => $methodMetadata[Config::SCHEMA_METHOD_HANDLER]]
+        ];
     }
 }
