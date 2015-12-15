@@ -18,6 +18,11 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     protected $storeManager;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -32,11 +37,13 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->storeManager = $storeManager;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -44,11 +51,14 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param string $tableName
      * @param string $columnName
-     * @return void
+     * @param string|null $linkedField
      */
-    protected function performAfterLoad($tableName, $columnName)
+    protected function performAfterLoad($tableName, $columnName, $linkedField = null)
     {
-        $items = $this->getColumnValues($columnName);
+        if (!$linkedField) {
+            $linkedField = $columnName;
+        }
+        $items = $this->getColumnValues($linkedField);
         if (count($items)) {
             $connection = $this->getConnection();
             $select = $connection->select()->from(['cms_entity_store' => $this->getTable($tableName)])
@@ -56,7 +66,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
             $result = $connection->fetchPairs($select);
             if ($result) {
                 foreach ($this as $item) {
-                    $entityId = $item->getData($columnName);
+                    $entityId = $item->getData($linkedField);
                     if (!isset($result[$entityId])) {
                         continue;
                     }
@@ -130,17 +140,20 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param string $tableName
      * @param string $columnName
-     * @return void
+     * @param string|null $linkedField
      */
-    protected function joinStoreRelationTable($tableName, $columnName)
+    protected function joinStoreRelationTable($tableName, $columnName, $linkedField = null)
     {
+        if (!$linkedField) {
+            $linkedField = $columnName;
+        }
         if ($this->getFilter('store')) {
             $this->getSelect()->join(
                 ['store_table' => $this->getTable($tableName)],
-                'main_table.' . $columnName . ' = store_table.' . $columnName,
+                'main_table.' . $linkedField . ' = store_table.' . $columnName,
                 []
             )->group(
-                'main_table.' . $columnName
+                'main_table.' . $linkedField
             );
         }
         parent::_renderFiltersBefore();
