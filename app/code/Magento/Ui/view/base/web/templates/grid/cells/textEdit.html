@@ -5,5 +5,7 @@
  */
 -->
 <div class="data-grid-cell-content">
-    <input type="text" data-bind="value: $col.getLabel($row())"/>
+    <input type="text" data-bind="value: $col.getLabel($row()), event: { change: function (data, ev) {
+     $col.dataChanged($row(), ev.target.value);
+     }}"/>
 </div>
