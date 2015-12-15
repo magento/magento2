@@ -15,8 +15,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     protected $_associatedEntitiesMap;
 
     /**
-     * Collection constructor.
-     *
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -51,11 +49,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @return void
      * @codeCoverageIgnore
      */
-    protected function _construct(
-
-    ) {
+    protected function _construct()
+    {
         $this->_init('Magento\CatalogRule\Model\Rule', 'Magento\CatalogRule\Model\ResourceModel\Rule');
-
     }
 
     /**
@@ -74,25 +70,48 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
-     * Limit rules collection by specific customer group
-     *
-     * @param int $customerGroupId
-     * @return $this
+     * @param $entityType
+     * @param $objectField
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
      */
-    public function addCustomerGroupFilter($customerGroupId)
+    protected function mapAssociatedEntities($entityType, $objectField)
     {
-        $entityInfo = $this->_getAssociatedEntityInfo('customer_group');
-        if (!$this->getFlag('is_customer_group_joined')) {
-            $this->setFlag('is_customer_group_joined', true);
-            $this->getSelect()->join(
-                ['customer_group' => $this->getTable($entityInfo['associations_table'])],
-                $this->getConnection()
-                    ->quoteInto('customer_group.' . $entityInfo['entity_id_field'] . ' = ?', $customerGroupId)
-                    . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = customer_group.'
-                    . $entityInfo['rule_id_field'],
-                []
-            );
+        if (!$this->_items) {
+            return;
         }
-        return $this;
+
+        $entityInfo = $this->_getAssociatedEntityInfo($entityType);
+        $ruleIdField = $entityInfo['rule_id_field'];
+        $entityIds = $this->getColumnValues($ruleIdField);
+
+        $select = $this->getConnection()->select()->from(
+            $this->getTable($entityInfo['associations_table'])
+        )->where(
+            $ruleIdField . ' IN (?)',
+            $entityIds
+        );
+
+        $associatedEntities = $this->getConnection()->fetchAll($select);
+
+        array_map(function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField) {
+            $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
+            $itemAssociatedValue = $item->getData($objectField) === null ? [] : $item->getData($objectField);
+            $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
+            $item->setData($objectField, $itemAssociatedValue);
+        }, $associatedEntities);
+    }
+
+    /**
+     * @return $this
+     * @throws \Exception
+     */
+    protected function _afterLoad()
+    {
+        $this->mapAssociatedEntities('website', 'website_ids');
+        $this->mapAssociatedEntities('customer_group', 'customer_group_ids');
+
+        $this->setFlag('add_websites_to_result', false);
+        return parent::_afterLoad();
     }
 }

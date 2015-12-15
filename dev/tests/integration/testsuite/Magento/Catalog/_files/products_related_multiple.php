@@ -88,6 +88,6 @@ $product->setTypeId(
     [1]
 )->setStockData(
     ['qty' => 100, 'is_in_stock' => 1]
-)->setRelatedLinkData(
+)->setProductLinks(
     [$productLink1, $productLink2]
 )->save();

@@ -23,7 +23,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogRule\Model\ResourceModel\Rule\Collection">
+    <type name="Magento\CatalogRule\Model\ResourceModel\Rule\Collection" shared="false">
         <arguments>
             <argument name="associatedEntitiesMap" xsi:type="array">
                 <item name="website" xsi:type="array">
@@ -39,7 +39,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogRule\Model\ResourceModel\Rule\Collection" shared="false" />
     <type name="Magento\Catalog\Model\Product\PriceModifier\Composite">
         <arguments>
             <argument name="modifiers" xsi:type="array">

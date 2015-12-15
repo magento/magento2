@@ -68,11 +68,15 @@ if ($product->getBundleOptionsData()) {
             if (!empty($bundleLinks[$key])) {
                 foreach ($bundleLinks[$key] as $linkData) {
                     if (!(bool)$linkData['delete']) {
+                        /** @var \Magento\Bundle\Api\Data\LinkInterface$link */
                         $link = $objectManager->create('Magento\Bundle\Api\Data\LinkInterfaceFactory')
                             ->create(['data' => $linkData]);
                         $linkProduct = $productRepository->getById($linkData['product_id']);
                         $link->setSku($linkProduct->getSku());
                         $link->setQty($linkData['selection_qty']);
+                        if (isset($linkData['selection_can_change_qty'])) {
+                            $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
+                        }
                         $links[] = $link;
                     }
                 }
