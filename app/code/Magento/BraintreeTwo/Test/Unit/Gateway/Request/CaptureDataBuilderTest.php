@@ -22,7 +22,7 @@ class CaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Payment|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $paymentMock;
+    private $payment;
 
     /**
      * @var \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
@@ -32,7 +32,7 @@ class CaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->paymentDO = $this->getMock(PaymentDataObjectInterface::class);
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
+        $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -52,13 +52,13 @@ class CaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
             'amount' => $amount
         ];
 
-        $this->paymentMock->expects(static::once())
+        $this->payment->expects(static::once())
             ->method('getCcTransId')
             ->willReturn('');
 
         $this->paymentDO->expects(static::once())
             ->method('getPayment')
-            ->willReturn($this->paymentMock);
+            ->willReturn($this->payment);
 
         $this->builder->build($buildSubject);
     }
@@ -81,13 +81,13 @@ class CaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
             'amount' => $amount
         ];
 
-        $this->paymentMock->expects(static::once())
+        $this->payment->expects(static::once())
             ->method('getCcTransId')
             ->willReturn($transactionId);
 
         $this->paymentDO->expects(static::once())
             ->method('getPayment')
-            ->willReturn($this->paymentMock);
+            ->willReturn($this->payment);
 
         static::assertEquals($expected, $this->builder->build($buildSubject));
     }

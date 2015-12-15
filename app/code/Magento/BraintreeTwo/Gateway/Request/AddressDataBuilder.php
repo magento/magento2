@@ -76,13 +76,20 @@ class AddressDataBuilder implements BuilderInterface
     const COUNTRY_CODE = 'countryCodeAlpha2';
 
     /**
+     * Order ID
+     */
+    const ORDER_ID = 'orderId';
+
+    /**
      * @inheritdoc
      */
     public function build(array $buildSubject)
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
         $order = $paymentDO->getOrder();
-        $result = [];
+        $result = [
+            self::ORDER_ID => $order->getOrderIncrementId()
+        ];
 
         $billingAddress = $order->getBillingAddress();
         if ($billingAddress) {

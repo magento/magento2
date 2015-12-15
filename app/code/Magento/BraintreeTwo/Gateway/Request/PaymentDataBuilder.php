@@ -6,10 +6,10 @@
 namespace Magento\BraintreeTwo\Gateway\Request;
 
 use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Helper\Formatter;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Payment\Helper\Formatter;
 
 /**
  * Payment Data Builder

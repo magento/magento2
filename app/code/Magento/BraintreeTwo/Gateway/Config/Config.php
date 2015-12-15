@@ -73,6 +73,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $this->braintreeConfiguration = $braintreeConfiguration;
         $this->braintreeClientToken = $braintreeClientToken;
 
+        /**
+         * @TODO should moved from constructor
+         */
         if ($this->getValue(self::KEY_ACTIVE)) {
             $this->initCredentials();
         }

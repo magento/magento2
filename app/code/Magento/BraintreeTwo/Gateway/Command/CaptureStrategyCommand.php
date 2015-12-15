@@ -12,6 +12,8 @@ use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
 
 /**
  * Class CaptureStrategyCommand
@@ -29,16 +31,28 @@ class CaptureStrategyCommand implements CommandInterface
     const CAPTURE = 'settlement';
 
     /**
+     * Braintree clone transaction command
+     */
+    const CLONE_TRANSACTION = 'clone';
+
+    /**
      * @var \Magento\Payment\Gateway\Command\CommandPoolInterface
      */
     private $commandPool;
 
     /**
-     * @param \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool
+     * @var \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory
      */
-    public function __construct(CommandPoolInterface $commandPool)
+    private $transactionCollectionFactory;
+
+    /**
+     * @param CommandPoolInterface $commandPool
+     * @param CollectionFactory $factory
+     */
+    public function __construct(CommandPoolInterface $commandPool, CollectionFactory $factory)
     {
         $this->commandPool = $commandPool;
+        $this->transactionCollectionFactory = $factory;
     }
 
     /**
@@ -53,8 +67,30 @@ class CaptureStrategyCommand implements CommandInterface
         $paymentInfo = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($paymentInfo);
 
-        // if auth transaction is exists execute capture command
-        $command = $paymentInfo->getAuthorizationTransaction() ? self::CAPTURE : self::SALE;
+        $command = $this->getCommand($paymentInfo);
         return $this->commandPool->get($command)->execute($commandSubject);
+    }
+
+    /**
+     * Get execution command name
+     * @param Payment $payment
+     * @return string
+     */
+    private function getCommand(Payment $payment)
+    {
+        // if auth transaction is not exists execute authorize&capture command
+        if (!$payment->getAuthorizationTransaction()) {
+            return self::SALE;
+        }
+
+        // if not exists capture transactions process submit for settlement
+        $collection = $this->transactionCollectionFactory->create();
+        $collection->addFieldToFilter('payment_id', $payment->getId())
+            ->addFieldToFilter('txn_type', Transaction::TYPE_CAPTURE);
+        if ($collection->getSize() == 0) {
+            return self::CAPTURE;
+        }
+
+        return self::CLONE_TRANSACTION;
     }
 }

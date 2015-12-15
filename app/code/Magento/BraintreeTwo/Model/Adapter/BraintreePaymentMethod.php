@@ -7,8 +7,6 @@ namespace Magento\BraintreeTwo\Model\Adapter;
 
 use Braintree\PaymentMethod;
 use Braintree\PaymentMethodNonce;
-use Braintree\Result\Error;
-use Braintree\Result\Successful;
 
 /**
  * BraintreePaymentMethod
