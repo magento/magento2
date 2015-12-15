@@ -33,10 +33,13 @@ class ThreeDSecureDetailsHandler implements HandlerInterface
         /** @var Transaction $transaction */
         $transaction = $response['object']->transaction;
 
-        if (empty($transaction->threeDSecureInfo) && $payment->hasAdditionalInformation(self::LIABILITY_SHIFTED)) {
-            // remove 3d secure details if they were set previously
+        if ($payment->hasAdditionalInformation(self::LIABILITY_SHIFTED)) {
+            // remove 3d secure details for reorder
             $payment->unsAdditionalInformation(self::LIABILITY_SHIFTED);
             $payment->unsAdditionalInformation(self::LIABILITY_SHIFT_POSSIBLE);
+        }
+
+        if (empty($transaction->threeDSecureInfo)) {
             return;
         }
 
