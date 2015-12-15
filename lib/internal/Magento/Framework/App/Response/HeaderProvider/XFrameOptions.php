@@ -23,20 +23,20 @@ class XFrameOptions extends \Magento\Framework\App\Response\HeaderProvider\Abstr
      *
      * @var string
      */
-    protected $name = Http::HEADER_X_FRAME_OPT;
+    protected $headerName = Http::HEADER_X_FRAME_OPT;
 
     /**
      * x-frame-options header value
      *
      * @var string
      */
-    protected $value;
+    protected $headerValue;
 
     /**
      * @param string $xFrameOpt
      */
     public function __construct($xFrameOpt = 'SAMEORIGIN')
     {
-        $this->value = $xFrameOpt;
+        $this->headerValue = $xFrameOpt;
     }
 }
