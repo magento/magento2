@@ -15,4 +15,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Model\EntityManager">
+        <plugin name="loadPlugin" type="Magento\Catalog\Model\CatalogRegistry" />
+    </type>
 </config>
