@@ -136,4 +136,5 @@ class IndexNameResolver
             }
         }
         return $storeIndex;
-    }}
+    }
+}
