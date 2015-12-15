@@ -18,11 +18,11 @@
     </type>
 
     <!-- Configuration vault -->
-    <type name="Magento\Vault\Gateway\Config\Config">
+    <virtualType name="VaultPaymentConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
             <argument name="methodCode" xsi:type="const">Magento\Vault\Model\VaultPaymentInterface::CODE</argument>
         </arguments>
-    </type>
+    </virtualType>
 
     <!-- Payment Method configuration -->
     <type name="Magento\Vault\Model\Method\Vault">
@@ -35,7 +35,7 @@
         <arguments>
             <argument name="nullRepository" xsi:type="object">Magento\Vault\Model\PaymentTokenNullRepository</argument>
             <argument name="vaultPayment" xsi:type="object">Magento\Vault\Model\Method\Vault</argument>
-            <argument name="config" xsi:type="object">Magento\Vault\Gateway\Config\Config</argument>
+            <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
             <argument name="repositories" xsi:type="array"/>
         </arguments>
     </type>
@@ -48,12 +48,12 @@
 
     <virtualType name="VaultPaymentDefaultValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
-            <argument name="configInterface" xsi:type="object">Magento\Vault\Gateway\Config\Config</argument>
+            <argument name="configInterface" xsi:type="object">VaultPaymentConfig</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Vault\Gateway\Config\ActiveHandler">
         <arguments>
-            <argument name="config" xsi:type="object">Magento\Vault\Gateway\Config\Config</argument>
+            <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
         </arguments>
     </type>
     <virtualType name="VaultPaymentValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">

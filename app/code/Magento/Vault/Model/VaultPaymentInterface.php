@@ -10,6 +10,7 @@ use Magento\Payment\Gateway\CommandExecutorInterface;
 
 /**
  * Interface VaultPaymentInterface
+ * @api
  */
 interface VaultPaymentInterface extends MethodInterface, CommandExecutorInterface
 {
