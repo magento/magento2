@@ -127,12 +127,15 @@ class Page extends AbstractDb
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+
         if (!is_numeric($value) && is_null($field)) {
             $field = 'identifier';
+        } elseif (!$field) {
+            $field = $entityMetadata->getIdentifierField();
         }
 
         $isId = true;
-        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
         if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
             $select = $this->_getLoadSelect($field, $value, $object);
             $select->reset(\Magento\Framework\DB\Select::COLUMNS)

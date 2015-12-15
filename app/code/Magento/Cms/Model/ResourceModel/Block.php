@@ -64,21 +64,6 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Process block data before deleting
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Cms\Model\ResourceModel\Page
-     */
-    protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $condition = ['block_id = ?' => (int)$object->getId()];
-
-        $this->getConnection()->delete($this->getTable('cms_block_store'), $condition);
-
-        return parent::_beforeDelete($object);
-    }
-
-    /**
      * Perform operations before object save
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -93,40 +78,6 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
         }
         return $this;
-    }
-
-    /**
-     * Perform operations after object save
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $oldStores = $this->lookupStoreIds($object->getId());
-        $newStores = (array)$object->getStores();
-
-        $table = $this->getTable('cms_block_store');
-        $insert = array_diff($newStores, $oldStores);
-        $delete = array_diff($oldStores, $newStores);
-
-        if ($delete) {
-            $where = ['block_id = ?' => (int)$object->getId(), 'store_id IN (?)' => $delete];
-
-            $this->getConnection()->delete($table, $where);
-        }
-
-        if ($insert) {
-            $data = [];
-
-            foreach ($insert as $storeId) {
-                $data[] = ['block_id' => (int)$object->getId(), 'store_id' => (int)$storeId];
-            }
-
-            $this->getConnection()->insertMultiple($table, $data);
-        }
-
-        return parent::_afterSave($object);
     }
 
     /**
@@ -159,23 +110,6 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->entityManager->load(BlockInterface::class, $object, $value);
         }
         return $this;
-    }
-
-    /**
-     * Perform operations after object load
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
-    {
-        if ($object->getId()) {
-            $stores = $this->lookupStoreIds($object->getId());
-            $object->setData('store_id', $stores);
-            $object->setData('stores', $stores);
-        }
-
-        return parent::_afterLoad($object);
     }
 
     /**
