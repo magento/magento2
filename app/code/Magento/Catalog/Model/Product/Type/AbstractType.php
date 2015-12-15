@@ -610,7 +610,8 @@ abstract class AbstractType
     public function checkProductBuyState($product)
     {
         if (!$product->getSkipCheckRequiredOption() && $product->getHasOptions()) {
-            foreach ($product->getOptions() as $option) {
+            $options = $product->getProductOptionsCollection();
+            foreach ($options as $option) {
                 if ($option->getIsRequire()) {
                     $customOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
                     if (!$customOption || strlen($customOption->getValue()) == 0) {
