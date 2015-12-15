@@ -12,10 +12,8 @@ define([
 
         /**
          * Disable required validation, when 'use config option' checked
-         *
-         * @returns {Boolean}
          */
-        handleRequired : function (newValue) {
+        handleRequired: function (newValue) {
             this.validation['required-entry'] = !newValue;
             this.required(!newValue);
             this.error(false);
