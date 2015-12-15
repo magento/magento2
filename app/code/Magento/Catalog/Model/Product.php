@@ -1912,6 +1912,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * Retrieve options collection of product
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
+     */
+    public function getProductOptionsCollection()
+    {
+        return $this->getOptionInstance()->getProductOptionCollection($this);
+    }
+
+    /**
      * Get all options of product
      *
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]|null
