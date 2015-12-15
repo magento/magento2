@@ -318,6 +318,9 @@
             <argument name="headerProviderList" xsi:type="array">
                 <item name="HSTSHeader" xsi:type="object">Magento\Store\Model\HeaderProvider\Hsts</item>
                 <item name="upgrade-insecure-requests" xsi:type="object">Magento\Store\Model\HeaderProvider\UpgradeInsecure</item>
+                <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XFrameOptions</item>
+                <item name="x-content-type-options" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XContentTypeOptions</item>
+                <item name="x-xss-protection" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XssProtection</item>
             </argument>
         </arguments>
     </type>

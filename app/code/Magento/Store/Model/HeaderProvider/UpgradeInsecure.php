@@ -18,14 +18,14 @@ class UpgradeInsecure extends \Magento\Framework\App\Response\HeaderProvider\Abs
      *
      * @var string
      */
-    protected $name = 'Content-Security-Policy';
+    protected $headerName = 'Content-Security-Policy';
 
     /**
      * Upgrade Insecure Requests header value
      *
      * @var string
      */
-    protected $value = 'upgrade-insecure-requests';
+    protected $headerValue = 'upgrade-insecure-requests';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

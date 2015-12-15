@@ -12,10 +12,10 @@ namespace Magento\Framework\App\Response\HeaderProvider;
 abstract class AbstractHeaderProvider implements \Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface
 {
     /** @var string */
-    protected $name = '';
+    protected $headerName = '';
 
     /** @var string */
-    protected $value = '';
+    protected $headerValue = '';
 
     /**
      * Whether the header should be attached to the response
@@ -34,7 +34,7 @@ abstract class AbstractHeaderProvider implements \Magento\Framework\App\Response
      */
     public function getName()
     {
-        return $this->name;
+        return $this->headerName;
     }
 
     /**
@@ -44,6 +44,6 @@ abstract class AbstractHeaderProvider implements \Magento\Framework\App\Response
      */
     public function getValue()
     {
-        return $this->value;
+        return $this->headerValue;
     }
 }

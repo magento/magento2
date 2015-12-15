@@ -8,25 +8,21 @@ namespace Magento\Framework\App\Response\HeaderProvider;
 use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
 use Magento\Framework\HTTP\Header;
 
-class XssProtection implements HeaderProviderInterface
+class XssProtection extends AbstractHeaderProvider
 {
-    /**
-     * Header name
-     */
-    const NAME = 'X-XSS-Protection';
+    /** Header name */
+    protected $headerName = 'X-XSS-Protection';
 
-    /**
-     * Matches IE 8 browsers
-     */
+    /** Matches IE 8 browsers */
     const IE_8_USER_AGENT = 'MSIE 8';
 
+    /** Value for browsers except IE 8 */
     const HEADER_ENABLED = '1; mode=block';
 
+    /** Value for IE 8 */
     const HEADER_DISABLED = '0';
 
-    /**
-     * @var Header
-     */
+    /** @var Header */
     private $headerService;
 
     /**
@@ -35,28 +31,6 @@ class XssProtection implements HeaderProviderInterface
     public function __construct(Header $headerService)
     {
         $this->headerService = $headerService;
-    }
-
-    /**
-     * Whether the header should be attached to the response
-     *
-     * @return bool
-     * @codeCoverageIgnore
-     */
-    public function canApply()
-    {
-        return true;
-    }
-
-    /**
-     * Header name
-     *
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function getName()
-    {
-        return self::NAME;
     }
 
     /**
