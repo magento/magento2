@@ -19,12 +19,18 @@ class StartConsumerCommand extends Command
 {
     const ARGUMENT_CONSUMER = 'consumer';
     const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
+    const OPTION_AREACODE = 'area-code';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
     /**
      * @var ConsumerFactory
      */
     private $consumerFactory;
+
+    /**
+     * @var \Magento\Framework\App\State $appState
+     */
+    private $appState;
 
     /**
      * StartConsumerCommand constructor.
@@ -34,11 +40,11 @@ class StartConsumerCommand extends Command
      * @param ConsumerFactory $consumerFactory
      */
     public function __construct(
-        $name = null,
         \Magento\Framework\App\State $appState,
-        ConsumerFactory $consumerFactory
+        ConsumerFactory $consumerFactory,
+        $name = null
     ) {
-        $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;
         parent::__construct($name);
     }
@@ -50,6 +56,12 @@ class StartConsumerCommand extends Command
     {
         $consumerName = $input->getArgument(self::ARGUMENT_CONSUMER);
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
+        $areaCode = $input->getOption(self::OPTION_AREACODE);
+        if ($areaCode !== null) {
+            $this->appState->setAreaCode($areaCode);
+        } else {
+            $this->appState->setAreaCode('global');
+        }
         $consumer = $this->consumerFactory->get($consumerName);
         $consumer->process($numberOfMessages);
     }
@@ -73,6 +85,13 @@ class StartConsumerCommand extends Command
             'The number of messages to be processed by the consumer before process termination. '
             . 'If not specified - terminate after processing all queued messages.'
         );
+        $this->addOption(
+            self::OPTION_AREACODE,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'The preferred area (global, adminhtml, etc...) '
+            . 'default is global.'
+        );
         $this->setHelp(
             <<<HELP
 This command starts MessageQueue consumer by its name.
@@ -84,6 +103,10 @@ To start consumer which will process all queued messages and terminate execution
 To specify the number of messages which should be processed by consumer before its termination:
 
     <comment>%command.full_name% someConsumer --max-messages=50</comment>
+
+To specify the preferred area:
+
+    <comment>%command.full_name% someConsumer --area-code='adminhtml'</comment>
 HELP
         );
         parent::configure();
