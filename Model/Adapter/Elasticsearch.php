@@ -163,7 +163,7 @@ class Elasticsearch
     {
         if (count($documents)) {
             try {
-                $this->checkIndex($storeId, false, $entityType);
+                $this->checkIndex($storeId, $entityType, false);
                 $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName, $entityType);
                 $this->client->bulkQuery($bulkIndexDocuments);
@@ -185,7 +185,7 @@ class Elasticsearch
      */
     public function cleanIndex($storeId, $entityType)
     {
-        $this->checkIndex($storeId, true, $entityType);
+        $this->checkIndex($storeId, $entityType, true);
         $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
         if ($this->client->isEmptyIndex($indexName)) {
             // use existing index if empty
@@ -220,7 +220,7 @@ class Elasticsearch
     public function deleteDocs(array $documentIds, $storeId, $entityType)
     {
         try {
-            $this->checkIndex($storeId, false, $entityType);
+            $this->checkIndex($storeId, $entityType, false);
             $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
             $bulkDeleteDocuments = $this->getDocsArrayInBulkIndexFormat(
                 $documentIds,
@@ -282,8 +282,11 @@ class Elasticsearch
      * @param string $entityType
      * @return $this
      */
-    protected function checkIndex($storeId, $checkAlias = true, $entityType)
-    {
+    protected function checkIndex(
+        $storeId,
+        $entityType,
+        $checkAlias = true
+    ) {
         // create new index for store
         $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
         if (!$this->client->indexExists($indexName)) {
