@@ -6,6 +6,7 @@
 namespace Magento\Cms\Model\ResourceModel;
 
 use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\EntityManager;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\StoreManagerInterface;
@@ -28,19 +29,27 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $entityManager;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param EntityManager $entityManager
+     * @param MetadataPool $metadataPool
      * @param null $connectionName
      */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
         EntityManager $entityManager,
+        MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
         $this->entityManager = $entityManager;
+        $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
 
@@ -161,6 +170,9 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _getLoadSelect($field, $value, $object)
     {
+        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+        $linkField = $entityMetadata->getLinkField();
+
         $select = parent::_getLoadSelect($field, $value, $object);
 
         if ($object->getStoreId()) {
@@ -168,19 +180,13 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $select->join(
                 ['cbs' => $this->getTable('cms_block_store')],
-                $this->getMainTable() . '.block_id = cbs.block_id',
+                $this->getMainTable() . '.' . $linkField . ' = cbs.block_id',
                 ['store_id']
-            )->where(
-                'is_active = ?',
-                1
-            )->where(
-                'cbs.store_id in (?)',
-                $stores
-            )->order(
-                'store_id DESC'
-            )->limit(
-                1
-            );
+            )
+                ->where('is_active = ?', 1)
+                ->where('cbs.store_id in (?)', $stores)
+                ->order('store_id DESC')
+                ->limit(1);
         }
 
         return $select;
@@ -195,28 +201,27 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getIsUniqueBlockToStores(\Magento\Framework\Model\AbstractModel $object)
     {
+        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+        $linkField = $entityMetadata->getLinkField();
+
         if ($this->_storeManager->hasSingleStore()) {
             $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID];
         } else {
             $stores = (array)$object->getData('stores');
         }
 
-        $select = $this->getConnection()->select()->from(
-            ['cb' => $this->getMainTable()]
-        )->join(
-            ['cbs' => $this->getTable('cms_block_store')],
-            'cb.block_id = cbs.block_id',
-            []
-        )->where(
-            'cb.identifier = ?',
-            $object->getData('identifier')
-        )->where(
-            'cbs.store_id IN (?)',
-            $stores
-        );
+        $select = $this->getConnection()->select()
+            ->from(['cb' => $this->getMainTable()])
+            ->join(
+                ['cbs' => $this->getTable('cms_block_store')],
+                'cb.' . $linkField . ' = cbs.block_id',
+                []
+            )
+            ->where('cb.identifier = ?', $object->getData('identifier'))
+            ->where('cbs.store_id IN (?)', $stores);
 
         if ($object->getId()) {
-            $select->where('cb.block_id <> ?', $object->getId());
+            $select->where('cb.' . $linkField . ' <> ?', $object->getId());
         }
 
         if ($this->getConnection()->fetchRow($select)) {
@@ -236,16 +241,19 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
 
-        $select = $connection->select()->from(
-            $this->getTable('cms_block_store'),
-            'store_id'
-        )->where(
-            'block_id = :block_id'
-        );
+        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+        $linkField = $entityMetadata->getLinkField();
 
-        $binds = [':block_id' => (int)$id];
+        $select = $connection->select()
+            ->from(['cbs' => $this->getTable('cms_block_store')], 'store_id')
+            ->join(
+                ['cb' => $this->getMainTable()],
+                'cbs.block_id = cb.' . $linkField,
+                []
+            )
+            ->where('cb.' . $linkField . ' = :block_id');
 
-        return $connection->fetchCol($select, $binds);
+        return $connection->fetchCol($select, ['block_id' => (int)$id]);
     }
 
     /**
