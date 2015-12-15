@@ -56,6 +56,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $customOptionFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->subjectMock = $this->getMock(
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
             [],
@@ -68,7 +71,8 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             $optionInterfaceFactory,
             $linkInterfaceFactory,
             $productRepository,
-            $storeManager
+            $storeManager,
+            $customOptionFactory
         );
     }
 
