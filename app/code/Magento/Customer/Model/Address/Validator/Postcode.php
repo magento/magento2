@@ -21,7 +21,7 @@ class Postcode
     }
 
     /**
-     * Check if zip code valid
+     * Check if postcode is valid
      *
      * @param string $countryId
      * @param string $zip
