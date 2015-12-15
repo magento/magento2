@@ -16,8 +16,9 @@ use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class ConfigProvider
+ * @api
  */
-final class VaultCardsConfigProvider implements ConfigProviderInterface
+final class TokensConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var PaymentTokenRepositoryInterface
@@ -50,12 +51,20 @@ final class VaultCardsConfigProvider implements ConfigProviderInterface
     private $storeManager;
 
     /**
+     * @var TokenUiComponentProviderInterface[]
+     */
+    private $tokenUiComponentProviders;
+
+    /**
      * Constructor
      *
      * @param Session $customerSession
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param StoreManagerInterface $storeManager
+     * @param VaultPaymentInterface $vaultPayment
+     * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
      */
     public function __construct(
         Session $customerSession,
@@ -63,7 +72,8 @@ final class VaultCardsConfigProvider implements ConfigProviderInterface
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StoreManagerInterface $storeManager,
-        VaultPaymentInterface $vaultPayment
+        VaultPaymentInterface $vaultPayment,
+        array $tokenUiComponentProviders = []
     ) {
         $this->paymentTokenRepository = $paymentTokenRepository;
         $this->filterBuilder = $filterBuilder;
@@ -71,6 +81,7 @@ final class VaultCardsConfigProvider implements ConfigProviderInterface
         $this->customerSession = $customerSession;
         $this->vaultPayment = $vaultPayment;
         $this->storeManager = $storeManager;
+        $this->tokenUiComponentProviders = $tokenUiComponentProviders;
     }
 
     /**
@@ -92,6 +103,12 @@ final class VaultCardsConfigProvider implements ConfigProviderInterface
             return $vaultPayments;
         }
 
+        $vaultProviderCode = $this->vaultPayment->getProviderCode($storeId);
+        $componentProvider = $this->getComponentProvider($vaultProviderCode);
+        if (null === $componentProvider) {
+            return $vaultPayments;
+        }
+
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
             ->setValue($customerId)
             ->create();
@@ -99,19 +116,17 @@ final class VaultCardsConfigProvider implements ConfigProviderInterface
             ->setValue(1)
             ->create();
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
-            ->setValue($this->vaultPayment->getProviderCode($storeId))
+            ->setValue($vaultProviderCode)
             ->create();
         $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
             ->create();
 
-        $index = 1;
-        foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $token) {
-            $vaultPayments[$this->vaultPayment->getCode() . '-' . $index] = [
-                'token' => $token->getPublicHash(),
-                'title' => __('Vault token - ' . $index)
+        foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $index => $token) {
+            $component = $componentProvider->getComponentForToken($token);
+            $vaultPayments[VaultPaymentInterface::CODE . $index] = [
+                'config' => $component->getConfig(),
+                'component' => $component->getName()
             ];
-
-            ++$index;
         }
 
         return [
@@ -119,5 +134,19 @@ final class VaultCardsConfigProvider implements ConfigProviderInterface
                 VaultPaymentInterface::CODE => $vaultPayments
             ]
         ];
+    }
+
+    /**
+     * @param string $vaultProviderCode
+     * @return TokenUiComponentProviderInterface|null
+     */
+    private function getComponentProvider($vaultProviderCode)
+    {
+        $componentProvider = isset($this->tokenUiComponentProviders[$vaultProviderCode])
+            ? $this->tokenUiComponentProviders[$vaultProviderCode]
+            : null;
+        return $componentProvider instanceof TokenUiComponentProviderInterface
+            ? $componentProvider
+            : null;
     }
 }
