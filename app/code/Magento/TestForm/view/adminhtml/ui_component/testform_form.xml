@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/Ui/etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">testform_form.testform_form_data_source</item>
+            <item name="deps" xsi:type="string">testform_form.testform_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Form</item>
+        <item name="layout" xsi:type="array">
+            <item name="type" xsi:type="string">tabs</item>
+        </item>
+    </argument>
+
+    <dataSource name="testform_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\TestForm\Model\DataProvider</argument>
+            <argument name="name" xsi:type="string">testform_form_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <!--<dataSource name="myyyyy_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\TestForm\Model\DataProvider</argument>
+            <argument name="name" xsi:type="string">myyyyy_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">myyyyy_id</argument>
+            <argument name="requestFieldName" xsi:type="string">idyyyyy</argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <dataSource name="listing_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\TestForm\Model\GridDataProvider</argument>
+            <argument name="name" xsi:type="string">listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">koala_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">koala_id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+    </dataSource>-->
+
+
+    <fieldset name="koala">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Koala</item>
+            </item>
+        </argument>
+        <field name="name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Name</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">koala</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="updateme">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">update me</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">koala</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+        </field>
+
+        <container name="robinGood_gridsrc">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/robinGood</item>
+                    <item name="dataScope" xsi:type="string">position_gridsrc</item>
+                    <item name="template" xsi:type="string">Magento_TestForm/koala/base</item>
+                    <item name="externalProvider" xsi:type="string">testform_form.areas.koala.koala.wood_listing.wood_columns.positionFromGridSource</item>
+                </item>
+            </argument>
+        </container>
+
+        <container name="robinGood_formsrc">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/robinGood</item>
+                    <item name="dataScope" xsi:type="string">position_formsrc</item>
+                    <item name="template" xsi:type="string">Magento_TestForm/koala/base</item>
+                    <item name="externalProvider" xsi:type="string">testform_form.areas.koala.koala.wood_listing.wood_columns.positionFromFormSource</item>
+                </item>
+            </argument>
+        </container>
+        <!--<container name="gridWrapper">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/gridWrapper</item>
+                    <item name="gridName" xsi:type="string"></item>
+                </item>
+            </argument>
+        </container>-->
+
+        <listing name="wood_listing">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">testform_form.listing_data_source</item>
+                    <item name="deps" xsi:type="string">testform_form.listing_data_source</item>
+                </item>
+            </argument>
+
+            <columns name="wood_columns">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="provider" xsi:type="string">testform_form.listing_data_source</item>
+                        <item name="deps" xsi:type="string">testform_form.listing_data_source</item>
+                    </item>
+                </argument>
+                <selectionsColumn name="ids">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="indexField" xsi:type="string">koala_id</item>
+                            <item name="provider" xsi:type="string">testform_form.listing_data_source</item>
+                            <item name="deps" xsi:type="string">testform_form.listing_data_source</item>
+                        </item>
+                    </argument>
+                </selectionsColumn>
+                <column name="koala_id">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">ID</item>
+                            <item name="provider" xsi:type="string">testform_form.listing_data_source</item>
+                            <item name="deps" xsi:type="string">testform_form.listing_data_source</item>
+                        </item>
+                    </argument>
+                </column>
+                <column name="name">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="sorting" xsi:type="string">asc</item>
+                            <item name="label" xsi:type="string" translate="true">Title</item>
+                            <item name="provider" xsi:type="string">testform_form.listing_data_source</item>
+                            <item name="deps" xsi:type="string">testform_form.listing_data_source</item>
+                        </item>
+                    </argument>
+                </column>
+                <column name="positionFromGridSource">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Position - grid source</item>
+                            <item name="component" xsi:type="string" translate="true">Magento_Ui/js/grid/columns/columnLittleJohn</item>
+                            <item name="provider" xsi:type="string">testform_form.listing_data_source</item>
+                            <item name="deps" xsi:type="string">testform_form.listing_data_source</item>
+                        </item>
+                    </argument>
+                </column>
+                <column name="positionFromFormSource">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Position - form source</item>
+                            <item name="component" xsi:type="string" translate="true">Magento_Ui/js/grid/columns/columnLittleJohn</item>
+                            <item name="rowsProvider" xsi:type="string">testform_form.listing_data_source</item>
+                        </item>
+                    </argument>
+                </column>
+            </columns>
+        </listing>
+    </fieldset>
+    <!--<container name="koala_importer">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_TestForm/js/koala/importer</item>
+                <item name="template" xsi:type="string">Magento_TestForm/koala/base</item>
+                <item name="exporter" xsi:type="string">testform_form.areas.koala.koala.koala_exporter</item>
+            </item>
+        </argument>
+    </container>
+    <container name="koala_exporter">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_TestForm/js/koala/exporter</item>
+                <item name="template" xsi:type="string">Magento_TestForm/koala/base</item>
+                <item name="importer" xsi:type="string">testform_form.areas.koala.koala.koala_importer</item>
+            </item>
+        </argument>
+    </container>
+    <container name="koala_links1">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_TestForm/js/koala/links1</item>
+                <item name="template" xsi:type="string">Magento_TestForm/koala/base</item>
+                <item name="linker" xsi:type="string">testform_form.areas.koala.koala.koala_links2</item>
+            </item>
+        </argument>
+    </container>
+    <container name="koala_links2">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_TestForm/js/koala/links2</item>
+                <item name="template" xsi:type="string">Magento_TestForm/koala/base</item>
+                <item name="linker" xsi:type="string">testform_form.areas.koala.koala.koala_links1</item>
+            </item>
+        </argument>
+    </container>-->
+</form>
