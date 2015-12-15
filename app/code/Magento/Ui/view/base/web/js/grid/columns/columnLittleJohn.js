@@ -3,10 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
+    'ko',
     'underscore',
     'mage/translate',
     './column'
-], function (_, $t, Column) {
+], function (ko, _, $t, Column) {
     'use strict';
 
     return Column.extend({
@@ -18,11 +19,9 @@ define([
             },
 
             listens: {
-                '${ $.name }:columnData': 'setData',
+                //'${ $.name }:columnData': 'setData',
                 'rows': 'getData'
-            },
-            columnData:[],
-            rows:[]
+            }
         },
 
         /**
@@ -40,6 +39,24 @@ define([
             this._super();
             this.observe(['rows', 'columnData']);
 
+            this.someval = ko.pureComputed({
+                /**
+                 * use 'mappedValue' as value if checked
+                 */
+                read: function(){
+                    debugger;
+                    return $col.getLabel($row());
+                },
+
+                /**
+                 * any value made checkbox checked
+                 */
+                write: function(val){
+                    if (val) {
+                        debugger;
+                    }
+                },
+                owner: this});
             return this;
         },
 
@@ -61,8 +78,12 @@ define([
         },
 
         setData: function (data) {
-            debugger;
             //
+        },
+
+        dataChanged: function (row, value) {
+            this.rows()[row._rowIndex][this.index] = value;
+            this.set('rows', this.rows());
         }
     });
 });

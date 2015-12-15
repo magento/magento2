@@ -17,7 +17,7 @@ define([
 
             links:{
                 value: '${ $.provider }:${ $.dataScope }',
-                externalValue: '${ $.externalProvider }:value'
+                externalValue: '${ $.externalProvider }:columnData'
             },
 
             valuesFormatter: null//must be plugged-in as a module
