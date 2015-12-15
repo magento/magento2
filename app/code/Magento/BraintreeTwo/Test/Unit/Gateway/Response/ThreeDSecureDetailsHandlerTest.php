@@ -57,10 +57,10 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'object' => $this->getBraintreeTransaction()
         ];
 
-        $this->payment->expects(static::at(0))
+        $this->payment->expects(static::at(1))
             ->method('setAdditionalInformation')
             ->with('liabilityShifted', true);
-        $this->payment->expects(static::at(1))
+        $this->payment->expects(static::at(2))
             ->method('setAdditionalInformation')
             ->with('liabilityShiftPossible', true);
 
