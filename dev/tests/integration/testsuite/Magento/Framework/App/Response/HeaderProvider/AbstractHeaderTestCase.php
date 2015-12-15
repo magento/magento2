@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-abstract class AbstractHeaderTest extends \Magento\TestFramework\TestCase\AbstractController
+abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\AbstractController
 {
     /** @var  \Magento\Framework\App\Response\Http */
     private $interceptedResponse;
@@ -30,7 +30,7 @@ abstract class AbstractHeaderTest extends \Magento\TestFramework\TestCase\Abstra
      * @param string $name
      * @param string $value
      */
-    protected function verifyHeader($name, $value)
+    protected function assertHeaderPresent($name, $value)
     {
         $this->interceptedResponse->sendResponse();
 
@@ -42,7 +42,7 @@ abstract class AbstractHeaderTest extends \Magento\TestFramework\TestCase\Abstra
         );
     }
 
-    protected function verifyHeaderNotPresent($name)
+    protected function assertHeaderNotPresent($name)
     {
         $this->interceptedResponse->sendResponse();
         $this->assertFalse($this->interceptedResponse->getHeader($name));

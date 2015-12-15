@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-class UpgradeInsecureTest extends AbstractHeaderTest
+class UpgradeInsecureTestCase extends AbstractHeaderTestCase
 {
     /**
      * @magentoAdminConfigFixture web/secure/enable_upgrade_insecure 1
@@ -14,7 +14,7 @@ class UpgradeInsecureTest extends AbstractHeaderTest
      */
     public function testHeaderPresent()
     {
-        parent::verifyHeader('Content-Security-Policy', 'upgrade-insecure-requests');
+        $this->assertHeaderPresent('Content-Security-Policy', 'upgrade-insecure-requests');
     }
 
     /**
@@ -24,6 +24,6 @@ class UpgradeInsecureTest extends AbstractHeaderTest
      */
     public function testHeaderNotPresent()
     {
-        parent::verifyHeaderNotPresent('Content-Security-Policy');
+        $this->assertHeaderNotPresent('Content-Security-Policy');
     }
 }

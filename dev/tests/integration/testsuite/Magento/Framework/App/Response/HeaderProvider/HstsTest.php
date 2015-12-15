@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-class HstsTest extends AbstractHeaderTest
+class HstsTestCase extends AbstractHeaderTestCase
 {
     /**
      * @magentoAdminConfigFixture web/secure/enable_hsts 1
@@ -14,7 +14,7 @@ class HstsTest extends AbstractHeaderTest
      */
     public function testHeaderPresent()
     {
-        parent::verifyHeader('Strict-Transport-Security', 'max-age=31536000');
+        $this->assertHeaderPresent('Strict-Transport-Security', 'max-age=31536000');
     }
 
     /**
@@ -24,6 +24,6 @@ class HstsTest extends AbstractHeaderTest
      */
     public function testHeaderNotPresent()
     {
-        parent::verifyHeaderNotPresent('Strict-Transport-Security');
+        $this->assertHeaderNotPresent('Strict-Transport-Security');
     }
 }
