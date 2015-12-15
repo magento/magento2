@@ -68,6 +68,21 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var string
+     */
+    protected $entityType;
+
+    /**
+     * @var int
+     */
+    protected $storeId;
+
+    /**
+     * @var \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexNameResolver;
+
+    /**
      * Setup
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -96,7 +111,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getIndexName',
+                'getIndexPrefix',
                 'getEntityType',
                 'getIndexSettings',
             ])
@@ -150,11 +165,23 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'name' => 'string',
             ]);
         $this->clientConfig->expects($this->any())
-            ->method('getIndexName')
+            ->method('getIndexPrefix')
             ->willReturn('indexName');
         $this->clientConfig->expects($this->any())
             ->method('getEntityType')
             ->willReturn('product');
+        $this->entityType = 'product';
+        $this->storeId = 1;
+
+        $this->indexNameResolver = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver')
+            ->setMethods([
+                'getIndexName',
+                'getIndexNamespace',
+                'getIndexFromAlias',
+                'getIndexNameForAlias',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
             '\Magento\Elasticsearch\Model\Adapter\Elasticsearch',
@@ -164,7 +191,10 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'fieldMapper' => $this->fieldMapper,
                 'clientConfig' => $this->clientConfig,
                 'indexBuilder' => $this->indexBuilder,
-                'logger' => $this->logger
+                'logger' => $this->logger,
+                'indexNameResolver' => $this->indexNameResolver,
+                'options' => [],
+
             ]
         );
     }
@@ -208,7 +238,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $this->documentDataMapper->expects($this->once())
             ->method('map')
             ->willReturn([
-               'name' => 'Product Name',
+                'name' => 'Product Name',
             ]);
         $this->assertInternalType(
             'array',
@@ -238,7 +268,8 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                         'name' => 'Product Name',
                     ],
                 ],
-                1
+                1,
+                $this->entityType
             )
         );
     }
@@ -258,7 +289,8 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                     'name' => 'Product Name',
                 ],
             ],
-            1
+            1,
+            $this->entityType
         );
     }
 
@@ -267,19 +299,24 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanIndex()
     {
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->with(1, 'product', [])
+            ->willReturn('indexName_product_1_v');
+
         $this->client->expects($this->once())
             ->method('isEmptyIndex')
-            ->with('indexName_1_v1')
+            ->with('indexName_product_1_v')
             ->willReturn(false);
         $this->client->expects($this->atLeastOnce())
             ->method('indexExists')
             ->willReturn(true);
         $this->client->expects($this->once())
             ->method('deleteIndex')
-            ->with('indexName_1_v2');
+            ->with('_product_1_v1');
         $this->assertSame(
             $this->model,
-            $this->model->cleanIndex(1)
+            $this->model->cleanIndex(1, $this->entityType)
         );
     }
 
@@ -288,14 +325,18 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanIndexTrue()
     {
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('indexName_product_1_v');
+
         $this->client->expects($this->once())
             ->method('isEmptyIndex')
-            ->with('indexName_1_v1')
+            ->with('indexName_product_1_v')
             ->willReturn(true);
 
         $this->assertSame(
             $this->model,
-            $this->model->cleanIndex(1)
+            $this->model->cleanIndex(1, $this->entityType)
         );
     }
 
@@ -308,7 +349,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->method('bulkQuery');
         $this->assertSame(
             $this->model,
-            $this->model->deleteDocs(['1' => 1], 1)
+            $this->model->deleteDocs(['1' => 1], 1, $this->entityType)
         );
     }
 
@@ -321,7 +362,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $this->client->expects($this->once())
             ->method('bulkQuery')
             ->willThrowException(new \Exception('Something went wrong'));
-        $this->model->deleteDocs(['1' => 1], 1);
+        $this->model->deleteDocs(['1' => 1], 1, $this->entityType);
     }
 
     /**
@@ -337,13 +378,47 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'fieldMapper' => $this->fieldMapper,
                 'clientConfig' => $this->clientConfig,
                 'indexBuilder' => $this->indexBuilder,
-                'logger' => $this->logger
+                'logger' => $this->logger,
+                'indexNameResolver' => $this->indexNameResolver,
+                'options' => []
             ]
         );
 
         $this->client->expects($this->never())
             ->method('updateAlias');
-        $this->assertEquals($model, $model->updateAlias(1));
+
+        $this->assertEquals($model, $model->updateAlias(1, $this->entityType));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testConnectException()
+    {
+        $connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getConnection',
+            ])
+            ->getMock();
+
+        $connectionManager->expects($this->any())
+            ->method('getConnection')
+            ->willThrowException(new \Exception('Something went wrong'));
+
+        $this->objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Adapter\Elasticsearch',
+            [
+                'connectionManager' => $connectionManager,
+                'documentDataMapper' => $this->documentDataMapper,
+                'fieldMapper' => $this->fieldMapper,
+                'clientConfig' => $this->clientConfig,
+                'indexBuilder' => $this->indexBuilder,
+                'logger' => $this->logger,
+                'indexNameResolver' => $this->indexNameResolver,
+                'options' => []
+            ]
+        );
     }
 
     /**
@@ -353,8 +428,12 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     {
         $this->client->expects($this->atLeastOnce())
             ->method('updateAlias');
-        $this->model->cleanIndex(1);
-        $this->assertEquals($this->model, $this->model->updateAlias(1));
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexFromAlias')
+            ->willReturn('_product_1_v1');
+
+        $this->model->cleanIndex(1, $this->entityType);
+        $this->assertEquals($this->model, $this->model->updateAlias(1, $this->entityType));
     }
 
     /**
@@ -362,7 +441,16 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateAliasWithOldIndex()
     {
-        $this->model->cleanIndex(1);
+        $this->model->cleanIndex(1, $this->entityType);
+
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexFromAlias')
+            ->willReturn('_product_1_v2');
+
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexNameForAlias')
+            ->willReturn('_product_1_v2');
+
         $this->client->expects($this->any())
             ->method('existsAlias')
             ->with('indexName')
@@ -371,9 +459,9 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $this->client->expects($this->any())
             ->method('getAlias')
             ->with('indexName')
-            ->willReturn(['indexName_1_v'=>'indexName_1_v']);
+            ->willReturn(['indexName_product_1_v'=>'indexName_product_1_v']);
 
-        $this->assertEquals($this->model, $this->model->updateAlias(1));
+        $this->assertEquals($this->model, $this->model->updateAlias(1, $this->entityType));
     }
 
     /**
@@ -381,7 +469,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateAliasWithoutOldIndex()
     {
-        $this->model->cleanIndex(1);
+        $this->model->cleanIndex(1, $this->entityType);
         $this->client->expects($this->any())
             ->method('existsAlias')
             ->with('indexName')
@@ -390,9 +478,9 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $this->client->expects($this->any())
             ->method('getAlias')
             ->with('indexName')
-            ->willReturn(['indexName_1_v2'=>'indexName_1_v2']);
+            ->willReturn(['indexName_product_1_v2'=>'indexName_product_1_v2']);
 
-        $this->assertEquals($this->model, $this->model->updateAlias(1));
+        $this->assertEquals($this->model, $this->model->updateAlias(1, $this->entityType));
     }
 
     /**

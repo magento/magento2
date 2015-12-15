@@ -86,14 +86,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getIndexName() method
+     * Test getIndexPrefix() method
      */
-    public function testGetIndexName()
+    public function testGetIndexPrefix()
     {
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->willReturn('indexName');
-        $this->assertEquals('indexName', $this->model->getIndexName());
+            ->willReturn('indexPrefix');
+        $this->assertEquals('indexPrefix', $this->model->getIndexPrefix());
     }
 
     /**
@@ -102,5 +102,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityType()
     {
         $this->assertInternalType('string', $this->model->getEntityType());
+    }
+
+    /**
+     * Test getEntityType() method
+     */
+    public function testIsElasticsearchEnabled()
+    {
+        $this->assertFalse($this->model->isElasticsearchEnabled());
     }
 }
