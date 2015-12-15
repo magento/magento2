@@ -10,7 +10,7 @@ use Magento\BraintreeTwo\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Payment Details Handler
@@ -29,10 +29,6 @@ class PaymentDetailsHandler implements HandlerInterface
     const PROCESSOR_RESPONSE_CODE = 'processorResponseCode';
 
     const PROCESSOR_RESPONSE_TEXT = 'processorResponseText';
-
-    const LIABILITY_SHIFTED = 'liabilityShifted';
-
-    const LIABILITY_SHIFT_POSSIBLE = 'liabilityShiftPossible';
 
     /**
      * List of additional details
@@ -58,7 +54,7 @@ class PaymentDetailsHandler implements HandlerInterface
         /**
          * @TODO after changes in sales module should be refactored for new interfaces
          */
-        /** @var Payment $payment */
+        /** @var OrderPaymentInterface $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
@@ -67,7 +63,6 @@ class PaymentDetailsHandler implements HandlerInterface
         $payment->setLastTransId($transaction->id);
         $payment->setIsTransactionClosed(false);
 
-        $this->process3DSecure($transaction, $payment);
         //remove previously set payment nonce
         $payment->unsAdditionalInformation(DataAssignObserver::PAYMENT_METHOD_NONCE);
         foreach ($this->additionalInformationMapping as $item) {
@@ -76,24 +71,5 @@ class PaymentDetailsHandler implements HandlerInterface
             }
             $payment->setAdditionalInformation($item, $transaction->$item);
         }
-    }
-
-    /**
-     * Process 3d secure details
-     * @param \Braintree\Transaction $transaction
-     * @param \Magento\Sales\Model\Order\Payment $payment
-     */
-    protected function process3DSecure(Transaction $transaction, Payment $payment)
-    {
-        if (empty($transaction->threeDSecureInfo)) {
-            // remove 3d secure details if they were set previously
-            $payment->unsAdditionalInformation(self::LIABILITY_SHIFTED);
-            $payment->unsAdditionalInformation(self::LIABILITY_SHIFT_POSSIBLE);
-            return;
-        }
-        /** @var \Braintree\ThreeDSecureInfo $info */
-        $info = $transaction->threeDSecureInfo;
-        $payment->setAdditionalInformation(self::LIABILITY_SHIFTED, $info->liabilityShifted);
-        $payment->setAdditionalInformation(self::LIABILITY_SHIFT_POSSIBLE, $info->liabilityShiftPossible);
     }
 }

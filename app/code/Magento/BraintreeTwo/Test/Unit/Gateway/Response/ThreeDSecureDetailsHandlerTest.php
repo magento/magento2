@@ -5,25 +5,26 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
+use Braintree\Result\Successful;
 use Braintree\Transaction;
-use Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler;
+use Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class PaymentDetailsHandlerTest
- * @package Magento\BraintreeTwo\Test\Unit\Gateway\Response
+ * Class ThreeDSecureDetailsHandlerTest
  */
-class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    const TRANSACTION_ID = '432erwwe';
+
+    const TRANSACTION_ID = '432er5ww3e';
 
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler
+     * @var \Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler
      */
-    private $paymentHandler;
+    private $handler;
 
     /**
      * @var \Magento\Sales\Model\Order\Payment|MockObject
@@ -35,30 +36,17 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                'setTransactionId',
-                'setCcTransId',
-                'setLastTransId',
+                'unsAdditionalInformation',
+                'hasAdditionalInformation',
                 'setAdditionalInformation',
-                'setIsTransactionClosed'
             ])
             ->getMock();
 
-        $this->payment->expects(static::once())
-            ->method('setTransactionId');
-        $this->payment->expects(static::once())
-            ->method('setCcTransId');
-        $this->payment->expects(static::once())
-            ->method('setLastTransId');
-        $this->payment->expects(static::once())
-            ->method('setIsTransactionClosed');
-        $this->payment->expects(static::any())
-            ->method('setAdditionalInformation');
-
-        $this->paymentHandler = new PaymentDetailsHandler();
+        $this->handler = new ThreeDSecureDetailsHandler();
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::handle
+     * @covers \Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler::handle
      */
     public function testHandle()
     {
@@ -69,7 +57,14 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'object' => $this->getBraintreeTransaction()
         ];
 
-        $this->paymentHandler->handle($subject, $response);
+        $this->payment->expects(static::at(0))
+            ->method('setAdditionalInformation')
+            ->with('liabilityShifted', true);
+        $this->payment->expects(static::at(1))
+            ->method('setAdditionalInformation')
+            ->with('liabilityShiftPossible', true);
+
+        $this->handler->handle($subject, $response);
     }
 
     /**
@@ -98,17 +93,12 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $attributes = [
             'id' => self::TRANSACTION_ID,
-            'avsPostalCodeResponseCode' => 'M',
-            'avsStreetAddressResponseCode' => 'M',
-            'cvvResponseCode' => 'M',
-            'processorAuthorizationCode' => 'W1V8XK',
-            'processorResponseCode' => '1000',
-            'processorResponseText' => 'Approved'
+            'threeDSecureInfo' => $this->getThreeDSecureInfo()
         ];
 
-        $transaction = \Braintree\Transaction::factory($attributes);
+        $transaction = Transaction::factory($attributes);
 
-        $mock = $this->getMockBuilder(\Braintree\Result\Successful::class)
+        $mock = $this->getMockBuilder(Successful::class)
             ->disableOriginalConstructor()
             ->setMethods(['__get'])
             ->getMock();
@@ -119,5 +109,18 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($transaction);
 
         return $mock;
+    }
+
+    /**
+     * Get 3d secure details
+     * @return array
+     */
+    private function getThreeDSecureInfo()
+    {
+        $attributes = [
+            'liabilityShifted' => true,
+            'liabilityShiftPossible' => true
+        ];
+        return $attributes;
     }
 }
