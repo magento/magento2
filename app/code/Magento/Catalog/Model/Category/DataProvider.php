@@ -155,7 +155,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
         $category = $this->getCurrentCategory();
         if (!$category->getId()) {
-            return $this->getDefaultData();
+            return [];
         } else {
             $categoryData = $category->getData();
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
@@ -212,6 +212,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $result[$key]['sortOrder'] = 0;
         }
 
+        $result = $this->getDefaultMetaData($result);
+
         return $result;
     }
 
@@ -229,6 +231,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 ($categoryData[$elementsWithUseConfigSetting] == '')
             ) {
                 $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
+            } else {
+                $categoryData['use_config'][$elementsWithUseConfigSetting] = false;
             }
         }
         return $categoryData;
@@ -306,16 +310,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * Category's fields default values
+     *
+     * @param array $result
      * @return array
      */
-    public function getDefaultData()
+    public function getDefaultMetaData($result)
     {
-        $result = [];
-        $result['']['general']['parent'] = (int)$this->request->getParam('parent');
-        $result['']['general']['is_anchor'] = false;
-        $result['']['general']['use_config']['available_sort_by'] = true;
-        $result['']['general']['use_config']['default_sort_by'] = true;
-        $result['']['general']['use_config']['filter_price_range'] = true;
+        $result['parent']['default'] = (int)$this->request->getParam('parent');
+        $result['is_anchor']['default'] = false;
+        $result['use_config.available_sort_by']['default'] = true;
+        $result['use_config.default_sort_by']['default'] = true;
+        $result['use_config.filter_price_range']['default'] = true;
+
         return $result;
     }
 }

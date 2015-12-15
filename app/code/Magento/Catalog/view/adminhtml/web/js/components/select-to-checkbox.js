@@ -13,11 +13,12 @@ define([
         /**
          * Converts initial value to integer
          *
-         * @returns {Boolean}
+         * @returns {Abstract}
          */
         setInitialValue: function () {
             this._super();
             this.value(+this.value());
+
             return this;
         },
 
@@ -29,6 +30,7 @@ define([
         onUpdate: function () {
             this._super();
             this.value(+this.value());
+
             return this._super();
         }
     });
