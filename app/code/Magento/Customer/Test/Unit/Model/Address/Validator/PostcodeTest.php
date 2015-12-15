@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Address\Validator;
 class PostcodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Check zip code test
+     * Check postcode test
      *
      * @test
      */
