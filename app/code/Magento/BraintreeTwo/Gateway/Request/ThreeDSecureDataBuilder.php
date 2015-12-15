@@ -5,11 +5,11 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Request;
 
+use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Helper\Formatter;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Helper\Formatter;
 
 /**
  * Class ThreeDSecureDataBuilder

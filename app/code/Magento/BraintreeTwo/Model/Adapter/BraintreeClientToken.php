@@ -6,8 +6,6 @@
 namespace Magento\BraintreeTwo\Model\Adapter;
 
 use Braintree\ClientToken;
-use Braintree\Result\Error;
-use Braintree\Result\Successful;
 
 /**
  * BraintreeClientToken
