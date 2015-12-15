@@ -5,10 +5,10 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Request;
 
-use Magento\BraintreeTwo\Helper\Formatter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Payment\Helper\Formatter;
 
 /**
  * Class CaptureDataBuilder

@@ -51,4 +51,15 @@ class BraintreeTransaction
     {
         return Transaction::refund($transactionId, $amount);
     }
+
+    /**
+     * Clone original transaction
+     * @param string $transactionId
+     * @param array $attributes
+     * @return mixed
+     */
+    public function cloneTransaction($transactionId, array $attributes)
+    {
+        return Transaction::cloneTransaction($transactionId, $attributes);
+    }
 }
