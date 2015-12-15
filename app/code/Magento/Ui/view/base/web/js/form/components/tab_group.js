@@ -41,8 +41,10 @@ define([
             var elems   = this.elems(),
                 isFirst = !elems.indexOf(elem);
 
-            if (isFirst || elem.active()) {
-                elem.activate();
+            if (isFirst || ( elem.active && elem.active())) {
+               // console.log(elem);
+                if(elem.activate)
+                {elem.activate();}
             }
 
             return this;
