@@ -2508,4 +2508,7 @@ return [
     ['_beforeDelete', 'Magento\Cms\Model\ResourceModel\Page'],
     ['_afterSave', 'Magento\Cms\Model\ResourceModel\Page', 'Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler::execute'],
     ['_afterLoad', 'Magento\Cms\Model\ResourceModel\Page', 'Magento\Cms\Model\ResourceModel\Page\Relation\Store\ReadHandler::execute'],
+    ['_beforeDelete', 'Magento\Cms\Model\ResourceModel\Block'],
+    ['_afterSave', 'Magento\Cms\Model\ResourceModel\Block', 'Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler::execute'],
+    ['_afterLoad', 'Magento\Cms\Model\ResourceModel\Block', 'Magento\Cms\Model\ResourceModel\Block\Relation\Store\ReadHandler::execute'],
 ];
