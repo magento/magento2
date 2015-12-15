@@ -22,14 +22,13 @@ class SwitcherElement extends SimpleElement
      */
     public function setValue($value)
     {
-        if (( $value != 'Yes' ) && ( $value != 'No' ))
-        {
+        if (($value != 'Yes') && ($value != 'No')) {
             throw new \UnexpectedValueException(
                 sprintf('Switcher element accepts only "Yes" and "No" values.')
             );
         }
-        if ($value != $this->getValue())
-        {
+        if ($value != $this->getValue()) {
+            $this->hover();
             $this->click();
         }
     }
@@ -41,13 +40,14 @@ class SwitcherElement extends SimpleElement
      */
     public function getValue()
     {
-        if ($this->find('input:checked')->isVisible())
-        {
+        if ($this->find('parent::div[@class="switcher"]', 'xpath')->find('input:checked')->isVisible()) {
             return 'Yes';
-        }
-        else
-        {
+        } elseif ($this->find('parent::div[@class="switcher"]', 'xpath')->find('input')->isVisible()) {
             return 'No';
+        } else {
+            throw new \Exception (
+                sprintf('Element %s not found on page', $this->getLocator())
+            );
         }
     }
 }
