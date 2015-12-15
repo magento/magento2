@@ -127,6 +127,8 @@ class IndexerHandler implements IndexerInterface
     {
         if ($indexerId == Fulltext::INDEXER_ID) {
             $indexName = 'product';
+        } else {
+            $indexName = $indexerId;
         }
         return $indexName;
     }

@@ -77,7 +77,7 @@ class IndexNameResolver
      */
     public function getIndexNameForAlias($storeId, $entityType)
     {
-        return $this->clientConfig->getIndexerPrefix() . '_' . $storeId . '_' . $entityType;
+        return $this->clientConfig->getIndexerPrefix() . '_' . $entityType . '_' . $storeId;
     }
 
     /**

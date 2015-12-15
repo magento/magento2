@@ -7,6 +7,7 @@ namespace Magento\Elasticsearch\Model\Adapter\Index;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 /**
  * Alias name resolver
@@ -59,14 +60,32 @@ class SearchIndexNameResolver
     }
 
     /**
-     * Returns the index name.
+     * Returns the index (alias) name.
      *
      * @param int $storeId
-     * @param string $entityType
+     * @param string $indexerId
      * @return string
      */
-    public function getIndexName($storeId, $entityType)
+    public function getIndexName($storeId, $indexerId)
     {
-        return $this->clientConfig->getIndexerPrefix() . '_' . $storeId . '_' . $entityType;
+        $indexName = $this->getIndexMapping($indexerId);
+        return $this->clientConfig->getIndexerPrefix() . '_' . $indexName . '_' . $storeId;
+    }
+
+    /**
+     * Taking index name by indexer ID
+     *
+     * @param string $indexerId
+     *
+     * @return string
+     */
+    protected function getIndexMapping($indexerId)
+    {
+        if ($indexerId == Fulltext::INDEXER_ID) {
+            $indexName = 'product';
+        } else {
+            $indexName = $indexerId;
+        }
+        return $indexName;
     }
 }

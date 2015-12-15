@@ -151,7 +151,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
             ->willReturn('indexName');
 
         $this->assertEquals(
-            'indexName_1_product',
+            'indexName_product_1',
             $this->model->getIndexNameForAlias($this->storeId, $this->entityType)
         );
     }
