@@ -24,11 +24,11 @@ class Postcode
      * Check if postcode is valid
      *
      * @param string $countryId
-     * @param string $zip
+     * @param string $postcode
      * @return bool
      */
-    public function isValid($countryId, $zip)
+    public function isValid($countryId, $postcode)
     {
-        return $this->directoryHelper->isZipCodeOptional($countryId) || !empty($zip);
+        return $this->directoryHelper->isZipCodeOptional($countryId) || !empty($postcode);
     }
 }
