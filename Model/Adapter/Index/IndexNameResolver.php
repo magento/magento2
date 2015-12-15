@@ -7,6 +7,9 @@ namespace Magento\Elasticsearch\Model\Adapter\Index;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Elasticsearch\Model\Config;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Index name resolver
@@ -39,8 +42,8 @@ class IndexNameResolver
      */
     public function __construct(
         ConnectionManager $connectionManager,
-        \Magento\Elasticsearch\Model\Config $clientConfig,
-        \Psr\Log\LoggerInterface $logger,
+        Config $clientConfig,
+        LoggerInterface $logger,
         $options = []
     ) {
         $this->connectionManager = $connectionManager;
@@ -51,7 +54,7 @@ class IndexNameResolver
             $this->client = $this->connectionManager->getConnection($options);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('We were unable to perform the search because of a search engine misconfiguration.')
             );
         }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\Model\Indexer;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
 
 class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
@@ -26,6 +26,11 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
     private $batch;
 
     /**
+     * @var \Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $adapterFactory;
+
+    /**
      * Set up test environment.
      *
      * @return void
@@ -36,11 +41,11 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $adapterFactory = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory')
+        $this->adapterFactory = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $adapterFactory->expects($this->any())
+        $this->adapterFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->adapter);
 
@@ -48,10 +53,11 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = (new ObjectManager($this))->getObject(
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
             'Magento\Elasticsearch\Model\Indexer\IndexerHandler',
             [
-                'adapterFactory' => $adapterFactory,
+                'adapterFactory' => $this->adapterFactory,
                 'batch' => $this->batch,
                 'data' => ['indexer_id' => 'catalogsearch_fulltext'],
             ]
@@ -121,7 +127,7 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test cleanIndex() method.
      */
-    public function testCleanIndex()
+    public function testCleanIndexCatalogSearchFullText()
     {
         $dimensionValue = 'SomeDimension';
 
@@ -138,5 +144,36 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->cleanIndex([$dimension]);
 
         $this->assertEquals($this->model, $result);
+    }
+
+    /**
+     * Test cleanIndex() method.
+     */
+    public function testCleanIndex()
+    {
+        $objectManager = new ObjectManagerHelper($this);
+        $model = $objectManager->getObject(
+            'Magento\Elasticsearch\Model\Indexer\IndexerHandler',
+            [
+                'adapterFactory' => $this->adapterFactory,
+                'batch' => $this->batch,
+                'data' => ['indexer_id' => 'else_indexer_id'],
+            ]
+        );
+        $dimensionValue = 'SomeDimension';
+
+        $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dimension->expects($this->any())
+            ->method('getValue')
+            ->willReturn($dimensionValue);
+
+        $this->adapter->expects($this->once())
+            ->method('cleanIndex');
+
+        $result = $model->cleanIndex([$dimension]);
+
+        $this->assertEquals($model, $result);
     }
 }
