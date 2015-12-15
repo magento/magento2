@@ -64,6 +64,16 @@
                 </item>
             </argument>
         </field>
+        <field name="path">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">hidden</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="source" xsi:type="string">category</item>
+                </item>
+            </argument>
+        </field>
         <field name="store_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

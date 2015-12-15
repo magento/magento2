@@ -47,7 +47,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     protected $formElement = [
         'text' => 'input',
-        'hidden' => 'input',
         'boolean' => 'checkbox',
     ];
 
@@ -68,7 +67,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var array
      */
     protected $ignoreFields = [
-        'products_position'
+        'products_position',
+        'position'
     ];
 
     /**

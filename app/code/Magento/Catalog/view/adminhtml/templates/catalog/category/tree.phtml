@@ -468,9 +468,6 @@
                                     data: pd.join(""),
                                     showLoader: true
                                 }).done(function (data) {
-                                    if (data.messages && data.messages.length > 0) {
-                                        $('[name=category-edit-form] .messages').html(data.messages);
-                                    }
                                     if (data.error) {
                                         reRenderTree();
                                     } else {
