@@ -86,14 +86,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getIndexerPrefix() method
+     * Test getIndexPrefix() method
      */
-    public function testGetIndexerPrefix()
+    public function testGetIndexPrefix()
     {
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->willReturn('indexerPrefix');
-        $this->assertEquals('indexerPrefix', $this->model->getIndexerPrefix());
+            ->willReturn('indexPrefix');
+        $this->assertEquals('indexPrefix', $this->model->getIndexPrefix());
     }
 
     /**

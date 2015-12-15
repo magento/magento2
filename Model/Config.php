@@ -71,7 +71,7 @@ class Config implements ClientOptionsInterface
         $defaultOptions = [
             'hostname' => $this->getElasticsearchConfigData('server_hostname'),
             'port' => $this->getElasticsearchConfigData('server_port'),
-            'index' => $this->getElasticsearchConfigData('indexer_prefix'),
+            'index' => $this->getElasticsearchConfigData('index_prefix'),
             'enableAuth' => $this->getElasticsearchConfigData('enable_auth'),
             'username' => $this->getElasticsearchConfigData('username'),
             'password' => $this->getElasticsearchConfigData('password'),
@@ -117,13 +117,13 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * Get Elasticsearch indexer prefix
+     * Get Elasticsearch index prefix
      *
      * @return string
      */
-    public function getIndexerPrefix()
+    public function getIndexPrefix()
     {
-        return $this->getElasticsearchConfigData('indexer_prefix');
+        return $this->getElasticsearchConfigData('index_prefix');
     }
 
     /**

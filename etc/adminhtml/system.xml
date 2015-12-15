@@ -21,8 +21,8 @@
                         <field id="engine">elasticsearch</field>
                     </depends>
                 </field>
-                <field id="elasticsearch_indexer_prefix" translate="label" type="text" sortOrder="63" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Elasticsearch Indexer Prefix</label>
+                <field id="elasticsearch_index_prefix" translate="label" type="text" sortOrder="63" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch Index Prefix</label>
                     <depends>
                         <field id="engine">elasticsearch</field>
                     </depends>

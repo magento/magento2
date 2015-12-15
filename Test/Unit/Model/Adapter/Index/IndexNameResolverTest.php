@@ -72,7 +72,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
         $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getIndexerPrefix',
+                'getIndexPrefix',
                 'getEntityType',
                 'getIndexSettings',
             ])
@@ -121,7 +121,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->client);
 
         $this->clientConfig->expects($this->any())
-            ->method('getIndexerPrefix')
+            ->method('getIndexPrefix')
             ->willReturn('indexName');
         $this->clientConfig->expects($this->any())
             ->method('getEntityType')
@@ -147,7 +147,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetIndexNameForAlias()
     {
         $this->clientConfig->expects($this->any())
-            ->method('getIndexerPrefix')
+            ->method('getIndexPrefix')
             ->willReturn('indexName');
 
         $this->assertEquals(

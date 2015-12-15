@@ -69,7 +69,7 @@ class SearchIndexNameResolver
     public function getIndexName($storeId, $indexerId)
     {
         $indexName = $this->getIndexMapping($indexerId);
-        return $this->clientConfig->getIndexerPrefix() . '_' . $indexName . '_' . $storeId;
+        return $this->clientConfig->getIndexPrefix() . '_' . $indexName . '_' . $storeId;
     }
 
     /**
