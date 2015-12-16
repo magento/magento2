@@ -115,6 +115,10 @@ define([
             advancedPricingHandler.init();
             priceTypeHandler.init();
 
+            if (productType.type.init === 'configurable' && !this.hasVariations) {
+                $(document).trigger('setTypeProduct', 'simple');
+            }
+
             this.bindAll();
             this._initType();
         }
