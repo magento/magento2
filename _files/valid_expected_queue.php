@@ -234,7 +234,7 @@ return [
             "consumer_type" => "async",
             "handlers" => [
                 "demo.object.created" => [
-                    [
+                   "defaultHandler" => [
                         "type" => "\\Magento\\MysqlMq\\Model\\Processor",
                         "method" => "processMessage"
                     ]
@@ -250,7 +250,7 @@ return [
             "consumer_type" => "async",
             "handlers" => [
                 "demo.object.created" => [
-                    [
+                   "defaultHandler" => [
                         "type" => "\\Magento\\MysqlMq\\Model\\Processor",
                         "method" => "processMessageWithException"
                     ]
@@ -266,13 +266,13 @@ return [
             "consumer_type" => "async",
             "handlers" => [
                 "demo.object.created" => [
-                    [
+                   "defaultHandler" => [
                         "type" => "\\Magento\\MysqlMq\\Model\\Processor",
                         "method" => "processMessage"
                     ]
                 ],
                 "demo.object.updated" => [
-                    [
+                   "defaultHandler" => [
                         "type" => "\\Magento\\MysqlMq\\Model\\Processor",
                         "method" => "processMessage"
                     ]
@@ -321,7 +321,7 @@ return [
             "consumer_type" => "async",
             "handlers" => [
                 "test.schema.defined.by.method" => [
-                    [
+                   "defaultHandler" => [
                         "type" => "Magento\\MysqlMq\\Model\\DataObjectRepository",
                         "method" => "delayedOperation"
                     ]
