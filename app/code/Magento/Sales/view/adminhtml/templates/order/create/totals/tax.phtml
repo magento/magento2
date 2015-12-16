@@ -6,7 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
+$taxAmount = $block->getTotal()->getValue();
 ?>
+<?php if (($taxAmount == 0 && $this->helper('Magento\Tax\Helper\Data')->displayZeroTax()) || ($taxAmount > 0)): ?>
 <?php global $taxIter; $taxIter++; ?>
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
 <?php $isTop = 1; ?>
@@ -50,3 +52,5 @@
     </td>
     <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="admin__total-amount"><?php /* @escapeNotVerified */ echo $block->formatPrice($block->getTotal()->getValue()) ?></td>
 </tr>
+<?php endif;?>
+
