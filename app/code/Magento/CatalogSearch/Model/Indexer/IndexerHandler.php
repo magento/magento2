@@ -17,7 +17,7 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 class IndexerHandler implements IndexerInterface
 {
     /**
-     * @var IndexStructure
+     * @var IndexStructureProxy
      */
     private $indexStructure;
 
@@ -57,7 +57,7 @@ class IndexerHandler implements IndexerInterface
     private $indexScopeResolver;
 
     /**
-     * @param IndexStructure $indexStructure
+     * @param IndexStructureProxy $indexStructure
      * @param ResourceConnection $resource
      * @param Config $eavConfig
      * @param Batch $batch
@@ -66,7 +66,7 @@ class IndexerHandler implements IndexerInterface
      * @param int $batchSize
      */
     public function __construct(
-        IndexStructure $indexStructure,
+        IndexStructureProxy $indexStructure,
         ResourceConnection $resource,
         Config $eavConfig,
         Batch $batch,
