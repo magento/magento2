@@ -78,7 +78,7 @@ require([
                 <?php if($_product->getStoreId()): ?>
                     '<div class="admin__field admin__field-option">'+
                         '<input type="checkbox" id="downloadable_sample_<%- data.id %>_title" name="downloadable[sample][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
-                        '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Use Default Value'); ?></span></label>'+
+                        '<label for="downloadable_sample_<%- data.id %>_title" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Use Default Value'); ?></span></label>'+
                     '</div>' +
                 <?php endif; ?>
             '</td>'+
@@ -147,7 +147,7 @@ require([
                 if (scopeTitle) {
                     Event.observe(scopeTitle, 'click', function(event){
                         scopeElm = $(Event.findElement(event, 'input'));
-                        titleField = scopeElm.up(0).down('input[type="text"]');
+                        titleField = scopeElm.up(1).down('input[type="text"]');
                         if (scopeElm.checked == true) {
                             titleField.disabled = true;
                         } else {

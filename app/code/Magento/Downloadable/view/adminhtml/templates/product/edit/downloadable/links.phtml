@@ -257,7 +257,7 @@ require([
                 if (scopeTitle) {
                     Event.observe(scopeTitle, 'click', function(event){
                         scopeElm = $(Event.findElement(event, 'input'));
-                        titleField = scopeElm.up(0).down('input[type="text"]');
+                        titleField = scopeElm.up(1).down('input[type="text"]');
                         if (scopeElm.checked == true) {
                             titleField.disabled = true;
                         } else {
@@ -266,7 +266,7 @@ require([
                     });
                 }
                 if (!data.store_title && scopeTitle) {
-                    scopeTitle.up(1 ).down('input[type="text"]').disabled = true;
+                    scopeTitle.up(1).down('input[type="text"]').disabled = true;
                     scopeTitle.checked = true;
                 }
 
@@ -274,7 +274,7 @@ require([
                 if (scopePrice) {
                     Event.observe(scopePrice, 'click', function(event){
                         scopeElm = $(Event.findElement(event, 'input'));
-                        priceField = scopeElm.up(0).down('input[type="text"]');
+                        priceField = scopeElm.up(1).down('input[type="text"]');
                         if (scopeElm.checked == true) {
                             priceField.disabled = true;
                         } else {
@@ -283,7 +283,7 @@ require([
                     });
                 }
                 if (!data.website_price && scopePrice) {
-                    scopePrice.up(0).down('input[type="text"]').disabled = true;
+                    scopePrice.up(1).down('input[type="text"]').disabled = true;
                     scopePrice.checked = true;
                 }
                 downloadsElm = $('downloadable_link_'+data.id+'_downloads');
