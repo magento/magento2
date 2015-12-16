@@ -184,6 +184,39 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($bootstrap->isDeveloperMode());
     }
 
+    public function testIgnoreExceptionsInDeveloperMode()
+    {
+        $bootstrap = self::createBootstrap();
+
+        $this->ensureXdebugIsDisabled();
+        $this->assertFalse($bootstrap->ignoreExceptionsInDeveloperMode());
+
+        $this->ensureXdebugIsEnabled();
+        $this->assertTrue($bootstrap->ignoreExceptionsInDeveloperMode());
+
+        // In case Xdebug is installed, disable it for remainder of tests in order to not slow down tests
+        $this->ensureXdebugIsDisabled();
+    }
+
+    protected function ensureXdebugIsDisabled()
+    {
+        if (function_exists('xdebug_disable')) {
+            xdebug_disable();
+        }
+    }
+
+    protected function ensureXdebugIsEnabled()
+    {
+        // While xdebug should not be installed when running tests in a CI environment (like Travis or Atlassian
+        // Bamboo), it may be enabled on a developer's machine, so this test must account for both states
+        if (function_exists('xdebug_enable')) {
+            xdebug_enable();
+        } else {
+            // This file creates an "xdebug_is_enabled" function that returns true
+            require_once __DIR__ . '/_files/other/create_function_xdebug_is_enabled.php';
+        }
+    }
+
     public function testRunNoErrors()
     {
         $responseMock = $this->getMockForAbstractClass('\Magento\Framework\App\ResponseInterface');

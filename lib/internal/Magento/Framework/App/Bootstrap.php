@@ -241,31 +241,43 @@ class Bootstrap
     }
 
     /**
-     * Runs an application
+     * Runs application
      *
      * @param \Magento\Framework\AppInterface $application
      * @return void
      */
     public function run(AppInterface $application)
     {
-        try {
+        // If ignoring exceptions, don't wrap in a try/catch block so that PHP/Xdebug can output a clean backtrace
+        if ($this->isDeveloperMode() && $this->ignoreExceptionsInDeveloperMode()) {
+            Profiler::start('magento');
+            // If ignoring exceptions, don't initialize custom error handler so that PHP/Xdebug handles errors
+            $this->initObjectManager();
+            $this->assertMaintenance();
+            $this->assertInstalled();
+            $response = $application->launch();
+            $response->sendResponse();
+            Profiler::stop('magento');
+        } else {
             try {
-                \Magento\Framework\Profiler::start('magento');
-                $this->initErrorHandler();
-                $this->initObjectManager();
-                $this->assertMaintenance();
-                $this->assertInstalled();
-                $response = $application->launch();
-                $response->sendResponse();
-                \Magento\Framework\Profiler::stop('magento');
-            } catch (\Exception $e) {
-                \Magento\Framework\Profiler::stop('magento');
-                if (!$application->catchException($this, $e)) {
-                    throw $e;
+                try {
+                    \Magento\Framework\Profiler::start('magento');
+                    $this->initErrorHandler();
+                    $this->initObjectManager();
+                    $this->assertMaintenance();
+                    $this->assertInstalled();
+                    $response = $application->launch();
+                    $response->sendResponse();
+                    \Magento\Framework\Profiler::stop('magento');
+                } catch (\Exception $e) {
+                    \Magento\Framework\Profiler::stop('magento');
+                    if (!$application->catchException($this, $e)) {
+                        throw $e;
+                    }
                 }
+            } catch (\Exception $e) {
+                $this->terminate($e);
             }
-        } catch (\Exception $e) {
-            $this->terminate($e);
         }
     }
 
@@ -439,5 +451,18 @@ class Bootstrap
             echo $message;
         }
         exit(1);
+    }
+
+    /**
+     * Whether to handle exceptions in developer mode or to allow PHP to handle display of exceptions
+     *
+     * Xdebug provides very detailed stack traces that can assist a developer in troubleshooting an exception. If a
+     * developer has Xdebug installed and enabled, we should assume that they want to let Xdebug handle exceptions.
+     *
+     * @return bool
+     */
+    public function ignoreExceptionsInDeveloperMode()
+    {
+        return (function_exists('xdebug_is_enabled') && xdebug_is_enabled());
     }
 }
