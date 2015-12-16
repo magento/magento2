@@ -26,7 +26,7 @@ class Sequence
                      PRIMARY KEY (sequence_value)
             ) AUTO_INCREMENT = %d";
 
-        return sprintf($format, $name, $columnType,  $unsigned ? 'UNSIGNED' : '', $startNumber);
+        return sprintf($format, $name, $columnType, $unsigned ? 'UNSIGNED' : '', $startNumber);
     }
 
     /**
