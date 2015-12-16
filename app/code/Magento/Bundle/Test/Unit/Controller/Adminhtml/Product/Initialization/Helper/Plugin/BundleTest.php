@@ -79,7 +79,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     public function testAfterInitializeIfBundleAnsCustomOptionsAndBundleSelectionsExist()
     {
         $productOptionsBefore = [0 => ['key' => 'value'], 1 => ['is_delete' => false]];
-        $productOptionsAfter = [0 => ['key' => 'value', 'is_delete' => 1], 1 => ['is_delete' => 1]];
         $postValue = 'postValue';
         $valueMap = [
             ['bundle_options', null, $postValue],
