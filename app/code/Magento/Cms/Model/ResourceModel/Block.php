@@ -92,7 +92,7 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
 
-        if (!is_numeric($value) && is_null($field)) {
+        if (!is_numeric($value) && $field === null) {
             $field = 'identifier';
         } elseif (!$field) {
             $field = $entityMetadata->getIdentifierField();
