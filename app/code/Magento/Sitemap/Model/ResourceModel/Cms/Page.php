@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Sitemap cms page collection model
@@ -12,6 +15,25 @@ namespace Magento\Sitemap\Model\ResourceModel\Cms;
  */
 class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @param Context $context
+     * @param MetadataPool $metadataPool
+     * @param string $connectionName
+     */
+    public function __construct(
+        Context $context,
+        MetadataPool $metadataPool,
+        $connectionName = null
+    ) {
+        $this->metadataPool = $metadataPool;
+        parent::__construct($context, $connectionName);
+    }
+
     /**
      * Init resource model (catalog/category)
      *
@@ -30,14 +52,15 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getCollection($storeId)
     {
-        $pages = [];
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+        $linkField = $entityMetadata->getLinkField();
 
         $select = $this->getConnection()->select()->from(
             ['main_table' => $this->getMainTable()],
             [$this->getIdFieldName(), 'url' => 'identifier', 'updated_at' => 'update_time']
         )->join(
             ['store_table' => $this->getTable('cms_page_store')],
-            'main_table.page_id = store_table.page_id',
+            'main_table.page_id = store_table.' . $linkField,
             []
         )->where(
             'main_table.is_active = 1'
@@ -49,6 +72,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             [0, $storeId]
         );
 
+        $pages = [];
         $query = $this->getConnection()->query($select);
         while ($row = $query->fetch()) {
             $page = $this->_prepareObject($row);
