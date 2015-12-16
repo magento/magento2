@@ -30,7 +30,7 @@ class CaptureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $subjectReaderMock;
+    private $subjectReader;
 
     protected function setUp()
     {
@@ -38,11 +38,11 @@ class CaptureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setIsTransactionClosed'])
             ->getMock();
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->captureHandler = new CaptureDetailsHandler($this->subjectReaderMock);
+        $this->captureHandler = new CaptureDetailsHandler($this->subjectReader);
     }
 
     /**
@@ -63,7 +63,7 @@ class CaptureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReader->expects(self::once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentData);

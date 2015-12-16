@@ -21,11 +21,6 @@ class CaptureDetailsHandler implements HandlerInterface
     protected $subjectReader;
 
     /**
-     * @var \Magento\Payment\Model\InfoInterface
-     */
-    protected $payment;
-
-    /**
      * Constructor
      *
      * @param SubjectReader $subjectReader
@@ -44,9 +39,9 @@ class CaptureDetailsHandler implements HandlerInterface
         /**
          * @TODO after changes in sales module should be refactored for new interfaces
          */
-        $this->payment = $paymentDO->getPayment();
-        ContextHelper::assertOrderPayment($this->payment);
+        $payment = $paymentDO->getPayment();
+        ContextHelper::assertOrderPayment($payment);
 
-        $this->payment->setIsTransactionClosed(false);
+        $payment->setIsTransactionClosed(false);
     }
 }
