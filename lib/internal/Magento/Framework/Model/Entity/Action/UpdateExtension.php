@@ -32,8 +32,8 @@ class UpdateExtension
         MetadataPool $metadataPool,
         ExtensionPool $extensionPool
     ) {
-        $this->extensionPool = $extensionPool;
         $this->metadataPool = $metadataPool;
+        $this->extensionPool = $extensionPool;
     }
 
     /**
