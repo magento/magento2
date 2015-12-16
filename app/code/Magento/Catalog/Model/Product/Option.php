@@ -823,6 +823,36 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * @param Product $product
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     */
+    public function getProductOptionCollection(Product $product)
+    {
+        $collection = clone $this->getCollection();
+        $collection->addFieldToFilter(
+            'product_id',
+            $product->getId()
+        )->addTitleToResult(
+            $product->getStoreId()
+        )->addPriceToResult(
+            $product->getStoreId()
+        )->setOrder(
+            'sort_order',
+            'asc'
+        )->setOrder(
+            'title',
+            'asc'
+        );
+
+        if ($this->getAddRequiredFilter()) {
+            $collection->addRequiredFilter($this->getAddRequiredFilterValue());
+        }
+
+        $collection->addValuesToResult($product->getStoreId());
+        return $collection;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
