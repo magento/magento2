@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Model\Unit\Operation\Write;
+namespace Magento\Framework\Model\Test\Unit\Operation\Write;
 
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\Entity\Action\UpdateMain;

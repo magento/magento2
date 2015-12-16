@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Model\Unit\Entity;
+namespace Magento\Framework\Model\Test\Unit\Entity;
 
 use Magento\Framework\Model\Entity\EntityHydrator;
 
