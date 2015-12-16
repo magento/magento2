@@ -74,8 +74,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\BraintreeTwo\Gateway\Http\Client\AbstractTransaction">
-
     <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale">
         <arguments>
             <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
