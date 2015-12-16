@@ -39,7 +39,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             'getPriceType',
             'setCanSaveCustomOptions',
             'getProductOptions',
-            'setProductOptions',
+            'setOptions',
             'setCanSaveBundleSelections',
             '__wakeup',
         ];
@@ -56,6 +56,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $customOptionFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->subjectMock = $this->getMock(
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
             [],
@@ -68,14 +71,14 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             $optionInterfaceFactory,
             $linkInterfaceFactory,
             $productRepository,
-            $storeManager
+            $storeManager,
+            $customOptionFactory
         );
     }
 
     public function testAfterInitializeIfBundleAnsCustomOptionsAndBundleSelectionsExist()
     {
         $productOptionsBefore = [0 => ['key' => 'value'], 1 => ['is_delete' => false]];
-        $productOptionsAfter = [0 => ['key' => 'value', 'is_delete' => 1], 1 => ['is_delete' => 1]];
         $postValue = 'postValue';
         $valueMap = [
             ['bundle_options', null, $postValue],
@@ -96,7 +99,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($productOptionsBefore)
         );
-        $this->productMock->expects($this->once())->method('setProductOptions')->with($productOptionsAfter);
+        $this->productMock->expects($this->once())->method('setOptions')->with(null);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }

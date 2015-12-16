@@ -195,7 +195,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $linksToAdd = $option->getProductLinks();
         }
         try {
-            $option->setOptionId(null);
             $this->optionResource->save($option);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save option'), $e);

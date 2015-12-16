@@ -10,9 +10,10 @@ use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use Magento\Framework\App\ResourceConnection as AppResource;
 
 /**
- * Class ReadHandler
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadHandler
 {
@@ -32,6 +33,11 @@ class ReadHandler
     protected $metadataPool;
 
     /**
+     * @var AppResource
+     */
+    protected $appResource;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
@@ -40,18 +46,21 @@ class ReadHandler
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManager $storeManager
+     * @param AppResource $appResource
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        StoreManager $storeManager,
+        AppResource $appResource
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->storeManager = $storeManager;
+        $this->appResource = $appResource;
     }
 
     /**
@@ -100,26 +109,43 @@ class ReadHandler
         $data = [];
         $metadata = $this->metadataPool->getMetadata($entityType);
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        $attributeTables = [];
         if ($metadata->getEavEntityType()) {
+            $context = $this->getActionContext($entityType, $entityData);
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if (!$attribute->isStatic()) {
-                    $select = $metadata->getEntityConnection()->select()
-                        ->from($attribute->getBackend()->getTable(), ['value'])
-                        ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
-                        ->where('attribute_id = ?', $attribute->getAttributeId());
-                    $context = $this->getActionContext($entityType, $entityData);
-                    foreach ($context as $field => $value) {
-                        //TODO: if (in table exists context field)
-                        $select->where(
-                            $metadata->getEntityConnection()->quoteIdentifier($field) . ' IN (?)',
-                            $value
-                        )->order($field . ' DESC');
-                    }
-                    $value = $metadata->getEntityConnection()->fetchOne($select);
-                    if ($value !== false) {
-                        $data[$attribute->getAttributeCode()] = $value;
-                    }
+                    $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
                 }
+            }
+            $selects = [];
+            foreach ($attributeTables as $attributeTable => $attributeCodes) {
+                $select = $metadata->getEntityConnection()->select()
+                    ->from(['t' => $attributeTable], ['value' => 't.value'])
+                    ->join(
+                        ['a' => $this->appResource->getTableName('eav_attribute')],
+                        'a.attribute_id = t.attribute_id',
+                        ['attribute_code' => 'a.attribute_code']
+                    )
+                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
+                    ->where('t.attribute_id IN (?)', $attributeCodes)
+                    ->order('a.attribute_id');
+                foreach ($context as $field => $value) {
+                    //TODO: if (in table exists context field)
+                    $select->where(
+                        $metadata->getEntityConnection()->quoteIdentifier($field) . ' IN (?)',
+                        $value
+                    )->order('t.' . $field . ' DESC');
+                }
+                $selects[] = $select;
+            }
+
+            $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
+                $selects,
+                \Magento\Framework\DB\Select::SQL_UNION_ALL
+            );
+            $attributeValues = $metadata->getEntityConnection()->fetchAll((string)$unionSelect);
+            foreach ($attributeValues as $attributeValue) {
+                $data[$attributeValue['attribute_code']] = $attributeValue['value'];
             }
         }
         return $data;

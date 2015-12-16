@@ -6,6 +6,7 @@
 
 /**
  * Abstract Rule entity data model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Rule\Model;
 
