@@ -47,7 +47,6 @@ class IndexerHandler implements IndexerInterface
     /**
      * @param ElasticsearchFactory $adapterFactory
      * @param Batch $batch
-     * @param string $entityType
      * @param array $data
      * @param int $batchSize
      */
@@ -81,7 +80,6 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
@@ -120,7 +118,6 @@ class IndexerHandler implements IndexerInterface
      * Taking index name by indexer ID
      *
      * @param string $indexerId
-     *
      * @return string
      */
     private function getIndexMapping($indexerId)

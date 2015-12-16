@@ -17,7 +17,12 @@ use Magento\Framework\Exception\LocalizedException;
 class IndexNameResolver
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Config
+     * @var ConnectionManager
+     */
+    protected $connectionManager;
+
+    /**
+     * @var Config
      */
     protected $clientConfig;
 
@@ -27,18 +32,18 @@ class IndexNameResolver
     protected $client;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * Constructor for Index Name Resolver.
+     * Constructor for Index Name Resolver
      *
-     * @param \Magento\Elasticsearch\Model\Config $clientConfig
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param ConnectionManager $connectionManager
+     * @param Config $clientConfig
+     * @param LoggerInterface $logger
      * @param array $options
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function __construct(
         ConnectionManager $connectionManager,
@@ -61,7 +66,7 @@ class IndexNameResolver
     }
 
     /**
-     * Get index namespace from config.
+     * Get index namespace from config
      *
      * @return string
      */
@@ -71,7 +76,7 @@ class IndexNameResolver
     }
 
     /**
-     * Get index namespace from config.
+     * Get index namespace from config
      *
      * @param int $storeId
      * @param string $entityType
@@ -84,7 +89,7 @@ class IndexNameResolver
     }
 
     /**
-     * Returns the index name.
+     * Returns the index name
      *
      * @param int $storeId
      * @param string $entityType
@@ -113,7 +118,7 @@ class IndexNameResolver
      */
     public function getIndexPattern($storeId, $entityType)
     {
-        return $this->getIndexNamespace() .'_'. $entityType . '_' . $storeId . '_v';
+        return $this->getIndexNamespace() . '_' . $entityType . '_' . $storeId . '_v';
     }
 
     /**
@@ -127,7 +132,7 @@ class IndexNameResolver
     {
         $storeIndex = '';
         $indexPattern = $this->getIndexPattern($storeId, $entityType);
-        $namespace = $this->getIndexNamespace();
+        $namespace = $this->getIndexNamespace() . '_' . $entityType . '_' . $storeId;
         if ($this->client->existsAlias($namespace)) {
             $alias = $this->client->getAlias($namespace);
             $indices = array_keys($alias);
