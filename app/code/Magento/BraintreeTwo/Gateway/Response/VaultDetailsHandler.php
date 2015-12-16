@@ -110,6 +110,28 @@ class VaultDetailsHandler implements HandlerInterface
         $paymentToken->setPaymentMethodCode($payment->getMethod());
         $paymentToken->setCreatedAt($order->getCreatedAt());
 
+        $maskedCC = $transaction->creditCardDetails->maskedNumber;
+        if (!empty($maskedCC)) {
+            if (strlen($maskedCC) > 4) {
+                $maskedCC = substr($maskedCC, -4, 4);
+            }
+            $paymentToken->setTokenDetails($this->convertDetailsToJSON([
+                'maskedCC' => $maskedCC,
+                'expirationDate' => $transaction->creditCardDetails->expirationDate
+            ]));
+        }
+
         return $paymentToken;
+    }
+
+    /**
+     * Convert payment token details to JSON
+     * @param array $details
+     * @return string
+     */
+    protected function convertDetailsToJSON($details)
+    {
+        $json = \Zend_Json::encode($details);
+        return $json ? $json : '{}';
     }
 }
