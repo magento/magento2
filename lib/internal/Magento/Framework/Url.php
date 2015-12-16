@@ -763,7 +763,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function setQueryParam($key, $data)
     {
-        return $this->_queryParamsResolver->setQueryParam($key, $data);
+        $this->_queryParamsResolver->setQueryParam($key, $data);
+        return $this;
     }
 
     /**
