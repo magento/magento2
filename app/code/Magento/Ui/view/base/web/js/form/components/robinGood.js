@@ -31,7 +31,7 @@ define([
         initialize: function () {
             this._super();
 
-            if (this.render_url) {
+            if (this['render_url']) {
                 this.render();
             }
             this.observe('value', 'externalValue');
@@ -42,9 +42,8 @@ define([
         render: function() {
             $.ajax({
                 type: 'GET',
-                url: this.render_url + '?namespace=cms_page_listing&type=template',
+                url: this['render_url'] + '?namespace=cms_page_listing&type=template',
                 success: function() {
-                    debugger;
                 }
             });
         },
