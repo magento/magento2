@@ -104,7 +104,7 @@ class InstallSchema implements InstallSchemaInterface
                     ['payment_method_code', 'customer_id', 'gateway_token'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['customer_id', 'gateway_token'],
+                ['payment_method_code', 'customer_id', 'gateway_token'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addIndex(
                 $setup->getIdxName(
