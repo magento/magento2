@@ -135,7 +135,7 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $select->join(
                 ['cbs' => $this->getTable('cms_block_store')],
-                $this->getMainTable() . '.' . $linkField . ' = cbs.block_id',
+                $this->getMainTable() . '.' . $linkField . ' = cbs.' . $linkField,
                 ['store_id']
             )
                 ->where('is_active = ?', 1)
@@ -169,7 +169,7 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->from(['cb' => $this->getMainTable()])
             ->join(
                 ['cbs' => $this->getTable('cms_block_store')],
-                'cb.' . $linkField . ' = cbs.block_id',
+                'cb.' . $linkField . ' = cbs.' . $linkField,
                 []
             )
             ->where('cb.identifier = ?', $object->getData('identifier'))
@@ -203,10 +203,10 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->from(['cbs' => $this->getTable('cms_block_store')], 'store_id')
             ->join(
                 ['cb' => $this->getMainTable()],
-                'cbs.block_id = cb.' . $linkField,
+                'cbs.' . $linkField . ' = cb.' . $linkField,
                 []
             )
-            ->where('cb.' . $linkField . ' = :block_id');
+            ->where('cb.' . $entityMetadata->getIdentifierField()  . ' = :block_id');
 
         return $connection->fetchCol($select, ['block_id' => (int)$id]);
     }
