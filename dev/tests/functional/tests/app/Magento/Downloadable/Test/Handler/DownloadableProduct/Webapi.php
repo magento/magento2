@@ -59,7 +59,7 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
         if (isset($checkoutData['options']['links'])
             && !empty($response['extension_attributes']['downloadable_product_links'])
         ) {
-            foreach ($checkoutData['options']['links'] as $key => $link) {
+            foreach (array_keys($checkoutData['options']['links']) as $key) {
                 $checkoutData['options']['links'][$key]['id'] =
                     $response['extension_attributes']['downloadable_product_links'][$key]['id'];
             }
@@ -81,14 +81,8 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
         $downloadableProductSamples = [];
 
         if (isset($this->fields['downloadable']['sample'])) {
-            foreach ($this->fields['downloadable']['sample'] as $key => $link) {
-                $downloadableProductSamples[$key] = [
-                    'title' => $link['title'],
-                    'sort_order' => isset($link['sort_order']) ? $link['sort_order'] : 0,
-                    'sample_type' => $link['type'],
-                    'sample_url' => isset($link['sample_url']) ? $link['sample_url'] : null,
-                    'sample_file' => isset($link['sample_file']) ? $link['sample_file'] : null,
-                ];
+            foreach ($this->fields['downloadable']['sample'] as $key => $sample) {
+                $downloadableProductSamples[$key] = $this->prepareSampleData($sample);
             }
             $this->fields['product']['extension_attributes']['downloadable_product_samples'] =
                 $downloadableProductSamples;
@@ -101,6 +95,23 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
     }
 
     /**
+     * Prepare sample data.
+     *
+     * @param array $sample
+     * @return array
+     */
+    protected function prepareSampleData(array $sample)
+    {
+        return [
+            'title' => $sample['title'],
+            'sort_order' => isset($sample['sort_order']) ? $sample['sort_order'] : 0,
+            'sample_type' => $sample['type'],
+            'sample_url' => isset($sample['sample_url']) ? $sample['sample_url'] : null,
+            'sample_file' => isset($sample['sample_file']) ? $sample['sample_file'] : null,
+        ];
+    }
+
+    /**
      * Preparation of downloadable links data.
      *
      * @return void
@@ -110,19 +121,7 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
         $downloadableProductLinks = [];
 
         foreach ($this->fields['downloadable']['link'] as $key => $link) {
-            $downloadableProductLinks[$key] = [
-                'title' => $link['title'],
-                'sort_order' => isset($link['sort_order']) ? $link['sort_order'] : 0,
-                'is_shareable' => $link['is_shareable'],
-                'price' => floatval($link['price']),
-                'number_of_downloads' => isset($link['number_of_downloads']) ? $link['number_of_downloads'] : 0,
-                'link_type' => $link['type'],
-                'link_url' => isset($link['link_url']) ? $link['link_url'] : null,
-                'link_file' => isset($link['link_file']) ? $link['link_file'] : null,
-                'sample_type' => isset($link['sample']['type']) ? $link['sample']['type'] : null,
-                'sample_url' => isset($link['sample']['url']) ? $link['sample']['url'] : null,
-                'sample_file' => isset($link['sample']['file']) ? $link['sample']['file'] : null,
-            ];
+            $downloadableProductLinks[$key] = $this->prepareLinkData($link);
         }
 
         $this->fields['product']['links_exist'] = 1;
@@ -135,5 +134,28 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
 
         unset($this->fields['downloadable']);
         unset($this->fields['product']['downloadable_links']);
+    }
+
+    /**
+     * Prepare link data.
+     *
+     * @param array $link
+     * @return array
+     */
+    protected function prepareLinkData(array $link)
+    {
+        return [
+            'title' => $link['title'],
+            'sort_order' => isset($link['sort_order']) ? $link['sort_order'] : 0,
+            'is_shareable' => $link['is_shareable'],
+            'price' => floatval($link['price']),
+            'number_of_downloads' => isset($link['number_of_downloads']) ? $link['number_of_downloads'] : 0,
+            'link_type' => $link['type'],
+            'link_url' => isset($link['link_url']) ? $link['link_url'] : null,
+            'link_file' => isset($link['link_file']) ? $link['link_file'] : null,
+            'sample_type' => isset($link['sample']['type']) ? $link['sample']['type'] : null,
+            'sample_url' => isset($link['sample']['url']) ? $link['sample']['url'] : null,
+            'sample_file' => isset($link['sample']['file']) ? $link['sample']['file'] : null,
+        ];
     }
 }

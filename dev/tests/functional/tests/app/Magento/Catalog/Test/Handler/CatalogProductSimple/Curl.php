@@ -304,19 +304,49 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function prepareProductDetails()
     {
-        $this->fields['product']['status'] = isset($this->fields['product']['status'])
-            ? $this->fields['product']['status']
-            : 'Product online';
-        $this->fields['product']['price'] = isset($this->fields['product']['price'])
-            ? (is_array($this->fields['product']['price']) ? null : $this->fields['product']['price'])
-            : null;
-        $this->fields['product']['is_virtual'] = isset($this->fields['product']['is_virtual'])
-            ? $this->fields['product']['is_virtual']
-            : 'No';
+        $this->prepareStatus();
+        $this->preparePrice();
+        $this->prepareIsVirtual();
         $this->prepareAttributeSet();
         $this->prepareTaxClass();
         $this->prepareQuantityAndStockStatus();
         $this->prepareCategory();
+    }
+
+    /**
+     * Preparation of product status.
+     *
+     * @return void
+     */
+    protected function prepareStatus()
+    {
+        $this->fields['product']['status'] = isset($this->fields['product']['status'])
+            ? $this->fields['product']['status']
+            : 'Product online';
+    }
+
+    /**
+     * Preparation of price value.
+     *
+     * @return void
+     */
+    protected function preparePrice()
+    {
+        $this->fields['product']['price'] = isset($this->fields['product']['price'])
+            ? (is_array($this->fields['product']['price']) ? null : $this->fields['product']['price'])
+            : null;
+    }
+
+    /**
+     * Preparation wheather product 'Is Virtual'.
+     *
+     * @return void
+     */
+    protected function prepareIsVirtual()
+    {
+        $this->fields['product']['is_virtual'] = isset($this->fields['product']['is_virtual'])
+            ? $this->fields['product']['is_virtual']
+            : 'No';
     }
 
     /**
