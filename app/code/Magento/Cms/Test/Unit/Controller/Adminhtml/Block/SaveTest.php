@@ -160,7 +160,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         'title' => '"><img src=y onerror=prompt(document.domain)>;',
         'identifier' => 'unique_title_123',
         'stores' => ['0'],
-        'is_active' => '1',
+        'is_active' => true,
         'content' => '"><script>alert("cookie: "+document.cookie)</script>'
         ];
 
@@ -168,7 +168,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'title' => '&quot;&gt;&lt;img src=y onerror=prompt(document.domain)&gt;;',
             'identifier' => 'unique_title_123',
             'stores' => ['0'],
-            'is_active' => '1',
+            'is_active' => true,
             'content' => '&quot;&gt;&lt;script&gt;alert(&quot;cookie: &quot;+document.cookie)&lt;/script&gt;'
         ];
 
@@ -228,7 +228,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveActionNoId()
     {
-        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(true);
+        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(['block_id' => 1]);
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
             ->willReturnMap(
@@ -261,7 +261,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveAndContinue()
     {
-        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(true);
+        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(['block_id' => 1]);
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
             ->willReturnMap(
@@ -308,7 +308,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveActionThrowsException()
     {
-        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(true);
+        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(['block_id' => 1]);
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
             ->willReturnMap(
@@ -345,7 +345,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addError');
 
-        $this->sessionMock->expects($this->atLeastOnce())->method('setFormData')->with(true);
+        $this->sessionMock->expects($this->atLeastOnce())->method('setFormData')->with(['block_id' => 1]);
 
         $this->resultRedirect->expects($this->atLeastOnce())
             ->method('setPath')
