@@ -7,7 +7,7 @@ namespace Magento\Framework\Communication\Config\Reader;
 
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\ObjectManager\ConfigInterface as ObjectManagerConfig;
-use Magento\Framework\Communication\Config\Reader\XmlReader\Converter as DataGenerator;
+use Magento\Framework\Communication\Config\ReflectionGenerator;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 
 /**
@@ -21,7 +21,7 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
     private $objectManagerConfig;
 
     /**
-     * @var DataGenerator
+     * @var ReflectionGenerator
      */
     private $dataGenerator;
 
@@ -34,12 +34,12 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
      * Initialize dependencies.
      *
      * @param ObjectManagerConfig $objectManagerConfig
-     * @param DataGenerator $dataGenerator
+     * @param ReflectionGenerator $dataGenerator
      * @param ServiceMethodsMap $serviceMethodsMap
      */
     public function __construct(
         ObjectManagerConfig $objectManagerConfig,
-        DataGenerator $dataGenerator,
+        ReflectionGenerator $dataGenerator,
         ServiceMethodsMap $serviceMethodsMap
     ) {
         $this->objectManagerConfig = $objectManagerConfig;
@@ -72,7 +72,6 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
                 throw new \LogicException(sprintf('Service interface was expected, "%1" given', $serviceInterface));
             }
             foreach ($methodsMap as $methodName => $returnType) {
-                // TODO: Add logic based on return type to support async requests
                 $topicName = $this->generateTopicName($serviceInterface, $methodName);
                 $result[$topicName] = $this->dataGenerator->generateTopicConfigForServiceMethod(
                     $topicName,
