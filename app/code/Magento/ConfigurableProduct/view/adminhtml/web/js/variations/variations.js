@@ -135,7 +135,9 @@ define([
             };
         },
         getProductValue: function (name) {
-            return $('[name="product[' + name.split('/').join('][') + ']"]', this.productForm).val();
+            name = name.split('/').join('][');
+
+            return $('[name="product[' + name + ']"]:enabled:not(.ignore-validate)', this.productForm).val();
         },
         getRowId: function (data, field) {
             var key = data.variationKey;
