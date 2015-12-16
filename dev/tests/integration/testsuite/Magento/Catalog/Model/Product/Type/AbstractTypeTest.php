@@ -260,7 +260,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $product->load(1);
         // fixture
         $product->addCustomOption('info_buyRequest', serialize(new \Magento\Framework\DataObject(['qty' => 2])));
-        foreach ($product->getOptions() as $id => $option) {
+        foreach ($product->getOptions() as $option) {
             if ('field' == $option->getType()) {
                 $product->addCustomOption('option_ids', $option->getId());
                 $quoteOption = clone $option;
@@ -330,7 +330,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         // fixture
         $this->assertEquals('simple', $this->_model->getOptionSku($product));
 
-        foreach ($product->getOptions() as $id => $option) {
+        foreach ($product->getOptions() as $option) {
             if ('field' == $option->getType()) {
                 $product->addCustomOption('option_ids', $option->getId());
                 $quoteOption = clone $option;

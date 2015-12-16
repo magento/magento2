@@ -119,8 +119,6 @@ class ProductServiceTest extends WebapiAbstract
         $bundleProduct = $this->createFixedPriceBundleProduct();
         $bundleProductOptions = $this->getBundleProductOptions($bundleProduct);
 
-        $existingSelectionId = $bundleProductOptions[0]['product_links'][0]['id'];
-
         //Change the type of existing option
         $bundleProductOptions[0]['type'] = 'select';
         //Change the sku of existing link and qty
