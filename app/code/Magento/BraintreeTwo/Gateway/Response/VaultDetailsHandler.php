@@ -6,6 +6,7 @@
 namespace Magento\BraintreeTwo\Gateway\Response;
 
 use Braintree\Transaction;
+use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
@@ -38,7 +39,12 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * @var SubjectReader
      */
-    private $subjectReader;
+    protected $subjectReader;
+
+    /**
+     * @var Config
+     */
+    protected $config;
 
     /**
      * Constructor
@@ -46,17 +52,20 @@ class VaultDetailsHandler implements HandlerInterface
      * @param VaultPaymentInterface $vaultPayment
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param OrderPaymentExtensionFactory $paymentExtensionFactory
+     * @param Config $config
      * @param SubjectReader $subjectReader
      */
     public function __construct(
         VaultPaymentInterface $vaultPayment,
         PaymentTokenFactory $paymentTokenFactory,
         OrderPaymentExtensionFactory $paymentExtensionFactory,
+        Config $config,
         SubjectReader $subjectReader
     ) {
         $this->vaultPayment = $vaultPayment;
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
+        $this->config = $config;
         $this->subjectReader = $subjectReader;
     }
 
@@ -110,16 +119,11 @@ class VaultDetailsHandler implements HandlerInterface
         $paymentToken->setPaymentMethodCode($payment->getMethod());
         $paymentToken->setCreatedAt($order->getCreatedAt());
 
-        $maskedCC = $transaction->creditCardDetails->maskedNumber;
-        if (!empty($maskedCC)) {
-            if (strlen($maskedCC) > 4) {
-                $maskedCC = substr($maskedCC, -4, 4);
-            }
-            $paymentToken->setTokenDetails($this->convertDetailsToJSON([
-                'maskedCC' => $maskedCC,
-                'expirationDate' => $transaction->creditCardDetails->expirationDate
-            ]));
-        }
+        $paymentToken->setTokenDetails($this->convertDetailsToJSON([
+            'type' => $this->getCreditCardType($transaction->creditCardDetails->cardType),
+            'maskedCC' => $transaction->creditCardDetails->last4,
+            'expirationDate' => $transaction->creditCardDetails->expirationDate
+        ]));
 
         return $paymentToken;
     }
@@ -129,9 +133,23 @@ class VaultDetailsHandler implements HandlerInterface
      * @param array $details
      * @return string
      */
-    protected function convertDetailsToJSON($details)
+    private function convertDetailsToJSON($details)
     {
         $json = \Zend_Json::encode($details);
         return $json ? $json : '{}';
+    }
+
+    /**
+     * Get type of credit card mapped from Braintree
+     *
+     * @param string $type
+     * @return array
+     */
+    private function getCreditCardType($type)
+    {
+        $replaced = str_replace(' ', '-', strtolower($type));
+        $mapper = $this->config->getCctypesMapper();
+
+        return $mapper[$replaced];
     }
 }
