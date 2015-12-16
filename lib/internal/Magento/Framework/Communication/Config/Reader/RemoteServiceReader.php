@@ -8,7 +8,7 @@ namespace Magento\Framework\Communication\Config\Reader;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\ObjectManager\ConfigInterface as ObjectManagerConfig;
 use Magento\Framework\Communication\Config\Reader\XmlReader\Converter as DataGenerator;
-use \Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
+use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 
 /**
  * Remote service configuration reader.
@@ -88,7 +88,7 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
      * Generate topic name based on service type and method name.
      *
      * Perform the following conversion:
-     * \Magento\Customer\Api\RepositoryInterface + getById => Magento.Customer.Api.RepositoryInterface.getById
+     * \Magento\Customer\Api\RepositoryInterface + getById => Magento.Customer.Api.RepositoryInterface.GetById
      *
      * @param string $typeName
      * @param string $methodName
@@ -96,6 +96,6 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
      */
     protected function generateTopicName($typeName, $methodName)
     {
-        return ltrim(preg_replace('/\\\\([A-Z])/', '.$1', $typeName), '\\') . '.' . $methodName;
+        return ltrim(preg_replace('/\\\\([A-Z])/', '.$1', $typeName), '\\') . '.' . ucfirst($methodName);
     }
 }
