@@ -29,6 +29,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
 
     /**
      * @param ResourceModel\Rule $ruleResource
+     * @param RuleFactory $ruleFactory
      */
     public function __construct(
         \Magento\CatalogRule\Model\ResourceModel\Rule $ruleResource,

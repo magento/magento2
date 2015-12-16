@@ -19,6 +19,7 @@ use Magento\Catalog\Model\Product;
  * @method \Magento\CatalogRule\Model\Rule setWebsiteIds(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\CatalogRule\Api\Data\RuleInterface
 {
@@ -119,11 +120,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
      */
     protected $_ruleProductProcessor;
@@ -144,7 +140,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogRule\Helper\Data $catalogRuleData
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Indexer\Rule\RuleProductProcessor $ruleProductProcessor
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
@@ -169,7 +164,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogRule\Helper\Data $catalogRuleData,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -186,7 +180,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         $this->_catalogRuleData = $catalogRuleData;
         $this->_cacheTypesList = $cacheTypesList;
         $this->_relatedCacheTypes = $relatedCacheTypes;
-        $this->dateTime = $dateTime;
         $this->_ruleProductProcessor = $ruleProductProcessor;
         parent::__construct(
             $context,

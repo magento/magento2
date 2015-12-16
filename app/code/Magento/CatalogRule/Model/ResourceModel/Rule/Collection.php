@@ -70,8 +70,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
-     * @param $entityType
-     * @param $objectField
+     * @param string $entityType
+     * @param string $objectField
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
