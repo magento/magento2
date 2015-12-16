@@ -17,6 +17,7 @@
                         <item name="price" xsi:type="string">2</item>
                         <item name="is_shareable" xsi:type="string">Use config</item>
                         <item name="number_of_downloads" xsi:type="string">2</item>
+                        <item name="sort_order" xsi:type="string">1</item>
                         <item name="sample" xsi:type="array">
                             <item name="sample_type_url" xsi:type="string">Yes</item>
                             <item name="sample_url" xsi:type="string">http://example.com</item>
@@ -38,6 +39,7 @@
                         <item name="price" xsi:type="string">2</item>
                         <item name="is_shareable" xsi:type="string">Use config</item>
                         <item name="number_of_downloads" xsi:type="string">2</item>
+                        <item name="sort_order" xsi:type="string">1</item>
                         <item name="sample" xsi:type="array">
                             <item name="sample_type_url" xsi:type="string">Yes</item>
                             <item name="sample_url" xsi:type="string">http://example.com</item>
@@ -65,6 +67,7 @@
                         <item name="file_type_url" xsi:type="string">Yes</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">No</item>
+                        <item name="sort_order" xsi:type="string">0</item>
                     </item>
                     <item name="1" xsi:type="array">
                         <item name="title" xsi:type="string">link-2-%isolation%</item>
@@ -77,6 +80,7 @@
                         <item name="file_type_url" xsi:type="string">Yes</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">Yes</item>
+                        <item name="sort_order" xsi:type="string">1</item>
                     </item>
                 </item>
             </field>
@@ -98,6 +102,7 @@
                         <item name="file_type_url" xsi:type="string">Yes</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">No</item>
+                        <item name="sort_order" xsi:type="string">0</item>
                     </item>
                     <item name="1" xsi:type="array">
                         <item name="title" xsi:type="string">link-2-%isolation%</item>
@@ -110,6 +115,7 @@
                         <item name="file_type_url" xsi:type="string">Yes</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">Yes</item>
+                        <item name="sort_order" xsi:type="string">2</item>
                     </item>
                     <item name="2" xsi:type="array">
                         <item name="title" xsi:type="string">link-3-%isolation%</item>
@@ -122,6 +128,7 @@
                         <item name="file_type_url" xsi:type="string">Yes</item>
                         <item name="file_link_url" xsi:type="string">http://example.com</item>
                         <item name="is_shareable" xsi:type="string">Yes</item>
+                        <item name="sort_order" xsi:type="string">1</item>
                     </item>
                 </item>
             </field>
