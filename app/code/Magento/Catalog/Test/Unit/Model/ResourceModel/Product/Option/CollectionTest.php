@@ -11,6 +11,10 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Option;
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
+/**
+ * Class CollectionTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,6 +58,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $joinProcessor;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
@@ -86,6 +95,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->joinProcessor = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->resourceMock = $this->getMock(
             'Magento\Catalog\Model\ResourceModel\Product\Option',
             ['getConnection', '__wakeup', 'getMainTable', 'getTable'],
@@ -129,6 +141,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->optionsFactoryMock,
             $this->storeManagerMock,
             $this->metadataPoolMock,
+            $this->joinProcessor,
             null,
             $this->resourceMock
         );

@@ -116,7 +116,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'getAttributes',
                 'unlockAttribute',
                 'getOptionsReadOnly',
-                'setProductOptions',
+                'setOptions',
                 'setCanSaveCustomOptions',
                 '__sleep',
                 '__wakeup',
@@ -284,8 +284,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $this->productMock->expects($this->once())
-            ->method('setProductOptions')
-            ->with($productData['options']);
+            ->method('setOptions')
+            ->with([$customOption]);
 
         $this->productMock->expects($this->once())
             ->method('setCanSaveCustomOptions')

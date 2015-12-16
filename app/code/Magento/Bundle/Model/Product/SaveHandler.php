@@ -66,6 +66,7 @@ class SaveHandler
 
         $options = $entity->getExtensionAttributes()->getBundleProductOptions() ?: [];
         foreach ($options as $option) {
+            $option->setOptionId(null);
             $this->optionRepository->save($entity, $option);
         }
         return $entity;

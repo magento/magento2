@@ -147,7 +147,22 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+
+        $this->productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            [
+                'getId',
+                'getSku',
+                'setWebsiteIds',
+                'getWebsiteIds',
+                'load',
+                'setData'
+            ],
+            [],
+            '',
+            false
+        );
+
         $this->initializedProductMock = $this->getMock(
             'Magento\Catalog\Model\Product',
             [
@@ -732,6 +747,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      * @param array $existingOptions
      * @param array $expectedData
      * @dataProvider saveExistingWithOptionsDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testSaveExistingWithOptions(array $newOptions, array $existingOptions, array $expectedData)
     {
@@ -751,14 +767,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
-
-        $this->initializedProductMock->expects($this->once())
-            ->method('getOptions')
-            ->willReturn($existingOptions);
-
-        $this->initializedProductMock->expects($this->once())
-            ->method('setProductOptions')
-            ->with($expectedData);
 
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
@@ -995,9 +1003,17 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         }
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
 
+        if (!empty($outputLinks)) {
+            $this->initializedProductMock->expects($this->once())
+                ->method('setProductLinks')
+                ->with($outputLinks);
+        } else {
+            $this->initializedProductMock->expects($this->never())
+                ->method('setProductLinks');
+        }
+
         $results = $this->model->save($this->initializedProductMock);
         $this->assertEquals($this->initializedProductMock, $results);
-        $this->assertEquals($outputLinks, $results['product_links']);
     }
 
     public function saveWithLinksDataProvider()
