@@ -45,14 +45,16 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $entityId = 1;
+        $linkId = 2;
         $oldStore = 1;
         $newStore = 2;
+        $linkField = 'link_id';
 
         $adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->getMockForAbstractClass();
 
         $whereForDelete = [
-            'page_id = ?' => $entityId,
+            $linkField . ' = ?' => $linkId,
             'store_id IN (?)' => [$oldStore],
         ];
         $adapter->expects($this->once())
@@ -61,7 +63,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $whereForInsert = [
-            'page_id' => $entityId,
+            $linkField => $linkId,
             'store_id' => $newStore,
         ];
         $adapter->expects($this->once())
@@ -75,6 +77,9 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $entityMetadata->expects($this->once())
             ->method('getEntityConnection')
             ->willReturn($adapter);
+        $entityMetadata->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn($linkField);
 
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
@@ -95,6 +100,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
                 'getStores',
                 'getStoreId',
                 'getId',
+                'getData',
             ])
             ->getMock();
         $page->expects($this->once())
@@ -103,9 +109,13 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $page->expects($this->once())
             ->method('getStoreId')
             ->willReturn($newStore);
-        $page->expects($this->exactly(3))
+        $page->expects($this->once())
             ->method('getId')
             ->willReturn($entityId);
+        $page->expects($this->exactly(2))
+            ->method('getData')
+            ->with($linkField)
+            ->willReturn($linkId);
 
         $result = $this->model->execute('Magento\Cms\Model\Page', $page);
         $this->assertInstanceOf('Magento\Cms\Model\Page', $result);
