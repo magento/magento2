@@ -10,7 +10,6 @@ use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch;
 use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 use Magento\Store\Model\Store;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -30,6 +29,11 @@ class IndexerHandler implements IndexerInterface
     protected $adapter;
 
     /**
+     * @var \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver
+     */
+    protected $indexNameResolver;
+
+    /**
      * @var array
      */
     protected $data;
@@ -46,17 +50,20 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * @param ElasticsearchFactory $adapterFactory
+     * @param \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver
      * @param Batch $batch
      * @param array $data
      * @param int $batchSize
      */
     public function __construct(
         ElasticsearchFactory $adapterFactory,
+        \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver,
         Batch $batch,
         array $data = [],
         $batchSize = self::DEFAULT_BATCH_SIZE
     ) {
         $this->adapter = $adapterFactory->create();
+        $this->indexNameResolver = $indexNameResolver;
         $this->data = $data;
         $this->batch = $batch;
         $this->batchSize = $batchSize;
@@ -69,7 +76,7 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
-        $indexName = $this->getIndexMapping($this->data['indexer_id']);
+        $indexName = $this->indexNameResolver->getIndexMapping($this->data['indexer_id']);
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $storeId);
             $this->adapter->addDocs($docs, $storeId, $indexName);
@@ -85,7 +92,7 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
-        $indexName = $this->getIndexMapping($this->data['indexer_id']);
+        $indexName = $this->indexNameResolver->getIndexMapping($this->data['indexer_id']);
         $documentIds = [];
         foreach ($documents as $entityId => $document) {
             $documentIds[$entityId] = $entityId;
@@ -101,7 +108,7 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
-        $indexName = $this->getIndexMapping($this->data['indexer_id']);
+        $indexName = $this->indexNameResolver->getIndexMapping($this->data['indexer_id']);
         $this->adapter->cleanIndex($storeId, $indexName);
         return $this;
     }
@@ -112,21 +119,5 @@ class IndexerHandler implements IndexerInterface
     public function isAvailable()
     {
         return $this->adapter->ping();
-    }
-
-    /**
-     * Taking index name by indexer ID
-     *
-     * @param string $indexerId
-     * @return string
-     */
-    private function getIndexMapping($indexerId)
-    {
-        if ($indexerId == Fulltext::INDEXER_ID) {
-            $indexName = 'product';
-        } else {
-            $indexName = $indexerId;
-        }
-        return $indexName;
     }
 }

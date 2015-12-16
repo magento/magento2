@@ -10,6 +10,7 @@ use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Config;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 /**
  * Index name resolver
@@ -144,5 +145,21 @@ class IndexNameResolver
             }
         }
         return $storeIndex;
+    }
+
+    /**
+     * Taking index name by indexer ID
+     *
+     * @param string $indexerId
+     * @return string
+     */
+    public function getIndexMapping($indexerId)
+    {
+        if ($indexerId == Fulltext::INDEXER_ID) {
+            $indexName = 'product';
+        } else {
+            $indexName = $indexerId;
+        }
+        return $indexName;
     }
 }
