@@ -228,6 +228,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param mixed $value
      * @param string $field
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
