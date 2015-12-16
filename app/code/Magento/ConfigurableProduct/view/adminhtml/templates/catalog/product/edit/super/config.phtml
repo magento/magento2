@@ -74,7 +74,7 @@
             "Magento_ConfigurableProduct/js/configurable-type-handler": {
                 "blockId": "#<?= /* @noEscape */ $block->getId()?>",
                 "tabId": "<?= /* @noEscape */ $block->getTabId()?>",
-                "hasVariations": "<?= /* @noEscape */ $block->isConfigurableProduct() ? 'true' : 'false' ?>"
+                "hasVariations": <?= /* @noEscape */ $block->isConfigurableProduct() ? 'true' : 'false' ?>
             }
         }
     }

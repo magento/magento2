@@ -28,6 +28,11 @@ class Config extends Widget implements TabInterface
     protected $_coreRegistry;
 
     /**
+     * @var Configurable
+     */
+    protected $configurableType;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
@@ -35,9 +40,11 @@ class Config extends Widget implements TabInterface
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $coreRegistry,
+        Configurable $configurableType,
         array $data = []
     ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->configurableType = $configurableType;
         parent::__construct($context, $data);
     }
 
@@ -131,7 +138,8 @@ class Config extends Widget implements TabInterface
      */
     public function isConfigurableProduct()
     {
-        return $this->getProduct()->getTypeId() === Configurable::TYPE_CODE || $this->getRequest()->has('attributes');
+        return $this->getProduct()->getTypeId() === Configurable::TYPE_CODE
+            && $this->configurableType->getUsedProducts($this->getProduct());
     }
 
     /**
