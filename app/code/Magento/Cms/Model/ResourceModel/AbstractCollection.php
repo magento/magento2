@@ -51,36 +51,36 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param string $tableName
      * @param string $columnName
-     * @param string|null $linkedField
+     * @param string|null $linkField
      */
-    protected function performAfterLoad($tableName, $columnName, $linkedField = null)
+    protected function performAfterLoad($tableName, $columnName, $linkField = null)
     {
-        if (!$linkedField) {
-            $linkedField = $columnName;
+        if (!$linkField) {
+            $linkField = $columnName;
         }
-        $items = $this->getColumnValues($linkedField);
-        if (count($items)) {
+        $linkedIds = $this->getColumnValues($linkField);
+        if (count($linkedIds)) {
             $connection = $this->getConnection();
             $select = $connection->select()->from(['cms_entity_store' => $this->getTable($tableName)])
-                ->where('cms_entity_store.' . $columnName . ' IN (?)', $items);
+                ->where('cms_entity_store.' . $linkField . ' IN (?)', $linkedIds);
             $result = $connection->fetchPairs($select);
             if ($result) {
                 foreach ($this as $item) {
-                    $entityId = $item->getData($linkedField);
-                    if (!isset($result[$entityId])) {
+                    $linkedId = $item->getData($linkField);
+                    if (!isset($result[$linkedId])) {
                         continue;
                     }
-                    if ($result[$entityId] == 0) {
+                    if ($result[$linkedId] == 0) {
                         $stores = $this->storeManager->getStores(false, true);
                         $storeId = current($stores)->getId();
                         $storeCode = key($stores);
                     } else {
-                        $storeId = $result[$item->getData($columnName)];
+                        $storeId = $result[$linkedId];
                         $storeCode = $this->storeManager->getStore($storeId)->getCode();
                     }
                     $item->setData('_first_store_id', $storeId);
                     $item->setData('store_code', $storeCode);
-                    $item->setData('store_id', [$result[$entityId]]);
+                    $item->setData('store_id', [$result[$linkedId]]);
                 }
             }
         }
@@ -140,20 +140,20 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      *
      * @param string $tableName
      * @param string $columnName
-     * @param string|null $linkedField
+     * @param string|null $linkField
      */
-    protected function joinStoreRelationTable($tableName, $columnName, $linkedField = null)
+    protected function joinStoreRelationTable($tableName, $columnName, $linkField = null)
     {
-        if (!$linkedField) {
-            $linkedField = $columnName;
+        if (!$linkField) {
+            $linkField = $columnName;
         }
         if ($this->getFilter('store')) {
             $this->getSelect()->join(
                 ['store_table' => $this->getTable($tableName)],
-                'main_table.' . $linkedField . ' = store_table.' . $columnName,
+                'main_table.' . $linkField . ' = store_table.' . $columnName,
                 []
             )->group(
-                'main_table.' . $linkedField
+                'main_table.' . $linkField
             );
         }
         parent::_renderFiltersBefore();

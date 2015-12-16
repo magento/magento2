@@ -40,6 +40,8 @@ class SaveHandler
     public function execute($entityType, $entity)
     {
         $entityMetadata = $this->metadataPool->getMetadata($entityType);
+        $linkField = $entityMetadata->getLinkField();
+
         $connection = $entityMetadata->getEntityConnection();
 
         $oldStores = $this->resourcePage->lookupStoreIds((int)$entity->getId());
@@ -53,7 +55,7 @@ class SaveHandler
         $delete = array_diff($oldStores, $newStores);
         if ($delete) {
             $where = [
-                'page_id = ?' => (int)$entity->getId(),
+                $linkField . ' = ?' => (int)$entity->getData($linkField),
                 'store_id IN (?)' => $delete,
             ];
             $connection->delete($table, $where);
@@ -64,7 +66,7 @@ class SaveHandler
             $data = [];
             foreach ($insert as $storeId) {
                 $data[] = [
-                    'page_id' => (int)$entity->getId(),
+                    $linkField => (int)$entity->getData($linkField),
                     'store_id' => (int)$storeId
                 ];
             }

@@ -174,7 +174,7 @@ class Page extends AbstractDb
             ];
             $select->join(
                 ['cms_page_store' => $this->getTable('cms_page_store')],
-                $this->getMainTable() . '.' . $linkField . ' = cms_page_store.page_id',
+                $this->getMainTable() . '.' . $linkField . ' = cms_page_store.' . $linkField,
                 []
             )
                 ->where('is_active = ?', 1)
@@ -203,7 +203,7 @@ class Page extends AbstractDb
             ->from(['cp' => $this->getMainTable()])
             ->join(
                 ['cps' => $this->getTable('cms_page_store')],
-                'cp.' . $linkField . ' = cps.page_id',
+                'cp.' . $linkField . ' = cps.' . $linkField,
                 []
             )
             ->where('cp.identifier = ?', $identifier)
@@ -340,10 +340,10 @@ class Page extends AbstractDb
             ->from(['cps' => $this->getTable('cms_page_store')], 'store_id')
             ->join(
                 ['cp' => $this->getMainTable()],
-                'cps.page_id = cp.' . $linkField,
+                'cps.' . $linkField . ' = cp.' . $linkField,
                 []
             )
-            ->where('cp.' . $linkField . ' = :page_id');
+            ->where('cp.' . $entityMetadata->getIdentifierField() . ' = :page_id');
 
         return $connection->fetchCol($select, ['page_id' => (int)$pageId]);
     }
