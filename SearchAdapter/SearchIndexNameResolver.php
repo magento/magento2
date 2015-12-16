@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Model\Adapter\Index;
+namespace Magento\Elasticsearch\SearchAdapter;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
