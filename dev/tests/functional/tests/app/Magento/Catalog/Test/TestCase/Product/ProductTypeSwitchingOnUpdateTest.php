@@ -99,8 +99,8 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
         // Steps
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getProductGrid()->searchAndOpen(['sku' => $productOrigin->getSku()]);
-        $this->catalogProductEdit->getProductForm()->fill($product);
         $this->performAction($actionName);
+        $this->catalogProductEdit->getProductForm()->fill($product);
         $this->catalogProductEdit->getFormPageActions()->save($product);
 
         return ['product' => $product];
@@ -125,12 +125,12 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
      *
      * @return void
      */
-    protected function deleteAttributes()
+    protected function deleteVariations()
     {
         $this->catalogProductEdit->getProductForm()->openTab('variations');
         /** @var Config $variationsTab */
         $variationsTab = $this->catalogProductEdit->getProductForm()->getTab('variations');
-        $variationsTab->deleteAttributes();
+        $variationsTab->deleteVariations();
     }
 
     /**
