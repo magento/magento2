@@ -130,13 +130,13 @@
                 </item>
                 <item name="Magento\Cms\Api\Data\BlockInterface" xsi:type="array">
                     <item name="read" xsi:type="array">
-                        <item name="optionReader" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\ReadHandler</item>
+                        <item name="storeReader" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\ReadHandler</item>
                     </item>
                     <item name="create" xsi:type="array">
-                        <item name="custom_options" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler</item>
+                        <item name="storeCreator" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler</item>
                     </item>
                     <item name="update" xsi:type="array">
-                        <item name="optionUpdater" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler</item>
+                        <item name="storeUpdater" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler</item>
                     </item>
                 </item>
             </argument>
