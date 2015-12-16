@@ -335,17 +335,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
     private function mockInitCategoryCall()
     {
         /**
-         * @var \Magento\Backend\Model\Auth\Session
-         * |\PHPUnit_Framework_MockObject_MockObject $sessionMock
-         */
-        $sessionMock = $this->getMock(
-            'Magento\Backend\Model\Auth\Session',
-            ['setActiveTabId'],
-            [],
-            '',
-            false
-        );
-        /**
          * @var \Magento\Framework\Registry
          * |\PHPUnit_Framework_MockObject_MockObject $registryMock
          */
@@ -390,7 +379,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     [
-                        ['Magento\Backend\Model\Auth\Session', $sessionMock],
                         ['Magento\Framework\Registry', $registryMock],
                         ['Magento\Cms\Model\Wysiwyg\Config', $wysiwygConfigMock],
                         ['Magento\Store\Model\StoreManagerInterface', $storeManagerMock],
