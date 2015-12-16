@@ -63,7 +63,7 @@ class PageForm extends FormTabs
      * Open tab.
      *
      * @param string $tabName
-     * @return FormTabs
+     * @return PageForm
      */
     public function openTab($tabName)
     {
