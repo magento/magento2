@@ -15,6 +15,7 @@ use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 class DataProvider implements DataProviderInterface
 {
@@ -54,6 +55,11 @@ class DataProvider implements DataProviderInterface
     protected $customerSession;
 
     /**
+     * @var SearchIndexNameResolver
+     */
+    protected $searchIndexNameResolver;
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param Range $range
@@ -61,6 +67,7 @@ class DataProvider implements DataProviderInterface
      * @param Config $clientConfig
      * @param StoreManagerInterface $storeManager
      * @param CustomerSession $customerSession
+     * @param SearchIndexNameResolver $searchIndexNameResolver
      */
     public function __construct(
         ConnectionManager $connectionManager,
@@ -69,7 +76,8 @@ class DataProvider implements DataProviderInterface
         IntervalFactory $intervalFactory,
         Config $clientConfig,
         StoreManagerInterface $storeManager,
-        CustomerSession $customerSession
+        CustomerSession $customerSession,
+        SearchIndexNameResolver $searchIndexNameResolver
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
@@ -78,6 +86,7 @@ class DataProvider implements DataProviderInterface
         $this->clientConfig = $clientConfig;
         $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
+        $this->searchIndexNameResolver = $searchIndexNameResolver;
     }
 
     /**
@@ -105,7 +114,7 @@ class DataProvider implements DataProviderInterface
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
         $storeId = $this->storeManager->getStore()->getId();
         $requestQuery = [
-            'index' => $this->clientConfig->getIndexName(),
+            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->clientConfig->getEntityType()),
             'type' => $this->clientConfig->getEntityType(),
             'body' => [
                 'fields' => [
@@ -216,7 +225,7 @@ class DataProvider implements DataProviderInterface
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
         $requestQuery = [
-            'index' => $this->clientConfig->getIndexName(),
+            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->clientConfig->getEntityType()),
             'type' => $this->clientConfig->getEntityType(),
             'body' => [
                 'fields' => [
