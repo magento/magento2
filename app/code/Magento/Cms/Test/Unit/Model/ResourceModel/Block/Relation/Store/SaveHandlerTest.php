@@ -45,14 +45,16 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $entityId = 1;
+        $linkId = 2;
         $oldStore = 1;
         $newStore = 2;
+        $linkField = 'link_id';
 
         $adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->getMockForAbstractClass();
 
         $whereForDelete = [
-            'block_id = ?' => $entityId,
+            $linkField . ' = ?' => $linkId,
             'store_id IN (?)' => [$oldStore],
         ];
         $adapter->expects($this->once())
@@ -61,7 +63,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $whereForInsert = [
-            'block_id' => $entityId,
+            $linkField => $linkId,
             'store_id' => $newStore,
         ];
         $adapter->expects($this->once())
@@ -75,6 +77,9 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $entityMetadata->expects($this->once())
             ->method('getEntityConnection')
             ->willReturn($adapter);
+        $entityMetadata->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn($linkField);
 
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
@@ -94,14 +99,19 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods([
                 'getStores',
                 'getId',
+                'getData',
             ])
             ->getMock();
         $block->expects($this->once())
             ->method('getStores')
             ->willReturn($newStore);
-        $block->expects($this->exactly(3))
+        $block->expects($this->once())
             ->method('getId')
             ->willReturn($entityId);
+        $block->expects($this->exactly(2))
+            ->method('getData')
+            ->with($linkField)
+            ->willReturn($linkId);
 
         $result = $this->model->execute('Magento\Cms\Model\Block', $block);
         $this->assertInstanceOf('Magento\Cms\Model\Block', $result);
