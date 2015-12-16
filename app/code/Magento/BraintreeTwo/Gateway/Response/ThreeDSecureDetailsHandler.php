@@ -41,6 +41,9 @@ class ThreeDSecureDetailsHandler implements HandlerInterface
     public function handle(array $handlingSubject, array $response)
     {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
+        /**
+         * @TODO after changes in sales module should be refactored for new interfaces
+         */
         /** @var OrderPaymentInterface $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);

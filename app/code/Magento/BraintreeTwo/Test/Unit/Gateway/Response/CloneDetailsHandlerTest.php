@@ -32,7 +32,7 @@ class CloneDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $subjectReaderMock;
+    private $subjectReader;
 
     protected function setUp()
     {
@@ -42,11 +42,11 @@ class CloneDetailsHandlerTest extends \PHPUnit_Framework_TestCase
                 'setIsTransactionClosed', 'setTransactionId'
             ])
             ->getMock();
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cloneHandler = new CloneDetailsHandler($this->subjectReaderMock);
+        $this->cloneHandler = new CloneDetailsHandler($this->subjectReader);
     }
 
     /**
@@ -59,19 +59,16 @@ class CloneDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         $subject['payment'] = $paymentData;
 
         $this->payment->expects(static::once())
-            ->method('setIsTransactionClosed')
-            ->with(false);
-        $this->payment->expects(static::once())
             ->method('setTransactionId')
             ->with(self::TRANSACTION_ID);
 
         $response = ['object' => $transaction];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReader->expects(self::once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentData);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReader->expects(self::once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);

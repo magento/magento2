@@ -228,7 +228,7 @@ class Vault implements VaultPaymentInterface
      */
     public function canUseInternal()
     {
-        return $this->getVaultProvider()->canUseInternal();
+        return false;
     }
 
     /**

@@ -130,7 +130,7 @@
             <argument name="requestBuilder" xsi:type="object">BraintreeTwoCloneDataBuilder</argument>
             <argument name="transferFactory" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionClone</argument>
-            <argument name="handler" xsi:type="object">Magento\BraintreeTwo\Gateway\Response\CloneDetailsHandler</argument>
+            <argument name="handler" xsi:type="object">BraintreeTwoCloneResponseHandler</argument>
             <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\ResponseValidator</argument>
         </arguments>
     </virtualType>
@@ -164,6 +164,14 @@
                 <item name="risk_data" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\RiskDataHandler</item>
                 <item name="vault_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler</item>
                 <item name="3d_secure" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoCloneResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="capture_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\CaptureDetailsHandler</item>
+                <item name="clone_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\CloneDetailsHandler</item>
             </argument>
         </arguments>
     </virtualType>
