@@ -40,6 +40,8 @@ interface ConfigInterface
     const CONSUMER_METHOD = 'method';
     const CONSUMER_MAX_MESSAGES = 'max_messages';
     const CONSUMER_HANDLERS = 'handlers';
+    const CONSUMER_HANDLER_TYPE = 'type';
+    const CONSUMER_HANDLER_METHOD = 'method';
     const CONSUMER_TYPE = 'consumer_type';
     const CONSUMER_TYPE_SYNC = 'sync';
     const CONSUMER_TYPE_ASYNC = 'async';
