@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $synonymsModel \Magento\Search\Model\ResourceModel\SynonymReader */
-$synonymsModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Search\Model\ResourceModel\SynonymReader'
-);
-$synonymsModel->getConnection()->truncateTable('search_synonyms');
+/** @var \Magento\Framework\App\ResourceConnection $resource */
+$resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('\Magento\Framework\App\ResourceConnection');
+$connection = $resource->getConnection('default');
+$connection->truncateTable($resource->getTableName('search_synonyms'));
