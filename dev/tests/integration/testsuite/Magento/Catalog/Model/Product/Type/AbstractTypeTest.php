@@ -262,9 +262,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $product->addCustomOption('info_buyRequest', serialize(new \Magento\Framework\DataObject(['qty' => 2])));
         foreach ($product->getOptions() as $id => $option) {
             if ('field' == $option->getType()) {
-                $product->addCustomOption('option_ids', $id);
+                $product->addCustomOption('option_ids', $option->getId());
                 $quoteOption = clone $option;
-                $product->addCustomOption("option_{$id}", $quoteOption->getValue());
+                $product->addCustomOption("option_{$option->getId()}", $quoteOption->getValue());
 
                 $optionArr = $this->_model->getOrderOptions($product);
                 $this->assertArrayHasKey('info_buyRequest', $optionArr);
@@ -278,7 +278,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 $this->assertArrayHasKey('option_type', $renderedOption);
                 $this->assertArrayHasKey('option_value', $renderedOption);
                 $this->assertArrayHasKey('custom_view', $renderedOption);
-                $this->assertEquals($id, $renderedOption['option_id']);
+                $this->assertGreaterThan(0, $renderedOption['option_id']);
                 break;
             }
         }
@@ -332,9 +332,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
         foreach ($product->getOptions() as $id => $option) {
             if ('field' == $option->getType()) {
-                $product->addCustomOption('option_ids', $id);
+                $product->addCustomOption('option_ids', $option->getId());
                 $quoteOption = clone $option;
-                $product->addCustomOption("option_{$id}", $quoteOption);
+                $product->addCustomOption("option_{$option->getId()}", $quoteOption);
 
                 $this->assertEquals('simple-1-text', $this->_model->getOptionSku($product));
                 break;

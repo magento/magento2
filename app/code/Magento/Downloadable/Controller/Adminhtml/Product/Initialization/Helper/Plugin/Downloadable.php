@@ -52,6 +52,8 @@ class Downloadable
      *
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function afterInitialize(
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
@@ -69,11 +71,28 @@ class Downloadable
                         unset($linkData['link_id']);
                         // TODO: need to implement setLinkFileContent()
                         $link = $this->linkFactory->create(['data' => $linkData]);
+                        if (isset($linkData['type'])) {
+                            $link->setLinkType($linkData['type']);
+                        }
+                        if (isset($linkData['file'])) {
+                            $link->setLinkFile($linkData['file']);
+                        }
+                        if (isset($linkData['file_content'])) {
+                            $link->setLinkFileContent($linkData['file_content']);
+                        }
                         $link->setId(null);
-                        $link->setSampleType($linkData['sample']['type']);
-                        $link->setSampleFileData($linkData['sample']['file']);
-                        $link->setSampleUrl($linkData['sample']['url']);
-                        $link->setLinkType($linkData['type']);
+                        if (isset($linkData['sample']['type'])) {
+                            $link->setSampleType($linkData['sample']['type']);
+                        }
+                        if (isset($linkData['sample']['file'])) {
+                            $link->setSampleFile($linkData['sample']['file']);
+                        }
+                        if (isset($linkData['sample']['url'])) {
+                            $link->setSampleUrl($linkData['sample']['url']);
+                        }
+                        if (isset($linkData['sample']['file_content'])) {
+                            $link->setSampleFileContent($linkData['file_content']);
+                        }
                         $link->setStoreId($product->getStoreId());
                         $link->setWebsiteId($product->getStore()->getWebsiteId());
                         $link->setProductWebsiteIds($product->getWebsiteIds());
@@ -101,8 +120,12 @@ class Downloadable
                         $sample = $this->sampleFactory->create(['data' => $sampleData]);
                         $sample->setId(null);
                         $sample->setStoreId($product->getStoreId());
-                        $sample->setSampleType($sampleData['type']);
-                        $sample->setSampleUrl($sampleData['sample_url']);
+                        if (isset($sampleData['type'])) {
+                            $sample->setSampleType($sampleData['type']);
+                        }
+                        if (isset($sampleData['sample_url'])) {
+                            $sample->setSampleUrl($sampleData['sample_url']);
+                        }
                         if (!$sample->getSortOrder()) {
                             $sample->setSortOrder(1);
                         }

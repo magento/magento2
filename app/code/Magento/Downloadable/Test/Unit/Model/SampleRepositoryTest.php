@@ -65,7 +65,13 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
         $this->repositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
         $this->productTypeMock = $this->getMock('\Magento\Downloadable\Model\Product\Type', [], [], '', false);
-        $this->sampleResourceMock = $this->getMock('Magento\Downloadable\Model\ResourceModel\Sample', [], [], '', false);
+        $this->sampleResourceMock = $this->getMock(
+            'Magento\Downloadable\Model\ResourceModel\Sample',
+            [],
+            [],
+            '',
+            false
+        );
         $this->contentValidatorMock = $this->getMock(
             '\Magento\Downloadable\Model\Sample\ContentValidator',
             [],
@@ -316,10 +322,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $sampleId = 1;
         $productId = 1;
         $productSku = 'simple';
-        $basePath = 'downloadable/samples/';
-        $baseTmpPath = 'tmp/downloadable/samples/';
         $sampleFile = '/s/a/sample.jpg';
-        $encodedFile = 'something';
         $sampleData = [
             'id' => $sampleId,
             'title' => 'Updated Title',

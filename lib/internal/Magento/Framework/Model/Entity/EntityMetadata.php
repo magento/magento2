@@ -59,9 +59,9 @@ class EntityMetadata
      * @param AppResource $appResource
      * @param string $entityTableName
      * @param string $identifierField
-     * @param SequenceInterface $sequence
-     * @param null $eavEntityType
-     * @param null $connectionName
+     * @param SequenceInterface|null $sequence
+     * @param string|null $eavEntityType
+     * @param string|null $connectionName
      * @param array $entityContext
      * @param array $fields
      */

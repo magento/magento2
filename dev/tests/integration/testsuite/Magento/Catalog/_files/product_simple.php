@@ -63,87 +63,85 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             'is_qty_decimal'            => 0,
             'is_in_stock'               => 1,
         ]
-    )
-    ->setProductOptions(
-        [
-            [
-                'previous_group' => 'text',
-                'title'     => 'Test Field',
-                'type'      => 'field',
-                'is_require' => 1,
-                'sort_order' => 0,
-                'price'     => 1,
-                'price_type' => 'fixed',
-                'sku'       => '1-text',
-                'max_characters' => 100,
-            ],
-            [
-                'previous_group' => 'date',
-                'title'     => 'Test Date and Time',
-                'type'      => 'date_time',
-                'is_require' => 1,
-                'sort_order' => 0,
-                'price'     => 2,
-                'price_type' => 'fixed',
-                'sku'       => '2-date',
-            ],
-            [
-                'previous_group' => 'select',
-                'title'     => 'Test Select',
-                'type'      => 'drop_down',
-                'is_require' => 1,
-                'sort_order' => 0,
-                'values'    => [
-                    [
-                        'option_type_id' => -1,
-                        'title'         => 'Option 1',
-                        'price'         => 3,
-                        'price_type'    => 'fixed',
-                        'sku'           => '3-1-select',
-                    ],
-                    [
-                        'option_type_id' => -1,
-                        'title'         => 'Option 2',
-                        'price'         => 3,
-                        'price_type'    => 'fixed',
-                        'sku'           => '3-2-select',
-                    ],
-                ]
-            ],
-            [
-                'previous_group' => 'select',
-                'title'     => 'Test Radio',
-                'type'      => 'radio',
-                'is_require' => 1,
-                'sort_order' => 0,
-                'values'    => [
-                    [
-                        'option_type_id' => -1,
-                        'title'         => 'Option 1',
-                        'price'         => 3,
-                        'price_type'    => 'fixed',
-                        'sku'           => '4-1-radio',
-                    ],
-                    [
-                        'option_type_id' => -1,
-                        'title'         => 'Option 2',
-                        'price'         => 3,
-                        'price_type'    => 'fixed',
-                        'sku'           => '4-2-radio',
-                    ],
-                ]
-            ]
-        ]
-    )
-    ->setCanSaveCustomOptions(true)
+    )->setCanSaveCustomOptions(true)
     ->setHasOptions(true);
+
+$oldOptions = [
+    [
+        'previous_group' => 'text',
+        'title'     => 'Test Field',
+        'type'      => 'field',
+        'is_require' => 1,
+        'sort_order' => 0,
+        'price'     => 1,
+        'price_type' => 'fixed',
+        'sku'       => '1-text',
+        'max_characters' => 100,
+    ],
+    [
+        'previous_group' => 'date',
+        'title'     => 'Test Date and Time',
+        'type'      => 'date_time',
+        'is_require' => 1,
+        'sort_order' => 0,
+        'price'     => 2,
+        'price_type' => 'fixed',
+        'sku'       => '2-date',
+    ],
+    [
+        'previous_group' => 'select',
+        'title'     => 'Test Select',
+        'type'      => 'drop_down',
+        'is_require' => 1,
+        'sort_order' => 0,
+        'values'    => [
+            [
+                'option_type_id' => -1,
+                'title'         => 'Option 1',
+                'price'         => 3,
+                'price_type'    => 'fixed',
+                'sku'           => '3-1-select',
+            ],
+            [
+                'option_type_id' => -1,
+                'title'         => 'Option 2',
+                'price'         => 3,
+                'price_type'    => 'fixed',
+                'sku'           => '3-2-select',
+            ],
+        ]
+    ],
+    [
+        'previous_group' => 'select',
+        'title'     => 'Test Radio',
+        'type'      => 'radio',
+        'is_require' => 1,
+        'sort_order' => 0,
+        'values'    => [
+            [
+                'option_type_id' => -1,
+                'title'         => 'Option 1',
+                'price'         => 3,
+                'price_type'    => 'fixed',
+                'sku'           => '4-1-radio',
+            ],
+            [
+                'option_type_id' => -1,
+                'title'         => 'Option 2',
+                'price'         => 3,
+                'price_type'    => 'fixed',
+                'sku'           => '4-2-radio',
+            ],
+        ]
+    ]
+];
 
 $options = [];
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
 $customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
 
-foreach ($product->getProductOptions() as $option) {
+foreach ($oldOptions as $option) {
     /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option */
     $option = $customOptionFactory->create(['data' => $option]);
     $option->setProductSku($product->getSku());

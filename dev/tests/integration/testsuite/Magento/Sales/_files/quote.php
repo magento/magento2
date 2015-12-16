@@ -6,6 +6,7 @@
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId('simple')
+    ->setId(1)
     ->setAttributeSetId(4)
     ->setName('Simple Product')
     ->setSku('simple')

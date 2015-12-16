@@ -50,6 +50,7 @@ class ReadHandler
      * @param string $entityType
      * @param object $entity
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entity)
     {
@@ -57,7 +58,7 @@ class ReadHandler
         /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
         foreach ($this->optionRepository->getProductOptions($entity) as $option) {
             $option->setProduct($entity);
-            $options[$option->getOptionId()] = $option;
+            $options[] = $option;
         }
         $entity->setOptions($options);
         return $entity;

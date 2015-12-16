@@ -1758,6 +1758,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return void
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function evaluateDelete($object, $id, $connection)
     {

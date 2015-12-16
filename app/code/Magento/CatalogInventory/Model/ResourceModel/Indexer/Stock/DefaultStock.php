@@ -10,6 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {

@@ -70,6 +70,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      * @magentoAppArea adminhtml
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testSaveTypeSpecificData()
     {
@@ -188,11 +190,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             'sample_type' => 'file',
             'sort_order' => '1',
             'title' => 'Updated downloadable link #1',
-        ];
-        $expectedExtensionAttributes = [
-            'firstname' => 'firstname',
-            'lastname' => 'lastname',
-            'email' => 'admin@example.com'
         ];
         $links = $product->getExtensionAttributes()->getDownloadableProductLinks();
 

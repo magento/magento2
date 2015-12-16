@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/**
+ * @var \Magento\Catalog\Model\Product $product
+ */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product
     ->setTypeId(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
@@ -17,34 +19,30 @@ $product
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setLinksPurchasedSeparately(true);
 
-$downloadableData = [
-    'link' => [
-        [
-            'title' => 'Downloadable Product Link',
-            'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_URL,
-            'is_shareable' => \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG,
-            'link_url' => 'http://example.com/downloadable.txt',
-            'link_id' => 0,
-            'is_delete' => null,
-        ],
-    ],
-];
-$product->setDownloadableData($downloadableData);
+/**
+ * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkFactory
+ */
 $linkFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get('Magento\Downloadable\Api\Data\LinkInterfaceFactory');
 $links = [];
-foreach ($downloadableData['link'] as $linkData) {
-    $link = $linkFactory->create(['data' => $linkData]);
-    $link->setId(null);
-    $link->setLinkType($linkData['type']);
-    $link->setStoreId($product->getStoreId());
-    $link->setWebsiteId($product->getStore()->getWebsiteId());
-    $link->setProductWebsiteIds($product->getWebsiteIds());
-    $link->setSortOrder(1);
-    $link->setPrice(0);
-    $link->setNumberOfDownloads(0);
-    $links[] = $link;
-}
+$linkData = [
+    'title' => 'Downloadable Product Link',
+    'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_URL,
+    'is_shareable' => \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG,
+    'link_url' => 'http://example.com/downloadable.txt',
+    'link_id' => 0,
+    'is_delete' => null,
+];
+$link = $linkFactory->create(['data' => $linkData]);
+$link->setId(null);
+$link->setLinkType($linkData['type']);
+$link->setStoreId($product->getStoreId());
+$link->setWebsiteId($product->getStore()->getWebsiteId());
+$link->setProductWebsiteIds($product->getWebsiteIds());
+$link->setSortOrder(1);
+$link->setPrice(0);
+$link->setNumberOfDownloads(0);
+$links[] = $link;
 $extension = $product->getExtensionAttributes();
 $extension->setDownloadableProductLinks($links);
 $product->setExtensionAttributes($extension);

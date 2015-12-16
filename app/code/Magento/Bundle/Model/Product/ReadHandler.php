@@ -3,10 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Bundle\Model\Product;
 
-namespace Magento\Downloadable\Model\Sample;
-
-use Magento\Downloadable\Api\SampleRepositoryInterface as SampleRepository;
+use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 
 /**
  * Class ReadHandler
@@ -14,16 +13,18 @@ use Magento\Downloadable\Api\SampleRepositoryInterface as SampleRepository;
 class ReadHandler
 {
     /**
-     * @var SampleRepository
+     * @var OptionRepository
      */
-    protected $sampleRepository;
+    private $optionRepository;
 
     /**
-     * @param SampleRepository $sampleRepository
+     * ReadHandler constructor.
+     *
+     * @param OptionRepository $optionRepository
      */
-    public function __construct(SampleRepository $sampleRepository)
+    public function __construct(OptionRepository $optionRepository)
     {
-        $this->sampleRepository = $sampleRepository;
+        $this->optionRepository = $optionRepository;
     }
 
     /**
@@ -35,13 +36,13 @@ class ReadHandler
     public function execute($entityType, $entity)
     {
         /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
-        if ($entity->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
+        if ($entity->getTypeId() != \Magento\Bundle\Model\Product\Type::TYPE_CODE) {
             return $entity;
         }
         $entityExtension = $entity->getExtensionAttributes();
-        $samples = $this->sampleRepository->getSamplesByProduct($entity);
-        if ($samples) {
-            $entityExtension->setDownloadableProductSamples($samples);
+        $options = $this->optionRepository->getListByProduct($entity);
+        if ($options) {
+            $entityExtension->setBundleProductOptions($options);
         }
         $entity->setExtensionAttributes($entityExtension);
         return $entity;
