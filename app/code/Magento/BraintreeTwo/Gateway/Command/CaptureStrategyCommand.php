@@ -14,7 +14,7 @@ use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Api\Data\TransactionInterface;
 
 /**
  * Class CaptureStrategyCommand
@@ -132,7 +132,7 @@ class CaptureStrategyCommand implements CommandInterface
             ->create();
 
         $filters[] = $this->filterBuilder->setField('txn_type')
-            ->setValue(Transaction::TYPE_CAPTURE)
+            ->setValue(TransactionInterface::TYPE_CAPTURE)
             ->create();
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
