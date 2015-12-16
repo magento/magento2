@@ -311,15 +311,13 @@ class Tax extends CommonTaxCollector
             $area = 'taxes';
         }
 
-        if ($amount != 0 || $this->_config->displayCartZeroTax($store)) {
-            $totals[] = [
-                'code' => $this->getCode(),
-                'title' => __('Tax'),
-                'full_info' => $applied ? $applied : [],
-                'value' => $amount,
-                'area' => $area,
-            ];
-        }
+        $totals[] = [
+            'code' => $this->getCode(),
+            'title' => __('Tax'),
+            'full_info' => $applied ? $applied : [],
+            'value' => $amount,
+            'area' => $area,
+        ];
 
         /**
          * Modify subtotal
