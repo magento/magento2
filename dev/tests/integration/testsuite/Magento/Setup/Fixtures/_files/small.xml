@@ -22,7 +22,7 @@
         <categories_nesting_level>3</categories_nesting_level>
         <!-- Nesting level for categories -->
         <catalog_price_rules>10</catalog_price_rules>
-        <!-- Number os catalog price rules -->
+        <!-- Number of catalog price rules -->
         <cart_price_rules>10</cart_price_rules>
         <!-- Number of cart price rules -->
         <cart_price_rules_floor>2</cart_price_rules_floor>
