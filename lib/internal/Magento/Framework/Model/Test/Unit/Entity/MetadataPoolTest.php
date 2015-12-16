@@ -10,6 +10,9 @@ use Magento\Framework\Model\Entity\EntityHydrator;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\Entity\EntityMetadata;
 
+/**
+ * Class MetadataPoolTest
+ */
 class MetadataPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
