@@ -99,44 +99,6 @@ class Actions extends Generic implements TabInterface
         );
 
         $fieldset->addField(
-            'sub_is_enable',
-            'select',
-            [
-                'name' => 'sub_is_enable',
-                'label' => __('Subproduct discounts'),
-                'title' => __('Subproduct discounts'),
-                'onchange' => 'hideShowSubproductOptions(this);',
-                'values' => [0 => __('No'), 1 => __('Yes')]
-            ]
-        );
-
-        $fieldset->addField(
-            'sub_simple_action',
-            'select',
-            [
-                'label' => __('Apply'),
-                'name' => 'sub_simple_action',
-                'options' => [
-                    'by_percent' => __('Apply as percentage of original'),
-                    'by_fixed' => __('Apply as fixed amount'),
-                    'to_percent' => __('Adjust final price to this percentage'),
-                    'to_fixed' => __('Adjust final price to discount value'),
-                ]
-            ]
-        );
-
-        $fieldset->addField(
-            'sub_discount_amount',
-            'text',
-            [
-                'name' => 'sub_discount_amount',
-                'required' => true,
-                'class' => 'validate-not-negative-number',
-                'label' => __('Discount Amount')
-            ]
-        );
-
-        $fieldset->addField(
             'stop_rules_processing',
             'select',
             [

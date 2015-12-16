@@ -364,11 +364,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $action = $dataObject->getData('simple_action');
         $discount = $dataObject->getData('discount_amount');
         $result = array_merge($result, $this->validateDiscount($action, $discount));
-        if ($dataObject->getData('sub_is_enable') == 1) {
-            $action = $dataObject->getData('sub_simple_action');
-            $discount = $dataObject->getData('sub_discount_amount');
-            $result = array_merge($result, $this->validateDiscount($action, $discount));
-        }
 
         return !empty($result) ? $result : true;
     }
@@ -430,15 +425,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             if ($rulesData) {
                 foreach ($rulesData as $ruleData) {
                     if ($product->getParentId()) {
-                        if (!empty($ruleData['sub_simple_action'])) {
-                            $priceRules = $this->_catalogRuleData->calcPriceRule(
-                                $ruleData['sub_simple_action'],
-                                $ruleData['sub_discount_amount'],
-                                $priceRules ? $priceRules : $price
-                            );
-                        } else {
-                            $priceRules = $priceRules ? $priceRules : $price;
-                        }
+                        $priceRules = $priceRules ? $priceRules : $price;
                         if ($ruleData['action_stop']) {
                             break;
                         }
