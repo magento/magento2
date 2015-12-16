@@ -118,7 +118,7 @@ class IndexNameResolver
      */
     public function getIndexPattern($storeId, $entityType)
     {
-        return $this->getIndexNamespace() .'_'. $entityType . '_' . $storeId . '_v';
+        return $this->getIndexNamespace() . '_' . $entityType . '_' . $storeId . '_v';
     }
 
     /**
@@ -132,7 +132,7 @@ class IndexNameResolver
     {
         $storeIndex = '';
         $indexPattern = $this->getIndexPattern($storeId, $entityType);
-        $namespace = $this->getIndexNamespace();
+        $namespace = $this->getIndexNamespace() . '_' . $entityType . '_' . $storeId;
         if ($this->client->existsAlias($namespace)) {
             $alias = $this->client->getAlias($namespace);
             $indices = array_keys($alias);
