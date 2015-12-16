@@ -83,11 +83,6 @@ class Mapper
             ],
         ];
         $searchQuery['body']['query']['bool']['minimum_should_match'] = 1;
-        $searchQuery['body']['query']['bool']['must'][]= [
-            'term' => [
-                'store_id' => $storeId,
-            ]
-        ];
         return $searchQuery;
     }
 
