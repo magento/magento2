@@ -10,6 +10,7 @@ use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 
 /**
  * Create handler for catalog product gallery.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateHandler
 {
@@ -86,6 +87,9 @@ class CreateHandler
      * @param string $entityType
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute($entityType, $product)
     {
@@ -154,6 +158,12 @@ class CreateHandler
             if (in_array($attrData, array_keys($existImages))) {
                 $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             }
+
+            $product->addAttributeUpdate(
+                $mediaAttrCode,
+                $product->getData($mediaAttrCode),
+                $product->getStoreId()
+            );
         }
 
         $product->setData($attrCode, $value);
@@ -193,6 +203,7 @@ class CreateHandler
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function processDeletedImages($product, array &$images)
     {

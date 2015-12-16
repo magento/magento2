@@ -75,9 +75,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $joinProcessor = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $metadataPool = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
@@ -91,7 +88,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $optionFactory,
             $optionCollectionFactory,
             $this->converterMock,
-            $joinProcessor,
             $metadataPool
         );
     }

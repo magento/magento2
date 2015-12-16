@@ -1212,7 +1212,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             )
             ->join(
                 ['t_d' => $table],
-                "e.${linkField} = t_d.${linkField}",
+                "e.{$linkField} = t_d.{$linkField}",
                 ['t_d.attribute_id']
             )->where(
                 " e.entity_id IN (?)",

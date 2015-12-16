@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * Catalog product custom option resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -449,6 +450,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @param int $storeId
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getSearchableData($productId, $storeId)
     {

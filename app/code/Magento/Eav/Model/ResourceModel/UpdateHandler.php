@@ -36,9 +36,9 @@ class UpdateHandler
     protected $attributePersistor;
 
     /**
-     * @var ReadHandler
+     * @var ReadSnapshot
      */
-    protected $readHandler;
+    protected $readSnapshot;
 
     /**
      * UpdateHandler constructor.
@@ -47,20 +47,20 @@ class UpdateHandler
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AttributePersistor $attributePersistor
-     * @param ReadHandler $readHandler
+     * @param ReadSnapshot $readSnapshot
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AttributePersistor $attributePersistor,
-        ReadHandler $readHandler
+        ReadSnapshot $readSnapshot
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->attributePersistor = $attributePersistor;
-        $this->readHandler = $readHandler;
+        $this->readSnapshot = $readSnapshot;
     }
 
     /**
@@ -89,6 +89,10 @@ class UpdateHandler
         $contextFields = $metadata->getEntityContext();
         $context = [];
         foreach ($contextFields as $field) {
+            if ('store_id' == $field && array_key_exists($field, $data) && $data[$field] == 1) {
+                $context[$field] = 0;
+                continue;
+            }
             if (isset($data[$field])) {
                 $context[$field] = $data[$field];
             }
@@ -96,12 +100,13 @@ class UpdateHandler
         return $context;
     }
 
-
     /**
      * @param string $entityType
      * @param array $data
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute($entityType, $data)
     {
@@ -109,14 +114,16 @@ class UpdateHandler
         $metadata = $this->metadataPool->getMetadata($entityType);
         if ($metadata->getEavEntityType()) {
             $context = $this->getActionContext($entityType, $data);
-            $snapshot = $this->readHandler->execute($entityType, $data);
+            $snapshot = $this->readSnapshot->execute($entityType, $data);
             $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
                     continue;
                 }
-                if (isset($snapshot[$attribute->getAttributeCode()]) && $snapshot[$attribute->getAttributeCode()] !== false
-                    && empty($data[$attribute->getAttributeCode()])
+                if (isset($snapshot[$attribute->getAttributeCode()])
+                    && $snapshot[$attribute->getAttributeCode()] !== false
+                    && (array_key_exists($attribute->getAttributeCode(), $data)
+                        && $attribute->isValueEmpty($data[$attribute->getAttributeCode()]))
                 ) {
                     $this->attributePersistor->registerDelete(
                         $entityType,
@@ -124,7 +131,7 @@ class UpdateHandler
                         $attribute->getAttributeCode()
                     );
                 }
-                if ((!isset($snapshot[$attribute->getAttributeCode()])
+                if ((!array_key_exists($attribute->getAttributeCode(), $snapshot)
                     || $snapshot[$attribute->getAttributeCode()] === false)
                     && !empty($data[$attribute->getAttributeCode()])
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
@@ -137,7 +144,8 @@ class UpdateHandler
                     );
                     $processed[$attribute->getAttributeCode()] = $data[$attribute->getAttributeCode()];
                 }
-                if (isset($snapshot[$attribute->getAttributeCode()]) && $snapshot[$attribute->getAttributeCode()] !== false
+                if (array_key_exists($attribute->getAttributeCode(), $snapshot)
+                    && $snapshot[$attribute->getAttributeCode()] !== false
                     && !empty($data[$attribute->getAttributeCode()])
                     && $snapshot[$attribute->getAttributeCode()] != $data[$attribute->getAttributeCode()]
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])

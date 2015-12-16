@@ -232,8 +232,8 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($productId);
         $this->linkResourceMock->expects($this->once())
             ->method('save')
-            ->with($linkMock)
-            ->willReturn($linkId);
+            ->with($linkMock);
+        $linkMock->expects($this->once())->method('getId')->willReturn($linkId);
         $this->assertEquals($linkId, $this->service->save($productSku, $linkMock));
     }
 
@@ -272,7 +272,6 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdate()
     {
-        $websiteId = 1;
         $linkId = 1;
         $productSku = 'simple';
         $productId = 1;
@@ -304,12 +303,10 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateWithExistingFile()
     {
-        $websiteId = 1;
         $linkId = 1;
         $productSku = 'simple';
         $productId = 1;
         $linkFile = '/l/i/link.jpg';
-        $encodedFiles = "something";
         $linkData = [
             'id' => $linkId,
             'title' => 'Updated Title',
@@ -325,23 +322,9 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->any())->method('getData')
             ->with('id')
             ->will($this->returnValue($productId));
-        $existingLinkMock = $this->getMock(
-            '\Magento\Downloadable\Model\Link',
-            [
-                '__wakeup',
-                'getId',
-                'load',
-                'getProductId'
-            ],
-            [],
-            '',
-            false
-        );
         $linkMock = $this->getLinkMock($linkData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($linkMock)
             ->will($this->returnValue(true));
-
-
 
         $linkMock->expects($this->once())->method('setProductId')->with($productId);
         $this->linkResourceMock->expects($this->once())

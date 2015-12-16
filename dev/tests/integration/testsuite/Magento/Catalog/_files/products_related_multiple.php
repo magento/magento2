@@ -52,14 +52,16 @@ $product->setTypeId(
 )->save();
 
 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
-$productLink1 = $objectManager->create('Magento\Catalog\Api\Data\ProductLinkInterface');
+$productLink1 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Catalog\Api\Data\ProductLinkInterface');
 $productLink1->setSku('simple_with_cross');
 $productLink1->setLinkedProductSku('simple');
 $productLink1->setPosition(1);
 $productLink1->setLinkType('related');
 
 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
-$productLink2 = $objectManager->create('Magento\Catalog\Api\Data\ProductLinkInterface');
+$productLink2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Catalog\Api\Data\ProductLinkInterface');
 $productLink2->setSku('simple_with_cross');
 $productLink2->setLinkedProductSku('simple_with_cross_two');
 $productLink2->setPosition(1);
@@ -86,6 +88,6 @@ $product->setTypeId(
     [1]
 )->setStockData(
     ['qty' => 100, 'is_in_stock' => 1]
-)->setRelatedLinkData(
+)->setProductLinks(
     [$productLink1, $productLink2]
 )->save();

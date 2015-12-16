@@ -58,6 +58,7 @@ class MetadataPool
      * @param string $entityType
      * @return EntityMetadata
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getMetadata($entityType)
     {
@@ -68,13 +69,21 @@ class MetadataPool
             $this->registry[$entityType] = $this->metadataFactory->create(
                 [
                     'entityTableName' => $this->metadata[$entityType]['entityTableName'],
-                    'eavEntityType' => isset($this->metadata[$entityType]['eavEntityType']) ? $this->metadata[$entityType]['eavEntityType'] : null,
-//                        isset($this->eavMapping[$entityType]) ? $this->eavMapping[$entityType] : null,
+                    'eavEntityType' => isset($this->metadata[$entityType]['eavEntityType'])
+                        ? $this->metadata[$entityType]['eavEntityType']
+                        : null,
+                        //isset($this->eavMapping[$entityType]) ? $this->eavMapping[$entityType] : null,
                     'connectionName' => 'default',
                     'identifierField' => $this->metadata[$entityType]['identifierField'],
-                    'sequence' => isset($this->metadata[$entityType]['sequence']) ? $this->metadata[$entityType]['sequence'] : null,
-                    'entityContext' => isset($this->metadata[$entityType]['entityContext']) ? $this->metadata[$entityType]['entityContext'] : [],
-                    'fields' => isset($this->metadata[$entityType]['fields']) ? $this->metadata[$entityType]['fields'] : null,
+                    'sequence' => isset($this->metadata[$entityType]['sequence'])
+                        ? $this->metadata[$entityType]['sequence']
+                        : null,
+                    'entityContext' => isset($this->metadata[$entityType]['entityContext'])
+                        ? $this->metadata[$entityType]['entityContext']
+                        : [],
+                    'fields' => isset($this->metadata[$entityType]['fields'])
+                        ? $this->metadata[$entityType]['fields']
+                        : null,
                 ]
             );
         }
@@ -84,6 +93,7 @@ class MetadataPool
     /**
      * @param string $entityType
      * @return EntityHydrator
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getHydrator($entityType)
     {

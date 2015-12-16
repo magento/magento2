@@ -36,5 +36,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
     ->setStockData(['qty' => 100, 'is_in_stock' => 1])
-    ->setRelatedLinkData([$productLink])
+    ->setProductLinks([$productLink])
     ->save();

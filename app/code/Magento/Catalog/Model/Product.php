@@ -816,6 +816,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function beforeSave()
     {
@@ -837,7 +838,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
          */
         $this->canAffectOptions($this->_canAffectOptions && $this->getCanSaveCustomOptions());
         if ($this->getCanSaveCustomOptions()) {
-            $options = $this->getProductOptions() ?: $this->getOptions();
+            $options = $this->getOptions();
             if (is_array($options)) {
                 $this->setIsCustomOptionChanged(true);
                 foreach ($options as $option) {
@@ -1908,6 +1909,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
 
         return null;
+    }
+
+    /**
+     * Retrieve options collection of product
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
+     */
+    public function getProductOptionsCollection()
+    {
+        return $this->getOptionInstance()->getProductOptionCollection($this);
     }
 
     /**

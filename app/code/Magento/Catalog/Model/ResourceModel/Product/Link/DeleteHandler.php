@@ -65,6 +65,7 @@ class DeleteHandler
      * @return object
      * @throws CouldNotDeleteException
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entity)
     {

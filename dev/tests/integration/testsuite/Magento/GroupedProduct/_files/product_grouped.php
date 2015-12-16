@@ -33,6 +33,31 @@ $product->setTypeId(
     \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
 )->setStatus(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-)->setGroupedLinkData(
-    [$productId => ['qty' => 1, 'position' => 1], 21 => ['qty' => 1, 'position' => 2]]
-)->save();
+);
+
+$newLinks = [];
+$productLinkFactory = $objectManager->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+/** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+$productLink = $productLinkFactory->create();
+$linkedProduct = $productRepository->getById($productId);
+$productLink->setSku($product->getSku())
+    ->setLinkType('associated')
+    ->setLinkedProductSku($linkedProduct->getSku())
+    ->setLinkedProductType($linkedProduct->getTypeId())
+    ->setPosition(1)
+    ->getExtensionAttributes()
+    ->setQty(1);
+$newLinks[] = $productLink;
+/** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+$productLink = $productLinkFactory->create();
+$linkedProduct = $productRepository->getById(21);
+$productLink->setSku($product->getSku())
+    ->setLinkType('associated')
+    ->setLinkedProductSku($linkedProduct->getSku())
+    ->setLinkedProductType($linkedProduct->getTypeId())
+    ->setPosition(2)
+    ->getExtensionAttributes()
+    ->setQty(1);
+$newLinks[] = $productLink;
+$product->setProductLinks($newLinks);
+$product->save();

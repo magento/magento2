@@ -114,12 +114,6 @@ class CreateHandler
                         $attribute->getAttributeCode(),
                         $data[$attribute->getAttributeCode()]
                     );
-                    $this->attributePersistor->registerInsert(
-                        $entityType,
-                        $data[$metadata->getLinkField()],
-                        $attribute->getAttributeCode(),
-                        $data[$attribute->getAttributeCode()]
-                    );
                     $processed[$attribute->getAttributeCode()] = $data[$attribute->getAttributeCode()];
                 }
             }
