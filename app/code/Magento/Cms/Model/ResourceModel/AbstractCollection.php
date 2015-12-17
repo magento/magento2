@@ -51,15 +51,11 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * Perform operations after collection load
      *
      * @param string $tableName
-     * @param string $columnName
      * @param string|null $linkField
      * @return void
      */
-    protected function performAfterLoad($tableName, $columnName, $linkField = null)
+    protected function performAfterLoad($tableName, $linkField)
     {
-        if (!$linkField) {
-            $linkField = $columnName;
-        }
         $linkedIds = $this->getColumnValues($linkField);
         if (count($linkedIds)) {
             $connection = $this->getConnection();
@@ -141,19 +137,15 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * Join store relation table if there is store filter
      *
      * @param string $tableName
-     * @param string $columnName
      * @param string|null $linkField
      * @return void
      */
-    protected function joinStoreRelationTable($tableName, $columnName, $linkField = null)
+    protected function joinStoreRelationTable($tableName, $linkField)
     {
-        if (!$linkField) {
-            $linkField = $columnName;
-        }
         if ($this->getFilter('store')) {
             $this->getSelect()->join(
                 ['store_table' => $this->getTable($tableName)],
-                'main_table.' . $linkField . ' = store_table.' . $columnName,
+                'main_table.' . $linkField . ' = store_table.' . $linkField,
                 []
             )->group(
                 'main_table.' . $linkField
