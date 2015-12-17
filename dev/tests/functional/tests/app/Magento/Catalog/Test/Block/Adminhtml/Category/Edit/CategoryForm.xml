@@ -7,7 +7,7 @@
 -->
 <sections>
     <general_information>
-        <class>\Magento\Backend\Test\Block\Widget\Section</class>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>div[class=fieldset-wrapper]</selector>
         <strategy>css selector</strategy>
         <wrapper>general</wrapper>
@@ -23,12 +23,27 @@
             </include_in_menu>
         </fields>
     </general_information>
-    <display_setting>
-        <class>\Magento\Backend\Test\Block\Widget\Section</class>
+    <content>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>div[class=fieldset-wrapper]</selector>
         <strategy>css selector</strategy>
         <wrapper>general</wrapper>
         <fields>
+            <description />
+            <landing_page>
+                <input>select</input>
+            </landing_page>
+        </fields>
+    </content>
+    <display_setting>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>div[class=fieldset-wrapper]</selector>
+        <strategy>css selector</strategy>
+        <wrapper>general</wrapper>
+        <fields>
+            <display_mode>
+                <input>select</input>
+            </display_mode>
             <is_anchor>
                 <input>switcher</input>
                 <selector>//div[@class='switcher'][./input[@name='general[is_anchor]']]</selector>
@@ -49,9 +64,6 @@
             <default_sort_by>
                 <input>select[name='general[default_sort_by]']</input>
             </default_sort_by>
-            <display_mode>
-                <input>select</input>
-            </display_mode>
         </fields>
     </display_setting>
     <category_products>
@@ -60,7 +72,7 @@
         <strategy>css selector</strategy>
     </category_products>
     <custom_design>
-        <class>\Magento\Backend\Test\Block\Widget\Section</class>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>div[class=fieldset-wrapper]</selector>
         <strategy>css selector</strategy>
         <wrapper>general</wrapper>
