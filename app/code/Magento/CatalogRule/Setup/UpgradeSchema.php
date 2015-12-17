@@ -49,7 +49,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ],
         ];
 
-        foreach ($data as $table=>$fields) {
+        foreach ($data as $table => $fields) {
             foreach ($fields as $field){
                 $connection->dropColumn($setup->getTable($table), $field);
             }
