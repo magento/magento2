@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Model\Indexer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
 
 class IndexerHandlerFactory
 {
@@ -66,7 +65,7 @@ class IndexerHandlerFactory
      */
     public function create(array $data = [])
     {
-        $currentHandler = $this->scopeConfig->getValue($this->configPath, ScopeInterface::SCOPE_STORE);
+        $currentHandler = $this->scopeConfig->getValue($this->configPath);
         if (!isset($this->handlers[$currentHandler])) {
             throw new \LogicException(
                 'There is no such indexer handler: ' . $currentHandler

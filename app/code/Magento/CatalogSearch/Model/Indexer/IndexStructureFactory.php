@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Model\Indexer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
 
 class IndexStructureFactory
 {
@@ -66,7 +65,7 @@ class IndexStructureFactory
      */
     public function create(array $data = [])
     {
-        $currentStructure = $this->scopeConfig->getValue($this->configPath, ScopeInterface::SCOPE_STORE);
+        $currentStructure = $this->scopeConfig->getValue($this->configPath);
         if (!isset($this->structures[$currentStructure])) {
             throw new \LogicException(
                 'There is no such index structure: ' . $currentStructure
