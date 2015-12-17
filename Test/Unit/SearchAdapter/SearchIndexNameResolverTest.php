@@ -29,7 +29,7 @@ class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $entityType;
+    protected $indexId;
 
     /**
      * @var int
@@ -55,7 +55,7 @@ class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getIndexPrefix')
             ->willReturn('indexName');
 
-        $this->entityType = 'catalogsearch_fulltext';
+        $this->indexId = 'catalogsearch_fulltext';
         $this->storeId = 1;
 
         $objectManager = new ObjectManagerHelper($this);
@@ -63,7 +63,6 @@ class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
             '\Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver',
             [
                 'clientConfig' => $this->clientConfig,
-                'options' => [],
             ]
         );
     }
@@ -75,7 +74,7 @@ class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'indexName_product_1',
-            $this->model->getIndexName($this->storeId, $this->entityType)
+            $this->model->getIndexName($this->storeId, $this->indexId)
         );
     }
 
