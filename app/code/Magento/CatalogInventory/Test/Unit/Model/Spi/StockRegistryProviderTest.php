@@ -98,9 +98,10 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $stockStatusCriteria;
 
-    protected $productId = 111;
+    protected $stockId = 111;
+    protected $productId = 112;
     protected $productSku = 'simple';
-    protected $scopeId = 111;
+    protected $scopeId = 113;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -235,25 +236,20 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStock()
     {
-        $this->stockCriteriaFactory->expects($this->once())->method('create')->willReturn($this->stockCriteria);
-        $this->stockCriteria->expects($this->once())->method('setScopeFilter')->willReturn(null);
-        $stockCollection = $this->getMock(
-            '\Magento\CatalogInventory\Model\ResourceModel\Stock\Collection',
-            ['getFirstItem', '__wakeup', 'getItems'],
-            [],
-            '',
-            false
-        );
-        $stockCollection->expects($this->once())->method('getItems')->willReturn([$this->stock]);
-        $this->stockRepository->expects($this->once())->method('getList')->willReturn($stockCollection);
-        $this->stock->expects($this->once())->method('getStockId')->willReturn(true);
+        $this->stock->expects($this->once())->method('getStockId')->willReturn($this->stockId);
+        $this->stockRepository->expects($this->once())->method('get')->willReturn($this->stock);
         $this->assertEquals($this->stock, $this->stockRegistryProvider->getStock($this->scopeId));
     }
 
     public function testGetStockItem()
     {
+        $this->stock->expects($this->once())->method('getStockId')->willReturn($this->stockId);
+        $this->stockRepository->expects($this->once())->method('get')->willReturn($this->stock);
         $this->stockItemCriteriaFactory->expects($this->once())->method('create')->willReturn($this->stockItemCriteria);
-        $this->stockItemCriteria->expects($this->once())->method('setProductsFilter')->willReturn(null);
+        $this->stockItemCriteria->expects($this->once())->method('setProductsFilter')->with($this->productId)
+            ->willReturnSelf();
+        $this->stockItemCriteria->expects($this->once())->method('setStockFilter')->with($this->stock)
+            ->willReturnSelf();
         $stockItemCollection = $this->getMock(
             '\Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection',
             ['getFirstItem', '__wakeup', 'getItems'],
@@ -272,11 +268,15 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStockStatus()
     {
+        $this->stock->expects($this->once())->method('getStockId')->willReturn($this->stockId);
+        $this->stockRepository->expects($this->once())->method('get')->willReturn($this->stock);
         $this->stockStatusCriteriaFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->stockStatusCriteria);
-        $this->stockStatusCriteria->expects($this->once())->method('setScopeFilter')->willReturn(null);
-        $this->stockStatusCriteria->expects($this->once())->method('setProductsFilter')->willReturn(null);
+        $this->stockStatusCriteria->expects($this->once())->method('setProductsFilter')->with($this->productId)
+            ->willReturnSelf();
+        $this->stockStatusCriteria->expects($this->once())->method('setStockFilter')->with($this->stock)
+            ->willReturnSelf();
         $stockStatusCollection = $this->getMock(
             '\Magento\CatalogInventory\Model\ResourceModel\Stock\Status\Collection',
             ['getFirstItem', '__wakeup', 'getItems'],
