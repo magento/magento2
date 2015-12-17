@@ -18,7 +18,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
     /**
      * Message about captured amount in order.
      */
-    const CAPTURED_AMOUNT = 'captured amount of $';
+    const CAPTURED_AMOUNT = 'Captured amount of $';
 
     /**
      * Assert that comment about captured amount exist in Comments History section on order page in Admin.
@@ -26,7 +26,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param string $orderId
-     * @param array $capturePrices
+     * @param array $capturedPrices
      * @return void
      */
     public function processAssert(
