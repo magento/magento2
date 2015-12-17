@@ -32,8 +32,8 @@ class DeleteRelation
         MetadataPool $metadataPool,
         RelationActionPool $relationActionPool
     ) {
-        $this->relationActionPool = $relationActionPool;
         $this->metadataPool = $metadataPool;
+        $this->relationActionPool = $relationActionPool;
     }
 
     /**

@@ -47,6 +47,7 @@ class ReadHandler
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StoreManager $storeManager
+     * @param AppResource $appResource
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -147,7 +148,6 @@ class ReadHandler
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         $attributeTables = [];
         if ($metadata->getEavEntityType()) {
-            $context = $this->getActionContext($entityType, $entityData);
             $context = $this->getActionContext($entityType, $entityData);
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if (!$attribute->isStatic()) {

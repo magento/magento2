@@ -28,6 +28,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
      */
@@ -41,9 +42,9 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->storeManager = $storeManager;
         $this->metadataPool = $metadataPool;
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     /**
@@ -52,6 +53,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param string $tableName
      * @param string $columnName
      * @param string|null $linkField
+     * @return void
      */
     protected function performAfterLoad($tableName, $columnName, $linkField = null)
     {
@@ -141,6 +143,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param string $tableName
      * @param string $columnName
      * @param string|null $linkField
+     * @return void
      */
     protected function joinStoreRelationTable($tableName, $columnName, $linkField = null)
     {
