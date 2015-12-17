@@ -7,22 +7,35 @@ namespace Magento\BraintreeTwo\Model\Ui;
 
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
-use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
+use Magento\Framework\UrlInterface;
 
+/**
+ * Class TokenUiComponentProvider
+ */
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
     /**
      * @var TokenUiComponentInterfaceFactory
      */
-    protected $componentFactory;
+    private $componentFactory;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private $urlBuilder;
 
     /**
      * @param TokenUiComponentInterfaceFactory $componentFactory
+     * @param UrlInterface $urlBuilder
      */
-    public function __construct(TokenUiComponentInterfaceFactory $componentFactory)
-    {
+    public function __construct(
+        TokenUiComponentInterfaceFactory $componentFactory,
+        UrlInterface $urlBuilder
+    ) {
         $this->componentFactory = $componentFactory;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -32,19 +45,28 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
      */
     public function getComponentForToken(PaymentTokenInterface $paymentToken)
     {
-        /** @var TokenUiComponentInterface $component */
         $component = $this->componentFactory->create(
             [
                 'config' => [
+                    TokenUiComponentProviderInterface::COMPONENT_NONCE_URL => $this->getNonceRetrieveUrl(),
                     TokenUiComponentProviderInterface::COMPONENT_DETAILS => json_decode(
                         $paymentToken->getTokenDetails() ?: '{}', true
                     ),
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash()
                 ],
-                'name' => 'Magento_Vault/js/view/payment/method-renderer/vault'
+                'name' => 'Magento_BraintreeTwo/js/view/payment/method-renderer/vault'
             ]
         );
 
         return $component;
+    }
+
+    /**
+     * Get url to retrieve payment method nonce
+     * @return string
+     */
+    private function getNonceRetrieveUrl()
+    {
+        return $this->urlBuilder->getUrl(ConfigProvider::CODE . '/payment/getnonce', ['_secure' => true]);
     }
 }

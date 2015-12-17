@@ -59,11 +59,6 @@ define(
                 clientConfig: {
 
                     /**
-                     * {String}
-                     */
-                    id: 'co-transparent-form-braintree',
-
-                    /**
                      * Triggers on payment nonce receive
                      *
                      * @param {Object} response
@@ -276,6 +271,14 @@ define(
                 data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
 
                 return data;
+            },
+
+            /**
+             * Set payment nonce
+             * @param {String} paymentMethodNonce
+             */
+            setPaymentMethodNonce: function (paymentMethodNonce) {
+                this.paymentMethodNonce = paymentMethodNonce;
             },
 
             /**
