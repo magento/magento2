@@ -151,17 +151,16 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      */
     public function saveTokenWithPaymentLink(PaymentTokenInterface $token, OrderPaymentInterface $payment)
     {
-        $tokenDuplicate = $this->getByGatewayToken(
-            $token->getGatewayToken(),
-            $token->getPaymentMethodCode(),
+        $tokenDuplicate = $this->getByPublicHash(
+            $token->getPublicHash(),
             $token->getCustomerId()
         );
 
-        if (null === $tokenDuplicate) {
-            $this->paymentTokenRepository->save($token);
-        } else {
+        if (!empty($tokenDuplicate)) {
             $token->setEntityId($tokenDuplicate->getEntityId());
         }
+
+        $this->paymentTokenRepository->save($token);
 
         $result = $this->addLinkToOrderPayment($token->getEntityId(), $payment->getEntityId());
 
