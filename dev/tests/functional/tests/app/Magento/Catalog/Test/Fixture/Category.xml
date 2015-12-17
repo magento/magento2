@@ -18,10 +18,10 @@
         <field name="entity_type_id" is_required="" />
         <field name="attribute_set_id" is_required="" />
         <field name="description" is_required="0" group="general_information" />
-        <field name="parent_id" is_required="" group="null" source="Magento\Catalog\Test\Fixture\Category\ParentId" />
+        <field name="parent_id" is_required="" source="Magento\Catalog\Test\Fixture\Category\ParentId" />
         <field name="created_at" is_required="" />
         <field name="updated_at" is_required="" />
-        <field name="path" is_required="" group="null" />
+        <field name="path" is_required="" />
         <field name="position" is_required="" />
         <field name="level" is_required="" />
         <field name="children_count" is_required="" />
@@ -32,7 +32,7 @@
         <field name="meta_title" is_required="" group="general_information" />
         <field name="meta_keywords" is_required="" group="general_information" />
         <field name="meta_description" is_required="" group="general_information" />
-        <field name="id" group="null" />
+        <field name="id" />
         <field name="name" group="general_information" />
         <field name="is_active" group="general_information" />
         <field name="is_anchor" group="display_setting" />
@@ -41,6 +41,6 @@
         <field name="landing_page" group="display_setting" source="Magento\Catalog\Test\Fixture\Category\LandingPage" />
         <field name="display_mode" group="display_setting" />
         <field name="category_products" group="category_products" source="Magento\Catalog\Test\Fixture\Category\CategoryProducts" />
-        <field name="store_id" group="null" source="Magento\Catalog\Test\Fixture\Category\StoreId" />
+        <field name="store_id" source="Magento\Catalog\Test\Fixture\Category\StoreId" />
     </fixture>
 </config>
