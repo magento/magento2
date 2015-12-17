@@ -27,8 +27,8 @@ class Info extends Block
     public function getPaymentInfo()
     {
         $result = [];
-        $infoBlock = $this->_rootElement->getElements($this->info, Locator::SELECTOR_XPATH);
-        foreach ($infoBlock as $row) {
+        $elements = $this->_rootElement->getElements($this->info, Locator::SELECTOR_XPATH);
+        foreach ($elements as $row) {
             $key = rtrim($row->find('./th', Locator::SELECTOR_XPATH)->getText(), ':');
             $value = $row->find('./td', Locator::SELECTOR_XPATH)->getText();
             $result[$key] = $value;
