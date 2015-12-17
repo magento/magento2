@@ -36,7 +36,7 @@ define([
          */
         initialize: function () {
             utils.limit(this, 'onParamsChange', 5);
-            _.bindAll(this, 'onReload', 'onError');
+            _.bindAll(this, 'onReload');
 
             this._super()
                 .initStorage()
@@ -137,10 +137,6 @@ define([
             alert({
                 content: $t('Something went wrong.')
             });
-
-            var fakeData = {"items":[{"koala_id":1,"name":"Red Koala","id_field_name":"koala_id",
-                "positionFromGridSource":"111","positionFromFormSource":"999"}],"totalRecords":1};
-            this.onReload(fakeData);
         },
 
         /**
