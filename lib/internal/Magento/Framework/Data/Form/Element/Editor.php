@@ -92,7 +92,7 @@ class Editor extends Textarea
                 if ($this->getForceLoad()) {
                     $forceLoad = $jsSetupObject . '.setup("exact");';
                 } else {
-                    $forceLoad = 'Event.observe(window, "load", ' .
+                    $forceLoad = 'jQuery(window).on("load", ' .
                         $jsSetupObject .
                         '.setup.bind(' .
                         $jsSetupObject .
@@ -123,9 +123,9 @@ class Editor extends Textarea
                 '
                 <script type="text/javascript">
                 //<![CDATA[
-                require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup", "mage/adminhtml/wysiwyg/widget"], function(jQuery){' .
+                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; window.tinyMCE_GZ.loaded = true;require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup", "mage/adminhtml/wysiwyg/widget"], function(jQuery){' .
                 "\n" .
-                '(function($) {$.mage.translate.add(' .
+                '  (function($) {$.mage.translate.add(' .
                 \Zend_Json::encode(
                     $this->getButtonTranslations()
                 ) .
