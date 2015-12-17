@@ -7,13 +7,13 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="One page check out with Braintree payment method.">
-        <variation name="OnePageCheckoutBraintree3dSecureNotTriggeredThresholdTestVariation1" summary="Guest Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to selected Specific Country" ticketId="MAGETWO-46763">
-            <data name="description" xsi:type="string">Guest Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to selected Specific Country</data>
+        <variation name="OnePageCheckoutBraintree3dSecureNotTriggeredThresholdTestVariation1" summary="Registered Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to Threshold Amount" ticketId="MAGETWO-46763">
+            <data name="description" xsi:type="string">Registered Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to Threshold Amount</data>
             <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
-            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
@@ -29,13 +29,13 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
         </variation>
-        <variation name="OnePageCheckoutBraintree3dSecureNotTriggeredSpecificCountryTestVariation2" summary="Registered Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to Threshold Amount" ticketId="MAGETWO-46488">
-            <data name="description" xsi:type="string">Registered Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to Threshold Amount</data>
+        <variation name="OnePageCheckoutBraintree3dSecureNotTriggeredSpecificCountryTestVariation2" summary="Guest Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to selected Specific Country" ticketId="MAGETWO-46488">
+            <data name="description" xsi:type="string">Guest Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to selected Specific Country</data>
             <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
-            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
