@@ -172,6 +172,12 @@ class Query extends AbstractModel implements QueryInterface
     public function loadByQuery($text)
     {
         $this->_getResource()->loadByQuery($this, $text);
+
+        $synonymFor = $this->getSynonymFor();
+        if (!empty($synonymFor)) {
+            $this->setQueryText($synonymFor);
+        }
+
         $this->_afterLoad();
         $this->setOrigData();
         return $this;

@@ -5,12 +5,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab;
+namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Googleoptimizer extends \Magento\Catalog\Block\Adminhtml\Form
+class GoogleoptimizerForm extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**
      * @var \Magento\Framework\Registry
@@ -57,7 +57,8 @@ class Googleoptimizer extends \Magento\Catalog\Block\Adminhtml\Form
      */
     protected function _prepareForm()
     {
-        $this->_formHelper->addGoogleoptimizerFields($this->getForm(), $this->_getGoogleExperiment());
+        $this->_formHelper->addGoogleoptimizerFields($this->getForm(), $this->_getGoogleExperiment(), 'category_form');
+        $this->getForm()->getElement('googleoptimizer_fields')->setData(['legend' => __('Category View Optimization')]);
         return parent::_prepareForm();
     }
 

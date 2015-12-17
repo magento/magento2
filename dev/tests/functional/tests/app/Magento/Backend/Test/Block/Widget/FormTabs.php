@@ -32,7 +32,7 @@ class FormTabs extends Form
     protected $tabs = [];
 
     /**
-     * Fields which aren't assigned to any tab.
+     * Fields that are not assigned to any tab.
      *
      * @var array
      */
@@ -87,7 +87,7 @@ class FormTabs extends Form
     /**
      * Fill specified form with tabs.
      *
-     * @param array $tabs
+     * @param array $tabs Data format is [[tab_name => [field_name => [attribute_name => attribute_value], ..], ..], ..]
      * @param SimpleElement|null $element
      * @return FormTabs
      */
@@ -107,7 +107,7 @@ class FormTabs extends Form
     }
 
     /**
-     * Fill fields which weren't found on filled tabs.
+     * Fill fields that were not found on filled tabs.
      *
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -206,7 +206,7 @@ class FormTabs extends Form
      * Create data array for filling tabs (new fixture specification).
      *
      * @param InjectableFixture $fixture
-     * @return array
+     * @return array Data format is [tab_name => [field_name => [ attribute_name => attribute_value, ..], ..], ..]
      */
     private function getFixtureFieldsByTabs(InjectableFixture $fixture)
     {

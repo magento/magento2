@@ -130,20 +130,22 @@
         <variation name="CreateCategoryEntityTestVariation8" summary="Create Category from Category page with Required Fields Only" ticketId="MAGETWO-12513">
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
-            <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
-        <variation name="CreateCategoryEntityTestVariation9" summary="Assign Products at the Category Level" ticketId="MAGETWO-16351">
+        <variation name="CreateCategoryEntityTestVariation9"
+                   summary="Create Category from Category page with Required Fields and Assign Products"
+                   ticketId="MAGETWO-16351">
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
-            <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
             <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
