@@ -11,7 +11,6 @@ use Magento\Sales\Test\Page\Adminhtml\InvoiceIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesInvoiceView;
 
 /**
- * Class AssertInvoiceItems
  * Assert invoice items on invoice view page
  */
 class AssertInvoiceItems extends AbstractAssertItems

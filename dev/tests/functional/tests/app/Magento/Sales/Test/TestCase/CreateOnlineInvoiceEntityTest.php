@@ -33,7 +33,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 17. Perform assertions.
  *
  * @group Order_Management_(CS)
- * @ZephyrId MAGETWO-28209
+ * @ZephyrId MAGETWO-47010
  */
 class CreateOnlineInvoiceEntityTest extends Scenario
 {
