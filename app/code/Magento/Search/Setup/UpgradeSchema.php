@@ -92,5 +92,61 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             $connection->createTable($table);
         }
+
+        if (version_compare($context->getVersion(), '2.0.3') < 0) {
+
+            // Add 'scope_type' to 'search_synonyms'
+            $connection->addColumn(
+                $connection->getTable('search_synonyms'),
+                'scope_type',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 16,
+                    'nullable' => false,
+                    'default' => 'default',
+                    'comment' => 'Scope of synonyms. Within a store, within a website or across all stores'
+                ]
+            );
+
+            $connection->dropForeignKey(
+                $connection->getTable('search_synonyms'),
+                $connection->getFkName(
+                    'search_synonyms',
+                    'store_id',
+                    'store',
+                    'store_id'
+                )
+            );
+
+            $connection->dropIndex(
+                $connection->getTable('search_synonyms'),
+                $installer->getIdxName('search_synonyms', ['store_id'])
+            );
+
+            // Rename store_id to scope_id
+            $connection->changeColumn(
+                $connection->getTable('search_synonyms'),
+                'store_id',
+                'scope_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => 0,
+                    'comment' => 'Scope Id - id of the scope these synonyms belong to'
+                ]
+            );
+
+            $connection->addIndex(
+                $connection->getTable('search_synonyms'),
+                $installer->getIdxName(
+                    'search_synonyms',
+                    ['scope_type', 'scope_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+                ),
+                ['scope_type', 'scope_id'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+            );
+        }
     }
 }
