@@ -89,9 +89,15 @@ class AfterPaymentSaveObserver implements ObserverInterface
      */
     protected function generatePublicHash(PaymentTokenInterface $paymentToken)
     {
-        $hashKey = $paymentToken->getCustomerId()
-            . $paymentToken->getGatewayToken()
-            . $paymentToken->getPaymentMethodCode();
+        $hashKey = $paymentToken->getGatewayToken();
+        if ($paymentToken->getCustomerId()) {
+            $hashKey = $paymentToken->getCustomerId();
+        }
+
+        $hashKey .= $paymentToken->getPaymentMethodCode()
+            . $paymentToken->getType()
+            . $paymentToken->getTokenDetails();
+
         return $this->encryptor->getHash($hashKey);
     }
 
