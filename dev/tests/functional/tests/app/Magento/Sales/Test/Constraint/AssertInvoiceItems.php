@@ -33,7 +33,6 @@ class AssertInvoiceItems extends AbstractAssertItems
         array $ids,
         array $data = null
     ) {
-        $invoiceIndex->open();
         $orderId = $order->getId();
         $productsData = $this->prepareOrderProducts($order, $data['items_data']);
         foreach ($ids['invoiceIds'] as $invoiceId) {
@@ -41,6 +40,7 @@ class AssertInvoiceItems extends AbstractAssertItems
                 'order_id' => $orderId,
                 'id' => $invoiceId,
             ];
+            $invoiceIndex->open();
             $invoiceIndex->getInvoicesGrid()->searchAndOpen($filter);
             $itemsData = $this->preparePageItems($salesInvoiceView->getItemsBlock()->getData());
             $error = $this->verifyData($productsData, $itemsData);

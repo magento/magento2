@@ -18,7 +18,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
     /**
      * Message about captured amount in order.
      */
-    const CAPTURED_AMOUNT = 'Captured amount of $';
+    const CAPTURED_AMOUNT = 'captured amount of $';
 
     /**
      * Assert that comment about captured amount exist in Comments History section on order page in Admin.
@@ -26,25 +26,26 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param string $orderId
-     * @param array $prices
+     * @param array $capturePrices
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
         $orderId,
-        array $prices
+        array $capturedPrices
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        $actualCapturedAmount = $salesOrderView->getOrderHistoryBlock()->getCommentsHistory();
-
-        \PHPUnit_Framework_Assert::assertContains(
-            self::CAPTURED_AMOUNT . $prices['grandTotal'],
-            $actualCapturedAmount,
-            'Incorrect captured amount value for the order #' . $orderId
-        );
+        $actualCapturedAmount = $salesOrderView->getOrderHistoryBlock()->getCapturedAmount();
+        foreach ($capturedPrices as $key => $capturedPrice) {
+            \PHPUnit_Framework_Assert::assertContains(
+                self::CAPTURED_AMOUNT . $capturedPrice,
+                $actualCapturedAmount[$key],
+                'Incorrect captured amount value for the order #' . $orderId
+            );
+        }
     }
 
     /**
