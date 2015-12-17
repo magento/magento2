@@ -34,7 +34,8 @@ class ThreeDSecureDataBuilder implements BuilderInterface
      * @param Config $config
      * @param SubjectReader $subjectReader
      */
-    public function __construct(Config $config, SubjectReader $subjectReader) {
+    public function __construct(Config $config, SubjectReader $subjectReader)
+    {
         $this->config = $config;
         $this->subjectReader = $subjectReader;
     }
