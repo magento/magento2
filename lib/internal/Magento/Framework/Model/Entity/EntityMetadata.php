@@ -166,7 +166,7 @@ class EntityMetadata
             $this->getEntityConnection()
                 ->select()
                 ->from($this->getEntityTable(), [$this->getIdentifierField()])
-                ->where($this->getIdentifierField() . '= ?', $identifier)
+                ->where($this->getIdentifierField() . ' = ?', $identifier)
                 ->limit(1)
         );
     }

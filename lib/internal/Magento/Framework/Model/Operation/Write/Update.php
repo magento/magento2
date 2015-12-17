@@ -17,11 +17,6 @@ use Magento\Framework\Model\Entity\Action\UpdateRelation;
 class Update implements WriteInterface
 {
     /**
-     * @var MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
      * @var UpdateMain
      */
     protected $updateMain;
@@ -37,18 +32,15 @@ class Update implements WriteInterface
     protected $updateRelation;
 
     /**
-     * @param MetadataPool $metadataPool
      * @param UpdateMain $updateMain
      * @param UpdateExtension $updateExtension
      * @param UpdateRelation $updateRelation
      */
     public function __construct(
-        MetadataPool $metadataPool,
         UpdateMain $updateMain,
         UpdateExtension $updateExtension,
         UpdateRelation $updateRelation
     ) {
-        $this->metadataPool = $metadataPool;
         $this->updateMain = $updateMain;
         $this->updateExtension = $updateExtension;
         $this->updateRelation = $updateRelation;
