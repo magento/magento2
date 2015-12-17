@@ -5,65 +5,121 @@
 
 define([
     'uiElement',
-    'jquery'
-], function (Element, $) {
+    'jquery',
+    'mage/translate',
+    'mageUtils',
+    'underscore',
+    'uiLayout',
+    'Magento_Ui/js/modal/alert',
+    'Magento_Ui/js/lib/view/utils/bindings',
+    'Magento_Ui/js/lib/view/utils/async'
+], function (Element, $, $t, utils, _, layout, alert) {
     'use strict';
 
     return Element.extend({
         defaults: {
-            listens: {
-                value: 'updateExternalValue',
-                externalValue: 'updateValue'
+            content: '',
+            template: 'Magento_TestForm/robin',
+            contentSelector: '.${$.name}',
+            params: {
+                namespace: '${ $.ns }'
             },
-
-            links: {
-                value: '${ $.provider }:${ $.dataScope }',
-                externalValue: '${ $.externalProvider }:columnData'
+            renderSettings: {
+                url: '${ $.render_url }',
+                dataType: 'html'
             },
-
-            valuesFormatter: null//must be plugged-in as a module
+            externalLinks: {
+                imports: {
+                    'updateUrl': '${ $.externalProvider }:update_url'
+                },
+                links: {
+                    bla: '${ $.externalProvider }:data.items'
+                },
+                exports: {
+                    bla: '${ $.provider }:data.koala.items'
+                }
+            }
         },
 
-        /**
-         * Invokes initialize method of parent class,
-         * contains initialization logic
-         */
         initialize: function () {
-            this._super();
-
-            if (this['render_url']) {
-                this.render();
-            }
-            this.observe('value', 'externalValue');
+            _.bindAll(this, 'onRender');
+            this._super()
+                .render();
 
             return this;
         },
 
-        render: function() {
-            $.ajax({
-                type: 'GET',
-                url: this['render_url'] + '?namespace=cms_page_listing&type=template',
-                success: function() {
-                }
+        initObservable: function () {
+            return this._super()
+                .observe([
+                    'content',
+                    'value',
+                    'externalValue'
+                ]);
+        },
+
+        initConfig: function () {
+            var self = this._super();
+
+            this.contentSelector = this.contentSelector.replace(/\./g, '_').substr(1);
+            $.async('.' + this.contentSelector, function (el) {
+                self.contentEl = $(el);
+            });
+
+            return this;
+        },
+
+        render: function () {
+            var request = this.requestData(this.params, this.renderSettings);
+
+            request
+                .done(this.onRender)
+                .fail(this.onError);
+
+            return request;
+        },
+
+        requestData: function (params, ajaxSettings) {
+            var query   = utils.copy(params);
+
+            ajaxSettings = _.extend({
+                url: this.updateUrl,
+                method: 'GET',
+                data: query,
+                dataType: 'json'
+            }, ajaxSettings);
+
+            return $.ajax(ajaxSettings);
+        },
+
+        onRender: function (data) {
+            this.set('content', data);
+            this.contentEl.children().applyBindings();
+            this.contentEl.trigger('contentUpdated');
+            this.initExternalLinks(this.externalLinks);
+        },
+
+        onError: function (xhr) {
+            if (xhr.statusText === 'abort') {
+                return;
+            }
+
+            alert({
+                content: $t('Something went wrong.')
             });
         },
 
-        updateExternalValue: function (val) {
-            if (this.valuesFormatter && this.valuesFormatter.updateExternalValue) {
-                this.set('externalValue', valuesFormatter.updateExternalValue(val));
-            }
-            else {
-                this.set('externalValue', val);
-            }
-        },
+        initExternalLinks: function (external) {
+            this.setListeners(external.listens)
+                .setLinks(external.links, 'imports')
+                .setLinks(external.links, 'exports');
 
-        updateValue: function (extVal) {
-            if (this.valuesFormatter && this.valuesFormatter.updateValue) {
-                this.set('value', valuesFormatter.updateValue(extVal));
-            }
-            else {
-                this.set('value', extVal);
-            }
+            _.each({
+                exports: external.exports,
+                imports: external.imports
+            }, this.setLinks, this);
+
+            return this;
         }
     });
 });
