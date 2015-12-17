@@ -292,13 +292,11 @@ class Page extends AbstractDb
     public function getCmsPageTitleById($id)
     {
         $connection = $this->getConnection();
-
         $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
-        $linkField = $entityMetadata->getLinkField();
 
         $select = $connection->select()
             ->from($this->getMainTable(), 'title')
-            ->where($linkField . ' = :page_id');
+            ->where($entityMetadata->getIdentifierField() . ' = :page_id');
 
         return $connection->fetchOne($select, ['page_id' => (int)$id]);
     }
@@ -312,13 +310,11 @@ class Page extends AbstractDb
     public function getCmsPageIdentifierById($id)
     {
         $connection = $this->getConnection();
-
         $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
-        $linkField = $entityMetadata->getLinkField();
 
         $select = $connection->select()
             ->from($this->getMainTable(), 'identifier')
-            ->where($linkField . ' = :page_id');
+            ->where($entityMetadata->getIdentifierField() . ' = :page_id');
 
         return $connection->fetchOne($select, ['page_id' => (int)$id]);
     }
