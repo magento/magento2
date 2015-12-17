@@ -250,6 +250,28 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getIndexName() indexerId 'catalogsearch_fulltext'
+     */
+    public function testGetIndexNameCatalogSearchFullText()
+    {
+        $this->assertEquals(
+            'product',
+            $this->model->getIndexMapping('catalogsearch_fulltext')
+        );
+    }
+
+    /**
+     * Test getIndexName() with any ndex
+     */
+    public function testGetIndexName()
+    {
+        $this->assertEquals(
+            'else_index_id',
+            $this->model->getIndexMapping('else_index_id')
+        );
+    }
+
+    /**
      * Get elasticsearch client options
      *
      * @return array

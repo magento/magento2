@@ -71,7 +71,7 @@ class IndexNameResolver
      *
      * @return string
      */
-    private function getIndexNamespace()
+    protected function getIndexNamespace()
     {
         return $this->clientConfig->getIndexPrefix();
     }
