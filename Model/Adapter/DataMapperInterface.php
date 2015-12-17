@@ -13,7 +13,8 @@ interface DataMapperInterface
      * @param int $entityId
      * @param array $entityIndexData
      * @param int $storeId
+     * @param array $context
      * @return array
      */
-    public function map($entityId, array $entityIndexData, $storeId);
+    public function map($entityId, array $entityIndexData, $storeId, $context = []);
 }

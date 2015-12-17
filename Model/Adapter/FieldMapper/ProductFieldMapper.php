@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldType;
 
 /**
  * Class ProductFieldMapper

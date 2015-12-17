@@ -20,7 +20,7 @@ interface FieldMapperInterface
      *
      * @param string $attributeCode
      * @param array $context
-     * @return mixed
+     * @return string
      */
     public function getFieldName($attributeCode, $context = []);
 }
