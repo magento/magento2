@@ -6,15 +6,10 @@
 
 namespace Magento\Braintree\Test\Block\Form;
 
-
-use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
-use \Magento\Mtf\Block\Form;
-use Magento\User\Test\TestCase\LockAdminUserEntityTest;
+use Magento\Mtf\Block\Form;
 
 /**
  * Form for filling 3D Secure password for Braintree payment method
@@ -71,5 +66,5 @@ class Secure3d extends Form
         $this->_fill([$mapping['secure3d_password']], $element);
         $this->submit();
         $this->browser->switchToFrame();
-        }
+    }
 }
