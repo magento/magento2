@@ -9,7 +9,6 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch;
 use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
-use Magento\Store\Model\Store;
 
 class IndexerHandler implements IndexerInterface
 {

@@ -64,11 +64,11 @@ class Builder implements BuilderInterface
                         'type' => 'custom',
                         'tokenizer' => key($tokenizer),
                         'filter' => array_merge(
-                            ['lowercase'],
+                            ['lowercase', 'keyword_repeat'],
                             array_keys($filter)
                         ),
-                        'char_filter' => array_keys($charFilter),
-                    ],
+                        'char_filter' => array_keys($charFilter)
+                    ]
                 ],
                 'tokenizer' => $tokenizer,
                 'filter' => $filter,
@@ -107,6 +107,10 @@ class Builder implements BuilderInterface
     {
         $filter = [
             'default_stemmer' => $this->getStemmerConfig(),
+            'unique_stem' => [
+                'type' => 'unique',
+                'only_on_same_position' => true
+            ]
         ];
         return $filter;
     }
