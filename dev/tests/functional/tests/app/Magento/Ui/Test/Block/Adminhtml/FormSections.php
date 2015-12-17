@@ -4,15 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Backend\Test\Block\Widget;
+namespace Magento\Ui\Test\Block\Adminhtml;
 
 use Magento\Mtf\Block\Form;
-use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Block\Mapper;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Is used to represent a new unified form with collapsible sections on the page.
@@ -34,29 +31,14 @@ class FormSections extends Form
     protected $header = 'header';
 
     /**
-     * @constructor
-     * @param SimpleElement $element
-     * @param BlockFactory $blockFactory
-     * @param Mapper $mapper
-     * @param BrowserInterface $browser
-     * @param array $config
-     */
-    public function __construct(
-        SimpleElement $element,
-        BlockFactory $blockFactory,
-        Mapper $mapper,
-        BrowserInterface $browser,
-        array $config = []
-    ) {
-        parent::__construct($element, $blockFactory, $mapper, $browser, $config);
-    }
-
-    /**
-     * Initialize block.
+     * Initialize.
+     *
+     * @return FormSections
      */
     protected function init()
     {
         $this->sections = $this->getFormMapping();
+        return $this;
     }
 
     /**
@@ -74,8 +56,12 @@ class FormSections extends Form
         if (!$section instanceof Section) {
             throw new \Exception('Wrong Section Class.');
         }
-        $section->setWrapper(isset($this->sections[$sectionName]['wrapper']) ? $this->sections[$sectionName]['wrapper'] : '');
-        $section->setMapping(isset($this->sections[$sectionName]['fields']) ? (array)$this->sections[$sectionName]['fields'] : []);
+        $section->setWrapper(
+            isset($this->sections[$sectionName]['wrapper']) ? $this->sections[$sectionName]['wrapper'] : ''
+        );
+        $section->setMapping(
+            isset($this->sections[$sectionName]['fields']) ? (array)$this->sections[$sectionName]['fields'] : []
+        );
 
         return $section;
     }
@@ -131,8 +117,9 @@ class FormSections extends Form
      * [[section => [field => [attribute_name => attribute_value, ..], ..], ..]
      * where section name can be empty if a field is present on the form, but not assigned to any section.
      *
-     * Fixture's field should have 'group = "" ' if a field is present on the form, but is not inside any section.
-     * Fixture's field should not have 'group' property if it's not present on the form.
+     * Fixture's field should have attribute 'group' set to "" (empty string)
+     * if a field is present on the form, but is not inside any section.
+     * Fixture's field should not have 'group' attribute if the field is not present on the form.
      *
      * @param InjectableFixture $fixture
      * @return array
@@ -166,7 +153,7 @@ class FormSections extends Form
     {
         $context = ($element === null) ? $this->_rootElement : $element;
         foreach ($dataBySections as $sectionName => $sectionFields) {
-            if($sectionName) {
+            if ($sectionName) {
                 $this->openSection($sectionName);
                 $this->getSection($sectionName)->fillSection($sectionFields, $context);
             }
@@ -183,14 +170,6 @@ class FormSections extends Form
     public function openSection($sectionName)
     {
         $this->browser->find($this->header)->hover();
-        foreach($this->sections as $name => $sectionData) {
-            if ($name != $sectionName) {
-                $this->getSection($name)->collapse();
-                continue;
-            }
-            $this->getSection($name)->expand();
-            return $this;
-        }
         return $this;
     }
 }
