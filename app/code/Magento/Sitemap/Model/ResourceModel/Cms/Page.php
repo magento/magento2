@@ -60,7 +60,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             [$this->getIdFieldName(), 'url' => 'identifier', 'updated_at' => 'update_time']
         )->join(
             ['store_table' => $this->getTable('cms_page_store')],
-            'main_table.page_id = store_table.' . $linkField,
+            "main_table.{$linkField} = store_table.$linkField",
             []
         )->where(
             'main_table.is_active = 1'
