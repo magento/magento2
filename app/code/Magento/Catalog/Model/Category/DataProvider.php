@@ -17,6 +17,8 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -47,7 +49,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     protected $formElement = [
         'text' => 'input',
-        'hidden' => 'input',
         'boolean' => 'checkbox',
     ];
 
@@ -68,7 +69,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var array
      */
     protected $ignoreFields = [
-        'products_position'
+        'products_position',
+        'position'
     ];
 
     /**
@@ -102,6 +104,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $meta
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -176,6 +179,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Type $entityType
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAttributesMeta(Type $entityType)
     {
