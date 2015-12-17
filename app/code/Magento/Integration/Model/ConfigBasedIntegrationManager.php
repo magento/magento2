@@ -6,6 +6,7 @@
 namespace Magento\Integration\Model;
 
 use Magento\Integration\Model\Config\Converter;
+use Magento\Authorization\Model\Acl\AclRetriever;
 
 /**
  * Class to manage integrations installed from config file
@@ -18,43 +19,51 @@ class ConfigBasedIntegrationManager
      *
      * @var \Magento\Integration\Api\IntegrationServiceInterface
      */
-    protected $_integrationService;
+    protected $integrationService;
 
     /**
      * Integration config
      *
-     * @var Config
+     * @var IntegrationConfig
      */
-    protected $_integrationConfig;
+    protected $integrationConfig;
+
+    /** @var  AclRetriever */
+    protected $aclRetriever;
 
     /**
-     * @param Config $integrationConfig
+     * @param IntegrationConfig $integrationConfig
      * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
+     * @param AclRetriever $aclRetriever
      */
     public function __construct(
-        Config $integrationConfig,
-        \Magento\Integration\Api\IntegrationServiceInterface $integrationService
+        IntegrationConfig $integrationConfig,
+        \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
+        AclRetriever $aclRetriever
     ) {
-        $this->_integrationService = $integrationService;
-        $this->_integrationConfig = $integrationConfig;
+        $this->integrationService = $integrationService;
+        $this->integrationConfig = $integrationConfig;
+        $this->aclRetriever = $aclRetriever;
     }
 
     /**
      * Process integrations from config files for the given array of integration names
      *
-     * @param array $integrationNames
+     * @param array $integrations
      * @return array
      */
-    public function processIntegrationConfig(array $integrationNames)
+    public function processIntegrationConfig(array $integrations)
     {
-        if (empty($integrationNames)) {
+        if (empty($integrations)) {
             return [];
         }
-        /** @var array $integrations */
-        $integrations = $this->_integrationConfig->getIntegrations();
-        foreach ($integrationNames as $name) {
+
+        /** @var array $integrationsResource */
+        $integrationsResource = $this->integrationConfig->getIntegrations();
+        foreach (array_keys($integrations) as $name) {
             $integrationDetails = $integrations[$name];
             $integrationData = [Integration::NAME => $name];
+
             if (isset($integrationDetails[Converter::KEY_EMAIL])) {
                 $integrationData[Integration::EMAIL] = $integrationDetails[Converter::KEY_EMAIL];
             }
@@ -66,18 +75,70 @@ class ConfigBasedIntegrationManager
                 $integrationData[Integration::IDENTITY_LINK_URL] =
                     $integrationDetails[Converter::KEY_IDENTITY_LINKING_URL];
             }
+            if (isset($integrationsResource[$name]['resource'])) {
+                $integrationData['resource'] = $integrationsResource[$name]['resource'];
+            }
             $integrationData[Integration::SETUP_TYPE] = Integration::TYPE_CONFIG;
-            // If it already exists, update it
-            $integration = $this->_integrationService->findByName($name);
+
+            $integration = $this->integrationService->findByName($name);
             if ($integration->getId()) {
-                //If Integration already exists, update it.
-                //For now we will just overwrite the integration with same name but we will need a long term solution
-                $integrationData[Integration::ID] = $integration->getId();
-                $this->_integrationService->update($integrationData);
-            } else {
-                $this->_integrationService->create($integrationData);
+                $originalResources = $this->aclRetriever->getAllowedResourcesByUser(1, $integration->getId());
+                $updateData = $integrationData;
+                $updateData[Integration::ID] = $integration->getId();
+                $integration = $this->integrationService->update($updateData);
+
+                // If there were any changes, delete then recreate integration
+                if ($this->hasDataChanged($integration, $originalResources)) {
+                    $this->integrationService->delete($integration->getId());
+                } else {
+                    continue;
+                }
+            }
+            $this->integrationService->create($integrationData);
+        }
+        return $integrations;
+    }
+
+    /**
+     * Check that model data fields that can be saved
+     * has really changed comparing with origData
+     *
+     * @param Integration $integration
+     * @param array $originalResources
+     * @return bool
+     */
+    public function hasDataChanged(Integration $integration, $originalResources)
+    {
+        if (!$integration->getOrigData())
+            return true;
+
+        // Check if resources have changed
+        $newResources = $integration->getData('resource');
+        $commonResources = array_intersect(
+            $originalResources,
+            $newResources
+        );
+
+        if (count($commonResources) != count($originalResources) || count($commonResources) != count($newResources)) {
+            return true;
+        }
+
+        // Check if other data has changed
+        $fields = [
+            Integration::ID,
+            Integration::NAME,
+            Integration::EMAIL,
+            Integration::ENDPOINT,
+            Integration::IDENTITY_LINK_URL,
+            Integration::SETUP_TYPE,
+            Integration::CONSUMER_ID
+        ];
+        foreach ($fields as $field) {
+            if ($integration->getOrigData($field) != $integration->getData($field)) {
+                return true;
             }
         }
-        return $integrationNames;
+
+        return false;
     }
 }
