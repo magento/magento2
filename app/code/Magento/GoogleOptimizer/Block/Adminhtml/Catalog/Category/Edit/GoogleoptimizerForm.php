@@ -58,6 +58,7 @@ class GoogleoptimizerForm extends \Magento\Catalog\Block\Adminhtml\Form
     protected function _prepareForm()
     {
         $this->_formHelper->addGoogleoptimizerFields($this->getForm(), $this->_getGoogleExperiment(), 'category_form');
+        $this->getForm()->getElement('googleoptimizer_fields')->setData(['legend' => __('Category View Optimization')]);
         return parent::_prepareForm();
     }
 
