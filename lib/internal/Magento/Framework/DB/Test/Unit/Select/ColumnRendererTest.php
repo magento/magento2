@@ -55,9 +55,9 @@ class ColumnsRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $columns
-     * @param $sql
-     * @param $expectedResult
+     * @param array $columns
+     * @param string $sql
+     * @param string $expectedResult
      * @dataProvider renderDataProvider
      */
     public function testRender($columns, $sql, $expectedResult)
@@ -66,15 +66,9 @@ class ColumnsRendererTest extends \PHPUnit_Framework_TestCase
             ['column', null, '`column`'],
             [['table', 'column'], null, '`table`.`column`'],
             [['table', 'column'], 'alias', '`table`.`column` AS `alias`'],
-//            [new \Zend_Db_Expr(Select::SQL_WILDCARD), null, '`*`'],
-//            [$this->sqlWildcard, null, '`*`'],
-//            ['column', 'alias', '`column` AS `alias`'],
-//            [new \Zend_Db_Expr('column'), 'alias', '`column` AS `alias`'],
-//            [['table', $this->sqlWildcard], null, '`table`.`*`'],
         ];
         $this->quoteMock->expects($this->any())
             ->method('quoteColumnAs')
-            //->willReturnMap($mapValues);
             ->willReturnMap($mapValues);
         $this->selectMock->expects($this->exactly(2))
             ->method('getPart')
@@ -89,9 +83,6 @@ class ColumnsRendererTest extends \PHPUnit_Framework_TestCase
             [[['', 'column', null]], 'SELECT', 'SELECT `column`'],
             [[['table', 'column', null]], 'SELECT', 'SELECT `table`.`column`'],
             [[['table', 'column', 'alias']], 'SELECT', 'SELECT `table`.`column` AS `alias`'],
-//            [[['', '*', null]], 'SELECT', 'SELECT `*`'],
-//            [[['table', '*', null]], 'SELECT', 'SELECT `table`.`*`'],
-//            [[['', new \Zend_Db_Expr('column'), 'alias']], 'SELECT', 'SELECT `column` AS `alias`'],
         ];
     }
 }

@@ -35,7 +35,7 @@ class DistinctRendererTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject('\Magento\Framework\DB\Select\DistinctRenderer');
     }
 
-    public function testRenderNoDistinct()
+    public function testRenderNoPart()
     {
         $sql = 'SELECT';
         $this->selectMock->expects($this->once())
