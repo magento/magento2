@@ -29,6 +29,12 @@ class VaultConfigProvider implements ConfigProviderInterface
      */
     private $session;
 
+    /**
+     * VaultConfigProvider constructor.
+     * @param StoreManagerInterface $storeManager
+     * @param VaultPaymentInterface $vault
+     * @param Session $session
+     */
     public function __construct(
         StoreManagerInterface $storeManager,
         VaultPaymentInterface $vault,

@@ -25,6 +25,11 @@ class ConfigFactory implements ConfigFactoryInterface
         $this->om = $om;
     }
 
+    /**
+     * @param string|null $paymentCode
+     * @param string|null $pathPattern
+     * @return mixed
+     */
     public function create($paymentCode = null, $pathPattern = null)
     {
         $arguments = [

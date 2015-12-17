@@ -12,5 +12,10 @@ namespace Magento\Payment\Gateway;
  */
 interface ConfigFactoryInterface
 {
+    /**
+     * @param string|null $paymentCode
+     * @param string|null $pathPattern
+     * @return mixed
+     */
     public function create($paymentCode = null, $pathPattern = null);
 }
