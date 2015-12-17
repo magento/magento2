@@ -100,7 +100,6 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
             $output->writeln("");
             $output->writeln("<info>Unused product attributes successfully cleaned up:</info>");
             $output->writeln("<comment>  " . implode("\n  ", $attributeTables) . "</comment>");
-
         } catch (\Exception $exception) {
             $this->attributeResource->rollBack();
 
@@ -134,6 +133,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
      * @param AdapterInterface $connection
      * @param string $attributeTableName
      * @return array
+     * @throws \Zend_Db_Statement_Exception
      */
     private function getAffectedAttributeIds(AdapterInterface $connection, $attributeTableName)
     {
