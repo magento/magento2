@@ -12,6 +12,11 @@
             <argument name="attributeLabelCache" xsi:type="object">Magento\Framework\App\Cache\Type\Translate</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Ui\Component\Category\Form\Element\Wysiwyg">
+        <arguments>
+            <argument name="wysiwygConfig" xsi:type="object">Magento\Catalog\Ui\Component\Category\Form\Element\Wysiwyg\Config</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark">
         <arguments>
             <argument name="imageTypes" xsi:type="array">
