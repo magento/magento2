@@ -21,6 +21,6 @@ class TransactionClone extends AbstractTransaction
         $transactionId = $data[CaptureDataBuilder::TRANSACTION_ID];
         unset($data[CaptureDataBuilder::TRANSACTION_ID]);
 
-        return $this->transaction->cloneTransaction($transactionId, $data);
+        return $this->adapter->cloneTransaction($transactionId, $data);
     }
 }

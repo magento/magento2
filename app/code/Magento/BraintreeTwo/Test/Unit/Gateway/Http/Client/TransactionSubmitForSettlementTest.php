@@ -7,7 +7,7 @@ namespace Magento\BraintreeTwo\Test\Unit\Gateway\Http\Client;
 
 use Braintree\Result\Successful;
 use Magento\BraintreeTwo\Gateway\Http\Client\TransactionSubmitForSettlement;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeTransaction;
+use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
 use Psr\Log\LoggerInterface;
@@ -28,9 +28,9 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var BraintreeTransaction|\PHPUnit_Framework_MockObject_MockObject
+     * @var BraintreeAdapter|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $braintreeTransaction;
+    private $adapter;
 
     protected function setUp()
     {
@@ -39,7 +39,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['debug'])
             ->getMock();
-        $this->braintreeTransaction = $this->getMockBuilder(BraintreeTransaction::class)
+        $this->adapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->setMethods(['submitForSettlement'])
             ->getMock();
@@ -47,7 +47,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
         $this->client = new TransactionSubmitForSettlement(
             $criticalLoggerMock,
             $this->logger,
-            $this->braintreeTransaction
+            $this->adapter
         );
     }
 
@@ -59,7 +59,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
     public function testPlaceRequestWithException()
     {
         $exception = new \Exception('Transaction has been declined');
-        $this->braintreeTransaction->expects(static::once())
+        $this->adapter->expects(static::once())
             ->method('submitForSettlement')
             ->willThrowException($exception);
 
@@ -74,7 +74,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
     public function testPlaceRequest()
     {
         $data = new Successful(['success'], [true]);
-        $this->braintreeTransaction->expects(static::once())
+        $this->adapter->expects(static::once())
             ->method('submitForSettlement')
             ->willReturn($data);
 
