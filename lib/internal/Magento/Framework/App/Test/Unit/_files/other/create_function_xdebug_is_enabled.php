@@ -1,11 +1,7 @@
 <?php
 /**
- * create_xdebug_enabled_function.php
- *
- * @category    ClassyLlama
- * @package
- * @author      Erik Hansen <erik@classyllama.com>
- * @copyright   Copyright (c) 2015 Erik Hansen & Classy Llama Studios, LLC
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 if (!function_exists('xdebug_is_enabled')) {
