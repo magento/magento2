@@ -27,6 +27,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandler">
+        <arguments>
+            <argument name="indexStructure" xsi:type="object">Magento\CatalogSearch\Model\Indexer\IndexStructureProxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
