@@ -4,12 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
- * Template for \Magento\Catalog\Block\Adminhtml\Category\Cointainer
+ * Template for \Magento\Catalog\Block\Adminhtml\Category\Edit
  */
 ?>
 <div data-id="information-dialog-category" class="messages" style="display: none;">
@@ -17,3 +13,10 @@
         <div><?php /* @escapeNotVerified */ echo __('This operation can take a long time'); ?></div>
     </div>
 </div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "categoryForm": {"refreshUrl": "<?php /* @escapeNotVerified */ echo $block->getRefreshPathUrl() ?>"}
+        }
+    }
+</script>
