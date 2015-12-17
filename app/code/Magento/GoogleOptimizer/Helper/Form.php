@@ -24,7 +24,7 @@ class Form extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $fieldset = $form->addFieldset(
             'googleoptimizer_fields',
-            ['legend' => __('Google Analytics Content Experiments Code')]
+            ['legend' => __('Category View Optimization')]
         );
 
         $fieldset->addField(
