@@ -57,6 +57,10 @@ class GroupRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($sql, $this->model->render($this->selectMock, $sql));
     }
 
+    /**
+     * Data provider for testRenderNoPart
+     * @return array
+     */
     public function renderNoPartDataProvider()
     {
         return [
@@ -69,7 +73,7 @@ class GroupRendererTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $sql = 'SELECT';
-        $expectedResult = $sql . ' ' . Select::SQL_GROUP_BY . ' `group1`' . ",\n\t" . '`group2`';
+        $expectedResult = $sql . ' ' . Select::SQL_GROUP_BY . ' group1' . ",\n\t" . 'group2';
         $mapValues = [
             [Select::FROM, true],
             [Select::GROUP, ['group1', 'group2']]
@@ -79,12 +83,7 @@ class GroupRendererTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($mapValues);
         $this->quoteMock->expects($this->exactly(2))
             ->method('quoteIdentifier')
-            ->willReturnMap(
-                [
-                    ["group1", '`group1`'],
-                    ["group2", '`group2`']
-                ]
-            );
+            ->willReturnArgument(0);
         $this->assertEquals($expectedResult, $this->model->render($this->selectMock, $sql));
     }
 }

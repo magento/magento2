@@ -48,6 +48,10 @@ class HavingRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($sql, $this->model->render($this->selectMock, $sql));
     }
 
+    /**
+     * Data provider for testRenderNoPart
+     * @return array
+     */
     public function renderNoPartDataProvider()
     {
         return [
