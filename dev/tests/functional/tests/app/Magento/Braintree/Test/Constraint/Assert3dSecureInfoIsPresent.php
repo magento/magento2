@@ -22,11 +22,16 @@ class Assert3dSecureInfoIsPresent extends AbstractConstraint
     {
         $actualPaymentInformation = $salesOrderView->getBraintreeInfoBlock()->getPaymentInfo();
         foreach ($paymentInformation as $key => $value) {
-            \PHPUnit_Framework_Assert::assertArrayHasKey($key, $actualPaymentInformation,
+            \PHPUnit_Framework_Assert::assertArrayHasKey(
+                $key,
+                $actualPaymentInformation,
                 '3D Secure information is not present.'
             );
-            \PHPUnit_Framework_Assert::assertEquals($paymentInformation[$key], $value,
-                '3D Secure information is not equal to information from data set.');
+            \PHPUnit_Framework_Assert::assertEquals(
+                $paymentInformation[$key],
+                $value,
+                '3D Secure information is not equal to information from data set.'
+            );
         }
     }
 

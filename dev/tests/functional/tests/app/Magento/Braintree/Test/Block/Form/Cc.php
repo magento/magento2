@@ -6,11 +6,7 @@
 
 namespace Magento\Braintree\Test\Block\Form;
 
-
-use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Payment\Test\Block\Form\Cc as CreditCard;

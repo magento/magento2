@@ -118,17 +118,17 @@
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">1</item>
             </field>
-            <field name="payment/braintreetwo/allowspecific" xsi:type="array">
+            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo/braintreetwo_3dsecure/allowspecific" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">1</item>
             </field>
-            <field name="payment/braintreetwo/specificcountry" xsi:type="array">
+            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo/braintreetwo_3dsecure/specificcountry" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="value" xsi:type="array">
-                    <item name="United States" xsi:type="string">GB</item>
+                    <item name="United Kingdom" xsi:type="string">GB</item>
                 </item>
             </field>
         </dataset>
@@ -139,7 +139,7 @@
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">0</item>
             </field>
-            <field name="payment/braintreetwo/allowspecific" xsi:type="array">
+            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo/braintreetwo_3dsecure/allowspecific" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>

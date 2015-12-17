@@ -21,15 +21,15 @@ use Magento\Mtf\TestCase\Scenario;
  * 2. Add products to the Shopping Cart.
  * 3. Apply discounts in Shopping Cart according to dataset.
  * 4. In 'Estimate Shipping and Tax' section specify destination using values from Test Data.
- * 7. Click the 'Go to Checkout' button.
- * 8. Fill shipping information.
- * 9. Select shipping method.
- * 11. Select payment method (use reward points and store credit if available).
- * 12. Verify order total on review step.
- * 13. Click 'Place Order' button.
- * 13. Specify password in 3D Secure popup.
- * 13. Click 'Submit' to place order.
- * 14. Perform assertions.
+ * 5. Click the 'Go to Checkout' button.
+ * 6. Fill shipping information.
+ * 7. Select shipping method.
+ * 8. Select payment method (use reward points and store credit if available).
+ * 9. Verify order total on review step.
+ * 10. Click 'Place Order' button.
+ * 11. Specify password in 3D Secure popup.
+ * 12. Click 'Submit' to place order.
+ * 13. Perform assertions.
  *
  * @group Braintree_(CS)
  * @ZephyrId MAGETWO-46479
