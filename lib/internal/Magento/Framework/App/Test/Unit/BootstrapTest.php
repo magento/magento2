@@ -188,14 +188,28 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         $bootstrap = self::createBootstrap();
 
+        $isXdebugInitiallyEnabled = $this->isXdebugEnabled();
+
         $this->ensureXdebugIsDisabled();
         $this->assertFalse($bootstrap->ignoreExceptionsInDeveloperMode());
 
         $this->ensureXdebugIsEnabled();
         $this->assertTrue($bootstrap->ignoreExceptionsInDeveloperMode());
 
-        // In case Xdebug is installed, disable it for remainder of tests in order to not slow down tests
-        $this->ensureXdebugIsDisabled();
+        // Restore Xdebug to initial state
+        if ($isXdebugInitiallyEnabled) {
+            $this->ensureXdebugIsEnabled();
+        } else {
+            $this->ensureXdebugIsDisabled();
+        }
+    }
+
+    protected function isXdebugEnabled()
+    {
+        if (function_exists('xdebug_is_enabled')) {
+            return xdebug_is_enabled();
+        }
+        return false;
     }
 
     protected function ensureXdebugIsDisabled()
