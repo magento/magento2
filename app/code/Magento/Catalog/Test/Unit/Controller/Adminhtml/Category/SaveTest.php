@@ -192,18 +192,22 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      *
      * @param int|bool $categoryId
      * @param int $storeId
+     * @param int|string $activeTabId
      * @param int|null $parentId
      * @return void
      *
      * @dataProvider dataProviderExecute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testExecute($categoryId, $storeId, $parentId)
+    public function testExecute($categoryId, $storeId, $activeTabId, $parentId)
     {
-        $rootCategoryId = 896;
+        $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
         $products = [['any_product']];
         $postData = [
-            'general' => ['general-data', 'parent' => $parentId, 'store_id' => $storeId],
+            'general' => [
+                'general-data',
+                'parent' => $parentId,
+            ],
             'category_products' => json_encode($products),
         ];
         /**
@@ -240,6 +244,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'getPath',
                 'getResource',
                 'setPath',
+                'setParentId',
                 'setData',
                 'addData',
                 'setAttributeSetId',
@@ -267,6 +272,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'load',
                 'getPath',
                 'setPath',
+                'setParentId',
                 'setData',
                 'addData',
                 'setAttributeSetId',
@@ -275,6 +281,17 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'setPostedProducts',
                 'getId'
             ],
+            [],
+            '',
+            false
+        );
+        /**
+         * @var \Magento\Backend\Model\Auth\Session
+         * |\PHPUnit_Framework_MockObject_MockObject $sessionMock
+         */
+        $sessionMock = $this->getMock(
+            'Magento\Backend\Model\Auth\Session',
+            ['setActiveTabId'],
             [],
             '',
             false
@@ -360,6 +377,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                     [
                         ['id', false, $categoryId],
                         ['store', null, $storeId],
+                        ['active_tab_id', null, $activeTabId],
+                        ['parent', null, $parentId],
                     ]
                 )
             );
@@ -371,6 +390,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     [
+                        ['Magento\Backend\Model\Auth\Session', $sessionMock],
                         ['Magento\Framework\Registry', $registryMock],
                         ['Magento\Cms\Model\Wysiwyg\Config', $wysiwygConfigMock],
                         ['Magento\Store\Model\StoreManagerInterface', $storeManagerMock],
@@ -380,6 +400,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('setStoreId')
             ->with($storeId);
+        if ($activeTabId) {
+            $sessionMock->expects($this->once())
+                ->method('setActiveTabId')
+                ->with($activeTabId);
+        } else {
+            $sessionMock->expects($this->never())
+                ->method('setActiveTabId');
+        }
         $registryMock->expects($this->any())
             ->method('register')
             ->will(
@@ -435,6 +463,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('setPath')
             ->with('parent_category_path');
+        $categoryMock->expects($this->once())
+            ->method('setParentId')
+            ->with($parentId);
         $categoryMock->expects($this->atLeastOnce())
             ->method('setData')
             ->will(
@@ -536,11 +567,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             [
                 'categoryId' => false,
                 'storeId' => 7,
+                'activeTabId' => 33,
                 'parentId' => 123,
             ],
             [
                 'categoryId' => false,
                 'storeId' => 7,
+                'activeTabId' => '',
                 'parentId' => null,
             ]
         ];
