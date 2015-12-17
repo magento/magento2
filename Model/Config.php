@@ -22,9 +22,9 @@ class Config implements ClientOptionsInterface
     const ENGINE_NAME = 'elasticsearch';
 
     /**
-     * Elasticsearch Entity type for product
+     * Elasticsearch Entity type
      */
-    const ELASTICSEARCH_TYPE_PRODUCT = 'product';
+    const ELASTICSEARCH_TYPE_DOCUMENT = 'document';
 
     /**
      * Default Elasticsearch server timeout
@@ -133,6 +133,6 @@ class Config implements ClientOptionsInterface
      */
     public function getEntityType()
     {
-        return self::ELASTICSEARCH_TYPE_PRODUCT;
+        return self::ELASTICSEARCH_TYPE_DOCUMENT;
     }
 }
