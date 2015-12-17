@@ -104,7 +104,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Get threshold amount for 3d secure
-     * @return double
+     * @return float
      */
     public function getThresholdAmount()
     {

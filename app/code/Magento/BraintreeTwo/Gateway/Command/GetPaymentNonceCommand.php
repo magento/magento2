@@ -38,6 +38,7 @@ class GetPaymentNonceCommand implements CommandInterface
     /**
      * @param PaymentTokenManagementInterface $tokenManagement
      * @param BraintreeAdapter $adapter
+     * @param ArrayResultFactory $resultFactory
      */
     public function __construct(
         PaymentTokenManagementInterface $tokenManagement,
