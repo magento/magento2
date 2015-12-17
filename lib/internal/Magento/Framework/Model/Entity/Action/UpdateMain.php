@@ -32,8 +32,8 @@ class UpdateMain
         MetadataPool $metadataPool,
         UpdateEntityRow $updateEntityRow
     ) {
-        $this->updateEntityRow = $updateEntityRow;
         $this->metadataPool = $metadataPool;
+        $this->updateEntityRow = $updateEntityRow;
     }
 
     /**

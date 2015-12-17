@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
+
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Context;

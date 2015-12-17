@@ -11,6 +11,10 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Option;
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
+/**
+ * Class CollectionTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -32,8 +32,8 @@ class ReadMain
         MetadataPool $metadataPool,
         ReadEntityRow $readEntityRow
     ) {
-        $this->readEntityRow = $readEntityRow;
         $this->metadataPool = $metadataPool;
+        $this->readEntityRow = $readEntityRow;
     }
 
     /**
