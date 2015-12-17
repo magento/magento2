@@ -75,7 +75,6 @@ class Collection extends AbstractCollection
     protected function _renderFiltersBefore()
     {
         $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
-
-        $this->joinStoreRelationTable('cms_block_store', 'block_id', $entityMetadata->getLinkField());
+        $this->joinStoreRelationTable('cms_block_store', $entityMetadata->getLinkField());
     }
 }

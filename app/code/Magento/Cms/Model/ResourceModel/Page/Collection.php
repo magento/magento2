@@ -100,8 +100,7 @@ class Collection extends AbstractCollection
     protected function _afterLoad()
     {
         $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
-
-        $this->performAfterLoad('cms_page_store', 'page_id', $entityMetadata->getLinkField());
+        $this->performAfterLoad('cms_page_store', $entityMetadata->getLinkField());
         $this->_previewFlag = false;
 
         return parent::_afterLoad();
@@ -115,7 +114,6 @@ class Collection extends AbstractCollection
     protected function _renderFiltersBefore()
     {
         $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
-
-        $this->joinStoreRelationTable('cms_page_store', 'page_id', $entityMetadata->getLinkField());
+        $this->joinStoreRelationTable('cms_page_store', $entityMetadata->getLinkField());
     }
 }
