@@ -241,36 +241,33 @@ class Bootstrap
     }
 
     /**
-     * Runs application
+     * Runs an application
      *
      * @param \Magento\Framework\AppInterface $application
      * @return void
      */
     public function run(AppInterface $application)
     {
+        $prelaunchSuccessful = $this->preLaunch($application);
+        if (!$prelaunchSuccessful) {
+            return;
+        }
+
         // If ignoring exceptions, don't wrap in a try/catch block so that PHP/Xdebug can output a clean backtrace
         if ($this->isDeveloperMode() && $this->ignoreExceptionsInDeveloperMode()) {
             Profiler::start('magento');
-            // If ignoring exceptions, don't initialize custom error handler so that PHP/Xdebug handles errors
-            $this->initObjectManager();
-            $this->assertMaintenance();
-            $this->assertInstalled();
             $response = $application->launch();
             $response->sendResponse();
             Profiler::stop('magento');
         } else {
             try {
                 try {
-                    \Magento\Framework\Profiler::start('magento');
-                    $this->initErrorHandler();
-                    $this->initObjectManager();
-                    $this->assertMaintenance();
-                    $this->assertInstalled();
+                    Profiler::start('magento');
                     $response = $application->launch();
                     $response->sendResponse();
-                    \Magento\Framework\Profiler::stop('magento');
+                    Profiler::stop('magento');
                 } catch (\Exception $e) {
-                    \Magento\Framework\Profiler::stop('magento');
+                    Profiler::stop('magento');
                     if (!$application->catchException($this, $e)) {
                         throw $e;
                     }
@@ -279,6 +276,39 @@ class Bootstrap
                 $this->terminate($e);
             }
         }
+    }
+
+    /**
+     * Initialize prelaunch sequence to prepare for launching application
+     *
+     * All code is being run within a try/catch block (even if $this->ignoreExceptionsInDeveloperMode() is true), as
+     * this prelaunch code may throw exceptions that must be handled by \Magento\Framework\AppInterface::catchException
+     *
+     * @param AppInterface $application
+     * @return boolean
+     */
+    protected function preLaunch(AppInterface $application)
+    {
+        try {
+            try {
+                \Magento\Framework\Profiler::start('magento_prelaunch');
+                $this->initErrorHandler();
+                $this->initObjectManager();
+                $this->assertMaintenance();
+                $this->assertInstalled();
+                \Magento\Framework\Profiler::stop('magento_prelaunch');
+            } catch (\Exception $e) {
+                \Magento\Framework\Profiler::stop('magento_prelaunch');
+                if (!$application->catchException($this, $e)) {
+                    throw $e;
+                }
+                return false;
+            }
+        } catch (\Exception $e) {
+            $this->terminate($e);
+            return false;
+        }
+        return true;
     }
 
     /**
