@@ -104,20 +104,29 @@ define(['uiElement', 'underscore', 'mage/url'],
                     });
                     return params;
                 },
-                isGiftMessageAvailable: function() {
+
+                /**
+                 * Check if gift message can be displayed
+                 *
+                 * @returns {Boolean}
+                 */
+                isGiftMessageAvailable: function () {
+                    var isGloballyAvailable,
+                        giftMessageConfig,
+                        itemConfig;
+
                     // itemId represent gift message level: 'orderLevel' constant or cart item ID
-                    if (this.itemId == 'orderLevel') {
+                    if (this.itemId === 'orderLevel') {
                         return this.getConfigValue('isOrderLevelGiftOptionsEnabled');
                     }
 
                     // gift message product configuration must override system configuration
-                    var isGloballyAvailable = this.getConfigValue('isItemLevelGiftOptionsEnabled'),
-                        giftMessageConfig = window.giftOptionsConfig.giftMessage,
-                        itemConfig = giftMessageConfig.hasOwnProperty('itemLevel')
-                            && giftMessageConfig['itemLevel'].hasOwnProperty(this.itemId)
-                            ? giftMessageConfig['itemLevel'][this.itemId]
-                            : {};
-
+                    isGloballyAvailable = this.getConfigValue('isItemLevelGiftOptionsEnabled');
+                    giftMessageConfig = window.giftOptionsConfig.giftMessage;
+                    itemConfig = giftMessageConfig.hasOwnProperty('itemLevel') &&
+                        giftMessageConfig.itemLevel.hasOwnProperty(this.itemId) ?
+                        giftMessageConfig.itemLevel[this.itemId] :
+                        {};
 
                     return itemConfig.hasOwnProperty('is_available') ? itemConfig['is_available'] : isGloballyAvailable;
                 }
