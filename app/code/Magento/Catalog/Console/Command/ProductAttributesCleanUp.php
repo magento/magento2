@@ -32,29 +32,21 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     protected $appState;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\App\ObjectManagerFactory $objectManagerFactory
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\App\ObjectManagerFactory $objectManagerFactory
+        \Magento\Framework\App\State $appState
     ) {
         $this->productAttributeRepository = $productAttributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->attributeResource = $attributeResource;
         $this->appState = $appState;
-        $this->objectManager = $objectManagerFactory->create([]);
         parent::__construct();
     }
 
@@ -77,11 +69,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
         $connection = $this->attributeResource->getConnection();
         $attributeTables = $this->getAttributeTables();
 
-        /** @var \Symfony\Component\Console\Helper\ProgressBar $progress */
-        $progress = $this->objectManager->create(
-            'Symfony\Component\Console\Helper\ProgressBar',
-            ['output' => $output, 'max' => count($attributeTables)]
-        );
+        $progress = new \Symfony\Component\Console\Helper\ProgressBar($output, count($attributeTables));
         $progress->setFormat('<comment>%message%</comment> %current%/%max% [%bar%] %percent:3s%% %elapsed%');
 
         $this->attributeResource->beginTransaction();
