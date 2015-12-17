@@ -8,6 +8,7 @@ namespace Magento\BraintreeTwo\Model\Ui;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -16,29 +17,48 @@ use Magento\Framework\UrlInterface;
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
     /**
+     * @var TokenUiComponentInterfaceFactory
+     */
+    private $componentFactory;
+
+    /**
      * @var \Magento\Framework\UrlInterface
      */
     private $urlBuilder;
 
-    public function __construct(UrlInterface $urlBuilder)
-    {
+    /**
+     * @param TokenUiComponentInterfaceFactory $componentFactory
+     * @param UrlInterface $urlBuilder
+     */
+    public function __construct(
+        TokenUiComponentInterfaceFactory $componentFactory,
+        UrlInterface $urlBuilder
+    ) {
+        $this->componentFactory = $componentFactory;
         $this->urlBuilder = $urlBuilder;
     }
 
     /**
+     * Get UI component for token
      * @param PaymentTokenInterface $paymentToken
      * @return TokenUiComponentInterface
      */
     public function getComponentForToken(PaymentTokenInterface $paymentToken)
     {
-        return new TokenUiComponent(
+        $component = $this->componentFactory->create(
             [
-                'nonceUrl' => $this->getNonceRetrieveUrl(),
-                'details' => json_decode($paymentToken->getTokenDetails() ?: '{}', true),
-                'publicHash' => $paymentToken->getPublicHash()
-            ],
-            'Magento_BraintreeTwo/js/view/payment/method-renderer/vault'
+                'config' => [
+                    TokenUiComponentProviderInterface::COMPONENT_NONCE_URL => $this->getNonceRetrieveUrl(),
+                    TokenUiComponentProviderInterface::COMPONENT_DETAILS => json_decode(
+                        $paymentToken->getTokenDetails() ?: '{}', true
+                    ),
+                    TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash()
+                ],
+                'name' => 'Magento_BraintreeTwo/js/view/payment/method-renderer/vault'
+            ]
         );
+
+        return $component;
     }
 
     /**
