@@ -28,9 +28,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     /**
      * Initialize dependencies.
      */
-    public function __construct()
+    public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
-        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->schema = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/queue_merged.xsd');
         $this->perFileSchema = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/queue.xsd');
     }

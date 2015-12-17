@@ -21,8 +21,8 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = new \Magento\Framework\MessageQueue\Config\SchemaLocator();
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->model = new \Magento\Framework\MessageQueue\Config\SchemaLocator($this->urnResolver);
     }
 
     public function testGetSchema()
