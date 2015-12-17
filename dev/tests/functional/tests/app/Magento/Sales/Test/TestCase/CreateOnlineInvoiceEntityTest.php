@@ -14,7 +14,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 2. Create product.
  *
  * Steps:
- * 1. Open Backend.
+ * 1. Log in Admin.
  * 2. Open Sales -> Orders.
  * 3. Click Create New Order.
  * 4. Select Customer created in preconditions.

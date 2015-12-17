@@ -11,12 +11,12 @@ use Magento\Sales\Test\Page\Adminhtml\InvoiceIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesInvoiceView;
 
 /**
- * Assert invoice items on invoice view page
+ * Assert invoice items on invoice view page.
  */
 class AssertInvoiceItems extends AbstractAssertItems
 {
     /**
-     * Assert invoice items on invoice view page
+     * Assert invoice items on invoice view page.
      *
      * @param InvoiceIndex $invoiceIndex
      * @param SalesInvoiceView $salesInvoiceView
@@ -48,7 +48,7 @@ class AssertInvoiceItems extends AbstractAssertItems
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
