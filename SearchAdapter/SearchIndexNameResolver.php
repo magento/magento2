@@ -5,7 +5,6 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter;
 
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Framework\Exception\LocalizedException;
@@ -21,12 +20,7 @@ class SearchIndexNameResolver
     protected $clientConfig;
 
     /**
-     * @var ElasticsearchClient
-     */
-    protected $client;
-
-    /**
-     * Constructor for Index Name Resolver.
+     * Constructor for Index Name Resolver
      *
      * @param Config $clientConfig
      * @param array $options
@@ -40,7 +34,7 @@ class SearchIndexNameResolver
     }
 
     /**
-     * Returns the index (alias) name.
+     * Returns the index (alias) name
      *
      * @param int $storeId
      * @param string $indexerId
@@ -48,8 +42,8 @@ class SearchIndexNameResolver
      */
     public function getIndexName($storeId, $indexerId)
     {
-        $entityType = $this->getIndexMapping($indexerId);
-        return $this->clientConfig->getIndexPrefix() . '_' . $entityType . '_' . $storeId;
+        $mappedIndexerId = $this->getIndexMapping($indexerId);
+        return $this->clientConfig->getIndexPrefix() . '_' . $mappedIndexerId . '_' . $storeId;
     }
 
     /**
@@ -58,13 +52,13 @@ class SearchIndexNameResolver
      * @param string $indexerId
      * @return string
      */
-    protected function getIndexMapping($indexerId)
+    private function getIndexMapping($indexerId)
     {
         if ($indexerId == Fulltext::INDEXER_ID) {
-            $entityType = 'product';
+            $mappedIndexerId = 'product';
         } else {
-            $entityType = $indexerId;
+            $mappedIndexerId = $indexerId;
         }
-        return $entityType;
+        return $mappedIndexerId;
     }
 }

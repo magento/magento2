@@ -163,7 +163,6 @@ class Elasticsearch
     {
         if (count($documents)) {
             try {
-                $this->checkIndex($storeId, $mappedIndexerId, false);
                 $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName);
                 $this->client->bulkQuery($bulkIndexDocuments);
@@ -279,7 +278,7 @@ class Elasticsearch
      * @param string $mappedIndexerId
      * @return $this
      */
-    protected function checkIndex(
+    public function checkIndex(
         $storeId,
         $mappedIndexerId,
         $checkAlias = true

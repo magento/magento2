@@ -71,7 +71,7 @@ class IndexNameResolver
      *
      * @return string
      */
-    protected function getIndexNamespace()
+    private function getIndexNamespace()
     {
         return $this->clientConfig->getIndexPrefix();
     }
@@ -80,31 +80,31 @@ class IndexNameResolver
      * Get index namespace from config
      *
      * @param int $storeId
-     * @param string $entityType
+     * @param string $mappedIndexerId
      *
      * @return string
      */
-    public function getIndexNameForAlias($storeId, $entityType)
+    public function getIndexNameForAlias($storeId, $mappedIndexerId)
     {
-        return $this->clientConfig->getIndexPrefix() . '_' . $entityType . '_' . $storeId;
+        return $this->clientConfig->getIndexPrefix() . '_' . $mappedIndexerId . '_' . $storeId;
     }
 
     /**
      * Returns the index name
      *
      * @param int $storeId
-     * @param string $entityType
+     * @param string $mappedIndexerId
      * @param array $preparedIndex
      * @return string
      */
-    public function getIndexName($storeId, $entityType, array $preparedIndex)
+    public function getIndexName($storeId, $mappedIndexerId, array $preparedIndex)
     {
         if (isset($preparedIndex[$storeId])) {
             return $preparedIndex[$storeId];
         } else {
-            $indexName = $this->getIndexFromAlias($storeId, $entityType);
+            $indexName = $this->getIndexFromAlias($storeId, $mappedIndexerId);
             if (empty($indexName)) {
-                $indexName = $this->getIndexPattern($storeId, $entityType) . 1;
+                $indexName = $this->getIndexPattern($storeId, $mappedIndexerId) . 1;
             }
         }
         return $indexName;
@@ -114,26 +114,26 @@ class IndexNameResolver
      * Returns index pattern.
      *
      * @param int $storeId
-     * @param string $entityType
+     * @param string $mappedIndexerId
      * @return string
      */
-    public function getIndexPattern($storeId, $entityType)
+    public function getIndexPattern($storeId, $mappedIndexerId)
     {
-        return $this->getIndexNamespace() . '_' . $entityType . '_' . $storeId . '_v';
+        return $this->getIndexNamespace() . '_' . $mappedIndexerId . '_' . $storeId . '_v';
     }
 
     /**
      * Returns index for store in alias definition.
      *
      * @param int $storeId
-     * @param string $entityType
+     * @param string $mappedIndexerId
      * @return string
      */
-    public function getIndexFromAlias($storeId, $entityType)
+    public function getIndexFromAlias($storeId, $mappedIndexerId)
     {
         $storeIndex = '';
-        $indexPattern = $this->getIndexPattern($storeId, $entityType);
-        $namespace = $this->getIndexNamespace() . '_' . $entityType . '_' . $storeId;
+        $indexPattern = $this->getIndexPattern($storeId, $mappedIndexerId);
+        $namespace = $this->getIndexNamespace() . '_' . $mappedIndexerId . '_' . $storeId;
         if ($this->client->existsAlias($namespace)) {
             $alias = $this->client->getAlias($namespace);
             $indices = array_keys($alias);
@@ -156,10 +156,10 @@ class IndexNameResolver
     public function getIndexMapping($indexerId)
     {
         if ($indexerId == Fulltext::INDEXER_ID) {
-            $indexName = 'product';
+            $mappedIndexerId = 'product';
         } else {
-            $indexName = $indexerId;
+            $mappedIndexerId = $indexerId;
         }
-        return $indexName;
+        return $mappedIndexerId;
     }
 }

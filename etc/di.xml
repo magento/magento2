@@ -33,6 +33,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexStructureFactory">
+        <arguments>
+            <argument name="structures" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexStructure</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogSearch\Model\ResourceModel\EngineProvider">
         <arguments>
             <argument name="engines" xsi:type="array">
