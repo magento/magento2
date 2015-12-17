@@ -111,5 +111,68 @@
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
+        <dataset name="braintreetwo_3d_secure_uk">
+            <field name="payment/braintreetwo/verify_3dsecure" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintreetwo/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintreetwo/specificcountry" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="United States" xsi:type="string">GB</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="braintreetwo_3d_secure_uk_rollback">
+            <field name="payment/braintreetwo/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="payment/braintreetwo/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="braintreetwo_3d_secure_not_triggered_due_threshold">
+            <field name="payment/braintreetwo/verify_3dsecure" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintreetwo/threshold_amount" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">300</item>
+            </field>
+        </dataset>
+        <dataset name="braintreetwo_3d_secure_not_triggered_due_threshold_rollback">
+            <field name="payment/braintreetwo/verify_3dsecure" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="payment/braintreetwo/threshold_amount" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
     </repository>
 </config>
