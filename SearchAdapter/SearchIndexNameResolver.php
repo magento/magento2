@@ -7,7 +7,6 @@ namespace Magento\Elasticsearch\SearchAdapter;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Elasticsearch\Model\Config;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Alias name resolver
@@ -17,18 +16,13 @@ class SearchIndexNameResolver
     /**
      * @var Config
      */
-    protected $clientConfig;
+    private $clientConfig;
 
     /**
-     * Constructor for Index Name Resolver
-     *
      * @param Config $clientConfig
-     * @param array $options
-     * @throws LocalizedException
      */
     public function __construct(
-        Config $clientConfig,
-        $options = []
+        Config $clientConfig
     ) {
         $this->clientConfig = $clientConfig;
     }
