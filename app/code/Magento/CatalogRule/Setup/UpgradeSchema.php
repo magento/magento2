@@ -37,17 +37,22 @@ class UpgradeSchema implements UpgradeSchemaInterface
     private function removeSubProductDiscounts(SchemaSetupInterface $setup)
     {
         $connection = $setup->getConnection();
-        $fields = [
-            'table' => 'catalogrule',
-            'columns' => [
+        $data = [
+            'catalogrule' => [
                 'sub_is_enable',
                 'sub_simple_action',
-                'sub_discount_amount'
-            ]
+                'sub_discount_amount',
+            ],
+            'catalogrule_product' => [
+                'sub_simple_action',
+                'sub_discount_amount',
+            ],
         ];
 
-        foreach ($fields['columns'] as $filedInfo) {
-            $connection->dropColumn($setup->getTable($fields['table']), $filedInfo);
+        foreach ($data as $table=>$fields) {
+            foreach ($fields as $field){
+                $connection->dropColumn($setup->getTable($table), $field);
+            }
         }
     }
 }
