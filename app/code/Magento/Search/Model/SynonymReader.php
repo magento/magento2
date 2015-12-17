@@ -17,11 +17,13 @@ use Magento\Framework\Registry;
  *
  * @method \Magento\Search\Model\ResourceModel\SynonymReader _getResource()
  * @method \Magento\Search\Model\ResourceModel\SynonymReader getResource()
- * @method \Magento\Search\Model\SynonymReader setGroupId(int $value)
+ * @method \Magento\Search\Model\SynonymReader setGroupId($group)
  * @method int getGroupId()
- * @method \Magento\Search\Model\SynonymReader setStoreId(int $value)
- * @method int getStoreId()
- * @method \Magento\Search\Model\SynonymReader setSynonyms(string $value)
+ * @method \Magento\Search\Model\SynonymReader setScopeId($scope)
+ * @method int getScopeId()
+ * @method \Magento\Search\Model\SynonymReader setScopeType($scopeType)
+ * @method string getScopeType()
+ * @method \Magento\Search\Model\SynonymReader setSynonyms($value)
  * @method string getSynonyms()
  */
 class SynonymReader extends AbstractModel
@@ -116,5 +118,16 @@ class SynonymReader extends AbstractModel
     {
         $storeId = $this->storeManager->getStore()->getId();
         return $storeId;
+    }
+
+    /**
+     * Retrieve website Id
+     *
+     * @return int
+     */
+    public function getWebsiteId()
+    {
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        return $websiteId;
     }
 }

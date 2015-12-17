@@ -47,7 +47,10 @@ class SynonymReader extends AbstractDb
         $select = $this->getConnection()->select()->from(
             $this->getMainTable()
         )->where(
-            'store_id = ?',
+            'scope_type = ?',
+            'stores'
+        )->where(
+            'scope_id = ?',
             $value
         );
         $data = $this->getConnection()->fetchAll($select);
@@ -59,7 +62,7 @@ class SynonymReader extends AbstractDb
     }
 
     /**
-     * Custom load model: Get data by user query phrase and store view id
+     * Custom load model: Get data by user query phrase
      *
      * @param SynReaderModel $object
      * @param string $value
@@ -68,19 +71,24 @@ class SynonymReader extends AbstractDb
     public function loadByPhrase(SynReaderModel $object, $value)
     {
         $phrase = strtolower($value);
-        $matchQuery = $this->fullTextSelect->getMatchQuery(
-            ['synonyms' => 'synonyms'],
-            $phrase,
-            Fulltext::FULLTEXT_MODE_BOOLEAN
-        );
-        $query = $this->getConnection()->select()->from(
-            $this->getMainTable()
-        )->where(
-            'store_id = ?',
-            $object->getStoreViewId()
-        )->where($matchQuery);
 
-        $rows = $this->getConnection()->fetchAll($query);
+        // Search within the scope of current storeview
+        $id = $object->getStoreViewId();
+        $rows = $this->queryByPhrase($object, $phrase, 'stores', $id);
+
+        if (empty($rows)) {
+
+            // Fallback and search within website scope
+            $id = $object->getWebsiteId();
+            $rows = $this->queryByPhrase($object, $phrase, 'websites', $id);
+        }
+
+        if (empty($rows)) {
+
+            // Fallback and search across all stores
+            $rows = $this->queryByPhrase($object, $phrase, 'default', 0);
+        }
+
         $object->setData($rows);
         $this->_afterLoad($object);
         return $this;
@@ -94,5 +102,32 @@ class SynonymReader extends AbstractDb
     protected function _construct()
     {
         $this->_init('search_synonyms', 'group_id');
+    }
+
+    /**
+     * @param SynReaderModel $object
+     * @param string $value
+     * @param string $scopeType
+     * @param int $id
+     * @return array
+     */
+    private function queryByPhrase(SynReaderModel $object, $phrase, $scopeType, $id)
+    {
+        $matchQuery = $this->fullTextSelect->getMatchQuery(
+            ['synonyms' => 'synonyms'],
+            $phrase,
+            Fulltext::FULLTEXT_MODE_BOOLEAN
+        );
+        $query = $this->getConnection()->select()->from(
+            $this->getMainTable()
+        )->where(
+            'scope_type = ?',
+            $scopeType
+        )->where(
+            'scope_id = ?',
+            $id
+        )->where($matchQuery);
+
+        return $this->getConnection()->fetchAll($query);
     }
 }
