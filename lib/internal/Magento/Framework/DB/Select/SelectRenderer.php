@@ -18,12 +18,12 @@ class SelectRenderer implements RendererInterface
     protected $renders;
 
     /**
-     * @param RendererInterface[] $renders
+     * @param RendererInterface[] $renderers
      */
     public function __construct(
-        array $renders
+        array $renderers
     ) {
-        $this->renders = $this->sort($renders);
+        $this->renders = $this->sort($renderers);
     }
 
     /**
