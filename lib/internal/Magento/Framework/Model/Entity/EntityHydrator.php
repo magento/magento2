@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Model\Entity;
 
-
 /**
  * Class EntityHydrator
  */

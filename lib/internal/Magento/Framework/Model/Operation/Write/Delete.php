@@ -6,7 +6,6 @@
 namespace Magento\Framework\Model\Operation\Write;
 
 use Magento\Framework\Model\Operation\WriteInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\Entity\Action\DeleteMain;
 use Magento\Framework\Model\Entity\Action\DeleteExtension;
 use Magento\Framework\Model\Entity\Action\DeleteRelation;
@@ -16,11 +15,6 @@ use Magento\Framework\Model\Entity\Action\DeleteRelation;
  */
 class Delete implements WriteInterface
 {
-    /**
-     * @var MetadataPool
-     */
-    protected $metadataPool;
-
     /**
      * @var DeleteMain
      */
@@ -37,18 +31,15 @@ class Delete implements WriteInterface
     protected $deleteRelation;
 
     /**
-     * @param MetadataPool $metadataPool
      * @param DeleteMain $deleteMain
      * @param DeleteExtension $deleteExtension
      * @param DeleteRelation $deleteRelation
      */
     public function __construct(
-        MetadataPool $metadataPool,
         DeleteMain $deleteMain,
         DeleteExtension $deleteExtension,
         DeleteRelation $deleteRelation
     ) {
-        $this->metadataPool = $metadataPool;
         $this->deleteMain = $deleteMain;
         $this->deleteExtension = $deleteExtension;
         $this->deleteRelation = $deleteRelation;

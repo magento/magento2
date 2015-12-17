@@ -747,6 +747,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      * @param array $existingOptions
      * @param array $expectedData
      * @dataProvider saveExistingWithOptionsDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testSaveExistingWithOptions(array $newOptions, array $existingOptions, array $expectedData)
     {

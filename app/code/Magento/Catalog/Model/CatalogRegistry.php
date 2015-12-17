@@ -14,8 +14,16 @@ use Magento\Framework\Model\EntityManager;
  */
 class CatalogRegistry
 {
+    /**
+     * @var EntityRegistry
+     */
     protected $entityRegistry;
 
+    /**
+     * CatalogRegistry constructor.
+     *
+     * @param EntityRegistry $entityRegistry
+     */
     public function __construct(
         EntityRegistry $entityRegistry
     ) {
@@ -25,10 +33,11 @@ class CatalogRegistry
     /**
      * @param EntityManager $subject
      * @param \Closure $proceed
-     * @param $entityType
-     * @param $entity
-     * @param $identifier
+     * @param string $entityType
+     * @param object $entity
+     * @param string $identifier
      * @return null|object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundLoad(EntityManager $subject, \Closure $proceed, $entityType, $entity, $identifier)
     {
