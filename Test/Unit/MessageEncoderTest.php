@@ -30,7 +30,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->configMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Data')
+        $this->configMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectEncoderMock = $this->getMockBuilder('Magento\Framework\Webapi\ServiceOutputProcessor')
@@ -72,7 +72,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     public function testEncodeInvalidMessage()
     {
         $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
-        $this->configMock->expects($this->any())->method('get')->willReturn($this->getQueueConfigData());
+        $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigData());
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -92,7 +92,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     public function testEncodeInvalidMessageArray()
     {
         $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
-        $this->configMock->expects($this->any())->method('get')->willReturn($this->getQueueConfigData());
+        $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigData());
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -112,13 +112,9 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     private function getQueueConfigData()
     {
         return [
-            QueueConfig::TOPICS => [
-                'customer.created' => [
-                    QueueConfig::TOPIC_SCHEMA => [
-                        QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                        QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
-                    ]
-                ]
+            QueueConfig::TOPIC_SCHEMA => [
+                QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
             ]
         ];
     }

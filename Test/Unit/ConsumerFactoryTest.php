@@ -14,17 +14,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConsumerFactory
-     */
-    private $consumerFactory;
-
-    /**
      * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var QueueConfig
+     * @var QueueConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     private $queueConfigMock;
 
@@ -36,16 +31,9 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->queueConfigMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Data')
+        $this->queueConfigMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConfigInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
             ->getMock();
-        $this->consumerFactory = $this->objectManager->getObject(
-            'Magento\Framework\MessageQueue\ConsumerFactory',
-            [
-                'queueConfig' => $this->queueConfigMock,
-            ]
-        );
     }
 
     /**
@@ -54,12 +42,13 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUndeclaredConsumerName()
     {
-        $this->queueConfigMock->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue([
-                QueueConfig::CONSUMERS => []
-            ]));
-        $this->consumerFactory->get(self::TEST_CONSUMER_NAME);
+        $consumerFactory = $this->objectManager->getObject(
+            'Magento\Framework\MessageQueue\ConsumerFactory',
+            [
+                'queueConfig' => $this->queueConfigMock,
+            ]
+        );
+        $consumerFactory->get(self::TEST_CONSUMER_NAME);
     }
 
     /**
@@ -68,16 +57,14 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testConsumerNotInjectedIntoClass()
     {
-        $this->queueConfigMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue([
-                QueueConfig::CONSUMERS => [
-                    self::TEST_CONSUMER_NAME => [
-                        QueueConfig::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION
-                    ]
-                ],
-            ]));
-        $this->consumerFactory->get(self::TEST_CONSUMER_NAME);
+        $consumers = [
+            [
+                'type' => ['nonExistentType' => ''],
+                'connectionName' => self::TEST_CONSUMER_CONNECTION,
+            ]
+        ];
+        $consumerFactory = $this->getConsumerFactoryInstance($consumers);
+        $consumerFactory->get(self::TEST_CONSUMER_NAME);
     }
 
     /**
@@ -86,105 +73,93 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testNoConnectionInjectedForConsumer()
     {
-        $this->queueConfigMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue([
-                QueueConfig::CONSUMERS => [
-                    self::TEST_CONSUMER_NAME => [
-                        QueueConfig::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION
-                    ]
-                ],
-            ]));
-
-        $consumerMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerInterface')
-            ->getMockForAbstractClass();
-
-        $this->consumerFactory = $this->objectManager->getObject(
-            'Magento\Framework\MessageQueue\ConsumerFactory',
+        $consumerType = 'async';
+        $consumerTypeValue = 'Magento\Framework\MessageQueue\Model\TestConsumer';
+        $consumers = [
             [
-                'queueConfig' => $this->queueConfigMock,
-                'consumers' => [
-                    [
-                        'type' => $consumerMock,
-                        'connectionName' => 'randomPublisherConnection'
-                    ]
-                ]
+                'type' => [$consumerType => $consumerTypeValue],
+                'connectionName' => 'randomPublisherConnection',
             ]
-        );
-
-        $this->consumerFactory->get(self::TEST_CONSUMER_NAME);
+        ];
+        $consumerFactory = $this->getConsumerFactoryInstance($consumers);
+        $consumerFactory->get(self::TEST_CONSUMER_NAME);
     }
 
     public function testConnectionInjectedForConsumer()
     {
-        $dispatchTypeName = 'Magento\Framework\DataObject';
+        $consumerType = 'async';
+        $consumerTypeValue = 'Magento\Framework\MessageQueue\Model\TestConsumer';
+        $consumers = [
+            [
+                'type' => [$consumerType => $consumerTypeValue],
+                'connectionName' => self::TEST_CONSUMER_CONNECTION,
+            ]
+        ];
+        $consumerFactory = $this->getConsumerFactoryInstance($consumers);
+        $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)->getMock();
+        $this->assertInstanceOf(get_class($consumerInstanceMock), $consumerFactory->get(self::TEST_CONSUMER_NAME));
+    }
+
+    /**
+     * Return Consumer Factory with mocked objects
+     *
+     * @param array $consumers
+     * @return \Magento\Framework\MessageQueue\ConsumerFactory
+     */
+    private function getConsumerFactoryInstance($consumers)
+    {
+        $consumerTypeValue = 'Magento\Framework\MessageQueue\Model\TestConsumer';
+        $handlerTypeValue = 'Magento\Framework\DataObject';
+        $consumerType = 'async';
 
         $this->queueConfigMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue([
-                QueueConfig::CONSUMERS => [
-                    self::TEST_CONSUMER_NAME => [
+            ->method('getConsumer')
+            ->will(
+                $this->returnValue(
+                    [
                         QueueConfig::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION,
                         QueueConfig::CONSUMER_NAME => self::TEST_CONSUMER_NAME,
                         QueueConfig::CONSUMER_QUEUE => self::TEST_CONSUMER_QUEUE,
-                        QueueConfig::CONSUMER_CLASS => $dispatchTypeName,
-                        QueueConfig::CONSUMER_METHOD => self::TEST_CONSUMER_METHOD,
+                        QueueConfig::CONSUMER_TYPE => QueueConfig::CONSUMER_TYPE_ASYNC,
+                        QueueConfig::CONSUMER_HANDLERS => [
+                            'topicName' => [
+                                "defaultHandler" => [
+                                    "type" => $handlerTypeValue,
+                                    "method" => self::TEST_CONSUMER_METHOD
+                                ]
+                            ]
+                        ]
+
                     ]
-                ],
-            ]));
+                )
+            );
+
+        $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)->getMock();
+        $consumerMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerInterface')
+            ->setMethods(['configure'])
+            ->getMockForAbstractClass();
+
+        $consumerConfigurationMock =
+            $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerConfigurationInterface')
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
+        $consumerConfigurationMock->expects($this->any())->method('getType')->willReturn($consumerType);
 
         $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->setMethods(['create'])
             ->getMockForAbstractClass();
 
-        $consumerTypeName = 'Magento\Framework\MessageQueue\Model\TestConsumer';
-        $consumerMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerInterface')
-            ->setMethods(['configure'])
-            ->getMockForAbstractClass();
-
-        $objectManagerMock->expects($this->at(0))
+        $objectManagerMock->expects($this->any())
             ->method('create')
-            ->with($consumerTypeName, [])
-            ->will($this->returnValue($consumerMock));
+            ->willReturnOnConsecutiveCalls($consumerMock, $consumerConfigurationMock, $consumerInstanceMock);
 
-        $dispatchInstanceMock = $this->getMockBuilder($dispatchTypeName)
-            ->setMethods(['dispatch'])
-            ->getMock();
-
-        $objectManagerMock->expects($this->at(1))
-            ->method('create')
-            ->with($dispatchTypeName, [])
-            ->will($this->returnValue($dispatchInstanceMock));
-
-        $consumerConfigurationMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerConfiguration')
-            ->getMockForAbstractClass();
-
-        $objectManagerMock->expects($this->at(2))
-            ->method('create')
-            ->with('Magento\Framework\MessageQueue\ConsumerConfiguration', ['data' => [
-                ConsumerConfiguration::CONSUMER_NAME => self::TEST_CONSUMER_NAME,
-                ConsumerConfiguration::QUEUE_NAME => self::TEST_CONSUMER_QUEUE,
-                ConsumerConfiguration::HANDLERS => [
-                    $dispatchInstanceMock,
-                    self::TEST_CONSUMER_METHOD,
-                ],
-            ]])
-            ->will($this->returnValue($consumerConfigurationMock));
-
-        $this->consumerFactory = $this->objectManager->getObject(
+        return $this->objectManager->getObject(
             'Magento\Framework\MessageQueue\ConsumerFactory',
             [
                 'queueConfig' => $this->queueConfigMock,
                 'objectManager' => $objectManagerMock,
-                'consumers' => [
-                    [
-                        'type' => $consumerTypeName,
-                        'connectionName' => self::TEST_CONSUMER_CONNECTION,
-                    ]
-                ]
+                'consumers' => $consumers
             ]
         );
-
-        $this->assertSame($consumerMock, $this->consumerFactory->get(self::TEST_CONSUMER_NAME));
     }
 }
