@@ -15,7 +15,7 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
      * Add Criteria object
      *
      * @param \Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria
-     * @return bool
+     * @return void
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria);
 
@@ -23,7 +23,7 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
      * Filter by scope(s)
      *
      * @param int $scope
-     * @return bool
+     * @return void
      */
     public function setScopeFilter($scope);
 
@@ -31,7 +31,7 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
      * Add product(s) filter
      *
      * @param int $products
-     * @return bool
+     * @return void
      */
     public function setProductsFilter($products);
 
@@ -39,7 +39,15 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
      * Add filter by quantity
      *
      * @param float $qty
-     * @return bool
+     * @return void
      */
     public function setQtyFilter($qty);
+
+    /**
+     * Add stock filter to collection
+     *
+     * @param \Magento\CatalogInventory\Api\Data\StockInterface $stock
+     * @return void
+     */
+    public function setStockFilter($stock);
 }
