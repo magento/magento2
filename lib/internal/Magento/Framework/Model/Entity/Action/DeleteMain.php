@@ -32,8 +32,8 @@ class DeleteMain
         MetadataPool $metadataPool,
         DeleteEntityRow $createEntityRow
     ) {
-        $this->deleteEntityRow = $createEntityRow;
         $this->metadataPool = $metadataPool;
+        $this->deleteEntityRow = $createEntityRow;
     }
 
     /**
