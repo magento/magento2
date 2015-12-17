@@ -17,7 +17,14 @@ define([
     return Component.extend({
 
         defaults: {
-            template: 'Magento_BraintreeTwo/payment/form'
+            template: 'Magento_BraintreeTwo/payment/form',
+            clientConfig: {
+
+                /**
+                 * {String}
+                 */
+                id: 'co-transparent-form-braintree'
+            }
         },
 
         /**
