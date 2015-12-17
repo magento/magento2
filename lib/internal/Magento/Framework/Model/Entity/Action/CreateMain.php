@@ -32,8 +32,8 @@ class CreateMain
         MetadataPool $metadataPool,
         CreateEntityRow $createEntityRow
     ) {
-        $this->createEntityRow = $createEntityRow;
         $this->metadataPool = $metadataPool;
+        $this->createEntityRow = $createEntityRow;
     }
 
     /**
