@@ -8,9 +8,23 @@ namespace Magento\BraintreeTwo\Model\Ui;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
+use Magento\Framework\UrlInterface;
 
+/**
+ * Class TokenUiComponentProvider
+ */
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private $urlBuilder;
+
+    public function __construct(UrlInterface $urlBuilder)
+    {
+        $this->urlBuilder = $urlBuilder;
+    }
+
     /**
      * @param PaymentTokenInterface $paymentToken
      * @return TokenUiComponentInterface
@@ -19,10 +33,20 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     {
         return new TokenUiComponent(
             [
+                'nonceUrl' => $this->getNonceRetrieveUrl(),
                 'details' => json_decode($paymentToken->getTokenDetails() ?: '{}', true),
-                'public_hash' => $paymentToken->getPublicHash()
+                'publicHash' => $paymentToken->getPublicHash()
             ],
-            'Magento_Vault/js/view/payment/method-renderer/vault'
+            'Magento_BraintreeTwo/js/view/payment/method-renderer/vault'
         );
+    }
+
+    /**
+     * Get url to retrieve payment method nonce
+     * @return string
+     */
+    private function getNonceRetrieveUrl()
+    {
+        return $this->urlBuilder->getUrl(ConfigProvider::CODE . '/payment/getnonce', ['_secure' => true]);
     }
 }

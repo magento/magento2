@@ -6,9 +6,6 @@
 namespace Magento\BraintreeTwo\Gateway\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeConfiguration;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeClientToken;
-use Magento\BraintreeTwo\Model\Adminhtml\Source\Environment;
 
 /**
  * Class Config
@@ -35,83 +32,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const CODE_3DSECURE = 'three_d_secure';
     const KEY_KOUNT_MERCHANT_ID = 'kount_merchant_id';
     const FRAUD_PROTECTION = 'fraud_protection';
-
-    /**
-     * @var string
-     */
-    private $clientToken = '';
-
-    /**
-     * @var BraintreeConfiguration
-     */
-    private $braintreeConfiguration;
-
-    /**
-     * @var BraintreeClientToken
-     */
-    private $braintreeClientToken;
-
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param BraintreeConfiguration $braintreeConfiguration
-     * @param BraintreeClientToken $braintreeClientToken
-     * @param string $methodCode
-     * @param string $pathPattern
-     */
-    public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        BraintreeConfiguration $braintreeConfiguration,
-        BraintreeClientToken $braintreeClientToken,
-        $methodCode = '',
-        $pathPattern = self::DEFAULT_PATH_PATTERN
-    ) {
-        parent::__construct(
-            $scopeConfig,
-            $methodCode,
-            $pathPattern
-        );
-
-        $this->braintreeConfiguration = $braintreeConfiguration;
-        $this->braintreeClientToken = $braintreeClientToken;
-
-        /**
-         * @TODO should moved from constructor
-         */
-        if ($this->getValue(self::KEY_ACTIVE)) {
-            $this->initCredentials();
-        }
-    }
-
-    /**
-     * Initializes credentials.
-     *
-     * @return void
-     */
-    public function initCredentials()
-    {
-        if ($this->getValue(self::KEY_ENVIRONMENT) == Environment::ENVIRONMENT_PRODUCTION) {
-            $this->braintreeConfiguration->environment(Environment::ENVIRONMENT_PRODUCTION);
-        } else {
-            $this->braintreeConfiguration->environment(Environment::ENVIRONMENT_SANDBOX);
-        }
-        $this->braintreeConfiguration->merchantId($this->getValue(self::KEY_MERCHANT_ID));
-        $this->braintreeConfiguration->publicKey($this->getValue(self::KEY_PUBLIC_KEY));
-        $this->braintreeConfiguration->privateKey($this->getValue(self::KEY_PRIVATE_KEY));
-    }
-
-    /**
-     * Generate a new client token if necessary
-     * @TODO method should be moved to adapter
-     * @return string
-     */
-    public function getClientToken()
-    {
-        if (empty($this->clientToken)) {
-            $this->clientToken = $this->braintreeClientToken->generate();
-        }
-
-        return $this->clientToken;
-    }
 
     /**
      * Return the country specific card type config

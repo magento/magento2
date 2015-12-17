@@ -6,6 +6,7 @@
 namespace Magento\BraintreeTwo\Test\Unit\Model\Ui;
 
 use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
 use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 
 /**
@@ -17,16 +18,33 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
     const SDK_URL = 'https://js.braintreegateway.com/v2/braintree.js';
 
+    const CLIENT_TOKEN = 'token';
+
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configMock;
+    private $config;
+
+    /**
+     * @var BraintreeAdapter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $braintreeAdapter;
+
+    /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
 
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder(Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->configProvider = new ConfigProvider($this->config, $this->braintreeAdapter);
     }
 
     /**
@@ -38,14 +56,29 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfig($config, $expected)
     {
-        $configProvider = new ConfigProvider($this->configMock);
+        $this->braintreeAdapter->expects(static::once())
+            ->method('generate')
+            ->willReturn(self::CLIENT_TOKEN);
+
         foreach ($config as $method => $value) {
-            $this->configMock->expects(static::once())
+            $this->config->expects(static::once())
                 ->method($method)
                 ->willReturn($value);
         }
 
-        static::assertEquals($expected, $configProvider->getConfig());
+        static::assertEquals($expected, $this->configProvider->getConfig());
+    }
+
+    /**
+     * @covers \Magento\BraintreeTwo\Model\Ui\ConfigProvider::getClientToken
+     */
+    public function testGetClientToken()
+    {
+        $this->braintreeAdapter->expects(static::once())
+            ->method('generate')
+            ->willReturn(self::CLIENT_TOKEN);
+
+        static::assertEquals(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
     }
 
     /**
@@ -56,7 +89,6 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'config' => [
-                    'getClientToken' => 'token',
                     'getCcTypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
                     'getSdkUrl' => self::SDK_URL,
                     'getCountrySpecificCardTypeConfig' => [
@@ -76,7 +108,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'expected' => [
                     'payment' => [
                         ConfigProvider::CODE => [
-                            'clientToken' => 'token',
+                            'clientToken' => self::CLIENT_TOKEN,
                             'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                             'sdkUrl' => self::SDK_URL,
                             'countrySpecificCardTypes' =>[

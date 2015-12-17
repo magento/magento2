@@ -15,6 +15,6 @@ class TransactionSale extends AbstractTransaction
      */
     protected function process(array $data)
     {
-        return $this->transaction->sale($data);
+        return $this->adapter->sale($data);
     }
 }
