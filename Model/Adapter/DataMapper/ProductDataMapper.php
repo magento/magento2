@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Model\Adapter;
+namespace Magento\Elasticsearch\Model\Adapter\DataMapper;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -19,7 +19,7 @@ use Magento\Customer\Api\Data\GroupInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class DocumentDataMapper
+class ProductDataMapper implements DataMapperInterface
 {
     /**
      * Attribute code for image.

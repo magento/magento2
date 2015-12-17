@@ -7,7 +7,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Filter\Builder;
 
 use Magento\Framework\Search\Request\Filter\Range as RangeFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 
