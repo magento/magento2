@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Rule\Model;
+
 /**
  * Abstract Rule entity data model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-namespace Magento\Rule\Model;
-
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
     /**
