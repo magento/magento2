@@ -115,13 +115,14 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
      */
     private function getAttributeTables()
     {
+        $connection = $this->attributeResource->getConnection();
         $searchResult = $this->productAttributeRepository->getList($this->searchCriteriaBuilder->create());
         $attributeTables = [];
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $productAttribute */
         foreach ($searchResult->getItems() as $productAttribute) {
             if (!in_array($productAttribute->getBackend()->getTable(), $attributeTables)
-                && $productAttribute->getBackend()->getTable() != 'catalog_product_entity'
+                && $productAttribute->getBackend()->getTable() != $connection->getTableName('catalog_product_entity')
             ) {
                 $attributeTables[] = $productAttribute->getBackend()->getTable();
             }
