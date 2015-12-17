@@ -42,6 +42,15 @@ interface PaymentTokenManagementInterface
     public function getByGatewayToken($token, $paymentMethodCode, $customerId);
 
     /**
+     * Get payment token by public hash.
+     *
+     * @param string $hash Public hash.
+     * @param int $customerId Customer ID.
+     * @return PaymentTokenInterface|null Payment token interface.
+     */
+    public function getByPublicHash($hash, $customerId);
+
+    /**
      * @param PaymentTokenInterface $token
      * @param OrderPaymentInterface $payment
      * @return bool

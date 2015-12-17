@@ -70,6 +70,29 @@ class PaymentToken extends AbstractDb
     }
 
     /**
+     * Get payment token by public hash.
+     *
+     * @param string $hash Public hash.
+     * @param int $customerId Customer ID.
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getByPublicHash($hash, $customerId = 0)
+    {
+        $connection = $this->getConnection();
+        $select = $connection
+            ->select()
+            ->from($this->getMainTable())
+            ->where('public_hash = ?', $hash);
+        if ($customerId > 0) {
+            $select = $select->where('customer_id = ?', $customerId);
+        } else {
+            $select = $select->where('customer_id IS NULL');
+        }
+        return $connection->fetchRow($select);
+    }
+
+    /**
      * Add link between payment token and order payment.
      *
      * @param int $paymentTokenId
