@@ -7,10 +7,10 @@ namespace Magento\Elasticsearch\Model\Indexer;
 
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
-use Magento\Elasticsearch\Model\Adapter\Elasticsearch;
-use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
+use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Store\Model\Store;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -25,40 +25,56 @@ class IndexerHandler implements IndexerInterface
     const SCOPE_FIELD_NAME = 'scope';
 
     /**
-     * @var Elasticsearch
+     * @var IndexStructureInterface
      */
-    protected $adapter;
+    private $indexStructure;
 
     /**
-     * @var array
+     * @var ElasticsearchAdapter
      */
-    protected $data;
+    private $adapter;
+
+    /**
+     * @var IndexNameResolver
+     */
+    private $indexNameResolver;
 
     /**
      * @var Batch
      */
-    protected $batch;
+    private $batch;
+
+    /**
+     * @var array
+     */
+    private $data;
 
     /**
      * @var int
      */
-    protected $batchSize;
+    private $batchSize;
 
     /**
-     * @param ElasticsearchFactory $adapterFactory
+     * @param IndexStructureInterface $indexStructure
+     * @param ElasticsearchAdapter $adapter
+     * @param IndexNameResolver $indexNameResolver
      * @param Batch $batch
      * @param array $data
      * @param int $batchSize
      */
     public function __construct(
-        ElasticsearchFactory $adapterFactory,
+        IndexStructureInterface $indexStructure,
+        ElasticsearchAdapter $adapter,
+        IndexNameResolver $indexNameResolver,
         Batch $batch,
         array $data = [],
         $batchSize = self::DEFAULT_BATCH_SIZE
     ) {
-        $this->adapter = $adapterFactory->create();
-        $this->data = $data;
+        $this->indexStructure = $indexStructure;
+        $this->adapter = $adapter;
+        $this->indexNameResolver = $indexNameResolver;
         $this->batch = $batch;
+        $this->data = $data;
         $this->batchSize = $batchSize;
     }
 
@@ -69,12 +85,11 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
-        $indexName = $this->getIndexMapping($this->data['indexer_id']);
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $storeId);
-            $this->adapter->addDocs($docs, $storeId, $indexName);
+            $this->adapter->addDocs($docs, $storeId, $this->getIndexerId());
         }
-        $this->adapter->updateAlias($storeId, $indexName);
+        $this->adapter->updateAlias($storeId, $this->getIndexerId());
         return $this;
     }
 
@@ -85,12 +100,11 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
-        $indexName = $this->getIndexMapping($this->data['indexer_id']);
         $documentIds = [];
         foreach ($documents as $entityId => $document) {
             $documentIds[$entityId] = $entityId;
         }
-        $this->adapter->deleteDocs($documentIds, $storeId, $indexName);
+        $this->adapter->deleteDocs($documentIds, $storeId, $this->getIndexerId());
         return $this;
     }
 
@@ -99,10 +113,8 @@ class IndexerHandler implements IndexerInterface
      */
     public function cleanIndex($dimensions)
     {
-        $dimension = current($dimensions);
-        $storeId = $dimension->getValue();
-        $indexName = $this->getIndexMapping($this->data['indexer_id']);
-        $this->adapter->cleanIndex($storeId, $indexName);
+        $this->indexStructure->delete($this->getIndexerId(), $dimensions);
+        $this->indexStructure->create($this->getIndexerId(), [], $dimensions);
         return $this;
     }
 
@@ -115,18 +127,10 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * Taking index name by indexer ID
-     *
-     * @param string $indexerId
      * @return string
      */
-    private function getIndexMapping($indexerId)
+    private function getIndexerId()
     {
-        if ($indexerId == Fulltext::INDEXER_ID) {
-            $indexName = 'product';
-        } else {
-            $indexName = $indexerId;
-        }
-        return $indexName;
+        return $this->indexNameResolver->getIndexMapping($this->data['indexer_id']);
     }
 }

@@ -119,7 +119,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testTestConnection()
     {
-        $this->indicesMock->expects($this->once())->method('exists')->willReturn(true);
+        $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(true);
         $this->assertEquals(true, $this->model->testConnection());
     }
 
@@ -128,7 +128,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testTestConnectionFalse()
     {
-        $this->indicesMock->expects($this->once())->method('exists')->willReturn(false);
+        $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(false);
         $this->assertEquals(true, $this->model->testConnection());
     }
 

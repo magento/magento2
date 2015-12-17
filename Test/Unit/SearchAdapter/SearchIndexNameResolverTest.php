@@ -3,13 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index;
+namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
-use Magento\Elasticsearch\Model\Adapter\Index\SearchIndexNameResolver;
-use Psr\Log\LoggerInterface;
-use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +29,7 @@ class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $entityType;
+    protected $indexId;
 
     /**
      * @var int
@@ -58,15 +55,14 @@ class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getIndexPrefix')
             ->willReturn('indexName');
 
-        $this->entityType = 'catalogsearch_fulltext';
+        $this->indexId = 'catalogsearch_fulltext';
         $this->storeId = 1;
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Index\SearchIndexNameResolver',
+            '\Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver',
             [
                 'clientConfig' => $this->clientConfig,
-                'options' => [],
             ]
         );
     }
@@ -78,7 +74,7 @@ class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'indexName_product_1',
-            $this->model->getIndexName($this->storeId, $this->entityType)
+            $this->model->getIndexName($this->storeId, $this->indexId)
         );
     }
 

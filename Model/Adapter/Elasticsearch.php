@@ -155,17 +155,16 @@ class Elasticsearch
      *
      * @param array $documents
      * @param int $storeId
-     * @param string $entityType
+     * @param string $mappedIndexerId
      * @return $this
      * @throws \Exception
      */
-    public function addDocs(array $documents, $storeId, $entityType)
+    public function addDocs(array $documents, $storeId, $mappedIndexerId)
     {
         if (count($documents)) {
             try {
-                $this->checkIndex($storeId, $entityType, false);
-                $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
-                $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName, $entityType);
+                $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
+                $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName);
                 $this->client->bulkQuery($bulkIndexDocuments);
             } catch (\Exception $e) {
                 $this->logger->critical($e);
@@ -180,20 +179,20 @@ class Elasticsearch
      * Removes all documents from Elasticsearch index
      *
      * @param int $storeId
-     * @param string $entityType
+     * @param string $mappedIndexerId
      * @return $this
      */
-    public function cleanIndex($storeId, $entityType)
+    public function cleanIndex($storeId, $mappedIndexerId)
     {
-        $this->checkIndex($storeId, $entityType, true);
-        $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
+        $this->checkIndex($storeId, $mappedIndexerId, true);
+        $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
         if ($this->client->isEmptyIndex($indexName)) {
             // use existing index if empty
             return $this;
         }
 
         // prepare new index name and increase version
-        $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $entityType);
+        $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId);
         $version = intval(str_replace($indexPattern, '', $indexName));
         $newIndexName = $indexPattern . ++$version;
 
@@ -213,19 +212,18 @@ class Elasticsearch
      *
      * @param array $documentIds
      * @param int $storeId
-     * @param string $entityType
+     * @param string $mappedIndexerId
      * @return $this
      * @throws \Exception
      */
-    public function deleteDocs(array $documentIds, $storeId, $entityType)
+    public function deleteDocs(array $documentIds, $storeId, $mappedIndexerId)
     {
         try {
-            $this->checkIndex($storeId, $entityType, false);
-            $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
+            $this->checkIndex($storeId, $mappedIndexerId, false);
+            $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
             $bulkDeleteDocuments = $this->getDocsArrayInBulkIndexFormat(
                 $documentIds,
                 $indexName,
-                $entityType,
                 self::BULK_ACTION_DELETE
             );
             $this->client->bulkQuery($bulkDeleteDocuments);
@@ -242,19 +240,17 @@ class Elasticsearch
      *
      * @param array $documents
      * @param string $indexName
-     * @param string $entityType
      * @param string $action
      * @return array
      */
     protected function getDocsArrayInBulkIndexFormat(
         $documents,
         $indexName,
-        $entityType,
         $action = self::BULK_ACTION_INDEX
     ) {
         $bulkArray = [
             'index' => $indexName,
-            'type' => $entityType,
+            'type' => $this->clientConfig->getEntityType(),
             'body' => [],
         ];
 
@@ -262,7 +258,7 @@ class Elasticsearch
             $bulkArray['body'][] = [
                 $action => [
                     '_id' => $id,
-                    '_type' => $entityType,
+                    '_type' => $this->clientConfig->getEntityType(),
                     '_index' => $indexName
                 ]
             ];
@@ -279,23 +275,23 @@ class Elasticsearch
      *
      * @param int $storeId
      * @param bool $checkAlias
-     * @param string $entityType
+     * @param string $mappedIndexerId
      * @return $this
      */
-    protected function checkIndex(
+    public function checkIndex(
         $storeId,
-        $entityType,
+        $mappedIndexerId,
         $checkAlias = true
     ) {
         // create new index for store
-        $indexName = $this->indexNameResolver->getIndexName($storeId, $entityType, $this->preparedIndex);
+        $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
         if (!$this->client->indexExists($indexName)) {
             $this->prepareIndex($storeId, $indexName);
         }
 
         // add index to alias
         if ($checkAlias) {
-            $namespace = $this->indexNameResolver->getIndexNameForAlias($storeId, $entityType);
+            $namespace = $this->indexNameResolver->getIndexNameForAlias($storeId, $mappedIndexerId);
             if (!$this->client->existsAlias($namespace, $indexName)) {
                 $this->client->updateAlias($namespace, $indexName);
             }
@@ -307,22 +303,22 @@ class Elasticsearch
      * Update Elasticsearch alias for new index.
      *
      * @param int $storeId
-     * @param string $entityType
+     * @param string $mappedIndexerId
      * @return $this
      */
-    public function updateAlias($storeId, $entityType)
+    public function updateAlias($storeId, $mappedIndexerId)
     {
         if (!isset($this->preparedIndex[$storeId])) {
             return $this;
         }
 
-        $oldIndex = $this->indexNameResolver->getIndexFromAlias($storeId, $entityType);
+        $oldIndex = $this->indexNameResolver->getIndexFromAlias($storeId, $mappedIndexerId);
         if ($oldIndex == $this->preparedIndex[$storeId]) {
             $oldIndex = '';
         }
 
         $this->client->updateAlias(
-            $this->indexNameResolver->getIndexNameForAlias($storeId, $entityType),
+            $this->indexNameResolver->getIndexNameForAlias($storeId, $mappedIndexerId),
             $this->preparedIndex[$storeId],
             $oldIndex
         );

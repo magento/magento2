@@ -76,12 +76,6 @@ class Elasticsearch implements ClientInterface
      */
     public function testConnection()
     {
-        if (!empty($this->clientOptions['index'])) {
-            if ($this->client->indices()->exists(['index' => $this->clientOptions['index']])) {
-                return true;
-            }
-        }
-        // if no index is given or does not yet exist simply perform a ping
         return $this->ping();
     }
 

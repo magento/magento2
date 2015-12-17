@@ -3,12 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Model\Adapter\Index;
+namespace Magento\Elasticsearch\SearchAdapter;
 
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Elasticsearch\Model\Config;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Alias name resolver
@@ -18,29 +16,19 @@ class SearchIndexNameResolver
     /**
      * @var Config
      */
-    protected $clientConfig;
+    private $clientConfig;
 
     /**
-     * @var ElasticsearchClient
-     */
-    protected $client;
-
-    /**
-     * Constructor for Index Name Resolver.
-     *
      * @param Config $clientConfig
-     * @param array $options
-     * @throws LocalizedException
      */
     public function __construct(
-        Config $clientConfig,
-        $options = []
+        Config $clientConfig
     ) {
         $this->clientConfig = $clientConfig;
     }
 
     /**
-     * Returns the index (alias) name.
+     * Returns the index (alias) name
      *
      * @param int $storeId
      * @param string $indexerId
@@ -48,8 +36,8 @@ class SearchIndexNameResolver
      */
     public function getIndexName($storeId, $indexerId)
     {
-        $entityType = $this->getIndexMapping($indexerId);
-        return $this->clientConfig->getIndexPrefix() . '_' . $entityType . '_' . $storeId;
+        $mappedIndexerId = $this->getIndexMapping($indexerId);
+        return $this->clientConfig->getIndexPrefix() . '_' . $mappedIndexerId . '_' . $storeId;
     }
 
     /**
@@ -58,13 +46,13 @@ class SearchIndexNameResolver
      * @param string $indexerId
      * @return string
      */
-    protected function getIndexMapping($indexerId)
+    private function getIndexMapping($indexerId)
     {
         if ($indexerId == Fulltext::INDEXER_ID) {
-            $entityType = 'product';
+            $mappedIndexerId = 'product';
         } else {
-            $entityType = $indexerId;
+            $mappedIndexerId = $indexerId;
         }
-        return $entityType;
+        return $mappedIndexerId;
     }
 }
