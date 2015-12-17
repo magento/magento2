@@ -4,47 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Backend\Test\Block\Widget;
+namespace Magento\Ui\Test\Block\Adminhtml;
 
-use Magento\Mtf\Block\Form as AbstractForm;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Is used to represent any (collapsible) section on the page.
  */
-class Section extends AbstractForm
+class Section extends Form
 {
-    /**
-     * Expand section.
-     *
-     * @return FormSections
-     */
-    public function expand()
-    {
-        return;
-    }
-
-    /**
-     * Open section.
-     *
-     * @return FormSections
-     */
-    public function collapse()
-    {
-        return;
-    }
-
-    /**
-     * Check whether section is expanded.
-     *
-     * @return bool
-     */
-    public function isExpanded()
-    {
-        return true;
-    }
-
     /**
      * Get data of the section.
      *

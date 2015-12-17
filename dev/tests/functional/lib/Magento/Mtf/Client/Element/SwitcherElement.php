@@ -6,18 +6,21 @@
 
 namespace Magento\Mtf\Client\Element;
 
-use Magento\Mtf\ObjectManager;
-
 /**
  * Toggle element in the backend.
- * Switches value between YES and NO
+ * Switches value between YES and NO.
  */
 class SwitcherElement extends SimpleElement
 {
     /**
-     * Set value to conditions.
+     * XPath locator of the parent container
+     */
+    protected $parentContainer = 'parent::div[@class="switcher"]';
+
+    /**
+     * Set value to Yes or No.
      *
-     * @param string $value
+     * @param string $value Yes|No
      * @return void
      */
     public function setValue($value)
@@ -28,21 +31,21 @@ class SwitcherElement extends SimpleElement
             );
         }
         if ($value != $this->getValue()) {
-            $this->hover();
             $this->click();
         }
     }
 
     /**
-     * Get value from conditions.
+     * Get the current value.
      *
-     * @return null
+     * @return string 'Yes'|'No'
+     * @throws \Exception
      */
     public function getValue()
     {
-        if ($this->find('parent::div[@class="switcher"]', 'xpath')->find('input:checked')->isVisible()) {
+        if ($this->find($this->parentContainer, 'xpath')->find('input:checked')->isVisible()) {
             return 'Yes';
-        } elseif ($this->find('parent::div[@class="switcher"]', 'xpath')->find('input')->isVisible()) {
+        } elseif ($this->find($this->parentContainer, 'xpath')->find('input')->isVisible()) {
             return 'No';
         } else {
             throw new \Exception (
