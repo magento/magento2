@@ -332,6 +332,9 @@ class UpgradeData implements UpgradeDataInterface
 
         $customers = $setup->getConnection()->fetchAll($select);
         foreach ($customers as $customer) {
+            if ($customer['password_hash'] === null) {
+                continue;
+            }
             list($hash, $salt) = explode(Encryptor::DELIMITER, $customer['password_hash']);
 
             $newHash = $customer['password_hash'];
