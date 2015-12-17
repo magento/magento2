@@ -5,7 +5,6 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
-use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler;
@@ -19,6 +18,7 @@ use Magento\Vault\Model\PaymentTokenFactory;
 use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\BraintreeTwo\Gateway\Config\Config;
 
 /**
  * VaultDetailsHandler Test
@@ -64,14 +64,19 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     protected $salesOrderMock;
 
     /**
-     * @var VaultPaymentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var VaultPaymentInterface|MockObject
      */
     private $vaultPaymentMock;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
+
+    /**
+     * @var Config|MockObject salesOrderMock
+     */
+    protected $configMock;
 
     protected function setUp()
     {
@@ -123,10 +128,32 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $mapperArray = [
+            "american-express" => "AE",
+            "discover" => "DI",
+            "jcb" => "JCB",
+            "mastercard" => "MC",
+            "master-card" => "MC",
+            "visa" => "VI",
+            "maestro" => "MI",
+            "diners-club" => "DN",
+            "unionpay" => "CUP"
+        ];
+
+        $this->configMock = $this->getMockBuilder(Config::class)
+            ->setMethods(['getCctypesMapper'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->configMock->expects(self::once())
+            ->method('getCctypesMapper')
+            ->willReturn($mapperArray);
+
         $this->paymentHandler = new VaultDetailsHandler(
             $this->vaultPaymentMock,
             $this->paymentTokenFactoryMock,
             $this->paymentExtensionFactoryMock,
+            $this->configMock,
             $this->subjectReaderMock
         );
     }
