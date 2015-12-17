@@ -19,7 +19,7 @@ class AbstractItems extends Block
      *
      * @var string
      */
-    protected $rowItem = 'tbody tr';
+    protected $rowItem = 'tbody';
 
     /**
      * Locator for "Product" column
@@ -105,7 +105,7 @@ class AbstractItems extends Block
      */
     protected function parseProductName($product)
     {
-        $data = array_map('trim', explode('SKU:', $product));
+        $data = array_map('trim', explode('SKU:', str_replace("\n", '', $product)));
         return [
             'product' => $data[0],
             'sku' => isset($data[1]) ? $data[1] : ''

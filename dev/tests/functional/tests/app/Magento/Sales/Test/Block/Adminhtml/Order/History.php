@@ -51,12 +51,17 @@ class History extends Block
     /**
      * Get the captured amount from the comments history
      *
-     * @return string
+     * @return array
      */
     public function getCapturedAmount()
     {
+        $result = [];
         $this->waitCommentsHistory();
-        return $this->_rootElement->find($this->capturedAmount, Locator::SELECTOR_XPATH)->getText();
+        $captureComments = $this->_rootElement->getElements($this->capturedAmount, Locator::SELECTOR_XPATH);
+        foreach ($captureComments as $captureComment) {
+            $result[] = $captureComment->getText();
+        }
+        return $result;
     }
 
     /**
