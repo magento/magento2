@@ -131,6 +131,20 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     }
 
     /**
+     * Get payment token by public hash.
+     *
+     * @param string $hash Public hash.
+     * @param int $customerId Customer ID.
+     * @return PaymentTokenInterface|null Payment token interface.
+     */
+    public function getByPublicHash($hash, $customerId)
+    {
+        $tokenData = $this->paymentTokenResourceModel->getByPublicHash($hash, $customerId);
+        $tokenModel = !empty($tokenData) ? $this->paymentTokenFactory->create(['data' => $tokenData]) : null;
+        return $tokenModel;
+    }
+
+    /**
      * @param PaymentTokenInterface $token
      * @param OrderPaymentInterface $payment
      * @return bool
