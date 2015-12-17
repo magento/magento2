@@ -72,6 +72,7 @@ class FormSections extends Form
      * @param FixtureInterface|null $fixture
      * @param SimpleElement|null $element
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getData(FixtureInterface $fixture = null, SimpleElement $element = null)
     {
@@ -166,6 +167,7 @@ class FormSections extends Form
      *
      * @param string $sectionName
      * @return FormSections
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function openSection($sectionName)
     {
