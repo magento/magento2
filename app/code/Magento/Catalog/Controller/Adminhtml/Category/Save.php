@@ -105,7 +105,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
             if (!$category->getId()) {
-                $parentId = $data['general']['parent'];
+                $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
                 if (!$parentId) {
                     if ($storeId) {
                         $parentId = $this->_objectManager->get(
@@ -126,8 +126,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
              * Process "Use Config Settings" checkboxes
              */
             $generalPost = $data['general'];
-            if ($generalPost['use_config']) {
-                $useConfig = [];
+            $useConfig = [];
+            if (isset($generalPost['use_config']) && !empty($generalPost['use_config'])) {
                 foreach ($generalPost['use_config'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
                         $useConfig[] = $attributeCode;
@@ -155,7 +155,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Check "Use Default Value" checkboxes values
              */
-            if ($generalPost['use_default']) {
+            if (isset($generalPost['use_default']) && !empty($generalPost['use_default'])) {
                 foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
                         $category->setData($attributeCode, false);
@@ -249,9 +249,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             $data['image'] = $_FILES['image'];
         } else {
             unset($data['general']['image']);
-            if (isset($data['general']['savedImage']['value'])) {
-                $data['general']['image']['value'] = $data['general']['savedImage']['value'];
-            }
             if (
                 isset($data['general']['savedImage']['delete']) &&
                 $data['general']['savedImage']['delete']
@@ -274,7 +271,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     {
         foreach ($stringToBoolInputs as $key => $value) {
             if (is_array($value)) {
-                $data[$key] = $this->stringToBoolConverting($value, $data[$key]);
+                if (isset($data[$key])) {
+                    $data[$key] = $this->stringToBoolConverting($value, $data[$key]);
+                }
             } else {
                 if (isset($data[$value])) {
                     if ($data[$value] === 'true') {

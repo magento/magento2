@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Block\Adminhtml\Category\Tab;
+namespace Magento\Catalog\Test\Block\Adminhtml\Category\Section;
 
 use Magento\Backend\Test\Block\Widget\Grid;
 
 /**
- * Products' grid of Category Products tab.
+ * Products grid of Category Products section.
  */
 class ProductGrid extends Grid
 {

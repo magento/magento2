@@ -25,16 +25,18 @@ class DataProvider
      * @param \Magento\GoogleOptimizer\Helper\Data $helper
      * @param \Magento\Framework\View\LayoutInterface $layout
      */
-    public function __construct(\Magento\GoogleOptimizer\Helper\Data $helper, \Magento\Framework\View\LayoutInterface $layout)
-    {
+    public function __construct(
+        \Magento\GoogleOptimizer\Helper\Data $helper,
+        \Magento\Framework\View\LayoutInterface $layout
+    ) {
         $this->_helper = $helper;
         $this->_layout = $layout;
     }
 
     /**
      * @param \Magento\Catalog\Model\Category\DataProvider $subject
-     * @param $result
-     * @return mixed
+     * @param array $result
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterPrepareMeta(\Magento\Catalog\Model\Category\DataProvider $subject, $result)
