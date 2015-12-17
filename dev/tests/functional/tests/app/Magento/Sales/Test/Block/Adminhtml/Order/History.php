@@ -10,35 +10,33 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Totals
- * Order totals block
- *
+ * Order totals block.
  */
 class History extends Block
 {
     /**
-     * Comment history Id
+     * Comment history Id.
      *
      * @var string
      */
     protected $commentHistory = '.note-list-comment';
 
     /**
-     * Captured Amount from IPN
+     * Captured Amount from IPN.
      *
      * @var string
      */
     protected $capturedAmount = '//div[@class="note-list-comment"][contains(text(), "captured amount of")]';
 
     /**
-     * Note list locator
+     * Note list locator.
      *
      * @var string
      */
     protected $noteList = '.note-list';
 
     /**
-     * Get comments history
+     * Get comments history.
      *
      * @return string
      */
@@ -49,7 +47,7 @@ class History extends Block
     }
 
     /**
-     * Get the captured amount from the comments history
+     * Get the captured amount from the comments history.
      *
      * @return array
      */
@@ -65,7 +63,7 @@ class History extends Block
     }
 
     /**
-     * Wait for comments history is visible
+     * Wait for comments history is visible.
      *
      * @return void
      */
