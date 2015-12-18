@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Model\Test\Unit\EntitySnapshot\AttributeProvider;
+namespace Magento\Framework\Model\Test\Unit\EntitySnapshot;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\Entity\EntityMetadata;
