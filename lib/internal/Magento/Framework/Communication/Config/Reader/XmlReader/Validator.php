@@ -30,7 +30,6 @@ class Validator extends ConfigValidator
      */
     private $booleanUtils;
 
-
     /**
      * @param BooleanUtils $booleanUtils
      * @param TypeProcessor $typeProcessor
@@ -48,6 +47,8 @@ class Validator extends ConfigValidator
     }
 
     /**
+     * Validate service method
+     *
      * @param string $serviceMethod
      * @param string $topicName
      * @param string $className
@@ -70,6 +71,8 @@ class Validator extends ConfigValidator
     }
 
     /**
+     * Validate response request
+     *
      * @param string $requestResponseSchema
      * @param string $requestSchema
      * @param string $topicName
@@ -114,6 +117,8 @@ class Validator extends ConfigValidator
     }
 
     /**
+     * Validate declaration of the topic
+     *
      * @param string $requestResponseSchema
      * @param string $topicName
      * @param string $requestSchema
