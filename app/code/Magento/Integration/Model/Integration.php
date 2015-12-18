@@ -36,6 +36,8 @@ class Integration extends \Magento\Framework\Model\AbstractModel
 
     const STATUS_ACTIVE = 1;
 
+    const STATUS_RECREATED = 2;
+
     /**#@-*/
 
     /**#@+

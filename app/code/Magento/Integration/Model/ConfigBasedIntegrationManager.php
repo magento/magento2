@@ -7,6 +7,7 @@ namespace Magento\Integration\Model;
 
 use Magento\Integration\Model\Config\Converter;
 use Magento\Authorization\Model\Acl\AclRetriever;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class to manage integrations installed from config file
@@ -28,7 +29,9 @@ class ConfigBasedIntegrationManager
      */
     protected $integrationConfig;
 
-    /** @var  AclRetriever */
+    /**
+     * @var  AclRetriever
+     */
     protected $aclRetriever;
 
     /**
@@ -82,7 +85,10 @@ class ConfigBasedIntegrationManager
 
             $integration = $this->integrationService->findByName($name);
             if ($integration->getId()) {
-                $originalResources = $this->aclRetriever->getAllowedResourcesByUser(1, $integration->getId());
+                $originalResources = $this->aclRetriever->getAllowedResourcesByUser(
+                    UserContextInterface::USER_TYPE_INTEGRATION,
+                    $integration->getId()
+                );
                 $updateData = $integrationData;
                 $updateData[Integration::ID] = $integration->getId();
                 $integration = $this->integrationService->update($updateData);
@@ -90,6 +96,7 @@ class ConfigBasedIntegrationManager
                 // If there were any changes, delete then recreate integration
                 if ($this->hasDataChanged($integration, $originalResources)) {
                     $this->integrationService->delete($integration->getId());
+                    $integrationData[Integration::STATUS] = Integration::STATUS_RECREATED;
                 } else {
                     continue;
                 }
@@ -100,8 +107,7 @@ class ConfigBasedIntegrationManager
     }
 
     /**
-     * Check that model data fields that can be saved
-     * has really changed comparing with origData
+     * Check whether integration data or assigned resources were changed
      *
      * @param Integration $integration
      * @param array $originalResources
