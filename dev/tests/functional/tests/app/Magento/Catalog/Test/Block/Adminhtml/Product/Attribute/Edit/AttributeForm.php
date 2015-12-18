@@ -55,7 +55,7 @@ class AttributeForm extends FormTabs
         $this->waitForElementVisible($this->propertiesTab);
         $data = [];
         if (null === $fixture) {
-            foreach ($this->tabs as $tabName => $tab) {
+            foreach ($this->getTabs() as $tabName => $tab) {
                 if ($this->isTabVisible($tabName)) {
                     $this->openTab($tabName);
                     $this->expandAllToggles();

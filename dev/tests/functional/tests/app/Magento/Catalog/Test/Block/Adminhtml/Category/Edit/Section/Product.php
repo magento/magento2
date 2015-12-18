@@ -36,7 +36,7 @@ class Product extends Section
      * @param SimpleElement|null $element
      * @return void
      */
-    public function fillSection(array $fields, SimpleElement $element = null)
+    public function fillContainer(array $fields, SimpleElement $element = null)
     {
         if (!isset($fields['category_products'])) {
             return;
@@ -53,7 +53,7 @@ class Product extends Section
      * @param SimpleElement|null $element
      * @return array
      */
-    public function getSectionData($fields = null, SimpleElement $element = null)
+    public function getContainerData($fields = null, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
         $result = [];
