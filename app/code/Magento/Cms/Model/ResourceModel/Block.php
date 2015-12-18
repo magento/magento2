@@ -38,7 +38,7 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param StoreManagerInterface $storeManager
      * @param EntityManager $entityManager
      * @param MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         Context $context,
