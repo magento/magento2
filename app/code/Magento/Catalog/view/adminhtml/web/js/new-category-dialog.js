@@ -92,7 +92,7 @@ define([
                                     parent: $('#new_category_parent').val(),
                                     is_active: 1,
                                     include_in_menu: 1,
-                                    use_config: ['available_sort_by', 'default_sort_by'],
+                                    use_config: ['available_sort_by', 'default_sort_by']
                                 },
                                 form_key: FORM_KEY,
                                 return_session_messages_only: 1
