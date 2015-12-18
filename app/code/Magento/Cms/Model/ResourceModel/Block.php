@@ -176,7 +176,7 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->where('cbs.store_id IN (?)', $stores);
 
         if ($object->getId()) {
-            $select->where('cb.' . $linkField . ' <> ?', $object->getId());
+            $select->where('cb.' . $entityMetadata->getIdentifierField() . ' <> ?', $object->getId());
         }
 
         if ($this->getConnection()->fetchRow($select)) {
