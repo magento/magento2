@@ -245,7 +245,7 @@ define([
                 }),
                 usedProductIds = _.values(this.variationsComponent().productAttributesMap);
 
-            if (usedProductIds) {
+            if (usedProductIds && usedProductIds.length > 0) {
                 filterModifier['entity_id'] = {
                     'condition_type': 'nin', value: usedProductIds
                 };
