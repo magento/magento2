@@ -6,24 +6,24 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
+use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\ObjectManagerInterface;
 
-class IndexerHandlerFactory
+class IndexStructureFactory
 {
     /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $objectManager = null;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $handlers = null;
+    protected $structures = null;
 
     /**
      * @var ScopeConfigInterface
@@ -43,45 +43,42 @@ class IndexerHandlerFactory
      * @param ObjectManagerInterface $objectManager
      * @param ScopeConfigInterface $scopeConfig
      * @param string $configPath
-     * @param string[] $handlers
+     * @param string[] $structures
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ScopeConfigInterface $scopeConfig,
         $configPath,
-        array $handlers = []
+        array $structures = []
     ) {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
         $this->scopeConfig = $scopeConfig;
         $this->configPath = $configPath;
-        $this->handlers = $handlers;
+        $this->structures = $structures;
     }
 
     /**
-     * Create indexer handler
+     * Create index structure
      *
      * @param array $data
-     * @return IndexerInterface
+     * @return IndexStructureInterface
      */
     public function create(array $data = [])
     {
-        $currentHandler = $this->scopeConfig->getValue($this->configPath);
-        if (!isset($this->handlers[$currentHandler])) {
+        $currentStructure = $this->scopeConfig->getValue($this->configPath);
+        if (!isset($this->structures[$currentStructure])) {
             throw new \LogicException(
-                'There is no such indexer handler: ' . $currentHandler
+                'There is no such index structure: ' . $currentStructure
             );
         }
-        $indexer = $this->_objectManager->create($this->handlers[$currentHandler], $data);
+        $indexStructure = $this->objectManager->create($this->structures[$currentStructure], $data);
 
-        if (!$indexer instanceof IndexerInterface) {
-            throw new \InvalidArgumentException($indexer . ' doesn\'t implement \Magento\Framework\IndexerInterface');
-        }
-
-        if ($indexer && !$indexer->isAvailable()) {
-            throw new \LogicException(
-                'Indexer handler is not available: ' . $indexer
+        if (!$indexStructure instanceof IndexStructureInterface) {
+            throw new \InvalidArgumentException(
+                $indexStructure . ' doesn\'t implement \Magento\Framework\Indexer\IndexStructureInterface'
             );
         }
-        return $indexer;
+
+        return $indexStructure;
     }
 }
