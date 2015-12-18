@@ -166,7 +166,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
     {
 
         $this->quoteAddressMock->expects($this->once())->method('save')->willThrowException(
-            new \Exception('Unable to save address. Please, check input data.')
+            new \Exception('Unable to save address. Please check input data.')
         );
 
         $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
