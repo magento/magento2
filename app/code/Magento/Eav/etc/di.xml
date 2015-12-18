@@ -86,7 +86,7 @@
     </type>
     <type name="Magento\Eav\Model\ResourceModel\ReadHandler">
         <arguments>
-            <argument name="contextHandler" xsi:type="objects">Magento\Eav\Model\ResourceModel\ContextHandler</argument>
+            <argument name="contextHandler" xsi:type="object">Magento\Eav\Model\ResourceModel\ContextHandler</argument>
         </arguments>
     </type>
 </config>
