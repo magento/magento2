@@ -123,12 +123,12 @@ class Queue implements QueueInterface
     /**
      * {@inheritdoc}
      */
-    public function reject(EnvelopeInterface $envelope, $rejectionMessage = null)
+    public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
     {
         $properties = $envelope->getProperties();
         $relationId = $properties[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
 
-        if ($properties[QueueManagement::MESSAGE_NUMBER_OF_TRIALS] < $this->maxNumberOfTrials) {
+        if ($properties[QueueManagement::MESSAGE_NUMBER_OF_TRIALS] < $this->maxNumberOfTrials && $requeue) {
             $this->queueManagement->pushToQueueForRetry($relationId);
         } else {
             $this->queueManagement->changeStatus([$relationId], QueueManagement::MESSAGE_STATUS_ERROR);
