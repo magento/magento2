@@ -55,31 +55,31 @@ class Manager
      * Process integration resource permissions after the integration is created
      *
      * @param ConfigBasedIntegrationManager $subject
-     * @param string[] $integrationNames Name of integrations passed as array from the invocation chain
+     * @param array $integrations integrations passed as array from the invocation chain
      *
-     * @return string[]
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterProcessIntegrationConfig(
         ConfigBasedIntegrationManager $subject,
-        $integrationNames
+        $integrations
     ) {
-        if (empty($integrationNames)) {
+        if (empty($integrations)) {
             return [];
         }
-        /** @var array $integrations */
-        $integrations = $this->_integrationConfig->getIntegrations();
-        foreach ($integrationNames as $name) {
-            if (isset($integrations[$name])) {
+        /** @var array $integrationsResource */
+        $integrationsResource = $this->_integrationConfig->getIntegrations();
+        foreach (array_keys($integrations) as $name) {
+            if (isset($integrationsResource[$name])) {
                 $integration = $this->_integrationService->findByName($name);
                 if ($integration->getId()) {
                     $this->integrationAuthorizationService->grantPermissions(
                         $integration->getId(),
-                        $integrations[$name]['resources']
+                        $integrationsResource[$name]['resource']
                     );
                 }
             }
         }
-        return $integrationNames;
+        return $integrations;
     }
 }
