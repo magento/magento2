@@ -59,7 +59,7 @@ class Bundle extends Tab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         if (!isset($fields['bundle_selections'])) {
             return $this;
@@ -84,7 +84,7 @@ class Bundle extends Tab
      * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $newFields = [];
         if (!isset($fields['bundle_selections'])) {

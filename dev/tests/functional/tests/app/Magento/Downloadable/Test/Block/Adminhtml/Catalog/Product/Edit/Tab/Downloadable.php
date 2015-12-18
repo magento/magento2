@@ -57,7 +57,7 @@ class Downloadable extends Tab
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return array
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $newFields = [];
         if (isset($fields['downloadable_sample']['value'])) {
@@ -82,7 +82,7 @@ class Downloadable extends Tab
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         if (isset($fields['downloadable_sample']['value'])) {
             $this->getDownloadableBlock('Samples')->fillSamples($fields['downloadable_sample']['value']);

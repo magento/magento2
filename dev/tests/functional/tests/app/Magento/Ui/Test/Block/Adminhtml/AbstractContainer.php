@@ -21,7 +21,7 @@ abstract class AbstractContainer extends Form
      * @param SimpleElement|null $element
      * @return array
      */
-    public function getContainerData($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
         return $this->_getData($data, $element);
@@ -34,7 +34,7 @@ abstract class AbstractContainer extends Form
      * @param SimpleElement|null $contextElement
      * @return $this
      */
-    public function fillContainer(array $fields, SimpleElement $contextElement = null)
+    public function setFieldsData(array $fields, SimpleElement $contextElement = null)
     {
         $data = $this->dataMapping($fields);
         $this->_fill($data, $contextElement);

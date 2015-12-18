@@ -107,7 +107,7 @@ abstract class AbstractFormContainers extends Form
 
         if (null === $fixture) {
             foreach ($this->containers as $containerName => $containerData) {
-                $containerData = $this->getContainer($containerName)->getContainerData();
+                $containerData = $this->getContainer($containerName)->getFieldsData();
                 $data = array_merge($data, $containerData);
             }
         } else {
@@ -118,7 +118,7 @@ abstract class AbstractFormContainers extends Form
                     continue;
                 }
                 $this->openContainer($containerName);
-                $containerData = $this->getContainer($containerName)->getContainerData($containerFields);
+                $containerData = $this->getContainer($containerName)->getFieldsData($containerFields);
                 $data = array_merge($data, $containerData);
             }
         }
@@ -178,12 +178,10 @@ abstract class AbstractFormContainers extends Form
     {
         $context = ($element === null) ? $this->_rootElement : $element;
         foreach ($dataByContainers as $containerName => $containerFields) {
-            if ($containerName) {
-                $this->openContainer($containerName);
-                /** @var AbstractContainer $container */
-                $container = $this->getContainer($containerName);
-                $container->fillContainer($containerFields, $context);
-            }
+            $this->openContainer($containerName);
+            /** @var AbstractContainer $container */
+            $container = $this->getContainer($containerName);
+            $container->setFieldsData($containerFields, $context);
         }
         if (!empty($this->unassignedFields)) {
             $this->fillMissedFields();

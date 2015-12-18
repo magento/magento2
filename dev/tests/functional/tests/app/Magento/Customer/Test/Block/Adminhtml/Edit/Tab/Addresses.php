@@ -56,7 +56,7 @@ class Addresses extends Tab
         $addresses = is_array($address) ? $address : [$address];
         foreach ($addresses as $address) {
             $this->addNewAddress();
-            $this->fillFormTab($address->getData(), $this->_rootElement);
+            $this->setFieldsData($address->getData(), $this->_rootElement);
         }
 
         return $this;
@@ -95,7 +95,7 @@ class Addresses extends Tab
             }
             $this->_fill($this->dataMapping($defaultAddress));
 
-            $this->fillFormTab(array_diff($addressData, $defaultAddress), $this->_rootElement);
+            $this->setFieldsData(array_diff($addressData, $defaultAddress), $this->_rootElement);
         }
 
         return $this;
@@ -141,7 +141,7 @@ class Addresses extends Tab
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         /* Skip get data for standard method. Use getDataAddresses. */
         return [];

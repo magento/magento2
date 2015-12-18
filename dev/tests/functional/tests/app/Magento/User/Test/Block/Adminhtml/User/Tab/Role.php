@@ -22,7 +22,7 @@ class Role extends Tab
      * @param SimpleElement|null $element
      * @return void
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $this->getRoleGrid()->searchAndSelect(['rolename' => $fields['role_id']['value']]);
     }

@@ -30,7 +30,7 @@ class Options extends Tab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         foreach ($fields['options']['value'] as $field) {
             $this->_rootElement->find($this->addOption)->click();

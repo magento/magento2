@@ -39,30 +39,6 @@ class Tab extends AbstractContainer
     protected $mageErrorText = './/label[contains(@class,"error")]';
 
     /**
-     * Fill data to fields on tab.
-     *
-     * @param array $fields
-     * @param SimpleElement|null $element
-     * @return $this
-     */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
-    {
-        return $this->fillContainer($fields, $element);
-    }
-
-    /**
-     * Get data of tab.
-     *
-     * @param array|null $fields
-     * @param SimpleElement|null $element
-     * @return array
-     */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
-    {
-        return $this->getContainerData($fields, $element);
-    }
-
-    /**
      * Get array of label => js error text.
      *
      * @return array
