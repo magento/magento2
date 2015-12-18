@@ -16,6 +16,7 @@ for ssl configuration in nginx.conf you must: <br/>
 2 - generate dhparam file ```openssl dhparam -out dhparams.pem 2048``` <br/>
 3 - enable in nginx.conf ```ssl_dhparam /etc/ssl/certs/dhparams.pem;``` <br/>
 
+config:<br/>
 ```conf.d/assets.conf``` => settings for any static assets<br/>
 ```conf.d/error_page.conf``` => configure custom error pages<br/>
 ```conf.d/extra_protect.conf``` => protecting everything<br/>
