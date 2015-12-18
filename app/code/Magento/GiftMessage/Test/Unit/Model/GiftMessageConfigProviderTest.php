@@ -143,21 +143,17 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuoteId')->willReturn($quoteId);
         $this->cartRepositoryMock->expects($this->once())->method('get')->with($quoteId)->willReturn($messageMock);
-
         $this->checkoutSessionMock->expects($this->once())->method('loadCustomerQuote')->willReturnSelf();
         $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->any())->method('getId')->willReturn($quoteId);
         $quoteMock->expects($this->once())->method('getIsVirtual')->willReturn(false);
-
         $messageMock->expects($this->atLeastOnce())->method('getData')->willReturn($messageDataMock);
-
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
         $quoteItemMock->expects($this->once())->method('getId')->willReturn($itemId);
         $quoteItemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
         $productMock->expects($this->any())->method('getGiftMessageAvailable')->willReturn(false);
         $this->itemRepositoryMock->expects($this->once())->method('get')->with($quoteId, $itemId)
             ->willReturn($messageMock);
-
         $quoteMock->expects($this->once())->method('getQuoteCurrencyCode')->willReturn($currencyCode);
         $this->localeFormatMock->expects($this->once())->method('getPriceFormat')->with(null, $currencyCode)
             ->willReturn($priceFormat);
@@ -191,7 +187,6 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
             'formKey' => $formKey,
             'baseUrl' => $baseUrl
         ];
-
         $this->assertSame($expectedResult, $this->model->getConfig());
     }
 }
