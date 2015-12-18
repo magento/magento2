@@ -654,53 +654,12 @@ class Product extends AbstractResource
     /**
      * {@inheritdoc}
      */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    protected function processSave($object)
     {
-        /**
-         * Direct deleted items to delete method
-         */
-        if ($object->isDeleted()) {
-            return $this->delete($object);
-        }
-        if (!$object->hasDataChanges()) {
-            return $this;
-        }
-        $this->beginTransaction();
-        try {
-            $object->validateBeforeSave();
-            $object->beforeSave();
-            if ($object->isSaveAllowed()) {
-                if (!$this->isPartialSave()) {
-                    $this->loadAllAttributes($object);
-                }
-
-                if ($this->getEntityTable() ==  \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE
-                    && !$object->getEntityTypeId()
-                ) {
-                    $object->setEntityTypeId($this->getTypeId());
-                }
-
-                $object->setParentId((int)$object->getParentId());
-
-                $this->objectRelationProcessor->validateDataIntegrity($this->getEntityTable(), $object->getData());
-
-                $this->_beforeSave($object);
-                $this->entityManager->save(
-                    \Magento\Catalog\Api\Data\ProductInterface::class,
-                    $object
-                );
-                $this->_afterSave($object);
-
-                $object->afterSave();
-            }
-            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
-            $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
-            $this->rollBack();
-            $object->setHasDataChanges(true);
-            throw $e;
-        }
-        return $this;
+        $this->entityManager->save(
+            \Magento\Catalog\Api\Data\ProductInterface::class,
+            $object
+        );
     }
 
     /**
