@@ -45,7 +45,7 @@ class WidgetInstance extends Tab
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         foreach ($fields['widget_instance']['value'] as $key => $field) {
             $this->addLayoutUpdates();

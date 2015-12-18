@@ -6,8 +6,6 @@
 
 namespace Magento\Ui\Test\Block\Adminhtml;
 
-use Magento\Mtf\Client\Element\SimpleElement;
-
 /**
  * Is used to represent any (collapsible) section on the page.
  */

@@ -86,7 +86,7 @@ class AssociatedProducts extends Tab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         if (isset($fields['associated'])) {
             $options = $this->_rootElement->getElements($this->deleteButton);
@@ -116,7 +116,7 @@ class AssociatedProducts extends Tab
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $newFields = [];
         if (isset($fields['associated'])) {

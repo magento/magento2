@@ -6,8 +6,6 @@
 
 namespace Magento\Ui\Test\Block\Adminhtml;
 
-use Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers;
-
 /**
  * Is used to represent a new unified form with collapsible sections on the page.
  */
@@ -15,33 +13,36 @@ class FormSections extends AbstractFormContainers
 {
     /**
      * @param string $sectionName
+     * @return Section
+     * @throws \Exception
+     */
+    protected function getSection($sectionName)
+    {
+        return $this->getContainer($sectionName);
+    }
+
+    /**
+     * Opens the section.
+     *
+     * @param string $sectionName
      * @return $this
      */
     protected function openContainer($sectionName)
     {
-        $this->browser->find($this->header)->hover();
-        return $this;
+        return $this->openSection($sectionName);
     }
 
     /**
-     * Open section.
+     * Opens the section.
      *
      * @param string $sectionName
      * @return $this
      */
     public function openSection($sectionName)
     {
-        return $this->openContainer($sectionName);
-    }
-
-    /**
-     * @param string $sectionName
-     * @return $this
-     * @throws \Exception
-     */
-    public function getSection($sectionName)
-    {
-        return $this->getContainer($sectionName);
+        //TODO: needs to be implemented when ready
+        $this->browser->find($this->header)->hover();
+        return $this;
     }
 
     /**

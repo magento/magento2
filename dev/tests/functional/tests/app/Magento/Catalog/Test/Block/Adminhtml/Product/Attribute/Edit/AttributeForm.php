@@ -59,7 +59,7 @@ class AttributeForm extends FormTabs
                 if ($this->isTabVisible($tabName)) {
                     $this->openTab($tabName);
                     $this->expandAllToggles();
-                    $tabData = $this->getTab($tabName)->getDataFormTab();
+                    $tabData = $this->getTab($tabName)->getFieldsData();
                     $data = array_merge($data, $tabData);
                 }
             }
@@ -70,7 +70,7 @@ class AttributeForm extends FormTabs
                 if ($this->isTabVisible($tabName)) {
                     $this->openTab($tabName);
                     $this->expandAllToggles();
-                    $tabData = $this->getTab($tabName)->getDataFormTab($fields, $this->_rootElement);
+                    $tabData = $this->getTab($tabName)->getFieldsData($fields, $this->_rootElement);
                     $data = array_merge($data, $tabData);
                 }
             }

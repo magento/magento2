@@ -63,7 +63,7 @@ class FormTabs extends AbstractFormContainers
     {
         $tabs = $this->getFieldsByTabs($fixture);
         foreach ($tabs as $tab => $tabFields) {
-            $this->openTab($tab)->fillFormTab($tabFields, $this->_rootElement);
+            $this->openTab($tab)->setFieldsData($tabFields, $this->_rootElement);
         }
         return $this;
     }
@@ -114,9 +114,7 @@ class FormTabs extends AbstractFormContainers
      */
     protected function openContainer($tabName)
     {
-        $this->browser->find($this->header)->hover();
-        $this->getTabElement($tabName)->click();
-        return $this;
+        return $this->openTab($tabName);
     }
 
     /**
@@ -127,7 +125,9 @@ class FormTabs extends AbstractFormContainers
      */
     public function openTab($tabName)
     {
-        return $this->openContainer($tabName);
+        $this->browser->find($this->header)->hover();
+        $this->getTabElement($tabName)->click();
+        return $this;
     }
 
     /**
@@ -151,7 +151,7 @@ class FormTabs extends AbstractFormContainers
      */
     protected function isContainerVisible($tabName)
     {
-        return $this->getTabElement($tabName)->isVisible();
+        return $this->isTabVisible($tabName);
     }
 
     /**
@@ -162,6 +162,6 @@ class FormTabs extends AbstractFormContainers
      */
     public function isTabVisible($tabName)
     {
-        return $this->isContainerVisible($tabName);
+        return $this->getTabElement($tabName)->isVisible();
     }
 }

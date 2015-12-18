@@ -71,7 +71,7 @@ class Config extends Tab
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $attributes = isset($fields['configurable_attributes_data']['source'])
             ? $fields['configurable_attributes_data']['value']
@@ -177,7 +177,7 @@ class Config extends Tab
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $data = [];
 

@@ -16,7 +16,6 @@
                 <input>switcher</input>
                 <selector>input[name='general[is_active]']</selector>
             </is_active>
-            <description />
             <include_in_menu>
                 <input>switcher</input>
                 <selector>input[name='general[include_in_menu]']</selector>

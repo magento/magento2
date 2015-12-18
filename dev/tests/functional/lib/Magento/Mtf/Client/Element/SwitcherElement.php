@@ -13,7 +13,9 @@ namespace Magento\Mtf\Client\Element;
 class SwitcherElement extends SimpleElement
 {
     /**
-     * XPath locator of the parent container
+     * XPath locator of the parent container.
+     *
+     * @var string
      */
     protected $parentContainer = 'parent::div[@class="switcher"]';
 
