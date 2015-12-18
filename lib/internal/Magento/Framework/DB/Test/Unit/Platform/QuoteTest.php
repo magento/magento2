@@ -210,5 +210,4 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             [['`table`', '`column`'], 'alias', '```table```.```column``` ' . Select::SQL_AS . ' `alias`']
         ]);
     }
-
 }
