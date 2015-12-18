@@ -32,10 +32,13 @@ class Form extends AbstractComponent
         FilterBuilder $filterBuilder,
         array $components = [],
         array $data = []
-    )
-    {
+    ) {
         $this->filterBuilder = $filterBuilder;
-        parent::__construct($context, $components, $data);
+        parent::__construct(
+            $context,
+            $components,
+            $data
+        );
     }
 
     /**
