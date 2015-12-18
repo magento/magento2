@@ -39,24 +39,6 @@ define([
             this._super();
             this.observe(['rows', 'columnData']);
 
-            this.someval = ko.pureComputed({
-                /**
-                 * use 'mappedValue' as value if checked
-                 */
-                read: function(){
-                    debugger;
-                    return $col.getLabel($row());
-                },
-
-                /**
-                 * any value made checkbox checked
-                 */
-                write: function(val){
-                    if (val) {
-                        debugger;
-                    }
-                },
-                owner: this});
             return this;
         },
 

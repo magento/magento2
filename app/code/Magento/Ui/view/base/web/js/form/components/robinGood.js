@@ -30,14 +30,11 @@ define([
             },
             externalLinks: {
                 imports: {
-                    'updateUrl': '${ $.externalProvider }:update_url'
-                },
-                links: {
-                    bla: '${ $.externalProvider }:data.items'
-                },
-                exports: {
-                    bla: '${ $.provider }:data.koala.items'
+                    updateUrl: '${ $.externalProvider }:update_url'
                 }
+            },
+            modules: {
+                selections: '${ $.selectionsProvider }'
             }
         },
 
@@ -80,7 +77,7 @@ define([
         },
 
         requestData: function (params, ajaxSettings) {
-            var query   = utils.copy(params);
+            var query = utils.copy(params);
 
             ajaxSettings = _.extend({
                 url: this.updateUrl,
@@ -120,6 +117,41 @@ define([
             }, this.setLinks, this);
 
             return this;
+        },
+
+        updateExternalValue: function () {
+            //add other options
+            this.updateFromServerData();
+        },
+
+        updateFromServerData: function () {
+            var provider = this.selections(),
+                selections = provider && provider.getSelections(),
+                itemsType = selections && selections.excludeMode ? 'excluded' : 'selected',
+                filterType = selections && selections.excludeMode ? 'nin' : 'in',
+                selectionsData = {},
+                request;
+
+            if (!provider) {
+                return;
+            }
+
+            //add also filters and search!
+            selectionsData['filters_modifier'] = {};
+            selectionsData['filters_modifier'][provider.indexField] = {
+                    'condition_type': filterType,
+                    value: selections[itemsType]
+                };
+
+            _.extend(selectionsData, this.params || {});
+
+            request = this.requestData(selectionsData);
+            request
+                .done(function (data) {
+                    this.set('externalValue', data);
+                    console.log(this.externalValue());
+                }.bind(this))
+                .fail(this.onError);
         }
     });
 });
