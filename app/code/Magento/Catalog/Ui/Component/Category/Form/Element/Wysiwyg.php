@@ -70,7 +70,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
     private function prepareData($data)
     {
         if ($this->editorElement->isEnabled()) {
-            return $data['config']['content'] = $this->getWisywygButtonHtml() . $data['config']['content'];
+            $data['config']['content'] = $this->getWisywygButtonHtml() . $data['config']['content'];
         }
         return $data;
     }
