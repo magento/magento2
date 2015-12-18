@@ -95,6 +95,7 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
