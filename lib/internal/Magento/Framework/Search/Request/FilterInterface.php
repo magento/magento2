@@ -33,7 +33,7 @@ interface FilterInterface
     /**
      * Get Name
      *
-     * @return string Return data in raw-formt. Must be escaped for using in sql
+     * @return string
      */
     public function getName();
 }
