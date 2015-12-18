@@ -190,7 +190,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enable_js_bundling" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable Javascript Bundling</label>
+                    <label>Enable JavaScript Bundling</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -215,7 +215,7 @@
                     <label>Image Adapter</label>
                     <source_model>Magento\Config\Model\Config\Source\Image\Adapter</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Adapter</backend_model>
-                    <comment>When the adapter was changed, please, flush Catalog Images Cache.</comment>
+                    <comment>When the adapter was changed, please flush Catalog Images Cache.</comment>
                 </field>
             </group>
             <group id="static" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="0" showInStore="0">

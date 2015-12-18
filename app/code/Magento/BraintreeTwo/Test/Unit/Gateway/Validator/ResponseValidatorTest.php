@@ -85,7 +85,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with([
                 'isValid' => $isValid,
-                'failsDescription' => ['Transaction has been declined, please, try again later.']
+                'failsDescription' => ['Transaction has been declined. Please try again later.']
             ])
             ->willReturn($resultMock);
 
