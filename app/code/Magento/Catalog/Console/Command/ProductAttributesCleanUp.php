@@ -102,7 +102,6 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
      */
     private function getAttributeTables()
     {
-        $connection = $this->attributeResource->getConnection();
         $searchResult = $this->productAttributeRepository->getList($this->searchCriteriaBuilder->create());
         $attributeTables = [];
 

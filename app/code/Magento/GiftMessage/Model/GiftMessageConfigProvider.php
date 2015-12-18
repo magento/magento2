@@ -179,7 +179,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             $itemLevelConfig[$itemId] = [];
             $isMessageAvailable = $item->getProduct()->getGiftMessageAvailable();
             // use gift message product setting if it is available
-            if (!is_null($isMessageAvailable)) {
+            if ($isMessageAvailable !== null) {
                 $itemLevelConfig[$itemId]['is_available'] = (bool)$isMessageAvailable;
             }
             $message = $this->itemRepository->get($quote->getId(), $itemId);
