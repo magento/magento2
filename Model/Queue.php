@@ -148,13 +148,13 @@ class Queue implements QueueInterface
     /**
      * (@inheritdoc)
      */
-    public function reject(EnvelopeInterface $envelope, $rejectionMessage = null)
+    public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
     {
         $properties = $envelope->getProperties();
 
         $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
-        $channel->basic_reject($properties['delivery_tag'], false);
+        $channel->basic_reject($properties['delivery_tag'], $requeue);
         // @codingStandardsIgnoreEnd
         if ($rejectionMessage !== null) {
             $this->logger->critical(__('Message has been rejected: %1', $rejectionMessage));
