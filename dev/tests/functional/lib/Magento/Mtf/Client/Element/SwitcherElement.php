@@ -48,7 +48,7 @@ class SwitcherElement extends SimpleElement
         } elseif ($this->find($this->parentContainer, 'xpath')->find('input')->isVisible()) {
             return 'No';
         } else {
-            throw new \Exception (
+            throw new \Exception(
                 sprintf('Element %s not found on page', $this->getLocator())
             );
         }

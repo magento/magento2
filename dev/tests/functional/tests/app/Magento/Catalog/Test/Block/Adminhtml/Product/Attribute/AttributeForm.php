@@ -89,9 +89,9 @@ class AttributeForm extends FormTabs
      */
     public function openTab($tabName)
     {
-        $selector = $this->tabs[$tabName]['selector'];
-        $strategy = isset($this->tabs[$tabName]['strategy'])
-            ? $this->tabs[$tabName]['strategy']
+        $selector = $this->getTabs()[$tabName]['selector'];
+        $strategy = isset($this->getTabs()[$tabName]['strategy'])
+            ? $this->getTabs()[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
 
         $isTabOpened = $this->_rootElement->find($this->isTabOpened . $selector, $strategy);
