@@ -18,7 +18,7 @@ class ResponseValidator extends AbstractValidator
     /**
      * @var SubjectReader
      */
-    private $subjectReader;
+    protected $subjectReader;
 
     /**
      * Constructor
@@ -53,7 +53,7 @@ class ResponseValidator extends AbstractValidator
      * @param object $response
      * @return bool
      */
-    private function validateSuccess($response)
+    protected function validateSuccess($response)
     {
         return property_exists($response, 'success') && $response->success === true;
     }
@@ -62,7 +62,7 @@ class ResponseValidator extends AbstractValidator
      * @param object $response
      * @return bool
      */
-    private function validateErrors($response)
+    protected function validateErrors($response)
     {
         return !(property_exists($response, 'errors') && $response->errors->deepSize() > 0);
     }

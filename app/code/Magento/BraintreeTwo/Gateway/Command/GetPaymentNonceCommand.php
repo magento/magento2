@@ -6,8 +6,9 @@
 
 namespace Magento\BraintreeTwo\Gateway\Command;
 
-use Braintree\Result\Successful;
 use Exception;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
 use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\Result\ArrayResultFactory;
@@ -36,17 +37,34 @@ class GetPaymentNonceCommand implements CommandInterface
     private $resultFactory;
 
     /**
+     * @var SubjectReader
+     */
+    private $subjectReader;
+
+    /**
+     * @var PaymentNonceResponseValidator
+     */
+    private $responseValidator;
+
+    /**
      * @param PaymentTokenManagementInterface $tokenManagement
      * @param BraintreeAdapter $adapter
+     * @param ArrayResultFactory $resultFactory
+     * @param SubjectReader $subjectReader
+     * @param PaymentNonceResponseValidator $responseValidator
      */
     public function __construct(
         PaymentTokenManagementInterface $tokenManagement,
         BraintreeAdapter $adapter,
-        ArrayResultFactory $resultFactory
+        ArrayResultFactory $resultFactory,
+        SubjectReader $subjectReader,
+        PaymentNonceResponseValidator $responseValidator
     ) {
         $this->tokenManagement = $tokenManagement;
         $this->adapter = $adapter;
         $this->resultFactory = $resultFactory;
+        $this->subjectReader = $subjectReader;
+        $this->responseValidator = $responseValidator;
     }
 
     /**
@@ -55,16 +73,20 @@ class GetPaymentNonceCommand implements CommandInterface
      */
     public function execute(array $commandSubject)
     {
-        $publicHash = $commandSubject['publicHash'];
-        $customerId = $commandSubject['customerId'];
+        $publicHash = $this->subjectReader->readPublicHash($commandSubject);
+        $customerId = $this->subjectReader->readCustomerId($commandSubject);
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
         if (!$paymentToken) {
             throw new Exception('No available payment tokens');
         }
-        $result = $this->adapter->createNonce($paymentToken->getGatewayToken());
-        if (!$result instanceof Successful || !$result->success) {
-            throw new Exception('Payment nonce was not received');
+
+        $data = $this->adapter->createNonce($paymentToken->getGatewayToken());
+        $result = $this->responseValidator->validate(['response' => ['object' => $data]]);
+
+        if (!$result->isValid()) {
+            throw new Exception(__(implode("\n", $result->getFailsDescription())));
         }
-        return $this->resultFactory->create(['array' => ['paymentMethodNonce' => $result->paymentMethodNonce->nonce]]);
+
+        return $this->resultFactory->create(['array' => ['paymentMethodNonce' => $data->paymentMethodNonce->nonce]]);
     }
 }

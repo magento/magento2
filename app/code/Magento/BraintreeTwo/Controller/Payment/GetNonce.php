@@ -61,16 +61,8 @@ class GetNonce extends Action
 
         try {
             $publicHash = $this->getRequest()->getParam('public_hash');
-            if (!$publicHash) {
-                throw new \Exception('The "public_hash" should not be empty');
-            }
-
             $customerId = $this->session->getCustomerId();
-            if (!$customerId) {
-                throw new \Exception('User not allowed to perform this action');
-            }
-            $result = $this->command
-                ->execute(['publicHash' => $publicHash, 'customerId' => $customerId])
+            $result = $this->command->execute(['publicHash' => $publicHash, 'customerId' => $customerId])
                 ->get();
             $response->setData(['paymentMethodNonce' => $result['paymentMethodNonce']]);
 

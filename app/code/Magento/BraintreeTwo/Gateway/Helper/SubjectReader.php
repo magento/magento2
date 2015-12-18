@@ -71,4 +71,31 @@ class SubjectReader
     {
         return Helper\SubjectReader::readAmount($subject);
     }
+
+    /**
+     * Reads customer id from subject
+     * @param array $subject
+     * @return int
+     */
+    public function readCustomerId(array $subject)
+    {
+        if (empty($subject['customerId'])) {
+            throw new \InvalidArgumentException('The "customerId" field does not exists');
+        }
+
+        return (int)$subject['customerId'];
+    }
+
+    /**
+     * Reads public hash from subject
+     * @return string
+     */
+    public function readPublicHash(array $subject)
+    {
+        if (empty($subject['publicHash'])) {
+            throw new \InvalidArgumentException('The "publicHash" field does not exists');
+        }
+
+        return $subject['publicHash'];
+    }
 }
