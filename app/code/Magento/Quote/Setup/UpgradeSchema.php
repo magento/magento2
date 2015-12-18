@@ -29,6 +29,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $setup->getConnection()->changeColumn(
+                $setup->getTable('quote_address'),
+                'street',
+                'street',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 255,
+                    'comment' => 'Street'
+                ]
+            );
+        }
+
         $setup->endSetup();
     }
 }
