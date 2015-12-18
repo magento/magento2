@@ -54,7 +54,6 @@ class Config
      */
     const FULL_CONFIG_TEMPLATE = <<<config
 (function(require){
-%base%
 %function%
 
 %usages%
@@ -134,7 +133,6 @@ config;
     public function getConfig()
     {
         $distributedConfig = '';
-        $baseConfig = $this->getBaseConfig();
         $customConfigFiles = $this->fileSource->getFiles($this->design->getDesignTheme(), self::CONFIG_FILE_NAME);
         foreach ($customConfigFiles as $file) {
             /** @var $fileReader \Magento\Framework\Filesystem\File\Read */
@@ -148,8 +146,8 @@ config;
         }
 
         $fullConfig = str_replace(
-            ['%function%', '%base%', '%usages%'],
-            [$distributedConfig, $baseConfig],
+            ['%function%', '%usages%'],
+            [$distributedConfig],
             self::FULL_CONFIG_TEMPLATE
         );
 
