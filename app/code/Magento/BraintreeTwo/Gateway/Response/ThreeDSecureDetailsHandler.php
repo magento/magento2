@@ -63,7 +63,8 @@ class ThreeDSecureDetailsHandler implements HandlerInterface
 
         /** @var \Braintree\ThreeDSecureInfo $info */
         $info = $transaction->threeDSecureInfo;
-        $payment->setAdditionalInformation(self::LIABILITY_SHIFTED, $info->liabilityShifted);
-        $payment->setAdditionalInformation(self::LIABILITY_SHIFT_POSSIBLE, $info->liabilityShiftPossible);
+        $payment->setAdditionalInformation(self::LIABILITY_SHIFTED, $info->liabilityShifted ? 'Yes' : 'No');
+        $shiftPossible = $info->liabilityShiftPossible ? 'Yes' : 'No';
+        $payment->setAdditionalInformation(self::LIABILITY_SHIFT_POSSIBLE, $shiftPossible);
     }
 }

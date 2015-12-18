@@ -76,10 +76,10 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->payment->expects(static::at(1))
             ->method('setAdditionalInformation')
-            ->with('liabilityShifted', true);
+            ->with('liabilityShifted', 'Yes');
         $this->payment->expects(static::at(2))
             ->method('setAdditionalInformation')
-            ->with('liabilityShiftPossible', true);
+            ->with('liabilityShiftPossible', 'Yes');
 
         $this->handler->handle($subject, $response);
     }
@@ -125,8 +125,8 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     private function getThreeDSecureInfo()
     {
         $attributes = [
-            'liabilityShifted' => true,
-            'liabilityShiftPossible' => true
+            'liabilityShifted' => 'Yes',
+            'liabilityShiftPossible' => 'Yes'
         ];
 
         return $attributes;
