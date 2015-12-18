@@ -175,6 +175,25 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->expectedValidate(), $result);
     }
 
+    public function testEmptyFile()
+    {
+        $this->prepareEnvForEmptyFile();
+
+        $this->setExpectedException(
+            '\Magento\Framework\Exception\LocalizedException',
+            'The file is empty. Please choose another one'
+        );
+
+        $httpAdapterMock = $this->getMock('Zend_File_Transfer_Adapter_Http', ['isValid']);
+        $httpAdapterMock->expects($this->once())->method('isValid')->will($this->returnValue(true));
+        $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
+
+        $this->model->validate(
+            $this->objectManager->create('Magento\Framework\DataObject'),
+            $this->getProductOption()
+        );
+    }
+
     /**
      * @param array $options
      * @return \Magento\Catalog\Model\Product\Option
@@ -230,6 +249,27 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
             'tmp_name' => $filePath,
             'error' => 0,
             'size' => 12500,
+        ];
+    }
+
+    /**
+     * Test exception for empty file
+     *
+     * @return void
+     */
+    protected function prepareEnvForEmptyFile()
+    {
+        $file = 'magento_empty.jpg';
+
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = $this->objectManager->get('Magento\Framework\Filesystem');
+        $tmpDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
+        $filePath = $tmpDirectory->getAbsolutePath($file);
+
+        $_FILES['options_1_file'] = [
+            'name' => 'test.jpg',
+            'type' => 'image/jpeg',
+            'tmp_name' => $filePath,
         ];
     }
 

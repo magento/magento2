@@ -4110,6 +4110,15 @@ return [
         'Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface'
     ],
     ['Magento\Quote\Api\ShippingAddressManagementInterface', 'Magento\Quote\Model\ShippingAddressManagementInterface'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Form'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tabs'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Content'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Design'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Main'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Meta'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\Form'],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
         'Magento\Catalog\Model\ResourceModel\Product\Gallery'
