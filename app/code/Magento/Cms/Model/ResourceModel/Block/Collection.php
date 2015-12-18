@@ -27,7 +27,7 @@ class Collection extends AbstractCollection
     {
         $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
 
-        $this->performAfterLoad('cms_block_store', 'block_id', $entityMetadata->getLinkField());
+        $this->performAfterLoad('cms_block_store', $entityMetadata->getLinkField());
 
         return parent::_afterLoad();
     }

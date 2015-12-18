@@ -249,12 +249,11 @@ class Page extends AbstractDb
     public function checkIdentifier($identifier, $storeId)
     {
         $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
-        $linkField = $entityMetadata->getLinkField();
 
         $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId];
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores, 1);
         $select->reset(\Magento\Framework\DB\Select::COLUMNS)
-            ->columns('cp.' . $linkField)
+            ->columns('cp.' . $entityMetadata->getIdentifierField())
             ->order('cps.store_id DESC')
             ->limit(1);
 
