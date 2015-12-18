@@ -41,6 +41,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      * @param CategoryAttributeRepositoryInterface $attrRepository
      * @param array $components
      * @param array $data
+     * @param array $config
      */
     public function __construct(
         ContextInterface $context,
@@ -51,13 +52,14 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
         DataHelper $backendHelper,
         CategoryAttributeRepositoryInterface $attrRepository,
         array $components = [],
-        array $data = []
+        array $data = [],
+        array $config = []
     ) {
         $this->layout = $layout;
         $this->backendHelper = $backendHelper;
 
         $editorElement->setData('wysiwyg', (bool)$attrRepository->get($data['name'])->getIsWysiwygEnabled());
-        parent::__construct($context, $form, $editorElement, $wysiwygConfig, $components, $data);
+        parent::__construct($context, $form, $editorElement, $wysiwygConfig, $components, $data, $config);
         $this->setData($this->prepareData($this->getData()));
     }
 
@@ -70,7 +72,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
     private function prepareData($data)
     {
         if ($this->editorElement->isEnabled()) {
-            $data['config']['content'] = $this->getWisywygButtonHtml() . $data['config']['content'];
+            $data['config']['content'] .= $this->getWisywygButtonHtml();
         }
         return $data;
     }
