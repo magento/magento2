@@ -21,6 +21,13 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
      */
     const CACHE_TAG = 'cms_block';
 
+    /**#@+
+     * Block's statuses
+     */
+    const STATUS_ENABLED = 1;
+    const STATUS_DISABLED = 0;
+
+    /**#@-*/
     /**
      * @var string
      */
@@ -223,5 +230,15 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
     public function getStores()
     {
         return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
+    }
+
+    /**
+     * Prepare block's statuses.
+     *
+     * @return array
+     */
+    public function getAvailableStatuses()
+    {
+        return [self::STATUS_ENABLED => __('Enabled'), self::STATUS_DISABLED => __('Disabled')];
     }
 }
