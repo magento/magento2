@@ -25,6 +25,8 @@ use Magento\Vault\Model\VaultPaymentInterface;
  * Class ConfigProviderTest
  *
  * @see \Magento\Vault\Model\Ui\TokensConfigProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
 {

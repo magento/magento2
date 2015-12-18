@@ -35,6 +35,7 @@ final class ConfigProvider implements ConfigProviderInterface
      * Constructor
      *
      * @param Config $config
+     * @param BraintreeAdapter $adapter
      */
     public function __construct(Config $config, BraintreeAdapter $adapter)
     {

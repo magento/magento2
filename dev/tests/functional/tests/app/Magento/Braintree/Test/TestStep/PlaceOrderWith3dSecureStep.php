@@ -57,15 +57,15 @@ class PlaceOrderWith3dSecureStep implements TestStepInterface
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
-     * @param array $prices
      * @param Secure3dBraintree $secure3d
+     * @param array $prices
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertGrandTotalOrderReview $assertGrandTotalOrderReview,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
-        array $prices = [],
-        Secure3dBraintree $secure3d
+        Secure3dBraintree $secure3d,
+        array $prices = []
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->secure3d = $secure3d;

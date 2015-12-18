@@ -45,13 +45,12 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
      */
     public function getComponentForToken(PaymentTokenInterface $paymentToken)
     {
+        $jsonDetails = json_decode($paymentToken->getTokenDetails() ?: '{}', true);
         $component = $this->componentFactory->create(
             [
                 'config' => [
                     TokenUiComponentProviderInterface::COMPONENT_NONCE_URL => $this->getNonceRetrieveUrl(),
-                    TokenUiComponentProviderInterface::COMPONENT_DETAILS => json_decode(
-                        $paymentToken->getTokenDetails() ?: '{}', true
-                    ),
+                    TokenUiComponentProviderInterface::COMPONENT_DETAILS => $jsonDetails,
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash()
                 ],
                 'name' => 'Magento_BraintreeTwo/js/view/payment/method-renderer/vault'

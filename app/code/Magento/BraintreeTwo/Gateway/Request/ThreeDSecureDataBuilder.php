@@ -34,7 +34,8 @@ class ThreeDSecureDataBuilder implements BuilderInterface
      * @param Config $config
      * @param SubjectReader $subjectReader
      */
-    public function __construct(Config $config, SubjectReader $subjectReader) {
+    public function __construct(Config $config, SubjectReader $subjectReader)
+    {
         $this->config = $config;
         $this->subjectReader = $subjectReader;
     }
@@ -58,7 +59,7 @@ class ThreeDSecureDataBuilder implements BuilderInterface
     /**
      * Check if 3d secure is enabled
      * @param OrderAdapterInterface $order
-     * @param $amount
+     * @param float $amount
      * @return bool
      */
     private function is3DSecureEnabled(OrderAdapterInterface $order, $amount)
