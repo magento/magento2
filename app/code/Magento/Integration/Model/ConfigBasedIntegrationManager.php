@@ -113,10 +113,11 @@ class ConfigBasedIntegrationManager
      * @param array $originalResources
      * @return bool
      */
-    public function hasDataChanged(Integration $integration, $originalResources)
+    private function hasDataChanged(Integration $integration, $originalResources)
     {
-        if (!$integration->getOrigData())
+        if (!$integration->getOrigData()) {
             return true;
+        }
 
         // Check if resources have changed
         $newResources = $integration->getData('resource');
