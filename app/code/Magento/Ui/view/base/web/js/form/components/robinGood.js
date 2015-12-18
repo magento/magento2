@@ -30,12 +30,14 @@ define([
             },
             externalLinks: {
                 imports: {
-                    updateUrl: '${ $.externalProvider }:update_url'
+                    updateUrl: '${ $.externalProvider }:update_url',
+                    onSelectedChange: '${ $.selectionsProvider }:selected'
                 }
             },
             modules: {
                 selections: '${ $.selectionsProvider }'
-            }
+            },
+            immediateUpdateBySelection: false
         },
 
         initialize: function () {
@@ -119,31 +121,56 @@ define([
             return this;
         },
 
-        updateExternalValue: function () {
-            //add other options
-            this.updateFromServerData();
+        onSelectedChange: function () {
+            if (!this.immediateUpdateBySelection)
+                return;
+
+            this.updateExternalValue();
         },
 
-        updateFromServerData: function () {
+        updateExternalValue: function () {
             var provider = this.selections(),
                 selections = provider && provider.getSelections(),
                 itemsType = selections && selections.excludeMode ? 'excluded' : 'selected',
-                filterType = selections && selections.excludeMode ? 'nin' : 'in',
-                selectionsData = {},
-                request;
+                index = provider && provider.indexField,
+                rows = provider && provider.rows();
 
             if (!provider) {
                 return;
             }
 
-            //add also filters and search!
-            selectionsData['filters_modifier'] = {};
-            selectionsData['filters_modifier'][provider.indexField] = {
-                    'condition_type': filterType,
-                    value: selections[itemsType]
-                };
+            var canUpdateFromSelection =
+                itemsType === 'selected' &&
+                _.intersection(_.pluck(rows, index), selections.selected).length
+                == selections.selected.length;
 
-            _.extend(selectionsData, this.params || {});
+            if (canUpdateFromSelection) {
+                this.updateFromSelectionData(selections, index, rows);
+            } else {
+                this.updateFromServerData(selections, index, itemsType);
+            }
+        },
+
+        updateFromSelectionData: function (selections, index, rows) {
+            rows = selections.selected && selections.selected.length ?
+                _.filter(rows, function (row) {
+                    return _.contains(selections.selected, row[index]);
+                }) : [];
+            this.set('externalValue', rows);
+        },
+
+        updateFromServerData: function (selections, index, itemsType) {
+            var filterType = selections && selections.excludeMode ? 'nin' : 'in',
+                selectionsData = {},
+                request;
+
+            selectionsData['filters_modifier'] = {};
+            selectionsData['filters_modifier'][index] = {
+                'condition_type': filterType,
+                value: selections[itemsType]
+            };
+
+            _.extend(selectionsData, this.params || {}, selections.params);
 
             request = this.requestData(selectionsData);
             request

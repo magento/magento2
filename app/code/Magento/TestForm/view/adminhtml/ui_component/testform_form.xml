@@ -72,6 +72,7 @@
                     <item name="externalProvider" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
                     <item name="selectionsProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
                     <item name="render_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="immediateUpdateBySelection" xsi:type="string">true</item>
                 </item>
             </argument>
         </container>
