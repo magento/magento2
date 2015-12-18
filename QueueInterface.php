@@ -34,8 +34,10 @@ interface QueueInterface
      * Reject message and return it to the original queue
      *
      * @param EnvelopeInterface $envelope
+     * @param string $rejectionMessage
      * @return void
      */
+    public function reject(EnvelopeInterface $envelope, $rejectionMessage = null);
     public function reject(EnvelopeInterface $envelope);
 
     /**
