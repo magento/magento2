@@ -11,6 +11,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\Manager as MessageManager;
@@ -78,6 +79,11 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRedirect;
 
+    /**
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $formKeyValidator;
+
     protected function setUp()
     {
         $this->prepareContext();
@@ -101,14 +107,34 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->formKeyValidator = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->controller = new Fromcart(
             $this->context,
             $this->wishlistProvider,
             $this->wishlistHelper,
             $this->cart,
             $this->cartHelper,
-            $this->escaper
+            $this->escaper,
+            $this->formKeyValidator
         );
+    }
+
+    public function testExecuteWithInvalidFormKey()
+    {
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(false);
+
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/')
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultRedirect, $this->controller->execute());
     }
 
     /**
@@ -117,6 +143,11 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecutePageNotFound()
     {
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
+
         $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')
             ->willReturn(null);
@@ -128,6 +159,11 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
     {
         $itemId = 1;
         $cartUrl = 'cart_url';
+
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
 
         $wishlistMock = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
             ->disableOriginalConstructor()
@@ -178,6 +214,11 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
         $cartUrl = 'cart_url';
         $productId = 1;
         $productName = 'product_name';
+
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
 
         $dataObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
@@ -243,6 +284,11 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
         $cartUrl = 'cart_url';
         $exceptionMessage = 'exception_message';
         $exception = new \Exception($exceptionMessage);
+
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
 
         $wishlistMock = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
             ->disableOriginalConstructor()
