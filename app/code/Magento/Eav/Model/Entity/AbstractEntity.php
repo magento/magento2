@@ -1185,7 +1185,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $this->objectRelationProcessor->validateDataIntegrity($this->getEntityTable(), $object->getData());
 
                 $this->_beforeSave($object);
-                $this->_processSaveData($this->_collectSaveData($object));
+                $this->processSave($object);
                 $this->_afterSave($object);
 
                 $object->afterSave();
@@ -1199,6 +1199,17 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         }
 
         return $this;
+    }
+
+    /**
+     * Save entity process
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return void
+     */
+    protected function processSave($object)
+    {
+        $this->_processSaveData($this->_collectSaveData($object));
     }
 
     /**
