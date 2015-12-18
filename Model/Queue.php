@@ -11,6 +11,7 @@ use Magento\Framework\MessageQueue\QueueInterface;
 use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Queue
@@ -33,20 +34,28 @@ class Queue implements QueueInterface
     private $envelopeFactory;
 
     /**
+     * @var LoggerInterface $logger
+     */
+    private $logger;
+
+    /**
      * Initialize dependencies.
      *
      * @param Config $amqpConfig
      * @param EnvelopeFactory $envelopeFactory
      * @param string $queueName
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Config $amqpConfig,
         EnvelopeFactory $envelopeFactory,
-        $queueName
+        $queueName,
+        LoggerInterface $logger
     ) {
         $this->amqpConfig = $amqpConfig;
         $this->queueName = $queueName;
         $this->envelopeFactory = $envelopeFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -139,14 +148,17 @@ class Queue implements QueueInterface
     /**
      * (@inheritdoc)
      */
-    public function reject(EnvelopeInterface $envelope)
+    public function reject(EnvelopeInterface $envelope, $rejectionMessage = null)
     {
         $properties = $envelope->getProperties();
 
         $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
-        $channel->basic_reject($properties['delivery_tag'], true);
+        $channel->basic_reject($properties['delivery_tag'], false);
         // @codingStandardsIgnoreEnd
+        if ($rejectionMessage !== null) {
+            $this->logger->critical(__('Message has been rejected: %1', $rejectionMessage));
+        }
     }
 
     /**
