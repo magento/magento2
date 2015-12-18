@@ -33,20 +33,28 @@ class Exchange implements ExchangeInterface
     private $communicationConfig;
 
     /**
-     * Exchange constructor.
+     * @var int
+     */
+    private $rpcConnectionTimeout;
+
+    /**
+     * Initialize dependencies.
      *
      * @param Config $amqpConfig
      * @param QueueConfig $queueConfig
      * @param CommunicationConfigInterface $communicationConfig
+     * @param int $rpcConnectionTimeout
      */
     public function __construct(
         Config $amqpConfig,
         QueueConfig $queueConfig,
-        CommunicationConfigInterface $communicationConfig
+        CommunicationConfigInterface $communicationConfig,
+        $rpcConnectionTimeout = self::RPC_CONNECTION_TIMEOUT
     ) {
         $this->amqpConfig = $amqpConfig;
         $this->queueConfig = $queueConfig;
         $this->communicationConfig = $communicationConfig;
+        $this->rpcConnectionTimeout = $rpcConnectionTimeout;
     }
 
     /**
@@ -91,12 +99,12 @@ class Exchange implements ExchangeInterface
             $channel->basic_publish($msg, $exchange, $topic);
             while ($responseBody === null) {
                 try {
-                    $channel->wait(null, false, self::RPC_CONNECTION_TIMEOUT);
+                    $channel->wait(null, false, $this->rpcConnectionTimeout);
                 } catch (\PhpAmqpLib\Exception\AMQPTimeoutException $e) {
                     throw new LocalizedException(
                         __(
                             "RPC call failed, connection timed out after %time_out.",
-                            ['time_out' => self::RPC_CONNECTION_TIMEOUT]
+                            ['time_out' => $this->rpcConnectionTimeout]
                         )
                     );
                 }
