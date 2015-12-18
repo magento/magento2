@@ -25,19 +25,19 @@ $salesRule->setData(
 
 $salesRule->getConditions()->loadArray([
     'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Combine',
-    'attribute' => NULL,
-    'operator' => NULL,
+    'attribute' => null,
+    'operator' => null,
     'value' => '1',
-    'is_value_processed' => NULL,
+    'is_value_processed' => null,
     'aggregator' => 'all',
     'conditions' =>
         [
                 [
                     'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Found',
-                    'attribute' => NULL,
-                    'operator' => NULL,
-                    'value' => '1',
-                    'is_value_processed' => NULL,
+                    'attribute' => null,
+                    'operator' => null,
+                    'value' => '0',
+                    'is_value_processed' => null,
                     'aggregator' => 'all',
                     'conditions' =>
                         [
@@ -45,7 +45,14 @@ $salesRule->getConditions()->loadArray([
                                     'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product',
                                     'attribute' => 'category_ids',
                                     'operator' => '==',
-                                    'value' => '66',
+                                    'value' => '2',
+                                    'is_value_processed' => false,
+                                ],
+                                [
+                                    'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product',
+                                    'attribute' => 'attribute_set_id',
+                                    'operator' => '==',
+                                    'value' => '4',
                                     'is_value_processed' => false,
                                 ],
                         ],
@@ -58,5 +65,5 @@ $salesRule->save();
 /** @var Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
 
-$registry->unregister('_fixture/Magento_SalesRule_Categories');
-$registry->register('_fixture/Magento_SalesRule_Categories', $salesRule);
+$registry->unregister('_fixture/Magento_SalesRule_Group_Multiple_Categories');
+$registry->register('_fixture/Magento_SalesRule_Group_Multiple_Categories', $salesRule);
