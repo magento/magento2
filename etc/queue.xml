@@ -34,9 +34,9 @@
     <consumer name="demoConsumerQueueFour" queue="demo-queue-4" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
     <consumer name="demoConsumerQueueFive" queue="demo-queue-5" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
 
-    <consumer name="customerCreatedListener" queue="test-queue-1" connection="amqp" class="Data\Type" method="processMessage"/>
-    <consumer name="customerDeletedListener" queue="test-queue-2" connection="db" class="Other\Type" method="processMessage2" max_messages="98765"/>
-    <consumer name="cartCreatedListener" queue="test-queue-3" connection="amqp" class="Other\Type" method="processMessage3"/>
+    <consumer name="customerCreatedListener" queue="test-queue-1" connection="amqp" class="Magento\MysqlMq\Model\Processor" method="processMessage"/>
+    <consumer name="customerDeletedListener" queue="test-queue-2" connection="db" class="Magento\MysqlMq\Model\Processor" method="processMessage" max_messages="98765"/>
+    <consumer name="cartCreatedListener" queue="test-queue-3" connection="amqp" class="Magento\MysqlMq\Model\Processor" method="processMessage"/>
 
     <consumer name="delayedOperationConsumer" queue="demo-queue-6" connection="db" class="Magento\MysqlMq\Model\DataObjectRepository" method="delayedOperation"/>
 

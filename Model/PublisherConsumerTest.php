@@ -17,9 +17,9 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
     const MAX_NUMBER_OF_TRIALS = 3;
 
     /**
-     * @var PublisherInterface
+     * @var \Magento\Framework\MessageQueue\PublisherPool
      */
-    protected $publisher;
+    protected $publisherPool;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -49,7 +49,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $configData->reset();
         $configData->merge($newData);
 
-        $this->publisher = $this->objectManager->create('Magento\Framework\MessageQueue\PublisherInterface');
+        $this->publisherPool = $this->objectManager->create('Magento\Framework\MessageQueue\PublisherPool');
     }
 
     protected function tearDown()
@@ -83,17 +83,21 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $objectFactory = $this->objectManager->create('Magento\MysqlMq\Model\DataObjectFactory');
         /** @var \Magento\MysqlMq\Model\DataObject $object */
         $object = $objectFactory->create();
+        /** @var PublisherInterface $publisher */
+        $publisher = $this->publisherPool->getByTopicType('demo.object.created');
         for ($i = 0; $i < 10; $i++) {
             $object->setName('Object name ' . $i)->setEntityId($i);
-            $this->publisher->publish('demo.object.created', $object);
+            $publisher->publish('demo.object.created', $object);
         }
+        $publisher = $this->publisherPool->getByTopicType('demo.object.updated');
         for ($i = 0; $i < 5; $i++) {
             $object->setName('Object name ' . $i)->setEntityId($i);
-            $this->publisher->publish('demo.object.updated', $object);
+            $publisher->publish('demo.object.updated', $object);
         }
+        $publisher = $this->publisherPool->getByTopicType('demo.object.custom.created');
         for ($i = 0; $i < 3; $i++) {
             $object->setName('Object name ' . $i)->setEntityId($i);
-            $this->publisher->publish('demo.object.custom.created', $object);
+            $publisher->publish('demo.object.custom.created', $object);
         }
 
         $outputPattern = '/(Processed \d+\s)/';
@@ -126,9 +130,11 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\MysqlMq\Model\DataObject $object */
         /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
         $object = $objectFactory->create();
+        /** @var PublisherInterface $publisher */
+        $publisher = $this->publisherPool->getByTopicType('demo.object.created');
         for ($i = 0; $i < 5; $i++) {
             $object->setName('Object name ' . $i)->setEntityId($i);
-            $this->publisher->publish('demo.object.created', $object);
+            $publisher->publish('demo.object.created', $object);
         }
         $outputPattern = '/(Processed \d+\s)/';
         for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS; $i++) {
@@ -136,10 +142,11 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         }
         $this->consumeMessages('demoConsumerQueueOne', PHP_INT_MAX, 0, $outputPattern);
 
+        $publisher = $this->publisherPool->getByTopicType('demo.object.created');
         /** Try consume messages for MAX_NUMBER_OF_TRIALS+1 and then consumer them without exception */
         for ($i = 0; $i < 5; $i++) {
             $object->setName('Object name ' . $i)->setEntityId($i);
-            $this->publisher->publish('demo.object.created', $object);
+            $publisher->publish('demo.object.created', $object);
         }
         /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
         for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS + 1; $i++) {
@@ -162,7 +169,9 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $object->setName('Object name ' . $id)->setEntityId($id);
         $requiredStringParam = 'Required value';
         $optionalIntParam = 44;
-        $this->publisher->publish('test.schema.defined.by.method', [$object, $requiredStringParam, $optionalIntParam]);
+        /** @var PublisherInterface $publisher */
+        $publisher = $this->publisherPool->getByTopicType('test.schema.defined.by.method');
+        $publisher->publish('test.schema.defined.by.method', [$object, $requiredStringParam, $optionalIntParam]);
 
         $outputPattern = "/Processed '{$object->getEntityId()}'; "
             . "Required param '{$requiredStringParam}'; Optional param '{$optionalIntParam}'/";
