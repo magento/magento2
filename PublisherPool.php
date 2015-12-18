@@ -7,16 +7,15 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Publishers pool.
  */
 class PublisherPool
 {
-    const SYNC_MODE = 'sync';
-    const ASYNC_MODE = 'async';
+    const MODE_SYNC = 'sync';
+    const MODE_ASYNC = 'async';
     const CONNECTION_NAME = 'connectionName';
     const TYPE = 'type';
 
@@ -30,9 +29,9 @@ class PublisherPool
     /**
      * Communication config.
      *
-     * @var \Magento\Framework\Communication\Config
+     * @var CommunicationConfig
      */
-    protected $config;
+    protected $communicationConfig;
 
     /**
      * All of the merged queue config information
@@ -44,39 +43,16 @@ class PublisherPool
     /**
      * Initialize dependencies.
      *
-     *  <type name="Magento\Framework\MessageQueue\PublisherPool">
-     *      <arguments>
-     *          <argument name="publishers" xsi:type="array">
-     *              <item name="async" xsi:type="array">
-     *                  <item name="amqp" xsi:type="array">
-     *                      <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Rpc\Publisher</item>
-     *                      <item name="connectionName" xsi:type="string">amqp</item>
-     *                  </item>
-     *                  <item name="mysql" xsi:type="array">
-     *                      <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
-     *                      <item name="connectionName" xsi:type="string">db</item>
-     *                  </item>
-     *              </item>
-     *              <item name="sync" xsi:type="array">
-     *                  <item name="amqp" xsi:type="array">
-     *                      <item name="type" xsi:type="object">Magento\Framework\MessageQueue\Rpc\Publisher</item>
-     *                      <item name="connectionName" xsi:type="string">amqp</item>
-     *                  </item>
-     *              </item>
-     *          </argument>
-     *      </arguments>
-     *  </type>
-     *
-     * @param \Magento\Framework\Communication\Config $config
+     * @param CommunicationConfig $communicationConfig
      * @param QueueConfig $queueConfig
      * @param string[] $publishers
      */
     public function __construct(
-        \Magento\Framework\Communication\Config $config,
+        CommunicationConfig $communicationConfig,
         QueueConfig $queueConfig,
         array $publishers
     ) {
-        $this->config = $config;
+        $this->communicationConfig = $communicationConfig;
         $this->queueConfig = $queueConfig;
         $this->initializePublishers($publishers);
     }
@@ -89,12 +65,11 @@ class PublisherPool
      */
     public function getByTopicType($topicName)
     {
-        $topic = $this->config->getTopic($topicName);
+        $topic = $this->communicationConfig->getTopic($topicName);
         /* read the topic configuration for the publisher name */
         $publisherName = $this->getPublisherNameForTopic($topicName);
-        $publisherConfig = $this->getPublisherConfigForName($publisherName);
-        $type = $topic[\Magento\Framework\Communication\ConfigInterface::TOPIC_IS_SYNCHRONOUS] ? self::SYNC_MODE
-            : self::ASYNC_MODE;
+        $publisherConfig = $this->getPublisherConfig($publisherName);
+        $type = $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? self::MODE_SYNC : self::MODE_ASYNC;
         return $this->getPublisherForConnectionNameAndType($type, $publisherConfig[QueueConfig::PUBLISHER_CONNECTION]);
     }
 
@@ -105,18 +80,18 @@ class PublisherPool
      */
     private function initializePublishers(array $publishers)
     {
-        $asyncPublishers = isset($publishers[self::ASYNC_MODE]) ? $publishers[self::ASYNC_MODE] : [];
-        $syncPublishers = isset($publishers[self::SYNC_MODE]) ? $publishers[self::SYNC_MODE] : [];
+        $asyncPublishers = isset($publishers[self::MODE_ASYNC]) ? $publishers[self::MODE_ASYNC] : [];
+        $syncPublishers = isset($publishers[self::MODE_SYNC]) ? $publishers[self::MODE_SYNC] : [];
         foreach ($asyncPublishers as $publisherConfig) {
             $this->addPublisherToPool(
-                self::ASYNC_MODE,
+                self::MODE_ASYNC,
                 $publisherConfig[self::CONNECTION_NAME],
                 $publisherConfig[self::TYPE]
             );
         }
         foreach ($syncPublishers as $publisherConfig) {
             $this->addPublisherToPool(
-                self::SYNC_MODE,
+                self::MODE_SYNC,
                 $publisherConfig[self::CONNECTION_NAME],
                 $publisherConfig[self::TYPE]
             );
@@ -142,15 +117,13 @@ class PublisherPool
      *
      * @param string $topicName
      * @return string
-     * @throws LocalizedException
+     * @throws \LogicException
      */
     private function getPublisherNameForTopic($topicName)
     {
         $topicConfig = $this->queueConfig->getTopic($topicName);
         if ($topicConfig === null) {
-            throw new LocalizedException(
-                new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topicName])
-            );
+            throw new \LogicException(sprintf('Specified topic "%s" is not declared.', $topicName));
         }
         return $topicConfig[QueueConfig::TOPIC_PUBLISHER];
     }
@@ -160,15 +133,13 @@ class PublisherPool
      *
      * @param string $publisherName
      * @return array
-     * @throws LocalizedException
+     * @throws \LogicException
      */
-    private function getPublisherConfigForName($publisherName)
+    private function getPublisherConfig($publisherName)
     {
         $publisherConfig = $this->queueConfig->getPublisher($publisherName);
         if ($publisherConfig === null) {
-            throw new LocalizedException(
-                new Phrase('Specified publisher "%publisher" is not declared.', ['publisher' => $publisherName])
-            );
+            throw new \LogicException(sprintf('Specified publisher "%s" is not declared.', $publisherName));
         }
         return $publisherConfig;
     }
@@ -179,7 +150,8 @@ class PublisherPool
      * @param string $type
      * @param string $connectionName
      * @return PublisherInterface
-     * @throws LocalizedException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     private function getPublisherForConnectionNameAndType($type, $connectionName)
     {
@@ -188,13 +160,11 @@ class PublisherPool
         }
 
         if (!isset($this->publishers[$type][$connectionName])) {
-            throw new LocalizedException(
-                new Phrase(
-                    'Could not find an implementation type for type "%type" and connection "%name".',
-                    [
-                        'type' => $type,
-                        'name' => $connectionName
-                    ]
+            throw new \LogicException(
+                sprintf(
+                    'Could not find an implementation type for type "%s" and connection "%s".',
+                    $type,
+                    $connectionName
                 )
             );
         }

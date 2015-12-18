@@ -8,6 +8,7 @@ namespace Magento\Framework\MessageQueue\Config\Reader\EnvReader;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\MessageQueue\Config\Validator as ConfigValidator;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Communication configuration validator. Validates data, that have been read from env.php.
@@ -22,13 +23,15 @@ class Validator extends ConfigValidator
     /**
      * Initialize dependencies
      *
+     * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
      */
     public function __construct(
+        TypeProcessor $typeProcessor,
         MethodsMap $methodsMap
     ) {
         $this->methodsMap = $methodsMap;
-        parent::__construct($methodsMap);
+        parent::__construct($typeProcessor, $methodsMap);
     }
 
     /**
@@ -42,10 +45,12 @@ class Validator extends ConfigValidator
     {
         if (isset($configData[QueueConfig::TOPICS])) {
             foreach ($configData[QueueConfig::TOPICS] as $topicName => $configDataItem) {
-                $schemaType = $configDataItem[QueueConfig::TOPIC_SCHEMA][QueueConfig::TOPIC_SCHEMA_TYPE];
-                $schemaMethod = $configDataItem[QueueConfig::TOPIC_SCHEMA][QueueConfig::TOPIC_SCHEMA_VALUE];
+                $schemaType = $configDataItem[QueueConfig::TOPIC_SCHEMA][QueueConfig::TOPIC_SCHEMA_VALUE];
+                $responseSchemaType =
+                    $configDataItem[QueueConfig::TOPIC_RESPONSE_SCHEMA][QueueConfig::TOPIC_SCHEMA_VALUE];
                 $publisherName = $configDataItem[QueueConfig::TOPIC_PUBLISHER];
-                $this->validateSchemaMethodType($schemaType, $schemaMethod, $topicName);
+                $this->validateSchemaType($schemaType, $topicName);
+                $this->validateResponseSchemaType($responseSchemaType, $topicName);
                 $this->validateTopicPublisher(
                     $this->getAvailablePublishers($configData, $xmlConfigData),
                     $publisherName,

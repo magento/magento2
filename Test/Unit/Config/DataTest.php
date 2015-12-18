@@ -10,18 +10,26 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Config;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Config\Reader\XmlReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readerMock;
+    protected $xmlReaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Config\Reader\EnvReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $envReaderMock;
+
+    /**
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheMock;
 
     protected function setUp()
     {
-        $this->readerMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\XmlReader')
+        $this->xmlReaderMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\XmlReader')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->envReaderMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\EnvReader')
             ->disableOriginalConstructor()
             ->getMock();
         $this->cacheMock = $this->getMockBuilder('Magento\Framework\Config\CacheInterface')
@@ -35,8 +43,25 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->any())
             ->method('load')
             ->will($this->returnValue(serialize($expected)));
-        $configData = new \Magento\Framework\MessageQueue\Config\Data($this->readerMock, $this->cacheMock);
+        $this->envReaderMock->expects($this->any())->method('read')->willReturn([]);
+        $this->assertEquals($expected, $this->getModel()->get());
+    }
 
-        $this->assertEquals($expected, $configData->get());
+    /**
+     * Return Config Data Object
+     *
+     * @return \Magento\Framework\MessageQueue\Config\Data
+     */
+    private function getModel()
+    {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        return $objectManager->getObject(
+            'Magento\Framework\MessageQueue\Config\Data',
+            [
+                'xmlReader' => $this->xmlReaderMock,
+                'cache' => $this->cacheMock,
+                'envReader' => $this->envReaderMock
+            ]
+        );
     }
 }

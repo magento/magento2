@@ -6,6 +6,7 @@
 namespace Magento\Framework\MessageQueue\Config;
 
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Communication configuration validator.
@@ -18,17 +19,27 @@ class Validator
     private $methodsMap;
 
     /**
-     * Initialize dependencies.
+     * @var TypeProcessor
+     */
+    private $typeProcessor;
 
+    /**
+     * Initialize dependencies.
+     *
+     * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
      */
     public function __construct(
+        TypeProcessor $typeProcessor,
         MethodsMap $methodsMap
     ) {
+        $this->typeProcessor = $typeProcessor;
         $this->methodsMap = $methodsMap;
     }
 
     /**
+     * Validate schema Method Type
+     *
      * @param string $schemaType
      * @param string $schemaMethod
      * @param string $topicName
@@ -50,6 +61,8 @@ class Validator
     }
 
     /**
+     * Validate handler type
+     *
      * @param string $serviceName
      * @param string $methodName
      * @param string $consumerName
@@ -72,12 +85,14 @@ class Validator
     }
 
     /**
+     * Validate topic in a bind
+     *
      * @param $topics
      * @param $topicName
      */
     public function validateBindTopic($topics, $topicName)
     {
-        if (!array_key_exists($topicName, $topics)) {
+        if (!in_array($topicName, $topics)) {
             throw new \LogicException(
                 sprintf('Topic "%s" declared in binds must be defined in topics', $topicName)
             );
@@ -85,13 +100,15 @@ class Validator
     }
 
     /**
+     * Validate publisher in the topic
+     *
      * @param $publishers
      * @param $publisherName
      * @param $topicName
      */
     public function validateTopicPublisher($publishers, $publisherName, $topicName)
     {
-        if (!array_key_exists($publisherName, $publishers)) {
+        if (!in_array($publisherName, $publishers)) {
             throw new \LogicException(
                 sprintf(
                     'Publisher "%s", specified in env.php for topic "%s" is not declared.',
@@ -102,4 +119,70 @@ class Validator
         }
     }
 
+    /**
+     * Validate response schema type
+     *
+     * @param string $responseSchema
+     * @param string $topicName
+     * @return void
+     */
+    public function validateResponseSchemaType($responseSchema, $topicName)
+    {
+        try {
+            $this->validateType($responseSchema);
+        } catch (\Exception $e) {
+            throw new \LogicException(
+                sprintf(
+                    'Response schema definition for topic "%s" should reference existing type or service class. '
+                    . 'Given "%s"',
+                    $topicName,
+                    $responseSchema
+                )
+            );
+        }
+    }
+
+    /**
+     * Validate schema type
+     *
+     * @param string $schema
+     * @param string $topicName
+     * @return void
+     */
+    public function validateSchemaType($schema, $topicName)
+    {
+        try {
+            $this->validateType($schema);
+        } catch (\Exception $e) {
+            throw new \LogicException(
+                sprintf(
+                    'Schema definition for topic "%s" should reference existing type or service class. '
+                    . 'Given "%s"',
+                    $topicName,
+                    $schema
+                )
+            );
+        }
+    }
+
+    /**
+     * Ensure that specified type is either a simple type or a valid service data type.
+     *
+     * @param string $typeName
+     * @return $this
+     * @throws \Exception In case when type is invalid
+     */
+    protected function validateType($typeName)
+    {
+        if ($this->typeProcessor->isTypeSimple($typeName)) {
+            return $this;
+        }
+        if ($this->typeProcessor->isArrayType($typeName)) {
+            $arrayItemType = $this->typeProcessor->getArrayItemType($typeName);
+            $this->methodsMap->getMethodsMap($arrayItemType);
+        } else {
+            $this->methodsMap->getMethodsMap($typeName);
+        }
+        return $this;
+    }
 }

@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue\Config\Reader\XmlReader;
 
 use Magento\Framework\Reflection\MethodsMap;
-use Magento\Framework\Communication\ConfigInterface as Communication;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\MessageQueue\Config\Validator;
 
@@ -16,6 +16,7 @@ use Magento\Framework\MessageQueue\Config\Validator;
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     const SERVICE_METHOD_NAME_PATTERN = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
+    const DEFAULT_HANDLER = 'defaultHandler';
 
     /**
      * @var MethodsMap
@@ -150,7 +151,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $handlers = [];
             // TODO: Use Config::CONSUMER_HANDLER_TYPE and Config::CONSUMER_HANDLER_METHOD constants
             // TODO: Add keys to handlers, probably in communication config, since that is the origin of data
-            $handlers[$topicName] = $this->communicationConfig->getTopicHandlers($topicName);
+            $topicHandlers = $this->getTopicHandlers($topicName);
+            $handlers[$topicName] = $topicHandlers;
             $topicConfig = $this->communicationConfig->getTopic($topicName);
 
             foreach ($brokerConfig[QueueConfig::BROKER_CONSUMERS] as $consumerKey => $consumerConfig) {
@@ -200,14 +202,15 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $output = [];
         foreach ($this->communicationConfig->getTopics() as $topicConfig) {
-            $topicName = $topicConfig[Communication::TOPIC_NAME];
+            $topicName = $topicConfig[CommunicationConfig::TOPIC_NAME];
             if (!isset($config[$topicName])) {
                 continue;
             }
-            $schemaType = $topicConfig[Communication::TOPIC_REQUEST_TYPE] == Communication::TOPIC_REQUEST_TYPE_CLASS
+            $schemaType =
+                $topicConfig[CommunicationConfig::TOPIC_REQUEST_TYPE] == CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS
                 ? QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT
                 : QueueConfig::TOPIC_SCHEMA_TYPE_METHOD;
-            $schemaValue = $topicConfig[Communication::TOPIC_REQUEST];
+            $schemaValue = $topicConfig[CommunicationConfig::TOPIC_REQUEST];
             $output[$topicName] = [
                 QueueConfig::TOPIC_NAME => $topicName,
                 QueueConfig::TOPIC_SCHEMA => [
@@ -216,9 +219,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ],
                 QueueConfig::TOPIC_RESPONSE_SCHEMA => [
                     QueueConfig::TOPIC_SCHEMA_TYPE =>
-                        isset($topicConfig[Communication::TOPIC_RESPONSE]) ? QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT
+                        isset($topicConfig[CommunicationConfig::TOPIC_RESPONSE]) ? QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT
                             : null,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => $topicConfig[Communication::TOPIC_RESPONSE]
+                    QueueConfig::TOPIC_SCHEMA_VALUE => $topicConfig[CommunicationConfig::TOPIC_RESPONSE]
                 ],
                 QueueConfig::TOPIC_PUBLISHER =>
                     $config[$topicName][QueueConfig::BROKER_TYPE] .
@@ -239,10 +242,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $output = [];
         foreach ($config as $brokerConfig) {
             foreach ($brokerConfig[QueueConfig::BROKER_CONSUMERS] as $consumerConfig) {
-                $output[] = [
-                    QueueConfig::BIND_QUEUE => $consumerConfig[QueueConfig::BROKER_CONSUMER_QUEUE],
-                    QueueConfig::BIND_EXCHANGE => $brokerConfig[QueueConfig::BROKER_EXCHANGE],
-                    QueueConfig::BIND_TOPIC => $brokerConfig[QueueConfig::BROKER_TOPIC],
+                $queueName = $consumerConfig[QueueConfig::BROKER_CONSUMER_QUEUE];
+                $exchangeName = $brokerConfig[QueueConfig::BROKER_EXCHANGE];
+                $topicName = $brokerConfig[QueueConfig::BROKER_TOPIC];
+                $key = $this->getBindName($topicName, $exchangeName, $queueName);
+                $output[$key] = [
+                    QueueConfig::BIND_QUEUE => $queueName,
+                    QueueConfig::BIND_EXCHANGE => $exchangeName,
+                    QueueConfig::BIND_TOPIC => $topicName,
                 ];
             }
         }
@@ -409,7 +416,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $handlers = [];
             if (isset($map[$queueName])) {
                 foreach ($map[$queueName] as $topic) {
-                    $handlers[$topic][] = $handler;
+                    $handlers[$topic][self::DEFAULT_HANDLER] = $handler;
                 }
             }
             $output[$consumerName] = [
@@ -445,7 +452,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ? $this->getSchemaDefinedByMethod($schemaId, $topicName)
                 : $schemaId;
             $publisherName = $topicNode->attributes->getNamedItem('publisher')->nodeValue;
-            $this->xmlValidator->validateTopicPublisher($publishers, $publisherName, $topicName);
+            $this->xmlValidator->validateTopicPublisher(array_keys($publishers), $publisherName, $topicName);
 
             $output[$topicName] = [
                 QueueConfig::TOPIC_NAME => $topicName,
@@ -476,14 +483,49 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $output = [];
         /** @var $bindNode \DOMNode */
         foreach ($config->getElementsByTagName('bind') as $bindNode) {
+            $queueName = $bindNode->attributes->getNamedItem('queue')->nodeValue;
+            $exchangeName = $bindNode->attributes->getNamedItem('exchange')->nodeValue;
             $topicName = $bindNode->attributes->getNamedItem('topic')->nodeValue;
-            $this->xmlValidator->validateBindTopic($topics, $topicName);
-            $output[] = [
-                QueueConfig::BIND_QUEUE => $bindNode->attributes->getNamedItem('queue')->nodeValue,
-                QueueConfig::BIND_EXCHANGE => $bindNode->attributes->getNamedItem('exchange')->nodeValue,
+            $key = $this->getBindName($topicName, $exchangeName, $queueName);
+            $this->xmlValidator->validateBindTopic(array_keys($topics), $topicName);
+            $output[$key] = [
+                QueueConfig::BIND_QUEUE => $queueName,
+                QueueConfig::BIND_EXCHANGE => $exchangeName,
                 QueueConfig::BIND_TOPIC => $topicName,
             ];
         }
         return $output;
+    }
+
+    /**
+     * Return bind name
+     *
+     * @param string $topicName
+     * @param string $exchangeName
+     * @param string $queueName
+     * @return string
+     */
+    private function getBindName($topicName, $exchangeName, $queueName)
+    {
+        return $topicName . '--' . $exchangeName . '--' . $queueName;
+    }
+
+    /**
+     * Return topic handlers
+     *
+     * @param $topicName
+     * @return array
+     */
+    private function getTopicHandlers($topicName)
+    {
+        $topicHandlers = [];
+        $communicationTopicHandlers = $this->communicationConfig->getTopicHandlers($topicName);
+        foreach ($communicationTopicHandlers as $handlerName => $handler) {
+            $topicHandlers[$handlerName] = [
+                QueueConfig::CONSUMER_HANDLER_TYPE => $handler[CommunicationConfig::HANDLER_TYPE],
+                QueueConfig::CONSUMER_HANDLER_METHOD => $handler[CommunicationConfig::HANDLER_METHOD]
+            ];
+        }
+        return $topicHandlers;
     }
 }
