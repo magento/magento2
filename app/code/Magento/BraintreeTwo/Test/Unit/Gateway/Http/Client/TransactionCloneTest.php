@@ -13,7 +13,6 @@ use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Class TransactionCloneTest
  */

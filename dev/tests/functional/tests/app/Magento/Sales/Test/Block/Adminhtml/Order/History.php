@@ -10,7 +10,7 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Order totals block.
+ * Order comments block.
  */
 class History extends Block
 {
@@ -26,7 +26,7 @@ class History extends Block
      *
      * @var string
      */
-    protected $capturedAmount = '//div[@class="note-list-comment"][contains(text(), "captured amount of")]';
+    protected $capturedAmount = '//div[@class="note-list-comment"][contains(text(), "Captured amount of")]';
 
     /**
      * Note list locator.

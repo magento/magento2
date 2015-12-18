@@ -27,7 +27,7 @@
                 <item name="Liability Shift Possible" xsi:type="string">1</item>
             </data>
             <data name="secure3d/dataset" xsi:type="string">secure3d_braintree</data>
-            <data name="configData" xsi:type="string">braintreetwo, braintreetwo_3d_secure_us</data>
+            <data name="configData" xsi:type="string">braintreetwo, braintreetwo_3d_secure</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />

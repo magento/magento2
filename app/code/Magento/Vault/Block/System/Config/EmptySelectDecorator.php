@@ -11,6 +11,10 @@ use Magento\Framework\Data\Form\Element\Select;
 
 class EmptySelectDecorator extends Field
 {
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
     public function render(AbstractElement $element)
     {
         if (!$element instanceof Select || empty($element->getData('values'))) {

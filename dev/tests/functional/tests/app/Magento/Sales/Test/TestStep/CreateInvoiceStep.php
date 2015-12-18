@@ -84,7 +84,7 @@ class CreateInvoiceStep implements TestStepInterface
      * @param OrderInjectable $order
      * @param OrderShipmentView $orderShipmentView
      * @param array|null $data [optional]
-     * @param string $isPartial [optional]
+     * @param string $isInvoicePartial [optional]
      */
     public function __construct(
         OrderIndex $orderIndex,

@@ -18,6 +18,8 @@ use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 
 /**
  * Class Vault
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Vault implements VaultPaymentInterface
 {

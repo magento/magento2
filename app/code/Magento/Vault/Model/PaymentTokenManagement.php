@@ -158,6 +158,15 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
 
         if (!empty($tokenDuplicate)) {
             $token->setEntityId($tokenDuplicate->getEntityId());
+
+            // old  new  expected
+            // 0    0    0
+            // 0    1    1
+            // 1    0    0
+            // 1    1    1
+            // $isVisible = (int)$token->getIsActive() > (int)$tokenDuplicate->getIsVisible() ?
+            //     $token->getIsActive() : $tokenDuplicate->getIsVisible();
+            $token->setIsVisible($token->getIsActive());
         }
 
         $this->paymentTokenRepository->save($token);
