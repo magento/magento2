@@ -16,7 +16,7 @@ define([
          */
         init: function () {
 
-            //not weight switcher giftcard, bundle
+            //not weight switcher for specific product
             if (weight.productHasWeightBySwitcher() && weight.hasWeightSwither()) {
                 this.type = {
                     virtual: 'virtual',
