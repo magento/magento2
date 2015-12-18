@@ -56,7 +56,7 @@ class Page extends AbstractDb
      * @param DateTime $dateTime
      * @param EntityManager $entityManager
      * @param MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string $connectionName
      */
     public function __construct(
         Context $context,
