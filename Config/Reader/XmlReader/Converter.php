@@ -72,7 +72,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $binds = $this->extractBinds($source, $topics);
 
         /** Process Consumers Configuration */
-        $consumers = $this->extractConsumers($source, $binds);
+        $consumers = $this->extractConsumers($source, $binds, $topics);
         $brokerConsumers = $this->processConsumerConfiguration($brokers);
         $consumers = array_merge($consumers, $brokerConsumers);
         $brokerBinds = $this->processBindsConfiguration($brokers);
@@ -277,7 +277,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $keySplit = explode('--', $wildcardKey);
             $exchangePrefix = $keySplit[0];
             $key = $keySplit[1];
-            $pattern = $this->buildWildcardPattern($key);
+            $pattern = $this->xmlValidator->buildWildcardPattern($key);
             foreach (array_keys($topics) as $topic) {
                 if (preg_match($pattern, $topic)) {
                     $fullTopic = $exchangePrefix . '--' . $topic;
@@ -291,26 +291,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             unset($output[$wildcardKey]);
         }
         return $output;
-    }
-
-    /**
-     * Construct perl regexp pattern for matching topic names from wildcard key.
-     *
-     * @param string $wildcardKey
-     * @return string
-     */
-    protected function buildWildcardPattern($wildcardKey)
-    {
-        $pattern = '/^' . str_replace('.', '\.', $wildcardKey);
-        $pattern = str_replace('#', '.+', $pattern);
-        $pattern = str_replace('*', '[^\.]+', $pattern);
-        if (strpos($wildcardKey, '#') == strlen($wildcardKey)) {
-            $pattern .= '/';
-        } else {
-            $pattern .= '$/';
-        }
-
-        return $pattern;
     }
 
     /**
@@ -381,15 +361,20 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMDocument $config
      * @param array $binds
+     * @param array $topics
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @deprecated
      */
-    protected function extractConsumers(\DOMDocument $config, $binds)
+    protected function extractConsumers(\DOMDocument $config, $binds, $topics)
     {
         $map = [];
         foreach ($binds as $bind) {
-            $map[$bind['queue']][] = $bind['topic'];
+            $pattern = $this->xmlValidator->buildWildcardPattern($bind['topic']);
+            $extractedTopics = preg_grep($pattern, array_keys($topics));
+            foreach ($extractedTopics as $extractedTopic) {
+                $map[$bind['queue']][] = $extractedTopic;
+            }
         }
         $output = [];
         /** @var $consumerNode \DOMNode */
