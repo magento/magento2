@@ -9,7 +9,6 @@ namespace Magento\Framework\DB;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
 
 /**
  * Class SelectFactory
@@ -39,10 +38,10 @@ class SelectFactory
     }
 
     /**
-     * @param Mysql $adapter
+     * @param AdapterInterface $adapter
      * @return \Magento\Framework\DB\Select
      */
-    public function create(Mysql $adapter)
+    public function create(AdapterInterface $adapter)
     {
         return new Select($adapter, $this->selectRenderer, $this->parts);
     }
