@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\DB\Test\Unit;
+namespace Magento\Framework\DB\Test\Unit\Platform;
 
 use Magento\Framework\DB\Select;
 
@@ -210,5 +210,4 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             [['`table`', '`column`'], 'alias', '```table```.```column``` ' . Select::SQL_AS . ' `alias`']
         ]);
     }
-
 }
