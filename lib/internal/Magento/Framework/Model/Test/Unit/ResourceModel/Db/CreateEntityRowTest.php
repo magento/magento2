@@ -126,11 +126,11 @@ class CreateEntityRowTest extends \PHPUnit_Framework_TestCase
         $tableData = [
             [
                 'COLUMN_NAME' => 'TEST_FIELD_1',
-                'DEFAULT' => NULL
+                'DEFAULT' => null
             ],
             [
                 'COLUMN_NAME' => 'TEST_FIELD_2',
-                'DEFAULT' => NULL
+                'DEFAULT' => null
             ],
             [
                 'COLUMN_NAME' => 'TEST_FIELD_3',
@@ -138,7 +138,7 @@ class CreateEntityRowTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'COLUMN_NAME' => 'TEST_FIELD_4',
-                'DEFAULT' => NULL
+                'DEFAULT' => null
             ]
         ];
 

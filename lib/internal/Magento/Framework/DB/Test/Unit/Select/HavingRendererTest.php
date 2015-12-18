@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\DB\Test\Unit;
+namespace Magento\Framework\DB\Test\Unit\Select;
 
 use Magento\Framework\DB\Select;
 

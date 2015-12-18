@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\DB\Test\Unit;
+namespace Magento\Framework\DB\Test\Unit\Select;
 
 use Magento\Framework\DB\Select;
 
@@ -73,9 +73,11 @@ class FromRendererTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
         $this->quoteMock->expects($this->any())
             ->method('quoteTableAs')
-            ->willReturnCallback(function($tableName, $correlationName){
-                return $tableName . ' AS ' . $correlationName;
-            });
+            ->willReturnCallback(
+                function ($tableName, $correlationName) {
+                    return $tableName.' AS '.$correlationName;
+                }
+            );
         $this->selectMock->expects($this->once())
             ->method('getPart')
             ->with(Select::FROM)

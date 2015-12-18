@@ -15,7 +15,6 @@ class LimitRendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $offset = 10;
-        $count = null;
         $selectMock->expects($this->exactly(4))
             ->method('getPart')
             ->willReturnMap([[Select::LIMIT_OFFSET, $offset], [Select::LIMIT_COUNT, 2]]);
