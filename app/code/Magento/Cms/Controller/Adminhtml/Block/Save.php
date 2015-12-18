@@ -6,6 +6,8 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
+use Magento\Cms\Model\Block;
+
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
@@ -21,6 +23,14 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
         $data = $this->getRequest()->getPostValue();
         if ($data) {
             $id = $this->getRequest()->getParam('block_id');
+
+            if (isset($data['is_active']) && $data['is_active'] === 'true') {
+                $data['is_active'] = Block::STATUS_ENABLED;
+            }
+            if (empty($data['block_id'])) {
+                $data['block_id'] = null;
+            }
+
             $model = $this->_objectManager->create('Magento\Cms\Model\Block')->load($id);
             if (!$model->getId() && $id) {
                 $this->messageManager->addError(__('This block no longer exists.'));
