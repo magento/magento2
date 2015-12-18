@@ -32,19 +32,19 @@
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="string">PAYMENT_BRAINTREETWO_MERCHANT_ACCOUNT_ID</item>
             </field>
-            <field name="payment/braintreetwo/payment_action" xsi:type="array">
+            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo_required/payment_action" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Authorize</item>
                 <item name="value" xsi:type="string">authorize</item>
             </field>
-            <field name="payment/braintreetwo/debug" xsi:type="array">
+            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo_advanced/debug" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">1</item>
             </field>
-            <field name="payment/braintreetwo/active" xsi:type="array">
+            <field name="payment/braintreetwo_section/braintreetwo/active" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>
@@ -112,7 +112,7 @@
             </field>
         </dataset>
         <dataset name="braintreetwo_3d_secure">
-            <field name="payment/braintreetwo/verify_3dsecure" xsi:type="array">
+            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo_3dsecure/verify_3dsecure" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>
@@ -120,7 +120,7 @@
             </field>
         </dataset>
         <dataset name="braintreetwo_3d_secure_rollback">
-            <field name="payment/braintreetwo/active" xsi:type="array">
+            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo_3dsecure/verify_3dsecure" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>
@@ -149,7 +149,7 @@
             </field>
         </dataset>
         <dataset name="braintreetwo_3d_secure_uk_rollback">
-            <field name="payment/braintreetwo/active" xsi:type="array">
+            <field name="payment/braintreetwo_section/braintreetwo/braintreetwo_3dsecure/verify_3dsecure" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>

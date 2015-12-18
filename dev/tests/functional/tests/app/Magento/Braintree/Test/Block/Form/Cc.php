@@ -35,6 +35,12 @@ class Cc extends CreditCard
         foreach ($this->braintreeForm as $field => $iframe) {
             $this->browser->switchToFrame(new Locator($iframe));
             $element = $this->browser->find('body');
+            $this->browser->waitUntil(
+                function () use ($element) {
+                    $fieldElement = $element->find('input');
+                    return $fieldElement->isVisible() ? true : null;
+                }
+            );
             $this->_fill([$mapping[$field]], $element);
             $this->browser->switchToFrame();
         }
