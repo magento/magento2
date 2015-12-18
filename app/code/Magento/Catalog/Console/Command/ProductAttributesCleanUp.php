@@ -108,10 +108,11 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
 
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $productAttribute */
         foreach ($searchResult->getItems() as $productAttribute) {
-            if (!in_array($productAttribute->getBackend()->getTable(), $attributeTables)
-                && $productAttribute->getBackend()->getTable() != $connection->getTableName('catalog_product_entity')
+            $attributeTable = $productAttribute->getBackend()->getTable();
+            if (!in_array($attributeTable, $attributeTables)
+                && $attributeTable != $this->attributeResource->getTable('catalog_product_entity')
             ) {
-                $attributeTables[] = $productAttribute->getBackend()->getTable();
+                $attributeTables[] = $attributeTable;
             }
         }
         return $attributeTables;
@@ -126,12 +127,12 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     private function getAffectedAttributeIds(AdapterInterface $connection, $attributeTableName)
     {
         $select = $connection->select()->reset();
-        $select->from(['e' => $connection->getTableName('catalog_product_entity')], 'ei.value_id');
+        $select->from(['e' => $this->attributeResource->getTable('catalog_product_entity')], 'ei.value_id');
         $select->join(['ei' => $attributeTableName], 'ei.entity_id = e.entity_id AND ei.store_id != 0', '');
-        $select->join(['s' => $connection->getTableName('store')], 's.store_id = ei.store_id', '');
-        $select->join(['sg' => $connection->getTableName('store_group')], 'sg.group_id = s.group_id', '');
+        $select->join(['s' => $this->attributeResource->getTable('store')], 's.store_id = ei.store_id', '');
+        $select->join(['sg' => $this->attributeResource->getTable('store_group')], 'sg.group_id = s.group_id', '');
         $select->joinLeft(
-            ['pw' => $connection->getTableName('catalog_product_website')],
+            ['pw' => $this->attributeResource->getTable('catalog_product_website')],
             'pw.website_id = sg.website_id AND pw.product_id = e.entity_id',
             ''
         );
