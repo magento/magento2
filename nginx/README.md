@@ -1,5 +1,7 @@
 TESTING<br/>
-
+you have to install latest nginx package from official nginx repository<br/>
+```http://nginx.org/en/linux_packages.html#mainline```
+<br/>
 to enable configuration you have to run these commands:<br/>
 ```cd /etc/nginx/sites-enabled/```<br/>
 ```ln -s /etc/nginx/sites-avalable/default.conf ./default.conf```<br/>
