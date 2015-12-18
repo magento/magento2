@@ -76,7 +76,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit_Framework_TestCase
     {
         $connection = $this->attributeResource->getConnection();
         $select = $connection->select();
-        $select->from($connection->getTableName('catalog_product_entity_varchar'));
+        $select->from($this->attributeResource->getTable('catalog_product_entity_varchar'));
         $select->where('value = ?', 'Simple fixture store');
         return $connection->fetchRow($select);
     }
