@@ -70,6 +70,7 @@
                     <item name="dataScope" xsi:type="string">position_gridsrc</item>
                     <item name="ns" xsi:type="string">cms_page_listing</item>
                     <item name="externalProvider" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
+                    <item name="selectionsProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
                     <item name="render_url" xsi:type="url" path="mui/index/render"/>
                 </item>
             </argument>
