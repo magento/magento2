@@ -35,7 +35,7 @@ class ComposerJsonFinder
      */
     public function findComposerJson()
     {
-        $composerJson = $this->directoryList->getPath(DirectoryList::ROOT)->getAbsolutePath('composer.json');
+        $composerJson = $this->directoryList->getPath(DirectoryList::ROOT) . 'composer.json';
 
         $composerJson = realpath($composerJson);
 
