@@ -32,12 +32,23 @@ define([
                 imports: {
                     updateUrl: '${ $.externalProvider }:update_url',
                     onSelectedChange: '${ $.selectionsProvider }:selected'
+                },
+                exports: {
+                    externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
                 }
             },
             modules: {
                 selections: '${ $.selectionsProvider }'
             },
-            immediateUpdateBySelection: false
+            immediateUpdateBySelection: false,
+            listens: {
+                value: 'updateExternalFiltersModifier'
+            },
+            externalFiltersModifier: {},
+            externalFilter: {
+                condition_type: 'nin',
+                value: []
+            }
         },
 
         initialize: function () {
@@ -122,8 +133,9 @@ define([
         },
 
         onSelectedChange: function () {
-            if (!this.immediateUpdateBySelection)
+            if (!this.immediateUpdateBySelection) {
                 return;
+            }
 
             this.updateExternalValue();
         },
@@ -133,16 +145,17 @@ define([
                 selections = provider && provider.getSelections(),
                 itemsType = selections && selections.excludeMode ? 'excluded' : 'selected',
                 index = provider && provider.indexField,
-                rows = provider && provider.rows();
+                rows = provider && provider.rows(),
+                canUpdateFromSelection;
 
             if (!provider) {
                 return;
             }
 
-            var canUpdateFromSelection =
+            canUpdateFromSelection =
                 itemsType === 'selected' &&
-                _.intersection(_.pluck(rows, index), selections.selected).length
-                == selections.selected.length;
+                _.intersection(_.pluck(rows, index), selections.selected).length ===
+                selections.selected.length;
 
             if (canUpdateFromSelection) {
                 this.updateFromSelectionData(selections, index, rows);
@@ -176,9 +189,24 @@ define([
             request
                 .done(function (data) {
                     this.set('externalValue', data);
-                    console.log(this.externalValue());
                 }.bind(this))
                 .fail(this.onError);
+        },
+
+        updateExternalFiltersModifier: function (items) {
+            var provider = this.selections(),
+                index = provider && provider.indexField;
+
+            if (!items || !items.length) {
+                return;
+            }
+
+            this.externalFilter.value = _.pluck(items, index);
+            this.set('externalFiltersModifier.' + provider.indexField, this.externalFilter);
+        },
+
+        save: function () {
+            this.set('value', this.externalValue());
         }
     });
 });
