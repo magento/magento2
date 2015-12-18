@@ -15,7 +15,7 @@ class SelectRenderer implements RendererInterface
     /**
      * @var RendererInterface[]
      */
-    protected $renderers;
+    protected $renders;
 
     /**
      * @param RendererInterface[] $renderers
@@ -23,11 +23,11 @@ class SelectRenderer implements RendererInterface
     public function __construct(
         array $renderers
     ) {
-        $this->renderers = $this->sort($renderers);
+        $this->renders = $this->sort($renderers);
     }
 
     /**
-     * Sort renderers
+     * Sort renders
      *
      * @param array $renders
      * @return array
@@ -65,8 +65,8 @@ class SelectRenderer implements RendererInterface
      */
     public function render(Select $select, $sql = '')
     {
-        $sql = Select::SQL_SELECT . ' ';
-        foreach ($this->renderers as $renderer) {
+        $sql = Select::SQL_SELECT;
+        foreach ($this->renders as $renderer) {
             $sql = $renderer['renderer']->render($select, $sql);
         }
         return $sql;

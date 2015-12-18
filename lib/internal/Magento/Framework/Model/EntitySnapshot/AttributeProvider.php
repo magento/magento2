@@ -64,14 +64,14 @@ class AttributeProvider implements AttributeProviderInterface
             if ($metadata->getLinkField() != $metadata->getIdentifierField()) {
                 unset($this->registry[$entityType][$metadata->getLinkField()]);
             }
-            foreach ($this->providers as $providerClass) {
-                if (isset($this->providers[$entityType])) {
-                    $provider = $this->objectManager->get($providerClass);
-                } elseif (isset($this->providers['default'])) {
-                    $provider = $this->objectManager->get($providerClass);
-                } else {
-                    continue;
-                }
+            $providers = [];
+            if (isset($this->providers[$entityType])) {
+                $providers = $this->providers[$entityType];
+            } elseif (isset($this->providers['default'])) {
+                $providers = $this->providers['default'];
+            }
+            foreach ($providers as $providerClass) {
+                $provider = $this->objectManager->get($providerClass);
                 $this->registry[$entityType] = array_merge(
                     $this->registry[$entityType],
                     $provider->getAttributes($entityType)
