@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
+    <rule scope="testsuite">
+        <allow>
+            <module value="Magento_Install"/>
+            <module value="Magento_CatalogSampleData"/>
+            <module value="Magento_BundleSampleData"/>
+            <module value="Magento_ConfigurableSampleData"/>
+            <module value="Magento_CustomerSampleData"/>
+            <module value="Magento_DownloadableSampleData"/>
+            <module value="Magento_GroupedProductSampleData"/>
+            <module value="Magento_SalesSampleData"/>
+        </allow>
+    </rule>
+</config>
