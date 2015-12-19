@@ -16,7 +16,7 @@
         "magento/module-directory": "100.0.*",
         "magento/module-theme": "100.0.*",
         "magento/framework": "100.0.*",
-        "braintree/braintree_php": "2.39.0"
+        "braintree/braintree_php": "3.7.0"
     },
     "suggest": {
         "magento/module-checkout-agreements": "100.0.*"
