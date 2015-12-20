@@ -87,7 +87,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return string
      */
-    public function getFormatedLogTrace()
+    public function getFormattedLogTrace()
     {
         $trace = '';
         $lineNumber = 1;
