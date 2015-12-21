@@ -74,19 +74,19 @@ class SynonymReader extends AbstractDb
 
         // Search within the scope of current storeview
         $id = $object->getStoreViewId();
-        $rows = $this->queryByPhrase($object, $phrase, 'stores', $id);
+        $rows = $this->queryByPhrase($object, $phrase, \Magento\Store\Model\ScopeInterface::SCOPE_STORES, $id);
 
         if (empty($rows)) {
 
             // Fallback and search within website scope
             $id = $object->getWebsiteId();
-            $rows = $this->queryByPhrase($object, $phrase, 'websites', $id);
+            $rows = $this->queryByPhrase($object, $phrase, \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES, $id);
         }
 
         if (empty($rows)) {
 
             // Fallback and search across all stores
-            $rows = $this->queryByPhrase($object, $phrase, 'default', 0);
+            $rows = $this->queryByPhrase($object, $phrase, \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         }
 
         $object->setData($rows);
