@@ -87,7 +87,7 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $shippingExclTax = '[class="totals shipping excl"] span';
+    protected $shippingExclTax = '.totals.shipping.excl .price';
 
     /**
      * Shipping including tax search mask.

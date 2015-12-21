@@ -80,10 +80,7 @@ class AssertOrderTaxOnBackendExcludingTax extends AbstractAssertOrderTaxOnBacken
 
         $actualPrices['discount'] = $totalsBlock->getDiscount();
 
-        $actualPrices['shipping_excl_tax'] = $totalsBlock->getShippingExclTax();
-        $actualPrices['shipping_incl_tax'] = $totalsBlock->getShippingInclTax();
         $actualPrices['tax'] = $totalsBlock->getTax();
-
         $actualPrices['grand_total_excl_tax'] = $totalsBlock->getGrandTotal();
         $actualPrices['grand_total_incl_tax'] = null;
 
