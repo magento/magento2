@@ -111,6 +111,7 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($isId) {
             $this->entityManager->load(BlockInterface::class, $object, $value);
+            $this->_afterLoad($object);
         }
         return $this;
     }
