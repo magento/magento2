@@ -132,6 +132,14 @@ define([
             }
         },
 
+        _setOptions: function (options) {
+
+            if (options.VideoData.length) {
+                this.options.VideoData = options.VideoData;
+            }
+            this._initialize();
+        },
+
         /**
          *
          * @private
@@ -407,15 +415,13 @@ define([
                 if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs' &&
                     fotorama.data[t].type ===  this.VID) {
                     currentItem.addClass(iconClass);
+                    this._checkForVideo(e, fotorama, t);
                 }
             }
 
             $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
             }, this));
-            this._checkForVideo(e, fotorama, -1);
-            this._checkForVideo(e, fotorama, 0);
-            this._checkForVideo(e, fotorama, 1);
         },
 
         /**
@@ -443,9 +449,9 @@ define([
          */
         _startPrepareForPlayer: function (e, fotorama) {
             this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama, false);
-            this._checkForVideo(e, fotorama, -1);
-            this._checkForVideo(e, fotorama, 0);
-            this._checkForVideo(e, fotorama, 1);
+            this._checkForVideo(e, fotorama, parseInt(fotorama.activeFrame.i, 10));
+            this._checkForVideo(e, fotorama, parseInt(fotorama.activeFrame.i, 10) - 1);
+            this._checkForVideo(e, fotorama, parseInt(fotorama.activeFrame.i, 10) + 1);
         },
 
         /**
@@ -458,8 +464,8 @@ define([
          */
         _checkForVideo: function (e, fotorama, number) {
             var frameNumber = parseInt(fotorama.activeFrame.i, 10),
-                videoData = this.options.VideoData[frameNumber - 1 + number],
-                $image = fotorama.data[frameNumber - 1 + number];
+                videoData = this.options.VideoData[number],
+                $image = fotorama.data[number];
 
             if ($image) {
                 if ($image.type !== 'video') return;
@@ -649,15 +655,6 @@ define([
             $('.' + this.FTAR).removeClass('hidden-video');
         }
     });
-
-    //return function (config, element) {
-    //    $('.gallery-placeholder').on('fotorama:ready', function () {
-    //        $(element).find('.fotorama').AddFotoramaVideoEvents({
-    //            VideoData: config.fotoramaVideoData || [],
-    //            VideoSettings: config.fotoramaVideoSettings || {}
-    //        });
-    //    });
-    //};
 
     return $.mage.AddFotoramaVideoEvents;
 });
