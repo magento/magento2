@@ -53,7 +53,7 @@ class VaultConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $storeId = $this->storeManager->getStore()->getId();
-        $customerId = $this->session->getQuote()->getCustomerId();
+        $customerId = $this->session->getCustomerId();
 
         return [
             VaultPaymentInterface::CODE => [
