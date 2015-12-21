@@ -160,7 +160,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to save address. Please, check input data.
+     * @expectedExceptionMessage Unable to save address. Please check input data.
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
