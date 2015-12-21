@@ -283,7 +283,7 @@ define([
             var options = this.options;
 
             _.each(options.jsonConfig.images, function (array) {
-                var fullImagesList = [], 
+                var fullImagesList = [],
                     imagesList = [];
 
                 _.each(array, function (item) {
