@@ -138,9 +138,22 @@ return [
     ],
     'exchange_topic_to_queues_map' => [
         'magento--customer.created' => ['test-queue-1', 'test-queue-2', 'test-queue-4', 'test-queue-5', 'test-queue-9'],
-        'magento--customer.created.one' => ['test-queue-1', 'test-queue-5', 'test-queue-6', 'test-queue-7', 'test-queue-8', 'test-queue-9'],
+        'magento--customer.created.one' => [
+            'test-queue-1',
+            'test-queue-5',
+            'test-queue-6',
+            'test-queue-7',
+            'test-queue-8',
+            'test-queue-9'
+        ],
         'magento--customer.created.one.two' => ['test-queue-1', 'test-queue-5', 'test-queue-8', 'test-queue-9'],
-        'magento--customer.created.two' => ['test-queue-1', 'test-queue-5', 'test-queue-7', 'test-queue-8', 'test-queue-9'],
+        'magento--customer.created.two' => [
+            'test-queue-1',
+            'test-queue-5',
+            'test-queue-7',
+            'test-queue-8',
+            'test-queue-9'
+        ],
         'magento--customer.updated' => ['test-queue-1', 'test-queue-4', 'test-queue-5', 'test-queue-9'],
         'test-exchange-1--cart.created' => ['test-queue-1', 'test-queue-3'],
         'magento--customer.deleted' => ['test-queue-2', 'test-queue-4', 'test-queue-5', 'test-queue-9'],
