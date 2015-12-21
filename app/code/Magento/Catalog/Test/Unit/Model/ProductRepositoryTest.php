@@ -243,7 +243,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ImageContentValidatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $optionConverter = $this->objectManager->getObject('Magento\Catalog\Model\Product\Option\Converter');
         $this->linkTypeProviderMock = $this->getMock('Magento\Catalog\Model\Product\LinkTypeProvider',
             ['getLinkTypes'], [], '', false);
         $this->imageProcessorMock = $this->getMock('Magento\Framework\Api\ImageProcessorInterface', [], [], '', false);
@@ -279,7 +278,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'metadataServiceInterface' => $this->metadataServiceMock,
                 'searchResultsFactory' => $this->searchResultsFactoryMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
-                'optionConverter' => $optionConverter,
                 'contentValidator' => $this->contentValidatorMock,
                 'fileSystem' => $this->fileSystemMock,
                 'contentFactory' => $this->contentFactoryMock,

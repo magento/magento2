@@ -83,6 +83,12 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAddActionProductNameXss()
     {
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
+        $this->getRequest()->setPostValue([
+            'form_key' => $formKey->getFormKey(),
+        ]);
+
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Api\ProductRepositoryInterface');
