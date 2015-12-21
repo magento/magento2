@@ -23,12 +23,12 @@
 
         <a class="action-default"
            data-paypal-button="true"
-           href="<?php echo $block->escapeUrl($block->getButtonUrl() . '?' . $block->getQuery()); ?>"
+           href="<?php /* @noEscape */ echo $block->escapeUrl($block->getButtonUrl() . '?' . $block->getQuery()); ?>"
            target="PPFrame"><?php echo $block->escapeHtml($block->getButtonLabel()); ?></a>
 
         <a class="action-default"
            data-paypal-button="true"
-           href="<?php echo $block->escapeUrl($block->getSandboxButtonUrl() . '?' . $block->getQuery()); ?>"
+           href="<?php /* @noEscape */ echo $block->escapeUrl($block->getSandboxButtonUrl() . '?' . $block->getQuery()); ?>"
            target="PPFrame"><?php echo $block->escapeHtml($block->getSandboxButtonLabel()); ?></a>
     </div>
 </div>
