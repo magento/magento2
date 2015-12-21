@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="payment-method" data-bind="css: {'_active': isActive() && scriptLoaded()}">
+<div data-bind="attr: {class: 'payment-method payment-method-' + getCode()}, css: {'_active': isActive() && scriptLoaded()}">
     <div class="payment-method-title field choice">
         <input type="radio"
                name="payment[method]"
@@ -61,7 +61,8 @@
                         <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>
                     </label>
                     <div class="control">
-                        <div data-bind="attr: {id: getCode() + '_cc_number'}"></div>
+                        <div data-bind="attr: {id: getCode() + '_cc_number'}" class="hosted-control"></div>
+                        <div class="hosted-error"><!-- ko i18n: 'Please enter valid Credit Card Number'--><!-- /ko --></div>
                     </div>
                 </div>
                 <div class="field number required">
@@ -69,17 +70,14 @@
                         <span><!-- ko i18n: 'Expiration Date'--><!-- /ko --></span>
                     </label>
                     <div class="control">
-                        <div class="fields group group-2">
-                            <div class="field no-label month">
-                                <div class="control">
-                                    <div data-bind="attr: {id: getCode() + '_expirationMonth'}"></div>
-                                </div>
-                            </div>
-                            <div class="field no-label year">
-                                <div class="control">
-                                    <div data-bind="attr: {id: getCode() + '_expirationYear'}"></div>
-                                </div>
-                            </div>
+                        <div class="hosted-date-wrap">
+                            <div data-bind="attr: {id: getCode() + '_expirationMonth'}"
+                                 class="hosted-control hosted-date"></div>
+
+                            <div data-bind="attr: {id: getCode() + '_expirationYear'}"
+                                 class="hosted-control hosted-date"></div>
+
+                            <div class="hosted-error"><!-- ko i18n: 'Please enter valid Expiration Date'--><!-- /ko --></div>
                         </div>
                     </div>
                 </div>
@@ -89,7 +87,9 @@
                         <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
                     </label>
                     <div class="control _with-tooltip">
-                        <div data-bind="attr: {id: getCode() + '_cc_cid'}"></div>
+                        <div data-bind="attr: {id: getCode() + '_cc_cid'}" class="hosted-control hosted-cid"></div>
+                        <div class="hosted-error"><!-- ko i18n: 'Please enter valid Card Verification Number'--><!-- /ko --></div>
+
                         <div class="field-tooltip toggle">
                             <span class="field-tooltip-action action-cvv"
                                   tabindex="0"
