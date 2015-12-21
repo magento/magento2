@@ -63,7 +63,7 @@
         "phpunit/phpunit": "4.1.0",
         "squizlabs/php_codesniffer": "1.5.3",
         "phpmd/phpmd": "@stable",
-        "pdepend/pdepend": "2.0.6",
+        "pdepend/pdepend": "2.2.2",
         "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
         "lusitanian/oauth": "~0.3 <=0.7.0"
