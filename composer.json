@@ -13,7 +13,7 @@
         "elasticsearch/elasticsearch": "~2.0"
     },
     "type": "magento2-module",
-    "version": "100.0.1",
+    "version": "100.0.0",
     "license": [
         "proprietary"
     ],
