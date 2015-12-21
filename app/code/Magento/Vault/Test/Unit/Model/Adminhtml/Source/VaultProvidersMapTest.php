@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Test\Unit\Mode\Adminhtml\Source;
+namespace Magento\Vault\Test\Unit\Model\Adminhtml\Source;
 
 use Magento\Payment\Model\MethodInterface;
 use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
