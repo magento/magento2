@@ -149,10 +149,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $output = [];
         foreach ($config as $topicName => $brokerConfig) {
             $handlers = [];
-            // TODO: Use Config::CONSUMER_HANDLER_TYPE and Config::CONSUMER_HANDLER_METHOD constants
-            // TODO: Add keys to handlers, probably in communication config, since that is the origin of data
-            $topicHandlers = $this->getTopicHandlers($topicName);
-            $handlers[$topicName] = $topicHandlers;
+            $handlers[$topicName] = $this->getTopicHandlers($topicName);
             $topicConfig = $this->communicationConfig->getTopic($topicName);
 
             foreach ($brokerConfig[QueueConfig::BROKER_CONSUMERS] as $consumerKey => $consumerConfig) {

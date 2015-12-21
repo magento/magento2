@@ -49,6 +49,10 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
         $queueExchangeTopicToQueueMap = [];
         $queueConsumers = [];
         foreach ($remoteServiceTopics as $topicName => $communicationConfig) {
+            if (!isset($communicationConfig[CommunicationConfig::TOPIC_REQUEST])) {
+                // TODO: Investigate why this can happen
+                continue;
+            }
             $queueTopics[$topicName] = [
                 QueueConfig::TOPIC_NAME => $topicName,
                 QueueConfig::TOPIC_SCHEMA => [
