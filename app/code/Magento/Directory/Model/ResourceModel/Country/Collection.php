@@ -224,11 +224,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             unset($sort[$name]);
             $sort = [$name => $foregroundCountry] + $sort;
         }
+        $isRegionVisible = (bool)$this->helperData->isShowNonRequiredState();
         $options = [];
         foreach ($sort as $label => $value) {
             $option = ['value' => $value, 'label' => $label];
             if ($this->helperData->isRegionRequired($value)) {
                 $option['is_region_required'] = true;
+            } else {
+                $option['is_region_visible'] = $isRegionVisible;
             }
             if ($this->helperData->isZipCodeOptional($value)) {
                 $option['is_zipcode_optional'] = true;
