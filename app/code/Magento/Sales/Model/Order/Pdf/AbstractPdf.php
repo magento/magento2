@@ -395,6 +395,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
         if ($putOrderId) {
             $page->drawText(__('Order # ') . $order->getRealOrderId(), 35, $top -= 30, 'UTF-8');
+        } else {
+            $top -= 15;
         }
         $page->drawText(
             __('Order Date: ') .
