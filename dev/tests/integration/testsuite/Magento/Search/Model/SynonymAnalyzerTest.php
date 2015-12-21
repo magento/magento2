@@ -30,7 +30,7 @@ class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
     public static function loadGetSynonymsForPhraseDataProvider()
     {
         return [
-            'WithSynonymsFromStoreViewGroup' => [
+            'WithSynonymsFromStoreViewScope' => [
                 'phrase' => 'Elizabeth is the English queen.',
                 'expectedResult' => [['elizabeth'],['is'],['the'],['british', 'english'],['queen', 'monarch']]
             ],
