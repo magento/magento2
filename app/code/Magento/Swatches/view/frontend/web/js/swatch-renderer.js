@@ -283,15 +283,12 @@ define([
             var options = this.options;
 
             _.each(options.jsonConfig.images, function (array) {
-                var fullImagesList = [],
-                    imagesList = [];
+                var imagesList = [];
 
                 _.each(array, function (item) {
                     imagesList.push(item.img);
-                    fullImagesList.push(item.full);
                 });
                 preloadImages(imagesList);
-                preloadImages(fullImagesList);
             });
         },
 
