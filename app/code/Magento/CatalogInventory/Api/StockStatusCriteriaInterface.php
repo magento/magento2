@@ -42,12 +42,4 @@ interface StockStatusCriteriaInterface extends \Magento\Framework\Api\CriteriaIn
      * @return void
      */
     public function setQtyFilter($qty);
-
-    /**
-     * Add stock filter to collection
-     *
-     * @param \Magento\CatalogInventory\Api\Data\StockInterface $stock
-     * @return void
-     */
-    public function setStockFilter($stock);
 }

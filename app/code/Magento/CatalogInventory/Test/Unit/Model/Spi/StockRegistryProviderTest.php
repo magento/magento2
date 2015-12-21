@@ -224,7 +224,7 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
         $this->stockRepository->expects($this->once())->method('getList')
             ->with($stockCriteria)->willReturn($stockCollection);
         $stockCollection->expects($this->once())->method('getItems')->willReturn([$stock]);
-        $this->assertEquals($stock, $this->stockRegistryProvider->getStock());
+        $this->assertEquals($stock, $this->stockRegistryProvider->getStock(null));
     }
 
     public function testGetStockItem()
@@ -265,23 +265,16 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStockStatus()
     {
-        $stock = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getStockId'])
-            ->getMockForAbstractClass();
-        $this->stockFactory->expects($this->any())->method('create')->willReturn($stock);
-        $stock->expects($this->once())->method('getStockId')->willReturn($this->stockId);
-        $this->stockRepository->expects($this->once())->method('get')->willReturn($stock);
         $stockStatusCriteria = $this->getMockBuilder('Magento\CatalogInventory\Api\StockStatusCriteriaInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['setProductsFilter', 'setStockFilter'])
+            ->setMethods(['setProductsFilter', 'addFilter'])
             ->getMockForAbstractClass();
         $this->stockStatusCriteriaFactory->expects($this->once())
             ->method('create')
             ->willReturn($stockStatusCriteria);
         $stockStatusCriteria->expects($this->once())->method('setProductsFilter')->with($this->productId)
             ->willReturnSelf();
-        $stockStatusCriteria->expects($this->once())->method('setStockFilter')->with($stock)
+        $stockStatusCriteria->expects($this->once())->method('addFilter')->with('stock', 'stock_id', $this->stockId)
             ->willReturnSelf();
         $stockStatusCollection = $this->getMockBuilder(
             '\Magento\CatalogInventory\Model\ResourceModel\Stock\Status\Collection'
