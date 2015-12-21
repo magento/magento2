@@ -33,6 +33,13 @@ class Cc extends CreditCard
     {
         $mapping = $this->dataMapping($fixture->getData());
         foreach ($this->braintreeForm as $field => $iframe) {
+            $element = $this->browser->find('body');
+            $this->browser->waitUntil(
+                function () use ($element, $iframe) {
+                    $fieldElement = $element->find($iframe);
+                    return $fieldElement->isVisible() ? true : null;
+                }
+            );
             $this->browser->switchToFrame(new Locator($iframe));
             $element = $this->browser->find('body');
             $this->browser->waitUntil(

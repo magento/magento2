@@ -52,7 +52,7 @@ define(
              * @returns {Boolean}
              */
             isVaultEnabled: function () {
-                return window.checkoutConfig.vault['is_enabled'] === '1' &&
+                return window.checkoutConfig.vault['is_enabled'] === true &&
                     window.checkoutConfig.vault['vault_provider_code'] === this.paymentCode;
             }
         });
