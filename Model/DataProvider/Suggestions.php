@@ -97,7 +97,7 @@ class Suggestions implements SuggestedQueriesInterface
             foreach ($this->getSuggestions($query) as $suggestion) {
                 $count = null;
                 if ($isResultsCountEnabled) {
-                    $count = $suggestion['freq'];
+                    $count = isset($suggestion['freq']) ? $suggestion['freq'] : null;
                 }
                 $result[] = $this->queryResultFactory->create(
                     [
@@ -134,11 +134,33 @@ class Suggestions implements SuggestedQueriesInterface
         $suggestRequest = [
             'index' => $this->config->getIndexName(),
             'body' => [
-                'magento-suggest' => [
+                'suggestions' => [
                     'text' => $query->getQueryText(),
-                    'term' => [
+                    'phrase' => [
                         'field' => '_all',
-                        'size' => $searchSuggestionsCount
+                        'analyzer' => 'standard',
+                        'size' => $searchSuggestionsCount,
+                        'max_errors' => 2,
+                        'collate' => [
+                            'query' => [
+                                'bool' => [
+                                    'must' => [
+                                        'match' => [
+                                            '{{field_name}}' => '{{suggestion}}'
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'params' => [ 'field_name' => '_all' ],
+                            'prune' => true
+                        ],
+                        'direct_generator' => [
+                            [
+                                'field' => '_all',
+                                'min_word_length' => 3,
+                                'min_doc_freq' => 1
+                            ]
+                        ],
                     ]
                 ]
             ]
@@ -147,7 +169,7 @@ class Suggestions implements SuggestedQueriesInterface
         $result = $this->fetchQuery($suggestRequest);
 
         if (is_array($result)) {
-            foreach ($result['magento-suggest'] as $token) {
+            foreach ($result['suggestions'] as $token) {
                 foreach ($token['options'] as $key => $suggestion) {
                     $suggestions[$suggestion['score'] . '_' . $key] = $suggestion;
                 }
