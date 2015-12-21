@@ -87,71 +87,115 @@ class Bundle
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $product
     ) {
-        if (($selections = $this->request->getPost('bundle_selections')) && !$product->getCompositeReadonly()) {
+        $compositeReadonly = $product->getCompositeReadonly();
+        $selections = $this->request->getPost('bundle_selections');
+        if ($selections && !$compositeReadonly) {
             $product->setBundleSelectionsData($selections);
         }
-        if (($items = $this->request->getPost('bundle_options')) && !$product->getCompositeReadonly()) {
+
+        $items = $this->request->getPost('bundle_options');
+        if ($items && !$compositeReadonly) {
             $product->setBundleOptionsData($items);
         }
 
-        if ($product->getBundleOptionsData()) {
-            $options = [];
-            foreach ($product->getBundleOptionsData() as $key => $optionData) {
-                if (!(bool)$optionData['delete']) {
-                    $option = $this->optionFactory->create(['data' => $optionData]);
-                    $option->setSku($product->getSku());
-                    $option->setOptionId(null);
+        $this->processBundleOptionsData($product);
 
-                    $links = [];
-                    $bundleLinks = $product->getBundleSelectionsData();
-                    if (!empty($bundleLinks[$key])) {
-                        foreach ($bundleLinks[$key] as $linkData) {
-                            if (!(bool)$linkData['delete']) {
-                                $link = $this->linkFactory->create(['data' => $linkData]);
-                                $linkProduct = $this->productRepository->getById($linkData['product_id']);
-                                $link->setSku($linkProduct->getSku());
-                                $link->setQty($linkData['selection_qty']);
-                                if (isset($linkData['selection_can_change_qty'])) {
-                                    $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
-                                }
-                                $links[] = $link;
-                            }
-                        }
-                        $option->setProductLinks($links);
-                        $options[] = $option;
-                    }
-                }
-            }
-            $extension = $product->getExtensionAttributes();
-            $extension->setBundleProductOptions($options);
-            $product->setExtensionAttributes($extension);
-        }
+        $this->processDynamicOptionsData($product);
 
-        if (
-            $product->getPriceType() === \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
-            && !$product->getOptionsReadonly()
-        ) {
-            $product->setCanSaveCustomOptions(true);
-            if ($customOptions = $product->getProductOptions()) {
-                foreach (array_keys($customOptions) as $key) {
-                    $customOptions[$key]['is_delete'] = 1;
-                }
-                $newOptions = $product->getOptions();
-                foreach ($customOptions as $customOptionData) {
-                    if (!(bool)$customOptionData['is_delete']) {
-                        $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
-                        $customOption->setProductSku($product->getSku());
-                        $customOption->setOptionId(null);
-                        $newOptions[] = $customOption;
-                    }
-                }
-                $product->setOptions($newOptions);
-            }
-        }
-
-        $product->setCanSaveBundleSelections(
-            (bool)$this->request->getPost('affect_bundle_product_selections') && !$product->getCompositeReadonly()
-        );
+        $affectProductSelections = (bool)$this->request->getPost('affect_bundle_product_selections');
+        $product->setCanSaveBundleSelections($affectProductSelections && !$compositeReadonly);
         return $product;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return void
+     */
+    protected function processBundleOptionsData(\Magento\Catalog\Model\Product $product)
+    {
+        $bundleOptionsData = $product->getBundleOptionsData();
+        if (!$bundleOptionsData) {
+            return;
+        }
+        $options = [];
+        foreach ($bundleOptionsData as $key => $optionData) {
+            if ((bool)$optionData['delete']) {
+                continue;
+            }
+            $option = $this->optionFactory->create(['data' => $optionData]);
+            $option->setSku($product->getSku());
+            $option->setOptionId(null);
+
+            $links = [];
+            $bundleLinks = $product->getBundleSelectionsData();
+            if (empty($bundleLinks[$key])) {
+                continue;
+            }
+
+            foreach ($bundleLinks[$key] as $linkData) {
+                if ((bool)$linkData['delete']) {
+                    continue;
+                }
+                $link = $this->linkFactory->create(['data' => $linkData]);
+
+                if (array_key_exists('selection_price_value', $linkData)) {
+                    $link->setPrice($linkData['selection_price_value']);
+                }
+
+                if (array_key_exists('selection_price_type', $linkData)) {
+                    $link->setPriceType($linkData['selection_price_type']);
+                }
+
+                $linkProduct = $this->productRepository->getById($linkData['product_id']);
+                $link->setSku($linkProduct->getSku());
+                $link->setQty($linkData['selection_qty']);
+
+                if (array_key_exists('selection_can_change_qty', $linkData)) {
+                    $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
+                }
+                $links[] = $link;
+            }
+            $option->setProductLinks($links);
+            $options[] = $option;
+        }
+
+        $extension = $product->getExtensionAttributes();
+        $extension->setBundleProductOptions($options);
+        $product->setExtensionAttributes($extension);
+        return;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return void
+     */
+    protected function processDynamicOptionsData(\Magento\Catalog\Model\Product $product)
+    {
+        if ($product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+            return;
+        }
+
+        if ($product->getOptionsReadonly()) {
+            return;
+        }
+        $product->setCanSaveCustomOptions(true);
+        $customOptions = $product->getProductOptions();
+        if (!$customOptions) {
+            return;
+        }
+        foreach (array_keys($customOptions) as $key) {
+            $customOptions[$key]['is_delete'] = 1;
+        }
+        $newOptions = $product->getOptions();
+        foreach ($customOptions as $customOptionData) {
+            if ((bool)$customOptionData['is_delete']) {
+                continue;
+            }
+            $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
+            $customOption->setProductSku($product->getSku());
+            $customOption->setOptionId(null);
+            $newOptions[] = $customOption;
+        }
+        $product->setOptions($newOptions);
     }
 }
