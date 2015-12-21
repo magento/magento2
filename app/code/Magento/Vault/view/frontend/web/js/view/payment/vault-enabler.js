@@ -18,29 +18,42 @@ define(
                 isActivePaymentTokenEnabler: true
             },
 
+            /**
+             * @param {String} paymentCode
+             */
             setPaymentCode: function (paymentCode) {
                 this.paymentCode = paymentCode;
             },
 
+            /**
+             * @returns {Object}
+             */
             initObservable: function () {
                 this._super()
                     .observe([
                         'isActivePaymentTokenEnabler'
                     ]);
+
                 return this;
             },
 
-            visitAdditionalData: function(data) {
+            /**
+             * @param {Object} data
+             */
+            visitAdditionalData: function (data) {
                 if (!this.isVaultEnabled()) {
                     return;
                 }
 
-                data.additional_data.is_active_payment_token_enabler = this.isActivePaymentTokenEnabler();
+                data['additional_data']['is_active_payment_token_enabler'] = this.isActivePaymentTokenEnabler();
             },
 
-            isVaultEnabled: function() {
-                return window.checkoutConfig.vault.is_enabled == '1'
-                    && window.checkoutConfig.vault.vault_provider_code == this.paymentCode;
+            /**
+             * @returns {Boolean}
+             */
+            isVaultEnabled: function () {
+                return window.checkoutConfig.vault['is_enabled'] === '1' &&
+                    window.checkoutConfig.vault['vault_provider_code'] === this.paymentCode;
             }
         });
     }

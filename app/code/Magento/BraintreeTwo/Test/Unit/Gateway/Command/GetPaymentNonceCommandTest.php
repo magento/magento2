@@ -18,6 +18,8 @@ use Magento\Vault\Model\PaymentTokenManagement;
 
 /**
  * Class GetPaymentNonceCommandTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetPaymentNonceCommandTest extends \PHPUnit_Framework_TestCase
 {

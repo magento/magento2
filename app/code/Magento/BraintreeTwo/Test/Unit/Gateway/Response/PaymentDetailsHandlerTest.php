@@ -15,7 +15,6 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class PaymentDetailsHandlerTest
- * @package Magento\BraintreeTwo\Test\Unit\Gateway\Response
  */
 class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 {

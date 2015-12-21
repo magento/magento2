@@ -88,6 +88,8 @@ class SubjectReader
 
     /**
      * Reads public hash from subject
+     *
+     * @param array $subject
      * @return string
      */
     public function readPublicHash(array $subject)
