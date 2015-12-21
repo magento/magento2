@@ -25,39 +25,6 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public static function loadByStoreViewIdDataProvider()
-    {
-        return [
-            [
-                1,
-                [
-                    ['synonyms' => 'queen,monarch', 'scope_id' => 1, 'scope_type' => 'stores'],
-                    ['synonyms' => 'british,english', 'scope_id' => 1, 'scope_type' => 'stores'],
-                    ['synonyms' => 'schlicht,natürlich', 'scope_id' => 1, 'scope_type' => 'stores']
-                ]
-            ],
-        ];
-    }
-
-    /**
-     * @param int $storeviewId
-     * @param array $expectedResult
-     * @dataProvider loadByStoreViewIdDataProvider
-     */
-    public function testloadByStoreViewId($storeViewId, $expectedResult)
-    {
-        $data = $this->model->loadByStoreViewId($storeViewId)->getData();
-        $this->assertEquals($expectedResult[0]['synonyms'], $data[0]['synonyms']);
-        $this->assertEquals($expectedResult[0]['scope_id'], $data[0]['scope_id']);
-        $this->assertEquals($expectedResult[0]['scope_type'], $data[0]['scope_type']);
-        $this->assertEquals($expectedResult[1]['synonyms'], $data[1]['synonyms']);
-        $this->assertEquals($expectedResult[1]['scope_id'], $data[1]['scope_id']);
-        $this->assertEquals($expectedResult[1]['scope_type'], $data[1]['scope_type']);
-    }
-
-    /**
-     * @return array
-     */
     public static function loadByPhraseDataProvider()
     {
         return [

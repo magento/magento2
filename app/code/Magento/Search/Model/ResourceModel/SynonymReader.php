@@ -10,6 +10,8 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Search\Model\SynonymReader as SynReaderModel;
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Synonym Reader resource model
@@ -22,74 +24,77 @@ class SynonymReader extends AbstractDb
     private $fullTextSelect;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * Store manager
+     *
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
      * @param Fulltext $fulltext
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        Context $context,
+        StoreManagerInterface $storeManager,
         Fulltext $fulltext,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->fullTextSelect = $fulltext;
-    }
-
-    /**
-     * Custom load model: Get data by store view id
-     *
-     * @param AbstractModel $object
-     * @param int $value
-     * @return $this
-     */
-    public function loadByStoreViewId(AbstractModel $object, $value)
-    {
-        $select = $this->getConnection()->select()->from(
-            $this->getMainTable()
-        )->where(
-            'scope_type = ?',
-            'stores'
-        )->where(
-            'scope_id = ?',
-            $value
-        );
-        $data = $this->getConnection()->fetchAll($select);
-        if ($data) {
-            $object->setData($data);
-            $this->_afterLoad($object);
-        }
-        return $this;
+        $this->storeManager = $storeManager;
     }
 
     /**
      * Custom load model: Get data by user query phrase
      *
      * @param SynReaderModel $object
-     * @param string $value
+     * @param string $phrase
      * @return $this
      */
-    public function loadByPhrase(SynReaderModel $object, $value)
+    public function loadByPhrase(SynReaderModel $object, $phrase)
     {
-        $phrase = strtolower($value);
+        $phrase = strtolower($phrase);
 
-        // Search within the scope of current storeview
-        $id = $object->getStoreViewId();
-        $rows = $this->queryByPhrase($object, $phrase, \Magento\Store\Model\ScopeInterface::SCOPE_STORES, $id);
+        $rows = $this->queryByPhrase(strtolower($phrase));
 
-        if (empty($rows)) {
+        $storeViewId = $this->storeManager->getStore()->getId();
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $synRowsForStoreView = [];
+        $synRowsForWebsite = [];
+        $synRowsForDefault = [];
 
-            // Fallback and search within website scope
-            $id = $object->getWebsiteId();
-            $rows = $this->queryByPhrase($object, $phrase, \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES, $id);
+        // The synonyms configured for current store view gets highest priority. Second highest is current website
+        // scope. If there were no store view and website specific synonyms then at last 'default' (All store views)
+        // will be considered.
+
+        foreach ($rows as $index => $row) {
+            // Check for current store view
+            if ($row['scope_id'] === $storeViewId && $row['scope_type'] === 'stores') {
+                $synRowsForStoreView[] = $row;
+            }
+            // Check for current website
+            else if (empty($synRowsForStoreView) &&
+                ($row['scope_id'] === $websiteId && $row['scope_type'] === 'websites')) {
+                    $synRowsForWebsite[] = $row;
+            }
+            // Check for all store views (i.e. default)
+            elseif (empty($synRowsForStoreView) && empty($synRowsForWebsite)) {
+                $synRowsForDefault[] = $row;
+            }
         }
 
-        if (empty($rows)) {
-
-            // Fallback and search across all stores
-            $rows = $this->queryByPhrase($object, $phrase, \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        if (!empty($synRowsForStoreView)) {
+            $object->setData($synRowsForStoreView);
         }
-
-        $object->setData($rows);
+        elseif (!empty($synRowsForWebsite)) {
+            $object->setData($synRowsForWebsite);
+        }
+        else {
+            $object->setData($synRowsForDefault);
+        }
         $this->_afterLoad($object);
         return $this;
     }
@@ -105,13 +110,10 @@ class SynonymReader extends AbstractDb
     }
 
     /**
-     * @param SynReaderModel $object
      * @param string $value
-     * @param string $scopeType
-     * @param int $id
      * @return array
      */
-    private function queryByPhrase(SynReaderModel $object, $phrase, $scopeType, $id)
+    private function queryByPhrase($phrase)
     {
         $matchQuery = $this->fullTextSelect->getMatchQuery(
             ['synonyms' => 'synonyms'],
@@ -120,12 +122,6 @@ class SynonymReader extends AbstractDb
         );
         $query = $this->getConnection()->select()->from(
             $this->getMainTable()
-        )->where(
-            'scope_type = ?',
-            $scopeType
-        )->where(
-            'scope_id = ?',
-            $id
         )->where($matchQuery);
 
         return $this->getConnection()->fetchAll($query);
