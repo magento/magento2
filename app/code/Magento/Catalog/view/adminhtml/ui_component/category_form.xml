@@ -180,12 +180,16 @@
                             <item name="theme_advanced_statusbar_location" xsi:type="boolean">false</item>
                         </item>
                         <item name="files_browser_window_url" xsi:type="boolean">false</item>
+                        <item name="height" xsi:type="string">100px</item>
+                        <item name="plugin_buttons_hidden" xsi:type="boolean">true</item>
+                        <item name="show_hide_button_hidden" xsi:type="boolean">true</item>
                     </item>
                     <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="source" xsi:type="string">page</item>
                     <item name="wysiwyg" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="string">description</item>
                     <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="rows" xsi:type="number">8</item>
                 </item>
             </argument>
         </field>
