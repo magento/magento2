@@ -12,14 +12,14 @@
 .fotorama__nav__frame--dot:focus .fotorama__dot {
     box-shadow: none;
     &:after {
-        content: '';
         border-radius: inherit;
-        position: absolute;
-        top: @fotorama-inner-box-shadow;
-        right: @fotorama-inner-box-shadow;
-        left: @fotorama-inner-box-shadow;
         bottom: @fotorama-inner-box-shadow;
         box-shadow: @focus__box-shadow;
+        content: '';
+        left: @fotorama-inner-box-shadow;
+        position: absolute;
+        right: @fotorama-inner-box-shadow;
+        top: @fotorama-inner-box-shadow;
         z-index: @z-index-10;
     }
 }
@@ -28,10 +28,10 @@
 .fotorama__nav__frame--dot:focus {
     .fotorama__thumb:after,
     .fotorama__dot:after{
-        left: 0;
-        top: 0;
         bottom: 0;
+        left: 0;
         right: 0;
+        top: 0;
     }
     .fotorama__thumb.fotorama_vertical_ratio:after {
         left: 2px;
