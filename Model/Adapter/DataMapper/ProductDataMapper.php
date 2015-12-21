@@ -14,6 +14,9 @@ use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Elasticsearch\Model\ResourceModel\Index;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -59,12 +62,12 @@ class ProductDataMapper implements DataMapperInterface
     private $attributeContainer;
 
     /**
-     * @var \Magento\Elasticsearch\Model\ResourceModel\Index
+     * @var Index
      */
     private $resourceIndex;
 
     /**
-     * @var FieldMapper
+     * @var FieldMapperInterface
      */
     private $fieldMapper;
 
@@ -100,8 +103,8 @@ class ProductDataMapper implements DataMapperInterface
      *
      * @param Builder $builder
      * @param AttributeContainer $attributeContainer
-     * @param \Magento\Elasticsearch\Model\ResourceModel\Index $resourceIndex
-     * @param FieldMapper $fieldMapper
+     * @param Index $resourceIndex
+     * @param FieldMapperInterface $fieldMapper
      * @param DateTime $dateTime
      * @param TimezoneInterface $localeDate
      * @param ScopeConfigInterface $scopeConfig
@@ -110,8 +113,8 @@ class ProductDataMapper implements DataMapperInterface
     public function __construct(
         Builder $builder,
         AttributeContainer $attributeContainer,
-        \Magento\Elasticsearch\Model\ResourceModel\Index $resourceIndex,
-        FieldMapper $fieldMapper,
+        Index $resourceIndex,
+        FieldMapperInterface $fieldMapper,
         DateTime $dateTime,
         TimezoneInterface $localeDate,
         ScopeConfigInterface $scopeConfig,

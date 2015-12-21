@@ -6,7 +6,7 @@
 namespace Magento\Elasticsearch\Model\Adapter;
 
 /**
- * Class FieldMapper
+ * Class FieldType
  */
 class FieldType
 {

@@ -78,12 +78,9 @@ class ProductFieldMapper implements FieldMapperInterface
     }
 
     /**
-     * Gives all mapped attribute types
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAllAttributesTypes()
+    public function getAllAttributesTypes($context = [])
     {
         $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $allAttributes = [];

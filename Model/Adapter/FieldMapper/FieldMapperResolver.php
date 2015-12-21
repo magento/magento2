@@ -50,6 +50,14 @@ class FieldMapperResolver implements FieldMapperInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getAllAttributesTypes($context = [])
+    {
+        return $this->getEntity($context['entityType'])->getAllAttributesTypes($context);
+    }
+
+    /**
      * Get instance of current field mapper
      *
      * @param string $entityType

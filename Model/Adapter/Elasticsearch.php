@@ -33,7 +33,7 @@ class Elasticsearch
     protected $connectionManager;
 
     /**
-     * @var DocumentDataMapper
+     * @var DataMapperInterface
      */
     protected $documentDataMapper;
 
@@ -43,7 +43,7 @@ class Elasticsearch
     protected $indexNameResolver;
 
     /**
-     * @var FieldMapper
+     * @var FieldMapperInterface
      */
     protected $fieldMapper;
 
@@ -76,8 +76,8 @@ class Elasticsearch
      * Constructor for Elasticsearch adapter.
      *
      * @param ConnectionManager $connectionManager
-     * @param DocumentDataMapper $documentDataMapper
-     * @param FieldMapper $fieldMapper
+     * @param DataMapperInterface $documentDataMapper
+     * @param FieldMapperInterface $fieldMapper
      * @param Config $clientConfig
      * @param BuilderInterface $indexBuilder
      * @param LoggerInterface $logger
@@ -88,8 +88,8 @@ class Elasticsearch
      */
     public function __construct(
         ConnectionManager $connectionManager,
-        DocumentDataMapper $documentDataMapper,
-        FieldMapper $fieldMapper,
+        DataMapperInterface $documentDataMapper,
+        FieldMapperInterface $fieldMapper,
         Config $clientConfig,
         BuilderInterface $indexBuilder,
         LoggerInterface $logger,
@@ -291,7 +291,7 @@ class Elasticsearch
         // create new index for store
         $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
         if (!$this->client->indexExists($indexName)) {
-            $this->prepareIndex($storeId, $indexName);
+            $this->prepareIndex($storeId, $indexName, $mappedIndexerId);
         }
 
         // add index to alias
@@ -341,14 +341,15 @@ class Elasticsearch
      *
      * @param int $storeId
      * @param string $indexName
+     * @param string $mappedIndexerId
      * @return $this
      */
-    protected function prepareIndex($storeId, $indexName)
+    protected function prepareIndex($storeId, $indexName, $mappedIndexerId)
     {
         $this->indexBuilder->setStoreId($storeId);
         $this->client->createIndex($indexName, ['settings' => $this->indexBuilder->build()]);
         $this->client->addFieldsMapping(
-            $this->fieldMapper->getAllAttributesTypes(),
+            $this->fieldMapper->getAllAttributesTypes(['entityType' => $mappedIndexerId]),
             $indexName,
             $this->clientConfig->getEntityType()
         );

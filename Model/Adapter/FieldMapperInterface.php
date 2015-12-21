@@ -23,4 +23,12 @@ interface FieldMapperInterface
      * @return string
      */
     public function getFieldName($attributeCode, $context = []);
+
+    /**
+     * Get all entity attribute types
+     *
+     * @param array $context
+     * @return array
+     */
+    public function getAllAttributesTypes($context = []);
 }
