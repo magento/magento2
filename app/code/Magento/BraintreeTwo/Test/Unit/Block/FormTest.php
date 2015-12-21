@@ -161,14 +161,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'config' => [
-                    'vault_provider_code' => 'paypal',
+                    'vault_provider_code' => 'test payment 1',
                     'is_enabled' => true,
                 ],
                 'expected' => false
             ],
             [
                 'config' => [
-                    'vault_provider_code' => 'cybersource',
+                    'vault_provider_code' => 'test payment 2',
                     'is_enabled' => false,
                 ],
                 'expected' => false
