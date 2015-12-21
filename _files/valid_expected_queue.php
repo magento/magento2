@@ -45,8 +45,8 @@ return [
                 "schema_value" => "Magento\\MysqlMq\\Model\\DataObject"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "demo-publisher-1"
         ],
@@ -57,8 +57,8 @@ return [
                 "schema_value" => "Magento\\MysqlMq\\Model\\DataObject"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "demo-publisher-2"
         ],
@@ -69,8 +69,8 @@ return [
                 "schema_value" => "Magento\\MysqlMq\\Model\\DataObject"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "demo-publisher-2"
         ],
@@ -82,26 +82,26 @@ return [
                     [
                         "param_name" => "dataObject",
                         "param_position" => 0,
-                        "is_required" => TRUE,
+                        "is_required" => true,
                         "param_type" => "Magento\\MysqlMq\\Model\\DataObject"
                     ],
                     [
                         "param_name" => "requiredParam",
                         "param_position" => 1,
-                        "is_required" => TRUE,
+                        "is_required" => true,
                         "param_type" => "string"
                     ],
                     [
                         "param_name" => "optionalParam",
                         "param_position" => 2,
-                        "is_required" => FALSE,
+                        "is_required" => false,
                         "param_type" => "int"
                     ]
                 ]
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "demo-publisher-2"
         ],
@@ -112,8 +112,8 @@ return [
                 "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "test-publisher-1"
         ],
@@ -124,8 +124,8 @@ return [
                 "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "test-publisher-1"
         ],
@@ -136,8 +136,8 @@ return [
                 "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "test-publisher-1"
         ],
@@ -148,8 +148,8 @@ return [
                 "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "test-publisher-1"
         ],
@@ -160,8 +160,8 @@ return [
                 "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "demo-publisher-2"
         ],
@@ -172,8 +172,8 @@ return [
                 "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "demo-publisher-2"
         ],
@@ -184,8 +184,8 @@ return [
                 "schema_value" => "Magento\\Quote\\Api\\Data\\CartInterface"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "test-publisher-3"
         ],
@@ -196,8 +196,8 @@ return [
                 "schema_value" => "Magento\\Quote\\Api\\Data\\CartInterface"
             ],
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
             "publisher" => "test-publisher-3"
         ],
@@ -240,8 +240,8 @@ return [
                     ]
                 ]
             ],
-            "max_messages" => NULL,
-            "instance_type" => NULL
+            "max_messages" => null,
+            "instance_type" => null
         ],
         "demoConsumerQueueOneWithException" => [
             "name" => "demoConsumerQueueOneWithException",
@@ -256,8 +256,8 @@ return [
                     ]
                 ]
             ],
-            "max_messages" => NULL,
-            "instance_type" => NULL
+            "max_messages" => null,
+            "instance_type" => null
         ],
         "demoConsumerQueueTwo" => [
             "name" => "demoConsumerQueueTwo",
@@ -278,8 +278,8 @@ return [
                     ]
                 ]
             ],
-            "max_messages" => NULL,
-            "instance_type" => NULL
+            "max_messages" => null,
+            "instance_type" => null
         ],
         "demoConsumerQueueThree" => [
             "name" => "demoConsumerQueueThree",
@@ -289,8 +289,8 @@ return [
             "handlers" => [
 
             ],
-            "max_messages" => NULL,
-            "instance_type" => NULL
+            "max_messages" => null,
+            "instance_type" => null
         ],
         "demoConsumerQueueFour" => [
             "name" => "demoConsumerQueueFour",
@@ -300,8 +300,8 @@ return [
             "handlers" => [
 
             ],
-            "max_messages" => NULL,
-            "instance_type" => NULL
+            "max_messages" => null,
+            "instance_type" => null
         ],
         "demoConsumerQueueFive" => [
             "name" => "demoConsumerQueueFive",
@@ -311,8 +311,8 @@ return [
             "handlers" => [
 
             ],
-            "max_messages" => NULL,
-            "instance_type" => NULL
+            "max_messages" => null,
+            "instance_type" => null
         ],
         "delayedOperationConsumer" => [
             "name" => "delayedOperationConsumer",
@@ -327,8 +327,8 @@ return [
                     ]
                 ]
             ],
-            "max_messages" => NULL,
-            "instance_type" => NULL
+            "max_messages" => null,
+            "instance_type" => null
         ],
         "topicBrokerConsumer" => [
             "name" => "topicBrokerConsumer",
@@ -343,8 +343,8 @@ return [
                     ]
                 ]
             ],
-            "max_messages" => NULL,
-            "instance_type" => NULL
+            "max_messages" => null,
+            "instance_type" => null
         ]
     ],
     "binds" => [
