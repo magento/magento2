@@ -37,7 +37,7 @@ class Validator extends ConfigValidator
      * @param MethodsMap $methodsMap
      * @param BooleanUtils $booleanUtils
      */
-    public function __constsruct(
+    public function __construct(
         TypeProcessor $typeProcessor,
         MethodsMap $methodsMap,
         BooleanUtils $booleanUtils
