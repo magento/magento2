@@ -61,21 +61,23 @@ class Vault implements VaultPaymentInterface
     /**
      * Constructor
      *
+     * @param ConfigInterface $config
      * @param ConfigFactoryInterface $configFactory
      * @param ObjectManagerInterface $objectManager
      * @param NullPaymentProvider $nullPaymentProvider
      * @param ValueHandlerPoolInterface $valueHandlerPool
      */
     public function __construct(
+        ConfigInterface $config,
         ConfigFactoryInterface $configFactory,
         ObjectManagerInterface $objectManager,
         NullPaymentProvider $nullPaymentProvider,
         ValueHandlerPoolInterface $valueHandlerPool
     ) {
+        $this->config = $config;
         $this->configFactory = $configFactory;
         $this->objectManager = $objectManager;
         $this->valueHandlerPool = $valueHandlerPool;
-        $this->config = $this->configFactory->create(self::CODE);
         $this->nullPaymentProvider = $nullPaymentProvider;
     }
 

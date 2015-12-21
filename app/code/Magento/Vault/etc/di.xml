@@ -28,6 +28,7 @@
     <!-- Payment Method configuration -->
     <type name="Magento\Vault\Model\Method\Vault">
         <arguments>
+            <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
             <argument name="valueHandlerPool" xsi:type="object">VaultPaymentValueHandlerPool</argument>
         </arguments>
     </type>
