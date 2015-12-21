@@ -12,6 +12,8 @@ use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Class VaultPaymentMock
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class VaultPaymentMock implements \Magento\Vault\Model\VaultPaymentInterface
 {
