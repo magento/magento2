@@ -12,11 +12,6 @@ namespace Magento\Framework\MessageQueue\Config;
 class Data extends \Magento\Framework\Config\Data
 {
     /**
-     * @var Validator
-     */
-    private $envValidator;
-
-    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\MessageQueue\Config\Reader\XmlReader $xmlReader

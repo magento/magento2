@@ -81,6 +81,7 @@ class PublisherPool
      * Initialize publisher objects pool.
      *
      * @param array $publishers
+     * @return void
      */
     private function initializePublishers(array $publishers)
     {

@@ -86,8 +86,8 @@ class ConsumerFactory
         $consumer = $this->createConsumer(
             $consumerConfig[QueueConfig::CONSUMER_CONNECTION],
             isset($consumerConfig[QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE])
-                ? $consumerConfig[QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE]
-                : null,
+            ? $consumerConfig[QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE]
+            : null,
             $consumerConfigObject
         );
 
