@@ -17,7 +17,6 @@ class UpgradeData implements UpgradeDataInterface
 {
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -26,7 +25,7 @@ class UpgradeData implements UpgradeDataInterface
 
             // Update "scope_type" to "stores" for non-zero "scope_id" values
             $table = $setup->getTable('search_synonyms');
-            $bind = ['scope_type' => 'stores'];
+            $bind = ['scope_type' => \Magento\Store\Model\ScopeInterface::SCOPE_STORES];
             $where = ['scope_id != ?' => 0];
             $setup->getConnection()->update($table, $bind, $where);
         }

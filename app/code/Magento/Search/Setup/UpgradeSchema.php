@@ -103,7 +103,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => 16,
                     'nullable' => false,
-                    'default' => 'default',
+                    'default' => \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     'comment' => 'Scope of synonyms. Within a store, within a website or across all stores'
                 ]
             );

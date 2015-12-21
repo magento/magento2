@@ -5,9 +5,8 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Search\Api\SynonymAnalyzerInterface;
-use Magento\Search\Model\SynonymsReader;
+use Magento\Search\Model\SynonymReader;
 
 class SynonymAnalyzer implements SynonymAnalyzerInterface
 {
