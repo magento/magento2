@@ -128,7 +128,7 @@ class StockRegistryProvider implements StockRegistryProviderInterface
     /**
      * @inheritdoc
      */
-    public function getStock($stockId = null)
+    public function getStock($stockId)
     {
         if (!isset($this->stocks[$stockId])) {
             if ($stockId !== null) {
@@ -185,7 +185,7 @@ class StockRegistryProvider implements StockRegistryProviderInterface
             /** @var \Magento\CatalogInventory\Api\stockStatusCriteriaInterface $criteria */
             $criteria = $this->stockStatusCriteriaFactory->create();
             $criteria->setProductsFilter($productId);
-            $criteria->setStockFilter($this->getStock($stockId));
+            $criteria->addFilter('stock', 'stock_id', $stockId);
             $collection = $this->stockStatusRepository->getList($criteria);
             $stockStatus = current($collection->getItems());
             if ($stockStatus && $stockStatus->getProductId()) {
