@@ -28,7 +28,8 @@ class PaymentNonceResponseValidator extends ResponseValidator
 
     /**
      * Validate payment method nonce of response
-     * @param $response
+     *
+     * @param object $response
      * @return bool
      */
     private function validatePaymentMethodNonce($response)

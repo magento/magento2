@@ -22,7 +22,7 @@ use Magento\BraintreeTwo\Gateway\Config\Config;
 
 /**
  * VaultDetailsHandler Test
- * @package Magento\BraintreeTwo\Test\Unit\Gateway\Response
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase

@@ -5,11 +5,8 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Config;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-
 /**
  * Class Config
- * @package Magento\BraintreeTwo\Gateway\Config
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
