@@ -11,4 +11,5 @@ namespace Magento\Ui\Test\Block\Adminhtml;
  */
 class Section extends AbstractContainer
 {
+    //
 }

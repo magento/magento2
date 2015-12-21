@@ -109,8 +109,7 @@ class FormTabs extends AbstractFormContainers
     }
 
     /**
-     * @param string $tabName
-     * @return $this
+     * {@inheritdoc}
      */
     protected function openContainer($tabName)
     {
@@ -146,8 +145,7 @@ class FormTabs extends AbstractFormContainers
     }
 
     /**
-     * @param string $tabName
-     * @return bool
+     * {@inheritdoc}
      */
     protected function isContainerVisible($tabName)
     {

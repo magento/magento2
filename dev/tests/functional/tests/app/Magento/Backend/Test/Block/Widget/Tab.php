@@ -7,7 +7,6 @@
 namespace Magento\Backend\Test\Block\Widget;
 
 use Magento\Ui\Test\Block\Adminhtml\AbstractContainer;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 
 /**

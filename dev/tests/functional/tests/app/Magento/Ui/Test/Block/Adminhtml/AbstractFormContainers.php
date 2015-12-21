@@ -8,9 +8,6 @@ namespace Magento\Ui\Test\Block\Adminhtml;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Block\Mapper;
-use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -39,24 +36,6 @@ abstract class AbstractFormContainers extends Form
      * @var string
      */
     protected $header = 'header';
-
-    /**
-     * @constructor
-     * @param SimpleElement $element
-     * @param Mapper $mapper
-     * @param BlockFactory $blockFactory
-     * @param BrowserInterface $browser
-     * @param array $config
-     */
-    public function __construct(
-        SimpleElement $element,
-        Mapper $mapper,
-        BlockFactory $blockFactory,
-        BrowserInterface $browser,
-        array $config = []
-    ) {
-        parent::__construct($element, $blockFactory, $mapper, $browser, $config);
-    }
 
     /**
      * Initialize.
