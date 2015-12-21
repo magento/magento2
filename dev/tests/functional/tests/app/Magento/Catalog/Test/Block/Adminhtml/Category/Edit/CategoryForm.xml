@@ -28,7 +28,10 @@
         <strategy>css selector</strategy>
         <wrapper>general</wrapper>
         <fields>
-            <description />
+            <description>
+                <input>textarea</input>
+                <selector>#simple_wysiwyg_editor</selector>
+            </description>
             <landing_page>
                 <input>select</input>
             </landing_page>
@@ -65,6 +68,10 @@
             </default_sort_by>
         </fields>
     </display_setting>
+    <seo>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>div[class=fieldset-wrapper]</selector>
+    </seo>
     <category_products>
         <class>\Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section\Product</class>
         <selector>#catalog_category_products</selector>

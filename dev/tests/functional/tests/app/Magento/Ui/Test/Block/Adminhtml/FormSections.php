@@ -22,10 +22,7 @@ class FormSections extends AbstractFormContainers
     }
 
     /**
-     * Opens the section.
-     *
-     * @param string $sectionName
-     * @return $this
+     * {@inheritdoc}
      */
     protected function openContainer($sectionName)
     {
@@ -46,10 +43,7 @@ class FormSections extends AbstractFormContainers
     }
 
     /**
-     * Check whether section is visible.
-     *
-     * @param string $containerName
-     * @return bool
+     * {@inheritdoc}
      */
     protected function isContainerVisible($containerName)
     {
