@@ -6,7 +6,6 @@
 namespace Magento\BraintreeTwo\Gateway\Http\Client;
 
 use Magento\BraintreeTwo\Gateway\Request\CaptureDataBuilder;
-use Magento\Eway\Gateway\Request\PaymentDataBuilder;
 
 /**
  * Class TransactionClone
