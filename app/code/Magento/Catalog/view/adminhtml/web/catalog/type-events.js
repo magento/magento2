@@ -16,7 +16,8 @@ define([
          */
         init: function () {
 
-            if (weight.productHasWeight()) {
+            //not weight switcher for specific product
+            if (weight.productHasWeightBySwitcher() && weight.hasWeightSwither()) {
                 this.type = {
                     virtual: 'virtual',
                     real: this.$type.val() //simple, configurable
