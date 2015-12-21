@@ -59,7 +59,6 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
         $remoteServices = array_filter(
             $preferences,
             function ($preferenceTypeName) {
-                // TODO: Take this suffix from code generation class constant (when added)
                 $remoteServiceSuffix = 'Remote';
                 return (substr($preferenceTypeName, -strlen($remoteServiceSuffix)) == $remoteServiceSuffix);
             }
@@ -93,8 +92,8 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
      * @param string $methodName
      * @return string
      */
-    protected function generateTopicName($typeName, $methodName)
+    public function generateTopicName($typeName, $methodName)
     {
-        return ltrim(preg_replace('/\\\\([A-Z])/', '.$1', $typeName), '\\') . '.' . ucfirst($methodName);
+        return preg_replace('/\\\\([A-Z])/', '.$1', ltrim($typeName, '\\')) . '.' . ucfirst($methodName);
     }
 }
