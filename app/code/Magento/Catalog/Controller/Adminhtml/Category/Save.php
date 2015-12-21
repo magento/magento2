@@ -41,6 +41,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             'savedImage' => ['delete']
         ]
     ];
+
     /**
      * Constructor
      *
