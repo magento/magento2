@@ -11,10 +11,10 @@ namespace Magento\CatalogInventory\Model\Spi;
 interface StockRegistryProviderInterface
 {
     /**
-     * @param int $stockId
+     * @param int|null $stockId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
-    public function getStock($stockId);
+    public function getStock($stockId = null);
 
     /**
      * @param int $productId
