@@ -195,7 +195,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $this->messageManager->addSuccess(__('You saved the category.'));
                 $refreshTree = true;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addError(__('Something went wrong while saving the category.'));
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($data);
                 $refreshTree = false;
             }
