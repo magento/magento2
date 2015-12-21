@@ -108,6 +108,8 @@ class Bundle
                         foreach ($bundleLinks[$key] as $linkData) {
                             if (!(bool)$linkData['delete']) {
                                 $link = $this->linkFactory->create(['data' => $linkData]);
+                                $link->setPrice($linkData['selection_price_value']);
+                                $link->setPriceType($linkData['selection_price_type']);
                                 $linkProduct = $this->productRepository->getById($linkData['product_id']);
                                 $link->setSku($linkProduct->getSku());
                                 $link->setQty($linkData['selection_qty']);
