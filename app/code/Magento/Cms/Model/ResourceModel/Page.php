@@ -148,6 +148,7 @@ class Page extends AbstractDb
 
         if ($isId) {
             $this->entityManager->load(PageInterface::class, $object, $value);
+            $this->_afterLoad($object);
         }
         return $this;
     }
