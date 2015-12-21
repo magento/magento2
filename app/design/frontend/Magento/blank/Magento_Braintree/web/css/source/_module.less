@@ -55,6 +55,7 @@
                 @distance: 50px;
 
                 float: left;
+                margin-bottom: 7px;
                 width: 6rem;
 
                 &:first-of-type {
@@ -63,8 +64,8 @@
                     &:after {
                         content: '/';
                         display: inline;
-                        padding-top: inherit;
                         padding-bottom: inherit;
+                        padding-top: inherit;
                         position: absolute;
                         right: -@distance / 2;
                         top: 5px;
@@ -80,7 +81,9 @@
         .hosted-error {
             clear: both;
             color: @braintree-error__color;
+            font-size: 1.2rem;
             height: 0;
+            margin-top: 7px;
             opacity: 0;
         }
     }
@@ -91,7 +94,10 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .field-tooltip {
-        left: 6rem;
+    .payment-method-braintreetwo, // ToDo Ui: Remove this selector when Payment Module is fully implemented.
+    .payment-method-braintree {
+        .field-tooltip {
+            left: 6rem;
+        }
     }
 }

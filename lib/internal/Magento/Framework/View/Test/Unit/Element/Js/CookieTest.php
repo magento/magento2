@@ -23,26 +23,40 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     protected $sessionConfigMock;
 
     /**
-     * @var \Magento\Framework\Session\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\Ip|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configMock;
+    protected $ipValidatorMock;
 
     public function setUp()
     {
         $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionConfigMock = $this->getMockBuilder('Magento\Framework\Session\Config\ConfigInterface')
+        $this->sessionConfigMock = $this->getMockBuilder('Magento\Framework\Session\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder('Magento\Framework\Session\Config')
+        $this->ipValidatorMock = $this->getMockBuilder('Magento\Framework\Validator\Ip')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $validtorMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\File\Validator')
+            ->setMethods(['isValid'])->disableOriginalConstructor()->getMock();
+
+        $scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config')
+            ->setMethods(['isSetFlag'])->disableOriginalConstructor()->getMock();
+
+        $this->contextMock->expects($this->any())
+            ->method('getScopeConfig')
+            ->will($this->returnValue($scopeConfigMock));
+
+        $this->contextMock->expects($this->any())
+            ->method('getValidator')
+            ->will($this->returnValue($validtorMock));
 
         $this->model = new \Magento\Framework\View\Element\Js\Cookie(
             $this->contextMock,
             $this->sessionConfigMock,
-            $this->configMock,
+            $this->ipValidatorMock,
             []
         );
     }
@@ -50,6 +64,32 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     public function testInstanceOf()
     {
         $this->assertInstanceOf('Magento\Framework\View\Element\Js\Cookie', $this->model);
+    }
+
+    /**
+     * @dataProvider domainDataProvider
+     */
+    public function testGetDomain($domain, $isIp, $expectedResult)
+    {
+        $this->sessionConfigMock->expects($this->once())
+            ->method('getCookieDomain')
+            ->will($this->returnValue($domain));
+        $this->ipValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($this->equalTo($domain))
+            ->will($this->returnValue($isIp));
+
+        $result = $this->model->getDomain($domain);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public static function domainDataProvider()
+    {
+        return [
+            ['127.0.0.1', true, '127.0.0.1'],
+            ['example.com', false, '.example.com'],
+            ['.example.com', false, '.example.com'],
+        ];
     }
 
     public function testGetPath()

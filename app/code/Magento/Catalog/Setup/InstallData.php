@@ -89,13 +89,13 @@ class InstallData implements InstallDataInterface
         $categorySetup->updateAttributeGroup($entityTypeId, $attributeSetId, $attributeGroupId, 'sort_order', '10');
 
         $groups = [
-            'display' => ['name' => 'Display Settings', 'sort' => 20, 'id' => null],
-            'design' => ['name' => 'Custom Design', 'sort' => 30, 'id' => null],
+            'display' => ['name' => 'Display Settings', 'code' => 'display-settings', 'sort' => 20, 'id' => null],
+            'design' => ['name' => 'Custom Design', 'code' => 'custom-design', 'sort' => 30, 'id' => null],
         ];
 
         foreach ($groups as $k => $groupProp) {
             $categorySetup->addAttributeGroup($entityTypeId, $attributeSetId, $groupProp['name'], $groupProp['sort']);
-            $groups[$k]['id'] = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, $groupProp['name']);
+            $groups[$k]['id'] = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, $groupProp['code']);
         }
 
         // update attributes group and sort
@@ -183,25 +183,25 @@ class InstallData implements InstallDataInterface
         $tabNames = [
             'General' => [
                 'attribute_group_name' => $newGeneralTabName,
-                'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newGeneralTabName)),
+                'attribute_group_code' => $categorySetup->convertToAttributeGroupCode($newGeneralTabName),
                 'tab_group_code' => 'basic',
                 'sort_order' => 10,
             ],
             'Images' => [
                 'attribute_group_name' => $newImagesTabName,
-                'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newImagesTabName)),
+                'attribute_group_code' => $categorySetup->convertToAttributeGroupCode($newImagesTabName),
                 'tab_group_code' => 'basic',
                 'sort_order' => 20,
             ],
             'Meta Information' => [
                 'attribute_group_name' => $newMetaTabName,
-                'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newMetaTabName)),
+                'attribute_group_code' => $categorySetup->convertToAttributeGroupCode($newMetaTabName),
                 'tab_group_code' => 'basic',
                 'sort_order' => 30,
             ],
             'Prices' => [
                 'attribute_group_name' => $newPriceTabName,
-                'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newPriceTabName)),
+                'attribute_group_code' => $categorySetup->convertToAttributeGroupCode($newPriceTabName),
                 'tab_group_code' => 'advanced',
                 'sort_order' => 40,
             ],
