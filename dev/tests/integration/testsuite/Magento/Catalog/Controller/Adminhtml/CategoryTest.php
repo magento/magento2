@@ -82,7 +82,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
         if (empty($postData['return_session_messages_only'])) {
             $this->assertRedirect(
-                $this->stringContains('http://localhost/index.php/backend/catalog/category/edit/id/')
+                $this->stringContains('http://localhost/index.php/backend/catalog/category/edit/')
             );
         } else {
             $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -114,9 +114,12 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                 'name' => 'Category Created From Product Creation Page',
                 'is_active' => 1,
                 'include_in_menu' => 0,
+                'use_config' => [
+                    'available_sort_by' => 1,
+                    'default_sort_by' => 1
+                ],
+                'parent' => 2,
             ],
-            'parent' => 2,
-            'use_config' => ['available_sort_by', 'default_sort_by'],
         ];
 
         return [[$postData], [$postData + ['return_session_messages_only' => 1]]];
