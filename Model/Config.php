@@ -27,6 +27,11 @@ class Config implements ClientOptionsInterface
     const ELASTICSEARCH_TYPE_DOCUMENT = 'document';
 
     /**
+     * Elasticsearch default Entity type
+     */
+    const ELASTICSEARCH_TYPE_DEFAULT = 'product';
+
+    /**
      * Default Elasticsearch server timeout
      */
     const ELASTICSEARCH_DEFAULT_TIMEOUT = 15;

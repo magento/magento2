@@ -45,6 +45,11 @@ class ProductDataMapper implements DataMapperInterface
     const MEDIA_ROLE_SWATCH_IMAGE = 'swatch_image';
 
     /**
+     * Entyity type for product.
+     */
+    const PRODUCT_ENTITY_TYPE = 'product';
+
+    /**
      * Array of \DateTime objects per store
      *
      * @var \DateTime[]
@@ -143,13 +148,14 @@ class ProductDataMapper implements DataMapperInterface
      * @param int $productId
      * @param array $productIndexData
      * @param int $storeId
+     * @param array $context
      * @return array|false
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function map($productId, array $productIndexData, $storeId)
+    public function map($productId, array $productIndexData, $storeId, $context = [])
     {
         $this->builder->addField('store_id', $storeId);
         $mediaGalleryRoles = array_fill_keys($this->mediaGalleryRoles, '');
@@ -195,7 +201,9 @@ class ProductDataMapper implements DataMapperInterface
                         'qty' => $value
                     ];
                 }
-                $this->builder->addField($this->fieldMapper->getFieldName($attributeCode), $value);
+                $this->builder->addField($this->fieldMapper->getFieldName(
+                    $attributeCode, ['entityType' => self::PRODUCT_ENTITY_TYPE]
+                ), $value);
                 continue;
             }
             if ($attributeCode === 'tier_price') {
@@ -211,7 +219,9 @@ class ProductDataMapper implements DataMapperInterface
                 $value = $this->formatDate($storeId, $value);
             }
 
-            $this->builder->addField($this->fieldMapper->getFieldName($attributeCode), $value);
+            $this->builder->addField($this->fieldMapper->getFieldName(
+                $attributeCode, ['entityType' => self::PRODUCT_ENTITY_TYPE]
+            ), $value);
 
             unset($attribute);
         }

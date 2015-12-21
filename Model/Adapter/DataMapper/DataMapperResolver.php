@@ -7,6 +7,7 @@ namespace Magento\Elasticsearch\Model\Adapter\DataMapper;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
+use Magento\Elasticsearch\Model\Config;
 
 class DataMapperResolver implements DataMapperInterface
 {
@@ -50,7 +51,8 @@ class DataMapperResolver implements DataMapperInterface
         $storeId,
         $context = []
     ) {
-        return $this->getEntity($context['entityType'])->map($entityId, $entityIndexData, $storeId, $context);
+        $entityType = isset($context['entityType']) ? $context['entityType'] : Config::ELASTICSEARCH_TYPE_DEFAULT;
+        return $this->getEntity($entityType)->map($entityId, $entityIndexData, $storeId, $context);
     }
 
     /**

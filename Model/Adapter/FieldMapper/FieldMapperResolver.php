@@ -7,6 +7,7 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Config;
 
 class FieldMapperResolver implements FieldMapperInterface
 {
@@ -38,7 +39,7 @@ class FieldMapperResolver implements FieldMapperInterface
         array $fieldMappers = []
     ) {
         $this->objectManager = $objectManager;
-        $this->$fieldMappers = fieldMappers;
+        $this->fieldMappers = $fieldMappers;
     }
 
     /**
@@ -46,7 +47,8 @@ class FieldMapperResolver implements FieldMapperInterface
      */
     public function getFieldName($attributeCode, $context = [])
     {
-        return $this->getEntity($context['entityType'])->getFieldName($attributeCode, $context);
+        $entityType = isset($context['entityType']) ? $context['entityType'] : Config::ELASTICSEARCH_TYPE_DEFAULT;
+        return $this->getEntity($entityType)->getFieldName($attributeCode, $context);
     }
 
     /**
@@ -54,7 +56,8 @@ class FieldMapperResolver implements FieldMapperInterface
      */
     public function getAllAttributesTypes($context = [])
     {
-        return $this->getEntity($context['entityType'])->getAllAttributesTypes($context);
+        $entityType = isset($context['entityType']) ? $context['entityType'] : Config::ELASTICSEARCH_TYPE_DEFAULT;
+        return $this->getEntity($entityType)->getAllAttributesTypes($context);
     }
 
     /**
@@ -64,7 +67,7 @@ class FieldMapperResolver implements FieldMapperInterface
      * @return FieldMapperInterface
      * @throws \Exception
      */
-    private function getEntity($entityType = '')
+    private function getEntity($entityType)
     {
         if (empty($this->fieldMapperEntity)) {
             if (empty($entityType)) {
