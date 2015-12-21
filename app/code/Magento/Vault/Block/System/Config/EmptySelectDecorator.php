@@ -9,6 +9,9 @@ use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\Element\Select;
 
+/**
+ * Class EmptySelectDecorator
+ */
 class EmptySelectDecorator extends Field
 {
     /**
