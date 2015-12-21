@@ -5,12 +5,11 @@
  */
 namespace Magento\Vault\Test\Unit\Model\Ui;
 
-use Magento\Checkout\Model\Session;
+use Magento\Customer\Model\Session;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Model\VaultPaymentInterface;
-use Magento\Quote\Model\Quote;
 
 class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,19 +35,11 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMock(StoreManagerInterface::class);
         $store = $this->getMock(StoreInterface::class);
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', '__wakeup'])
-            ->getMock();
-
         $session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $session->expects(static::once())
-            ->method('getQuote')
-            ->willReturn($quote);
 
-        $quote->expects(static::once())
+        $session->expects(static::once())
             ->method('getCustomerId')
             ->willReturn($customerId);
         $storeManager->expects(static::once())

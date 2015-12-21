@@ -16,7 +16,7 @@
     </type>
     <type name="Magento\Vault\Model\Ui\VaultConfigProvider">
         <arguments>
-            <argument name="session" xsi:type="object">Magento\Checkout\Model\Session</argument>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
         </arguments>
     </type>
 </config>
