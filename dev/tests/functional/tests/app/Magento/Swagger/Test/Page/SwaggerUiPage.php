@@ -221,7 +221,7 @@ class SwaggerUiPage
     private function openSwaggerUrl()
     {
         $browser = $this->browser;
-        $pattern = self::MCA;;
+        $pattern = self::MCA;
         return $browser->waitUntil(
             function () use ($browser, $pattern) {
                 try {
