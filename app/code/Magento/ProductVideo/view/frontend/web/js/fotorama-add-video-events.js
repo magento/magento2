@@ -449,9 +449,9 @@ define([
          */
         _startPrepareForPlayer: function (e, fotorama) {
             this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama, false);
-            this._checkForVideo(e, fotorama, parseInt(fotorama.activeFrame.i, 10));
-            this._checkForVideo(e, fotorama, parseInt(fotorama.activeFrame.i, 10) - 1);
-            this._checkForVideo(e, fotorama, parseInt(fotorama.activeFrame.i, 10) + 1);
+            this._checkForVideo(e, fotorama, fotorama.activeFrame.i);
+            this._checkForVideo(e, fotorama, fotorama.activeFrame.i - 1);
+            this._checkForVideo(e, fotorama, fotorama.activeFrame.i + 1);
         },
 
         /**
@@ -463,8 +463,7 @@ define([
          * @private
          */
         _checkForVideo: function (e, fotorama, number) {
-            var frameNumber = parseInt(fotorama.activeFrame.i, 10),
-                videoData = this.options.VideoData[number],
+            var videoData = this.options.VideoData[number],
                 $image = fotorama.data[number];
 
             if ($image) {
