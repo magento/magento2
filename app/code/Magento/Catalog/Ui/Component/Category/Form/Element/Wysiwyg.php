@@ -42,6 +42,8 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      * @param array $components
      * @param array $data
      * @param array $config
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ContextInterface $context,
@@ -72,7 +74,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
     private function prepareData($data)
     {
         if ($this->editorElement->isEnabled()) {
-            $data['config']['content'] .= $this->getWisywygButtonHtml();
+            $data['config']['content'] .= $this->getWysiwygButtonHtml();
         }
         return $data;
     }
@@ -82,7 +84,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      *
      * @return string
      */
-    private function getWisywygButtonHtml()
+    private function getWysiwygButtonHtml()
     {
         return $this->layout->createBlock(
             Button::class,
@@ -93,8 +95,8 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
                     'type' => 'button',
                     'class' => 'action-wysiwyg',
                     'onclick' => 'catalogWysiwygEditor.open(\'' . $this->backendHelper->getUrl(
-                            'catalog/product/wysiwyg'
-                        ) . '\', \'' . $this->editorElement->getHtmlId() . '\')',
+                        'catalog/product/wysiwyg'
+                    ) . '\', \'' . $this->editorElement->getHtmlId() . '\')',
                 ]
             ]
         )->toHtml();
