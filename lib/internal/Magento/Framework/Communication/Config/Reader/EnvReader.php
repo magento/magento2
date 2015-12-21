@@ -41,6 +41,7 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
      * Read communication configuration from env.php
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function read()
     {
