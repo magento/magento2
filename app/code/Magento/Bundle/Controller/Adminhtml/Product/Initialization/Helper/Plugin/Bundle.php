@@ -110,6 +110,7 @@ class Bundle
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processBundleOptionsData(\Magento\Catalog\Model\Product $product)
     {
