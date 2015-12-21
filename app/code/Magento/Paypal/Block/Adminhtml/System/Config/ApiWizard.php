@@ -5,6 +5,9 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\View\Asset\Repository;
+
 /**
  * Custom renderer for PayPal API credentials wizard popup
  */
@@ -14,6 +17,21 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
      * Path to block template
      */
     const WIZARD_TEMPLATE = 'system/config/api_wizard.phtml';
+
+    /**
+     * @var Repository
+     */
+    private $assetRepository;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(Context $context, Repository $assetRepository, array $data = [])
+    {
+        parent::__construct($context, $data);
+        $this->assetRepository = $assetRepository;
+    }
+
 
     /**
      * Set template to itself
@@ -52,14 +70,44 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
         $originalData = $element->getOriginalData();
         $this->addData(
             [
+                // Global
+                'query' => $this->createQuery(
+                    [
+                        'partnerId' => $originalData['partner_id'],
+                        'partnerLogoUrl' => $this->assetRepository->getUrl($originalData['partner_logo_url']),
+                        'receiveCredentials' => $originalData['receive_credentials'],
+                        'showPermissions' => $originalData['show_permissions'],
+                        'displayMode' => $originalData['display_mode'],
+                        'productIntentID' => $originalData['product_intent_id'],
+                    ]
+                ),
+                // Live
                 'button_label' => __($originalData['button_label']),
                 'button_url' => $originalData['button_url'],
                 'html_id' => $element->getHtmlId(),
+                // Sandbox
                 'sandbox_button_label' => __($originalData['sandbox_button_label']),
                 'sandbox_button_url' => $originalData['sandbox_button_url'],
                 'sandbox_html_id' => 'sandbox_' . $element->getHtmlId(),
             ]
         );
         return $this->_toHtml();
+    }
+
+    /**
+     * Create request query
+     *
+     * @param array $requestData
+     * @return string
+     */
+    private function createQuery(array $requestData)
+    {
+        $query = [];
+
+        foreach ($requestData as $name => $value) {
+            $query[] = sprintf('%s=%s', $name, $value);
+        }
+
+        return implode('&', $query);
     }
 }
