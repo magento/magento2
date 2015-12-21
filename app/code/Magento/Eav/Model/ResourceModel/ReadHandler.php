@@ -9,19 +9,14 @@ namespace Magento\Eav\Model\ResourceModel;
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Framework\App\ResourceConnection as AppResource;
+use Magento\Framework\Model\Operation\ContextHandlerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadHandler
 {
-    /**
-     * @var StoreManager
-     */
-    protected $storeManager;
-
     /**
      * @var AttributeRepository
      */
@@ -43,24 +38,29 @@ class ReadHandler
     protected $searchCriteriaBuilder;
 
     /**
+     * @var ContextHandlerInterface
+     */
+    protected $contextHandler;
+
+    /**
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param StoreManager $storeManager
      * @param AppResource $appResource
+     * @param ContextHandlerInterface $contextHandler
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        StoreManager $storeManager,
-        AppResource $appResource
+        AppResource $appResource,
+        ContextHandlerInterface $contextHandler
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->storeManager = $storeManager;
         $this->appResource = $appResource;
+        $this->contextHandler = $contextHandler;
     }
 
     /**
@@ -85,16 +85,10 @@ class ReadHandler
      */
     protected function getActionContext($entityType, $data)
     {
-        $metadata = $this->metadataPool->getMetadata($entityType);
-        $contextFields = $metadata->getEntityContext();
-        $context = [];
-        if (isset($contextFields[\Magento\Store\Model\Store::STORE_ID])) {
-            $context[\Magento\Store\Model\Store::STORE_ID] = $this->addStoreIdContext(
-                $data,
-                \Magento\Store\Model\Store::STORE_ID
-            );
-        }
-        return $context;
+        return $this->contextHandler->retrieve(
+            $this->metadataPool->getMetadata($entityType),
+            $data
+        );
     }
 
     /**
@@ -149,27 +143,5 @@ class ReadHandler
             }
         }
         return $data;
-    }
-
-    /**
-     * Add store_id filter to context from object data or store manager
-     *
-     * @param array $data
-     * @param string $field
-     * @return array
-     */
-    protected function addStoreIdContext(array $data, $field)
-    {
-        if (isset($data[$field])) {
-            $storeId = $data[$field];
-        } else {
-            $storeId = (int)$this->storeManager->getStore(true)->getId();
-        }
-        $storeIds = [\Magento\Store\Model\Store::DEFAULT_STORE_ID];
-        if ($storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
-            $storeIds[] = $storeId;
-        }
-
-        return $storeIds;
     }
 }

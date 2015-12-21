@@ -36,11 +36,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $converterMock;
-
     protected function setUp()
     {
         $this->productRepositoryMock = $this->getMock('Magento\Catalog\Model\ProductRepository', [], [], '', false);
@@ -51,16 +46,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        /**
-         * \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory,
-        \Magento\Catalog\Model\Product\Option\Converter $converter,
-        JoinProcessorInterface $joinProcessor,
-        MetadataPool $metadataPool
-         */
         $this->optionMock = $this->getMock('\Magento\Catalog\Model\Product\Option', [], [], '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->converterMock = $this->getMock('\Magento\Catalog\Model\Product\Option\Converter', [], [], '', false);
         $optionFactory = $this->getMock(
             'Magento\Catalog\Model\Product\OptionFactory',
             ['create'],
@@ -87,7 +74,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->optionResourceMock,
             $optionFactory,
             $optionCollectionFactory,
-            $this->converterMock,
             $metadataPool
         );
     }
