@@ -5,11 +5,12 @@
  */
 namespace Magento\Vault\Test\Unit\Model\Ui;
 
-use Magento\Customer\Model\Session;
+use Magento\Checkout\Model\Session;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Model\VaultPaymentInterface;
+use Magento\Quote\Model\Quote;
 
 class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,11 +35,20 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
         $vaultMethod = $this->getMock(VaultPaymentInterface::class);
         $storeManager = $this->getMock(StoreManagerInterface::class);
         $store = $this->getMock(StoreInterface::class);
-        $customerSession = $this->getMockBuilder(Session::class)
+
+        $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getCustomerId', '__wakeup'])
             ->getMock();
 
-        $customerSession->expects(static::once())
+        $session = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $session->expects(static::once())
+            ->method('getQuote')
+            ->willReturn($quote);
+
+        $quote->expects(static::once())
             ->method('getCustomerId')
             ->willReturn($customerId);
         $storeManager->expects(static::once())
@@ -57,7 +67,7 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->with($storeId)
             ->willReturn($paymentProviderCode);
 
-        $vaultCards = new VaultConfigProvider($storeManager, $vaultMethod, $customerSession);
+        $vaultCards = new VaultConfigProvider($storeManager, $vaultMethod, $session);
 
         static::assertEquals(
             $expectedConfiguration,
