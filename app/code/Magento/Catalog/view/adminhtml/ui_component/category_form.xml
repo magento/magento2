@@ -45,7 +45,7 @@
     <fieldset name="general">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">Category Information</item>
+                <item name="label" xsi:type="string" translate="false"></item>
                 <item name="collapsible" xsi:type="boolean">false</item>
             </item>
         </argument>
