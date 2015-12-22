@@ -20,13 +20,27 @@ define([
         defaults: {
             content: '',
             template: 'Magento_TestForm/robin',
+            showSpinner: true,
+            loading: false,
             contentSelector: '.${$.name}',
+            behaviourType: 'simple',
             params: {
                 namespace: '${ $.ns }'
             },
             renderSettings: {
                 url: '${ $.render_url }',
                 dataType: 'html'
+            },
+            settings: {
+                simple: {
+                },
+                edit: {
+                    externalLinks: {
+                        listens: {
+                            '${ $.editorProvider }:changed': 'onChangeRecord'
+                        }
+                    }
+                }
             },
             externalLinks: {
                 imports: {
@@ -41,20 +55,43 @@ define([
                 selections: '${ $.selectionsProvider }'
             },
             immediateUpdateBySelection: false,
+            links: {
+                value: '${ $.provider }:${ $.dataScope}'
+            },
             listens: {
-                value: 'updateExternalFiltersModifier'
+                value: 'updateExternalFiltersModifier',
+                externalValue: 'onSetExternalValue'
             },
             externalFiltersModifier: {},
             externalFilter: {
-                condition_type: 'nin',
+                'condition_type': 'nin',
                 value: []
             }
         },
 
+        onChangeRecord: function (record) {
+            var id = utils.getKeys(record[0], true),
+                value = record[0][id],
+                idName = value['id_field_name'],
+                index;
+
+            index = _.findIndex(this.externalValue(), function (val) {
+                return val[idName] == id;
+            });
+
+            this.externalValue()[index] = value;
+            this.externalValue.valueHasMutated();
+        },
+
         initialize: function () {
+            var self = this._super();
+
             _.bindAll(this, 'onRender');
-            this._super()
-                .render();
+
+            $.async('.' + this.contentSelector, function (el) {
+                self.contentEl = $(el);
+                self.render();
+            });
 
             return this;
         },
@@ -64,17 +101,15 @@ define([
                 .observe([
                     'content',
                     'value',
-                    'externalValue'
+                    'externalValue',
+                    'loading'
                 ]);
         },
 
         initConfig: function () {
-            var self = this._super();
-
+            this._super();
+            utils.extend(this, this.settings[this.behaviourType]);
             this.contentSelector = this.contentSelector.replace(/\./g, '_').substr(1);
-            $.async('.' + this.contentSelector, function (el) {
-                self.contentEl = $(el);
-            });
 
             return this;
         },
@@ -99,10 +134,13 @@ define([
                 dataType: 'json'
             }, ajaxSettings);
 
+            this.loading(true);
+
             return $.ajax(ajaxSettings);
         },
 
         onRender: function (data) {
+            this.loading(false);
             this.set('content', data);
             this.contentEl.children().applyBindings();
             this.contentEl.trigger('contentUpdated');
@@ -189,6 +227,7 @@ define([
             request
                 .done(function (data) {
                     this.set('externalValue', data);
+                    this.loading(false);
                 }.bind(this))
                 .fail(this.onError);
         },
@@ -203,6 +242,15 @@ define([
 
             this.externalFilter.value = _.pluck(items, index);
             this.set('externalFiltersModifier.' + provider.indexField, this.externalFilter);
+        },
+
+        onSetExternalValue: function () {
+            debugger;
+            //if (this.immediateUpdateBySelection) {
+            //    this.save();
+            //}
+            //
+            //return this;
         },
 
         save: function () {

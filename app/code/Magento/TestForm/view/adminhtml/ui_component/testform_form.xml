@@ -45,6 +45,9 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">koala</item>
+                    <item name="links" xsi:type="array">
+                        <item name="value" xsi:type="string">${ $.provider }:data.${ $.index }</item>
+                    </item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
@@ -68,11 +71,13 @@
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/robinGood</item>
                     <item name="dataScope" xsi:type="string">position_gridsrc</item>
-                    <item name="ns" xsi:type="string">cms_page_listing</item>
-                    <item name="externalProvider" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
-                    <item name="selectionsProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
+                    <item name="externalProvider" xsi:type="string">testlisting_listing.testlisting_listing_data_source</item>
+                    <item name="selectionsProvider" xsi:type="string">testlisting_listing.testlisting_listing.cms_page_columns.ids</item>
+                    <item name="editorProvider" xsi:type="string">testlisting_listing.testlisting_listing.cms_page_columns_editor</item>
+                    <item name="ns" xsi:type="string">testlisting_listing</item>
                     <item name="render_url" xsi:type="url" path="mui/index/render"/>
-                    <item name="immediateUpdateBySelection" xsi:type="string">true</item>
+                    <!--<item name="immediateUpdateBySelection" xsi:type="boolean">true</item>-->
+                    <item name="behaviourType" xsi:type="string">edit</item>
                 </item>
             </argument>
         </container>

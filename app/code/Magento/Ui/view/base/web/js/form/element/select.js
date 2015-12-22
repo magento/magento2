@@ -40,7 +40,7 @@ define([
         nodes = _.map(nodes, function (node) {
             value = node.value;
 
-            if (value === null || value === captionValue) {
+            if (value == null || value === captionValue) {
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
