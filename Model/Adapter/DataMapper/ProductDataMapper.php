@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Model\Adapter;
+namespace Magento\Elasticsearch\Model\Adapter\DataMapper;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -14,12 +14,15 @@ use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Elasticsearch\Model\ResourceModel\Index;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class DocumentDataMapper
+class ProductDataMapper implements DataMapperInterface
 {
     /**
      * Attribute code for image.
@@ -42,6 +45,11 @@ class DocumentDataMapper
     const MEDIA_ROLE_SWATCH_IMAGE = 'swatch_image';
 
     /**
+     * Entyity type for product.
+     */
+    const PRODUCT_ENTITY_TYPE = 'product';
+
+    /**
      * Array of \DateTime objects per store
      *
      * @var \DateTime[]
@@ -59,12 +67,12 @@ class DocumentDataMapper
     private $attributeContainer;
 
     /**
-     * @var \Magento\Elasticsearch\Model\ResourceModel\Index
+     * @var Index
      */
     private $resourceIndex;
 
     /**
-     * @var FieldMapper
+     * @var FieldMapperInterface
      */
     private $fieldMapper;
 
@@ -100,8 +108,8 @@ class DocumentDataMapper
      *
      * @param Builder $builder
      * @param AttributeContainer $attributeContainer
-     * @param \Magento\Elasticsearch\Model\ResourceModel\Index $resourceIndex
-     * @param FieldMapper $fieldMapper
+     * @param Index $resourceIndex
+     * @param FieldMapperInterface $fieldMapper
      * @param DateTime $dateTime
      * @param TimezoneInterface $localeDate
      * @param ScopeConfigInterface $scopeConfig
@@ -110,8 +118,8 @@ class DocumentDataMapper
     public function __construct(
         Builder $builder,
         AttributeContainer $attributeContainer,
-        \Magento\Elasticsearch\Model\ResourceModel\Index $resourceIndex,
-        FieldMapper $fieldMapper,
+        Index $resourceIndex,
+        FieldMapperInterface $fieldMapper,
         DateTime $dateTime,
         TimezoneInterface $localeDate,
         ScopeConfigInterface $scopeConfig,
@@ -140,13 +148,14 @@ class DocumentDataMapper
      * @param int $productId
      * @param array $productIndexData
      * @param int $storeId
+     * @param array $context
      * @return array|false
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function map($productId, array $productIndexData, $storeId)
+    public function map($productId, array $productIndexData, $storeId, $context = [])
     {
         $this->builder->addField('store_id', $storeId);
         $mediaGalleryRoles = array_fill_keys($this->mediaGalleryRoles, '');
@@ -196,7 +205,9 @@ class DocumentDataMapper
                         'qty' => $value
                     ];
                 }
-                $this->builder->addField($this->fieldMapper->getFieldName($attributeCode), $value);
+                $this->builder->addField($this->fieldMapper->getFieldName(
+                    $attributeCode, ['entityType' => self::PRODUCT_ENTITY_TYPE]
+                ), $value);
                 continue;
             }
             if ($attributeCode === 'tier_price') {
@@ -212,7 +223,9 @@ class DocumentDataMapper
                 $value = $this->formatDate($storeId, $value);
             }
 
-            $this->builder->addField($this->fieldMapper->getFieldName($attributeCode), $value);
+            $this->builder->addField($this->fieldMapper->getFieldName(
+                $attributeCode, ['entityType' => self::PRODUCT_ENTITY_TYPE]
+            ), $value);
 
             unset($attribute);
         }

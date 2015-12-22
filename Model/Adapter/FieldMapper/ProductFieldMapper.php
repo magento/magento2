@@ -3,16 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Model\Adapter;
+namespace Magento\Elasticsearch\Model\Adapter\FieldMapper;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldType;
 
 /**
- * Class FieldMapper
+ * Class ProductFieldMapper
  */
-class FieldMapper implements FieldMapperInterface
+class ProductFieldMapper implements FieldMapperInterface
 {
     /**
      * @var Config
@@ -77,12 +78,9 @@ class FieldMapper implements FieldMapperInterface
     }
 
     /**
-     * Gives all mapped attribute types
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAllAttributesTypes()
+    public function getAllAttributesTypes($context = [])
     {
         $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $allAttributes = [];
