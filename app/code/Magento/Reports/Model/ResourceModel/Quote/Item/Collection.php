@@ -177,6 +177,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $productAttrPrice = $this->productResource->getAttribute('price');
         $productAttrPriceId = (int)$productAttrPrice->getAttributeId();
 
+        $linkField = $this->productResource->getEntity()->getLinkField();
         $select = clone $this->productResource->getSelect();
         $select->reset();
         $select->from(
@@ -185,15 +186,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             true
         )->joinInner(
             ['product_name' => $productAttrName->getBackend()->getTable()],
-            'product_name.entity_id = main_table.entity_id'
+            "product_name.{$linkField} = main_table.{$linkField}"
             . ' AND product_name.attribute_id = ' . $productAttrNameId
             . ' AND product_name.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             ['name' => 'product_name.value']
         )->joinInner(
             ['product_price' => $productAttrPrice->getBackend()->getTable()],
-            "product_price.entity_id = main_table.entity_id AND product_price.attribute_id = {$productAttrPriceId}",
+            "product_price.{$linkField} = main_table.{$linkField}"
+            ." AND product_price.attribute_id = {$productAttrPriceId}",
             ['price' => new \Zend_Db_Expr('product_price.value')]
-        )->where('main_table.entity_id IN (?)', $productIds);
+        )->where("main_table.{$linkField} IN (?)", $productIds);
 
         $productData = $productConnection->fetchAssoc($select);
         return $productData;

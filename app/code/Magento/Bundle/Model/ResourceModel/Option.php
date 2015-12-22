@@ -42,6 +42,18 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * @param int $optionId
+     * @return int
+     */
+    public function removeOptionSelections($optionId)
+    {
+        return $this->getConnection()->delete(
+            $this->getTable('catalog_product_bundle_selection'),
+            ['option_id =?' => $optionId]
+        );
+    }
+
+    /**
      * After save process
      *
      * @param \Magento\Framework\Model\AbstractModel $object
