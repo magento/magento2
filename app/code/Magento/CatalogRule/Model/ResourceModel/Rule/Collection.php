@@ -114,4 +114,27 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         $this->setFlag('add_websites_to_result', false);
         return parent::_afterLoad();
     }
+
+    /**
+     * Limit rules collection by specific customer group
+     *
+     * @param int $customerGroupId
+     * @return $this
+     */
+    public function addCustomerGroupFilter($customerGroupId)
+    {
+        $entityInfo = $this->_getAssociatedEntityInfo('customer_group');
+        if (!$this->getFlag('is_customer_group_joined')) {
+            $this->setFlag('is_customer_group_joined', true);
+            $this->getSelect()->join(
+                ['customer_group' => $this->getTable($entityInfo['associations_table'])],
+                $this->getConnection()
+                    ->quoteInto('customer_group.' . $entityInfo['entity_id_field'] . ' = ?', $customerGroupId)
+                . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = customer_group.'
+                . $entityInfo['rule_id_field'],
+                []
+            );
+        }
+        return $this;
+    }
 }
