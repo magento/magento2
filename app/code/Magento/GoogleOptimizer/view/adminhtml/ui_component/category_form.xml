@@ -7,7 +7,13 @@
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <fieldset name="general">
+    <fieldset name="category_view_optimization">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Category View Optimization</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+            </item>
+        </argument>
         <container name="google_experiment_container" >
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

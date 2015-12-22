@@ -45,9 +45,14 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderConfigureResult()
     {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = $productRepository->get('simple');
+
         $configureResult = new \Magento\Framework\DataObject();
         $configureResult->setOk(true)
-            ->setProductId(1)
+            ->setProductId($product->getId())
             ->setCurrentCustomerId(1);
 
         $this->helper->renderConfigureResult($configureResult);

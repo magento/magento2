@@ -19,4 +19,3 @@ class Googleoptimizer extends \Magento\Backend\Block\Template
         )->toHtml();
     }
 }
-
