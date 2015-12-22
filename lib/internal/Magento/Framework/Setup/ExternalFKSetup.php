@@ -43,6 +43,7 @@ class ExternalFKSetup
      * @param string $entityColumn
      * @param string $externalTable
      * @param string $externalColumn
+     * @return void
      */
     public function install(
         SchemaSetupInterface $setup,
