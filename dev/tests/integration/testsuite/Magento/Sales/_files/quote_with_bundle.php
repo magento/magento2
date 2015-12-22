@@ -8,7 +8,6 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** Create simple and bundle products for quote*/
 $simpleProducts[] = $objectManager->create('Magento\Catalog\Model\Product')
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setId(1)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Simple Product 1')
@@ -23,7 +22,6 @@ $simpleProducts[] = $objectManager->create('Magento\Catalog\Model\Product')
 
 $simpleProducts[] = $objectManager->create('Magento\Catalog\Model\Product')
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setId(2)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Simple Product 2')
@@ -39,7 +37,6 @@ $simpleProducts[] = $objectManager->create('Magento\Catalog\Model\Product')
 $product = $objectManager->create('Magento\Catalog\Model\Product');
 $product
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
-    ->setId(3)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Bundle Product')

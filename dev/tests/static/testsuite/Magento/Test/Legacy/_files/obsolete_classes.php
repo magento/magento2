@@ -762,6 +762,7 @@ return [
     ],
     ['Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\Exception'],
+    ['Magento\Catalog\Model\Product\Option\Converter'],
     [
         'Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException',
         'Magento\Framework\Exception\File\LargeSizeException',
@@ -4119,4 +4120,8 @@ return [
     ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Meta'],
     ['Magento\Cms\Block\Adminhtml\Block\Edit'],
     ['Magento\Cms\Block\Adminhtml\Block\Edit\Form'],
+    [
+        'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
+        'Magento\Catalog\Model\ResourceModel\Product\Gallery'
+    ],
 ];
