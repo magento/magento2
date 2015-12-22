@@ -62,7 +62,7 @@ class FormSections extends AbstractFormContainers
     }
 
     /**
-     * Checks if the section is collapsible on the form
+     * Checks if the section is collapsible on the form.
      *
      * @param string $sectionName
      * @return bool
@@ -70,9 +70,9 @@ class FormSections extends AbstractFormContainers
     public function isCollapsible($sectionName)
     {
         $title = $this->getContainerElement($sectionName)->find($this->sectionTitle);
-        if (! $title->isVisible()) {
+        if (!$title->isVisible()) {
             return false;
         };
-        return $title->find('parent::' . $this->collapsible, 'xpath')->isVisible();
+        return $title->find('parent::' . $this->collapsible, Locator::SELECTOR_XPATH)->isVisible();
     }
 }

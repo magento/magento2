@@ -123,7 +123,8 @@ abstract class AbstractFormContainers extends Form
     }
 
     /**
-     * Create data array for filling containers
+     * Create data array for filling containers.
+     *
      * Returns data in format
      * [[abstract_container_name => [field_name => [attribute_name => attribute_value, ..], ..], ..]
      * where container name should be set to 'null' if a field is not present on the form.
@@ -149,6 +150,7 @@ abstract class AbstractFormContainers extends Form
 
     /**
      * Fill specified form with containers data.
+     * 
      * Input data in format
      * [[container => [field => [attribute_name => attribute_value, ..], ..], ..]
      * where container name can be empty if a field is not assigned to any container.

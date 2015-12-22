@@ -86,7 +86,7 @@ class FormTabs extends AbstractFormContainers
     public function openTab($tabName)
     {
         $this->browser->find($this->header)->hover();
-        if (! $this->isTabVisible($tabName)) {
+        if (!$this->isTabVisible($tabName)) {
             throw new \Exception(
                 'Tab "' . $tabName . '" is not visible.'
             );
