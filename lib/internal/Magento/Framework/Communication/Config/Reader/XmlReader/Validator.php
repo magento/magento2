@@ -31,14 +31,16 @@ class Validator extends ConfigValidator
     private $booleanUtils;
 
     /**
-     * @param BooleanUtils $booleanUtils
+     * Initialize dependencies
+     *
      * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
+     * @param BooleanUtils $booleanUtils
      */
     public function __construct(
-        BooleanUtils $booleanUtils,
         TypeProcessor $typeProcessor,
-        MethodsMap $methodsMap
+        MethodsMap $methodsMap,
+        BooleanUtils $booleanUtils
     ) {
         $this->booleanUtils = $booleanUtils;
         $this->typeProcessor = $typeProcessor;
