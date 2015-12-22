@@ -25,6 +25,7 @@
                     size="5"
                     id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
                     name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][]"
+                    data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][]"
                     class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> multiselect product bundle option change-container-classname"
                     <?php if ($_option->getRequired()) echo 'data-validate={required:true}' ?>>
                 <?php if(!$_option->getRequired()): ?>
