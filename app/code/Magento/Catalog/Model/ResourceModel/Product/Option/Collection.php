@@ -210,9 +210,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             foreach ($values as $value) {
                 $optionId = $value->getOptionId();
                 if ($this->getItemById($optionId)) {
-                    // @TODO fix with new storing mechanizm
                     $this->getItemById($optionId)->addValue($value);
-                    $value->setId(null);
                     $value->setOption($this->getItemById($optionId));
                 }
             }
