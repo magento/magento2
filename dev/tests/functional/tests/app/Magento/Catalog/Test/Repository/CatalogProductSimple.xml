@@ -1039,5 +1039,13 @@
                 <item name="dataset" xsi:type="string">default_subcategory</item>
             </field>
         </dataset>
+
+        <dataset name="sample_data_simple_product">
+            <field name="id" xsi:type="string">1</field>
+            <field name="name" xsi:type="string">Overnight Duffle</field>
+            <field name="sku" xsi:type="string">24-WB07</field>
+            <field name="url_key" xsi:type="string">overnight-duffle</field>
+        </dataset>
+
     </repository>
 </config>
