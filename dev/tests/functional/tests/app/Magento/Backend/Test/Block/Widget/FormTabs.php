@@ -22,7 +22,7 @@ use Magento\Mtf\Fixture\InjectableFixture;
 class FormTabs extends AbstractFormContainers
 {
     /**
-     * List of tabs
+     * List of tabs.
      *
      * @return array
      */
@@ -32,7 +32,7 @@ class FormTabs extends AbstractFormContainers
     }
 
     /**
-     * Get tab class.
+     * Get Tab class.
      *
      * @param string $tabName
      * @return Tab
@@ -44,6 +44,8 @@ class FormTabs extends AbstractFormContainers
     }
 
     /**
+     * Fill data into tabs.
+     *
      * @param array $tabsData
      * @param SimpleElement $element
      * @return $this
@@ -61,51 +63,11 @@ class FormTabs extends AbstractFormContainers
      */
     public function update(FixtureInterface $fixture)
     {
-        $tabs = $this->getFieldsByTabs($fixture);
+        $tabs = $this->getFixtureFieldsByContainers($fixture);
         foreach ($tabs as $tab => $tabFields) {
             $this->openTab($tab)->setFieldsData($tabFields, $this->_rootElement);
         }
         return $this;
-    }
-
-    /**
-     * Create data array for filling tabs.
-     *
-     * @param FixtureInterface $fixture
-     * @return array
-     */
-    protected function getFieldsByTabs(FixtureInterface $fixture)
-    {
-        if ($fixture instanceof InjectableFixture) {
-            $tabs = $this->getFixtureFieldsByContainers($fixture);
-        } else {
-            $tabs = $this->getFixtureFieldsByTabsDeprecated($fixture);
-        }
-        return $tabs;
-    }
-
-    /**
-     * Create data array for filling tabs (deprecated fixture specification).
-     *
-     * @param FixtureInterface $fixture
-     * @return array
-     * @deprecated
-     */
-    private function getFixtureFieldsByTabsDeprecated(FixtureInterface $fixture)
-    {
-        $tabs = [];
-
-        $dataSet = $fixture->getData();
-        $fields = isset($dataSet['fields']) ? $dataSet['fields'] : [];
-
-        foreach ($fields as $field => $attributes) {
-            if (array_key_exists('group', $attributes) && $attributes['group'] !== null) {
-                $tabs[$attributes['group']][$field] = $attributes;
-            } elseif (!array_key_exists('group', $attributes)) {
-                $this->unassignedFields[$field] = $attributes;
-            }
-        }
-        return $tabs;
     }
 
     /**
@@ -121,10 +83,16 @@ class FormTabs extends AbstractFormContainers
      *
      * @param string $tabName
      * @return Tab
+     * @throws \Exception
      */
     public function openTab($tabName)
     {
         $this->browser->find($this->header)->hover();
+        if (! $this->isTabVisible($tabName)) {
+            throw new \Exception(
+                'Tab "' . $tabName . '" is not visible.'
+            );
+        }
         $this->getTabElement($tabName)->click();
         return $this;
     }
@@ -142,14 +110,6 @@ class FormTabs extends AbstractFormContainers
             ? $this->containers[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
         return $this->_rootElement->find($selector, $strategy);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function isContainerVisible($tabName)
-    {
-        return $this->isTabVisible($tabName);
     }
 
     /**
