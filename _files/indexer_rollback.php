@@ -19,5 +19,16 @@ if ($collection->count() > 0) {
     $collection->delete();
 }
 
+/** @var \Magento\Store\Model\Store $store */
+$store = $objectManager->create('Magento\Store\Model\Store');
+$storeCode = 'secondary';
+$store->load($storeCode);
+if ($store->getId()) {
+    $store->delete();
+}
+
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+
+/* Refresh stores memory cache */
+$objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();

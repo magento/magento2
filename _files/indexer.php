@@ -7,6 +7,35 @@
 /** @var $objectManager \Magento\Framework\ObjectManagerInterface */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+/** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+
+/** @var \Magento\Store\Model\Store $store */
+$store = $objectManager->create('Magento\Store\Model\Store');
+$storeCode = 'secondary';
+
+if (!$store->load($storeCode)->getId()) {
+    $store->setCode($storeCode)
+        ->setWebsiteId($storeManager->getWebsite()->getId())
+        ->setGroupId($storeManager->getWebsite()->getDefaultGroupId())
+        ->setName('Secondary Store View')
+        ->setSortOrder(10)
+        ->setIsActive(1);
+    $store->save();
+
+    /** @var \Magento\Framework\App\MutableScopeConfig $scopeConfig */
+    $scopeConfig = $objectManager->get('Magento\Framework\App\MutableScopeConfig');
+    $scopeConfig->setValue(
+        'general/locale/code',
+        'de_DE',
+        \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+        $store->getId()
+    );
+
+    /* Refresh stores memory cache */
+    $storeManager->reinitStores();
+}
+
 /** @var $productFirst \Magento\Catalog\Model\Product */
 $productFirst = $objectManager->create('Magento\Catalog\Model\Product');
 $productFirst->setTypeId('simple')

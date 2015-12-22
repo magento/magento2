@@ -12,10 +12,11 @@ use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 /**
  * @magentoDbIsolation disabled
- * @magentoDataFixture Magento/Elasticsearch/_files/products.php
+ * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  */
 class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,14 +36,19 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
     protected $client;
 
     /**
-     * @var Dimension
+     * @var Dimension[]
      */
-    protected $dimension;
+    protected $dimensions;
 
     /**
      * @var Config
      */
     protected $clientConfig;
+
+    /**
+     * @var SearchIndexNameResolver
+     */
+    protected $searchIndexNameResolver;
 
     /**
      * @var Product
@@ -85,13 +91,22 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->client = $this->connectionManager->getConnection();
 
-        $this->dimension = Bootstrap::getObjectManager()->create(
+        $mainStore = Bootstrap::getObjectManager()->create(
             '\Magento\Framework\Search\Request\Dimension',
             ['name' => 'scope', 'value' => '1']
         );
+        $secondaryStore = Bootstrap::getObjectManager()->create(
+            '\Magento\Framework\Search\Request\Dimension',
+            ['name' => 'scope', 'value' => '2']
+        );
+        $this->dimensions = [$mainStore, $secondaryStore];
 
         $this->clientConfig = Bootstrap::getObjectManager()->create(
             'Magento\Elasticsearch\Model\Config'
+        );
+
+        $this->searchIndexNameResolver = Bootstrap::getObjectManager()->create(
+            'Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver'
         );
 
         $this->productApple = $this->getProductBySku('fulltext-1');
@@ -109,12 +124,16 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->indexer->reindexAll();
 
-        $products = $this->searchByName('Apple');
-        $this->assertCount(1, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]['_id']);
+        foreach ($this->dimensions as $dimension) {
+            $storeId = $dimension->getValue();
 
-        $products = $this->searchByName('Simple Product');
-        $this->assertCount(5, $products);
+            $products = $this->searchByName('Apple', $storeId);
+            $this->assertCount(1, $products);
+            $this->assertEquals($this->productApple->getId(), $products[0]['_id']);
+
+            $products = $this->searchByName('Simple Product', $storeId);
+            $this->assertCount(5, $products);
+        }
     }
 
     /**
@@ -122,20 +141,22 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterEdit()
     {
-        $this->indexer->reindexAll();
-
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
-        $products = $this->searchByName('Apple');
-        $this->assertCount(0, $products);
+        foreach ($this->dimensions as $dimension) {
+            $storeId = $dimension->getValue();
 
-        $products = $this->searchByName('Cucumber');
-        $this->assertCount(1, $products);
-        $this->assertEquals($this->productApple->getId(), $products[0]['_id']);
+            $products = $this->searchByName('Apple', $storeId);
+            $this->assertCount(0, $products);
 
-        $products = $this->searchByName('Simple Product');
-        $this->assertCount(5, $products);
+            $products = $this->searchByName('Cucumber', $storeId);
+            $this->assertCount(1, $products);
+            $this->assertEquals($this->productApple->getId(), $products[0]['_id']);
+
+            $products = $this->searchByName('Simple Product', $storeId);
+            $this->assertCount(5, $products);
+        }
     }
 
     /**
@@ -143,8 +164,6 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterMassAction()
     {
-        $this->indexer->reindexAll();
-
         $productIds = [
             $this->productApple->getId(),
             $this->productBanana->getId(),
@@ -159,20 +178,24 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $action->updateAttributes($productIds, $attrData, 1);
 
-        $products = $this->searchByName('Apple');
-        $this->assertCount(0, $products);
+        foreach ($this->dimensions as $dimension) {
+            $storeId = $dimension->getValue();
 
-        $products = $this->searchByName('Banana');
-        $this->assertCount(0, $products);
+            $products = $this->searchByName('Apple', $storeId);
+            $this->assertCount(0, $products);
 
-        $products = $this->searchByName('Unknown');
-        $this->assertCount(0, $products);
+            $products = $this->searchByName('Banana', $storeId);
+            $this->assertCount(0, $products);
 
-        $products = $this->searchByName('Common');
-        $this->assertCount(2, $products);
+            $products = $this->searchByName('Unknown', $storeId);
+            $this->assertCount(0, $products);
 
-        $products = $this->searchByName('Simple Product');
-        $this->assertCount(5, $products);
+            $products = $this->searchByName('Common', $storeId);
+            $this->assertCount(2, $products);
+
+            $products = $this->searchByName('Simple Product', $storeId);
+            $this->assertCount(5, $products);
+        }
     }
 
     /**
@@ -183,33 +206,31 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->indexer->reindexAll();
         $this->productBanana->delete();
-        $products = $this->searchByName('Simple Product');
-        $this->assertCount(4, $products);
+
+        foreach ($this->dimensions as $dimension) {
+            $storeId = $dimension->getValue();
+
+            $products = $this->searchByName('Simple Product', $storeId);
+            $this->assertCount(4, $products);
+        }
     }
 
     /**
      * Search docs in Elasticsearch by name
      *
      * @param string $text
+     * @param int $storeId
      * @return array
      */
-    protected function searchByName($text)
+    protected function searchByName($text, $storeId)
     {
-        $storeId = $this->dimension->getValue();
         $searchQuery = [
-            'index' => $this->clientConfig->getIndexName(),
+            'index' => $this->searchIndexNameResolver->getIndexName($storeId, 'catalogsearch_fulltext'),
             'type' => $this->clientConfig->getEntityType(),
             'body' => [
                 'query' => [
                     'bool' => [
                         'minimum_should_match' => 1,
-                        'must' => [
-                            [
-                                'term' => [
-                                    'store_id' => $storeId,
-                                ]
-                            ],
-                        ],
                         'should' => [
                             [
                                 'match' => [
