@@ -68,12 +68,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
         $attributeTable = $attribute->getBackend()->getTable();
         $connection = $this->getConnection();
         $joinType = $condition !== null || $required ? 'join' : 'joinLeft';
+        $productIdField = $this->getProductIdFieldName();
 
         if ($attribute->isScopeGlobal()) {
             $alias = 'ta_' . $attrCode;
             $select->{$joinType}(
                 [$alias => $attributeTable],
-                "{$alias}.entity_id = {$entity} AND {$alias}.attribute_id = {$attributeId}" .
+                "{$alias}.{$productIdField} = {$entity} AND {$alias}.attribute_id = {$attributeId}" .
                 " AND {$alias}.store_id = 0",
                 []
             );
@@ -84,13 +85,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
             $select->{$joinType}(
                 [$dAlias => $attributeTable],
-                "{$dAlias}.entity_id = {$entity} AND {$dAlias}.attribute_id = {$attributeId}" .
+                "{$dAlias}.{$productIdField} = {$entity} AND {$dAlias}.attribute_id = {$attributeId}" .
                 " AND {$dAlias}.store_id = 0",
                 []
             );
             $select->joinLeft(
                 [$sAlias => $attributeTable],
-                "{$sAlias}.entity_id = {$entity} AND {$sAlias}.attribute_id = {$attributeId}" .
+                "{$sAlias}.{$productIdField} = {$entity} AND {$sAlias}.attribute_id = {$attributeId}" .
                 " AND {$sAlias}.store_id = {$store}",
                 []
             );
@@ -210,5 +211,15 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
         }
 
         return $result;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getProductIdFieldName()
+    {
+        $table = $this->getTable('catalog_product_entity');
+        $indexList = $this->getConnection()->getIndexList($table);
+        return $indexList[$this->getConnection()->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }
