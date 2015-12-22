@@ -58,7 +58,7 @@ class CcConfigProvider implements ConfigProviderInterface
         foreach (array_keys($types) as $code) {
             if (!array_key_exists($code, $icons)) {
                 $asset = $this->ccConfig->createAsset('Magento_Payment::images/cc/' . strtolower($code) . '.png');
-                $placeholder = $this->assetSource->findRelativeSourceFilePath($asset);
+                $placeholder = $this->assetSource->findSource($asset);
                 if ($placeholder) {
                     list($width, $height) = getimagesize($asset->getSourceFile());
                     $icons[$code] = [
