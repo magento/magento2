@@ -35,6 +35,7 @@
 
             .items {
                 padding: 6px 0;
+                text-align: left;
             }
 
             > .action {
@@ -111,6 +112,8 @@
         //  Wish list popup
         &.window.popup {
             .lib-popup();
+            box-sizing: border-box;
+
             &.active {
                 display: block;
             }
@@ -205,6 +208,22 @@
 
                 &-select {
                     margin-right: @indent__base;
+                }
+                
+                .copy {
+                    .dropdown {
+                        right: 0;
+
+                        &:before {
+                            left: auto;
+                            right: 11px;
+                        }
+
+                        &:after {
+                            left: auto;
+                            right: 10px;
+                        }
+                    }
                 }
             }
 
