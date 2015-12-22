@@ -72,12 +72,12 @@ class SynonymReader extends AbstractDb
 
         foreach ($rows as $index => $row) {
             // Check for current store view
-            if ($row['scope_id'] === $storeViewId && $row['scope_type'] === 'stores') {
+            if ($row['scope_id'] === $storeViewId && $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_STORES) {
                 $synRowsForStoreView[] = $row;
             }
             // Check for current website
             else if (empty($synRowsForStoreView) &&
-                ($row['scope_id'] === $websiteId && $row['scope_type'] === 'websites')) {
+                ($row['scope_id'] === $websiteId && $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES)) {
                     $synRowsForWebsite[] = $row;
             }
             // Check for all store views (i.e. default)
