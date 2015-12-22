@@ -193,7 +193,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             50
         );
 
-        $this->setUpNoPrettyVersionParser();
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
  	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
@@ -209,13 +208,16 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                     'message' => $xdebugMessage,
                     'error' => false,
                 ],
-                'always_populate_raw_post_data' => [
-                    'message' => $rawPostMessage,
-                    'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
-                    'error' => false
-                ]
             ]
         ];
+        if (!$this->isPhp7OrHhvm()) {
+            $this->setUpNoPrettyVersionParser();
+            $expected['data']['always_populate_raw_post_data'] = [
+                'message' => $rawPostMessage,
+                'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
+                'error' => false
+            ];
+        }
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
@@ -231,7 +233,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             200
         );
 
-        $this->setUpNoPrettyVersionParser();
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
  	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
@@ -246,14 +247,17 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 'xdebug_max_nesting_level' => [
                     'message' => $xdebugMessage,
                     'error' => true,
-                ],
-                'always_populate_raw_post_data' => [
-                    'message' => $rawPostMessage,
-                    'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
-                    'error' => false
                 ]
             ]
         ];
+        if (!$this->isPhp7OrHhvm()) {
+            $this->setUpNoPrettyVersionParser();
+            $expected['data']['always_populate_raw_post_data'] = [
+                'message' => $rawPostMessage,
+                'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
+                'error' => false
+            ];
+        }
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
@@ -261,7 +265,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->phpInfo->expects($this->once())->method('getCurrent')->willReturn([]);
 
-        $this->setUpNoPrettyVersionParser();
         $rawPostMessage = sprintf(
             'Your PHP Version is %s, but always_populate_raw_post_data = -1.
  	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
@@ -272,14 +275,18 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         );
         $expected = [
             'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS,
-            'data' => [
+            'data' => []
+        ];
+        if (!$this->isPhp7OrHhvm()) {
+            $this->setUpNoPrettyVersionParser();
+            $expected['data'] = [
                 'always_populate_raw_post_data' => [
                     'message' => $rawPostMessage,
                     'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
                     'error' => false
                 ]
-            ]
-        ];
+            ];
+        }
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
@@ -332,6 +339,14 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpExtensions());
+    }
+    
+    /**
+     * @return bool
+     */
+    protected function isPhp7OrHhvm()
+    {
+        return version_compare(PHP_VERSION, '7.0.0-beta') >= 0 || defined('HHVM_VERSION');
     }
 }
 

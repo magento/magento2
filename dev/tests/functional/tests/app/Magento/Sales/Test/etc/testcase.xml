@@ -28,9 +28,9 @@
         <step name="addProducts" module="Magento_Sales" next="updateProductsData" />
         <step name="updateProductsData" module="Magento_Sales" next="fillAccountInformation" />
         <step name="fillAccountInformation" module="Magento_Sales" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
-        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
-        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
     </scenario>
     <scenario name="PrintOrderFrontendGuestTest" firstStep="createProducts">
