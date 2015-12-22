@@ -60,9 +60,9 @@ class Queue implements QueueInterface
         QueueManagement $queueManagement,
         EnvelopeFactory $envelopeFactory,
         $queueName,
+        LoggerInterface $logger,
         $interval = 5,
-        $maxNumberOfTrials = 3,
-        LoggerInterface $logger
+        $maxNumberOfTrials = 3
     ) {
         $this->queueManagement = $queueManagement;
         $this->envelopeFactory = $envelopeFactory;
