@@ -104,7 +104,7 @@ class Validator extends ConfigValidator
     /**
      * Return all available topics from xml and env configs
      *
-     * @param $configData
+     * @param array $configData
      * @param array $xmlConfigData
      * @return array
      */

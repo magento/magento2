@@ -87,8 +87,10 @@ class Validator
     /**
      * Validate topic in a bind
      *
-     * @param $topics
-     * @param $topicName
+     * @param string[] $topics
+     * @param string $topicName
+     * @return void
+     * @throws \LogicException
      */
     public function validateBindTopic($topics, $topicName)
     {
@@ -133,9 +135,11 @@ class Validator
     /**
      * Validate publisher in the topic
      *
-     * @param $publishers
-     * @param $publisherName
-     * @param $topicName
+     * @param string[] $publishers
+     * @param string $publisherName
+     * @param string $topicName
+     * @return void
+     * @throws \LogicException
      */
     public function validateTopicPublisher($publishers, $publisherName, $topicName)
     {

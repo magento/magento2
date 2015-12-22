@@ -364,6 +364,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $topics
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @deprecated
      */
     protected function extractConsumers(\DOMDocument $config, $binds, $topics)
@@ -496,7 +497,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Return topic handlers
      *
-     * @param $topicName
+     * @param string $topicName
      * @return array
      */
     private function getTopicHandlers($topicName)

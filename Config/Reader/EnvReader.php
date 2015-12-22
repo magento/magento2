@@ -26,9 +26,8 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
     /**
      * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(
-        DeploymentConfig $deploymentConfig
-    ) {
+    public function __construct(DeploymentConfig $deploymentConfig)
+    {
         $this->deploymentConfig = $deploymentConfig;
     }
 
@@ -37,6 +36,7 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function read($scope = null)
     {
