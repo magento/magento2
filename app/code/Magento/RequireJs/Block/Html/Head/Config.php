@@ -119,16 +119,4 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
 
         return parent::_prepareLayout();
     }
-
-    /**
-     * Include base RequireJs configuration necessary for working with Magento application
-     *
-     * @return string|void
-     */
-    protected function _toHtml()
-    {
-        return "<script type=\"text/javascript\">\n"
-            . $this->config->getBaseConfig()
-            . "</script>\n";
-    }
 }
