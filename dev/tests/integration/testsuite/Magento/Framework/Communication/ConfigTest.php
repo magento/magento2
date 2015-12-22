@@ -44,8 +44,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Either "request" or "schema" attribute must be specified for topic "customerUpdated"
+     * @TODO removed expected exception for debug purposes. Revert back after debug
      */
     public function testGetTopicsExceptionMissingRequest()
     {
