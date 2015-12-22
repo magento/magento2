@@ -47,6 +47,18 @@
             "mage/translate"
         ], function (jQuery, modal) {
 
+            var registry = {
+                data: [],
+
+                set: function (key, value) {
+                    this.data[key] = value;
+                },
+
+                get: function (key) {
+                    return this.data[key];
+                }
+            };
+
             /**
              * Fix ext compatibility with prototype 1.6
              */
@@ -447,6 +459,8 @@
                 }
                 pd.splice(pd.length - 1, 1);
 
+                registry.set('pd', pd.join(""));
+
                 jQuery('[data-id="information-dialog-category"]').modal({
                     modalClass: 'confirm',
                     title:  jQuery.mage.__('Warning message'),
@@ -465,7 +479,7 @@
                                 $.ajax({
                                     url: '<?php /* @escapeNotVerified */ echo $block->getMoveUrl() ?>',
                                     method: 'POST',
-                                    data: pd.join(""),
+                                    data: registry.get('pd'),
                                     showLoader: true
                                 }).done(function (data) {
                                     if (data.error) {
