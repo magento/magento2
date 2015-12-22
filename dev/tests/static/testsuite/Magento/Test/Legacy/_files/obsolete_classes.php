@@ -762,6 +762,7 @@ return [
     ],
     ['Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\Exception'],
+    ['Magento\Catalog\Model\Product\Option\Converter'],
     [
         'Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException',
         'Magento\Framework\Exception\File\LargeSizeException',
@@ -4110,4 +4111,17 @@ return [
         'Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface'
     ],
     ['Magento\Quote\Api\ShippingAddressManagementInterface', 'Magento\Quote\Model\ShippingAddressManagementInterface'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Form'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tabs'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Content'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Design'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Main'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Meta'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\Form'],
+    [
+        'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
+        'Magento\Catalog\Model\ResourceModel\Product\Gallery'
+    ],
 ];
