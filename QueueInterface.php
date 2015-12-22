@@ -31,12 +31,14 @@ interface QueueInterface
     public function subscribe($callback);
 
     /**
-     * Reject message and return it to the original queue
+     * Reject message
      *
      * @param EnvelopeInterface $envelope
+     * @param bool $requeue
+     * @param string $rejectionMessage
      * @return void
      */
-    public function reject(EnvelopeInterface $envelope);
+    public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null);
 
     /**
      * Push message to queue directly, without using exchange

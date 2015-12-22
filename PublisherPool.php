@@ -65,11 +65,15 @@ class PublisherPool
      */
     public function getByTopicType($topicName)
     {
-        $topic = $this->communicationConfig->getTopic($topicName);
         /* read the topic configuration for the publisher name */
         $publisherName = $this->getPublisherNameForTopic($topicName);
         $publisherConfig = $this->getPublisherConfig($publisherName);
-        $type = $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? self::MODE_SYNC : self::MODE_ASYNC;
+        try {
+            $topic = $this->communicationConfig->getTopic($topicName);
+        } catch (\Exception $e) {
+            $topic = [];
+        }
+        $type = !empty($topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS]) ? self::MODE_SYNC : self::MODE_ASYNC;
         return $this->getPublisherForConnectionNameAndType($type, $publisherConfig[QueueConfig::PUBLISHER_CONNECTION]);
     }
 
@@ -77,6 +81,7 @@ class PublisherPool
      * Initialize publisher objects pool.
      *
      * @param array $publishers
+     * @return void
      */
     private function initializePublishers(array $publishers)
     {

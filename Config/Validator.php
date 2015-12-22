@@ -87,12 +87,25 @@ class Validator
     /**
      * Validate topic in a bind
      *
-     * @param $topics
-     * @param $topicName
+     * @param string[] $topics
+     * @param string $topicName
+     * @return void
+     * @throws \LogicException
      */
     public function validateBindTopic($topics, $topicName)
     {
-        if (!in_array($topicName, $topics)) {
+        $isDefined = false;
+        if (strpos($topicName, '#') === false && strpos($topicName, '*') === false) {
+            if (in_array($topicName, $topics)) {
+                $isDefined = true;
+            }
+        } else {
+            $pattern = $this->buildWildcardPattern($topicName);
+            if (count(preg_grep($pattern, $topics))) {
+                $isDefined = true;
+            }
+        }
+        if (!$isDefined) {
             throw new \LogicException(
                 sprintf('Topic "%s" declared in binds must be defined in topics', $topicName)
             );
@@ -100,11 +113,33 @@ class Validator
     }
 
     /**
+     * Construct perl regexp pattern for matching topic names from wildcard key.
+     *
+     * @param string $wildcardKey
+     * @return string
+     */
+    public function buildWildcardPattern($wildcardKey)
+    {
+        $pattern = '/^' . str_replace('.', '\.', $wildcardKey);
+        $pattern = str_replace('#', '.+', $pattern);
+        $pattern = str_replace('*', '[^\.]+', $pattern);
+        if (strpos($wildcardKey, '#') == strlen($wildcardKey)) {
+            $pattern .= '/';
+        } else {
+            $pattern .= '$/';
+        }
+
+        return $pattern;
+    }
+
+    /**
      * Validate publisher in the topic
      *
-     * @param $publishers
-     * @param $publisherName
-     * @param $topicName
+     * @param string[] $publishers
+     * @param string $publisherName
+     * @param string $topicName
+     * @return void
+     * @throws \LogicException
      */
     public function validateTopicPublisher($publishers, $publisherName, $topicName)
     {

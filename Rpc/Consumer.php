@@ -176,7 +176,7 @@ class Consumer implements ConsumerInterface
                 $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {
                 $this->resource->getConnection()->rollBack();
-                $queue->reject($message);
+                $queue->reject($message, false, $e->getMessage());
             }
         };
     }
