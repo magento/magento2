@@ -14,12 +14,23 @@ require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_duplicated.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_virtual.php';
 
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+$simpleId = $productRepository->get('simple')->getId();
+$simpleDuplicatedId = $productRepository->get('simple-1')->getId();
+$virtualId = $productRepository->get('virtual-product')->getId();
+
 // imitate product views
 /** @var \Magento\Reports\Observer\CatalogProductViewObserver $reportObserver */
 $reportObserver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Reports\Observer\CatalogProductViewObserver'
 );
-foreach ([1, 2, 1, 21, 1, 21] as $productId) {
+
+$productIds = [$simpleId, $simpleDuplicatedId, $simpleId, $virtualId, $simpleId, $virtualId];
+
+foreach ($productIds as $productId) {
     $reportObserver->execute(
         new \Magento\Framework\Event\Observer(
             [

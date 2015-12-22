@@ -50,14 +50,21 @@ class Select extends \Zend_Db_Select
      * Class constructor
      * Add straight join support
      *
-     * @param \Magento\Framework\DB\Adapter\Pdo\Mysql $adapter
+     * @param Adapter\Pdo\Mysql $adapter
+     * @param Select\SelectRenderer $selectRenderer
+     * @param array $parts
      */
-    public function __construct(\Magento\Framework\DB\Adapter\Pdo\Mysql $adapter)
-    {
+    public function __construct(
+        \Magento\Framework\DB\Adapter\Pdo\Mysql $adapter,
+        \Magento\Framework\DB\Select\SelectRenderer $selectRenderer,
+        $parts = []
+    ) {
+        self::$_partsInit = array_merge(self::$_partsInit, $parts);
         if (!isset(self::$_partsInit[self::STRAIGHT_JOIN])) {
             self::$_partsInit = [self::STRAIGHT_JOIN => false] + self::$_partsInit;
         }
 
+        $this->selectRenderer = $selectRenderer;
         parent::__construct($adapter);
     }
 
@@ -483,5 +490,15 @@ class Select extends \Zend_Db_Select
     public function getConnection()
     {
         return $this->_adapter;
+    }
+
+    /**
+     * Converts this object to an SQL SELECT string.
+     *
+     * @return string|null This object as a SELECT string. (or null if a string cannot be produced.)
+     */
+    public function assemble()
+    {
+        return $this->selectRenderer->render($this);
     }
 }
