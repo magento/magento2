@@ -40,6 +40,11 @@ class Store extends AbstractExtensibleModel implements
     StoreInterface
 {
     /**
+     * Store Id key name
+     */
+    const STORE_ID = 'store_id';
+
+    /**
      * Entity name
      */
     const ENTITY = 'store';
@@ -736,7 +741,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getId()
     {
-        return $this->_getData('store_id');
+        return $this->_getData(self::STORE_ID);
     }
 
     /**

@@ -38,7 +38,13 @@ $requestInfo = [
         $attribute->getId() => $option->getId(),
     ],
 ];
-
+/** @var \Magento\Sales\Model\Order $order */
+$order = $objectManager->create('Magento\Sales\Model\Order');
+$order->setIncrementId('100000001');
+$order->loadByIncrementId('100000001');
+if ($order->getId()) {
+    $order->delete();
+}
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderItem = $objectManager->create('Magento\Sales\Model\Order\Item');
 $orderItem->setProductId($product->getId());
