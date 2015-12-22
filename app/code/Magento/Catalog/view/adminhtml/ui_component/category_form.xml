@@ -13,12 +13,14 @@
             <item name="deps" xsi:type="string">category_form.category_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Category Information</item>
-        <item name="layout" xsi:type="array">
-            <item name="type" xsi:type="string">tabs</item>
-        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="buttons" xsi:type="array">
             <item name="delete" xsi:type="string">Magento\Catalog\Block\Adminhtml\Category\Edit\DeleteButton</item>
             <item name="save" xsi:type="string">Magento\Catalog\Block\Adminhtml\Category\Edit\SaveButton</item>
+        </item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">category_form</item>
         </item>
     </argument>
     <dataSource name="category_form_data_source">
@@ -44,6 +46,7 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Category Information</item>
+                <item name="collapsible" xsi:type="boolean">false</item>
             </item>
         </argument>
         <field name="id">
@@ -125,6 +128,14 @@
                 </item>
             </argument>
         </field>
+    </fieldset>
+    <fieldset name="content">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Content</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+            </item>
+        </argument>
         <container name="image_group">
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
@@ -139,6 +150,7 @@
             <field name="image">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="dataType" xsi:type="string">string</item>
                         <item name="formElement" xsi:type="string">image</item>
                         <item name="source" xsi:type="string">category</item>
                     </item>
@@ -151,7 +163,7 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">${ $.provider }:data.general.savedImage.value</item>
+                        <item name="visible" xsi:type="string">${ $.provider }:data.savedImage.value</item>
                         </item>
                     </item>
                 </argument>
@@ -182,7 +194,7 @@
                         <item name="files_browser_window_url" xsi:type="boolean">false</item>
                     </item>
                     <item name="template" xsi:type="string">ui/form/field</item>
-                    <item name="source" xsi:type="string">page</item>
+                    <item name="source" xsi:type="string">category</item>
                     <item name="wysiwyg" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="string">description</item>
                     <item name="sortOrder" xsi:type="number">50</item>
@@ -199,6 +211,14 @@
                 </item>
             </argument>
         </field>
+    </fieldset>
+    <fieldset name="display_settings">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Display Settings</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+            </item>
+        </argument>
         <field name="display_mode">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -227,7 +247,6 @@
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="required" xsi:type="boolean">true</item>
-                    <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">90</item>
                     <item name="label" xsi:type="string" translate="true">Sort Products By</item>
                 </item>
@@ -238,8 +257,8 @@
                         <item name="formElement" xsi:type="string">multiselect</item>
                         <item name="source" xsi:type="string">category</item>
                         <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.general.use_config.available_sort_by</item>
-                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.general.use_config.available_sort_by</item>
+                            <item name="disabled" xsi:type="string">${ $.provider }:data.use_config.available_sort_by</item>
+                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.use_config.available_sort_by</item>
                         </item>
                         <item name="component" xsi:type="string">Magento_Catalog/js/components/multiselect-handle-required</item>
                     </item>
@@ -262,7 +281,6 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">Default Product Sorting</item>
                     <item name="required" xsi:type="boolean">true</item>
-                    <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">100</item>
                 </item>
             </argument>
@@ -272,8 +290,8 @@
                         <item name="formElement" xsi:type="string">select</item>
                         <item name="source" xsi:type="string">category</item>
                         <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.general.use_config.default_sort_by</item>
-                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.general.use_config.default_sort_by</item>
+                            <item name="disabled" xsi:type="string">${ $.provider }:data.use_config.default_sort_by</item>
+                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.use_config.default_sort_by</item>
                         </item>
                         <item name="component" xsi:type="string">Magento_Catalog/js/components/select-handle-required</item>
                     </item>
@@ -296,7 +314,6 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">Layered Navigation Price Step</item>
                     <item name="required" xsi:type="boolean">true</item>
-                    <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">110</item>
                 </item>
             </argument>
@@ -306,8 +323,8 @@
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="source" xsi:type="string">category</item>
                         <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.general.use_config.filter_price_range</item>
-                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.general.use_config.filter_price_range</item>
+                            <item name="disabled" xsi:type="string">${ $.provider }:data.use_config.filter_price_range</item>
+                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.use_config.filter_price_range</item>
                         </item>
                         <item name="component" xsi:type="string">Magento_Catalog/js/components/input-handle-required</item>
                         <item name="addbefore" xsi:type="string">$</item>
@@ -324,6 +341,14 @@
                 </argument>
             </field>
         </container>
+    </fieldset>
+    <fieldset name="search_engine_optimization">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Search Engine Optimization</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+            </item>
+        </argument>
         <container name="url_key_group">
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
@@ -331,7 +356,6 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">URL Key</item>
                     <item name="required" xsi:type="boolean">false</item>
-                    <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">120</item>
                 </item>
             </argument>
@@ -342,7 +366,7 @@
                         <item name="source" xsi:type="string">category</item>
                         <item name="sortOrder" xsi:type="number">10</item>
                         <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.general.use_default.url_key</item>
+                            <item name="disabled" xsi:type="string">${ $.provider }:data.use_default.url_key</item>
                         </item>
                     </item>
                 </argument>
@@ -355,7 +379,7 @@
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="sortOrder" xsi:type="number">20</item>
                         <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">${ $.provider }:data.general.store_id</item>
+                            <item name="visible" xsi:type="string">${ $.provider }:data.store_id</item>
                         </item>
                     </item>
                 </argument>
@@ -391,6 +415,14 @@
                 </item>
             </argument>
         </field>
+    </fieldset>
+    <fieldset name="assign_products">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Products in Category</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+            </item>
+        </argument>
         <container name="assign_products_container" >
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -401,6 +433,14 @@
                 <argument name="block" xsi:type="object">Magento\Catalog\Block\Adminhtml\Category\AssignProducts</argument>
             </htmlContent>
         </container>
+    </fieldset>
+    <fieldset name="design">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Design</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+            </item>
+        </argument>
         <container name="custom_use_parent_settings_group">
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
@@ -408,7 +448,6 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true"/>
                     <item name="required" xsi:type="boolean">false</item>
-                    <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">170</item>
                 </item>
             </argument>
@@ -430,7 +469,7 @@
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Layout</item>
                     <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">${ $.provider }:data.general.custom_use_parent_settings</item>
+                        <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
                     </item>
                 </item>
             </argument>
@@ -443,7 +482,7 @@
                     <item name="formElement" xsi:type="string">textarea</item>
                     <item name="label" xsi:type="string" translate="true">Layout Update XML</item>
                     <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">${ $.provider }:data.general.custom_use_parent_settings</item>
+                        <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
                     </item>
                 </item>
             </argument>
@@ -455,7 +494,6 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true"/>
                     <item name="required" xsi:type="boolean">false</item>
-                    <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">200</item>
                 </item>
             </argument>
@@ -466,12 +504,20 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.general.custom_use_parent_settings</item>
+                            <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
                         </item>
                     </item>
                 </argument>
             </field>
         </container>
+    </fieldset>
+    <fieldset name="schedule_design_update">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Schedule Design Update</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+            </item>
+        </argument>
         <container name="date_group">
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
@@ -479,7 +525,6 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">Schedule Update From</item>
                     <item name="required" xsi:type="boolean">false</item>
-                    <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">210</item>
                 </item>
             </argument>
@@ -490,7 +535,7 @@
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="formElement" xsi:type="string">date</item>
                         <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.general.custom_use_parent_settings</item>
+                            <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
                         </item>
                     </item>
                 </argument>
@@ -502,7 +547,7 @@
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="formElement" xsi:type="string">date</item>
                         <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.general.custom_use_parent_settings</item>
+                            <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
                         </item>
                     </item>
                 </argument>
@@ -516,7 +561,7 @@
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">New Theme</item>
                     <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">${ $.provider }:data.general.custom_use_parent_settings</item>
+                        <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
                     </item>
                 </item>
             </argument>

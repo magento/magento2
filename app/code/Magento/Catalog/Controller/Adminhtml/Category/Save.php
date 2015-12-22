@@ -99,7 +99,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         $refreshTree = false;
-        $data = $this->getRequest()->getPostValue();
+        $data['general'] = $this->getRequest()->getPostValue();
         $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
         $data = $this->imagePreprocessing($data);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
