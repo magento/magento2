@@ -86,20 +86,6 @@
             <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
-        <variation name="CreateGroupedProductEntityTestVariation7" firstConstraint="Magento\GroupedProduct\Test\Constraint\AssertGroupedPriceOnGroupedProductPage" method="test">
-            <data name="description" xsi:type="string">Create with group price products</data>
-            <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
-            <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
-            <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/category" xsi:type="string">category_%isolation%</data>
-            <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::simple_with_group_price,catalogProductSimple::simple_with_group_price</data>
-            <data name="product/data/associated/dataset" xsi:type="string">defaultSimpleProduct</data>
-            <data name="isRequired" xsi:type="string">No</data>
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedPriceOnGroupedProductPage" />
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-        </variation>
         <variation name="CreateGroupedProductEntityTestVariation8" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
             <data name="description" xsi:type="string">Create with virtual products</data>
             <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>

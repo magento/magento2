@@ -26,7 +26,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
     protected $_taxCalculation;
 
     /**
-     * @var \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory
+     * @var \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory
      */
     protected $_taxOrdersFactory;
 
@@ -35,13 +35,13 @@ class DefaultTotal extends \Magento\Framework\DataObject
      *
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $ordersFactory
+     * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $ordersFactory,
+        \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory,
         array $data = []
     ) {
         $this->_taxHelper = $taxHelper;
@@ -106,7 +106,7 @@ class DefaultTotal extends \Magento\Framework\DataObject
                 $tax['font_size'] = $fontSize;
             }
         } else {
-            /** @var $orders \Magento\Tax\Model\Resource\Sales\Order\Tax\Collection */
+            /** @var $orders \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\Collection */
             $orders = $this->_taxOrdersFactory->create();
             $rates = $orders->loadByOrder($this->getOrder())->toArray();
             $fullInfo = $this->_taxCalculation->reproduceProcess($rates['items']);

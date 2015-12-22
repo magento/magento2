@@ -11,7 +11,7 @@
              type="eav"
              entity_type="catalog_product"
              product_type="simple"
-             collection="Magento\Catalog\Model\Resource\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
              identifier="sku"
              repository_class="Magento\Catalog\Test\Repository\CatalogProductSimple"
              handler_interface="Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface"
@@ -35,7 +35,6 @@
         <field name="description" is_required="0" group="product-details" />
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
-        <field name="group_price" is_required="0" group="advanced-pricing" repository="Magento\Catalog\Test\Repository\Product\GroupPriceOptions" />
         <field name="has_options" is_required="0" />
         <field name="image" is_required="0" />
         <field name="image_label" is_required="0" />
@@ -85,7 +84,7 @@
         <field name="cross_sell_products" group="crosssells" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
         <field name="up_sell_products" group="upsells" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
         <field name="related_products" group="related-products" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
-        <field name="is_virtual" group="product-details" />
+        <field name="product_has_weight" group="product-details" />
         <field name="attributes" />
         <field name="fpt" is_required="0" group="product-details" repository="Magento\Catalog\Test\Repository\Product\Fpt" />
     </fixture>

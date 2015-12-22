@@ -15,7 +15,7 @@ class ArraySerialized extends \Magento\Config\Model\Config\Backend\Serialized
     /**
      * Unset array element with '__empty' key
      *
-     * @return void
+     * @return $this
      */
     public function beforeSave()
     {
@@ -24,6 +24,6 @@ class ArraySerialized extends \Magento\Config\Model\Config\Backend\Serialized
             unset($value['__empty']);
         }
         $this->setValue($value);
-        parent::beforeSave();
+        return parent::beforeSave();
     }
 }

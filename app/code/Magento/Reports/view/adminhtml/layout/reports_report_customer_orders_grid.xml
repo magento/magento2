@@ -5,13 +5,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="reports_report_grid"/>
     <body>
         <referenceBlock name="adminhtml.report.grid">
             <arguments>
                 <argument name="id" xsi:type="string">gridOrdersCustomer</argument>
-                <argument name="dataSource" xsi:type="object">Magento\Reports\Model\Resource\Customer\Orders\Collection\Initial</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Reports\Model\ResourceModel\Customer\Orders\Collection\Initial</argument>
             </arguments>
         </referenceBlock>
         <referenceBlock name="adminhtml.report.grid.export">

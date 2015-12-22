@@ -10,14 +10,14 @@
 <?php
 $element = $block->getElement();
 $fieldId = ($element->getHtmlContainerId()) ? ' id="' . $element->getHtmlContainerId() . '"' : '';
-$fieldClass = "field field-{$element->getId()} {$element->getCssClass()}";
+$fieldClass = "field admin__field field-{$element->getId()} {$element->getCssClass()}";
 $fieldClass .= ($element->getRequired()) ? ' required' : '';
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId('form-field', $element->getId());
 ?>
 
-<div<?php echo $fieldAttributes ?>>
+<div<?php /* @escapeNotVerified */ echo $fieldAttributes ?>>
     <?php echo $element->getLabelHtml() ?>
-    <div class="control">
+    <div class="control admin__field-control">
         <div class="rule-tree">
             <div class="rule-tree-wrapper">
                 <?php echo $block->getInputHtml() ?>
@@ -32,6 +32,6 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId(
         "Magento_Rule/rules",
         "prototype"
     ], function(VarienRulesForm){
-        window.<?php echo $block->getHtmlId() ?> = new VarienRulesForm('<?php echo $block->getHtmlId() ?>', '<?php echo $block->getNewChildUrl() ?>');
+        window.<?php echo $block->getHtmlId() ?> = new VarienRulesForm('<?php echo $block->getHtmlId() ?>', '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>');
     });
 </script>

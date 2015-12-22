@@ -11,39 +11,41 @@ use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Page\Page;
 
 /**
- * Multishipping login page
+ * Multishipping login page.
  */
 class MultishippingCheckoutLogin extends Page
 {
     /**
-     * URL for multishipping login page
+     * URL for multishipping login page.
      */
     const MCA = 'multishipping/checkout/login';
 
     /**
-     * Form for customer login
+     * Form for customer login.
      *
      * @var string
      */
     protected $loginBlock = '.login-container';
 
     /**
-     * Custom constructor
+     * Init page. Set page url.
+     *
+     * @return void
      */
-    protected function _init()
+    protected function initUrl()
     {
-        $this->_url = $_ENV['app_frontend_url'] . self::MCA;
+        $this->url = $_ENV['app_frontend_url'] . self::MCA;
     }
 
     /**
-     * Get form for customer login
+     * Get form for customer login.
      *
      * @return \Magento\Customer\Test\Block\Form\Login
      */
     public function getLoginBlock()
     {
         return Factory::getBlockFactory()->getMagentoCustomerFormLogin(
-            $this->_browser->find($this->loginBlock, Locator::SELECTOR_CSS)
+            $this->browser->find($this->loginBlock, Locator::SELECTOR_CSS)
         );
     }
 }

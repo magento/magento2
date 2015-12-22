@@ -9,7 +9,7 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\Resource\OrderFactory;
+use Magento\Sales\Model\ResourceModel\OrderFactory;
 
 /**
  * Class InvoiceTest
@@ -93,7 +93,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             'context' => $contextMock,
             'orderFactory' => $this->orderFactory,
             'orderResourceFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\OrderFactory',
+                'Magento\Sales\Model\ResourceModel\OrderFactory',
                 [],
                 [],
                 '',
@@ -107,7 +107,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                     false
                 ),
             'invoiceItemCollectionFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory',
+                'Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory',
                 [],
                 [],
                 '',
@@ -121,7 +121,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                 false
             ),
             'commentCollectionFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory',
+                'Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory',
                 [],
                 [],
                 '',

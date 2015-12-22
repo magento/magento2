@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
@@ -13,7 +13,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Action\Action">
+    <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="weee-app-action-dispatchController-context-plugin"
                 type="Magento\Weee\Model\App\Action\ContextPlugin"/>
     </type>

@@ -64,7 +64,7 @@ class BestsellerProductsReportEntityTest extends Injectable
         // Preconditions
         $order->persist();
         $this->bestsellers->open();
-        $this->bestsellers->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->bestsellers->getMessagesBlock()->clickLinkInMessage('notice', 'here');
 
         // Steps
         $this->bestsellers->getFilterBlock()->viewsReport($bestsellerReport);

@@ -24,6 +24,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -120,7 +121,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $field = $fieldset->addField(
-                'store_id',
+                'stores',
                 'multiselect',
                 [
                     'name' => 'stores[]',
@@ -136,7 +137,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $field->setRenderer($renderer);
         } else {
             $fieldset->addField(
-                'store_id',
+                'stores',
                 'hidden',
                 ['name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId()]
             );

@@ -48,7 +48,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
 
         $allShow = $this->getColumn()->getStoreAll();
 
-        $html = '<select name="' . $this->escapeHtml(
+        $html = '<select class="admin__control-select" name="' . $this->escapeHtml(
             $this->_getHtmlName()
         ) . '" ' . $this->getColumn()->getValidateClass() . $this->getUiId(
             'filter',

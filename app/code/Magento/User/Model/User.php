@@ -15,8 +15,8 @@ use Magento\User\Api\Data\UserInterface;
 /**
  * Admin user model
  *
- * @method \Magento\User\Model\Resource\User _getResource()
- * @method \Magento\User\Model\Resource\User getResource()
+ * @method \Magento\User\Model\ResourceModel\User _getResource()
+ * @method \Magento\User\Model\ResourceModel\User getResource()
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()
@@ -94,11 +94,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
@@ -122,9 +117,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param UserValidationRules $validationRules
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -139,15 +133,13 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UserValidationRules $validationRules,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_encryptor = $encryptor;
-        $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_userData = $userData;
         $this->_config = $config;
@@ -165,7 +157,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\User\Model\Resource\User');
+        $this->_init('Magento\User\Model\ResourceModel\User');
     }
 
     /**
@@ -216,7 +208,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function beforeSave()
     {
         $data = [
-            'modified' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             'extra' => serialize($this->getExtra()),
         ];
 
@@ -369,6 +360,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         $templateId = $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE);
         $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateModel('Magento\Email\Model\BackendTemplate')
             ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
             ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
             ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
@@ -388,6 +380,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         $templateId = $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE);
         $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
+            ->setTemplateModel('Magento\Email\Model\BackendTemplate')
             ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
             ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
             ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))

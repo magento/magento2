@@ -63,7 +63,7 @@ class Contextual extends AbstractParser
      */
     protected function _addPhrase($phraseData, $contextType, $contextValue)
     {
-        $phraseKey = $contextType . $phraseData['phrase'];
+        $phraseKey = $contextType . $contextValue. stripslashes($phraseData['phrase']);
 
         if (isset($this->_phrases[$phraseKey])) {
             /** @var \Magento\Setup\Module\I18n\Dictionary\Phrase $phrase */

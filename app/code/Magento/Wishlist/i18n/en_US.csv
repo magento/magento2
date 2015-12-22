@@ -65,7 +65,7 @@ Message,Message
 "An error occurred while deleting the item from wish list.","An error occurred while deleting the item from wish list."
 "Cannot add item to shopping cart","Cannot add item to shopping cart"
 "The requested cart item doesn't exist.","The requested cart item doesn't exist."
-"%1 has been moved to wish list %2","%1 has been moved to wish list %2"
+"%1 has been moved to your wish list.","%1 has been moved to your wish list."
 "We can't move the item to the wish list.","We can't move the item to the wish list."
 "Message length must not exceed %1 symbols","Message length must not exceed %1 symbols"
 "Email address can't be empty.","Email address can't be empty."

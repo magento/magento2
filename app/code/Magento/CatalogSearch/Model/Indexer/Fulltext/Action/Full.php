@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -55,7 +55,7 @@ class Full
     protected $productEmulators = [];
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $productAttributeCollectionFactory;
 
@@ -102,7 +102,7 @@ class Full
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Engine
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
      */
     protected $engine;
 
@@ -132,7 +132,7 @@ class Full
     protected $resource;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext
      */
     protected $fulltextResource;
 
@@ -152,13 +152,13 @@ class Full
     protected $connection;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Search\Request\Config $searchRequestConfig
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
-     * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttributeCollectionFactory
+     * @param \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider
      * @param \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -166,19 +166,19 @@ class Full
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
+     * @param \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
      * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Search\Request\Config $searchRequestConfig,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
-        \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttributeCollectionFactory,
+        \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider,
         \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory $indexHandlerFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -186,7 +186,7 @@ class Full
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
+        \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource,
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig
     ) {
@@ -196,7 +196,7 @@ class Full
         $this->eavConfig = $eavConfig;
         $this->searchRequestConfig = $searchRequestConfig;
         $this->catalogProductStatus = $catalogProductStatus;
-        $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
+        $this->productAttributeCollectionFactory = $prodAttributeCollectionFactory;
         $this->eventManager = $eventManager;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
@@ -553,17 +553,22 @@ class Full
         $result = [];
         $selects = [];
         $ifStoreValue = $this->connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
+        $productIdField = $this->getProductIdFieldName();
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
                 $selects[] = $this->connection->select()->from(
+                    ['cpe' => $this->getTable('catalog_product_entity')],
+                    ['entity_id']
+                )->joinInner(
                     ['t_default' => $tableName],
-                    ['entity_id', 'attribute_id']
+                    'cpe.' . $productIdField . ' = t_default.' . $productIdField,
+                    ['attribute_id']
                 )->joinLeft(
                     ['t_store' => $tableName],
                     $this->connection->quoteInto(
-                        't_default.entity_id=t_store.entity_id' .
-                        ' AND t_default.attribute_id=t_store.attribute_id' .
+                        "t_default.{$productIdField} = t_store.{$productIdField}" .
+                        ' AND t_default.attribute_id = t_store.attribute_id' .
                         ' AND t_store.store_id = ?',
                         $storeId
                     ),
@@ -575,7 +580,7 @@ class Full
                     't_default.attribute_id IN (?)',
                     $attributeIds
                 )->where(
-                    't_default.entity_id IN (?)',
+                    "cpe.entity_id IN (?)",
                     $productIds
                 );
             }
@@ -798,5 +803,15 @@ class Full
         foreach ($data as $key => $value) {
             yield $key => $value;
         }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProductIdFieldName()
+    {
+        $table = $this->getTable('catalog_product_entity');
+        $indexList = $this->connection->getIndexList($table);
+        return $indexList[$this->connection->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }

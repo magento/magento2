@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Fixtures;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class OrdersFixture
@@ -34,59 +34,59 @@ class OrdersFixture extends Fixture
 
         $quoteTableName = $this->getTableName(
             'quote',
-            'Magento\Quote\Model\Resource\Quote'
+            'Magento\Quote\Model\ResourceModel\Quote'
         );
         $quoteAddressTableName = $this->getTableName(
             'quote_address',
-            'Magento\Quote\Model\Resource\Quote\Address'
+            'Magento\Quote\Model\ResourceModel\Quote\Address'
         );
         $quoteItemTableName = $this->getTableName(
             'quote_item',
-            'Magento\Quote\Model\Resource\Quote\Item'
+            'Magento\Quote\Model\ResourceModel\Quote\Item'
         );
         $quoteItemOptionTableName = $this->getTableName(
             'quote_item_option',
-            'Magento\Quote\Model\Resource\Quote\Item\Option'
+            'Magento\Quote\Model\ResourceModel\Quote\Item\Option'
         );
         $quotePaymentTableName = $this->getTableName(
             'quote_payment',
-            'Magento\Quote\Model\Resource\Quote\Payment'
+            'Magento\Quote\Model\ResourceModel\Quote\Payment'
         );
         $quoteAddressRateTableName = $this->getTableName(
             'quote_shipping_rate',
-            'Magento\Quote\Model\Resource\Quote\Address\Rate'
+            'Magento\Quote\Model\ResourceModel\Quote\Address\Rate'
         );
         $reportEventTableName = $this->getTableName(
             'report_event',
-            'Magento\Reports\Model\Resource\Event'
+            'Magento\Reports\Model\ResourceModel\Event'
         );
         $salesOrderTableName = $this->getTableName(
             'sales_order',
-            'Magento\Sales\Model\Resource\Order'
+            'Magento\Sales\Model\ResourceModel\Order'
         );
         $salesOrderAddressTableName = $this->getTableName(
             'sales_order_address',
-            'Magento\Sales\Model\Resource\Order'
+            'Magento\Sales\Model\ResourceModel\Order'
         );
         $salesOrderGridTableName = $this->getTableName(
             'sales_order_grid',
-            'Magento\Sales\Model\Resource\Order\Grid'
+            'Magento\Sales\Model\ResourceModel\Order\Grid'
         );
         $salesOrderItemTableName = $this->getTableName(
             'sales_order_item',
-            'Magento\Sales\Model\Resource\Order\Item'
+            'Magento\Sales\Model\ResourceModel\Order\Item'
         );
         $salesOrderPaymentTableName = $this->getTableName(
             'sales_order_payment',
-            'Magento\Sales\Model\Resource\Order\Payment'
+            'Magento\Sales\Model\ResourceModel\Order\Payment'
         );
         $salesOrderStatusHistoryTableName = $this->getTableName(
             'sales_order_status_history',
-            'Magento\Sales\Model\Resource\Order\Status\History'
+            'Magento\Sales\Model\ResourceModel\Order\Status\History'
         );
         $eavEntityStoreTableName = $this->getTableName(
             'eav_entity_store',
-            '\Magento\Eav\Model\Resource\Entity\Store'
+            '\Magento\Eav\Model\ResourceModel\Entity\Store'
         );
         /** @var \Magento\Store\Model\StoreManager $storeManager */
         $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
@@ -127,9 +127,9 @@ class OrdersFixture extends Fixture
                     /** @var $productCategory \Magento\Catalog\Model\Category */
                     $productCategory = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Category');
 
-                    /** @var $simpleProductCollection \Magento\Catalog\Model\Resource\Product\Collection */
+                    /** @var $simpleProductCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
                     $simpleProductCollection = $this->fixtureModel->getObjectManager()->create(
-                        'Magento\Catalog\Model\Resource\Product\Collection'
+                        'Magento\Catalog\Model\ResourceModel\Product\Collection'
                     );
 
                     $simpleProductCollection->addStoreFilter($storeId);
@@ -316,7 +316,7 @@ class OrdersFixture extends Fixture
     public function getConnection()
     {
         return $this->fixtureModel->getObjectManager()->get(
-            'Magento\Framework\App\Resource'
+            'Magento\Framework\App\ResourceConnection'
         )->getConnection();
     }
 }

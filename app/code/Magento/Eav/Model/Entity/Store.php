@@ -6,8 +6,8 @@
 namespace Magento\Eav\Model\Entity;
 
 /**
- * @method \Magento\Eav\Model\Resource\Entity\Store _getResource()
- * @method \Magento\Eav\Model\Resource\Entity\Store getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Store _getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Store getResource()
  * @method int getEntityTypeId()
  * @method \Magento\Eav\Model\Entity\Store setEntityTypeId(int $value)
  * @method int getStoreId()
@@ -25,10 +25,11 @@ class Store extends \Magento\Framework\Model\AbstractModel
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Entity\Store');
+        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Store');
     }
 
     /**
@@ -37,6 +38,7 @@ class Store extends \Magento\Framework\Model\AbstractModel
      * @param int $entityTypeId
      * @param int $storeId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function loadByEntityStore($entityTypeId, $storeId)
     {

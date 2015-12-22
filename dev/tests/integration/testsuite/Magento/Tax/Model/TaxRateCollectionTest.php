@@ -12,8 +12,8 @@ class TaxRateCollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateTaxRateCollectionItem()
     {
-        /** @var \Magento\Tax\Model\Resource\Calculation\Rate\Collection $collection */
-        $collection = Bootstrap::getObjectManager()->get('Magento\Tax\Model\Resource\Calculation\Rate\Collection');
+        /** @var \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection $collection */
+        $collection = Bootstrap::getObjectManager()->get('Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection');
         $dbTaxRatesQty = $collection->count();
         if (($dbTaxRatesQty == 0) || ($collection->getFirstItem()->getId() != 1)) {
             $this->fail("Preconditions failed.");

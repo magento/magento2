@@ -24,7 +24,7 @@ class AssertCartPriceRuleSuccessSaveMessage extends AbstractConstraint
      */
     public function processAssert(PromoQuoteIndex $promoQuoteIndex)
     {
-        $actualMessage = $promoQuoteIndex->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $promoQuoteIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

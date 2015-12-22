@@ -8,14 +8,9 @@
 
 /** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
 
-/**
- * @deprecated
- * @removeCandidate
- */
-
 $_item = $block->getItem();
 ?>
 <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>
 <span class="cart-price">
-    <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
+    <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
 </span>

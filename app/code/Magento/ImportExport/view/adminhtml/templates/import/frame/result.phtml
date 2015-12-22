@@ -6,6 +6,6 @@
 ?>
 <script type='text/javascript'>
 //<![CDATA[
-    top.varienImport.postToFrameComplete(<?php echo $block->getResponseJson() ?>);
+    top.varienImport.postToFrameComplete(<?php /* @escapeNotVerified */ echo $block->getResponseJson() ?>);
 //]]>
 </script>

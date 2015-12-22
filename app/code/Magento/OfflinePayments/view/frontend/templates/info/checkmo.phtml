@@ -5,22 +5,24 @@
  */
 
 // @codingStandardsIgnoreFile
-
+/**
+ * @var $block \Magento\OfflinePayments\Block\Info\Checkmo
+ */
 ?>
 <dl class="payment-method checkmemo">
     <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
     <?php if ($block->getInfo()->getAdditionalData()): ?>
         <?php if ($block->getPayableTo()): ?>
             <dd class="content">
-                <strong><?php echo __('Make Check payable to') ?></strong>
+                <strong><?php echo $block->escapeHtml(__('Make Check payable to')) ?></strong>
                 <?php echo $block->escapeHtml($block->getPayableTo()) ?>
             </dd>
         <?php endif; ?>
         <?php if ($block->getMailingAddress()): ?>
             <dd class="content">
-                <strong><?php echo __('Send Check to') ?></strong>
+                <strong><?php echo $block->escapeHtml(__('Send Check to')) ?></strong>
                 <address class="checkmo mailing address">
-                    <?php echo nl2br($block->escapeHtml($block->getMailingAddress())) ?>
+                    <?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getMailingAddress())) ?>
                 </address>
             </dd>
         <?php endif; ?>

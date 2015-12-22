@@ -23,7 +23,7 @@ class ResourcesPopup extends Form
      *
      * @var string
      */
-    protected $allowButtonSelector = '[data-row-dialog="tokens"][role="button"]';
+    protected $allowButtonSelector = '[data-row-dialog="tokens"][type="button"]';
 
     /**
      * Selector for "Reauthorize" button.

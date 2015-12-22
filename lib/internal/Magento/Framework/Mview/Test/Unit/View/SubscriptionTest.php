@@ -22,7 +22,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Mview\View\Subscription */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Resource */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection */
     protected $resourceMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Ddl\TriggerFactory */
@@ -40,7 +40,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false);
+        $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false, false);
 
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')

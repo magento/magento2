@@ -6,13 +6,14 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Catalog inventory module observer
  */
-class SubtractQuoteInventoryObserver
+class SubtractQuoteInventoryObserver implements ObserverInterface
 {
     /**
      * @var StockManagementInterface
@@ -54,7 +55,7 @@ class SubtractQuoteInventoryObserver
      * @param EventObserver $observer
      * @return $this
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $observer->getEvent()->getQuote();

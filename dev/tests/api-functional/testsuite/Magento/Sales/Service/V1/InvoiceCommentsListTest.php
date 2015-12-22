@@ -24,8 +24,8 @@ class InvoiceCommentsListTest extends WebapiAbstract
         $comment = 'Test comment';
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Magento\Sales\Model\Resource\Order\Invoice\Collection $invoiceCollection */
-        $invoiceCollection = $objectManager->get('Magento\Sales\Model\Resource\Order\Invoice\Collection');
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Collection $invoiceCollection */
+        $invoiceCollection = $objectManager->get('Magento\Sales\Model\ResourceModel\Order\Invoice\Collection');
         $invoice = $invoiceCollection->getFirstItem();
         $invoiceComment = $objectManager->get('Magento\Sales\Model\Order\Invoice\Comment');
         $invoiceComment->setComment($comment);

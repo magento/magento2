@@ -114,7 +114,7 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
     /**
      * Creates and initializes the information for \Magento\Directory\Model\Data\CountryInformation
      *
-     * @param \Magento\Directory\Model\Resource\Country $country
+     * @param \Magento\Directory\Model\ResourceModel\Country $country
      * @param array $regions
      * @param string $storeLocale
      * @return \Magento\Directory\Model\Data\CountryInformation

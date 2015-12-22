@@ -36,8 +36,19 @@ main.controller('navigationController',
     ]
 )
 .controller('mainController', [
-    '$scope', '$state', 'navigationService', '$localStorage',
-    function ($scope, $state, navigationService, $localStorage) {
+    '$scope', '$state', 'navigationService', '$localStorage', '$interval', '$http',
+    function ($scope, $state, navigationService, $localStorage, $interval, $http) {
+        $interval(
+            function () {
+                $http.post('index.php/session/prolong')
+                    .success(function (result) {
+                    })
+                    .error(function (result) {
+                    });
+            },
+            120000
+        );
+
         $scope.moduleName = $localStorage.moduleName;
         $scope.$on('$stateChangeSuccess', function (event, state) {
             $scope.valid = true;
@@ -49,6 +60,12 @@ main.controller('navigationController',
                 $state.go(navigationService.getNextState().id);
             }
         };
+
+        $scope.goToState = function (stateId) {
+            $state.go(stateId)
+        }
+
+        $scope.state = $state;
 
         $scope.previousState = function () {
                 $scope.valid = true;
@@ -78,7 +95,7 @@ main.controller('navigationController',
 
         $scope.goToStart = function() {
             if ($state.current.type === 'install') {
-                $state.go('root.landing-installer');
+                $state.go('root.landing-install');
             } else if ($state.current.type === 'upgrade') {
                 $state.go('root.upgrade');
             } else {
@@ -96,6 +113,7 @@ main.controller('navigationController',
     return {
         mainState: {},
         states: [],
+        titlesWithModuleName: ['enable', 'disable', 'update', 'uninstall'],
         load: function () {
             var self = this;
             return $http.get('index.php/navigation').success(function (data) {
@@ -103,6 +121,9 @@ main.controller('navigationController',
                 var isCurrentStateFound = false;
                 self.states = data.nav;
                 $localStorage.menu = data.menu;
+                self.titlesWithModuleName.forEach(function (value) {
+                    data.titles[value] = data.titles[value] + $localStorage.moduleName;
+                });
                 $localStorage.titles = data.titles;
                 data.nav.forEach(function (item) {
                     app.stateProvider.state(item.id, item);

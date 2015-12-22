@@ -29,9 +29,9 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\UrlFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $storeManagerMock;
+    private $backendUrlFactory;
 
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -56,13 +56,10 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
         $this->validatorFactory = $this->getMockBuilder('Magento\Framework\ValidatorFactory')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('/'));
-        $this->storeManagerMock = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
+        $backendUrl = $this->getMock('\Magento\Backend\Model\Url', [], [], '', false);
+        $backendUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('/'));
+        $this->backendUrlFactory = $this->getMock('Magento\Backend\Model\UrlFactory', ['create'], [], '', false);
+        $this->backendUrlFactory->expects($this->any())->method('create')->willReturn($backendUrl);
 
         $this->filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $dirMock = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
@@ -99,7 +96,7 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
                 'validatorFactory' => $this->validatorFactory,
                 'request' => $this->requestMock,
                 'frontNameResolver' => $mockFrontNameResolver,
-                'storeManager' => $this->storeManagerMock,
+                'backendUrlFactory' => $this->backendUrlFactory,
                 'filesystem' => $this->filesystemMock,
             ]
         );
@@ -108,12 +105,14 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test for setting session name for admin
-     *
+     * Test for setting session name and secure_cookie for admin
+     * @dataProvider requestSecureDataProvider
+     * @param $secureRequest
      */
-    public function testSetSessionNameByConstructor()
+    public function testSetSessionSettingsByConstructor($secureRequest)
     {
         $sessionName = 'admin';
+        $this->requestMock->expects($this->once())->method('isSecure')->willReturn($secureRequest);
 
         $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
             ->disableOriginalConstructor()
@@ -134,10 +133,16 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
                 'validatorFactory' => $this->validatorFactory,
                 'request' => $this->requestMock,
                 'sessionName' => $sessionName,
-                'storeManager' => $this->storeManagerMock,
+                'backendUrlFactory' => $this->backendUrlFactory,
                 'filesystem' => $this->filesystemMock,
             ]
         );
         $this->assertSame($sessionName, $adminConfig->getName());
+        $this->assertSame($secureRequest, $adminConfig->getCookieSecure());
+    }
+
+    public function requestSecureDataProvider()
+    {
+        return [[true], [false]];
     }
 }

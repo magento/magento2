@@ -20,6 +20,7 @@ class Actions extends Text
      * Returns current quote item
      *
      * @return AbstractItem
+     * @codeCoverageIgnore
      */
     public function getItem()
     {
@@ -31,6 +32,7 @@ class Actions extends Text
      *
      * @param AbstractItem $item
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setItem(AbstractItem $item)
     {

@@ -6,10 +6,12 @@
 
 namespace Magento\TestFramework\Event;
 
+use Magento\Framework\Event\ObserverInterface;
+
 /**
  * Observer of Magento events triggered using \Magento\TestFramework\EventManager::dispatch()
  */
-class Magento
+class Magento implements ObserverInterface
 {
     /**
      * Used when Magento framework instantiates the class on its own and passes nothing to the constructor
@@ -51,8 +53,10 @@ class Magento
 
     /**
      * Handler for 'core_app_init_current_store_after' event, that converts it into 'initStoreAfter'
+     * @param \Magento\Framework\Event\Observer $observer
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function initStoreAfter()
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $this->_eventManager->fireEvent('initStoreAfter');
     }

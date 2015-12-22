@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <catalog>
             <seo>
@@ -15,7 +15,6 @@
                 <engine>mysql</engine>
                 <min_query_length>1</min_query_length>
                 <max_query_length>128</max_query_length>
-                <use_layered_navigation_count>0</use_layered_navigation_count>
             </search>
         </catalog>
     </default>

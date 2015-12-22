@@ -7,13 +7,15 @@ define([
     'mageUtils',
     'uiRegistry',
     './abstract',
-    'Magento_Ui/js/core/renderer/layout'
+    'uiLayout'
 ], function (_, utils, registry, Abstract, layout) {
     'use strict';
 
     var inputNode = {
         parent: '${ $.$data.parentName }',
-        type: 'form.input',
+        component: 'Magento_Ui/js/form/element/abstract',
+        template: '${ $.$data.template }',
+        provider: '${ $.$data.provider }',
         name: '${ $.$data.index }_input',
         dataScope: '${ $.$data.customEntry }',
         customScope: '${ $.$data.customScope }',
@@ -31,14 +33,14 @@ define([
      * @param  {Array} nodes
      * @return {Object}
      */
-    function parseOptions(nodes) {
+    function parseOptions(nodes, captionValue) {
         var caption,
             value;
 
         nodes = _.map(nodes, function (node) {
             value = node.value;
 
-            if (value === null || value === '') {
+            if (value === null || value === captionValue) {
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
@@ -102,7 +104,8 @@ define([
 
     return Abstract.extend({
         defaults: {
-            customName: '${ $.parentName }.${ $.index }_input'
+            customName: '${ $.parentName }.${ $.index }_input',
+            elementTmpl: 'ui/form/element/select'
         },
 
         /**
@@ -131,7 +134,9 @@ define([
          * @returns {Object} Chainable.
          */
         initConfig: function (config) {
-            var result = parseOptions(config.options);
+            var options = config.options,
+                captionValue = config.captionValue || '',
+                result = parseOptions(options, captionValue);
 
             if (config.caption) {
                 delete result.caption;

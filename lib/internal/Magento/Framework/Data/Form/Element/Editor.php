@@ -92,7 +92,7 @@ class Editor extends Textarea
                 if ($this->getForceLoad()) {
                     $forceLoad = $jsSetupObject . '.setup("exact");';
                 } else {
-                    $forceLoad = 'Event.observe(window, "load", ' .
+                    $forceLoad = 'jQuery(window).on("load", ' .
                         $jsSetupObject .
                         '.setup.bind(' .
                         $jsSetupObject .
@@ -123,9 +123,9 @@ class Editor extends Textarea
                 '
                 <script type="text/javascript">
                 //<![CDATA[
-                require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup", "mage/adminhtml/wysiwyg/widget"], function(jQuery){' .
+                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; window.tinyMCE_GZ.loaded = true;require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup", "mage/adminhtml/wysiwyg/widget"], function(jQuery){' .
                 "\n" .
-                '(function($) {$.mage.translate.add(' .
+                '  (function($) {$.mage.translate.add(' .
                 \Zend_Json::encode(
                     $this->getButtonTranslations()
                 ) .
@@ -252,7 +252,7 @@ class Editor extends Textarea
         if ($this->getConfig('add_widgets')) {
             $buttonsHtml .= $this->_getButtonHtml(
                 [
-                    'title' => $this->translate('Insert Frontend App...'),
+                    'title' => $this->translate('Insert Widget...'),
                     'onclick' => "widgetTools.openDialog('" . $this->getConfig(
                         'widget_window_url'
                     ) . "widget_target_id/" . $this->getHtmlId() . "')",
@@ -385,14 +385,14 @@ class Editor extends Textarea
     protected function _wrapIntoContainer($html)
     {
         if (!$this->getConfig('use_container')) {
-            return $html;
+            return '<div class="admin__control-wysiwig">' .$html . '</div>';
         }
 
         $html = '<div id="editor' . $this->getHtmlId() . '"' . ($this->getConfig(
             'no_display'
         ) ? ' style="display:none;"' : '') . ($this->getConfig(
             'container_class'
-        ) ? ' class="' . $this->getConfig(
+        ) ? ' class="admin__control-wysiwig ' . $this->getConfig(
             'container_class'
         ) . '"' : '') . '>' . $html . '</div>';
 

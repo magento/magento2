@@ -6,7 +6,7 @@
 namespace Magento\Quote\Model\Cart;
 
 use Magento\Quote\Api;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\Api\DataObjectHelper;
@@ -15,6 +15,7 @@ use Magento\Quote\Api\CouponManagementInterface;
 
 /**
  * Cart totals data object.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartTotalRepository implements CartTotalRepositoryInterface
 {
@@ -28,7 +29,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     /**
      * Quote repository.
      *
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $quoteRepository;
 
@@ -54,7 +55,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
 
     /**
      * @param Api\Data\TotalsInterfaceFactory $totalsFactory
-     * @param QuoteRepository $quoteRepository
+     * @param CartRepositoryInterface $quoteRepository
      * @param DataObjectHelper $dataObjectHelper
      * @param CouponManagementInterface $couponService
      * @param TotalsConverter $totalsConverter
@@ -62,7 +63,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      */
     public function __construct(
         Api\Data\TotalsInterfaceFactory $totalsFactory,
-        QuoteRepository $quoteRepository,
+        CartRepositoryInterface $quoteRepository,
         DataObjectHelper $dataObjectHelper,
         CouponManagementInterface $couponService,
         TotalsConverter $totalsConverter,
@@ -84,34 +85,38 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      */
     public function get($cartId)
     {
-        /**
-         * Quote.
-         *
-         * @var \Magento\Quote\Model\Quote $quote
-         */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
-        $shippingAddress = $quote->getShippingAddress();
         if ($quote->isVirtual()) {
-            $totalsData = array_merge($quote->getBillingAddress()->getData(), $quote->getData());
+            $addressTotalsData = $quote->getBillingAddress()->getData();
+            $addressTotals = $quote->getBillingAddress()->getTotals();
         } else {
-            $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
+            $addressTotalsData = $quote->getShippingAddress()->getData();
+            $addressTotals = $quote->getShippingAddress()->getTotals();
         }
-        $totals = $this->totalsFactory->create();
-        $this->dataObjectHelper->populateWithArray($totals, $totalsData, '\Magento\Quote\Api\Data\TotalsInterface');
+
+        /** @var \Magento\Quote\Api\Data\TotalsInterface $quoteTotals */
+        $quoteTotals = $this->totalsFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $quoteTotals,
+            $addressTotalsData,
+            '\Magento\Quote\Api\Data\TotalsInterface'
+        );
         $items = [];
-        $weeeTaxAppliedAmount = 0;
         foreach ($quote->getAllVisibleItems() as $index => $item) {
             $items[$index] = $this->itemConverter->modelToDataObject($item);
-            $weeeTaxAppliedAmount += $item->getWeeeTaxAppliedRowAmount();
         }
-        $totals->setCouponCode($this->couponService->get($cartId));
-        $calculatedTotals = $this->totalsConverter->process($quote->getTotals());
-        $amount = $totals->getGrandTotal() - $totals->getTaxAmount();
+        $calculatedTotals = $this->totalsConverter->process($addressTotals);
+        $quoteTotals->setTotalSegments($calculatedTotals);
+
+        $amount = $quoteTotals->getGrandTotal() - $quoteTotals->getTaxAmount();
         $amount = $amount > 0 ? $amount : 0;
-        $totals->setGrandTotal($amount);
-        $totals->setTotalSegments($calculatedTotals);
-        $totals->setItems($items);
-        $totals->setWeeeTaxAppliedAmount($weeeTaxAppliedAmount);
-        return $totals;
+        $quoteTotals->setCouponCode($this->couponService->get($cartId));
+        $quoteTotals->setGrandTotal($amount);
+        $quoteTotals->setItems($items);
+        $quoteTotals->setItemsQty($quote->getItemsQty());
+        $quoteTotals->setBaseCurrencyCode($quote->getBaseCurrencyCode());
+        $quoteTotals->setQuoteCurrencyCode($quote->getQuoteCurrencyCode());
+        return $quoteTotals;
     }
 }

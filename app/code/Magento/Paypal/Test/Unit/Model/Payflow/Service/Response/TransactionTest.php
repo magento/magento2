@@ -26,7 +26,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     protected $sessionTransparent;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -53,7 +53,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->sessionTransparent = $this->getMock('Magento\Framework\Session\Generic', ['getQuoteId'], [], '', false);
-        $this->quoteRepository = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepository = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->transparent = $this->getMock('Magento\Paypal\Model\Payflow\Transparent', [], [], '', false);
         $this->paymentMethodManagementInterface = $this->getMock(
             'Magento\Quote\Api\PaymentMethodManagementInterface',

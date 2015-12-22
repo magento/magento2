@@ -37,7 +37,7 @@ class TaxClassTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($attributeMock));
 
-        $resourceMock = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
+        $resourceMock = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
             ->setMethods(['beginTransaction', '_construct', 'getIdFieldName', 'addCommitCallback', 'commit',
                           'save', '__wakeup', ])

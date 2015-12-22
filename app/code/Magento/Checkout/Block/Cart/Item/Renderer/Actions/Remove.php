@@ -19,6 +19,7 @@ class Remove extends Generic
      * @param Template\Context $context
      * @param Cart $cartHelper
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         Template\Context $context,
@@ -33,6 +34,7 @@ class Remove extends Generic
      * Get delete item POST JSON
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getDeletePostJson()
     {

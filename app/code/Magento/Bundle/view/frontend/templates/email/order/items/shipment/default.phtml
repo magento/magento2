@@ -29,7 +29,7 @@
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
             <tr class="bundle-option-label">
                 <td colspan="2">
-                    <strong><em><?= $attributes['option_label'] ?></em></strong>
+                    <strong><em><?= /* @escapeNotVerified */  $attributes['option_label'] ?></em></strong>
                 </td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
@@ -39,7 +39,7 @@
         <tr class="bundle-item bundle-parent">
             <td class="item-info">
                 <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-                <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+                <p class="sku"><?= /* @escapeNotVerified */  __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
             </td>
     <?php else: ?>
         <tr class="bundle-item bundle-option-value">
@@ -50,9 +50,9 @@
             <td class="item-qty">
                 <?php if (($block->isShipmentSeparately() && $_item->getParentItem()) || (!$block->isShipmentSeparately() && !$_item->getParentItem())): ?>
                     <?php if (isset($shipItems[$_item->getId()])): ?>
-                        <?= $shipItems[$_item->getId()]->getQty() * 1 ?>
+                        <?= /* @escapeNotVerified */  $shipItems[$_item->getId()]->getQty() * 1 ?>
                     <?php elseif ($_item->getIsVirtual()): ?>
-                        <?= __('N/A') ?>
+                        <?= /* @escapeNotVerified */  __('N/A') ?>
                     <?php else: ?>
                         0
                     <?php endif; ?>
@@ -70,8 +70,8 @@
             <?php if ($block->getItemOptions()): ?>
             <dl>
                 <?php foreach ($block->getItemOptions() as $option): ?>
-                <dt><strong><em><?= $option['label'] ?></em></strong></dt>
-                            <dd><?= $option['value'] ?></dd>
+                <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
+                            <dd><?= /* @escapeNotVerified */  $option['value'] ?></dd>
                 <?php endforeach; ?>
             </dl>
             <?php endif; ?>

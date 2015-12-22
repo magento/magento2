@@ -16,7 +16,7 @@ $productId = $block->getSaleableItem()->getId();
 /** @var \Magento\Catalog\Pricing\Price\RegularPrice $priceModel */
 $priceModel = $block->getPriceType('regular_price');
 
-echo $block->renderAmount($priceModel->getAmount(), [
+/* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [
     'price_id'          => $block->getPriceId('product-price-'),
     'include_container' => true
 ]);

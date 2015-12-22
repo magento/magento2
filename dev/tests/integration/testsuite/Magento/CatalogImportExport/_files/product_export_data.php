@@ -37,8 +37,6 @@ $productModel->setTypeId(
     'simple'
 )->setPrice(
     10
-)->setGroupPrice(
-    [0 => ['website_id' => 0, 'cust_group' => 0, 'price' => 9]]
 )->setTierPrice(
     [0 => ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 8]]
 )->setVisibility(
@@ -53,10 +51,10 @@ $productModel->setTypeId(
     ['qty' => 100, 'is_in_stock' => 1]
 )->setCanSaveCustomOptions(
     true
-)->setProductOptions(
-    $customOptions
 )->setCategoryIds(
     [333]
 )->setUpSellLinkData(
     [$product->getId() => ['position' => 1]]
-)->save();
+);
+
+$product->setOptions($customOptions)->save();

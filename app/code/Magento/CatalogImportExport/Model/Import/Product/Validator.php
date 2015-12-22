@@ -95,6 +95,28 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
     /**
      * @param string $attrCode
+     * @param array $attributeParams
+     * @param array $rowData
+     * @return bool
+     */
+    public function isRequiredAttributeValid($attrCode, array $attributeParams, array $rowData)
+    {
+        $doCheck = false;
+        if ($attrCode == Product::COL_SKU) {
+            $doCheck = true;
+        } elseif ($attrCode == 'price') {
+            $doCheck = false;
+        } elseif ($attributeParams['is_required'] && $this->getRowScope($rowData) == Product::SCOPE_DEFAULT
+            && $this->context->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
+        ) {
+            $doCheck = true;
+        }
+
+        return $doCheck ? isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode])) : true;
+    }
+
+    /**
+     * @param string $attrCode
      * @param array $attrParams
      * @param array $rowData
      * @return bool
@@ -104,28 +126,25 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
         $this->_rowData = $rowData;
-        if (!empty($attrParams['apply_to']) && !in_array($rowData['product_type'], $attrParams['apply_to'])) {
+        if (isset($rowData['product_type']) && !empty($attrParams['apply_to'])
+            && !in_array($rowData['product_type'], $attrParams['apply_to'])
+        ) {
             return true;
         }
-        if ($attrCode == Product::COL_SKU || $attrParams['is_required']
-            && ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
-                || ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
-                    && !isset($this->context->getOldSku()[$rowData[$attrCode]])))
-        ) {
-            if (!isset($rowData[$attrCode]) || !strlen(trim($rowData[$attrCode]))) {
-                $valid = false;
-                $this->_addMessages(
-                    [
-                        sprintf(
-                            $this->context->retrieveMessageTemplate(
-                                RowValidatorInterface::ERROR_VALUE_IS_REQUIRED
-                            ),
-                            $attrCode
-                        )
-                    ]
-                );
-                return $valid;
-            }
+
+        if (!$this->isRequiredAttributeValid($attrCode, $attrParams, $rowData)) {
+            $valid = false;
+            $this->_addMessages(
+                [
+                    sprintf(
+                        $this->context->retrieveMessageTemplate(
+                            RowValidatorInterface::ERROR_VALUE_IS_REQUIRED
+                        ),
+                        $attrCode
+                    )
+                ]
+            );
+            return $valid;
         }
 
         if (!strlen(trim($rowData[$attrCode]))) {
@@ -141,11 +160,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 $valid = $this->numericValidation($attrCode, $attrParams['type']);
                 break;
             case 'select':
+            case 'boolean':
             case 'multiselect':
                 $values = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]);
                 $valid = true;
                 foreach ($values as $value) {
-                    $valid = $valid || isset($attrParams['options'][strtolower($value)]);
+                    $valid = $valid && isset($attrParams['options'][strtolower($value)]);
                 }
                 if (!$valid) {
                     $this->_addMessages(
@@ -224,6 +244,20 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             }
         }
         return $returnValue;
+    }
+
+    /**
+     * Obtain scope of the row from row data.
+     *
+     * @param array $rowData
+     * @return int
+     */
+    public function getRowScope(array $rowData)
+    {
+        if (empty($rowData[Product::COL_STORE])) {
+            return Product::SCOPE_DEFAULT;
+        }
+        return Product::SCOPE_STORE;
     }
 
     /**

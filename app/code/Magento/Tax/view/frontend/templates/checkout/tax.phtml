@@ -24,22 +24,22 @@
     }
 ?>
 
-<tr <?php echo $attributes; ?>>
-    <th style="<?php echo $_style ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>" scope="row">
+<tr <?php /* @escapeNotVerified */ echo $attributes; ?>>
+    <th style="<?php /* @escapeNotVerified */ echo $_style ?>" class="mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <span class="detailed"><?php echo $block->getTotal()->getTitle() ?></span>
+            <span class="detailed"><?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?></span>
         <?php else: ?>
-            <?php echo $block->getTotal()->getTitle() ?>
+            <?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?>
         <?php endif;?>
     </th>
-    <td style="<?php echo $_style ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_value) ?>
+    <td style="<?php /* @escapeNotVerified */ echo $_style ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+        <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_value) ?>
     </td>
 </tr>
 
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $_value != 0): ?>
     <?php $isTop = 1; ?>
-    <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
+    <?php foreach (unserialize($block->getTotal()->getFullInfo()) as $info): ?>
         <?php if (isset($info['hidden']) && $info['hidden']) {
     continue;
 } ?>
@@ -49,17 +49,17 @@
         <?php $isFirst = 1; ?>
 
         <?php foreach ($rates as $rate): ?>
-            <tr class="totals-tax-details details-<?php echo $taxIter; ?>">
-                <th class="mark" style="<?php echo $_style ?>" colspan="<?php echo $block->getColspan(); ?>" scope="row">
+            <tr class="totals-tax-details details-<?php /* @escapeNotVerified */ echo $taxIter; ?>">
+                <th class="mark" style="<?php /* @escapeNotVerified */ echo $_style ?>" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
                     <?php echo $block->escapeHtml($rate['title']); ?>
                     <?php if (!is_null($rate['percent'])): ?>
                         (<?php echo (float)$rate['percent']; ?>%)
                     <?php endif; ?>
                 </th>
                 <?php if ($isFirst): ?>
-                    <td style="<?php echo $_style ?>" class="amount" rowspan="<?php echo count($rates); ?>"
+                    <td style="<?php /* @escapeNotVerified */ echo $_style ?>" class="amount" rowspan="<?php echo count($rates); ?>"
                        data-th="<?php echo $block->escapeHtml($rate['title']); ?><?php if (!is_null($rate['percent'])): ?>(<?php echo (float)$rate['percent']; ?>%)<?php endif; ?>">
-                        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount); ?>
+                        <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount); ?>
                     </td>
                 <?php endif; ?>
             </tr>

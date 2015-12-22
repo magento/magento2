@@ -152,7 +152,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      * Match provided request and if matched - return corresponding controller
      *
      * @param \Magento\Framework\App\RequestInterface $request
-     * @return \Magento\Framework\App\Action\Action|null
+     * @return \Magento\Framework\App\ActionInterface|null
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
@@ -235,10 +235,9 @@ class Base implements \Magento\Framework\App\RouterInterface
      * Get not found controller instance
      *
      * @param string $currentModuleName
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return \Magento\Framework\App\Action\Action|null
+     * @return \Magento\Framework\App\ActionInterface|null
      */
-    protected function getNotFoundAction($currentModuleName, RequestInterface $request)
+    protected function getNotFoundAction($currentModuleName)
     {
         if (!$this->applyNoRoute) {
             return null;
@@ -250,7 +249,7 @@ class Base implements \Magento\Framework\App\RouterInterface
         }
 
         // instantiate action class
-        return $this->actionFactory->create($actionClassName, ['request' => $request]);
+        return $this->actionFactory->create($actionClassName);
     }
 
     /**
@@ -258,7 +257,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @param array $params
-     * @return \Magento\Framework\App\Action\Action|null
+     * @return \Magento\Framework\App\ActionInterface|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -298,12 +297,12 @@ class Base implements \Magento\Framework\App\RouterInterface
                 continue;
             }
 
-            $actionInstance = $this->actionFactory->create($actionClassName, ['request' => $request]);
+            $actionInstance = $this->actionFactory->create($actionClassName);
             break;
         }
 
         if (null == $actionInstance) {
-            $actionInstance = $this->getNotFoundAction($currentModuleName, $request);
+            $actionInstance = $this->getNotFoundAction($currentModuleName);
             if ($actionInstance === null) {
                 return null;
             }

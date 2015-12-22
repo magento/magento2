@@ -528,7 +528,10 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-        $this->session->expects($this->once())
+        $this->session->expects($this->atLeastOnce())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+        $this->addressData->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
@@ -682,11 +685,11 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(true);
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->once())
             ->method('getParam')
             ->with('id')
             ->willReturn($addressId);
-        $this->request->expects($this->once())
+        $this->request->expects($this->never())
             ->method('getPostValue')
             ->willReturn($postValue);
 
@@ -701,7 +704,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($exception, __('We can\'t save the address.'))
             ->willReturnSelf();
 
-        $this->session->expects($this->once())
+        $this->session->expects($this->never())
             ->method('setAddressFormData')
             ->with($postValue)
             ->willReturnSelf();
@@ -710,7 +713,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('*/*/edit', ['id' => $addressId])
+            ->with('*/*/index')
             ->willReturn($url);
 
         $this->objectManager->expects($this->once())

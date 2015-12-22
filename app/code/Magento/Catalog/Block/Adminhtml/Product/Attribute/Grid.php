@@ -19,20 +19,20 @@ use Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid;
 class Grid extends AbstractGrid
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -83,9 +83,9 @@ class Grid extends AbstractGrid
                 'index' => 'is_global',
                 'type' => 'options',
                 'options' => [
-                    \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE => __('Store View'),
-                    \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE => __('Web Site'),
-                    \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL => __('Global'),
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE => __('Store View'),
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE => __('Web Site'),
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL => __('Global'),
                 ],
                 'align' => 'center'
             ],

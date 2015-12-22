@@ -25,9 +25,5 @@
             <selector>[name$='[sample_url]']</selector>
             <strategy>css selector</strategy>
         </sample_url>
-        <sort_order>
-            <selector>[name$='[sort_order]']</selector>
-            <strategy>css selector</strategy>
-        </sort_order>
     </fields>
 </mapping>

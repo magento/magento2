@@ -15,14 +15,16 @@
 $_product = $block->getProduct();
 $block->getConfigJson();
 ?>
-<fieldset class="admin__fieldset downloadable-form">
+<fieldset class="admin__fieldset downloadable-form" data-ui-id="downloadable-samples">
+    <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Samples')?></span></legend><br>
+    <p class="note"><?php /* @escapeNotVerified */ echo __('Add product preview files here.')?></p>
     <div class="admin__field"<?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
-        <label class="admin__field-label" for="downloadable_samples_title"><span><?php echo __('Title')?></span></label>
+        <label class="admin__field-label" for="downloadable_samples_title"><span><?= /* @noEscape */ __('Title')?></span></label>
         <div class="admin__field-control">
-            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?php echo $block->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?= /* @noEscape */ $block->getSamplesTitle() ?>" <?= /* @noEscape */ ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()): ?>
                 <div class="admin__field admin__field-option">
-                    <input id="sample_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
+                    <input id="sample_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?= /* @noEscape */ $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
                     <label class="admin__field-label" for="sample_title_default"><span>Use Default Value</span></label>
                 </div>
             <?php endif; ?>
@@ -34,15 +36,15 @@ $block->getConfigJson();
                 <table class="admin__control-table">
                     <thead>
                         <tr>
-                            <th class="_required col-title"><span><?php echo __('Title') ?></span></th>
-                            <th class="col-file"><span><?php echo __('File') ?></span></th>
-                            <th class="col-sort"><span><?php echo __('Sort Order') ?></span></th>
+                            <th class="col-sort"><span><?= /* @noEscape */ __('Sort Order') ?></span></th>
+                            <th class="_required col-title"><span><?= /* @noEscape */ __('Title') ?></span></th>
+                            <th class="col-file"><span><?= /* @noEscape */ __('Attach File or Enter Link') ?></span></th>
                             <th class="col-actions">&nbsp;</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <td colspan="4" class="col-actions"><?php echo $block->getAddButtonHtml() ?></td>
+                            <td colspan="4" class="col-actions-add"><?php echo $block->getAddButtonHtml() ?></td>
                         </tr>
                     </tfoot>
                     <tbody id="sample_items_body">
@@ -50,7 +52,7 @@ $block->getConfigJson();
                 </table>
             </div>
             <div class="admin__field-note">
-                <span><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
+                <?= /* @noEscape */ __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?>
             </div>
         </div>
     </div>
@@ -58,53 +60,60 @@ $block->getConfigJson();
 <script>
 require([
     'jquery',
-    'Magento_Ui/js/lib/registry/registry',
+    'uiRegistry',
     'mage/template',
     'jquery/file-uploader',
     'prototype'
 ], function (jQuery, registry, mageTemplate) {
     registry.get('downloadable', function (Downloadable) {
         var sampleTemplate = '<tr>'+
-                            '<td class="col-title">'+
-                                '<input type="hidden" class="__delete__" name="downloadable[sample][<%- data.id %>][is_delete]" value="" />'+
-                                '<input type="hidden" name="downloadable[sample][<%- data.id %>][sample_id]" value="<%- data.sample_id %>" />'+
-                                '<input type="text" class="required-entry input-text admin__control-text" name="downloadable[sample][<%- data.id %>][title]" value="<%- data.title %>" />'+
-                                '<?php echo $_product->getStoreId() ? '<br /><input type="checkbox" id="downloadable_sample_<%- data.id %>_title" name="downloadable[sample][<%- data.id %>][use_default_title]" value="1" /><label class="normal" for="downloadable_sample_<%- data.id %>_title">Use Default Value</label>' : '' ?>'+
-                            '</td>'+
-                            '<td class="col-file">'+
-                                '<div class="files-wide">'+
-                                    '<div class="row">'+
-                                        '<label for="downloadable_sample_<%- data.id %>_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_file_type" name="downloadable[sample][<%- data.id %>][type]" value="file"<%- data.file_checked %> /> File:</label>'+
-                                        '<input type="hidden" class="validate-downloadable-file" id="downloadable_sample_<%- data.id %>_file_save" name="downloadable[sample][<%- data.id %>][file]" value="<%- data.file_save %>" />'+
-                                        '<div id="downloadable_sample_<%- data.id %>_file" class="uploader">'+
-                                            '<div id="downloadable_sample_<%- data.id %>_file-old" class="file-row-info"></div>'+
-                                            '<div id="downloadable_sample_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
-                                            '<div class="fileinput-button form-buttons">'+
-                                                '<span><?php echo __('Browse Files...') ?></span>' +
-                                                '<input id="downloadable_sample_<%- data.id %>_file" type="file" name="<?php echo $block->getConfig()->getFileField() ?>" data-url="<?php echo $block->getConfig()->getUrl() ?>">' +
-                                                '<script>' +
-                                                '/*<![CDATA[*/' +
-                                                    'sampleUploader("#downloadable_sample_<%- data.id %>_file"); ' +
-                                                '/*]]>*/' +
-                                                '</scr'+'ipt>'+
-                                            '</div>'+
-                                            '<div class="clear"></div>'+
-                                        '</div>'+
-                                    '</div>'+
-                                    '<div class="row">'+
-                                        '<label for="downloadable_sample_<%- data.id %>_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_url_type" name="downloadable[sample][<%- data.id %>][type]" value="url"<%- data.url_checked %> /> URL:</label> <input type="text" class="validate-downloadable-url validate-url input-text admin__control-text" name="downloadable[sample][<%- data.id %>][sample_url]" value="<%- data.sample_url %>" />'+
-                                    '</div>'+
-                                    '<div>'+
-                                        '<span id="downloadable_sample_<%- data.id %>_container"></span>'+
-                                    '</div>'+
-                                '</div>'+
-
-                            '</td>'+
-                            '<td class="col-sort"><input type="text" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text sort admin__control-text" /></td>'+
-                            '<td class="col-actions">'+
-                                '<button type="button" class="action-delete"><span>Delete</span></button>'+
-                            '</td>'+
-                        '</tr>';
+            '<td class="col-sort" data-role="draggable-handle">' +
+                '<input data-container="link-order" type="hidden" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="sort" />' +
+                '<span class="draggable-handle" title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Sort Variations')) ?>"></span>' +
+            '</td>'+
+            '<td class="col-title">'+
+                '<input type="hidden" class="__delete__" name="downloadable[sample][<%- data.id %>][is_delete]" value="" />'+
+                '<input type="hidden" name="downloadable[sample][<%- data.id %>][sample_id]" value="<%- data.sample_id %>" />'+
+                '<input type="text" class="required-entry input-text admin__control-text" name="downloadable[sample][<%- data.id %>][title]" value="<%- data.title %>" />'+
+                <?php if($_product->getStoreId()): ?>
+                    '<div class="admin__field admin__field-option">'+
+                        '<input type="checkbox" id="downloadable_sample_<%- data.id %>_title" name="downloadable[sample][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
+                        '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Use Default Value'); ?></span></label>'+
+                    '</div>' +
+                <?php endif; ?>
+            '</td>'+
+            '<td class="col-file">'+
+                '<div class="admin__field admin__field-option">'+
+                    '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_file_type" name="downloadable[sample][<%- data.id %>][type]" value="file"<%- data.file_checked %> />' +
+                    '<label for="downloadable_sample_<%- data.id %>_file_type" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('File'); ?>:</span></label>'+
+                    '<input type="hidden" class="validate-downloadable-file" id="downloadable_sample_<%- data.id %>_file_save" name="downloadable[sample][<%- data.id %>][file]" value="<%- data.file_save %>" />'+
+                    '<div id="downloadable_sample_<%- data.id %>_file" class="admin__field-uploader">'+
+                        '<div id="downloadable_sample_<%- data.id %>_file-old" class="file-row-info"></div>'+
+                        '<div id="downloadable_sample_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
+                        '<div class="fileinput-button">'+
+                            '<span><?= /* @noEscape */ __('Browse Files...') ?></span>' +
+                            '<input id="downloadable_sample_<%- data.id %>_file" type="file" name="<?= /* @noEscape */ $block->getConfig()->getFileField() ?>" data-url="<?= /* @noEscape */ $block->getConfig()->getUrl() ?>">' +
+                            '<script>' +
+                            '/*<![CDATA[*/' +
+                                'sampleUploader("#downloadable_sample_<%- data.id %>_file"); ' +
+                            '/*]]>*/' +
+                            '</scr'+'ipt>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="admin__field admin__field-option admin__field-file-url">'+
+                    '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_url_type" name="downloadable[sample][<%- data.id %>][type]" value="url"<%- data.url_checked %> />' +
+                    '<label for="downloadable_sample_<%- data.id %>_url_type" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('URL'); ?></span></label>' +
+                    '<input type="text" class="validate-downloadable-url validate-url admin__control-text" name="downloadable[sample][<%- data.id %>][sample_url]" value="<%- data.sample_url %>" placeholder="<?php /* @escapeNotVerified */ echo __('URL'); ?>" />'+
+                '</div>'+
+                '<div>'+
+                    '<span id="downloadable_sample_<%- data.id %>_container"></span>'+
+                '</div>'+
+            '</td>'+
+            '<td class="col-actions">'+
+                '<button type="button" class="action-delete" title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Delete')); ?>"><span><?php /* @escapeNotVerified */ echo __('Delete'); ?></span></button>'+
+            '</td>'+
+        '</tr>';
         sampleItems = {
             tbody: $('sample_items_body'),
             templateText: sampleTemplate,
@@ -117,6 +126,7 @@ require([
                     data = {};
                     data.sample_type = 'file';
                     data.sample_id  = 0;
+                    data.sort_order = this.itemCount + 1;
                 }
 
                 data.id = this.itemCount;
@@ -158,11 +168,11 @@ require([
                 new Downloadable.FileUploader(
                     'samples',
                     data.id,
-                    sampleUrl.up('td').down('div.uploader'),
+                    sampleUrl.up('td').down('div.admin__field-uploader'),
                     'downloadable[sample]['+data.id+']',
                     data.file_save,
                     'downloadable_sample_'+data.id+'_file',
-                    <?php echo $block->getConfigJson() ?>
+                    <?= /* @noEscape */ $block->getConfigJson() ?>
                 );
                 sampleUrl.advaiceContainer = 'downloadable_sample_'+data.id+'_container';
                 sampleFile = $('downloadable_sample_'+data.id+'_file_type');
@@ -171,6 +181,20 @@ require([
 
                 this.itemCount++;
                 this.bindRemoveButtons();
+            },
+            sorting: function () {
+                var list = jQuery(this.tbody);
+                list.sortable({
+                    axis: 'y',
+                    handle: '[data-role=draggable-handle]',
+                    items: 'tr',
+                    update: function (event, data) {
+                        list.find('[data-container=link-order]').each(function (i, el) {
+                            jQuery(el).val(i + 1);
+                        });
+                    },
+                    tolerance: 'pointer'
+                });
             },
             remove: function(event) {
                 var element = $(Event.findElement(event, 'tr'));
@@ -191,15 +215,16 @@ require([
                     }
                 }
             }
-        }
+        };
 
+        sampleItems.sorting();
         sampleItems.bindRemoveButtons();
 
         sampleUploader = function (id) {
             (function ($, id) {
                 $(id).fileupload({
                     dataType: 'json',
-                    url: '<?php echo $block->getConfig()->getUrl() ?>',
+                    url: '<?= /* @noEscape */ $block->getConfig()->getUrl() ?>',
                     sequentialUploads: true,
                     maxFileSize: 2000000,
                     add: function (e, data) {
@@ -263,7 +288,7 @@ require([
         }
 
         <?php foreach ($block->getSampleData() as $item): ?>
-            sampleItems.add(<?php echo $item->toJson() ?>);
+            sampleItems.add(<?= /* @noEscape */ $item->toJson() ?>);
         <?php endforeach; ?>
 
     });

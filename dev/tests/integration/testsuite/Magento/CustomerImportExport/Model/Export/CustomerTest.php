@@ -31,9 +31,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     public function testExport()
     {
         $expectedAttributes = [];
-        /** @var $collection \Magento\Customer\Model\Resource\Attribute\Collection */
+        /** @var $collection \Magento\Customer\Model\ResourceModel\Attribute\Collection */
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Attribute\Collection'
+            'Magento\Customer\Model\ResourceModel\Attribute\Collection'
         );
         /** @var $attribute \Magento\Customer\Model\Attribute */
         foreach ($collection as $attribute) {
@@ -94,7 +94,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributeCollection()
     {
         $this->assertInstanceOf(
-            'Magento\Customer\Model\Resource\Attribute\Collection',
+            'Magento\Customer\Model\ResourceModel\Attribute\Collection',
             $this->_model->getAttributeCollection()
         );
     }
@@ -104,7 +104,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function testFilterAttributeCollection()
     {
-        /** @var $collection \Magento\Customer\Model\Resource\Attribute\Collection */
+        /** @var $collection \Magento\Customer\Model\ResourceModel\Attribute\Collection */
         $collection = $this->_model->getAttributeCollection();
         $collection = $this->_model->filterAttributeCollection($collection);
         /**
@@ -167,7 +167,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
          * Change type of created_at attribute. In this case we have possibility to test date rage filter
          */
         $attributeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Attribute\Collection'
+            'Magento\Customer\Model\ResourceModel\Attribute\Collection'
         );
         $attributeCollection->addFieldToFilter('attribute_code', 'created_at');
         /** @var $createdAtAttribute \Magento\Customer\Model\Attribute */
@@ -187,10 +187,10 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $this->_model->setParameters($parameters);
-        /** @var $customers \Magento\Customer\Model\Resource\Customer\Collection */
+        /** @var $customers \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $collection = $this->_model->filterEntityCollection(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Customer\Model\Resource\Customer\Collection'
+                'Magento\Customer\Model\ResourceModel\Customer\Collection'
             )
         );
         $collection->load();

@@ -15,6 +15,7 @@ class Notices extends \Magento\Framework\View\Element\Template
      * Get Link to cookie restriction privacy policy page
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getPrivacyPolicyLink()
     {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container as AggregationContainer;
@@ -35,13 +35,13 @@ class Builder
     private $resource;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param DataProviderContainer $dataProviderContainer
      * @param AggregationContainer $aggregationContainer
      * @param EntityMetadata $entityMetadata
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         DataProviderContainer $dataProviderContainer,
         AggregationContainer $aggregationContainer,
         EntityMetadata $entityMetadata

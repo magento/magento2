@@ -14,7 +14,7 @@
         <links_purchased_separately>
             <selector>[name="product[links_purchased_separately]"]</selector>
             <strategy>css selector</strategy>
-            <input>select</input>
+            <input>checkbox</input>
         </links_purchased_separately>
     </fields>
 </mapping>

@@ -48,7 +48,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
                     ],
                     'type' => 'boolQuery',
                 ],
-                'match_query' => ['value' => 'ok', 'type' => 'matchQuery'],
+                'match_query' => ['value' => 'ok', 'type' => 'matchQuery', 'is_bind' => true],
                 'bool_query_rm' => [
                     'queryReference' => [
                         ['ref' => 'match_query_rm'],
@@ -83,7 +83,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
                     'filterReference' => [['ref' => 'term_filter2']],
                     'type' => 'boolFilter',
                 ],
-                'term_filter2' => ['value' => 'value_good', 'type' => 'termFilter'],
+                'term_filter2' => ['value' => 'value_good', 'type' => 'termFilter', 'is_bind' => true],
             ],
         ];
         $exceptedRequestData = [
@@ -93,7 +93,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
                     'queryReference' => [['ref' => 'match_query'], ['ref' => 'filtered_query_to_filter2']],
                     'type' => 'boolQuery',
                 ],
-                'match_query' => ['value' => 'ok', 'type' => 'matchQuery'],
+                'match_query' => ['value' => 'ok', 'type' => 'matchQuery', 'is_bind' => true],
                 'filtered_query_to_filter2' => [
                     'filterReference' => [['ref' => 'bool_filter2']],
                     'type' => 'filteredQuery',
@@ -104,7 +104,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
                     'filterReference' => [['ref' => 'term_filter2']],
                     'type' => 'boolFilter',
                 ],
-                'term_filter2' => ['value' => 'value_good', 'type' => 'termFilter'],
+                'term_filter2' => ['value' => 'value_good', 'type' => 'termFilter', 'is_bind' => true],
             ],
         ];
 
@@ -129,7 +129,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
                     ],
                     'type' => 'boolQuery',
                 ],
-                'match_query' => ['value' => 'ok', 'type' => 'matchQuery'],
+                'match_query' => ['value' => 'ok', 'type' => 'matchQuery', 'is_bind' => true],
                 'bool_query_rm' => [
                     'queryReference' => [
                         ['ref' => 'match_query_rm'],
@@ -164,7 +164,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
                     'filterReference' => [['ref' => 'term_filter2']],
                     'type' => 'boolFilter',
                 ],
-                'term_filter2' => ['value' => 'value_good', 'type' => 'termFilter'],
+                'term_filter2' => ['value' => 'value_good', 'type' => 'termFilter', 'is_bind' => true],
             ],
         ];
         $exceptedRequestData = [
@@ -174,7 +174,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
                     'queryReference' => [['ref' => 'match_query'], ['ref' => 'filtered_query_to_filter2']],
                     'type' => 'boolQuery',
                 ],
-                'match_query' => ['value' => 'ok', 'type' => 'matchQuery'],
+                'match_query' => ['value' => 'ok', 'type' => 'matchQuery', 'is_bind' => true],
                 'filtered_query_to_filter2' => [
                     'filterReference' => [['ref' => 'bool_filter2']],
                     'type' => 'filteredQuery',
@@ -185,7 +185,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
                     'filterReference' => [['ref' => 'term_filter2']],
                     'type' => 'boolFilter',
                 ],
-                'term_filter2' => ['value' => 'value_good', 'type' => 'termFilter'],
+                'term_filter2' => ['value' => 'value_good', 'type' => 'termFilter', 'is_bind' => true],
             ],
             'aggregations' => [],
         ];

@@ -11,7 +11,7 @@
         <xs:documentation>The definition of a configuration item components</xs:documentation>
     </xs:annotation>
     <!-- Include section -->
-    <xs:include schemaLocation="ui_components.xsd"/>
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:etc/ui_components.xsd"/>
     <!-- Components list -->
     <xs:element type="formConfiguration" name="form"/>
     <xs:element type="containerConfiguration" name="container"/>
@@ -34,9 +34,19 @@
                     <xs:element type="argumentType" name="argument"/>
                     <xs:element type="bookmark" name="bookmark"/>
                     <xs:element name="filterSearch" type="filterSearch" />
+                    <xs:element name="component" type="component" />
+                    <xs:element name="actionsColumn" type="actionsColumn" />
+                    <xs:element name="selectionsColumn" type="selectionsColumn" />
                     <xs:element type="exportButton" name="exportButton"/>
+                    <xs:element type="columnsControls" name="columnsControls"/>
+                    <xs:element type="listingToolbarConfiguration" name="listingToolbar"/>
                 </xs:choice>
             </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="listingToolbarConfiguration">
+        <xs:complexContent>
+            <xs:extension base="containerConfiguration"/>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="fieldsetConfiguration">
@@ -54,6 +64,7 @@
             <xs:extension base="listing">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="paging" name="paging"/>
+                    <xs:element type="listingToolbarConfiguration" name="listingToolbar"/>
                     <xs:element type="filtersConfiguration" name="filters"/>
                     <xs:element type="massactionConfiguration" name="massaction"/>
                     <xs:element type="dataSource" name="dataSource"/>
@@ -80,6 +91,8 @@
             <xs:extension base="columns">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="column" type="column" />
+                    <xs:element name="actionsColumn" type="actionsColumn" />
+                    <xs:element name="selectionsColumn" type="selectionsColumn" />
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

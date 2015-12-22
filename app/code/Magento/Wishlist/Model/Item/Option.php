@@ -5,12 +5,14 @@
  */
 namespace Magento\Wishlist\Model\Item;
 
-/**
- * Item option model
- */
 use Magento\Catalog\Model\Product;
 use Magento\Wishlist\Model\Item;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
+/**
+ * Item option model
+ * @method int getProductId()
+ */
 class Option extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {
@@ -20,9 +22,34 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
     protected $_item;
 
     /**
-     * @var Product
+     * @var Product|null
      */
     protected $_product;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        ProductRepositoryInterface $productRepository,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->productRepository = $productRepository;
+    }
 
     /**
      * Initialize resource model
@@ -31,7 +58,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\Resource\Item\Option');
+        $this->_init('Magento\Wishlist\Model\ResourceModel\Item\Option');
     }
 
     /**
@@ -91,6 +118,10 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getProduct()
     {
+        //In some cases product_id is present instead product instance
+        if (null === $this->_product && $this->getProductId()) {
+            $this->_product = $this->productRepository->getById($this->getProductId());
+        }
         return $this->_product;
     }
 

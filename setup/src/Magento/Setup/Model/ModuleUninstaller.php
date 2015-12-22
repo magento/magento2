@@ -63,7 +63,7 @@ class ModuleUninstaller
     {
         $uninstalls = $this->collector->collectUninstall($modules);
         $setupModel = $this->setupFactory->create();
-        $resource = $this->objectManager->get('Magento\Framework\Module\Resource');
+        $resource = $this->objectManager->get('Magento\Framework\Module\ModuleResource');
         foreach ($modules as $module) {
             if (isset($uninstalls[$module])) {
                 $output->writeln("<info>Removing data of $module</info>");

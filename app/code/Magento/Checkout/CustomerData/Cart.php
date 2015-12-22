@@ -24,7 +24,7 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
     protected $checkoutCart;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Url
+     * @var \Magento\Catalog\Model\ResourceModel\Url
      */
     protected $catalogUrl;
 
@@ -55,16 +55,17 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
+     * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param ItemPoolInterface $itemPoolInterface
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Model\Resource\Url $catalogUrl,
+        \Magento\Catalog\Model\ResourceModel\Url $catalogUrl,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         ItemPoolInterface $itemPoolInterface,

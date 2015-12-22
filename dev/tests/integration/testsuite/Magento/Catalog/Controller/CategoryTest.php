@@ -25,7 +25,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
         return [
             'category without children' => [
                 'categoryId' => 5,
-                ['catalog_category_view_type_default', 'catalog_category_view_type_default_without_children'],
+                ['catalog_category_view_type_layered', 'catalog_category_view_type_layered_without_children'],
                 [
                     '%acategorypath-category-1-category-1-1-category-1-1-1%a',
                     '%acategory-category-1-1-1%a',
@@ -54,7 +54,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @dataProvider getViewActionDataProvider
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
      */
     public function testViewAction($categoryId, array $expectedHandles, array $expectedContent)
     {

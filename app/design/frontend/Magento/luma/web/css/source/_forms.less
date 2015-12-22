@@ -18,6 +18,7 @@
     &:last-child {
         margin-bottom: 0;
     }
+
     > .field,
     > .fields > .field {
         .lib-form-field();
@@ -26,6 +27,7 @@
                 .lib-visually-hidden();
             }
         }
+
         &.choice {
             .label {
                 font-weight: normal;
@@ -33,11 +35,13 @@
                 display: inline;
             }
         }
+
         .label {
             .column:not(.main) & {
                 font-weight: normal;
             }
         }
+
         .field.choice {
             margin-bottom: @indent__s;
             &:last-child {
@@ -46,24 +50,36 @@
         }
     }
 }
+
 .legend + .fieldset,
 .legend + div {
     clear: both;
 }
+
 .legend {
     span {
         margin-right: @indent__xs;
     }
 }
+
 fieldset.field {
     border: 0;
     padding: 0;
 }
-.field.date {
-    .time-picker {
-        white-space: nowrap;
-        margin-top: @indent__s;
-        display: inline-block;
+
+.field {
+    &.date {
+        .time-picker {
+            white-space: nowrap;
+            margin-top: @indent__s;
+            display: inline-block;
+        }
+    }
+
+    .message {
+        &.warning {
+            margin-top: @indent__s;
+        }
     }
 }
 
@@ -77,9 +93,11 @@ fieldset.field {
     padding-right: 25px;
     text-indent: .01em;
     text-overflow: '';
+
     &::-ms-expand{
         display:none;
     }
+
     .lt-ie10 & {
         background-image: none;
         padding-right: 4px;
@@ -122,6 +140,7 @@ select:focus ~ .tooltip .tooltip-content {
         );
         display: inline-block;
         vertical-align: middle;
+
         &:focus {
             box-shadow: none;
             outline: 0;
@@ -135,17 +154,20 @@ select:focus ~ .tooltip .tooltip-content {
 .sidebar {
     .fieldset {
         margin: 0;
+
         > .field:not(.choice) >,
         .fields > .field {
             &:not(:last-child) {
                 margin: 0 0 @form-field__vertical-indent;
             }
+
             .label {
                 margin: 0 0 4px;
                 padding: 0 0 @indent__xs;
                 text-align: left;
                 width: 100%;
             }
+
             .control {
                 width: 100%;
             }

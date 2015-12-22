@@ -66,21 +66,18 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
      * @param array  $value
      * @param string $allWebsites
      * @param string $colTierPriceWebsite
-     * @param string $colGroupPriceWebsite
      * @param bool   $expectedResult
      */
     public function testIsValidReturn(
         $value,
         $allWebsites,
         $colTierPriceWebsite,
-        $colGroupPriceWebsite,
         $expectedResult
     ) {
         $this->website->expects($this->once())->method('_clearMessages');
         $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsites);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
-            [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
         ]);
 
         $result = $this->website->isValid($value);
@@ -91,18 +88,15 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     {
         $value = [
             AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-            AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
         ];
         $allWebsitesValue = 'not tier|group price website value';
         $colTierPriceWebsite = false;
-        $colGroupPriceWebsite = 'value';
         $expectedMessages = [AdvancedPricing\Validator\Website::ERROR_INVALID_WEBSITE];
 
         $this->website->expects($this->once())->method('_clearMessages');
         $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
-            [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
         ]);
 
         $this->website->expects($this->any())->method('_addMessages')->with($expectedMessages);
@@ -140,90 +134,52 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                     AdvancedPricing::COL_TIER_PRICE => 'value',
-                    AdvancedPricing::COL_GROUP_PRICE => 'group value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => false,
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => false,
             ],
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                     AdvancedPricing::COL_TIER_PRICE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE => 'value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => false,
-                '$colGroupPriceWebsite' => 'value',
-                '$expectedResult' => false,
-            ],
-            [
-                '$value' => [
-                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
-                    AdvancedPricing::COL_TIER_PRICE => 'value',
-                    AdvancedPricing::COL_GROUP_PRICE => ' group value',
-                ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => false,
-                '$expectedResult' => false,
-            ],
-            [
-                '$value' => [
-                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
-                    AdvancedPricing::COL_TIER_PRICE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE => 'value',
-                ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => false,
                 '$expectedResult' => false,
             ],
             // True cases.
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
                 '$allWebsites' => 'tier value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
                 '$allWebsites' => 'group value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => false,
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
         ];

@@ -15,6 +15,7 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @throws NotFoundException
      * @return void
+     * @codeCoverageIgnore
      */
     public function execute()
     {

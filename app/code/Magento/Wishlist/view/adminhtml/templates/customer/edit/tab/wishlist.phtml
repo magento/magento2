@@ -11,30 +11,31 @@
  */
 ?>
 <script>
-require([
-    "prototype",
-    "Magento_Catalog/catalog/product/composite/configure"
-], function(){
+    require([
+            "Magento_Ui/js/modal/confirm",
+            "prototype",
+            "Magento_Catalog/catalog/product/composite/configure"
+        ], function(confirm){
 
 //<!--
-wishlistControl = {
-    reload: function (urlParams) {
-        if (!urlParams) {
-            urlParams = '';
-        }
-        var url = <?php echo $block->getJsObjectName() ?>.url + '?ajax=true' + urlParams;
-        new Ajax.Updater(
-            <?php echo $block->getJsObjectName() ?>.containerId,
-            url,
-            {
-                parameters: {form_key: FORM_KEY},
-                onComplete: <?php echo $block->getJsObjectName() ?>.initGrid.bind(<?php echo $block->getJsObjectName() ?>),
-                evalScripts:true
-            }
-        );
-    },
+            wishlistControl = {
+                reload: function (urlParams) {
+                    if (!urlParams) {
+                        urlParams = '';
+                    }
+                    var url = <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.url + '?ajax=true' + urlParams;
+                    new Ajax.Updater(
+                        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.containerId,
+                        url,
+                        {
+                            parameters: {form_key: FORM_KEY},
+                            onComplete: <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.initGrid.bind(<?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>),
+                        evalScripts:true
+                }
+            );
+        },
 
-    configureItem: function (itemId) {
+        configureItem: function (itemId) {
         productConfigure.setOnLoadIFrameCallback('wishlist', this.cbOnLoadIframe.bind(this));
         productConfigure.showItemConfiguration('wishlist', itemId);
         return false;
@@ -48,22 +49,27 @@ wishlistControl = {
     },
 
     removeItem: function (itemId) {
-        if(!confirm('<?php echo __('Are you sure you want to remove this item?') ?>')) {
-            return false;
+        var self = this;
+
+        confirm({
+            content: '<?php /* @escapeNotVerified */ echo __('Are you sure you want to remove this item?') ?>',
+            actions: {
+                confirm: function () {
+                    self.reload('&delete=' + itemId);
+                }
+            }
+        });
+    }
+    }
+
+    productConfigure.addListType(
+        'wishlist',
+        {
+            urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
+            urlConfirm: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/wishlist_product_composite_wishlist/update') ?>'
         }
-        this.reload('&delete=' + itemId);
-        return false;
-    }
-}
+    );
+    //-->
 
-productConfigure.addListType(
-    'wishlist',
-    {
-        urlFetch: '<?php echo $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
-        urlConfirm: '<?php echo $block->getUrl('customer/wishlist_product_composite_wishlist/update') ?>'
-    }
-);
-//-->
-
-});
+    });
 </script>

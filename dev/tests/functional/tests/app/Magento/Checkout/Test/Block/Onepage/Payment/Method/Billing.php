@@ -20,7 +20,7 @@ class Billing extends Form
      *
      * @var string
      */
-    protected $updateButtonSelector = '.action-toolbar .action-update';
+    protected $updateButtonSelector = '.action.action-update';
 
     /**
      * Wait element.

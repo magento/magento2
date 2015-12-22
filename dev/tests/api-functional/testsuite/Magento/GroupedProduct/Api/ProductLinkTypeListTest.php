@@ -6,7 +6,7 @@
  */
 namespace Magento\GroupedProduct\Api;
 
-use Magento\GroupedProduct\Model\Resource\Product\Link;
+use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 
 class ProductLinkTypeListTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {

@@ -8,8 +8,8 @@ namespace Magento\Newsletter\Model;
 /**
  * Template model
  *
- * @method \Magento\Newsletter\Model\Resource\Template _getResource()
- * @method \Magento\Newsletter\Model\Resource\Template getResource()
+ * @method \Magento\Newsletter\Model\ResourceModel\Template _getResource()
+ * @method \Magento\Newsletter\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Newsletter\Model\Template setTemplateCode(string $value)
  * @method \Magento\Newsletter\Model\Template setTemplateText(string $value)
@@ -127,7 +127,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\Resource\Template');
+        $this->_init('Magento\Newsletter\Model\ResourceModel\Template');
     }
 
     /**

@@ -11,8 +11,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * CMS block model
  *
- * @method \Magento\Cms\Model\Resource\Block _getResource()
- * @method \Magento\Cms\Model\Resource\Block getResource()
+ * @method \Magento\Cms\Model\ResourceModel\Block _getResource()
+ * @method \Magento\Cms\Model\ResourceModel\Block getResource()
  */
 class Block extends \Magento\Framework\Model\AbstractModel implements BlockInterface, IdentityInterface
 {
@@ -21,6 +21,13 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
      */
     const CACHE_TAG = 'cms_block';
 
+    /**#@+
+     * Block's statuses
+     */
+    const STATUS_ENABLED = 1;
+    const STATUS_DISABLED = 0;
+
+    /**#@-*/
     /**
      * @var string
      */
@@ -38,7 +45,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Resource\Block');
+        $this->_init('Magento\Cms\Model\ResourceModel\Block');
     }
 
     /**
@@ -213,5 +220,25 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
     public function setIsActive($isActive)
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
+    }
+
+    /**
+     * Receive page store ids
+     *
+     * @return int[]
+     */
+    public function getStores()
+    {
+        return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
+    }
+
+    /**
+     * Prepare block's statuses.
+     *
+     * @return array
+     */
+    public function getAvailableStatuses()
+    {
+        return [self::STATUS_ENABLED => __('Enabled'), self::STATUS_DISABLED => __('Disabled')];
     }
 }

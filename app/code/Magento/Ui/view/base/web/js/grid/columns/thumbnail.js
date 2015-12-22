@@ -13,7 +13,10 @@ define([
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'ui/grid/cells/thumbnail'
+            bodyTmpl: 'ui/grid/cells/thumbnail',
+            fieldClass: {
+                'data-grid-thumbnail-cell': true
+            }
         },
         getSrc: function (row) {
             return row[this.index + '_src']
@@ -44,6 +47,11 @@ define([
                 innerScroll: true,
                 modalClass: '_image-box',
                 buttons: []}).trigger('openModal');
+        },
+        getFieldHandler: function (row) {
+            if (this.isPreviewAvailable()) {
+                return this.preview.bind(this, row);
+            }
         }
     });
 });

@@ -7,7 +7,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <!-- Include section -->
-    <xs:include schemaLocation="../../../../../lib/internal/Magento/Framework/Data/etc/argument/types.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:Data/etc/argument/types.xsd"/>
     <!-- Defined the types of components -->
     <xs:complexType name="layout" xml:base="ui_element">
         <xs:complexContent>
@@ -114,6 +114,25 @@
             <xs:extension base="input"/>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="component">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="actionsColumn">
+        <xs:complexContent>
+           <xs:extension base="column"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="selectionsColumn">
+        <xs:complexContent>
+            <xs:extension base="column"/>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="container">
         <xs:complexContent>
             <xs:extension base="ui_element">
@@ -174,6 +193,15 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="textarea">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="wysiwyg">
         <xs:complexContent>
             <xs:extension base="ui_element">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -311,6 +339,15 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="exportButton" xml:base="ui_element">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="columnsControls" xml:base="ui_element">
         <xs:complexContent>
             <xs:extension base="ui_element">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">

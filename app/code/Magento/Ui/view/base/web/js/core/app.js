@@ -4,7 +4,8 @@
  */
 define([
     './renderer/types',
-    './renderer/layout'
+    './renderer/layout',
+    '../lib/knockout/bootstrap'
 ], function (types, layout) {
     'use strict';
 

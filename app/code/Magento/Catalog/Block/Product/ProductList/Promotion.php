@@ -6,8 +6,8 @@
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Model\Resource\Product\Collection;
-use Magento\Catalog\Model\Resource\Product\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 class Promotion extends \Magento\Catalog\Block\Product\ListProduct
 {

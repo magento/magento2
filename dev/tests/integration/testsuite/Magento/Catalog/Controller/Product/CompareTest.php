@@ -13,14 +13,35 @@ namespace Magento\Catalog\Controller\Product;
  */
 class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+    /**
+     * @var \Magento\Catalog\Model\ProductRepository
+     */
+    protected $productRepository;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->productRepository = $objectManager->create('Magento\Catalog\Model\ProductRepository');
+    }
+
     public function testAddAction()
     {
         $this->_requireVisitorWithNoProducts();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $objectManager->get('Magento\Framework\Data\Form\FormKey');
-
-        $this->dispatch('catalog/product_compare/add/product/1/form_key/' . $formKey->getFormKey() . '?nocookie=1');
+        $product = $this->productRepository->get('simple_product_1');
+        $this->dispatch(
+            sprintf(
+                'catalog/product_compare/add/product/%s/form_key/%s?nocookie=1',
+                $product->getEntityId(),
+                $formKey->getFormKey()
+            )
+        );
 
         /** @var $messageManager \Magento\Framework\Message\Manager */
         $messageManager = $objectManager->get('Magento\Framework\Message\Manager');
@@ -35,25 +56,25 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect();
 
-        $this->_assertCompareListEquals([1]);
+        $this->_assertCompareListEquals([$product->getEntityId()]);
     }
 
     public function testIndexActionAddProducts()
     {
         $this->_requireVisitorWithNoProducts();
-
-        $this->dispatch('catalog/product_compare/index/items/2');
+        $product = $this->productRepository->get('simple_product_2');
+        $this->dispatch('catalog/product_compare/index/items/' . $product->getEntityId());
 
         $this->assertRedirect($this->equalTo('http://localhost/index.php/catalog/product_compare/index/'));
 
-        $this->_assertCompareListEquals([2]);
+        $this->_assertCompareListEquals([$product->getEntityId()]);
     }
 
     public function testRemoveAction()
     {
         $this->_requireVisitorWithTwoProducts();
-
-        $this->dispatch('catalog/product_compare/remove/product/2');
+        $product = $this->productRepository->get('simple_product_2');
+        $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
 
         /** @var $messageManager \Magento\Framework\Message\Manager */
         $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -68,16 +89,16 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $this->assertRedirect();
-
-        $this->_assertCompareListEquals([1]);
+        $restProduct = $this->productRepository->get('simple_product_1');
+        $this->_assertCompareListEquals([$restProduct->getEntityId()]);
     }
 
     public function testRemoveActionWithSession()
     {
         $this->_requireCustomerWithTwoProducts();
-
-        $this->dispatch('catalog/product_compare/remove/product/1');
-
+        $product = $this->productRepository->get('simple_product_1');
+        $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
+        $secondProduct = $this->productRepository->get('simple_product_2');
         /** @var $messageManager \Magento\Framework\Message\Manager */
         $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\Message\Manager');
@@ -90,7 +111,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect();
 
-        $this->_assertCompareListEquals([2]);
+        $this->_assertCompareListEquals([$secondProduct->getEntityId()]);
     }
 
     public function testIndexActionDisplay()
@@ -144,7 +165,8 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testRemoveActionProductNameXss()
     {
         $this->_prepareCompareListWithProductNameXss();
-        $this->dispatch('catalog/product_compare/remove/product/1?nocookie=1');
+        $product = $this->productRepository->get('product-with-xss');
+        $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId() . '?nocookie=1');
         $messages = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Message\Manager'
         )->getMessages()->getItems();
@@ -171,7 +193,8 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $item = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product\Compare\Item'
         );
-        $item->setVisitorId($visitor->getId())->setProductId(1)->save();
+        $firstProductEntityId = $this->productRepository->get('product-with-xss')->getEntityId();
+        $item->setVisitorId($visitor->getId())->setProductId($firstProductEntityId)->save();
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Customer\Model\Visitor'
         )->load(
@@ -211,13 +234,15 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $item = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product\Compare\Item'
         );
-        $item->setVisitorId($visitor->getId())->setProductId(1)->save();
+        $firstProductEntityId = $this->productRepository->get('simple_product_1')->getEntityId();
+        $secondProductEntityId = $this->productRepository->get('simple_product_2')->getEntityId();
+        $item->setVisitorId($visitor->getId())->setProductId($firstProductEntityId)->save();
 
         /** @var $item \Magento\Catalog\Model\Product\Compare\Item */
         $item = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product\Compare\Item'
         );
-        $item->setVisitorId($visitor->getId())->setProductId(2)->save();
+        $item->setVisitorId($visitor->getId())->setProductId($secondProductEntityId)->save();
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Customer\Model\Visitor'
@@ -225,7 +250,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             $visitor->getId()
         );
 
-        $this->_assertCompareListEquals([1, 2]);
+        $this->_assertCompareListEquals([$firstProductEntityId, $secondProductEntityId]);
     }
 
     protected function _requireCustomerWithTwoProducts()
@@ -262,25 +287,28 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT))
             ->save();
 
+        $firstProductEntityId = $this->productRepository->get('simple_product_1')->getEntityId();
+        $secondProductEntityId = $this->productRepository->get('simple_product_2')->getEntityId();
+
         /** @var $item \Magento\Catalog\Model\Product\Compare\Item */
         $item = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product\Compare\Item');
         $item->setVisitorId($visitor->getId())
             ->setCustomerId(1)
-            ->setProductId(1)
+            ->setProductId($firstProductEntityId)
             ->save();
 
         /** @var $item \Magento\Catalog\Model\Product\Compare\Item */
         $item = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product\Compare\Item');
         $item->setVisitorId($visitor->getId())
-            ->setProductId(2)
+            ->setProductId($secondProductEntityId)
             ->save();
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Customer\Model\Visitor')
             ->load($visitor->getId());
 
-        $this->_assertCompareListEquals([1, 2]);
+        $this->_assertCompareListEquals([$firstProductEntityId, $secondProductEntityId]);
     }
 
     /**
@@ -290,9 +318,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected function _assertCompareListEquals(array $expectedProductIds)
     {
-        /** @var $compareItems \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection */
+        /** @var $compareItems \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection */
         $compareItems = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Resource\Product\Compare\Item\Collection'
+            'Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection'
         );
         $compareItems->useProductItem(true);
         // important

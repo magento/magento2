@@ -75,7 +75,8 @@ class DeleteCmsBlockEntityTest extends Injectable
 
         // Steps
         $this->cmsBlockIndex->open();
-        $this->cmsBlockIndex->getCmsBlockGrid()->searchAndOpen($filter, true, false);
+        $this->cmsBlockIndex->getCmsBlockGrid()->searchAndOpen($filter);
         $this->cmsBlockNew->getFormPageActions()->delete();
+        $this->cmsBlockNew->getModalBlock()->acceptAlert();
     }
 }

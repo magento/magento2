@@ -6,6 +6,7 @@
 namespace Magento\Paypal\Model;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
@@ -15,6 +16,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Config;
+use Magento\Sales\Model\Order;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -270,7 +272,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param ConfigInterfaceFactory $configFactory
      * @param Gateway $gateway
      * @param HandlerInterface $errorHandler
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -289,7 +291,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         ConfigInterfaceFactory $configFactory,
         Gateway $gateway,
         HandlerInterface $errorHandler,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -362,6 +364,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
         $request = $this->_buildPlaceRequest($payment, $amount);
+        $this->addRequestOrderInfo($request, $payment->getOrder());
         $request->setTrxtype(self::TRXTYPE_AUTH_ONLY);
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
@@ -413,6 +416,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             $request = $this->_buildPlaceRequest($payment, $amount);
             $request->setTrxtype(self::TRXTYPE_SALE);
         }
+        $this->addRequestOrderInfo($request, $payment->getOrder());
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
@@ -497,8 +501,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $this->processErrors($response);
 
         if ($response->getResultCode() == self::RESPONSE_CODE_APPROVED) {
-            $payment->setTransactionId($response->getPnref())->setIsTransactionClosed(1);
-            $payment->setShouldCloseParentTransaction(!$payment->getCreditmemo()->getInvoice()->canRefund());
+            $payment->setTransactionId($response->getPnref())->setIsTransactionClosed(true);
         }
         return $this;
     }
@@ -572,7 +575,14 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {
-        return $this->gateway->postRequest($request, $config);
+        try {
+            return $this->gateway->postRequest($request, $config);
+        } catch (\Zend_Http_Client_Exception $e) {
+            throw new LocalizedException(
+                __('Payment Gateway is unreachable at the moment. Please use another payment option.'),
+                $e
+            );
+        }
     }
 
     /**
@@ -580,7 +590,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      *
      * @param Object|Payment $payment
      * @param float $amount
-     * @return Object
+     * @return DataObject
      */
     protected function _buildPlaceRequest(DataObject $payment, $amount)
     {
@@ -591,24 +601,15 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request->setCvv2($payment->getCcCid());
 
         $order = $payment->getOrder();
-        if (!empty($order)) {
-            $request->setCurrency($order->getBaseCurrencyCode());
-
-            $orderIncrementId = $order->getIncrementId();
-
-            $request->setCurrency($order->getBaseCurrencyCode())
-                ->setInvnum($orderIncrementId)
-                ->setPonum($order->getId())
-                ->setComment1($orderIncrementId);
-            $request = $this->fillCustomerContacts($order, $request);
-        }
+        $request->setCurrency($order->getBaseCurrencyCode());
+        $request = $this->fillCustomerContacts($order, $request);
         return $request;
     }
 
     /**
      * Return request object with basic information for gateway request
      *
-     * @return Object
+     * @return DataObject
      */
     public function buildBasicRequest()
     {
@@ -828,10 +829,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     public function fillCustomerContacts(DataObject $order, DataObject $request)
     {
-        $customerId = $order->getCustomerId();
-        if ($customerId) {
-            $request->setCustref($customerId);
-        }
         $billing = $order->getBillingAddress();
         if (!empty($billing)) {
             $request = $this->setBilling($request, $billing);
@@ -843,5 +840,24 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             return $request;
         }
         return $request;
+    }
+
+    /**
+     * Add order details to payment request
+     * @param DataObject $request
+     * @param Order $order
+     * @return void
+     */
+    protected function addRequestOrderInfo(DataObject $request, Order $order)
+    {
+        $id = $order->getId();
+        // for auth request order id is not exists yet
+        if (!empty($id)) {
+            $request->setPonum($id);
+        }
+        $orderIncrementId = $order->getIncrementId();
+        $request->setCustref($orderIncrementId)
+            ->setInvnum($orderIncrementId)
+            ->setComment1($orderIncrementId);
     }
 }

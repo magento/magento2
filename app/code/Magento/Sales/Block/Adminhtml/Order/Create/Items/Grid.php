@@ -572,7 +572,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Retrieve collection of customer wishlists
      *
-     * @return \Magento\Wishlist\Model\Resource\Wishlist\Collection
+     * @return \Magento\Wishlist\Model\ResourceModel\Wishlist\Collection
      */
     public function getCustomerWishlists()
     {

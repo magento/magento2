@@ -6,10 +6,9 @@
 
 namespace Magento\Braintree\Test\Unit\Model\Plugin\Sales\Order;
 
-use Magento\Braintree\Model\Observer;
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 
 /**
  * Class PaymentPluginTest
@@ -51,7 +50,7 @@ class PaymentPluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->transactionCollectionFactoryMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory'
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory'
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -119,7 +118,8 @@ class PaymentPluginTest extends \PHPUnit_Framework_TestCase
             ->with($transactionId)
             ->willReturn($transactionId);
 
-        $collectionMock = $this->getMockBuilder('\Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection')
+        $collectionMock =
+            $this->getMockBuilder('\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->transactionCollectionFactoryMock->expects($this->once())
@@ -180,7 +180,8 @@ class PaymentPluginTest extends \PHPUnit_Framework_TestCase
             ->with($transactionId)
             ->willReturn($transactionId);
 
-        $collectionMock = $this->getMockBuilder('\Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection')
+        $collectionMock =
+            $this->getMockBuilder('\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->transactionCollectionFactoryMock->expects($this->once())

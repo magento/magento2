@@ -24,7 +24,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Widget\Model\Layout\Update'
         );
-        $this->assertInstanceOf('Magento\Widget\Model\Resource\Layout\Update', $this->_model->getResource());
+        $this->assertInstanceOf('Magento\Widget\Model\ResourceModel\Layout\Update', $this->_model->getResource());
     }
 
     /**

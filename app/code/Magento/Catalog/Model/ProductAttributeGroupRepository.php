@@ -22,18 +22,18 @@ class ProductAttributeGroupRepository implements \Magento\Catalog\Api\ProductAtt
     protected $groupFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Group
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group
      */
     protected $groupResource;
 
     /**
      * @param \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group $groupResource
      * @param Product\Attribute\GroupFactory $groupFactory
      */
     public function __construct(
         \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group $groupResource,
         \Magento\Catalog\Model\Product\Attribute\GroupFactory $groupFactory
     ) {
         $this->groupRepository = $groupRepository;

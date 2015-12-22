@@ -18,19 +18,17 @@ $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
         <a href="#"
             class="action towishlist"
-            title="<?php echo __('Add to Wish List') ?>"
-            data-post='<?php echo $_wishlistSubmitParams; ?>'
-            data-action="add-to-wishlist"><span><?php echo __('Add to Wish List') ?></span></a>
+            data-post='<?php /* @escapeNotVerified */ echo $_wishlistSubmitParams; ?>'
+            data-action="add-to-wishlist"><span><?php /* @escapeNotVerified */ echo __('Add to Wish List') ?></span></a>
     <?php endif; ?>
-    <a href="#" data-post='<?php echo $compareHelper->getPostDataParams($_product);?>'
+    <a href="#" data-post='<?php /* @escapeNotVerified */ echo $compareHelper->getPostDataParams($_product);?>'
         data-role="add-to-links"
-        title="<?php echo __('Add to Compare') ?>"
-        class="action tocompare"><span><?php echo __('Add to Compare') ?></span></a>
+        class="action tocompare"><span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span></a>
 </div>
 <script type="text/x-magento-init">
     {
         "body": {
-            "addToWishlist": <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
+            "addToWishlist": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
         }
     }
 </script>

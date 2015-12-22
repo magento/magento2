@@ -70,11 +70,6 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
                     ? $assignedProduct['data']['selection_price_value']
                     : $bundleSelections['products'][$optionKey][$productKey]->getPrice();
 
-                if ($product->hasData('group_price')) {
-                    $groupedPrice = $product->getGroupPrice();
-                    $price -= $price / 100 * reset($groupedPrice)['price'];
-                }
-
                 $optionData['options'][$productKey] = [
                     'title' => $assignedProduct['search_data']['name'],
                     'price' => number_format($price, 2),

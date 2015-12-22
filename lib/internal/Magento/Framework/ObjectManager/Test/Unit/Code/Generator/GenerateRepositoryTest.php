@@ -54,7 +54,7 @@ class GenerateRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->ioObjectMock->expects($this->once())
-            ->method('getResultFileName')
+            ->method('generateResultFileName')
             ->with('\Magento\Framework\ObjectManager\Code\Generator\SampleRepository')
             ->willReturn('SampleRepository.php');
 

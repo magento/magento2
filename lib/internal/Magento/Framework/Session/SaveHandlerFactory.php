@@ -59,8 +59,8 @@ class SaveHandlerFactory
         }
 
         $model = $this->objectManager->create($sessionHandler, $params);
-        if (!$model instanceof \SessionHandler) {
-            throw new \LogicException($sessionHandler . ' doesn\'t implement \SessionHandler');
+        if (!$model instanceof \SessionHandlerInterface) {
+            throw new \LogicException($sessionHandler . ' doesn\'t implement \SessionHandlerInterface');
         }
 
         return $model;

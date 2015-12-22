@@ -12,18 +12,18 @@
 <?php $captcha = $block->getCaptchaModel() ?>
 <div class="admin__field _required">
     <label for="captcha" class="admin__field-label">
-        <span><?php echo __('Please enter the letters from the image') ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Please enter the letters from the image') ?></span>
     </label>
     <div class="admin__field-control">
         <input
             id="captcha"
             class="admin__control-text"
             type="text"
-            name="<?php echo \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $block->getFormId()?>]"
+            name="<?php /* @escapeNotVerified */ echo \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE ?>[<?php /* @escapeNotVerified */ echo $block->getFormId()?>]"
             data-validate="{required:true}"/>
         <?php if ($captcha->isCaseSensitive()) :?>
             <div class="admin__field-note">
-                <span><?php echo __('<strong>Attention</strong>: Captcha is case sensitive.') ?></span>
+                <span><?php /* @escapeNotVerified */ echo __('<strong>Attention</strong>: Captcha is case sensitive.') ?></span>
             </div>
         <?php endif; ?>
     </div>
@@ -32,19 +32,19 @@
     <img
         id="captcha-reload"
         class="captcha-reload"
-        src="<?php echo $block->getViewFileUrl('Magento_Captcha::reload.png') ?>"
-        alt="<?php echo __('Reload captcha') ?>"/>
+        src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('Magento_Captcha::reload.png') ?>"
+        alt="<?php /* @escapeNotVerified */ echo __('Reload captcha') ?>"/>
     <img
-        id="<?php echo $block->getFormId() ?>"
-        width="<?php echo $block->getImgWidth() ?>"
-        height="<?php echo $block->getImgHeight() ?>"
-        src="<?php echo $captcha->getImgSrc() ?>" />
+        id="<?php /* @escapeNotVerified */ echo $block->getFormId() ?>"
+        width="<?php /* @escapeNotVerified */ echo $block->getImgWidth() ?>"
+        height="<?php /* @escapeNotVerified */ echo $block->getImgHeight() ?>"
+        src="<?php /* @escapeNotVerified */ echo $captcha->getImgSrc() ?>" />
 </div>
 <script>
     require(["prototype", "mage/captcha"], function(){
 
 //<![CDATA[
-        var captcha = new Captcha('<?php echo $block->getRefreshUrl() ?>', '<?php echo $block->getFormId() ?>');
+        var captcha = new Captcha('<?php /* @escapeNotVerified */ echo $block->getRefreshUrl() ?>', '<?php /* @escapeNotVerified */ echo $block->getFormId() ?>');
 
         $('captcha-reload').observe('click', function () {
             captcha.refresh(this);

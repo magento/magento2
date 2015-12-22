@@ -21,13 +21,34 @@
     "use strict";
 
     $.each({
+        'validate-card-type': [
+            function (number, item, allowedTypes) {
+                var cardInfo,
+                    i,
+                    l;
+
+                if (!creditCardNumberValidator(number).isValid) {
+                    return false;
+                } else {
+                    cardInfo = creditCardNumberValidator(number).card;
+
+                    for (i = 0, l = allowedTypes.length; i < l; i++) {
+                        if (cardInfo.title == allowedTypes[i].type) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            },
+            'Please enter a valid credit card type number.'
+        ],
         'validate-card-number': [
             /**
              * Validate credit card number based on mod 10
              * @param number - credit card number
              * @return {boolean}
              */
-            function (number) {
+                function (number) {
                 return creditCardNumberValidator(number).isValid;
             },
             'Please enter a valid credit card number.'

@@ -67,9 +67,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->method('addMinifiedSign')
             ->withConsecutive(
                 ['onefile.js'],
+                ['onefile.js'],
                 ['/js/bundle/bundle0.js']
             )
             ->willReturnOnConsecutiveCalls(
+                'onefile.min.js',
                 'onefile.min.js',
                 '/js/bundle/bundle0.min.js'
             );

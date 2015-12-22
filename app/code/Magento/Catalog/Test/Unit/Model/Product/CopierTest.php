@@ -10,6 +10,11 @@ use \Magento\Catalog\Model\Product\Copier;
 class CopierTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $optionRepositoryMock;
+
+    /**
      * @var Copier
      */
     protected $_model;
@@ -39,11 +44,23 @@ class CopierTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->optionRepositoryMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Option\Repository',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->optionRepositoryMock;
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $this->productMock->expects($this->any())->method('getId')->will($this->returnValue('1'));
+        $this->productMock->expects($this->any())->method('getEntityId')->willReturn(1);
         $this->productMock->expects($this->any())->method('getData')->will($this->returnValue('product data'));
 
-        $this->_model = new Copier($this->copyConstructorMock, $this->productFactoryMock);
+        $this->_model = new Copier(
+            $this->copyConstructorMock,
+            $this->productFactoryMock,
+            $this->optionRepositoryMock
+        );
     }
 
     public function testCopy()
@@ -51,10 +68,8 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->atLeastOnce())->method('getWebsiteIds');
         $this->productMock->expects($this->atLeastOnce())->method('getCategoryIds');
 
-        $resourceMock = $this->getMock('\Magento\Catalog\Model\Resource\Product', [], [], '', false);
-        $optionMock = $this->getMock('\Magento\Catalog\Model\Product\Option', [], [], '', false);
+        $resourceMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $this->productMock->expects($this->once())->method('getResource')->will($this->returnValue($resourceMock));
-        $this->productMock->expects($this->once())->method('getOptionInstance')->will($this->returnValue($optionMock));
 
         $duplicateMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
@@ -68,7 +83,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
                 'setUpdatedAt',
                 'setId',
                 'setStoreId',
-                'getId',
+                'getEntityId',
                 'save',
                 'setUrlKey',
                 'getUrlKey',
@@ -103,8 +118,10 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         $duplicateMock->expects($this->once())->method('getUrlKey')->willReturn('urk-key-1');
         $duplicateMock->expects($this->once())->method('setUrlKey')->with('urk-key-2');
         $duplicateMock->expects($this->once())->method('save');
-        $duplicateMock->expects($this->any())->method('getId')->will($this->returnValue(2));
-        $optionMock->expects($this->once())->method('duplicate')->with(1, 2);
+        $duplicateMock->expects($this->any())->method('getEntityId')->willReturn(2);
+        $this->optionRepositoryMock->expects($this->once())
+            ->method('duplicate')
+            ->with($this->productMock, $duplicateMock);
         $resourceMock->expects($this->once())->method('duplicate')->with(1, 2);
 
         $this->assertEquals($duplicateMock, $this->_model->copy($this->productMock));

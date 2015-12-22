@@ -6,10 +6,12 @@
 define([
     'jquery',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'jquery/file-uploader',
-    'mage/translate'
-], function ($, mageTemplate) {
+    'mage/translate',
+    'mage/backend/notification'
+], function ($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.baseImage', {
@@ -17,6 +19,9 @@ define([
          * Button creation
          * @protected
          */
+        options: {
+            maxImageUploadCount : 10
+        },
         _create: function () {
             var $container = this.element,
                 imageTmpl = mageTemplate(this.element.find('[data-template=image]').html()),
@@ -33,6 +38,9 @@ define([
 
             var findElement = function (data) {
                 return $container.find('.image:not(.image-placeholder)').filter(function () {
+                    if (!$(this).data('image')) {
+                        return false;
+                    }
                     return $(this).data('image').file === data.file;
                 }).first();
             };
@@ -124,9 +132,25 @@ define([
                     if (!data.result.error) {
                         $galleryContainer.trigger('addItem', data.result);
                     } else {
-                        alert($.mage.__('We don\'t recognize or support this file extension type.'));
+                        alert({
+                            content: $.mage.__('We don\'t recognize or support this file extension type.')
+                        });
                     }
                 },
+                change: function(e, data) {
+                    if (data.files.length > this.options.maxImageUploadCount) {
+                        $('body').notification('clear').notification('add', {
+                            error: true,
+                            message: $.mage.__('You can\'t upload more than ' + this.options.maxImageUploadCount
+                                + ' images in one time'),
+                            insertMethod: function(message) {
+                                $('.page-main-actions').after(message);
+                            }
+                        });
+
+                        return false;
+                    }
+                }.bind(this),
                 add: function (event, data) {
                     $(this).fileupload('process', data).done(function () {
                         data.submit();

@@ -20,4 +20,12 @@ interface ConfigurableProductManagementInterface
      * @return \Magento\Catalog\Api\Data\ProductInterface[]
      */
     public function generateVariation(\Magento\Catalog\Api\Data\ProductInterface $product, $options);
+
+    /**
+     * Provide the number of product count
+     *
+     * @param null|int $status
+     * @return int
+     */
+    public function getCount($status = null);
 }

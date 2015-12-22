@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Indexer\Action;
 
-use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 
 class Entity extends Base
 {

@@ -21,13 +21,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $config = $this->getMockBuilder('Magento\Framework\Indexer\ConfigInterface')->getMock();
 
         $statesFactory = $this->getMockBuilder(
-            'Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory'
+            'Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory'
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
 
         $states = $this->getMockBuilder(
-            'Magento\Indexer\Model\Resource\Indexer\State\Collection'
+            'Magento\Indexer\Model\ResourceModel\Indexer\State\Collection'
         )->disableOriginalConstructor()->getMock();
 
         $state = $this->getMockBuilder(

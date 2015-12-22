@@ -16,7 +16,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_helper = null;
 
     /**
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory
      */
     protected $_agreementFactory;
 
@@ -29,7 +29,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Paypal\Helper\Data $helper
-     * @param \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementFactory
+     * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $agreementFactory
      * @param \Magento\Paypal\Model\Billing\Agreement $agreementModel
      * @param array $data
      */
@@ -37,7 +37,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Paypal\Helper\Data $helper,
-        \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $agreementFactory,
+        \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $agreementFactory,
         \Magento\Paypal\Model\Billing\Agreement $agreementModel,
         array $data = []
     ) {
@@ -90,7 +90,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        /** @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection $collection */
+        /** @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection $collection */
         $collection = $this->_agreementFactory->create()->addCustomerDetails();
         $this->setCollection($collection);
         return parent::_prepareCollection();

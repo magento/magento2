@@ -71,12 +71,12 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderCollectionMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderCollectionFactoryMock;
 
@@ -114,10 +114,10 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
-        $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Collection')
+        $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        $orderCollection = 'Magento\Sales\Model\Resource\Order\CollectionFactory';
+        $orderCollection = 'Magento\Sales\Model\ResourceModel\Order\CollectionFactory';
         $this->orderCollectionFactoryMock = $this->getMockBuilder($orderCollection)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

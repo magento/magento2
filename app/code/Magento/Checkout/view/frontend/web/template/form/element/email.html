@@ -20,7 +20,9 @@
             <div class="control _with-tooltip">
                 <input class="input-text"
                        type="email"
-                       data-bind="textInput: email"
+                       data-bind="
+                            textInput: email,
+                            hasFocus: emailFocused"
                        name="username"
                        data-validate="{required:true, 'validate-email':true}"
                        id="customer-email" />

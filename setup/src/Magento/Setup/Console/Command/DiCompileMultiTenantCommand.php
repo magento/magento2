@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
 use Magento\Framework\Autoload\AutoloaderRegistry;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
@@ -55,6 +56,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     const SERIALIZER_VALUE_IGBINARY = 'igbinary';
     /**#@- */
 
+    /** Command name */
+    const NAME = 'setup:di:compile-multi-tenant';
+
     /**
      * Object Manager
      *
@@ -79,7 +83,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
      *
      * @var array
      */
-    private $files;
+    private $files = [];
 
     /**
      *
@@ -94,15 +98,25 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     private $log;
 
     /**
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param DirectoryList $directoryList
+     * @param ComponentRegistrar $componentRegistrar
      */
-    public function __construct(ObjectManagerProvider $objectManagerProvider, DirectoryList $directoryList)
-    {
+    public function __construct(
+        ObjectManagerProvider $objectManagerProvider,
+        DirectoryList $directoryList,
+        ComponentRegistrar $componentRegistrar
+    ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->directoryList = $directoryList;
+        $this->componentRegistrar = $componentRegistrar;
         parent::__construct();
     }
 
@@ -144,13 +158,41 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 'Allows to exclude Paths from compilation (default is #[\\\\/]m1[\\\\/]#i)'
             ),
         ];
-        $this->setName('setup:di:compile-multi-tenant')
+        $this->setName(self::NAME)
             ->setDescription(
                 'Generates all non-existing proxies and factories, and pre-compile class definitions, '
                 . 'inheritance information and plugin definitions'
             )
             ->setDefinition($options);
         parent::configure();
+    }
+
+    /**
+     * Get module directories exclude patterns
+     *
+     * @return array
+     */
+    private function getModuleExcludePatterns()
+    {
+        $modulesExcludePatterns = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
+            $modulesExcludePatterns[] = "#^" . $modulePath . "/Test#";
+        }
+        return $modulesExcludePatterns;
+    }
+
+    /**
+     * Get library directories exclude patterns
+     *
+     * @return array
+     */
+    private function getLibraryExcludePatterns()
+    {
+        $libraryExcludePatterns = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
+            $libraryExcludePatterns[] = "#^" . $libraryPath . "/([\\w]+/)?Test#";
+        }
+        return $libraryExcludePatterns;
     }
 
     /**
@@ -166,13 +208,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
 
         $generationDir = $input->getOption(self::INPUT_KEY_GENERATION) ? $input->getOption(self::INPUT_KEY_GENERATION)
             : $this->directoryList->getPath(DirectoryList::GENERATION);
+        $modulesExcludePatterns = $this->getModuleExcludePatterns();
         $testExcludePatterns = [
-            "#^" . $this->directoryList->getPath(DirectoryList::MODULES) . "/[\\w]+/[\\w]+/Test#",
-            "#^" . $this->directoryList->getPath(DirectoryList::LIB_INTERNAL)
-            . "/[\\w]+/[\\w]+/([\\w]+/)?Test#",
             "#^" . $this->directoryList->getPath(DirectoryList::SETUP) . "/[\\w]+/[\\w]+/Test#",
             "#^" . $this->directoryList->getRoot() . "/dev/tools/Magento/Tools/[\\w]+/Test#"
         ];
+        $librariesExcludePatterns = $this->getLibraryExcludePatterns();
+        $testExcludePatterns = array_merge($testExcludePatterns, $modulesExcludePatterns, $librariesExcludePatterns);
         $fileExcludePatterns = $input->getOption('exclude-pattern') ?
             [$input->getOption(self::INPUT_KEY_EXCLUDE_PATTERN)] : ['#[\\\\/]M1[\\\\/]#i'];
         $fileExcludePatterns = array_merge($fileExcludePatterns, $testExcludePatterns);
@@ -211,9 +253,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     {
         // 1.1 Code scan
         $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
-        $codeScanDir = $this->directoryList->getRoot() . '/app';
         $directoryScanner = new Scanner\DirectoryScanner();
-        $this->files = $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns);
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $codeScanDir) {
+            $this->files = array_merge_recursive(
+                $this->files,
+                $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns)
+            );
+        }
         $this->files['additional'] = [$input->getOption(self::INPUT_KEY_EXTRA_CLASSES_FILE)];
         $repositoryScanner = new Scanner\RepositoryScanner();
         $repositories = $repositoryScanner->collectEntities($this->files['di']);
@@ -301,11 +347,14 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $relationsFile = $diDir . '/relations.ser';
         $pluginDefFile = $diDir . '/plugins.ser';
         $compilationDirs = [
-            $this->directoryList->getPath(DirectoryList::MODULES),
-            $this->directoryList->getPath(DirectoryList::LIB_INTERNAL) . '/Magento',
             $this->directoryList->getPath(DirectoryList::SETUP) . '/Magento/Setup/Module',
             $this->directoryList->getRoot() . '/dev/tools/Magento/Tools',
         ];
+        $compilationDirs = array_merge(
+            $compilationDirs,
+            $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+            $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY)
+        );
         $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
         // 2.1 Code scan
         $validator = new \Magento\Framework\Code\Validator();

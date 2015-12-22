@@ -12,7 +12,7 @@
     {
         "*": {
             "Magento_Review/js/process-reviews": {
-                "productReviewUrl": "<?php echo $block->getProductReviewUrl();?>"
+                "productReviewUrl": "<?php /* @escapeNotVerified */ echo $block->getProductReviewUrl();?>"
             }
         }
     }

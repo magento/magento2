@@ -28,7 +28,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_dataCollectionFactory;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -38,26 +38,32 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $quote = null;
 
     /**
-     * Constructor
-     *
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Framework\Data\CollectionFactory $dataCollectionFactory,
         \Magento\Framework\Registry $coreRegistry,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = []
     ) {
         $this->_dataCollectionFactory = $dataCollectionFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->quoteRepository = $quoteRepository;
+        $this->quoteFactory = $quoteFactory;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -159,7 +165,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         if (null == $this->quote) {
             $storeIds = $this->_storeManager->getWebsite($this->getWebsiteId())->getStoreIds();
-            $this->quote = $this->quoteRepository->create()->setSharedStoreIds($storeIds);
+            $this->quote = $this->quoteFactory->create()->setSharedStoreIds($storeIds);
 
             $currentCustomerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
             if (!empty($currentCustomerId)) {

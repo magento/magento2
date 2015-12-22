@@ -31,6 +31,11 @@ define(
             back: function() {
                 sidebarModel.hide();
                 stepNavigator.navigateTo('shipping');
+            },
+
+            backToShippingMethod: function() {
+                sidebarModel.hide();
+                stepNavigator.navigateTo('shipping', 'opc-shipping_method');
             }
         });
     }

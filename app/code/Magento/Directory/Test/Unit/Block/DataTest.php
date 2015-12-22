@@ -7,9 +7,9 @@ namespace Magento\Directory\Test\Unit\Block;
 
 use Magento\Directory\Block\Data;
 use Magento\Directory\Helper\Data as HelperData;
-use Magento\Directory\Model\Resource\Country\Collection as CountryCollection;
-use Magento\Directory\Model\Resource\Country\CollectionFactory as CountryCollectionFactory;
-use Magento\Directory\Model\Resource\Region\CollectionFactory as RegionCollectionFactory;
+use Magento\Directory\Model\ResourceModel\Country\Collection as CountryCollection;
+use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCollectionFactory;
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Json\EncoderInterface;
@@ -76,7 +76,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->regionCollectionFactory = $this->getMockBuilder(
-            'Magento\Directory\Model\Resource\Region\CollectionFactory'
+            'Magento\Directory\Model\ResourceModel\Region\CollectionFactory'
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -131,12 +131,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareCountryCollection()
     {
-        $this->countryCollection = $this->getMockBuilder('Magento\Directory\Model\Resource\Country\Collection')
+        $this->countryCollection = $this->getMockBuilder('Magento\Directory\Model\ResourceModel\Country\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->countryCollectionFactory = $this->getMockBuilder(
-            'Magento\Directory\Model\Resource\Country\CollectionFactory'
+            'Magento\Directory\Model\ResourceModel\Country\CollectionFactory'
         )
             ->disableOriginalConstructor()
             ->setMethods([

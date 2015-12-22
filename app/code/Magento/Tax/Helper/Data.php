@@ -69,7 +69,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_localeFormat;
 
     /**
-     * @var \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory
+     * @var \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory
      */
     protected $_orderTaxCollectionFactory;
 
@@ -101,7 +101,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Config                                                        $taxConfig
      * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
      * @param \Magento\Framework\Locale\FormatInterface                     $localeFormat
-     * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
+     * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
      * @param \Magento\Framework\Locale\ResolverInterface                   $localeResolver
      * @param \Magento\Catalog\Helper\Data                                  $catalogHelper
      * @param OrderTaxManagementInterface                                   $orderTaxManagement
@@ -114,7 +114,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         Config $taxConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory,
+        \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Catalog\Helper\Data $catalogHelper,
         OrderTaxManagementInterface $orderTaxManagement,

@@ -1,40 +1,45 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\System\Config\Validatevat;
 
+use Magento\Framework\Controller\Result\JsonFactory;
+
 class Validate extends \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat
 {
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var JsonFactory
      */
-    protected $resultRawFactory;
+    protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
-        $this->resultRawFactory = $resultRawFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
      * Check whether vat is valid
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
         $result = $this->_validate();
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-        $resultRaw = $this->resultRawFactory->create();
-        return $resultRaw->setContents((int)$result->getIsValid());
+
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData([
+            'valid' => (int)$result->getIsValid(),
+            'message' => $result->getRequestMessage(),
+        ]);
     }
 }

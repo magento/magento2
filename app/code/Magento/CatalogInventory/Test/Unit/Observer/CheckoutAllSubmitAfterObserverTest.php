@@ -87,13 +87,13 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quote));
 
         $this->subtractQuoteInventoryObserver->expects($this->once())
-            ->method('invoke')
+            ->method('execute')
             ->with($this->eventObserver);
 
         $this->reindexQuoteInventoryObserver->expects($this->once())
-            ->method('invoke')
+            ->method('execute')
             ->with($this->eventObserver);
 
-        $this->observer->invoke($this->eventObserver);
+        $this->observer->execute($this->eventObserver);
     }
 }

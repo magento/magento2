@@ -14,6 +14,7 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {

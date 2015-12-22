@@ -73,5 +73,16 @@ return [
             'order'       => 7,
             'noMenu'      => true
         ],
+        [
+            'id'          => 'root.system-config',
+            'url'         => 'system-config',
+            'templateUrl' => "$base/system-config",
+            'title'       => 'System config',
+            'controller'  => 'systemConfigController',
+            'default'     => false,
+            'nav-bar'     => false,
+            'noMenu'      => true,
+            'order'       => -1,
+        ]
     ],
 ];

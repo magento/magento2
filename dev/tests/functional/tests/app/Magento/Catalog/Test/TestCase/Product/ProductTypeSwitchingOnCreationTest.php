@@ -81,10 +81,10 @@ class ProductTypeSwitchingOnCreationTest extends Injectable
     public function test($createProduct, $product)
     {
         // Steps
-        $this->catalogProductIndex->open();
-        $this->catalogProductIndex->getGridPageActionBlock()->addProduct($createProduct);
         list($fixture, $dataset) = explode('::', $product);
         $product = $this->fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
+        $this->catalogProductIndex->open();
+        $this->catalogProductIndex->getGridPageActionBlock()->addProduct($createProduct);
         $this->catalogProductNew->getProductForm()->fill($product);
         $this->catalogProductNew->getFormPageActions()->save($product);
 

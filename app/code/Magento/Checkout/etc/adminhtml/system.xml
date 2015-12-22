@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="checkout" translate="label" type="text" sortOrder="305" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Checkout</label>
@@ -20,13 +20,6 @@
                 <field id="guest_checkout" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow Guest Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="customer_must_be_logged" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Require Customer To Be Logged In To Checkout</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <depends>
-                        <field id="guest_checkout">0</field>
-                    </depends>
                 </field>
             </group>
             <group id="cart" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">

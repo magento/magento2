@@ -16,7 +16,11 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemaFile = BP . '/app/code/Magento/Catalog/etc/catalog_attributes.xsd';
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->_schemaFile = $urnResolver->getRealPath('urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd');
     }
 
     /**
@@ -26,7 +30,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $dom = new \Magento\Framework\Config\Dom($fixtureXml, [], null, null, '%message%');
+        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, '%message%');
         $actualResult = $dom->validate($this->_schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);

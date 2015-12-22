@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Resource\Product\Compare\Item\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 
 /**
  * Catalog Product Compare Helper
@@ -75,7 +75,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     /**
      * Product compare item collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
@@ -100,7 +100,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Customer\Model\Session $customerSession
@@ -113,7 +113,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Customer\Model\Session $customerSession,
@@ -148,7 +148,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
 
         $params = [
             'items' => implode(',', $itemIds),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
         ];
 
         return $this->_getUrl('catalog/product_compare', $params);
@@ -186,7 +186,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $beforeCompareUrl = $this->_catalogSession->getBeforeCompareUrl();
 
         $encodedUrl = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl)
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl)
         ];
 
         return $this->_wishlistHelper->getAddParams($product, $encodedUrl);
@@ -203,7 +203,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $beforeCompareUrl = $this->_catalogSession->getBeforeCompareUrl();
         $params = [
             'product' => $product->getId(),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl),
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl),
             '_secure' => $this->_getRequest()->isSecure()
         ];
 
@@ -230,7 +230,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     {
         $listCleanUrl = $this->getEncodedUrl($this->_getUrl('catalog/product_compare'));
         $data = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $listCleanUrl,
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $listCleanUrl,
             'product' => $product->getId()
         ];
         return $this->postHelper->getPostData($this->getRemoveUrl(), $data);
@@ -255,7 +255,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     {
         $refererUrl = $this->_getRequest()->getServer('HTTP_REFERER');
         $params = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($refererUrl)
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($refererUrl)
         ];
         return $this->postHelper->getPostData($this->getClearListUrl(), $params);
     }

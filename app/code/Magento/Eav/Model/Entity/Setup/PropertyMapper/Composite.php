@@ -25,6 +25,7 @@ class Composite implements PropertyMapperInterface
     /**
      * @param ObjectManagerInterface $objectManager
      * @param array $propertyMappers
+     * @codeCoverageIgnore
      */
     public function __construct(ObjectManagerInterface $objectManager, array $propertyMappers = [])
     {

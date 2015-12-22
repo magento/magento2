@@ -6,7 +6,7 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:redefine schemaLocation="product_options.xsd">
+    <xs:redefine schemaLocation="urn:magento:module:Magento_Catalog:etc/product_options.xsd">
         <xs:complexType name="optionDeclaration">
             <xs:complexContent>
                 <xs:restriction base="optionDeclaration">

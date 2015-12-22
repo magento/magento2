@@ -11,7 +11,7 @@ namespace Magento\Cms\Block\Adminhtml\Page;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * @var \Magento\Cms\Model\Resource\Page\CollectionFactory
+     * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -29,7 +29,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Cms\Model\Page $cmsPage
-     * @param \Magento\Cms\Model\Resource\Page\CollectionFactory $collectionFactory
+     * @param \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory
      * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
      * @param array $data
      */
@@ -37,7 +37,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Cms\Model\Page $cmsPage,
-        \Magento\Cms\Model\Resource\Page\CollectionFactory $collectionFactory,
+        \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory,
         \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder,
         array $data = []
     ) {
@@ -66,7 +66,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         $collection = $this->_collectionFactory->create();
-        /* @var $collection \Magento\Cms\Model\Resource\Page\Collection */
+        /* @var $collection \Magento\Cms\Model\ResourceModel\Page\Collection */
         $collection->setFirstStoreFlag(true);
         $this->setCollection($collection);
 

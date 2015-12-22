@@ -22,7 +22,7 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Wishlist item collection factory.
      *
-     * @var \Magento\Wishlist\Model\Resource\Item\CollectionFactory
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -31,14 +31,14 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Wishlist\Model\Resource\Item\CollectionFactory $collectionFactory
+     * @param \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Wishlist\Model\Resource\Item\CollectionFactory $collectionFactory,
+        \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory $collectionFactory,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {

@@ -26,7 +26,7 @@ class CouponsMassDelete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Qu
 
         if (is_array($codesIds)) {
             $couponsCollection = $this->_objectManager->create(
-                'Magento\SalesRule\Model\Resource\Coupon\Collection'
+                'Magento\SalesRule\Model\ResourceModel\Coupon\Collection'
             )->addFieldToFilter(
                 'coupon_id',
                 ['in' => $codesIds]

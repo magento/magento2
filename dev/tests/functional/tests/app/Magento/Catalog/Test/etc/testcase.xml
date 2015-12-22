@@ -16,12 +16,13 @@
         <step name="setDefaultAttributeValue" module="Magento_Catalog" next="saveProduct"/>
         <step name="saveProduct" module="Magento_Catalog"/>
     </scenario>
-    <scenario name="CreateProductAttributeEntityTest" firstStep="createProductTemplate">
-        <step name="createProductTemplate" module="Magento_Catalog" next="openProductAttributesPage"/>
+    <scenario name="CreateProductAttributeEntityTest" firstStep="createAttributeSet">
+        <step name="createAttributeSet" module="Magento_Catalog" next="openProductAttributesPage"/>
         <step name="openProductAttributesPage" module="Magento_Catalog" next="addNewAttribute"/>
         <step name="addNewAttribute" module="Magento_Catalog" next="fillAttributeForm"/>
         <step name="fillAttributeForm" module="Magento_Catalog" next="saveAttribute"/>
-        <step name="saveAttribute" module="Magento_Catalog" next="addAttributeToProductTemplate"/>
-        <step name="addAttributeToProductTemplate" module="Magento_Catalog"/>
+        <step name="saveAttribute" module="Magento_Catalog" next="addAttributeToAttributeSet"/>
+        <step name="addAttributeToAttributeSet" module="Magento_Catalog" next="createProductWithAttributeSet"/>
+        <step name="createProductWithAttributeSet" module="Magento_Catalog"/>
     </scenario>
 </config>

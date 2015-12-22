@@ -56,9 +56,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $entityIdCode = Address::COLUMN_ADDRESS_ID;
 
         $expectedAttributes = [];
-        /** @var $collection \Magento\Customer\Model\Resource\Address\Attribute\Collection */
+        /** @var $collection \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection */
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Address\Attribute\Collection'
+            'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection'
         );
         /** @var $attribute \Magento\Customer\Model\Attribute */
         foreach ($collection as $attribute) {
@@ -193,7 +193,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributeCollection()
     {
         $this->assertInstanceOf(
-            'Magento\Customer\Model\Resource\Address\Attribute\Collection',
+            'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection',
             $this->_model->getAttributeCollection()
         );
     }

@@ -5,33 +5,23 @@
  */
 namespace Magento\Ui\Component\Layout;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
+use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 
 /**
  * Class Tabs
  */
-class Tabs extends Generic implements LayoutInterface
+class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInterface
 {
     /**
      * @var string
      */
     protected $navContainerName;
-
-    /**
-     * @var UiComponentInterface
-     */
-    protected $component;
-
-    /**
-     * @var string
-     */
-    protected $namespace;
 
     /**
      * @var array
@@ -44,20 +34,16 @@ class Tabs extends Generic implements LayoutInterface
     protected $sortIncrement = 10;
 
     /**
-     * @var UiComponentFactory
-     */
-    protected $uiComponentFactory;
-
-    /**
      * Constructor
      *
      * @param UiComponentFactory $uiComponentFactory
      * @param null|string $navContainerName
+     * @param array $data
      */
-    public function __construct(UiComponentFactory $uiComponentFactory, $navContainerName = null)
+    public function __construct(UiComponentFactory $uiComponentFactory, $navContainerName = null, $data = [])
     {
         $this->navContainerName = $navContainerName;
-        $this->uiComponentFactory = $uiComponentFactory;
+        parent::__construct($uiComponentFactory, $data);
     }
 
     /**
@@ -72,15 +58,6 @@ class Tabs extends Generic implements LayoutInterface
         $this->namespace = $component->getContext()->getNamespace();
 
         $this->addNavigationBlock();
-
-        // Register html content element
-        $this->component->getContext()->addComponentDefinition(
-            'html_content',
-            [
-                'component' => 'Magento_Ui/js/form/components/html',
-                'extends' => $this->namespace
-            ]
-        );
 
         // Initialization of structure components
         $this->initSections();
@@ -186,11 +163,11 @@ class Tabs extends Generic implements LayoutInterface
     /**
      * Add wrapped layout block
      *
-     * @param \Magento\Ui\Component\Wrapper\Block $childComponent
+     * @param BlockWrapperInterface $childComponent
      * @param array $areas
      * @return void
      */
-    protected function addWrappedBlock(\Magento\Ui\Component\Wrapper\Block $childComponent, array &$areas)
+    protected function addWrappedBlock(BlockWrapperInterface $childComponent, array &$areas)
     {
         $name = $childComponent->getName();
         /** @var TabInterface $block */

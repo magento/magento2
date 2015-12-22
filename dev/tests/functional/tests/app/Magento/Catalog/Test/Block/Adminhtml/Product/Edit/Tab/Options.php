@@ -51,7 +51,7 @@ class Options extends Tab
      *
      * @var string
      */
-    protected $importGrid = "//ancestor::body/div[*[@id='import-container'] and contains(@style,'display: block')]";
+    protected $importGrid = "//ancestor::body//aside[*//div[@id='import-container']]";
 
     /**
      * Fill custom options form on tab

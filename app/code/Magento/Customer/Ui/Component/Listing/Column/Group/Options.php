@@ -6,7 +6,7 @@
 namespace Magento\Customer\Ui\Component\Listing\Column\Group;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Customer\Model\Resource\Group\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Class Options

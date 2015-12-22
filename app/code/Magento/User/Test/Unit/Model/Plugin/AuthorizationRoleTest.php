@@ -14,7 +14,7 @@ class AuthorizationRoleTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\User\Model\Plugin\AuthorizationRole */
     protected $model;
 
-    /** @var \Magento\User\Model\Resource\User|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\ResourceModel\User|\PHPUnit_Framework_MockObject_MockObject */
     protected $userResourceModelMock;
 
     /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
@@ -25,7 +25,7 @@ class AuthorizationRoleTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->userResourceModelMock = $this->getMockBuilder('Magento\User\Model\Resource\User')
+        $this->userResourceModelMock = $this->getMockBuilder('Magento\User\Model\ResourceModel\User')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

@@ -22,12 +22,12 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     private $eavConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeCollection;
 
@@ -43,13 +43,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->attributeCollection = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\Collection'
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
         )
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attributeCollectionFactory = $this->getMockBuilder(
-            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory'
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory'
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()

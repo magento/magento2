@@ -77,6 +77,7 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function restoreValue($value)
     {

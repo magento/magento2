@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SortOrder;
-use Magento\SalesRule\Model\Resource\Coupon\Collection;
+use Magento\SalesRule\Model\ResourceModel\Coupon\Collection;
 
 /**
  * Coupon CRUD class
@@ -33,7 +33,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
     protected $searchResultFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -51,7 +51,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      * @param CouponFactory $couponFactory
      * @param RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory $searchResultFactory
-     * @param Resource\Coupon\CollectionFactory $collectionFactory
+     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $collectionFactory
      * @param Spi\CouponResourceInterface $resourceModel
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      */
@@ -59,7 +59,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         \Magento\SalesRule\Api\Data\CouponSearchResultInterfaceFactory $searchResultFactory,
-        \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $collectionFactory,
+        \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $collectionFactory,
         \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
@@ -149,7 +149,7 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\SalesRule\Model\Resource\Coupon\Collection $collection */
+        /** @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $collection */
         $collection = $this->collectionFactory->create();
         $couponInterfaceName = 'Magento\SalesRule\Api\Data\CouponInterface';
         $this->extensionAttributesJoinProcessor->process($collection, $couponInterfaceName);

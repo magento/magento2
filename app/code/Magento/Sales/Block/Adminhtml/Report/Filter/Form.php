@@ -67,7 +67,7 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
                     'name' => 'show_order_statuses',
                     'label' => __('Order Status'),
                     'options' => ['0' => __('Any'), '1' => __('Specified')],
-                    'note' => __('Applies to Any of the Specified Order Statuses')
+                    'note' => __('Applies to Any of the Specified Order Statuses except canceled orders')
                 ],
                 'to'
             );
@@ -75,7 +75,12 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
             $fieldset->addField(
                 'order_statuses',
                 'multiselect',
-                ['name' => 'order_statuses', 'values' => $values, 'display' => 'none'],
+                [
+                    'name' => 'order_statuses',
+                    'label' => '',
+                    'values' => $values,
+                    'display' => 'none'
+                ],
                 'show_order_statuses'
             );
 

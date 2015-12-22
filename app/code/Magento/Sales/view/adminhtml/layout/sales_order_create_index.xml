@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="sales_order_create_customer_block"/>
     <head>
         <link src="Magento_Sales::js/bootstrap/order-create-index.js"/>
@@ -21,6 +21,7 @@
         </referenceBlock>
         <referenceContainer name="after.body.start">
             <block class="Magento\Backend\Block\Template" name="optional_zip_countries" as="optional_zip_countries" template="Magento_Directory::js/optional_zip_countries.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Configure" template="Magento_Catalog::catalog/product/composite/configure.phtml"/>
         </referenceContainer>
         <referenceContainer name="js">
             <block class="Magento\Backend\Block\Template" template="Magento_Sales::order/create/js.phtml" name="create"/>
@@ -75,8 +76,5 @@
                 </block>
             </block>
         </referenceBlock>
-        <referenceContainer name="before.body.end">
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Configure" template="Magento_Catalog::catalog/product/composite/configure.phtml"/>
-        </referenceContainer>
     </body>
 </page>

@@ -15,13 +15,13 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         $path = 'frontend/Magento/luma';
         $collectionFactory = $this->getMock(
-            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\ResourceModel\Theme\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
-        $collectionMock = $this->getMock('Magento\Theme\Model\Resource\Theme\Collection', [], [], '', false);
+        $collectionMock = $this->getMock('Magento\Theme\Model\ResourceModel\Theme\Collection', [], [], '', false);
         $theme = $this->getMock('Magento\Framework\View\Design\ThemeInterface', [], [], '', false);
         $collectionMock->expects(
             $this->once()
@@ -43,7 +43,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         $themeId = 755;
         $collectionFactory = $this->getMock(
-            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\ResourceModel\Theme\CollectionFactory',
             [],
             [],
             '',
@@ -60,7 +60,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetThemeCustomizations()
     {
-        $collectionFactory = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\CollectionFactory')
+        $collectionFactory = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,7 +68,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Collection')
+        $collection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -84,7 +84,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->with(ThemeInterface::TYPE_VIRTUAL)
             ->willReturnSelf();
 
-        /** @var \Magento\Theme\Model\Resource\Theme\CollectionFactory $collectionFactory */
+        /** @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory */
         /** @var \Magento\Theme\Model\ThemeFactory $themeFactory */
         $themeProvider = new ThemeProvider($collectionFactory, $themeFactory);
         $this->assertInstanceOf(get_class($collection), $themeProvider->getThemeCustomizations());

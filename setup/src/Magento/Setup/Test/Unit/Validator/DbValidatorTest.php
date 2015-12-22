@@ -46,9 +46,38 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
         $this->connection
             ->expects($this->atLeastOnce())
             ->method('query')
-            ->with('SHOW GRANTS FOR current_user()')
             ->willReturn($pdo);
-        $pdo->expects($this->once())->method('fetchAll')->willReturn([['GRANT ALL PRIVILEGES ON `name.*` TO']]);
+
+        $listOfPrivileges = [
+            ['SELECT'],
+            ['INSERT'],
+            ['UPDATE'],
+            ['DELETE'],
+            ['CREATE'],
+            ['DROP'],
+            ['REFERENCES'],
+            ['INDEX'],
+            ['ALTER'],
+            ['CREATE TEMPORARY TABLES'],
+            ['LOCK TABLES'],
+            ['EXECUTE'],
+            ['CREATE VIEW'],
+            ['SHOW VIEW'],
+            ['CREATE ROUTINE'],
+            ['ALTER ROUTINE'],
+            ['EVENT'],
+            ['TRIGGER'],
+        ];
+        $accessibleDbs = ['some_db', 'name', 'another_db'];
+
+        $pdo->expects($this->atLeastOnce())
+            ->method('fetchAll')
+            ->willReturnMap(
+                [
+                    [\PDO::FETCH_COLUMN, 0, $accessibleDbs],
+                    [\PDO::FETCH_NUM, null, $listOfPrivileges]
+                ]
+            );
         $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
     }
 
@@ -65,11 +94,44 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
         $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
         $this->connection
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('query')
-            ->with('SHOW GRANTS FOR current_user()')
             ->willReturn($pdo);
-        $pdo->expects($this->once())->method('fetchAll')->willReturn([['GRANT SELECT ON *.* TO']]);
+        $listOfPrivileges = [['SELECT']];
+        $accessibleDbs = ['some_db', 'name', 'another_db'];
+
+        $pdo->expects($this->atLeastOnce())
+            ->method('fetchAll')
+            ->willReturnMap(
+                [
+                    [\PDO::FETCH_COLUMN, 0, $accessibleDbs],
+                    [\PDO::FETCH_NUM, null, $listOfPrivileges]
+                ]
+            );
+        $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
+    }
+
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedExceptionMessage Database 'name' does not exist or specified database server user does not have
+     */
+    public function testCheckDatabaseConnectionDbNotAccessible()
+    {
+        $this->connection
+            ->expects($this->once())
+            ->method('fetchOne')
+            ->with('SELECT version()')
+            ->willReturn('5.6.0-0ubuntu0.12.04.1');
+        $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
+        $this->connection
+            ->expects($this->atLeastOnce())
+            ->method('query')
+            ->willReturn($pdo);
+        $accessibleDbs = ['some_db', 'another_db'];
+
+        $pdo->expects($this->atLeastOnce())
+            ->method('fetchAll')
+            ->willReturn($accessibleDbs);
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
@@ -85,6 +147,18 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
     public function testCheckDatabaseTablePrefixWrongFormat()
     {
         $this->assertEquals(true, $this->dbValidator->checkDatabaseTablePrefix('_wrong_format'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Table prefix length can't be more than
+     */
+    public function testCheckDatabaseTablePrefixWrongLength()
+    {
+        $this->assertEquals(
+            true,
+            $this->dbValidator->checkDatabaseTablePrefix('mvbXzXzItSIr0wrZW3gqgV2UKrWiK1Mj7bkBlW72rZW3gqgV2UKrWiK1M')
+        );
     }
 
     /**

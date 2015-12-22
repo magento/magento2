@@ -117,7 +117,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Get resource instance.
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     abstract public function getResource();
 
@@ -234,7 +234,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
-        $countSelect->columns('COUNT(*)');
+        $countSelect->columns(new \Zend_Db_Expr('COUNT(*)'));
 
         return $countSelect;
     }

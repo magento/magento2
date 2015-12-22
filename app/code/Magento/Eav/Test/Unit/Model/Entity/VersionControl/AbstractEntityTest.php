@@ -6,7 +6,7 @@
 namespace Magento\Eav\Test\Unit\Model\Entity\VersionControl;
 
 use Magento\Eav\Model\Entity\VersionControl\AbstractEntity;
-use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEntityTest
 {
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshot;
 
@@ -27,7 +27,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
     protected function setUp()
     {
         $this->entitySnapshot = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
             ['isModified', 'registerSnapshot'],
             [],
             '',
@@ -35,7 +35,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         );
 
         $this->entityRelationComposite = $this->getMock(
-            'Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite',
+            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite',
             ['processRelations'],
             [],
             '',

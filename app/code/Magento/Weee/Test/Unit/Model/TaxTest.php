@@ -110,7 +110,17 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->calculationFactory = $this->getMock($className, ['create'], [], '', false);
 
         $className = '\Magento\Customer\Model\Session';
-        $this->customerSession = $this->getMock($className, [], [], '', false);
+        $this->customerSession = $this->getMock(
+            $className,
+            ['getCustomerId', 'getDefaultTaxShippingAddress', 'getDefaultTaxBillingAddress', 'getCustomerTaxClassId'],
+            [],
+            '',
+            false
+        );
+        $this->customerSession->expects($this->any())->method('getCustomerId')->willReturn(null);
+        $this->customerSession->expects($this->any())->method('getDefaultTaxShippingAddress')->willReturn(null);
+        $this->customerSession->expects($this->any())->method('getDefaultTaxBillingAddress')->willReturn(null);
+        $this->customerSession->expects($this->any())->method('getCustomerTaxClassId')->willReturn(null);
 
         $className = '\Magento\Customer\Api\AccountManagementInterface';
         $this->accountManagement = $this->getMock($className, [], [], '', false);
@@ -118,7 +128,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $className = '\Magento\Tax\Helper\Data';
         $this->taxData = $this->getMock($className, [], [], '', false);
 
-        $className = '\Magento\Weee\Model\Resource\Tax';
+        $className = '\Magento\Weee\Model\ResourceModel\Tax';
         $this->resource = $this->getMock($className, [], [], '', false);
 
         $className = '\Magento\Weee\Model\Config';
@@ -165,11 +175,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $calculation->expects($this->once())
             ->method('getRateRequest')
             ->willReturn($obj);
-
         $calculation->expects($this->once())
             ->method('getDefaultRateRequest')
             ->willReturn($obj);
-
         $calculation->expects($this->any())
             ->method('getRate')
             ->willReturn('10');
@@ -177,10 +185,6 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->once())
             ->method('getAttributeCodesByFrontendType')
             ->willReturn(['0'=>'fpt']);
-
-        $website->expects($this->any())
-            ->method('getId')
-            ->willReturn(1);
 
         $store->expects($this->any())
             ->method('getId')
@@ -190,6 +194,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(1);
 
+        $website->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
         $website->expects($this->any())
             ->method('getDefaultGroup')
             ->willReturn($group);

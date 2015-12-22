@@ -165,27 +165,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedValidationMixed()
     {
-        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        // package name "dummy" is not in root composer.json file
-        $dirRead->expects($this->any())
-            ->method('readFile')
-            ->will($this->returnValueMap(
-                [
-                    ['test1/composer.json', null, null, '{"name": "dummy1"}'],
-                    ['test2/composer.json', null, null, '{"name": "magento/theme-b"}'],
-                    ['test4/composer.json', null, null, '{"name": "dummy2"}']
-                ]
-            ));
-        $dirRead->expects($this->any())
-            ->method('isExist')
-            ->will($this->returnValueMap(
-                [
-                    ['test1/composer.json', true],
-                    ['test2/composer.json', true],
-                    ['test3/composer.json', false],
-                    ['test4/composer.json', true]
-                ]
-            ));
         $this->themePackageInfo->expects($this->exactly(4))
             ->method('getPackageName')
             ->will($this->returnValueMap([
