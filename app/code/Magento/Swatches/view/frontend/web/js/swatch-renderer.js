@@ -6,9 +6,8 @@
 define([
     'jquery',
     'underscore',
-    'mage/gallery/preloadImages',
     'jquery/ui'
-], function ($, _, preloadImages) {
+], function ($, _) {
     'use strict';
 
     /**
@@ -272,24 +271,6 @@ define([
                     'img': $main.find('.product-image-photo').attr('src')
                 }];
             }
-            this._preloadSwatchesImages();
-        },
-
-        /**
-         * Preloads optional configuration images.
-         * @private
-         */
-        _preloadSwatchesImages: function () {
-            var options = this.options;
-
-            _.each(options.jsonConfig.images, function (array) {
-                var imagesList = [];
-
-                _.each(array, function (item) {
-                    imagesList.push(item.img);
-                });
-                preloadImages(imagesList);
-            });
         },
 
         /**
