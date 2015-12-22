@@ -27,6 +27,7 @@ class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\Tr
      * @param string $templateNamespace
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testGetTransport(
         $templateType = TemplateTypesInterface::TYPE_HTML,
