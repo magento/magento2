@@ -24,6 +24,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     private $communicationConfigMock;
 
     /**
+     * @var \Magento\Framework\MessageQueue\Config\Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validatorMock;
+
+    /**
      * Initialize parameters
      */
     protected function setUp()
@@ -32,11 +37,15 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->communicationConfigMock = $this->getMockBuilder('Magento\Framework\Communication\ConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->validatorMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Validator')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->converter = $objectManager->getObject(
             'Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter',
             [
-                'communicationConfig' => $this->communicationConfigMock
+                'communicationConfig' => $this->communicationConfigMock,
+                'xmlValidator' => $this->validatorMock
             ]
         );
     }
@@ -47,6 +56,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvert()
     {
         $this->communicationConfigMock->expects($this->any())->method('getTopics')->willReturn([]);
+        $this->validatorMock->expects($this->any())
+            ->method('buildWildcardPattern')
+            ->willReturnMap($this->getWildcardPatternMap());
         $expected = $this->getConvertedQueueConfig();
         $xmlFile = __DIR__ . '/_files/queue.xml';
         $dom = new \DOMDocument();
@@ -63,5 +75,15 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected function getConvertedQueueConfig()
     {
         return include(__DIR__ . '/_files/expected_queue.php');
+    }
+
+    /**
+     * Get wildcard pattern map from the file
+     *
+     * @return array
+     */
+    protected function getWildcardPatternMap()
+    {
+        return include(__DIR__ . '/_files/wildcard_pattern_map.php');
     }
 }
