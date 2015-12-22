@@ -308,7 +308,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $configData = $objectManager->create(
             'Magento\Framework\Communication\Config\Data',
             [
-                'xmlReader' => $xmlReader,
+                'reader' => $xmlReader,
                 'envReader' => $envReader
             ]
         );
