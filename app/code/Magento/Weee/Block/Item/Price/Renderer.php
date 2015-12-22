@@ -196,13 +196,13 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseUnitDisplayPriceExclTax()
     {
-        // Getting the qty on the order page
-        $qty = $this->getItem()->getQtyOrdered();
-        if ($qty == 0 || $qty == null) {
-            // Getting the qty on the invoice and credit memo pages
-            $qty = $this->getItem()->getQty();
+        $orderItem = $this->getItem();
+        if ($orderItem instanceof InvoiceItem || $orderItem instanceof CreditMemoItem) {
+            $orderItem = $orderItem->getOrderItem();
         }
-        $basePriceExclTax = $this->getItem()->getBaseRowTotal() / $qty;
+
+        $qty = $orderItem->getQtyOrdered();
+        $basePriceExclTax = $orderItem->getBaseRowTotal() / $qty;
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
@@ -344,13 +344,13 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseFinalUnitDisplayPriceExclTax()
     {
-        // Getting the qty on the order page
-        $qty = $this->getItem()->getQtyOrdered();
-        if ($qty == 0 || $qty == null) {
-            // Getting the qty on the invoice and credit memo pages
-            $qty = $this->getItem()->getQty();
+        $orderItem = $this->getItem();
+        if ($orderItem instanceof InvoiceItem || $orderItem instanceof CreditMemoItem) {
+            $orderItem = $orderItem->getOrderItem();
         }
-        $basePriceExclTax = $this->getItem()->getBaseRowTotal() / $qty;
+
+        $qty = $orderItem->getQtyOrdered();
+        $basePriceExclTax = $orderItem->getBaseRowTotal() / $qty;
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
