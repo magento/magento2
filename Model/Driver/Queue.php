@@ -51,14 +51,15 @@ class Queue implements QueueInterface
      *
      * @param QueueManagement $queueManagement
      * @param EnvelopeFactory $envelopeFactory
+     * @param LoggerInterface $logger
      * @param string $queueName
      * @param int $interval
      * @param int $maxNumberOfTrials
-     * @param LoggerInterface $logger
      */
     public function __construct(
         QueueManagement $queueManagement,
         EnvelopeFactory $envelopeFactory,
+        LoggerInterface $logger,
         $queueName,
         LoggerInterface $logger,
         $interval = 5,
