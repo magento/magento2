@@ -10,6 +10,8 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Is used to represent a form with abstract containers.
@@ -200,6 +202,21 @@ abstract class AbstractFormContainers extends Form
                 'Could not find all elements on the tabs: ' . implode(', ', array_keys($this->unassignedFields))
             );
         }
+    }
+
+    /**
+     * Get container element.
+     *
+     * @param string $containerName
+     * @return ElementInterface
+     */
+    protected function getContainerElement($containerName)
+    {
+        $selector = $this->containers[$containerName]['selector'];
+        $strategy = isset($this->containers[$containerName]['strategy'])
+            ? $this->containers[$containerName]['strategy']
+            : Locator::SELECTOR_CSS;
+        return $this->_rootElement->find($selector, $strategy);
     }
 
     /**
