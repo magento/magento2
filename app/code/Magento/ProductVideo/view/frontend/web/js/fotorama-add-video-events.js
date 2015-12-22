@@ -227,11 +227,9 @@ define([
          * @private
          */
         _hideCloseVideo: function () {
-            $(this.element).find('.' + this.FTVC).css({
-                opacity: 0,
-                transform: 'translate3d(95px, -95px, 0)',
-                display: 'none'
-            });
+            $(this.element)
+                .find('.' + this.FTVC)
+                .removeClass('fotorama-show-control');
             $('.' + this.FTAR).removeClass('hidden-video');
         },
 
@@ -240,11 +238,9 @@ define([
          * @private
          */
         _showCloseVideo: function () {
-            $(this.element).find('.' + this.FTVC).css({
-                opacity: 1,
-                transform: 'translate3d(0px, 0px, 0)',
-                display: 'block'
-            });
+            $(this.element)
+                .find('.' + this.FTVC)
+                .addClass('fotorama-show-control');
             $('.' + this.FTAR).addClass('hidden-video');
         },
 
