@@ -50,6 +50,13 @@ $salesRule->getConditions()->loadArray([
                                 ],
                                 [
                                     'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product',
+                                    'attribute' => 'sku',
+                                    'operator' => '==',
+                                    'value' => '80',
+                                    'is_value_processed' => false,
+                                ],
+                                [
+                                    'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product',
                                     'attribute' => 'attribute_set_id',
                                     'operator' => '==',
                                     'value' => '4',
