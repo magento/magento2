@@ -51,7 +51,9 @@ class Configurable
         $attributes = $this->request->getParam('attributes');
         if ($product->getTypeId() == ConfigurableProduct::TYPE_CODE && !empty($attributes)) {
             $setId = $this->request->getPost('new-variations-attribute-set-id');
-            $product->setAttributeSetId($setId);
+            if ($setId) {
+                $product->setAttributeSetId($setId);
+            }
             $this->productType->setUsedProductAttributeIds($attributes, $product);
 
             $product->setNewVariationsAttributeSetId($setId);
