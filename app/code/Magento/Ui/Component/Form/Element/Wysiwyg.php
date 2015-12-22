@@ -31,6 +31,7 @@ class Wysiwyg extends AbstractElement
      * @param ConfigInterface $wysiwygConfig
      * @param array $components
      * @param array $data
+     * @param array $config
      */
     public function __construct(
         ContextInterface $context,
@@ -38,7 +39,8 @@ class Wysiwyg extends AbstractElement
         EditorElement $editorElement,
         ConfigInterface $wysiwygConfig,
         array $components = [],
-        array $data = []
+        array $data = [],
+        array $config = []
     ) {
         $this->editorElement = $editorElement;
         $this->editorElement->setForm($form);
@@ -46,7 +48,10 @@ class Wysiwyg extends AbstractElement
         $this->editorElement->setData('rows', 20);
         $this->editorElement->setData('name', $data['name']);
         $this->editorElement->setData('html_id', $data['name'] . 'Editor');
-        $this->editorElement->setConfig($wysiwygConfig->getConfig());
+
+        $wysiwygConfigData = isset($config['wysiwygConfigData']) ? $config['wysiwygConfigData'] : [];
+        $this->editorElement->setConfig($wysiwygConfig->getConfig($wysiwygConfigData));
+
         $data['config']['content'] = $editorElement->getElementHtml();
         parent::__construct($context, $components, $data);
     }

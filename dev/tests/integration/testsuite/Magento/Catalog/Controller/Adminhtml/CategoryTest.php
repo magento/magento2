@@ -82,7 +82,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
         if (empty($postData['return_session_messages_only'])) {
             $this->assertRedirect(
-                $this->stringContains('http://localhost/index.php/backend/catalog/category/edit/id/')
+                $this->stringContains('http://localhost/index.php/backend/catalog/category/edit/')
             );
         } else {
             $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -114,9 +114,12 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                 'name' => 'Category Created From Product Creation Page',
                 'is_active' => 1,
                 'include_in_menu' => 0,
+                'use_config' => [
+                    'available_sort_by' => 1,
+                    'default_sort_by' => 1
+                ],
+                'parent' => 2,
             ],
-            'parent' => 2,
-            'use_config' => ['available_sort_by', 'default_sort_by'],
         ];
 
         return [[$postData], [$postData + ['return_session_messages_only' => 1]]];
@@ -153,28 +156,28 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                         'path' => '1/2',
                         'url_key' => 'default-category',
                         'is_anchor' => '0',
-                    ],
-                    'use_default' => [
-                        0 => 'name',
-                        1 => 'is_active',
-                        2 => 'thumbnail',
-                        3 => 'description',
-                        4 => 'image',
-                        5 => 'meta_title',
-                        6 => 'meta_keywords',
-                        7 => 'meta_description',
-                        8 => 'include_in_menu',
-                        9 => 'display_mode',
-                        10 => 'landing_page',
-                        11 => 'available_sort_by',
-                        12 => 'default_sort_by',
-                        13 => 'filter_price_range',
-                        14 => 'custom_apply_to_products',
-                        15 => 'custom_design',
-                        16 => 'custom_design_from',
-                        17 => 'custom_design_to',
-                        18 => 'page_layout',
-                        19 => 'custom_layout_update',
+                        'use_default' => [
+                            'name' => 1,
+                            'is_active' => 1,
+                            'thumbnail' => 1,
+                            'description' => 1,
+                            'image' => 1,
+                            'meta_title' => 1,
+                            'meta_keywords' => 1,
+                            'meta_description' => 1,
+                            'include_in_menu' => 1,
+                            'display_mode' => 1,
+                            'landing_page' => 1,
+                            'available_sort_by' => 1,
+                            'default_sort_by' => 1,
+                            'filter_price_range' => 1,
+                            'custom_apply_to_products' => 1,
+                            'custom_design' => 1,
+                            'custom_design_from' => 1,
+                            'custom_design_to' => 1,
+                            'page_layout' => 1,
+                            'custom_layout_update' => 1,
+                        ],
                     ],
                 ],
                 [
@@ -221,8 +224,13 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                         'custom_design_to' => '5/29/2015',
                         'page_layout' => '',
                         'custom_layout_update' => '',
+                        'use_config' => [
+                            'available_sort_by' => 1,
+                            'default_sort_by' => 1,
+                            'filter_price_range' => 1,
+                        ],
                     ],
-                    'use_config' => [0 => 'available_sort_by', 1 => 'default_sort_by', 2 => 'filter_price_range'],
+
                 ],
                 [
                     'name' => true,
@@ -287,8 +295,13 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                         'custom_design_to' => '5/21/2015',
                         'page_layout' => '',
                         'custom_layout_update' => '',
+                        'use_config' => [
+                            'available_sort_by' => 1,
+                            'default_sort_by' => 1,
+                            'filter_price_range' => 1,
+                        ],
                     ],
-                    'use_config' => [0 => 'available_sort_by', 1 => 'default_sort_by', 2 => 'filter_price_range'],
+
                 ],
                 [
                     'name' => false,

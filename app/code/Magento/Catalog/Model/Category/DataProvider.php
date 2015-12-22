@@ -89,6 +89,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $request;
 
     /**
+     * @var \Magento\Ui\Model\Manager
+     */
+    private $uiManager;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -117,6 +122,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         Config $eavConfig,
         FilterPool $filterPool,
         \Magento\Framework\App\RequestInterface $request,
+        \Magento\Ui\Model\Manager $uiManager,
         array $meta = [],
         array $data = []
     ) {
@@ -128,6 +134,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->registry = $registry;
         $this->storeManager = $storeManager;
         $this->request = $request;
+        $this->uiManager = $uiManager;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
     }
@@ -140,10 +147,41 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function prepareMeta($meta)
     {
-        $meta['general']['fields'] = $this->getAttributesMeta(
-            $this->eavConfig->getEntityType('catalog_category')
-        );
+        $meta = array_replace_recursive($meta, $this->prepareFieldsMeta(
+            $this->uiManager->getData('category_form')['category_form'],
+            $this->getAttributesMeta($this->eavConfig->getEntityType('catalog_category'))
+        ));
         return $meta;
+    }
+
+    /**
+     * Prepare fields meta based on xml declaration of form and fields metadata
+     *
+     * @param array $formConfig
+     * @param array $fieldsMeta
+     * @return array
+     */
+    private function prepareFieldsMeta($formConfig, $fieldsMeta)
+    {
+        $fields = [];
+        foreach ($formConfig['children'] as $fieldset => $child) {
+            $callable = function($component) use (&$callable, $fieldsMeta) {
+                $result = [];
+                foreach ($component as $k => $v) {
+                    if (isset($fieldsMeta[$k])) {
+                        $result[$k] = $fieldsMeta[$k];
+                    }
+                    if (isset($v['children'])) {
+                        $result = array_merge($result, $callable($v['children']));
+                    }
+                }
+                return $result;
+            };
+            if (isset($child['children']) && $child['children']) {
+                $fields[$fieldset]['fields'] = $callable($child['children']);
+            }
+        }
+        return $fields;
     }
 
     /**
@@ -164,11 +202,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
             $categoryData = $this->addUseConfigSettings($categoryData);
             $categoryData = $this->filterFields($categoryData);
-            $result['general'] = $categoryData;
-            if (isset($result['general']['image'])) {
-                $result['general']['savedImage']['value'] = $category->getImageUrl();
+            if (isset($categoryData['image'])) {
+                $categoryData['savedImage']['value'] = $category->getImageUrl();
             }
-            $this->loadedData[$category->getId()] = $result;
+            $this->loadedData[$category->getId()] = $categoryData;
         }
         return $this->loadedData;
     }
