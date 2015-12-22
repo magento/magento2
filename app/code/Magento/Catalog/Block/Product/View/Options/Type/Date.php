@@ -199,6 +199,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             $extraParams .= ' onchange="opConfig.reloadPrice()"';
         }
         $extraParams .= ' data-role="calendar-dropdown" data-calendar-role="' . $name . '"';
+        $extraParams .= ' data-selector="' . $select->getName() . '"';
         $select->setExtraParams($extraParams);
 
         if ($value === null) {
