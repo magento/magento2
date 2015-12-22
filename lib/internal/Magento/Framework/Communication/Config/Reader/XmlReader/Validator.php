@@ -30,16 +30,17 @@ class Validator extends ConfigValidator
      */
     private $booleanUtils;
 
-
     /**
-     * @param BooleanUtils $booleanUtils
+     * Initialize dependencies
+     *
      * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
+     * @param BooleanUtils $booleanUtils
      */
     public function __construct(
-        BooleanUtils $booleanUtils,
         TypeProcessor $typeProcessor,
-        MethodsMap $methodsMap
+        MethodsMap $methodsMap,
+        BooleanUtils $booleanUtils
     ) {
         $this->booleanUtils = $booleanUtils;
         $this->typeProcessor = $typeProcessor;
@@ -48,6 +49,8 @@ class Validator extends ConfigValidator
     }
 
     /**
+     * Validate service method
+     *
      * @param string $serviceMethod
      * @param string $topicName
      * @param string $className
@@ -70,6 +73,8 @@ class Validator extends ConfigValidator
     }
 
     /**
+     * Validate response request
+     *
      * @param string $requestResponseSchema
      * @param string $requestSchema
      * @param string $topicName
@@ -114,6 +119,8 @@ class Validator extends ConfigValidator
     }
 
     /**
+     * Validate declaration of the topic
+     *
      * @param string $requestResponseSchema
      * @param string $topicName
      * @param string $requestSchema

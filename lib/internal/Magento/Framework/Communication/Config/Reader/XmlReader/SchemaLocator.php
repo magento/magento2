@@ -27,10 +27,11 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * Initialize dependencies.
+     *
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
-    public function __construct()
+    public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
-        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->schema = $urnResolver->getRealPath('urn:magento:framework:Communication/etc/communication.xsd');
         $this->perFileSchema = $urnResolver->getRealPath('urn:magento:framework:Communication/etc/communication.xsd');
     }
