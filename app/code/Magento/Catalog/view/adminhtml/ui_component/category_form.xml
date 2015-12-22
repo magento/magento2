@@ -134,6 +134,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Content</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">10</item>
             </item>
         </argument>
         <container name="image_group">
@@ -221,6 +222,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Display Settings</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">20</item>
             </item>
         </argument>
         <field name="display_mode">
@@ -351,6 +353,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Search Engine Optimization</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">30</item>
             </item>
         </argument>
         <container name="url_key_group">
@@ -425,6 +428,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Products in Category</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">40</item>
             </item>
         </argument>
         <container name="assign_products_container" >
@@ -443,6 +447,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Design</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">60</item>
             </item>
         </argument>
         <container name="custom_use_parent_settings_group">
@@ -520,6 +525,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Schedule Design Update</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">70</item>
             </item>
         </argument>
         <container name="date_group">
