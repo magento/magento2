@@ -56,23 +56,25 @@ class Minifier implements MinifierInterface
     ];
 
     /**
-     * @var Filesystem\Directory\ReadInterface
-     */
-    protected $rootDirectory;
-
-    /**
      * @var Filesystem\Directory\WriteInterface
      */
     protected $htmlDirectory;
 
     /**
+     * @var Filesystem\Directory\ReadFactory
+     */
+    protected $readFactory;
+
+    /**
      * @param Filesystem $filesystem
+     * @param Filesystem\Directory\ReadFactory $readFactory
      */
     public function __construct(
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        Filesystem\Directory\ReadFactory $readFactory
     ) {
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::TEMPLATE_MINIFICATION_DIR);
+        $this->readFactory = $readFactory;
     }
 
     /**
@@ -84,7 +86,8 @@ class Minifier implements MinifierInterface
     public function getMinified($file)
     {
         $file = $this->htmlDirectory->getDriver()->getRealPathSafety($file);
-        if (!$this->htmlDirectory->isExist($this->rootDirectory->getRelativePath($file))) {
+        $relativeMinifiedFile = ltrim($file, '/');
+        if (!$this->htmlDirectory->isExist($relativeMinifiedFile)) {
             $this->minify($file);
         }
         return $this->getPathToMinified($file);
@@ -98,9 +101,8 @@ class Minifier implements MinifierInterface
      */
     public function getPathToMinified($file)
     {
-        return $this->htmlDirectory->getAbsolutePath(
-            $this->rootDirectory->getRelativePath($file)
-        );
+        $file = ltrim($file, '/');
+        return $this->htmlDirectory->getAbsolutePath($file);
     }
 
     /**
@@ -111,7 +113,8 @@ class Minifier implements MinifierInterface
      */
     public function minify($file)
     {
-        $file = $this->rootDirectory->getRelativePath($file);
+        $dir = dirname($file);
+        $fileName = basename($file);
         $content = preg_replace(
             '#(?<!]]>)\s+</#',
             '</',
@@ -131,7 +134,7 @@ class Minifier implements MinifierInterface
                             preg_replace(
                                 '#(?<!:)//[^\n\r]*(\s\?\>)#',
                                 '$1',
-                                $this->rootDirectory->readFile($file)
+                                $this->readFactory->create($dir)->readFile($fileName)
                             )
                         )
                     )
@@ -142,6 +145,7 @@ class Minifier implements MinifierInterface
         if (!$this->htmlDirectory->isExist()) {
             $this->htmlDirectory->create();
         }
+        $file = ltrim($file, '/');
         $this->htmlDirectory->writeFile($file, rtrim($content));
     }
 }
