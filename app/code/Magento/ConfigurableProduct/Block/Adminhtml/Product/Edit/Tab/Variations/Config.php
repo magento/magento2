@@ -136,7 +136,7 @@ class Config extends Widget implements TabInterface
     /**
      * @return bool
      */
-    public function isConfigurableProduct()
+    public function isHasVariations()
     {
         return $this->getProduct()->getTypeId() === Configurable::TYPE_CODE
             && $this->configurableType->getUsedProducts($this->getProduct());
@@ -147,7 +147,7 @@ class Config extends Widget implements TabInterface
      */
     protected function _prepareLayout()
     {
-        $this->setData('opened', $this->isConfigurableProduct());
+        $this->setData('opened', $this->getProduct()->getTypeId() === Configurable::TYPE_CODE);
         return parent::_prepareLayout();
     }
 }
