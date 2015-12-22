@@ -38,6 +38,12 @@ class UrlRewrite extends AbstractSimpleObject
     ];
 
     /**
+     * URL suffix for rewrite (used in import)
+     * @var
+     */
+    protected $urlSuffix;
+
+    /**
      * Get data by key
      *
      * @param string $key
@@ -230,6 +236,27 @@ class UrlRewrite extends AbstractSimpleObject
             $metadata = serialize($metadata);
         }
         return $this->setData(UrlRewrite::METADATA, $metadata);
+    }
+
+    /**
+     * Store url suffix
+     *
+     * @param string $suffix
+     * @return $this
+     */
+    public function setUrlSuffix($suffix)
+    {
+        $this->urlSuffix = (string) $suffix;
+        return $this;
+    }
+
+    /**
+     * Return URL suffix in case if it exists
+     * @return string
+     */
+    public function getUrlSuffix()
+    {
+        return $this->urlSuffix;
     }
 
     /**
