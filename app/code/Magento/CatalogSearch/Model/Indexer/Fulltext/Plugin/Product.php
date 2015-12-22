@@ -23,7 +23,7 @@ class Product extends AbstractPlugin
         \Magento\Framework\Model\AbstractModel $product
     ) {
         $productResource->addCommitCallback(function () use ($product) {
-            $this->reindexRow($product->getId());
+            $this->reindexRow($product->getEntityId());
         });
         return $proceed($product);
     }

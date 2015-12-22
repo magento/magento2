@@ -12,6 +12,15 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class SampleTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPoolMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataMock;
 
     /**
      * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit_Framework_MockObject_MockObject
@@ -46,11 +55,17 @@ class SampleTest extends \PHPUnit_Framework_TestCase
         $sampleResourceFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->sampleResource));
+        $this->metadataPoolMock = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $this->target = $objectManagerHelper->getObject(
             'Magento\Downloadable\Model\Product\TypeHandler\Sample',
             [
                 'sampleFactory' => $this->sampleFactory,
                 'sampleResourceFactory' => $sampleResourceFactory,
+                'metadataPool' => $this->metadataPoolMock
             ]
         );
     }
@@ -64,9 +79,10 @@ class SampleTest extends \PHPUnit_Framework_TestCase
     public function testSave($product, array $data, array $modelData)
     {
         $link = $this->createSampleModel($product, $modelData, true);
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn('id');
         $this->sampleFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($link));
+            ->willReturn($link);
         $this->target->save($product, $data);
     }
 
@@ -185,8 +201,8 @@ class SampleTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $sample->expects($this->once())
             ->method('setProductId')
-            ->with($product->getId())
-            ->will($this->returnSelf());
+            ->with($product->getData('id'))
+            ->willReturnSelf();
         $sample->expects($this->once())
             ->method('setStoreId')
             ->with($product->getStoreId())
@@ -211,7 +227,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $product->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($id));
+            ->willReturn($id);
         $product->expects($this->any())
             ->method('getStoreId')
             ->will($this->returnValue($storeId));
@@ -228,6 +244,10 @@ class SampleTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));
+        $product->expects($this->any())
+            ->method('getData')
+            ->with('id')
+            ->willReturn($id);
         return $product;
     }
 }
