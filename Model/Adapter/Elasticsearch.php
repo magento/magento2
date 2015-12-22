@@ -207,7 +207,7 @@ class Elasticsearch
         }
 
         // prepare new index
-        $this->prepareIndex($storeId, $newIndexName);
+        $this->prepareIndex($storeId, $newIndexName, $mappedIndexerId);
 
         return $this;
     }
