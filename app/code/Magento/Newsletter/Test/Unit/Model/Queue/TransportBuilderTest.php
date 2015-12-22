@@ -32,7 +32,7 @@ class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\Tr
         $templateType = TemplateTypesInterface::TYPE_HTML,
         $messageType = MessageInterface::TYPE_HTML,
         $bodyText = '<h1>Html message</h1>',
-        $templateNamespace = null
+        $templateNamespace = ''
     ) {
         $filter = $this->getMock('Magento\Email\Model\Template\Filter', [], [], '', false);
         $data = [
