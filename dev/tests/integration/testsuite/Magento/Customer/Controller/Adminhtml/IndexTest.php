@@ -33,6 +33,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /** @var AccountManagementInterface */
     protected $accountManagement;
 
+    /** @var \Magento\Framework\Data\Form\FormKey */
+    protected $formKey;
+
     protected function setUp()
     {
         parent::setUp();
@@ -45,6 +48,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Api\AccountManagementInterface'
+        );
+
+        $this->formKey = Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Data\Form\FormKey'
         );
     }
 
@@ -289,7 +296,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals('test firstname', $customer->getFirstname());
 
         /**
-         * Addresses should be removed by \Magento\Customer\Model\Resource\Customer::_saveAddresses during _afterSave
+         * Addresses should be removed by
+         * \Magento\Customer\Model\ResourceModel\Customer::_saveAddresses during _afterSave
          * addressOne - updated
          * addressTwo - removed
          * addressThree - removed
@@ -499,6 +507,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testDeleteAction()
     {
         $this->getRequest()->setParam('id', 1);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
+
+        $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_POST);
+
         $this->dispatch('backend/customer/index/delete');
         $this->assertRedirect($this->stringContains('customer/index'));
         $this->assertSessionMessages(
@@ -513,6 +525,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testNotExistingCustomerDeleteAction()
     {
         $this->getRequest()->setParam('id', 2);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
+
+        $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_POST);
+
         $this->dispatch('backend/customer/index/delete');
         $this->assertRedirect($this->stringContains('customer/index'));
         $this->assertSessionMessages(

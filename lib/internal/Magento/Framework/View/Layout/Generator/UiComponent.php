@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Element\BlockFactory;
-use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\Data\Structure as DataStructure;
 use Magento\Framework\View\Layout\GeneratorInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -102,13 +102,13 @@ class UiComponent implements GeneratorInterface
     /**
      * Create component object
      *
-     * @param Structure $structure
+     * @param DataStructure $structure
      * @param string $elementName
      * @param string $data
      * @param LayoutInterface $layout
      * @return ContainerInterface
      */
-    protected function generateComponent(Structure $structure, $elementName, $data, LayoutInterface $layout)
+    protected function generateComponent(DataStructure $structure, $elementName, $data, LayoutInterface $layout)
     {
         $attributes = $data['attributes'];
         if (!empty($attributes['group'])) {

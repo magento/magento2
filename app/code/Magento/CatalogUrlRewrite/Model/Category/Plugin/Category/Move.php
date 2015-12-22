@@ -27,7 +27,7 @@ class Move
     }
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Category $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Category $subject
      * @param callable $proceed
      * @param Category $category
      * @param Category $newParent
@@ -36,7 +36,7 @@ class Move
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundChangeParent(
-        \Magento\Catalog\Model\Resource\Category $subject,
+        \Magento\Catalog\Model\ResourceModel\Category $subject,
         \Closure $proceed,
         $category,
         $newParent,

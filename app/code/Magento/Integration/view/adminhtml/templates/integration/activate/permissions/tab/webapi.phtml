@@ -11,9 +11,9 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<fieldset class="fieldset form-inline entry-edit">
+<fieldset class="admin__fieldset form-inline entry-edit">
     <?php if ($block->isTreeEmpty()): ?>
-        <p class="empty"><?php echo __('No permissions requested'); ?></p>
+        <p class="empty"><?php /* @escapeNotVerified */ echo __('No permissions requested'); ?></p>
     <?php else: ?>
         <div class="field" data-role="tree-resources-container">
             <div class="control">
@@ -36,8 +36,8 @@ require(["jquery", "Magento_User/js/roles-tree"], function($){
     });
 
     $('[data-role="resource-tree"]').rolesTree({
-        'treeInitData': <?php echo $block->getResourcesTreeJson() ?>,
-        'treeInitSelectedData': <?php echo $block->getSelectedResourcesJson() ?>
+        'treeInitData': <?php /* @escapeNotVerified */ echo $block->getResourcesTreeJson() ?>,
+        'treeInitSelectedData': <?php /* @escapeNotVerified */ echo $block->getSelectedResourcesJson() ?>
     });
 
 });

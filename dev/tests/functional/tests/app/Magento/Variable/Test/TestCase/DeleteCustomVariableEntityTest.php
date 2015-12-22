@@ -80,5 +80,6 @@ class DeleteCustomVariableEntityTest extends Injectable
         $this->systemVariableIndexPage->open();
         $this->systemVariableIndexPage->getSystemVariableGrid()->searchAndOpen($filter);
         $this->systemVariableNewPage->getFormPageActions()->delete();
+        $this->systemVariableNewPage->getModalBlock()->acceptAlert();
     }
 }

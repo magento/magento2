@@ -1,41 +1,36 @@
-app/code/Magento/CatalogImportExport
-app/code/Magento/CatalogUrlRewrite
-app/code/Magento/CmsUrlRewrite
-app/code/Magento/ConfigurableImportExport
-app/code/Magento/Doc
-app/code/Magento/GroupedImportExport
-app/code/Magento/Msrp
-app/code/Magento/TaxImportExport
-app/code/Magento/Translation
-lib/internal/Magento/Framework/Acl
-lib/internal/Magento/Framework/Api
-lib/internal/Magento/Framework/Authorization
-lib/internal/Magento/Framework/Cache
-lib/internal/Magento/Framework/Config
-lib/internal/Magento/Framework/DB
-lib/internal/Magento/Framework/DomDocument
-lib/internal/Magento/Framework/Filter
-lib/internal/Magento/Framework/Gdata
-lib/internal/Magento/Framework/HTTP
-lib/internal/Magento/Framework/Interception
-lib/internal/Magento/Framework/Io
-lib/internal/Magento/Framework/Json
-lib/internal/Magento/Framework/Mail
-lib/internal/Magento/Framework/Mview
-lib/internal/Magento/Framework/Notification
-lib/internal/Magento/Framework/Oauth
-lib/internal/Magento/Framework/Parse
-lib/internal/Magento/Framework/Pricing
-lib/internal/Magento/Framework/Reflection
-lib/internal/Magento/Framework/RequireJs
-lib/internal/Magento/Framework/Search
-lib/internal/Magento/Framework/Serialization
-lib/internal/Magento/Framework/Simplexml
-lib/internal/Magento/Framework/System
-lib/internal/Magento/Framework/Test
-lib/internal/Magento/Framework/App/Utility
-lib/internal/Magento/Framework/Url
-lib/internal/Magento/Framework/UrlInterface
-lib/internal/Magento/Framework/Xml
-lib/internal/Magento/Framework/XsltProcessor
-lib/internal/Magento/Framework
+module Magento_CatalogImportExport /
+module Magento_CatalogUrlRewrite /
+module Magento_CmsUrlRewrite /
+module Magento_ConfigurableImportExport /
+module Magento_GroupedImportExport /
+module Magento_Msrp /
+module Magento_TaxImportExport /
+module Magento_Translation /
+library magento/framework Acl
+library magento/framework Api
+library magento/framework Authorization
+library magento/framework Cache
+library magento/framework Config
+library magento/framework DB
+library magento/framework DomDocument
+library magento/framework Filter
+library magento/framework HTTP
+library magento/framework Interception
+library magento/framework Json
+library magento/framework Mail
+library magento/framework Mview
+library magento/framework Notification
+library magento/framework Oauth
+library magento/framework Parse
+library magento/framework Pricing
+library magento/framework Reflection
+library magento/framework RequireJs
+library magento/framework Search
+library magento/framework Simplexml
+library magento/framework System
+library magento/framework Test
+library magento/framework App/Utility
+library magento/framework Url
+library magento/framework Xml
+library magento/framework XsltProcessor
+library magento/framework /

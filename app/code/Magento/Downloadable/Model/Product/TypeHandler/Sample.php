@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Model\Product\TypeHandler;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\ComponentInterface;
 
@@ -13,29 +14,33 @@ use Magento\Downloadable\Model\ComponentInterface;
  */
 class Sample extends AbstractTypeHandler
 {
+    const DATA_KEY = 'sample';
+    const IDENTIFIER_KEY = 'sample_id';
     /**
      * @var \Magento\Downloadable\Model\SampleFactory
      */
     private $sampleFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\SampleFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\SampleFactory
      */
     private $sampleResourceFactory;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
-     * @param \Magento\Downloadable\Model\Resource\SampleFactory $sampleResourceFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\SampleFactory $sampleResourceFactory
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Downloadable\Helper\File $downloadableFile,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
-        \Magento\Downloadable\Model\Resource\SampleFactory $sampleResourceFactory
+        \Magento\Downloadable\Model\ResourceModel\SampleFactory $sampleResourceFactory
     ) {
-        parent::__construct($jsonHelper, $downloadableFile);
+        parent::__construct($jsonHelper, $downloadableFile, $metadataPool);
         $this->sampleFactory = $sampleFactory;
         $this->sampleResourceFactory = $sampleResourceFactory;
     }
@@ -45,7 +50,7 @@ class Sample extends AbstractTypeHandler
      */
     public function getDataKey()
     {
-        return 'sample';
+        return self::DATA_KEY;
     }
 
     /**
@@ -53,7 +58,7 @@ class Sample extends AbstractTypeHandler
      */
     public function getIdentifierKey()
     {
-        return 'sample_id';
+        return self::IDENTIFIER_KEY;
     }
 
     /**
@@ -87,8 +92,11 @@ class Sample extends AbstractTypeHandler
         )->setSampleType(
             $data['type']
         )->setProductId(
-            $product->getId()
-        )->setStoreId(
+            $product->getData(
+                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+            )
+        );
+        $model->setStoreId(
             $product->getStoreId()
         );
     }

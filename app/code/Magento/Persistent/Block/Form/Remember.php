@@ -70,6 +70,7 @@ class Remember extends \Magento\Framework\View\Element\Template
      * @param int $length
      * @param string|null $chars
      * @return string
+     * @codeCoverageIgnore
      */
     public function getRandomString($length, $chars = null)
     {

@@ -9,7 +9,7 @@ class IndexableAttributeFilterTest extends \PHPUnit_Framework_TestCase
 {
     public function testFilter()
     {
-        $catalogResourceMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Eav\Attribute')
+        $catalogResourceMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->disableOriginalConstructor()
             ->setMethods(['load', 'isIndexable', '__wakeup'])
             ->getMock();
@@ -23,7 +23,7 @@ class IndexableAttributeFilterTest extends \PHPUnit_Framework_TestCase
             ->method('isIndexable')
             ->will($this->returnValue(false));
 
-        $eavAttributeFactoryMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Eav\AttributeFactory')
+        $eavAttributeFactoryMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

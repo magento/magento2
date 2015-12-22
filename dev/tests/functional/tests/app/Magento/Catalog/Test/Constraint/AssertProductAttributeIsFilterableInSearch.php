@@ -37,7 +37,7 @@ class AssertProductAttributeIsFilterableInSearch extends AbstractConstraint
             ? $attribute->getManageFrontendLabel()
             : $attribute->getFrontendLabel();
         \PHPUnit_Framework_Assert::assertTrue(
-            in_array($label, $catalogCategoryView->getLayeredNavigationBlock()->getFilters()),
+            in_array(strtoupper($label), $catalogCategoryView->getLayeredNavigationBlock()->getFilters()),
             'Attribute is absent in layered navigation on search page.'
         );
     }

@@ -42,6 +42,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,

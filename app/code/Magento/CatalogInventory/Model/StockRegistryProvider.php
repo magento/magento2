@@ -118,37 +118,36 @@ class StockRegistryProvider implements StockRegistryProviderInterface
     }
 
     /**
-     * @param int|null $websiteId
+     * @param int|null $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
-    public function getStock($websiteId)
+    public function getStock($scopeId)
     {
-        if (!isset($this->stocks[$websiteId])) {
+        if (!isset($this->stocks[$scopeId])) {
             $criteria = $this->stockCriteriaFactory->create();
-            $criteria->setWebsiteFilter($websiteId);
+            $criteria->setScopeFilter($scopeId);
             $collection = $this->stockRepository->getList($criteria);
             $stock = current($collection->getItems());
             if ($stock && $stock->getStockId()) {
-                $this->stocks[$websiteId] = $stock;
+                $this->stocks[$scopeId] = $stock;
             } else {
                 return $this->stockFactory->create();
             }
         }
-        return $this->stocks[$websiteId];
+        return $this->stocks[$scopeId];
     }
 
     /**
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      */
-    public function getStockItem($productId, $websiteId)
+    public function getStockItem($productId, $scopeId)
     {
-        $key = $websiteId . '/' . $productId;
+        $key = $scopeId . '/' . $productId;
         if (!isset($this->stockItems[$key])) {
             $criteria = $this->stockItemCriteriaFactory->create();
             $criteria->setProductsFilter($productId);
-            $criteria->setWebsiteFilter($websiteId);
             $collection = $this->stockItemRepository->getList($criteria);
             $stockItem = current($collection->getItems());
             if ($stockItem && $stockItem->getItemId()) {
@@ -162,16 +161,16 @@ class StockRegistryProvider implements StockRegistryProviderInterface
 
     /**
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
      */
-    public function getStockStatus($productId, $websiteId)
+    public function getStockStatus($productId, $scopeId)
     {
-        $key = $websiteId . '/' . $productId;
+        $key = $scopeId . '/' . $productId;
         if (!isset($this->stockStatuses[$key])) {
             $criteria = $this->stockStatusCriteriaFactory->create();
             $criteria->setProductsFilter($productId);
-            $criteria->setWebsiteFilter($websiteId);
+            $criteria->setScopeFilter($scopeId);
             $collection = $this->stockStatusRepository->getList($criteria);
             $stockStatus = current($collection->getItems());
             if ($stockStatus && $stockStatus->getProductId()) {

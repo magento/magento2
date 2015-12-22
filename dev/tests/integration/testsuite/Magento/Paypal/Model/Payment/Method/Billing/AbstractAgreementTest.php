@@ -30,7 +30,7 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
     public function testIsActive()
     {
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Quote\Model\Resource\Quote\Collection'
+            'Magento\Quote\Model\ResourceModel\Quote\Collection'
         )->getFirstItem();
         $this->assertTrue($this->_model->isAvailable($quote));
     }
@@ -41,9 +41,9 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
      */
     public function testAssignData()
     {
-        /** @var \Magento\Quote\Model\Resource\Quote\Collection $collection */
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Collection $collection */
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Quote\Model\Resource\Quote\Collection'
+            'Magento\Quote\Model\ResourceModel\Quote\Collection'
         );
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $collection->getFirstItem();
@@ -56,9 +56,13 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
         );
         $this->_model->setData('info_instance', $info);
         $billingAgreement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection'
         )->getFirstItem();
-        $data = [AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID => $billingAgreement->getId()];
+        $data = new \Magento\Framework\DataObject(
+            [
+                AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID => $billingAgreement->getId()
+            ]
+        );
         $this->_model->assignData($data);
         $this->assertEquals(
             'REF-ID-TEST-678',

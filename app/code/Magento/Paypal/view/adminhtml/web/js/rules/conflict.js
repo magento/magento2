@@ -2,31 +2,43 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-(function() {
-    var executed = false;
-    define([], function () {
-        "use strict";
-        return function ($target, $owner, data) {
-            if ($owner.find(data.enableButton).val() == 1) {
-                var isDisabled = true;
+(function () {
+    'use strict';
 
+    var executed = false;
+
+    define([
+        'Magento_Ui/js/modal/alert',
+        'underscore'
+    ], function (alert, _) {
+
+        return function ($target, $owner, data) {
+
+            var isDisabled = true,
+                newLine = String.fromCharCode(10, 13);
+
+            if ($owner.find(data.enableButton).val() === '1') {
                 _.every(data.argument, function (name) {
-                    if (data.solutionsElements[name]
-                        && data.solutionsElements[name].find(data.enableButton).val() == 1
+                    if (data.solutionsElements[name] &&
+                        data.solutionsElements[name].find(data.enableButton).val() === '1'
                     ) {
                         isDisabled = false;
+
                         return isDisabled;
                     }
+
                     return isDisabled;
                 }, this);
 
                 if (!isDisabled && !executed) {
                     executed = true;
-                    alert(
-                        "The following error(s) occured:\n\r"
-                        + "Some PayPal solutions conflict.\n\r"
-                        + "Please re-enable the previously enabled payment solutions."
-                    );
+                    alert({
+                        content: 'The following error(s) occurred:' +
+                        newLine +
+                        'Some PayPal solutions conflict.' +
+                        newLine +
+                        'Please re-enable the previously enabled payment solutions.'
+                    });
                 }
             }
         };

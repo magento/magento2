@@ -32,12 +32,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductCollection()
     {
-        /** @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->_model->getProductCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Collection', $collection);
         $ids = $collection->getAllIds();
-        $this->assertContains(1, $ids);
-        $this->assertContains(2, $ids);
+        $this->assertEquals(2, count($ids));
         $this->assertSame($collection, $this->_model->getProductCollection());
     }
 

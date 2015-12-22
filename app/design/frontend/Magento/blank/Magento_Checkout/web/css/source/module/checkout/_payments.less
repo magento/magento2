@@ -26,20 +26,29 @@
         .step-title {
             margin-bottom: 0;
         }
+
         .payment-method {
             &:first-child {
                 .payment-method-title {
                     border-top: 0;
                 }
             }
+
             &._active {
                 .payment-method-content {
                     display: block;
                 }
             }
-            .action {
-                &.primary {
-                    &:extend(.abs-button-l all);
+        }
+
+        .payment-method-content {
+            > .actions-toolbar {
+                > .primary {
+                    .action {
+                        &.primary {
+                            &:extend(.abs-button-l all);
+                        }
+                    }
                 }
             }
         }
@@ -63,12 +72,10 @@
 
         .payment-method-content {
             display: none;
+
             .lib-css(padding, 0 0 @indent__base @checkout-payment-method-content__padding__xl);
             .fieldset {
                 &:not(:last-child) {
-                    margin: 0 0 @indent__base;
-                }
-                > .field {
                     margin: 0 0 @indent__base;
                 }
             }
@@ -117,20 +124,20 @@
                 &:extend(.abs-visually-hidden all);
             }
         }
+
         .payment-method-iframe {
             background-color: transparent;
             display: none;
             width: 100%;
         }
+
         .no-payments-block {
             margin: @indent__base 0;
         }
-        .ccard {
+
+        .payments {
             .legend {
                 &:extend(.abs-visually-hidden all);
-            }
-            .year {
-                padding-left: @indent__l;
             }
         }
     }
@@ -176,6 +183,7 @@
                 }
             }
         }
+
         .fieldset {
             > .field-select-billing {
                 > .control {
@@ -184,11 +192,33 @@
                 }
             }
         }
+
+        .payment-method-content {
+            .fieldset {
+                > .field {
+                    margin: 0 0 @indent__base;
+
+                    &.type {
+                        .control {
+                            margin-left: 25.8%;
+                        }
+
+                        &.no-detection {
+                            .control {
+                                margin-left: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+
     .payment-method-billing-address {
         .action-update {
             float: right;
         }
+
         .actions-toolbar {
             .action-cancel {
                 margin: 6px @indent__base 0 0;

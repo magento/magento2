@@ -10,7 +10,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Integration test for service layer \Magento\Customer\Model\Resource\AddressRepository
+ * Integration test for service layer \Magento\Customer\Model\ResourceModel\AddressRepository
  *
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)

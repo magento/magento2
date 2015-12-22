@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Email/etc/email_templates.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
     <template id="customer_create_account_email_template" label="New Account" file="account_new.html" type="html" module="Magento_Customer" area="frontend"/>
     <template id="customer_create_account_email_no_password_template" label="New Account Without Password" file="account_new_no_password.html" type="html" module="Magento_Customer" area="frontend"/>
     <template id="customer_create_account_email_confirmation_template" label="New Account Confirmation Key" file="account_new_confirmation.html" type="html" module="Magento_Customer" area="frontend"/>

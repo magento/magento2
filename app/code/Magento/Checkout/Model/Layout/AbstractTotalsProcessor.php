@@ -18,6 +18,7 @@ abstract class AbstractTotalsProcessor
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @codeCoverageIgnore
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig

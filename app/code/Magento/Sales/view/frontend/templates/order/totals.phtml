@@ -15,19 +15,19 @@
     <?php if ($_total->getBlockName()): ?>
         <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
     <?php else:?>
-    <tr class="<?php echo $_code?>">
-        <th <?php echo $block->getLabelProperties()?> scope="row">
+    <tr class="<?php /* @escapeNotVerified */ echo $_code?>">
+        <th <?php /* @escapeNotVerified */ echo $block->getLabelProperties()?> scope="row">
             <?php if ($_total->getStrong()):?>
             <strong><?php echo $block->escapeHtml($_total->getLabel());?></strong>
             <?php else:?>
             <?php echo $block->escapeHtml($_total->getLabel());?>
             <?php endif?>
         </th>
-        <td <?php echo $block->getValueProperties()?> data-th="<?php echo $block->escapeHtml($_total->getLabel());?>">
+        <td <?php /* @escapeNotVerified */ echo $block->getValueProperties()?> data-th="<?php echo $block->escapeHtml($_total->getLabel());?>">
             <?php if ($_total->getStrong()):?>
-            <strong><?php echo $block->formatValue($_total) ?></strong>
+            <strong><?php /* @escapeNotVerified */ echo $block->formatValue($_total) ?></strong>
             <?php else:?>
-            <?php echo $block->formatValue($_total) ?>
+            <?php /* @escapeNotVerified */ echo $block->formatValue($_total) ?>
             <?php endif?>
         </td>
     </tr>

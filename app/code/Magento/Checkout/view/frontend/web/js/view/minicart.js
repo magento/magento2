@@ -7,8 +7,9 @@ define([
     'Magento_Customer/js/customer-data',
     'jquery',
     'ko',
+    'underscore',
     'sidebar'
-], function (Component, customerData, $, ko) {
+], function (Component, customerData, $, ko, _) {
     'use strict';
 
     var sidebarInitialized = false;
@@ -20,6 +21,10 @@ define([
     });
 
     function initSidebar() {
+        if (minicart.data('mageSidebar')) {
+            minicart.sidebar('update');
+        }
+
         if (!$('[data-role=product-item]').length) {
             return false;
         }
@@ -33,7 +38,9 @@ define([
             "url": {
                 "checkout": window.checkout.checkoutUrl,
                 "update": window.checkout.updateItemQtyUrl,
-                "remove": window.checkout.removeItemUrl
+                "remove": window.checkout.removeItemUrl,
+                "loginUrl": window.checkout.customerLoginUrl,
+                "isRedirectRequired": window.checkout.isRedirectRequired
             },
             "button": {
                 "checkout": "#top-cart-btn-checkout",
@@ -63,20 +70,29 @@ define([
 
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
+        cart: {},
+
+        /**
+         * @override
+         */
         initialize: function () {
-            var self = this;
-            this._super();
-            this.cart = customerData.get('cart');
-            this.cart.subscribe(function () {
+            var self = this,
+                cartData = customerData.get('cart');
+
+            this.update(cartData());
+            cartData.subscribe(function (updatedCart) {
                 addToCartCalls--;
                 this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
+                this.update(updatedCart);
                 initSidebar();
             }, this);
             $('[data-block="minicart"]').on('contentLoading', function(event) {
                 addToCartCalls++;
                 self.isLoading(true);
             });
+
+            return this._super();
         },
         isLoading: ko.observable(false),
         initSidebar: initSidebar,
@@ -90,6 +106,36 @@ define([
         },
         getItemRenderer: function (productType) {
             return this.itemRenderer[productType] || 'defaultRenderer';
+        },
+
+        /**
+         * Update mini shopping cart content.
+         *
+         * @param {Object} updatedCart
+         * @returns void
+         */
+        update: function (updatedCart) {
+            _.each(updatedCart, function (value, key) {
+                if (!this.cart.hasOwnProperty(key)) {
+                    this.cart[key] = ko.observable();
+                }
+                this.cart[key](value);
+            }, this);
+        },
+
+        /**
+         * Get cart param by name.
+         * @param {String} name
+         * @returns {*}
+         */
+        getCartParam: function (name) {
+            if (!_.isUndefined(name)) {
+                if (!this.cart.hasOwnProperty(name)) {
+                    this.cart[name] = ko.observable();
+                }
+            }
+
+            return this.cart[name]();
         }
     });
 });

@@ -7,6 +7,7 @@
 angular.module('readiness-check', [])
     .constant('COUNTER', 1)
     .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER) {
+        $scope.Object = Object;
         $scope.titles = $localStorage.titles;
         $scope.moduleName = $localStorage.moduleName;
         $scope.progressCounter = COUNTER;
@@ -23,14 +24,14 @@ angular.module('readiness-check', [])
         };
         switch ($state.current.type) {
             case 'uninstall':
-                $scope.dependencyUrl = 'index.php/environment/uninstall-dependency-check';
+                $scope.dependencyUrl = 'index.php/dependency-check/uninstall-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = $localStorage.packages;
                 }
                 break;
             case 'enable':
             case 'disable':
-                $scope.dependencyUrl = 'index.php/environment/enable-disable-dependency-check';
+                $scope.dependencyUrl = 'index.php/dependency-check/enable-disable-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = {
                         type: $state.current.type,
@@ -39,7 +40,7 @@ angular.module('readiness-check', [])
                 }
                 break;
             default:
-                $scope.dependencyUrl = 'index.php/environment/component-dependency';
+                $scope.dependencyUrl = 'index.php/dependency-check/component-dependency';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = $localStorage.packages;
                 }
@@ -111,6 +112,7 @@ angular.module('readiness-check', [])
             'php-version': {
                 url:'index.php/environment/php-version',
                 params: $scope.actionFrom,
+                useGet: true,
                 show: function() {
                     $scope.startProgress();
                     $scope.version.visible = true;
@@ -128,6 +130,7 @@ angular.module('readiness-check', [])
             'php-settings': {
                 url:'index.php/environment/php-settings',
                 params: $scope.actionFrom,
+                useGet: true,
                 show: function() {
                     $scope.startProgress();
                     $scope.settings.visible = true;
@@ -145,6 +148,7 @@ angular.module('readiness-check', [])
             'php-extensions': {
                 url:'index.php/environment/php-extensions',
                 params: $scope.actionFrom,
+                useGet: true,
                 show: function() {
                     $scope.startProgress();
                     $scope.extensions.visible = true;
@@ -152,6 +156,9 @@ angular.module('readiness-check', [])
                 process: function(data) {
                     $scope.extensions.processed = true;
                     angular.extend($scope.extensions, data);
+                    if(data.responseType !== 'error') {
+                        $scope.extensions.length = Object.keys($scope.extensions.data.required).length;
+                    }
                     $scope.updateOnProcessed($scope.extensions.responseType);
                     $scope.stopProgress();
                 },
@@ -283,13 +290,28 @@ angular.module('readiness-check', [])
 
         $scope.query = function(item) {
             if (item.params) {
-                return $http.post(item.url, item.params)
-                    .success(function(data) { item.process(data) })
-                    .error(function(data, status) {
-                        item.fail();
-                    });
+                if (item.useGet === true) {
+                    // The http request type has been changed from POST to GET for a reason. The POST request
+                    // results in PHP throwing a warning regards to 'always_populate_raw_post_data'
+                    // being incorrectly set to a value different than -1. This warning is throw during the initial
+                    // boot up sequence when POST request is received before the control gets transferred over to
+                    // the Magento customer error handler, hence not catchable. To avoid that warning, the HTTP
+                    // request type is being changed from POST to GET for select queries. Those queries are:
+                    // (1) PHP Version Check (2) PHP Settings Check and (3) PHP Extensions Check.
+
+                    item.url = item.url + '?type=' + item.params;
+                } else {
+                    return $http.post(item.url, item.params)
+                        .success(function (data) {
+                            item.process(data)
+                        })
+                        .error(function (data, status) {
+                            item.fail();
+                        });
+                }
             }
-            return $http.get(item.url, {timeout: 3000})
+            // setting 1 minute timeout to prevent system from timing out
+            return $http.get(item.url, {timeout: 60000})
                 .success(function(data) { item.process(data) })
                 .error(function(data, status) {
                     item.fail();
@@ -302,8 +324,10 @@ angular.module('readiness-check', [])
             angular.forEach($scope.items, function(item) {
                 item.show();
             });
+            var $delay = 0;
             angular.forEach($scope.items, function(item) {
-                $scope.query(item);
+                $timeout(function() { $scope.query(item); }, $delay * 1000);
+                $delay++;
             });
         };
 
@@ -312,4 +336,27 @@ angular.module('readiness-check', [])
                 $scope.progress();
             }
         });
+
+        $scope.wordingOfReadinessCheckAction = function() {
+            var $actionString = 'We\'re making sure your server environment is ready for ';
+            if ($localStorage.moduleName) {
+                $actionString += $localStorage.moduleName;
+            } else {
+                if($state.current.type === 'install' || $state.current.type === 'upgrade') {
+                    $actionString += 'Magento';
+                    if ($state.current.type === 'upgrade' && $localStorage.packages.length > 1 ) {
+                        $actionString += ' and selected components';
+                    }
+                } else {
+                    $actionString += 'package';
+                }
+            }
+            $actionString += " to be " + $state.current.type;
+            if ($scope.endsWith($state.current.type, 'e')) {
+                $actionString += 'd';
+            } else {
+                $actionString +='ed';
+            }
+            return $actionString;
+        }
     }]);

@@ -6,7 +6,7 @@
 namespace Magento\Framework\Indexer\Handler;
 
 use Magento\Framework\Indexer\HandlerInterface;
-use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 
 class ConcatHandler implements HandlerInterface
 {

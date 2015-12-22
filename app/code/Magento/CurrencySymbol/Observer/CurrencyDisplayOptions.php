@@ -6,11 +6,9 @@
 namespace Magento\CurrencySymbol\Observer;
 
 use Magento\Framework\Locale\Currency;
+use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Currency Symbol Observer
- */
-class CurrencyDisplayOptions
+class CurrencyDisplayOptions implements ObserverInterface
 {
     /**
      * @var \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory
@@ -31,7 +29,7 @@ class CurrencyDisplayOptions
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function invoke(\Magento\Framework\Event\Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $baseCode = $observer->getEvent()->getBaseCode();
         $currencyOptions = $observer->getEvent()->getCurrencyOptions();

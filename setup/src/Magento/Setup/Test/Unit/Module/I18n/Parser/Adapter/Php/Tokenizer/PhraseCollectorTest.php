@@ -204,4 +204,23 @@ class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($line);
         return $token;
     }
+
+    public function testCollectPhrases()
+    {
+        $firstPart = "'first part'";
+        $firstPartToken = new Token(\T_CONSTANT_ENCAPSED_STRING, $firstPart);
+        $concatenationToken = new Token('.', '.');
+        $secondPart = "' second part'";
+        $secondPartToken = new Token(\T_CONSTANT_ENCAPSED_STRING, $secondPart);
+        $phraseTokens = [$firstPartToken, $concatenationToken, $secondPartToken];
+        $phraseString = "'first part' . ' second part'";
+
+        $reflectionMethod = new \ReflectionMethod(
+            '\Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector',
+            '_collectPhrase'
+        );
+
+        $reflectionMethod->setAccessible(true);
+        $this->assertSame($phraseString, $reflectionMethod->invoke($this->phraseCollector, $phraseTokens));
+    }
 }

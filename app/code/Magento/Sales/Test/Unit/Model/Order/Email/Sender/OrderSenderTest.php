@@ -15,7 +15,7 @@ class OrderSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \Magento\Sales\Model\Resource\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderResourceMock;
 
@@ -24,7 +24,7 @@ class OrderSenderTest extends AbstractSenderTest
         $this->stepMockSetup();
 
         $this->orderResourceMock = $this->getMock(
-            '\Magento\Sales\Model\Resource\Order',
+            '\Magento\Sales\Model\ResourceModel\Order',
             ['saveAttribute'],
             [],
             '',

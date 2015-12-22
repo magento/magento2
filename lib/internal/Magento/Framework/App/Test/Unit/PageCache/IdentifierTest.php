@@ -18,19 +18,15 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isSecure
      * @param string $uri
      * @param string|null $vary
      * @return \Magento\Framework\App\Request\Http
      */
-    protected function getRequestMock($isSecure, $uri, $vary = null)
+    protected function getRequestMock($uri, $vary = null)
     {
         $requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
         $requestMock->expects($this->once())
-            ->method('isSecure')
-            ->willReturn($isSecure);
-        $requestMock->expects($this->once())
-            ->method('getRequestUri')
+            ->method('getUriString')
             ->willReturn($uri);
         $requestMock->expects($this->once())
             ->method('get')
@@ -54,16 +50,15 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isSecure
      * @param string $uri
      * @param string|null $varyStringCookie
      * @param string|null $varyStringContext
      * @param string $expected
      * @dataProvider dataProvider
      */
-    public function testGetValue($isSecure, $uri, $varyStringCookie, $varyStringContext, $expected)
+    public function testGetValue($uri, $varyStringCookie, $varyStringContext, $expected)
     {
-        $request = $this->getRequestMock($isSecure, $uri, $varyStringCookie);
+        $request = $this->getRequestMock($uri, $varyStringCookie);
         $context = $this->getContextMock($varyStringCookie ? 0 : 1, $varyStringContext);
 
         $model = $this->objectManager->getObject(
@@ -81,17 +76,15 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProvider()
     {
-        $uri = 'index.php/customer';
-        $isSecure = 0;
+        $uri = 'http://domain.com/customer';
         $vary = 1;
-
-        $data = [$isSecure, $uri, $vary];
+        $data = [$uri, $vary];
         ksort($data);
         $expected = md5(serialize($data));
 
         return [
-            [$isSecure, $uri, $vary, null, $expected],
-            [$isSecure, $uri, null, $vary, $expected]
+            [$uri, $vary, null, $expected],
+            [$uri, null, $vary, $expected]
         ];
     }
 }

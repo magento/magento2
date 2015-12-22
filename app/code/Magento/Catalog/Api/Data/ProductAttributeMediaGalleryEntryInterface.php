@@ -19,6 +19,7 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
     const POSITION = 'position';
     const DISABLED = 'disabled';
     const TYPES = 'types';
+    const MEDIA_TYPE = 'media_type';
     const FILE = 'file';
     const CONTENT = 'content';
 
@@ -36,6 +37,21 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * @return $this
      */
     public function setId($id);
+
+    /**
+     * Get media type
+     *
+     * @return string
+     */
+    public function getMediaType();
+
+    /**
+     * Set media type
+     *
+     * @param string $mediaType
+     * @return $this
+     */
+    public function setMediaType($mediaType);
 
     /**
      * Retrieve gallery entry alternative text

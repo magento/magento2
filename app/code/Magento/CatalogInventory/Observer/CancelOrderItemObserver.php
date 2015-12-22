@@ -6,13 +6,14 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Catalog inventory module observer
  */
-class CancelOrderItemObserver
+class CancelOrderItemObserver implements ObserverInterface
 {
     /**
      * @var StockManagementInterface
@@ -42,7 +43,7 @@ class CancelOrderItemObserver
      * @param   EventObserver $observer
      * @return  void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         /** @var \Magento\Sales\Model\Order\Item $item */
         $item = $observer->getEvent()->getItem();

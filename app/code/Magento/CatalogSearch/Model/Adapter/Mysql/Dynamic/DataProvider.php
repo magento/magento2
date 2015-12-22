@@ -7,7 +7,7 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic;
 
 use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
@@ -52,14 +52,14 @@ class DataProvider implements DataProviderInterface
     private $connection;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param Range $range
      * @param Session $customerSession
      * @param MysqlDataProviderInterface $dataProvider
      * @param IntervalFactory $intervalFactory
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         Range $range,
         Session $customerSession,
         MysqlDataProviderInterface $dataProvider,
@@ -135,7 +135,10 @@ class DataProvider implements DataProviderInterface
         $column = $select->getPart(Select::COLUMNS)[0];
         $select->reset(Select::COLUMNS);
         $rangeExpr = new \Zend_Db_Expr(
-            $this->connection->quoteInto('(FLOOR(' . $column[1] . ' / ? ) + 1)', $range)
+            $this->connection->getIfNullSql(
+                $this->connection->quoteInto('FLOOR(' . $column[1] . ' / ? ) + 1', $range),
+                1
+            )
         );
 
         $select

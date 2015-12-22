@@ -15,55 +15,58 @@
     var $form;
 
     require([
-        "jquery",
-        "jquery/ui"
+        'jquery',
+        'jquery/ui',
+        'Magento_Ui/js/modal/modal'
     ], function($){
-        $form = $('#affected-attribute-set-form');
-
+        $form = $('[data-role=affected-attribute-set-selector]');
         var resetValidation = function() {
-            $form.find('.messages .message.error').hide();
-            $form.find('form').validation().data('validator').resetForm();
-        };
+                $form.find('.messages .message.error').hide();
+                $form.find('form').validation().data('validator').resetForm();
+            },
+            setAttributeSetId = function (id) {
+                $('[data-role=new-variations-attribute-set-id]').val(id);
+            },
+            closeDialogAndProcessForm = function (form) {
+                form.modal('closeModal').data('target').click();
+            },
+            newAttributeSetContainer = $('[data-role=affected-attribute-set-new-name-container]'),
+            existingAttributeSetContainer = $('[data-role=affected-attribute-set-existing-name-container]');
+
+        $form.find('input[type=text]').on('keypress',function(e){
+            if(e.keyCode === 13){
+                e.preventDefault();
+                $form.closest('[data-role=modal]').find('button[data-action=confirm]').click();
+            }
+        });
 
         $('[data-form=edit-product]').append($('<input>', {
             type: 'hidden',
             name: 'new-variations-attribute-set-id',
-            id: 'new-variations-attribute-set-id'
+            'data-role': 'new-variations-attribute-set-id'
         }));
 
         $form
-            .dialog({
-                title: '<?php echo __('Choose Affected Product Template'); ?>',
-                autoOpen: false,
-                id: '<?php echo $block->getJsId() ?>',
-                width: '75%',
-                modal: true,
-                resizable: false,
-                position: {
-                    my: 'left top',
-                    at: 'center top',
-                    of: 'body'
-                },
-                open: function () {
-                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-                    var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight();
-                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
-                },
-                close: function () {
+            .modal({
+                title: '<?php /* @escapeNotVerified */ echo __('Choose Affected Attribute Set'); ?>',
+                closed: function () {
                     resetValidation();
-                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                 },
                 buttons: [{
-                    text: '<?php echo __('Confirm'); ?>',
-                    id: '<?php echo $block->getJsId('confirm-button') ?>',
-                    'class': 'action-primary',
+                    text: '<?php /* @escapeNotVerified */ echo __('Confirm'); ?>',
+                    attr: {
+                        'data-action': 'confirm'
+                    },
+                    'class': 'action-secondary',
                     click: function() {
-                        if ($form.find('input[name=affected-attribute-set]:checked').val() == 'current') {
-                            $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
-                            $form.dialog('close')
-                                .data('target').click();
+                        var affectedAttributeSetId = $form.find('input[name=affected-attribute-set]:checked').val();
+                        if (affectedAttributeSetId == 'current') {
+                            setAttributeSetId($('#attribute_set_id').val());
+                            closeDialogAndProcessForm($form);
                             return;
+                        } else if (affectedAttributeSetId == 'existing') {
+                            setAttributeSetId($('select', existingAttributeSetContainer).val());
+                            closeDialogAndProcessForm($form);
                         }
 
                         $form.find('.messages .message.error').hide();
@@ -74,12 +77,12 @@
 
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $block->getAttributeSetCreationUrl()?>',
+                            url: '<?php /* @escapeNotVerified */ echo $block->getAttributeSetCreationUrl()?>',
                             data: {
                                 gotoEdit: 1,
                                 attribute_set_name: $form.find('input[name=new-attribute-set-name]').val(),
                                 skeleton_set: $('#attribute_set_id').val(),
-                                form_key: '<?php echo $block->getFormKey()?>',
+                                form_key: '<?php /* @escapeNotVerified */ echo $block->getFormKey()?>',
                                 return_session_messages_only: 1
                             },
                             dataType: 'json',
@@ -88,9 +91,8 @@
                         })
                             .success(function (data) {
                                 if (!data.error) {
-                                    $('#new-variations-attribute-set-id').val(data.id);
-                                    $form.dialog('close')
-                                        .data('target').click();
+                                    setAttributeSetId(data.id);
+                                    closeDialogAndProcessForm($form);
                                 } else {
                                     $form.find('.messages .message.error').replaceWith($(data.messages).find('.message.error'));
                                 }
@@ -99,19 +101,21 @@
                         return false;
                     }
                 },{
-                    text: '<?php echo __('Cancel'); ?>',
-                    id: '<?php echo $block->getJsId('close-button') ?>',
+                    text: '<?php /* @escapeNotVerified */ echo __('Cancel'); ?>',
+                    id: '<?php /* @escapeNotVerified */ echo $block->getJsId('close-button') ?>',
                     'class': 'action-close',
                     click: function() {
-                        $form.dialog('close');
+                        $form.modal('closeModal');
                     }
                 }]
             })
             .find('input[name=affected-attribute-set]').on('change', function() {
-                $('#affected-attribute-set-new-name-container')[$(this).val() == 'new' ? 'show' : 'hide']();
+                var affectedAttributeSet = $(this).val();
+                newAttributeSetContainer[affectedAttributeSet == 'new' ? 'show' : 'hide']();
+                existingAttributeSetContainer[affectedAttributeSet == 'existing' ? 'show' : 'hide']();
                 resetValidation();
-                if ($(this).val() == 'new') {
-                    $form.find('input[name=new-attribute-set-name]').focus();
+                if (affectedAttributeSet == 'new') {
+                    newAttributeSetContainer.find('input[name=new-attribute-set-name]').focus();
                 }
             });
     });
@@ -145,7 +149,7 @@
          * This fix was made in order to properly handle 'stopImmediatePropagation'.
          */
         $('#save-split-button .item').on('click', function(event) {
-            if ($('#new-variations-attribute-set-id').val() != '') {
+            if ($('[data-role=new-variations-attribute-set-id]').val() != '') {
                 return; // affected attribute set was already chosen
             }
 
@@ -157,7 +161,7 @@
                 }
             });
             if (!extendingAttributes.length) {
-                $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
+                $('[data-role=new-variations-attribute-set-id]').val($('#attribute_set_id').val());
                 return; // all selected configurable attributes belong to current attribute set
             }
             if (!$('[data-role=product-variations-matrix] [data-column=entity_id]')
@@ -168,7 +172,7 @@
 
             event.stopImmediatePropagation();
 
-            $form.data('target', event.target).dialog('open');
+            $form.data('target', event.target).modal('openModal');
         });
 
     });

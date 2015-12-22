@@ -17,7 +17,7 @@ class AbstractSwatch extends \Magento\Framework\Data\Form\Element\Select
     {
         $options = [];
         $attribute = $this->getData('entity_attribute');
-        if ($attribute instanceof \Magento\Catalog\Model\Resource\Eav\Attribute) {
+        if ($attribute instanceof \Magento\Catalog\Model\ResourceModel\Eav\Attribute) {
             $options = $attribute->getSource()->getAllOptions(true, true);
         }
         return $options;

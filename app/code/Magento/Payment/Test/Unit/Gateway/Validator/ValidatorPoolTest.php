@@ -5,6 +5,7 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
 
+use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Magento\Payment\Gateway\Validator\ValidatorPool;
 
 class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +27,7 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'array' => ['validator' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'],
-                    'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+                    'type' => ValidatorInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -40,8 +41,8 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
             ->willReturn($commandI);
 
         $pool = new ValidatorPool(
-            ['validator' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'],
-            $tMapFactory
+            $tMapFactory,
+            ['validator' => 'Magento\Payment\Gateway\Validator\ValidatorInterface']
         );
 
         static::assertSame($commandI, $pool->get('validator'));
@@ -64,7 +65,7 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'array' => [],
-                    'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+                    'type' => ValidatorInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -73,7 +74,7 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
             ->with('validator')
             ->willReturn(false);
 
-        $pool = new ValidatorPool([], $tMapFactory);
+        $pool = new ValidatorPool($tMapFactory, []);
         $pool->get('validator');
     }
 }

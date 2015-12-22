@@ -7,6 +7,8 @@
  */
 namespace Magento\Catalog\Model\Attribute\Config;
 
+use Magento\Framework\Module\Dir;
+
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
@@ -21,7 +23,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Catalog') . '/catalog_attributes.xsd';
+        $this->_schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Catalog')
+            . '/catalog_attributes.xsd';
     }
 
     /**

@@ -96,11 +96,11 @@ class ViewedProductsReportEntityTest extends Injectable
     {
         // Preconditions
         $this->catalogProductIndexPage->open();
-        $this->catalogProductIndexPage->getProductGrid()->massaction([], 'Delete', true, 'Select all');
+        $this->catalogProductIndexPage->getProductGrid()->massaction([], 'Delete', true, 'Select All');
         $productsList = $this->prepareProducts($products);
         $this->openProducts($productsList, $total);
         $this->productReportView->open();
-        $this->productReportView->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->productReportView->getMessagesBlock()->clickLinkInMessage('notice', 'here');
 
         // Steps
         $this->productReportView->getFilterBlock()->viewsReport($viewsReport);

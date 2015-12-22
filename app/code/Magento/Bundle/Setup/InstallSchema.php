@@ -549,27 +549,6 @@ class InstallSchema implements InstallSchemaInterface
                 [],
                 'Base Tier'
             )
-            ->addColumn(
-                'group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Group price'
-            )
-            ->addColumn(
-                'base_group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Base Group Price'
-            )
-            ->addColumn(
-                'group_price_percent',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Group Price Percent'
-            )
             ->setComment('Catalog Product Index Price Bundle Idx');
 
         $installer->getConnection()->createTable($table);
@@ -670,27 +649,6 @@ class InstallSchema implements InstallSchemaInterface
                 [],
                 'Base Tier'
             )
-            ->addColumn(
-                'group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Group price'
-            )
-            ->addColumn(
-                'base_group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Base Group Price'
-            )
-            ->addColumn(
-                'group_price_percent',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Group Price Percent'
-            )
             ->setOption(
                 'type',
                 \Magento\Framework\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY
@@ -767,13 +725,6 @@ class InstallSchema implements InstallSchemaInterface
                 [],
                 'Tier Price'
             )
-            ->addColumn(
-                'group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Group price'
-            )
             ->setComment('Catalog Product Index Price Bundle Sel Idx');
 
         $installer->getConnection()->createTable($table);
@@ -845,13 +796,6 @@ class InstallSchema implements InstallSchemaInterface
                 '12,4',
                 [],
                 'Tier Price'
-            )
-            ->addColumn(
-                'group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Group price'
             )
             ->setOption(
                 'type',
@@ -929,20 +873,6 @@ class InstallSchema implements InstallSchemaInterface
                 [],
                 'Alt Tier Price'
             )
-            ->addColumn(
-                'group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Group price'
-            )
-            ->addColumn(
-                'alt_group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Alt Group Price'
-            )
             ->setComment('Catalog Product Index Price Bundle Opt Idx');
 
         $installer->getConnection()->createTable($table);
@@ -1014,20 +944,6 @@ class InstallSchema implements InstallSchemaInterface
                 '12,4',
                 [],
                 'Alt Tier Price'
-            )
-            ->addColumn(
-                'group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Group price'
-            )
-            ->addColumn(
-                'alt_group_price',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                '12,4',
-                [],
-                'Alt Group Price'
             )
             ->setOption(
                 'type',

@@ -7,10 +7,9 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Configure extends Action\Action implements IndexInterface
+class Configure extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * Core registry

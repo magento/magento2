@@ -15,22 +15,23 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $_optionsDefault = [];
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory
      */
     protected $_attrOptionCollectionFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory
      */
     protected $_attrOptionFactory;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
     ) {
         $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
         $this->_attrOptionFactory = $attrOptionFactory;

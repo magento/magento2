@@ -203,36 +203,6 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer = null);
 
     /**
-     * Returns the payment method that is used to process the cart.
-     *
-     * @return string|null Payment method. Otherwise, null.
-     */
-    public function getCheckoutMethod();
-
-    /**
-     * Sets the payment method that is used to process the cart.
-     *
-     * @param string $checkoutMethod
-     * @return $this
-     */
-    public function setCheckoutMethod($checkoutMethod);
-
-    /**
-     * Returns the cart shipping address.
-     *
-     * @return \Magento\Quote\Api\Data\AddressInterface|null Cart shipping address. Otherwise, null.
-     */
-    public function getShippingAddress();
-
-    /**
-     * Sets the cart shipping address.
-     *
-     * @param \Magento\Quote\Api\Data\AddressInterface $shippingAddress
-     * @return $this
-     */
-    public function setShippingAddress(\Magento\Quote\Api\Data\AddressInterface $shippingAddress = null);
-
-    /**
      * Returns the cart billing address.
      *
      * @return \Magento\Quote\Api\Data\AddressInterface|null Cart billing address. Otherwise, null.

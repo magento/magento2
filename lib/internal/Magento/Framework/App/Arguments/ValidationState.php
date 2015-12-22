@@ -27,7 +27,7 @@ class ValidationState implements \Magento\Framework\Config\ValidationStateInterf
      *
      * @return boolean
      */
-    public function isValidated()
+    public function isValidationRequired()
     {
         return $this->_appMode == \Magento\Framework\App\State::MODE_DEVELOPER;
     }

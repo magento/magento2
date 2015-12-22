@@ -9,8 +9,8 @@ namespace Magento\Paypal\Model\Report\Settlement;
  * Model for report rows
  */
 /**
- * @method \Magento\Paypal\Model\Resource\Report\Settlement\Row _getResource()
- * @method \Magento\Paypal\Model\Resource\Report\Settlement\Row getResource()
+ * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row _getResource()
+ * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row getResource()
  * @method int getReportId()
  * @method Row setReportId(int $value)
  * @method string getTransactionId()
@@ -72,7 +72,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\Resource\Report\Settlement\Row');
+        $this->_init('Magento\Paypal\Model\ResourceModel\Report\Settlement\Row');
     }
 
     /**

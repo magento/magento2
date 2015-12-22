@@ -13,13 +13,23 @@ use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
  * Controller for testing the CookieManager.
  *
  */
-abstract class CookieTester extends \Magento\Framework\App\Action\Action
+abstract class CookieTester implements \Magento\Framework\App\ActionInterface
 {
     /** @var PhpCookieManager */
     protected $cookieManager;
 
     /** @var  CookieMetadataFactory */
     protected $cookieMetadataFactory;
+
+    /**
+     * @var \Magento\Framework\App\ResponseInterface
+     */
+    protected $_response;
+
+    /**
+     * @var
+     */
+    protected $request;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -33,7 +43,8 @@ abstract class CookieTester extends \Magento\Framework\App\Action\Action
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFacory = $cookieMetadataFactory;
-        parent::__construct($context);
+        $this->_response = $context->getResponse();
+        $this->request = $context->getRequest();
     }
 
     /**
@@ -60,11 +71,8 @@ abstract class CookieTester extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->getRequest()->isDispatched()) {
-            parent::dispatch($request);
-        }
-
-        $result = parent::dispatch($request);
-        return $result;
+        $this->request = $request;
+        $result = $this->execute();
+        return $result ? $result : $this->_response;
     }
 }

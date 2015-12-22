@@ -14,13 +14,13 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
-use Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory;
+use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * Wishlist item model
  *
- * @method \Magento\Wishlist\Model\Resource\Item getResource()
+ * @method \Magento\Wishlist\Model\ResourceModel\Item getResource()
  * @method int getWishlistId()
  * @method \Magento\Wishlist\Model\Item setWishlistId(int $value)
  * @method int getProductId()
@@ -96,7 +96,7 @@ class Item extends AbstractModel implements ItemInterface
     protected $_date;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Url
+     * @var \Magento\Catalog\Model\ResourceModel\Url
      */
     protected $_catalogUrl;
 
@@ -125,12 +125,12 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
+     * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
      * @param OptionFactory $wishlistOptFactory
      * @param CollectionFactory $wishlOptionCollectionFactory
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -140,12 +140,12 @@ class Item extends AbstractModel implements ItemInterface
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Catalog\Model\Resource\Url $catalogUrl,
+        \Magento\Catalog\Model\ResourceModel\Url $catalogUrl,
         OptionFactory $wishlistOptFactory,
         CollectionFactory $wishlOptionCollectionFactory,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -166,7 +166,7 @@ class Item extends AbstractModel implements ItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\Resource\Item');
+        $this->_init('Magento\Wishlist\Model\ResourceModel\Item');
     }
 
     /**
@@ -184,7 +184,7 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Retrieve resource instance wrapper
      *
-     * @return \Magento\Wishlist\Model\Resource\Item
+     * @return \Magento\Wishlist\Model\ResourceModel\Item
      */
     protected function _getResource()
     {

@@ -75,7 +75,7 @@ class UpSellTest extends \PHPUnit_Framework_TestCase
         $this->_linkMock->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
 
         $productLinkMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Link',
+            '\Magento\Catalog\Model\ResourceModel\Product\Link',
             ['__wakeup', 'getLinkedProductId', 'toArray'],
             [],
             '',
@@ -94,7 +94,7 @@ class UpSellTest extends \PHPUnit_Framework_TestCase
         );
 
         $collectionMock = $helper->getCollectionMock(
-            '\Magento\Catalog\Model\Resource\Product\Link\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Link\Collection',
             [$productLinkMock]
         );
         $this->_productMock->expects(

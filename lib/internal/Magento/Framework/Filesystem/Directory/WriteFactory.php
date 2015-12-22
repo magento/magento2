@@ -27,7 +27,7 @@ class WriteFactory
     }
 
     /**
-     * Create a readable directory
+     * Create a writable directory
      *
      * @param string $path
      * @param string $driverCode

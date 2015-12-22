@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <remove id="Magento_Backend::system_currency" />
         <add id="Magento_CurrencySymbol::system_currency" title="Currency" module="Magento_CurrencySymbol" sortOrder="30" parent="Magento_Backend::stores" resource="Magento_CurrencySymbol::system_currency" />

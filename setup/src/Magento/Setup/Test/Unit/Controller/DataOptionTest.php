@@ -69,7 +69,7 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
 
     public function testNoHasUninstallAction()
     {
-        $this->request->expects($this->any())->method('getContent')->willReturn('');
+        $this->request->expects($this->any())->method('getContent')->willReturn('{}');
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
         $this->uninstallCollector->expects($this->never())->method('collectUninstall')->with(["some_module"]);

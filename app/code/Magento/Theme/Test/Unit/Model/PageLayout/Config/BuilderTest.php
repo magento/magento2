@@ -27,7 +27,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected $fileCollector;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeCollection;
 
@@ -47,7 +47,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themeCollection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\Collection')
+        $this->themeCollection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeCollection->expects($this->once())

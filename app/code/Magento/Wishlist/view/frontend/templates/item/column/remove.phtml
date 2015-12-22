@@ -8,6 +8,6 @@
 
 ?>
 
-<a href="#" data-role="remove" data-post-remove='<?php echo $block->getItemRemoveParams($block->getItem()); ?>' title="<?php echo __('Remove Item') ?>" class="btn-remove action delete">
-    <span><?php echo __('Remove item');?></span>
+<a href="#" data-role="remove" data-post-remove='<?php /* @escapeNotVerified */ echo $block->getItemRemoveParams($block->getItem()); ?>' title="<?php /* @escapeNotVerified */ echo __('Remove Item') ?>" class="btn-remove action delete">
+    <span><?php /* @escapeNotVerified */ echo __('Remove item');?></span>
 </a>

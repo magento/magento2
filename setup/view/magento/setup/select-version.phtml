@@ -5,8 +5,6 @@
  */
 ?>
 
-<h2 class="page-title">{{$state.current.header}}</h2>
-
 <div class="nav-bar-outer-actions">
 
     <div class="outer-actions-inner-wrap">
@@ -29,6 +27,8 @@
         </div>
     </div>
 </div>
+
+<h2 class="page-sub-title">{{$state.current.header}}</h2>
 
 <div class="row form-row">
     <div class="message message-spinner" ng-show="!upgradeProcessed">
@@ -54,7 +54,7 @@
                 id="selectVersion"
                 class="form-el-select"
                 ng-model="selectedOption"
-                ng-options="item.id as item.name for item in versions">
+                ng-options="item.versionInfo as item.version.name for item in versions">
             </select>
         </div>
     </div>
@@ -186,14 +186,15 @@
                 <tbody>
             <tr ng-repeat="component in displayComponents | limitTo:rowLimit">
                     <td class="data-grid-indicator-cell">
-                        <div class="onoffswitch">
+                        <div class="actions-switch">
                             <input type="checkbox" name="{{component.checkboxId}}"
-                                   class="onoffswitch-checkbox" id="{{component.checkboxId}}"
+                                   class="actions-switch-checkbox" id="{{component.checkboxId}}"
                                    ng-click="AddRemoveComponentOnSliderMove(component)"
                                    ng-checked="isSelected(component.name)">
-                            <label class="onoffswitch-label" for="{{component.checkboxId}}">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
+                            <label class="actions-switch-label" for="{{component.checkboxId}}">
+                                <span class="actions-switch-inner"></span>
+                                <span class="actions-switch-indicator"></span>
+                                <span class="actions-switch-text" data-label-yes="Yes" data-label-no="No"></span>
                             </label>
                         </div>
                     </td>

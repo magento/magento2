@@ -44,6 +44,8 @@ class Stock extends AbstractExtensibleModel implements StockInterface
 
     const STOCK_IN_STOCK = 1;
 
+    const WEBSITE_ID = 'website_id';
+
     /**
      * Default stock id
      */
@@ -54,7 +56,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\Resource\Stock');
+        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock');
     }
 
     //@codeCoverageIgnoreStart

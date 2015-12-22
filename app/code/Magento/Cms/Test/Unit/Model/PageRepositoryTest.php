@@ -19,7 +19,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Resource\Page
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Page
      */
     protected $pageResource;
 
@@ -49,16 +49,21 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $dataObjectProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Resource\Page\Collection
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Page\Collection
      */
     protected $collection;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * Initialize repository
      */
     public function setUp()
     {
-        $this->pageResource = $this->getMockBuilder('Magento\Cms\Model\Resource\Page')
+        $this->pageResource = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectProcessor = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
@@ -76,17 +81,25 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collectionFactory = $this->getMockBuilder('Magento\Cms\Model\Resource\Page\CollectionFactory')
+        $collectionFactory = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store = $this->getMockBuilder('\Magento\Store\Api\Data\StoreInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getId')->willReturn(0);
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->page = $this->getMockBuilder('Magento\Cms\Model\Page')->disableOriginalConstructor()->getMock();
         $this->pageData = $this->getMockBuilder('Magento\Cms\Api\Data\PageInterface')
             ->getMock();
         $this->pageSearchResult = $this->getMockBuilder('Magento\Cms\Api\Data\PageSearchResultsInterface')
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Cms\Model\Resource\Page\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
             ->getMock();
@@ -107,7 +120,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Cms\Model\PageFactory $pageFactory
          * @var \Magento\Cms\Api\Data\PageInterfaceFactory $pageDataFactory
          * @var \Magento\Cms\Api\Data\PageSearchResultsInterfaceFactory $pageSearchResultFactory
-         * @var \Magento\Cms\Model\Resource\Page\CollectionFactory $collectionFactory
+         * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory
          */
 
         $this->dataHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
@@ -121,7 +134,8 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
             $collectionFactory,
             $pageSearchResultFactory,
             $this->dataHelper,
-            $this->dataObjectProcessor
+            $this->dataObjectProcessor,
+            $this->storeManager
         );
     }
 

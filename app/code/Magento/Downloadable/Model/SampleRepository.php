@@ -5,15 +5,19 @@
  */
 namespace Magento\Downloadable\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
-use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Api\Data\File\ContentUploaderInterface;
 use Magento\Downloadable\Api\Data\SampleInterface;
+use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Sample\ContentValidator;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Downloadable\Model\ResourceModel\Sample as ResourceModel;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Downloadable\Helper\File;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Exception\StateException;
 
 /**
  * Class SampleRepository
@@ -22,7 +26,17 @@ use Magento\Framework\Json\EncoderInterface;
 class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInterface
 {
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @var ResourceModel
+     */
+    protected $resourceModel;
+
+    /**
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -34,49 +48,51 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * @var Type
      */
-    protected $downloadableType;
+    protected $productType;
 
     /**
      * @var SampleInterfaceFactory
      */
-    protected $sampleDataObjectFactory;
+    protected $sampleFactory;
 
     /**
-     * @var ContentUploaderInterface
+     * @var JsonHelper
      */
-    protected $fileContentUploader;
+    protected $jsonHelper;
 
     /**
-     * @var EncoderInterface
+     * @var File
      */
-    protected $jsonEncoder;
+    protected $downloadableFile;
 
     /**
+     * @param MetadataPool $metadataPool
      * @param ProductRepositoryInterface $productRepository
-     * @param Type $downloadableType
-     * @param SampleInterfaceFactory $sampleDataObjectFactory
+     * @param Type $productType
+     * @param ResourceModel $resourceModel
+     * @param SampleInterfaceFactory $sampleFactory
      * @param ContentValidator $contentValidator
-     * @param ContentUploaderInterface $fileContentUploader
-     * @param EncoderInterface $jsonEncoder
-     * @param SampleFactory $sampleFactory
+     * @param JsonHelper $jsonHelper
+     * @param File $downloadableFile
      */
     public function __construct(
+        MetadataPool $metadataPool,
         ProductRepositoryInterface $productRepository,
-        Type $downloadableType,
-        SampleInterfaceFactory $sampleDataObjectFactory,
+        Type $productType,
+        ResourceModel $resourceModel,
+        SampleInterfaceFactory $sampleFactory,
         ContentValidator $contentValidator,
-        ContentUploaderInterface $fileContentUploader,
-        EncoderInterface $jsonEncoder,
-        SampleFactory $sampleFactory
+        JsonHelper $jsonHelper,
+        File $downloadableFile
     ) {
+        $this->metadataPool = $metadataPool;
         $this->productRepository = $productRepository;
-        $this->downloadableType = $downloadableType;
+        $this->productType = $productType;
+        $this->resourceModel = $resourceModel;
         $this->contentValidator = $contentValidator;
-        $this->fileContentUploader = $fileContentUploader;
-        $this->jsonEncoder = $jsonEncoder;
+        $this->jsonHelper = $jsonHelper;
         $this->sampleFactory = $sampleFactory;
-        $this->downloadableType = $downloadableType;
-        $this->sampleDataObjectFactory = $sampleDataObjectFactory;
+        $this->downloadableFile = $downloadableFile;
     }
 
     /**
@@ -97,7 +113,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      */
     protected function buildSample($resourceData)
     {
-        $sample = $this->sampleDataObjectFactory->create();
+        $sample = $this->sampleFactory->create();
         $this->setBasicFields($resourceData, $sample);
         return $sample;
     }
@@ -105,8 +121,8 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Subroutine for buildLink and buildSample
      *
-     * @param \Magento\Downloadable\Model\Link|\Magento\Downloadable\Model\Sample $resourceData
-     * @param \Magento\Downloadable\Api\Data\LinkInterface|\Magento\Downloadable\Api\Data\SampleInterface $dataObject
+     * @param Sample $resourceData
+     * @param SampleInterface $dataObject
      * @return null
      */
     protected function setBasicFields($resourceData, $dataObject)
@@ -128,13 +144,13 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * List of links with associated samples
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
+     * @param ProductInterface $product
+     * @return SampleInterface[]
      */
-    public function getSamplesByProduct(\Magento\Catalog\Api\Data\ProductInterface $product)
+    public function getSamplesByProduct(ProductInterface $product)
     {
         $sampleList = [];
-        $samples = $this->downloadableType->getSamples($product);
+        $samples = $this->productType->getSamples($product);
         /** @var \Magento\Downloadable\Model\Sample $sample */
         foreach ($samples as $sample) {
             $sampleList[] = $this->buildSample($sample);
@@ -143,143 +159,50 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     }
 
     /**
-     * Update downloadable sample of the given product
-     *
-     * @param string $sku
-     * @param \Magento\Downloadable\Api\Data\SampleInterface $sample
-     * @param bool $isGlobalScopeContent
-     * @return int
-     */
-    public function save(
-        $sku,
-        SampleInterface $sample,
-        $isGlobalScopeContent = false
-    ) {
-        $product = $this->productRepository->get($sku, true);
-
-        $sampleId = $sample->getId();
-        if ($sampleId) {
-            return $this->updateSample($product, $sample, $isGlobalScopeContent);
-        } else {
-            if ($product->getTypeId() !== Type::TYPE_DOWNLOADABLE) {
-                throw new InputException(__('Product type of the product must be \'downloadable\'.'));
-            }
-            if (!$this->contentValidator->isValid($sample)) {
-                throw new InputException(__('Provided sample information is invalid.'));
-            }
-
-            if (!in_array($sample->getSampleType(), ['url', 'file'])) {
-                throw new InputException(__('Invalid sample type.'));
-            }
-
-            $title = $sample->getTitle();
-            if (empty($title)) {
-                throw new InputException(__('Sample title cannot be empty.'));
-            }
-
-            return $this->saveSample($product, $sample, $isGlobalScopeContent);
-        }
-    }
-
-    /**
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param SampleInterface $sample
-     * @param bool $isGlobalScopeContent
-     * @return int
-     */
-    protected function saveSample(
-        \Magento\Catalog\Api\Data\ProductInterface $product,
-        SampleInterface $sample,
-        $isGlobalScopeContent
-    ) {
-        $sampleData = [
-            'sample_id' => $sample->getid() === null ? 0 : $sample->getid(),
-            'is_delete' => 0,
-            'type' => $sample->getSampleType(),
-            'sort_order' => $sample->getSortOrder(),
-            'title' => $sample->getTitle(),
-        ];
-
-        if ($sample->getSampleType() == 'file' && $sample->getSampleFile() === null) {
-            $sampleData['file'] = $this->jsonEncoder->encode(
-                [
-                    $this->fileContentUploader->upload($sample->getSampleFileContent(), 'sample'),
-                ]
-            );
-        } elseif ($sample->getSampleType() === 'url') {
-            $sampleData['sample_url'] = $sample->getSampleUrl();
-        } else {
-            //existing file
-            $sampleData['file'] = $this->jsonEncoder->encode(
-                [
-                    [
-                        'file' => $sample->getSampleFile(),
-                        'status' => 'old',
-                    ],
-                ]
-            );
-        }
-
-        $downloadableData = ['sample' => [$sampleData]];
-        $product->setDownloadableData($downloadableData);
-        if ($isGlobalScopeContent) {
-            $product->setStoreId(0);
-        }
-        $this->downloadableType->save($product);
-        return $product->getLastAddedSampleId();
-    }
-
-    /**
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param SampleInterface $sample
-     * @param bool $isGlobalScopeContent
-     * @return int
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function updateSample(
-        \Magento\Catalog\Api\Data\ProductInterface $product,
-        SampleInterface $sample,
-        $isGlobalScopeContent
-    ) {
-        $sampleId = $sample->getId();
-        /** @var $existingSample \Magento\Downloadable\Model\Sample */
-        $existingSample = $this->sampleFactory->create()->load($sampleId);
-
-        if (!$existingSample->getId()) {
-            throw new NoSuchEntityException(__('There is no downloadable sample with provided ID.'));
+    public function save($sku, SampleInterface $sample, $isGlobalScopeContent = true)
+    {
+        $product = $this->productRepository->get($sku, true);
+        if ($product->getTypeId() !== Type::TYPE_DOWNLOADABLE) {
+            throw new InputException(__('Product type of the product must be \'downloadable\'.'));
         }
-
-        if ($existingSample->getProductId() != $product->getId()) {
-            throw new InputException(__('Provided downloadable sample is not related to given product.'));
-        }
-
-        $validateFileContent = $sample->getSampleFileContent() === null ? false : true;
-        if (!$this->contentValidator->isValid($sample, $validateFileContent)) {
-            throw new InputException(__('Provided sample information is invalid.'));
-        }
-        if ($isGlobalScopeContent) {
-            $product->setStoreId(0);
+        //if (!$this->contentValidator->isValid($sample)) {
+        //    throw new InputException(__('Provided sample information is invalid.'));
+        //}
+        if (!in_array($sample->getSampleType(), ['url', 'file'])) {
+            throw new InputException(__('Invalid sample type.'));
         }
 
         $title = $sample->getTitle();
         if (empty($title)) {
-            if ($isGlobalScopeContent) {
-                throw new InputException(__('Sample title cannot be empty.'));
-            }
-            // use title from GLOBAL scope
-            $existingSample->setTitle(null);
-        } else {
-            $existingSample->setTitle($sample->getTitle());
+            throw new InputException(__('Sample title cannot be empty.'));
         }
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $sample->setProductId($product->getData($metadata->getLinkField()));
+        $this->setFiles($sample);
+        return $this->resourceModel->save($sample);
+    }
 
-        if ($sample->getSampleType() === 'file' && $sample->getSampleFileContent() === null) {
-            $sample->setSampleFile($existingSample->getSampleFile());
+    /**
+     * Load file and set path to sample
+     *
+     * @param SampleInterface $sample
+     * @return void
+     */
+    protected function setFiles(SampleInterface $sample)
+    {
+        if ($sample->getSampleType() == \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE && $sample->getFile()) {
+            $sampleFileName = $this->downloadableFile->moveFileFromTmp(
+                $sample->getBaseTmpPath(),
+                $sample->getBasePath(),
+                $this->jsonHelper->jsonDecode($sample->getFile())
+            );
+            $sample->setSampleFile($sampleFileName);
+            $sample->setSampleUrl(null);
         }
-        $this->saveSample($product, $sample, $isGlobalScopeContent);
-        return $existingSample->getId();
     }
 
     /**
@@ -292,7 +215,11 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         if (!$sample->getId()) {
             throw new NoSuchEntityException(__('There is no downloadable sample with provided ID.'));
         }
-        $sample->delete();
+        try {
+            $this->resourceModel->delete($sample);
+        } catch (\Exception $exception) {
+            throw new StateException(__('Cannot delete sample with id %1', $sample->getId()), $exception);
+        }
         return true;
     }
 }

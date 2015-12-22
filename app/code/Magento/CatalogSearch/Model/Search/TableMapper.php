@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogSearch\Model\Search;
 
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Filter\BoolExpression;
@@ -30,7 +30,7 @@ class TableMapper
     private $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     private $attributeCollection;
 
@@ -103,9 +103,10 @@ class TableMapper
         if ($fieldToTableMap) {
             list($alias, $table, $mapOn, $mappedFields) = $fieldToTableMap;
             $table = $this->resource->getTableName($table);
-        } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
-            $attribute = $this->getAttributeByCode($field);
-            if ($attribute) {
+        } elseif ($attribute = $this->getAttributeByCode($field)) {
+            if ($filter->getType() === FilterInterface::TYPE_TERM
+                && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+            ) {
                 $table = $this->resource->getTableName('catalog_product_index_eav');
                 $alias = $field . '_filter';
                 $mapOn = sprintf(
@@ -115,19 +116,12 @@ class TableMapper
                     $this->getStoreId()
                 );
                 $mappedFields = [];
-            }
-        } else {
-            $attribute = $this->getAttributeByCode($field);
-            if ($attribute && $attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
+            } elseif ($attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
                 $table = $attribute->getBackendTable();
-                $alias = $this->getTableAlias($table);
+                $alias = $field . '_filter';
                 $mapOn = 'search_index.entity_id = ' . $alias . '.entity_id';
                 $mappedFields = null;
             }
-        }
-
-        if (!$alias && $table) {
-            $alias = $this->getTableAlias($table);
         }
 
         return [$alias, $table, $mapOn, $mappedFields];
@@ -243,17 +237,8 @@ class TableMapper
     }
 
     /**
-     * @param string $table
-     * @return string
-     */
-    private function getTableAlias($table)
-    {
-        return md5($table);
-    }
-
-    /**
      * @param string $field
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     private function getAttributeByCode($field)
     {

@@ -2,7 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
- 
+
 define([
     'underscore',
     'mageUtils',
@@ -50,7 +50,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe({
+                .track({
                     hasData: false
                 });
 
@@ -121,7 +121,7 @@ define([
             var fields  = _.keys(this.getData()),
                 hasData = !!fields.length;
 
-            this.hasData(hasData);
+            this.hasData = hasData;
 
             if (!this.active()) {
                 fields = [];

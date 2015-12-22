@@ -7,21 +7,35 @@ namespace Magento\Framework\Cache\Test\Unit\Config;
 
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\Cache\Config\SchemaLocator
-     */
+    /** @var \Magento\Framework\Cache\Config\SchemaLocator */
     protected $schemaLocator;
+
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolverMock;
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->schemaLocator = $objectManager->getObject('Magento\Framework\Cache\Config\SchemaLocator');
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+        $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $this->schemaLocator = new \Magento\Framework\Cache\Config\SchemaLocator($this->urnResolverMock);
     }
 
     public function testGetSchema()
     {
-        $this->assertRegExp('/etc[\/\\\\]cache.xsd/', $this->schemaLocator->getSchema());
+        $this->urnResolverMock->expects($this->once())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:Cache/etc/cache.xsd')
+            ->willReturn(
+                $this->urnResolver->getRealPath('urn:magento:framework:Cache/etc/cache.xsd')
+            );
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:Cache/etc/cache.xsd'),
+            $this->schemaLocator->getSchema()
+        );
     }
 
     public function testGetPerFileSchema()

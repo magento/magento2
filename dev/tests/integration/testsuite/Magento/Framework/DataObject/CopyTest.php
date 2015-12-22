@@ -37,6 +37,118 @@ class CopyTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTarget, $target);
     }
 
+    public function testCopyFieldsetWithExtensionAttributes()
+    {
+        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
+        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $fieldsetConfigMock = $this->getMockBuilder('\Magento\Framework\DataObject\Copy\Config')
+            ->disableOriginalConstructor()
+            ->setMethods(['getFieldSet'])
+            ->getMock();
+
+        $service = $objectManager->create(
+            'Magento\Framework\DataObject\Copy',
+            ['fieldsetConfig' => $fieldsetConfigMock]
+        );
+
+        $data = ['firstname' => ['name' => '*'], 'lastname' => ['name' => '*'], 'test_group_code' => ['name' => '*']];
+        $fieldsetConfigMock
+            ->expects($this->once())
+            ->method('getFieldSet')
+            ->willReturn($data);
+
+        $fieldset = 'customer_account';
+        $aspect = 'name';
+        $groupCode = 'general';
+        $firstName = 'First';
+        $data = [
+            'email'                => 'customer@example.com',
+            'firstname'            => $firstName,
+            'lastname'             => 'Last',
+            // see declaration in dev/tests/integration/testsuite/Magento/Framework/Api/etc/extension_attributes.xml
+            'extension_attributes' => ['test_group_code' => $groupCode]
+        ];
+        $dataWithExtraField = array_merge($data, ['undeclared_field' => 'will be omitted']);
+
+        /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
+        $dataObjectHelper = $objectManager->get('Magento\Framework\Api\DataObjectHelper');
+        /** @var \Magento\Wonderland\Model\Data\FakeCustomerFactory $customerFactory */
+        $customerFactory = $objectManager->get('Magento\Wonderland\Model\Data\FakeCustomerFactory');
+        /** @var \Magento\Wonderland\Api\Data\CustomerInterface $source */
+        $source = $customerFactory->create();
+        $dataObjectHelper->populateWithArray(
+            $source,
+            $dataWithExtraField,
+            'Magento\Wonderland\Api\Data\FakeCustomerInterface'
+        );
+        /** @var \Magento\Wonderland\Api\Data\CustomerInterface $target */
+        $target = $customerFactory->create();
+        $target = $service->copyFieldsetToTarget($fieldset, $aspect, $source, $target);
+
+        $this->assertInstanceOf('Magento\Wonderland\Api\Data\FakeCustomerInterface', $target);
+        $this->assertNull(
+            $target->getEmail(),
+            "Email should not be set because it is not defined in the fieldset."
+        );
+        $this->assertEquals(
+            $firstName,
+            $target->getFirstname(),
+            "First name was not copied."
+        );
+        $this->assertEquals(
+            $groupCode,
+            $target->getExtensionAttributes()->getTestGroupCode(),
+            "Extension attribute was not copied."
+        );
+    }
+
+    public function testCopyFieldsetWithAbstractSimpleObject()
+    {
+        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
+        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $fieldset = 'sales_copy_order';
+        $aspect = 'to_edit';
+
+        $fieldsetConfigMock = $this->getMockBuilder('\Magento\Framework\DataObject\Copy\Config')
+            ->disableOriginalConstructor()
+            ->setMethods(['getFieldSet'])
+            ->getMock();
+
+        $service = $objectManager->create(
+            'Magento\Framework\DataObject\Copy',
+            ['fieldsetConfig' => $fieldsetConfigMock]
+        );
+
+        $data = ['store_label' => ['to_edit' => '*'], 'frontend_label' => ['to_edit' => '*'],
+                 'attribute_code' => ['to_edit' => '*'], 'note' => ['to_edit' => '*']];
+        $fieldsetConfigMock
+            ->expects($this->any())
+            ->method('getFieldSet')
+            ->willReturn($data);
+
+        $source = $objectManager->get('Magento\Wonderland\Model\Data\FakeAttributeMetadata');
+        $source->setStoreLabel('storeLabel');
+        $source->setFrontendLabel('frontendLabel');
+        $source->setAttributeCode('attributeCode');
+        $source->setNote('note');
+
+        $target = $objectManager->get('Magento\Wonderland\Model\Data\FakeAttributeMetadata');
+        $expectedTarget = $source;
+
+        $this->assertEquals(
+            $target,
+            $service->copyFieldsetToTarget('invalid_fieldset', $aspect, $source, $target)
+        );
+        $this->assertEquals(
+            $expectedTarget,
+            $service->copyFieldsetToTarget($fieldset, $aspect, $source, $target)
+        );
+    }
+
     public function testCopyFieldsetArrayTarget()
     {
         $fieldset = 'sales_copy_order';

@@ -27,10 +27,16 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
+        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->paymentHelper = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $this->model = $objectManager->getObject(
             'Magento\Sales\Ui\Component\Listing\Column\PaymentMethod',
-            ['paymentHelper' => $this->paymentHelper]
+            ['paymentHelper' => $this->paymentHelper, 'context' => $contextMock]
         );
     }
 
@@ -57,7 +63,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->willReturn($payment);
 
         $this->model->setData('name', $itemName);
-        $this->model->prepareDataSource($dataSource);
+        $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 }

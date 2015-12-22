@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Test\Block\Onepage;
 
 use Magento\Mtf\Block\Block;
+use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Payment\Test\Fixture\CreditCard;
 
 /**
@@ -75,29 +76,35 @@ class Payment extends Block
      * Select payment method.
      *
      * @param array $payment
-     * @param CreditCard|null $creditCard
+     * @param InjectableFixture|null $creditCard
      * @throws \Exception
      * @return void
      */
-    public function selectPaymentMethod(array $payment, CreditCard $creditCard = null)
+    public function selectPaymentMethod(array $payment, InjectableFixture $creditCard = null)
     {
-        $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodInput, $payment['method']));
-        if ($paymentSelector->isVisible()) {
-            $paymentSelector->click();
-        } else {
-            $paymentLabel = $this->_rootElement->find(sprintf($this->paymentMethodLabel, $payment['method']));
-            $this->waitForElementNotVisible($this->waitElement);
-            if (!$paymentLabel->isVisible()) {
-                throw new \Exception('Such payment method is absent.');
-            }
+        $paymentSelector = sprintf($this->paymentMethodInput, $payment['method']);
+        $paymentLabelSelector = sprintf($this->paymentMethodLabel, $payment['method']);
+
+        try {
+            $this->waitForElementVisible($paymentLabelSelector);
+        } catch (\Exception $exception) {
+            throw new \Exception('Such payment method is absent.');
         }
+
+        $paymentRadioButton = $this->_rootElement->find($paymentSelector);
+        if ($paymentRadioButton->isVisible()) {
+            $paymentRadioButton->click();
+        }
+
         if ($payment['method'] == "purchaseorder") {
             $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
         if ($creditCard !== null) {
+            $class = explode('\\', get_class($creditCard));
+            $module = $class[1];
             /** @var \Magento\Payment\Test\Block\Form\Cc $formBlock */
             $formBlock = $this->blockFactory->create(
-                '\\Magento\\Payment\\Test\\Block\\Form\\Cc',
+                "\\Magento\\{$module}\\Test\\Block\\Form\\Cc",
                 ['element' => $this->_rootElement->find('#payment_form_' . $payment['method'])]
             );
             $formBlock->fill($creditCard);

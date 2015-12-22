@@ -3,10 +3,12 @@
  * See COPYING.txt for license details.
  */
 define([
-    "jquery",
-    "jquery/ui",
-    "prototype"
-], function(jQuery){
+    'jquery',
+    'mage/translate',
+    'Magento_Ui/js/modal/modal',
+    'jquery/ui',
+    'prototype',
+], function(jQuery, $t){
 
 window.Variables = {
     textareaElementId: null,
@@ -50,43 +52,23 @@ window.Variables = {
             this.openDialogWindow(this.variablesContent);
         }
     },
-    openDialogWindow: function(variablesContent) {
+    openDialogWindow: function (variablesContent) {
         var windowId = this.dialogWindowId;
-        jQuery('body').append('<div id="' + windowId + '">'+ Variables.variablesContent +'</div>');
-        jQuery('#' + windowId).dialog({
-            autoOpen:   false,
-            title:      "Insert Variable...",
-            modal:      true,
-            resizable:  false,
-            minWidth:   500,
-            width:      '75%',
-            position: {
-                my: 'left top',
-                at: 'center top',
-                of: 'body'
-            },
-            open: function () {
-                jQuery(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-                var topMargin = jQuery(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
-                jQuery(this).closest('.ui-dialog').css('margin-top', topMargin);
-            },
-            close: function(event, ui) {
-                jQuery(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-                jQuery(this).dialog('destroy');
-                jQuery('#' + windowId).remove();
+        jQuery('<div id="' + windowId + '">' + Variables.variablesContent + '</div>').modal({
+            title: $t('Insert Variable...'),
+            type: 'slide',
+            buttons: [],
+            closed: function (e, modal) {
+                modal.modal.remove();
             }
         });
 
-        jQuery('#' + windowId).dialog('open');
+        jQuery('#' + windowId).modal('openModal');
 
         variablesContent.evalScripts.bind(variablesContent).defer();
     },
-    closeDialogWindow: function(window) {
-        var windowId = this.dialogWindowId;
-        if(jQuery('#' + windowId).length){
-            jQuery('#' + windowId).dialog('close');
-        }
+    closeDialogWindow: function() {
+        jQuery('#' + this.dialogWindowId).modal('closeModal');
     },
     prepareVariableRow: function(varValue, varLabel) {
         var value = (varValue).replace(/"/g, '&quot;').replace(/'/g, '\\&#39;');
@@ -95,13 +77,14 @@ window.Variables = {
     },
     insertVariable: function(value) {
         var windowId = this.dialogWindowId;
-        jQuery('#' + windowId).dialog('close');
+        jQuery('#' + windowId).modal('closeModal');
         var textareaElm = $(this.textareaElementId);
         if (textareaElm) {
             var scrollPos = textareaElm.scrollTop;
             updateElementAtCursor(textareaElm, value);
             textareaElm.focus();
             textareaElm.scrollTop = scrollPos;
+            jQuery(textareaElm).change();
             textareaElm = null;
         }
         return;

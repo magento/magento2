@@ -20,6 +20,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
     /**
+     * Product type
+     */
+    const TYPE_CODE = 'bundle';
+
+    /**
      * Product is composite
      *
      * @var bool
@@ -100,7 +105,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_bundleOption;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\Selection
+     * @var \Magento\Bundle\Model\ResourceModel\Selection
      */
     protected $_bundleSelection;
 
@@ -110,12 +115,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_config;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\Selection\CollectionFactory
+     * @var \Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory
      */
     protected $_bundleCollection;
 
     /**
-     * @var \Magento\Bundle\Model\Resource\BundleFactory
+     * @var \Magento\Bundle\Model\ResourceModel\BundleFactory
      */
     protected $_bundleFactory;
 
@@ -152,10 +157,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Bundle\Model\SelectionFactory $bundleModelSelection
-     * @param \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory
-     * @param \Magento\Bundle\Model\Resource\Selection\CollectionFactory $bundleCollection
+     * @param \Magento\Bundle\Model\ResourceModel\BundleFactory $bundleFactory
+     * @param \Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory $bundleCollection
      * @param \Magento\Catalog\Model\Config $config
-     * @param \Magento\Bundle\Model\Resource\Selection $bundleSelection
+     * @param \Magento\Bundle\Model\ResourceModel\Selection $bundleSelection
      * @param \Magento\Bundle\Model\OptionFactory $bundleOption
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
@@ -177,10 +182,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Bundle\Model\SelectionFactory $bundleModelSelection,
-        \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory,
-        \Magento\Bundle\Model\Resource\Selection\CollectionFactory $bundleCollection,
+        \Magento\Bundle\Model\ResourceModel\BundleFactory $bundleFactory,
+        \Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory $bundleCollection,
         \Magento\Catalog\Model\Config $config,
-        \Magento\Bundle\Model\Resource\Selection $bundleSelection,
+        \Magento\Bundle\Model\ResourceModel\Selection $bundleSelection,
         \Magento\Bundle\Model\OptionFactory $bundleOption,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
@@ -242,7 +247,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         return $this->_bundleSelection->getChildrenIds($parentId, $required);
     }
 
-    /**
+  /**
      * Retrieve parent ids array by required child
      *
      * @param int|array $childId
@@ -385,86 +390,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Save type related data
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    public function save($product)
-    {
-        parent::save($product);
-        /* @var $resource \Magento\Bundle\Model\Resource\Bundle */
-        $resource = $this->_bundleFactory->create();
-
-        $options = $product->getBundleOptionsData();
-        if ($options) {
-            $product->setIsRelationsChanged(true);
-
-            foreach ($options as $key => $option) {
-                if (isset($option['option_id']) && $option['option_id'] == '') {
-                    unset($option['option_id']);
-                }
-
-                $optionModel = $this->_bundleOption->create()
-                    ->setData($option)
-                    ->setParentId($product->getId())
-                    ->setStoreId($product->getStoreId());
-
-                $optionModel->isDeleted((bool)$option['delete']);
-                $optionModel->save();
-                $options[$key]['option_id'] = $optionModel->getOptionId();
-            }
-
-            $usedProductIds = [];
-            $excludeSelectionIds = [];
-
-            $selections = $product->getBundleSelectionsData();
-            if ($selections) {
-                foreach ($selections as $index => $group) {
-                    foreach ($group as $selection) {
-                        if (isset($selection['selection_id']) && $selection['selection_id'] == '') {
-                            unset($selection['selection_id']);
-                        }
-
-                        if (!isset($selection['is_default'])) {
-                            $selection['is_default'] = 0;
-                        }
-
-                        $selectionModel = $this->_bundleModelSelection->create()
-                            ->setData($selection)
-                            ->setOptionId($options[$index]['option_id'])
-                            ->setWebsiteId(
-                                $this->_storeManager->getStore($product->getStoreId())
-                                    ->getWebsiteId()
-                            )
-                            ->setParentProductId($product->getId());
-
-                        $selectionModel->isDeleted((bool)$selection['delete']);
-                        $selectionModel->save();
-
-                        $selection['selection_id'] = $selectionModel->getSelectionId();
-
-                        if ($selectionModel->getSelectionId()) {
-                            $excludeSelectionIds[] = $selectionModel->getSelectionId();
-                            $usedProductIds[] = $selectionModel->getProductId();
-                        }
-                    }
-                }
-
-                $resource->dropAllUnneededSelections($product->getId(), $excludeSelectionIds);
-                $resource->saveProductRelations($product->getId(), array_unique($usedProductIds));
-            }
-
-            if ($product->getData('price_type') != $product->getOrigData('price_type')) {
-                $resource->dropAllQuoteChildItems($product->getId());
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Retrieve bundle options items
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -492,12 +417,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve bundle option collection
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptionsCollection($product)
     {
         if (!$product->hasData($this->_keyOptionsCollection)) {
-            /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection */
+            /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $this->_bundleOption->create()
                 ->getResourceCollection();
             $optionsCollection->setProductIdFilter($product->getId());
@@ -520,7 +445,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param array $optionIds
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\Resource\Selection\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Selection\Collection
      */
     public function getSelectionsCollection($optionIds, $product)
     {
@@ -861,7 +786,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param array $selectionIds
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\Resource\Selection\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Selection\Collection
      */
     public function getSelectionsByIds($selectionIds, $product)
     {
@@ -883,6 +808,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->addFilterByRequiredOptions()
                 ->setSelectionIdsFilter($selectionIds);
 
+            if (count($usedSelections->getItems()) !== count($selectionIds)) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The options you selected are not available.')
+                );
+            }
+
             if (!$this->_catalogData->isPriceGlobal() && $storeId) {
                 $websiteId = $this->_storeManager->getStore($storeId)
                     ->getWebsiteId();
@@ -900,7 +831,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param array $optionIds
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptionsByIds($optionIds, $product)
     {
@@ -1260,7 +1191,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
-     * @param \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection
+     * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
      * @param int[] $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1277,9 +1208,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * @param \Magento\Bundle\Model\Resource\Selection\Collection $selections
+     * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selections
      * @param bool $skipSaleableCheck
-     * @param \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection
+     * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
      * @param int[] $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException

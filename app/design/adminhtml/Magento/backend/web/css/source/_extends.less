@@ -91,3 +91,23 @@
 .extend__list-reset-styles() {
     &:extend(.abs-list-reset-styles all);
 }
+
+//  Draggable handle with an icon
+.abs-draggable-handle {
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: move;
+    display: inline-block;
+    font-size: 0;
+    margin-top: -4px;
+    padding: 0 @indent__s 0 0;
+    vertical-align: middle;
+
+    .lib-icon-font(
+    @icon-gripper__content,
+    @_icon-font: @icons-admin__font-name,
+    @_icon-font-size: 1.8rem,
+    @_icon-font-color: @color-gray62,
+    @_icon-font-color-hover: @color-gray52
+    );
+}

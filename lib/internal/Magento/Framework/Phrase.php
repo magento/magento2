@@ -7,9 +7,9 @@
  */
 namespace Magento\Framework;
 
-use Zend\Stdlib\JsonSerializable;
-use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Phrase\Renderer\Placeholder as RendererPlaceholder;
+use Magento\Framework\Phrase\RendererInterface;
+use Zend\Stdlib\JsonSerializable;
 
 class Phrase implements JsonSerializable
 {

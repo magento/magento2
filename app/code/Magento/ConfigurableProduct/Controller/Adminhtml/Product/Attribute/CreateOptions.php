@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
-use Magento\Catalog\Model\Resource\Eav\AttributeFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
 class CreateOptions extends Action
 {
@@ -18,7 +18,7 @@ class CreateOptions extends Action
     protected $jsonHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Eav\AttributeFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
      */
     protected $attributeFactory;
 

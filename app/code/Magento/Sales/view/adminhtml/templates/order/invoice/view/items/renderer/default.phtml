@@ -16,12 +16,12 @@
     <td class="col-price">
         <?php echo $block->getColumnHtml($_item, 'price'); ?>
     </td>
-    <td class="col-qty"><?php echo $_item->getQty()*1 ?></td>
+    <td class="col-qty"><?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?></td>
     <td class="col-subtotal">
         <?php echo $block->getColumnHtml($_item, 'subtotal'); ?>
     </td>
-    <td class="col-tax"><?php echo $block->displayPriceAttribute('tax_amount') ?></td>
-    <td class="col-discount"><?php echo $block->displayPriceAttribute('discount_amount') ?></td>
+    <td class="col-tax"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('tax_amount') ?></td>
+    <td class="col-discount"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('discount_amount') ?></td>
     <td class="col-total last">
         <?php echo $block->getColumnHtml($_item, 'total'); ?>
     </td>

@@ -21,6 +21,7 @@ class Config extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @param array $options
+     * @codeCoverageIgnore
      */
     public function __construct(array $options)
     {

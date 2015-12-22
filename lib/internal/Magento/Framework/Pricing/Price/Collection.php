@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Pricing\Price;
 
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Class Collection
@@ -19,7 +19,7 @@ class Collection implements \Iterator
     protected $pool;
 
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface
+     * @var \Magento\Framework\Pricing\SaleableInterface
      */
     protected $saleableItem;
 

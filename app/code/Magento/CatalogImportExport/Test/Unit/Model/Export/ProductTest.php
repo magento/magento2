@@ -24,7 +24,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -39,7 +39,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $logger;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collection;
 
@@ -54,32 +54,32 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $exportConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $attrSetColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryColFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $optionColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $attributeColFactory;
 
@@ -97,6 +97,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $rowCustomizer;
+
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
 
     /**
      * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter| \PHPUnit_Framework_MockObject_MockObject
@@ -141,7 +146,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->once())->method('getEntityType')->willReturn($type);
 
         $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',
@@ -164,7 +169,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->collection = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            '\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
             [],
             [],
             '',
@@ -194,7 +199,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->productFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\ProductFactory',
+            'Magento\Catalog\Model\ResourceModel\ProductFactory',
             [
                 'create',
                 'getTypeId',
@@ -205,7 +210,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->attrSetColFactory = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             [
                 'create',
                 'setEntityTypeFilter',
@@ -216,7 +221,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->categoryColFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Category\CollectionFactory',
             [
                 'create',
                 'addNameToResult',
@@ -227,14 +232,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->itemFactory = $this->getMock(
-            'Magento\CatalogInventory\Model\Resource\Stock\ItemFactory',
+            'Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory',
             [],
             [],
             '',
             false
         );
         $this->optionColFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory',
             [],
             [],
             '',
@@ -242,7 +247,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->attributeColFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
             [],
             [],
             '',
@@ -265,6 +270,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
         $this->rowCustomizer = $this->getMock(
             'Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->metadataPool = $this->getMock(
+            '\Magento\Framework\Model\Entity\MetadataPool',
             [],
             [],
             '',
@@ -332,7 +344,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->attributeColFactory,
             $this->typeFactory,
             $this->linkTypeProvider,
-            $this->rowCustomizer
+            $this->rowCustomizer,
+            $this->metadataPool
         );
 
         $this->object = new StubProduct();

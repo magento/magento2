@@ -35,7 +35,6 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
 
     const UPDATED_AT = 'updated_at';
 
-    const STORE_ID = 'store_id';
     /**#@-*/
 
     /**
@@ -82,21 +81,6 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setName($name);
-
-    /**
-     * Product store id
-     *
-     * @return int|null
-     */
-    public function getStoreId();
-
-    /**
-     * Set product store id
-     *
-     * @param int $storeId
-     * @return $this
-     */
-    public function setStoreId($storeId);
 
     /**
      * Product attribute set id
@@ -277,21 +261,6 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setMediaGalleryEntries(array $mediaGalleryEntries = null);
-
-    /**
-     * Gets list of product group prices
-     *
-     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
-     */
-    public function getGroupPrices();
-
-    /**
-     * Sets list of product group prices
-     *
-     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterface[] $groupPrices
-     * @return $this
-     */
-    public function setGroupPrices(array $groupPrices = null);
 
     /**
      * Gets list of product tier prices

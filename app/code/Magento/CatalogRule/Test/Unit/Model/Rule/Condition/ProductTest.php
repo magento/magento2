@@ -22,10 +22,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $productModel;
 
-    /** @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $productResource;
 
-    /** @var \Magento\Catalog\Model\Resource\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $eavAttributeResource;
 
     protected function setUp()
@@ -48,7 +48,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->productResource = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product',
+            'Magento\Catalog\Model\ResourceModel\Product',
             ['loadAllAttributes',
                 'getAttributesByCode',
                 'getAttribute'
@@ -58,7 +58,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->eavAttributeResource = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Eav\Attribute',
+            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             [
                 '__wakeup',
                 'isAllowedForRuleCondition',

@@ -234,7 +234,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
                 $nodeIds[] = $node->getId();
             }
 
-            /* @var $collection \Magento\Catalog\Model\Resource\Category\Collection */
+            /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
             $collection = $category->getResourceCollection();
             $collection->addIdFilter($nodeIds)
                 ->addAttributeToSelect('url_key')

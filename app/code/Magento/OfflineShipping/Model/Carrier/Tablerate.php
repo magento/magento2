@@ -42,7 +42,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     protected $_resultMethodFactory;
 
     /**
-     * @var \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory
+     * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory
      */
     protected $_tablerateFactory;
 
@@ -52,7 +52,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
-     * @param \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory
+     * @param \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory $tablerateFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -62,7 +62,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory,
-        \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory,
+        \Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory $tablerateFactory,
         array $data = []
     ) {
         $this->_rateResultFactory = $rateResultFactory;

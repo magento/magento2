@@ -36,12 +36,12 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     {
         /* validate result of setAttribute */
         $this->assertEquals(
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL,
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
             $this->_model->getAttribute()->getIsGlobal()
         );
         $this->_model->setScope($this->_model->getAttribute());
         $this->assertEquals(
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL,
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
             $this->_model->getAttribute()->getIsGlobal()
         );
     }
@@ -53,7 +53,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setScope($this->_model->getAttribute());
         $this->assertEquals(
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
             $this->_model->getAttribute()->getIsGlobal()
         );
     }
@@ -64,11 +64,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterSave()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         $product->setOrigData();
         $product->setPrice(9.99);
         $product->setStoreId(0);

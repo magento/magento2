@@ -244,18 +244,18 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Constructor
      *
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $params
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
      * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,
         \Magento\DownloadableImportExport\Helper\Data $downloadableHelper

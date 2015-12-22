@@ -33,28 +33,21 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetUrlInstance()
-    {
-        $instance = $this->_model->getUrlInstance();
-        $this->assertInstanceOf('Magento\Framework\Url', $instance);
-        $this->assertSame($instance, $this->_model->getUrlInstance());
-    }
-
     public function testGetUrlInStore()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         $this->assertStringEndsWith('simple-product.html', $this->_model->getUrlInStore($product));
     }
 
     public function testGetProductUrl()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         $this->assertStringEndsWith('simple-product.html', $this->_model->getProductUrl($product));
     }
 
@@ -87,11 +80,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrl()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         $this->assertStringEndsWith('simple-product.html', $this->_model->getUrl($product));
 
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

@@ -46,13 +46,10 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getCode')->will($this->returnValue('new-store'));
-        $currentStore = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
-        $currentStore->expects($this->any())->method('getCode')->will($this->returnValue('current-store'));
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($currentStore));
         $storeSwitchUrl = 'stores/store/switch';
         $this->urlBuilder->expects($this->any())->method('getUrl')->with($storeSwitchUrl)->willReturnArgument(0);
         $this->corePostDataHelper->expects($this->any())->method('getPostData')
-            ->with($storeSwitchUrl, ['___store' => 'new-store', '___from_store' => 'current-store']);
+            ->with($storeSwitchUrl, ['___store' => 'new-store']);
 
         $this->switcher->getTargetStorePostData($store);
     }

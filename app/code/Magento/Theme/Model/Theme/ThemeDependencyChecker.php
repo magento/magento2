@@ -115,7 +115,8 @@ class ThemeDependencyChecker
     private function getParentChildThemeMap()
     {
         $map = [];
-        $this->themeCollection->addDefaultPattern('*');
+        $this->themeCollection->resetConstraints();
+        $this->themeCollection->clear();
         /** @var \Magento\Theme\Model\Theme\Data $theme */
         foreach ($this->themeCollection as $theme) {
             if ($theme->getParentTheme()) {

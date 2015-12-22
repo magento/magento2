@@ -9,20 +9,22 @@
 ?>
 <?php $_element = $block->getElement() ?>
 <?php if ($_element->getFieldsetContainerId()): ?>
-    <div id="<?php echo $_element->getFieldsetContainerId(); ?>">789
+    <div id="<?php /* @escapeNotVerified */ echo $_element->getFieldsetContainerId(); ?>">789
 <?php endif; ?>
 
 <?php if (!$_element->getNoContainer()): ?>
-    <fieldset class="fieldset <?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
+    <fieldset class="admin__fieldset fieldset <?php /* @escapeNotVerified */ echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
 <?php endif; ?>
 
     <?php if ($_element->getLegend()): ?>
-        <legend class="legend">
-            <span><?php echo $_element->getLegend() ?></span>
-        </legend>
-        <?php echo $_element->getHeaderBar() ?>
-    <?php endif; ?>
+        <legend class="admin__legend legend">
+            <span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span>
+            <?php echo $block->getHintHtml() ?>
+        </legend><br/>
+        <?php /* @escapeNotVerified */ echo $_element->getHeaderBar() ?>
+    <?php else: ?>
         <?php echo $block->getHintHtml() ?>
+    <?php endif; ?>
         <div class="tree-store-scope">
             <?php if ($_element->getComment()): ?>
             <p class="comment"><?php echo $block->escapeHtml($_element->getComment()) ?></p>

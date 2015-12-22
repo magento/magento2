@@ -14,19 +14,13 @@ use Magento\TestFramework\Helper\Bootstrap;
 class ProductRuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Resource\Rule
+     * @var \Magento\CatalogRule\Model\ResourceModel\Rule
      */
     protected $resourceRule;
 
-    /**
-     * @var \Magento\Catalog\Model\Product
-     */
-    protected $product;
-
     protected function setUp()
     {
-        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\Resource\Rule');
-        $this->product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
+        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\ResourceModel\Rule');
 
         Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor')
             ->getIndexer()->isScheduled(false);
@@ -40,8 +34,13 @@ class ProductRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexAfterSuitableProductSaving()
     {
-        $this->product->load(1)->setData('test_attribute', 'test_attribute_value')->save();
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
+        );
+        $product = $productRepository->get('simple');
+        $product->setData('test_attribute', 'test_attribute_value')->save();
 
-        $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, 1));
+        $this->assertEquals(9.8, $this->resourceRule->getRulePrice(new \DateTime(), 1, 1, $product->getId()));
     }
 }

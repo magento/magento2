@@ -232,21 +232,24 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
+        $timezoneInterface = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $date = new \DateTime();
+        $timezoneInterface->expects($this->any())->method('date')->willReturn($date);
         $modelClassArgs = [
-            $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
-            $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false),
+            $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false),
+            $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false),
+            $this->getMock('Magento\ImportExport\Model\ResourceModel\Helper', [], [], '', false),
             $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
             $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             $this->getMock(
-                'Magento\Catalog\Model\Resource\Product\Option\CollectionFactory',
+                'Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory',
                 [],
                 [],
                 '',
                 false
             ),
             $this->getMock(
-                'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory',
+                'Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory',
                 [],
                 [],
                 '',
@@ -254,7 +257,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ),
             $catalogDataMock,
             $scopeConfig,
-            new \Magento\Framework\Stdlib\DateTime(),
+            $timezoneInterface,
             $this->getMock(
                 'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface',
                 [],

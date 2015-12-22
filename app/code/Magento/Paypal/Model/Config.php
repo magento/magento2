@@ -8,6 +8,8 @@
 
 namespace Magento\Paypal\Model;
 
+use Magento\Paypal\Helper\Formatter;
+
 /**
  * Config model that is aware of all \Magento\Paypal payment methods
  * Works with PayPal-specific system configuration
@@ -16,6 +18,9 @@ namespace Magento\Paypal\Model;
  */
 class Config extends AbstractConfig
 {
+
+    use Formatter;
+
     /**
      * PayPal Standard - alias METHOD_WPP_EXPRESS
      */
@@ -151,6 +156,12 @@ class Config extends AbstractConfig
 
     const EC_BA_SIGNUP_NEVER = 'never';
 
+    /**
+     * Paypal setting
+     */
+    const TRANSFER_CART_LINE_ITEMS = 'lineItemsEnabled';
+    const TRANSFER_SHIPPING_OPTIONS = 'transferShippingOptions';
+
     /**#@-*/
 
     /**
@@ -202,12 +213,13 @@ class Config extends AbstractConfig
         'NZD',
         'PLN',
         'GBP',
+        'RUB',
         'SGD',
         'SEK',
         'CHF',
-        'USD',
         'TWD',
         'THB',
+        'USD',
     ];
 
     /**
@@ -224,6 +236,7 @@ class Config extends AbstractConfig
         'BG',
         'BR',
         'CA',
+        'CN',
         'CH',
         'CL',
         'CR',
@@ -267,6 +280,7 @@ class Config extends AbstractConfig
         'PH',
         'PL',
         'PT',
+        'RU',
         'RE',
         'RO',
         'SE',
@@ -1346,7 +1360,7 @@ class Config extends AbstractConfig
             'locale' => $this->_getSupportedLocaleCode($localeCode),
         ];
         if ($orderTotal) {
-            $params['ordertotal'] = sprintf('%.2F', $orderTotal);
+            $params['ordertotal'] = $this->formatPrice($orderTotal);
             if ($pal) {
                 $params['pal'] = $pal;
             }

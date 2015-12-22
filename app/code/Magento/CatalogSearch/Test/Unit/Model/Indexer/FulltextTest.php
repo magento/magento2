@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
-use Magento\CatalogSearch\Model\Resource\Fulltext as FulltextResource;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
 
@@ -37,7 +37,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $saveHandler;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fulltextResource;
 
@@ -90,7 +90,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         );
         $dimensionFactory->expects($this->any())->method('create')->willReturn($this->dimension);
 
-        $this->fulltextResource = $this->getClassMock('\Magento\CatalogSearch\Model\Resource\Fulltext');
+        $this->fulltextResource = $this->getClassMock('\Magento\CatalogSearch\Model\ResourceModel\Fulltext');
         $this->searchRequestConfig = $this->getClassMock('Magento\Framework\Search\Request\Config');
 
         $this->model = new \Magento\CatalogSearch\Model\Indexer\Fulltext(

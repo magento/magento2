@@ -36,7 +36,7 @@ class Form extends \Magento\Eav\Model\Form
      * Get EAV Entity Form Attribute Collection for Customer
      * exclude 'created_at'
      *
-     * @return \Magento\Customer\Model\Resource\Form\Attribute\Collection
+     * @return \Magento\Customer\Model\ResourceModel\Form\Attribute\Collection
      */
     protected function _getFormAttributeCollection()
     {

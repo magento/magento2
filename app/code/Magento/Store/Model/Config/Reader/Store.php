@@ -25,7 +25,7 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
     protected $_converter;
 
     /**
-     * @var \Magento\Store\Model\Resource\Config\Collection\ScopedFactory
+     * @var \Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory
      */
     protected $_collectionFactory;
 
@@ -38,14 +38,14 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
      * @param \Magento\Framework\App\Config\Initial $initialConfig
      * @param \Magento\Framework\App\Config\ScopePool $scopePool
      * @param \Magento\Store\Model\Config\Converter $converter
-     * @param \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory
+     * @param \Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Config\Initial $initialConfig,
         \Magento\Framework\App\Config\ScopePool $scopePool,
         \Magento\Store\Model\Config\Converter $converter,
-        \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory,
+        \Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory $collectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_initialConfig = $initialConfig;

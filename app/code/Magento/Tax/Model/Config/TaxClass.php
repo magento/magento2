@@ -11,7 +11,7 @@ namespace Magento\Tax\Model\Config;
 class TaxClass extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\Config\Model\Resource\Config
+     * @var \Magento\Config\Model\ResourceModel\Config
      */
     protected $resourceConfig;
 
@@ -24,9 +24,10 @@ class TaxClass extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Config\Model\Resource\Config $resourceConfig
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -34,23 +35,24 @@ class TaxClass extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Config\Model\Resource\Config $resourceConfig,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Config\Model\ResourceModel\Config $resourceConfig,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->resourceConfig = $resourceConfig;
         $this->attributeFactory = $attributeFactory;
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**
      * Update the default product tax class
      *
-     * @return \Magento\Tax\Model\Config\TaxClass
+     * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $attributeCode = "tax_class_id";
 
@@ -62,6 +64,6 @@ class TaxClass extends \Magento\Framework\App\Config\Value
         $attribute->setData("default_value", $this->getData('value'));
         $attribute->save();
 
-        return parent::_afterSave($this);
+        return parent::afterSave();
     }
 }

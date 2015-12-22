@@ -50,12 +50,18 @@ class RowsTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogInventory\Api\StockItemRepositoryInterface'
         );
 
-        /** @var \Magento\CatalogInventory\Model\Resource\Stock\Item $stockItemResource */
+        /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItemResource */
         $stockItemResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Model\Resource\Stock\Item'
+            'Magento\CatalogInventory\Model\ResourceModel\Stock\Item'
         );
 
-        $stockItem = $stockRegistry->getStockItem(1, 1);
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
+        );
+        $product = $productRepository->get('simple');
+
+        $stockItem = $stockRegistry->getStockItem($product->getId(), 1);
 
         $stockItemData = [
             'qty' => $stockItem->getQty() + 12,

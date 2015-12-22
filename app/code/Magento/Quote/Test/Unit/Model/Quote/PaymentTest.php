@@ -43,7 +43,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         return [
             [null, null],
             [0, null],
-            ['0', null],
+            ['0', 0],
             [1939, 1939],
         ];
     }

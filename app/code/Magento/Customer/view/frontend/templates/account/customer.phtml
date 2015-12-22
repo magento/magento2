@@ -19,8 +19,9 @@
             <span data-bind="text: customer().fullname"></span>
             <button type="button"
                     class="action switch"
-                    tabindex="-1">
-                <span><?php echo __('Change')?></span>
+                    tabindex="-1"
+                    data-action="customer-menu-toggle">
+                <span><?php /* @escapeNotVerified */ echo __('Change')?></span>
             </button>
         </span>
         <script type="text/x-magento-init">

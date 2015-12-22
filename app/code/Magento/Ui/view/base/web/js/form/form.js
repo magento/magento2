@@ -4,10 +4,11 @@
  */
 define([
     'underscore',
-    'uiComponent',
     'Magento_Ui/js/lib/spinner',
-    './adapter'
-], function (_, Component, loader, adapter) {
+    'rjsResolver',
+    './adapter',
+    'uiCollection'
+], function (_, loader, resolver, adapter, Collection) {
     'use strict';
 
     function collectData(selector) {
@@ -17,17 +18,18 @@ define([
         items = Array.prototype.slice.call(items);
 
         items.forEach(function (item) {
-            result[item.name] = item.value;
+            result[item.name] = item.type === 'checkbox' ? +!!item.checked : item.value;
         });
 
         return result;
     }
 
-    return Component.extend({
+    return Collection.extend({
         initialize: function () {
             this._super()
-                .initAdapter()
-                .hideLoader();
+                .initAdapter();
+
+            resolver(this.hideLoader, this);
 
             return this;
         },
@@ -42,7 +44,7 @@ define([
             return this;
         },
 
-        initProperties: function () {
+        initConfig: function () {
             this._super();
 
             this.selector = '[data-form-part=' + this.namespace + ']';
@@ -76,7 +78,10 @@ define([
             });
 
             source.save({
-                redirect: redirect
+                redirect: redirect,
+                attributes: {
+                    id: this.namespace
+                }
             });
         },
 

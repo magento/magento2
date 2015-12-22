@@ -11,6 +11,7 @@ define([
 
     return Abstract.extend({
         defaults: {
+            elementTmpl: 'ui/form/element/date',
             dateFormat: 'MM/dd/YYYY',
             options: {}
         },
@@ -20,10 +21,12 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        initProperties: function () {
+        initConfig: function () {
+            this._super();
+
             this.dateFormat = utils.normalizeDate(this.dateFormat);
 
-            return this._super();
+            return this;
         },
 
         /**

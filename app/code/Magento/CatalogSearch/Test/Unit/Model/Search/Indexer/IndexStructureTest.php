@@ -20,7 +20,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
      */
     private $indexScopeResolver;
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
     /**
@@ -38,7 +38,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();

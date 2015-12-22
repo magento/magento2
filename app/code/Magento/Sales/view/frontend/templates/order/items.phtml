@@ -10,15 +10,15 @@
 <?php $_order = $block->getOrder() ?>
 <?php $_giftMessage; ?>
 <div class="table-wrapper order-items">
-    <table class="data table table-order-items" id="my-orders-table" summary="<?php echo __('Items Ordered') ?>">
-        <caption class="table-caption"><?php echo __('Items Ordered') ?></caption>
+    <table class="data table table-order-items" id="my-orders-table" summary="<?php /* @escapeNotVerified */ echo __('Items Ordered') ?>">
+        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Ordered') ?></caption>
         <thead>
             <tr>
-                <th class="col name"><?php echo __('Product Name') ?></th>
-                <th class="col sku"><?php echo __('SKU') ?></th>
-                <th class="col price"><?php echo __('Price') ?></th>
-                <th class="col qty"><?php echo __('Qty') ?></th>
-                <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+                <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
+                <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
+                <th class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                <th class="col subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
             </tr>
         </thead>
         <?php $_items = $_order->getItemsCollection(); ?>
@@ -36,25 +36,25 @@
                     <tr>
                         <td class="col options" colspan="5">
                             <a href="#"
-                               id="order-item-gift-message-link-<?php echo $_item->getId() ?>"
+                               id="order-item-gift-message-link-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"
                                class="action show"
-                               aria-controls="order-item-gift-message-<?php echo $_item->getId() ?>"
-                               data-item-id="<?php echo $_item->getId() ?>">
-                                <?php echo __('Gift Message') ?>
+                               aria-controls="order-item-gift-message-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"
+                               data-item-id="<?php /* @escapeNotVerified */ echo $_item->getId() ?>">
+                                <?php /* @escapeNotVerified */ echo __('Gift Message') ?>
                             </a>
                             <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_item); ?>
-                            <div class="order-gift-message" id="order-item-gift-message-<?php echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1">
+                            <div class="order-gift-message" id="order-item-gift-message-<?php /* @escapeNotVerified */ echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1">
                                 <a href="#"
-                                   title="<?php echo __('Close') ?>"
-                                   aria-controls="order-item-gift-message-<?php echo $_item->getId()?>"
-                                   data-item-id="<?php echo $_item->getId()?>"
+                                   title="<?php /* @escapeNotVerified */ echo __('Close') ?>"
+                                   aria-controls="order-item-gift-message-<?php /* @escapeNotVerified */ echo $_item->getId()?>"
+                                   data-item-id="<?php /* @escapeNotVerified */ echo $_item->getId()?>"
                                    class="action close">
-                                    <?php echo __('Close') ?>
+                                    <?php /* @escapeNotVerified */ echo __('Close') ?>
                                 </a>
                                 <dl class="item-options">
-                                    <dt class="item-sender"><strong class="label"><?php echo __('From') ?></strong><?php echo $block->escapeHtml($_giftMessage->getSender()) ?></dt>
-                                    <dt class="item-recipient"><strong class="label"><?php echo __('To') ?></strong><?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?></dt>
-                                    <dd class="item-message"><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_item) ?></dd>
+                                    <dt class="item-sender"><strong class="label"><?php /* @escapeNotVerified */ echo __('From') ?></strong><?php echo $block->escapeHtml($_giftMessage->getSender()) ?></dt>
+                                    <dt class="item-recipient"><strong class="label"><?php /* @escapeNotVerified */ echo __('To') ?></strong><?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+                                    <dd class="item-message"><?php /* @escapeNotVerified */ echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_item) ?></dd>
                                 </dl>
                             </div>
                         </td>

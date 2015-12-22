@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\DB;
 
-\Zend_Loader::loadClass('\Magento\Framework\DB\Select');
-\Zend_Loader::loadClass('\Magento\Framework\DB\Tree\Node');
-\Zend_Loader::loadClass('\Magento\Framework\DB\Tree\NodeSet');
 use Magento\Framework\DB\Tree\Node;
 use Magento\Framework\DB\Tree\NodeSet;
 use Magento\Framework\Exception\LocalizedException;

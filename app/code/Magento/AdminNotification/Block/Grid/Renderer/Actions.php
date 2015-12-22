@@ -60,7 +60,7 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
                 [
                     '_current' => true,
                     'id' => $row->getId(),
-                    \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $encodedUrl
+                    \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
                 ]
             ),
             __('Are you sure?'),

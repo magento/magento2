@@ -6,12 +6,10 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
-/**
- * Catalog inventory module observer
- */
-class AddInventoryDataObserver
+class AddInventoryDataObserver implements ObserverInterface
 {
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
@@ -32,7 +30,7 @@ class AddInventoryDataObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         $product = $observer->getEvent()->getProduct();
         if ($product instanceof \Magento\Catalog\Model\Product) {

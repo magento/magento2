@@ -8,7 +8,6 @@ namespace Magento\Tax\Test\Handler\TaxClass;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -29,7 +28,7 @@ class Curl extends AbstractCurl implements TaxClassInterface
 
         $url = $_ENV['app_backend_url'] . 'tax/tax/ajaxSave/?isAjax=true';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 

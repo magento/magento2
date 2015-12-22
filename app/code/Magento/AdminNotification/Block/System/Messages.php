@@ -10,7 +10,7 @@ class Messages extends \Magento\Backend\Block\Template
     /**
      * Message list
      *
-     * @var \Magento\AdminNotification\Model\Resource\System\Message\Collection\Synchronized
+     * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized
      */
     protected $_messages;
 
@@ -21,13 +21,13 @@ class Messages extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\AdminNotification\Model\Resource\System\Message\Collection\Synchronized $messages
+     * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\AdminNotification\Model\Resource\System\Message\Collection\Synchronized $messages,
+        \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $data = []
     ) {
@@ -120,11 +120,8 @@ class Messages extends \Magento\Backend\Block\Template
         return $this->jsonHelper->jsonEncode(
             [
                 'systemMessageDialog' => [
-                    'autoOpen' => false,
-                    'width' => '75%',
-                    'modal' => true,
-                    'minHeight' => '0',
-                    'dialogClass' => 'ui-dialog-active ui-popup-message',
+                    'buttons' => [],
+                    'modalClass' => 'ui-dialog-active ui-popup-message modal-system-messages',
                     'ajaxUrl' => $this->_getMessagesUrl()
                 ],
             ]

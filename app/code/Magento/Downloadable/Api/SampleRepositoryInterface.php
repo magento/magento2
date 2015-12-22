@@ -40,7 +40,7 @@ interface SampleRepositoryInterface
     public function save(
         $sku,
         SampleInterface $sample,
-        $isGlobalScopeContent = false
+        $isGlobalScopeContent = true
     );
 
     /**

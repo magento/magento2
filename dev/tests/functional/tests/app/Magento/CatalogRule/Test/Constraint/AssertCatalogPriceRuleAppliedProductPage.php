@@ -41,12 +41,17 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
                 '\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
                 ['customer' => $customer]
             )->run();
+        } else {
+            $this->objectManager->create('\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
         }
+
         $cmsIndexPage->open();
         foreach ($products as $key => $product) {
             $categoryName = $product->getCategoryIds()[0];
             $cmsIndexPage->getTopmenu()->selectCategoryByName($categoryName);
             $catalogCategoryViewPage->getListProductBlock()->getProductItem($product)->open();
+
+            $catalogProductViewPage->getViewBlock()->waitLoader();
             $productPriceBlock = $catalogProductViewPage->getViewBlock()->getPriceBlock();
             $actualPrice['regular'] = $productPriceBlock->getOldPrice();
             $actualPrice['special'] = $productPriceBlock->getSpecialPrice();

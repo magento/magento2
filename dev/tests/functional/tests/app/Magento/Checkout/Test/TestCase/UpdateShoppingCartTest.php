@@ -102,6 +102,7 @@ class UpdateShoppingCartTest extends Injectable
     {
         // Preconditions
         $product->persist();
+        $this->checkoutCart->open();
         $this->checkoutCart->getCartBlock()->clearShoppingCart();
 
         // Steps

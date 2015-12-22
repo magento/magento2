@@ -4,8 +4,9 @@
  */
 define([
     'jquery',
+    'underscore',
     'jquery/ui'
-], function ($) {
+], function ($, _) {
     'use strict';
 
     $.widget('mage.productAttributes', {
@@ -13,6 +14,57 @@ define([
             this._on({
                 'click': '_showPopup'
             });
+        },
+
+        _initModal: function () {
+            var self = this;
+
+            this.modal = $('<div id="create_new_attribute"/>').modal({
+                title: $.mage.__('New Attribute'),
+                type: 'slide',
+                buttons: [],
+                opened: function () {
+                    $(this).parent().addClass('modal-content-new-attribute');
+                    self.iframe = $('<iframe id="create_new_attribute_container">').attr({
+                        src: self._prepareUrl(),
+                        frameborder: 0
+                    });
+                    self.modal.append(self.iframe);
+                    self._changeIframeSize();
+                    $(window).off().on('resize', _.debounce(self._changeIframeSize.bind(self), 400));
+                },
+                closed: function () {
+                    var doc = self.iframe.get(0).document;
+
+                    if (doc && $.isFunction(doc.execCommand)) {
+                        //IE9 break script loading but not execution on iframe removing
+                        doc.execCommand('stop');
+                        self.iframe.remove();
+                    }
+                    self.modal.data('modal').modal.remove();
+                }
+            });
+        },
+
+        _getHeight: function () {
+            var modal = this.modal.data('modal').modal,
+                modalHead = modal.find('header'),
+                modalHeadHeight = modalHead.outerHeight(),
+                modalHeight = modal.outerHeight(),
+                modalContentPadding = this.modal.parent().outerHeight() - this.modal.parent().height();
+
+            return modalHeight - modalHeadHeight - modalContentPadding;
+        },
+
+        _getWidth: function () {
+            return this.modal.width();
+        },
+
+        _changeIframeSize: function () {
+            this.modal.parent().outerHeight(this._getHeight());
+            this.iframe.outerHeight(this._getHeight());
+            this.iframe.outerWidth(this._getWidth());
+
         },
 
         _prepareUrl: function () {
@@ -25,64 +77,9 @@ define([
                 window.encodeURIComponent(name);
         },
 
-        _showPopup: function (event) {
-            var wrapper,
-                iframe;
-
-            wrapper = $('<div id="create_new_attribute"/>').appendTo('body').dialog({
-                // ToDo: refactor to a sliding panel
-                title: 'New Attribute',
-                width: '75%',
-                minHeight: 650,
-                modal: true,
-                resizable: false,
-                resizeStop: function () {
-                    iframe.height($(this).outerHeight() + 'px');
-                    iframe.width($(this).outerWidth() + 'px');
-                },
-                position: {
-                    my: 'left top',
-                    at: 'center top',
-                    of: 'body'
-                },
-                open: function () {
-                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-                    var topMargin = jQuery(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 45;
-                    jQuery(this).closest('.ui-dialog').css('margin-top', topMargin);
-                },
-                close: function () {
-                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-                }
-            });
-
-            iframe = $('<iframe id="create_new_attribute_container">').attr({
-                src: this._prepareUrl(event),
-                frameborder: 0,
-                style: 'position:absolute;top:58px;left:0px;right:0px;bottom:0px'
-            });
-
-            iframe.on('load', function () {
-                $(this).css({
-                    height: wrapper.outerHeight() + 'px',
-                    width: wrapper.outerWidth() + 'px'
-                });
-            });
-
-            wrapper.append(iframe);
-
-            wrapper.on('dialogclose', function () {
-                var dialog = this,
-                    doc = iframe.get(0).document;
-
-                if (doc && $.isFunction(doc.execCommand)) {
-                    //IE9 break script loading but not execution on iframe removing
-                    doc.execCommand('stop');
-                    iframe.remove();
-                }
-
-                $(dialog).remove();
-            });
+        _showPopup: function () {
+            this._initModal();
+            this.modal.modal('openModal');
         }
     });
 

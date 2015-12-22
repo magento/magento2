@@ -38,7 +38,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     protected $configurableType;
 
     /**
-     * @var Resource\Product\Type\Configurable\Attribute
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute
      */
     protected $optionResource;
 
@@ -58,7 +58,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     protected $configurableAttributeFactory;
 
     /**
-     * @var Resource\Product\Type\Configurable
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
      */
     private $configurableTypeResource;
 
@@ -66,21 +66,21 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory
      * @param ConfigurableType $configurableType
-     * @param Resource\Product\Type\Configurable\Attribute $optionResource
+     * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $optionResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param ConfigurableType\AttributeFactory $configurableAttributeFactory
-     * @param Resource\Product\Type\Configurable $configurableTypeResource
+     * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType,
-        \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $optionResource,
+        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $optionResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory,
-        \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurableTypeResource
+        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource
     ) {
         $this->productRepository = $productRepository;
         $this->optionValueFactory = $optionValueFactory;

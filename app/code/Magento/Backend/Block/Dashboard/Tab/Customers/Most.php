@@ -14,20 +14,20 @@ namespace Magento\Backend\Block\Dashboard\Tab\Customers;
 class Most extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
+        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -49,7 +49,7 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
     protected function _prepareCollection()
     {
         $collection = $this->_collectionFactory->create();
-        /* @var $collection \Magento\Reports\Model\Resource\Order\Collection */
+        /* @var $collection \Magento\Reports\Model\ResourceModel\Order\Collection */
         $collection->groupByCustomer()->addOrdersCount()->joinCustomerName();
 
         $storeFilter = 0;

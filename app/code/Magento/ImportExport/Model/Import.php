@@ -80,6 +80,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
     /**#@-*/
 
+    /**
+     * default delimiter for several values in one cell as default for FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR
+     */
+    const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
+
     /**#@+
      * Import constants
      */
@@ -118,7 +123,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_entityFactory;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Import\Data
+     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
      */
     protected $_importData;
 
@@ -159,7 +164,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param Import\ConfigInterface $importConfig
      * @param Import\Entity\Factory $entityFactory
-     * @param Resource\Import\Data $importData
+     * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param Export\Adapter\CsvFactory $csvFactory
      * @param FileTransferFactory $httpFactory
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
@@ -177,7 +182,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\ImportExport\Model\Import\ConfigInterface $importConfig,
         \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory,
-        \Magento\ImportExport\Model\Resource\Import\Data $importData,
+        \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
         \Magento\ImportExport\Model\Export\Adapter\CsvFactory $csvFactory,
         \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
@@ -316,10 +321,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     public static function getAttributeType(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
-        if ($attribute->usesSource() && in_array($attribute->getFrontendInput(), ['select', 'multiselect'])) {
-            return $attribute->getFrontendInput() == 'multiselect' ? 'multiselect' : 'select';
+        $frontendInput = $attribute->getFrontendInput();
+        if ($attribute->usesSource() && in_array($frontendInput, ['select', 'multiselect', 'boolean'])) {
+            return $frontendInput;
         } elseif ($attribute->isStatic()) {
-            return $attribute->getFrontendInput() == 'date' ? 'datetime' : 'varchar';
+            return $frontendInput == 'date' ? 'datetime' : 'varchar';
         } else {
             return $attribute->getBackendType();
         }
@@ -328,7 +334,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * DB data source model getter.
      *
-     * @return \Magento\ImportExport\Model\Resource\Import\Data
+     * @return \Magento\ImportExport\Model\ResourceModel\Import\Data
      */
     public function getDataSourceModel()
     {

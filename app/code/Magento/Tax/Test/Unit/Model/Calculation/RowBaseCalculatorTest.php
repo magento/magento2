@@ -21,20 +21,27 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $this->initMocks(true);
         $this->initRowBaseCalculator();
-        $this->rowBaseCalculator->expects($this->once())
+        $this->rowBaseCalculator->expects($this->atLeastOnce())
             ->method('deltaRound')->will($this->returnValue(0));
 
         $this->assertSame(
             $this->taxDetailsItem,
-            $this->calculate($this->rowBaseCalculator)
+            $this->calculate($this->rowBaseCalculator, true)
         );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
+
+        $this->assertSame(
+            $this->taxDetailsItem,
+            $this->calculate($this->rowBaseCalculator, false)
+        );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
     }
 
     public function testCalculateWithTaxNotInPrice()
     {
         $this->initMocks(false);
         $this->initRowBaseCalculator();
-        $this->rowBaseCalculator->expects($this->never())
+        $this->rowBaseCalculator->expects($this->atLeastOnce())
             ->method('deltaRound');
 
         $this->assertSame(

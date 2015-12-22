@@ -7,11 +7,17 @@ namespace Magento\Sales\Test\Unit\Model\Config;
 
 class XsdTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
     protected $_xsdFile;
 
     public function setUp()
     {
-        $this->_xsdFile = __DIR__ . "/../../../../../../../../app/code/Magento/Sales/etc/sales.xsd";
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+        $this->_xsdFile = "urn:magento:module:Magento_Sales:etc/sales.xsd";
     }
 
     /**
@@ -23,9 +29,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->load(__DIR__ . "/_files/{$xmlFile}");
         libxml_use_internal_errors(true);
-        $result = $dom->schemaValidate($this->_xsdFile);
+        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $this->_xsdFile);
         libxml_use_internal_errors(false);
-        $this->assertTrue($result);
+        $this->assertEmpty($result, 'Validation failed with errors: ' . join(', ', $result));
     }
 
     /**
@@ -46,15 +52,11 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->load(__DIR__ . "/_files/{$xmlFile}");
         libxml_use_internal_errors(true);
-        $dom->schemaValidate($this->_xsdFile);
-        $errors = libxml_get_errors();
 
-        $actualErrors = [];
-        foreach ($errors as $error) {
-            $actualErrors[] = $error->message;
-        }
+        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $this->_xsdFile);
+
         libxml_use_internal_errors(false);
-        $this->assertEquals($expectedErrors, $actualErrors);
+        $this->assertEquals($expectedErrors, $result);
     }
 
     /**
@@ -66,38 +68,40 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             [
                 'sales_invalid.xml',
                 [
-                    "Element 'section', attribute 'wrongName': The attribute 'wrongName' is not allowed.\n",
-                    "Element 'section': The attribute 'name' is required but missing.\n",
-                    "Element 'wrongGroup': This element is not expected. Expected is ( group ).\n"
+                    "Element 'section', attribute 'wrongName': The attribute 'wrongName' is not allowed.\nLine: 9\n",
+                    "Element 'section': The attribute 'name' is required but missing.\nLine: 9\n",
+                    "Element 'wrongGroup': This element is not expected. Expected is ( group ).\nLine: 10\n"
                 ],
             ],
             [
                 'sales_invalid_duplicates.xml',
                 [
                     "Element 'renderer': Duplicate key-sequence ['r1']" .
-                    " in unique identity-constraint 'uniqueRendererName'.\n",
-                    "Element 'item': Duplicate key-sequence ['i1'] in unique identity-constraint 'uniqueItemName'.\n",
-                    "Element 'group': Duplicate key-sequence ['g1'] in unique identity-constraint 'uniqueGroupName'.\n",
+                        " in unique identity-constraint 'uniqueRendererName'.\nLine: 13\n",
+                    "Element 'item': Duplicate key-sequence ['i1']" .
+                        " in unique identity-constraint 'uniqueItemName'.\nLine: 15\n",
+                    "Element 'group': Duplicate key-sequence ['g1']" .
+                        " in unique identity-constraint 'uniqueGroupName'.\nLine: 17\n",
                     "Element 'section': Duplicate key-sequence ['s1']" .
-                    " in unique identity-constraint 'uniqueSectionName'.\n",
+                        " in unique identity-constraint 'uniqueSectionName'.\nLine: 21\n",
                     "Element 'available_product_type': Duplicate key-sequence ['a1']" .
-                    " in unique identity-constraint 'uniqueProductTypeName'.\n"
+                        " in unique identity-constraint 'uniqueProductTypeName'.\nLine: 28\n"
                 ]
             ],
             [
                 'sales_invalid_without_attributes.xml',
                 [
-                    "Element 'section': The attribute 'name' is required but missing.\n",
-                    "Element 'group': The attribute 'name' is required but missing.\n",
-                    "Element 'item': The attribute 'name' is required but missing.\n",
-                    "Element 'renderer': The attribute 'name' is required but missing.\n",
-                    "Element 'renderer': The attribute 'instance' is required but missing.\n",
-                    "Element 'available_product_type': The attribute 'name' is required but missing.\n"
+                    "Element 'section': The attribute 'name' is required but missing.\nLine: 9\n",
+                    "Element 'group': The attribute 'name' is required but missing.\nLine: 10\n",
+                    "Element 'item': The attribute 'name' is required but missing.\nLine: 11\n",
+                    "Element 'renderer': The attribute 'name' is required but missing.\nLine: 12\n",
+                    "Element 'renderer': The attribute 'instance' is required but missing.\nLine: 12\n",
+                    "Element 'available_product_type': The attribute 'name' is required but missing.\nLine: 17\n"
                 ]
             ],
             [
                 'sales_invalid_root_node.xml',
-                ["Element 'wrong': This element is not expected. Expected is one of ( section, order ).\n"]
+                ["Element 'wrong': This element is not expected. Expected is one of ( section, order ).\nLine: 9\n"]
             ]
         ];
     }

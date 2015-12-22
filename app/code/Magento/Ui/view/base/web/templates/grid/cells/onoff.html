@@ -1,0 +1,24 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="switcher">
+    <input
+            class="admin__control-onoff"
+            type="checkbox"
+            data-bind="
+                staticChecked: $col.selected,
+                value: $row()[$col.indexField],
+                attr: {
+                    id: 'check' + $row()[$col.indexField]
+                }">
+    <label
+        class="switcher-label"
+        data-bind="
+            attr: {
+                for: 'check' + $row()[$col.indexField]
+            },
+            text: $col.getLabel($row()[$col.indexField])"></label>
+</div>

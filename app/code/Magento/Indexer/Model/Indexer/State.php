@@ -26,15 +26,15 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Indexer\Model\Resource\Indexer\State $resource
-     * @param \Magento\Indexer\Model\Resource\Indexer\State\Collection $resourceCollection
+     * @param \Magento\Indexer\Model\ResourceModel\Indexer\State $resource
+     * @param \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Indexer\Model\Resource\Indexer\State $resource,
-        \Magento\Indexer\Model\Resource\Indexer\State\Collection $resourceCollection,
+        \Magento\Indexer\Model\ResourceModel\Indexer\State $resource,
+        \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $resourceCollection,
         array $data = []
     ) {
         if (!isset($data['status'])) {

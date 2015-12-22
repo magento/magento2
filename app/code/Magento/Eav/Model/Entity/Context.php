@@ -17,7 +17,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
@@ -32,7 +32,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $localeFormat;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper
+     * @var \Magento\Eav\Model\ResourceModel\Helper
      */
     protected $resourceHelper;
 
@@ -42,34 +42,34 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $universalFactory;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\TransactionManagerInterface
+     * @var \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface
      */
     protected $transactionManager;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor
+     * @var \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor
      */
     protected $objectRelationProcessor;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Attribute\Set $attrSetEntity
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager
-     * @param \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor $objectRelationProcessor
+     * @param \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface $transactionManager
+     * @param \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor $objectRelationProcessor
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Model\Resource\Db\TransactionManagerInterface $transactionManager,
-        \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor $objectRelationProcessor
+        \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface $transactionManager,
+        \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor $objectRelationProcessor
     ) {
         $this->eavConfig = $eavConfig;
         $this->resource = $resource;
@@ -90,7 +90,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\App\Resource
+     * @return \Magento\Framework\App\ResourceConnection
      */
     public function getResource()
     {
@@ -114,7 +114,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Eav\Model\Resource\Helper
+     * @return \Magento\Eav\Model\ResourceModel\Helper
      */
     public function getResourceHelper()
     {
@@ -130,7 +130,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\Model\Resource\Db\ObjectRelationProcessor
+     * @return \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor
      */
     public function getObjectRelationProcessor()
     {
@@ -138,7 +138,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\Model\Resource\Db\TransactionManagerInterface
+     * @return \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface
      */
     public function getTransactionManager()
     {

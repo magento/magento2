@@ -6,39 +6,61 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\Entity\MetadataPool;
 
+/**
+ * Class Repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
 {
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\OptionFactory
+     */
+    protected $optionFactory;
+
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Option
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option
      */
     protected $optionResource;
 
     /**
-     * @var Converter
+     * @var MetadataPool
      */
-    protected $converter;
+    protected $metadataPool;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Resource\Product\Option $optionResource
-     * @param Converter $converter
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource
+     * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Resource\Product\Option $optionResource,
-        \Magento\Catalog\Model\Product\Option\Converter $converter
+        \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource,
+        \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory,
+        MetadataPool $metadataPool
     ) {
         $this->productRepository = $productRepository;
         $this->optionResource = $optionResource;
-        $this->converter = $converter;
+        $this->optionFactory = $optionFactory;
+        $this->collectionFactory = $collectionFactory;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -47,7 +69,19 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     public function getList($sku)
     {
         $product = $this->productRepository->get($sku, true);
-        return $product->getOptions();
+        return $product->getOptions() ?: [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductOptions(ProductInterface $product, $requiredOnly = false)
+    {
+        return $this->collectionFactory->create()->getProductOptions(
+            $product->getEntityId(),
+            $product->getStoreId(),
+            $requiredOnly
+        );
     }
 
     /**
@@ -75,48 +109,27 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     /**
      * {@inheritdoc}
      */
+    public function duplicate(
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        \Magento\Catalog\Api\Data\ProductInterface $duplicate
+    ) {
+        return $this->optionResource->duplicate(
+            $this->optionFactory->create([]),
+            $product->getId(),
+            $duplicate->getId()
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
-        $sku = $option->getProductSku();
-        $product = $this->productRepository->get($sku, true);
-        $optionData = $this->converter->toArray($option);
-        if ($option->getOptionId()) {
-            if (!$product->getOptionById($option->getOptionId())) {
-                throw new NoSuchEntityException();
-            }
-            $originalValues = $product->getOptionById($option->getOptionId())->getValues();
-            if (!empty($optionData['values'])) {
-                $optionData['values'] = $this->markRemovedValues($optionData['values'], $originalValues);
-            }
-        }
-
-        unset($optionData['product_sku']);
-
-        $product->setProductOptions([$optionData]);
-        $existingOptions = $product->getOptions();
-        try {
-            $this->productRepository->save($product, true);
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save product option'));
-        }
-
-        $product = $this->productRepository->get($sku, true);
-        if (!$option->getOptionId()) {
-            $currentOptions = $product->getOptions();
-            if ($existingOptions == null) {
-                $newID = array_keys($currentOptions);
-            } else {
-                $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
-            }
-
-            if (empty($newID)) {
-                throw new CouldNotSaveException(__('Could not save product option'));
-            }
-            $newID = current($newID);
-        } else {
-            $newID = $option->getOptionId();
-        }
-        $option = $this->get($sku, $newID);
+        $product = $this->productRepository->get($option->getProductSku());
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $option->setData('product_id', $product->getData($metadata->getLinkField()));
+        $option->setOptionId(null);
+        $option->save();
         return $option;
     }
 

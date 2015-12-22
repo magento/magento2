@@ -5,12 +5,14 @@
 define([
     'jquery',
     'mage/template',
-    'jquery/ui'
+    'jquery/ui',
+    'Magento_Ui/js/modal/modal'
 ], function ($, mageTemplate) {
     'use strict';
 
-    $.widget('mage.systemMessageDialog', $.ui.dialog, {
+    $.widget('mage.systemMessageDialog', $.mage.modal, {
         options: {
+            modalClass: 'modal-system-messages',
             systemMessageTemplate:
                 '<% _.each(data.items, function(item) { %>' +
                     '<li class="message message-warning <% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
@@ -19,8 +21,14 @@ define([
                 '<% }); %>'
         },
 
-        open: function (severity) {
+        _create: function() {
+            this.options.title = $('#message-system-all').attr('title');
+            this._super();
+        },
+
+        openModal: function (severity) {
             var superMethod = $.proxy(this._super, this);
+            //this.modal.options
 
             $.ajax({
                 url: this.options.ajaxUrl,
@@ -47,16 +55,19 @@ define([
             }, this));
 
             return this;
+        },
+        closeModal: function () {
+            this._super();
         }
     });
 
     $(document).ready(function () {
         $('#system_messages .message-system-short .error').on('click', function () {
-            $('#message-system-all').systemMessageDialog('open', 1);
+            $('#message-system-all').systemMessageDialog('openModal', 1);
         });
 
         $('#system_messages .message-system-short .warning').on('click', function () {
-            $('#message-system-all').systemMessageDialog('open', 2);
+            $('#message-system-all').systemMessageDialog('openModal', 2);
         });
     });
 

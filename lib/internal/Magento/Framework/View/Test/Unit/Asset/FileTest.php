@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use \Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\File;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {

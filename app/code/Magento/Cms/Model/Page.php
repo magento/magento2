@@ -11,8 +11,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Cms Page Model
  *
- * @method \Magento\Cms\Model\Resource\Page _getResource()
- * @method \Magento\Cms\Model\Resource\Page getResource()
+ * @method \Magento\Cms\Model\ResourceModel\Page _getResource()
+ * @method \Magento\Cms\Model\ResourceModel\Page getResource()
  */
 class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
 {
@@ -52,7 +52,7 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Resource\Page');
+        $this->_init('Magento\Cms\Model\ResourceModel\Page');
     }
 
     /**

@@ -20,6 +20,8 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -47,6 +49,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_themeCollection;
 
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrar
+     */
+    protected static $_componentRegistrar;
+
     public static function setUpBeforeClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -54,10 +61,12 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
             ['preferences' => ['Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data']]
         );
 
+        self::$_componentRegistrar = $objectManager->get('Magento\Framework\Component\ComponentRegistrar');
+
         /** @var $fallbackPool \Magento\Framework\View\Design\Fallback\RulePool */
         $fallbackPool = $objectManager->get('Magento\Framework\View\Design\Fallback\RulePool');
         self::$_fallbackRule = $fallbackPool->getRule(
-            \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE
+            $fallbackPool::TYPE_STATIC_FILE
         );
 
         self::$_viewFilesFallback = $objectManager->get(
@@ -67,7 +76,6 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 
         // Themes to be checked
         self::$_themeCollection = $objectManager->get('Magento\Theme\Model\Theme\Collection');
-        self::$_themeCollection->addDefaultPattern('*');
 
         // Compose list of locales, needed to be checked for themes
         self::$_checkThemeLocales = [];
@@ -110,7 +118,10 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
         $localePlaceholder = '<locale_placeholder>';
         $params = ['area' => $theme->getArea(), 'theme' => $theme, 'locale' => $localePlaceholder];
         $patternDirs = self::$_fallbackRule->getPatternDirs($params);
-        $themePath = '/' . $theme->getFullPath() . '/';
+        $themePath =  self::$_componentRegistrar->getPath(
+            \Magento\Framework\Component\ComponentRegistrar::THEME,
+            $theme->getFullPath()
+        );
         foreach ($patternDirs as $patternDir) {
             $patternPath = $patternDir . '/';
             if ((strpos($patternPath, $themePath) !== false) // It is theme's directory
@@ -218,25 +229,19 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static function _getFilesToProcess()
     {
         $result = [];
-        $rootDir = self::_getRootDir();
-        foreach (['app/code', 'app/design'] as $subDir) {
+        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
+        $dirs = array_merge(
+            $componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+            $componentRegistrar->getPaths(ComponentRegistrar::THEME)
+        );
+        foreach ($dirs as $dir) {
             $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($rootDir . "/{$subDir}", \RecursiveDirectoryIterator::SKIP_DOTS)
+                new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS)
             );
             $result = array_merge($result, iterator_to_array($iterator));
         }
 
         return $result;
-    }
-
-    /**
-     * Return application root directory
-     *
-     * @return string
-     */
-    protected static function _getRootDir()
-    {
-        return realpath(__DIR__ . '/../../../../../../../');
     }
 
     /**
@@ -250,7 +255,14 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static function _getArea($file)
     {
         $file = str_replace('\\', '/', $file);
-        $areaPatterns = ['#app/code/[^/]+/[^/]+/view/([^/]+)/#S', '#app/design/([^/]+)/#S'];
+        $areaPatterns = [];
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+            $areaPatterns[] = '#' . $themeDir . '/([^/]+)/#S';
+        }
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $areaPatterns[] = '#' . $moduleDir . '/view/([^/]+)/#S';
+        }
         foreach ($areaPatterns as $pattern) {
             if (preg_match($pattern, $file, $matches)) {
                 return $matches[1];

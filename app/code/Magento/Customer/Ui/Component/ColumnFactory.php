@@ -30,7 +30,7 @@ class ColumnFactory
         'text' => 'text',
         'boolean' => 'select',
         'select' => 'select',
-        'multiselect' => 'text',
+        'multiselect' => 'select',
         'date' => 'date',
     ];
 
@@ -60,7 +60,12 @@ class ColumnFactory
             'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
             'align' => 'left',
             'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
+            'component' => $this->getJsComponent($this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])),
         ], $config);
+        if ($attributeData[AttributeMetadata::FRONTEND_INPUT] == 'date') {
+            $config['dateFormat'] = 'MMM d, y';
+            $config['timezone'] = false;
+        }
         if (count($attributeData[AttributeMetadata::OPTIONS]) && !isset($config[AttributeMetadata::OPTIONS])) {
             $config[AttributeMetadata::OPTIONS] = $attributeData[AttributeMetadata::OPTIONS];
         }

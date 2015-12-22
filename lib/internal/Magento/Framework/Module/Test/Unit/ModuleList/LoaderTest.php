@@ -8,9 +8,6 @@ namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
 use \Magento\Framework\Module\ModuleList\Loader;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Xml\Parser;
-
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -19,16 +16,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      * @var string
      */
     private static $sampleXml = '<?xml version="1.0"?><test></test>';
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $filesystem;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $dir;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -55,25 +42,38 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     private $loader;
 
+    /**
+     * @var array
+     */
+    private $loadFixture;
+
     protected function setUp()
     {
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->dir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
-        $this->filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::MODULES)
-            ->willReturn($this->dir);
         $this->converter = $this->getMock('Magento\Framework\Module\Declaration\Converter\Dom', [], [], '', false);
         $this->parser = $this->getMock('Magento\Framework\Xml\Parser', [], [], '', false);
         $this->parser->expects($this->once())->method('initErrorHandler');
-        $this->registry = $this->getMock('Magento\Framework\Module\ModuleRegistryInterface', [], [], '', false, false);
+        $this->registry = $this->getMock(
+            'Magento\Framework\Component\ComponentRegistrarInterface',
+            [],
+            [],
+            '',
+            false,
+            false
+        );
         $this->driver = $this->getMock('Magento\Framework\Filesystem\DriverInterface', [], [], '', false, false);
-        $this->loader = new Loader($this->filesystem, $this->converter, $this->parser, $this->registry, $this->driver);
+        $this->loader = new Loader($this->converter, $this->parser, $this->registry, $this->driver);
     }
 
-    public function testLoad()
+    /**
+     * @param $paths
+     * @dataProvider testLoadDataProvider
+     */
+    public function testLoad($paths)
     {
-        $fixtures = [
+        $this->registry->expects($this->once())
+            ->method('getPaths')
+            ->willReturn($paths);
+        $this->loadFixture = [
             'a' => ['name' => 'a', 'sequence' => []],    // a is on its own
             'b' => ['name' => 'b', 'sequence' => ['d']], // b is after d
             'c' => ['name' => 'c', 'sequence' => ['e']], // c is after e
@@ -81,19 +81,15 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             'e' => ['name' => 'e', 'sequence' => ['a']], // e is after a
             // so expected sequence is a -> e -> c -> d -> b
         ];
-        $this->dir->expects($this->once())->method('search')->willReturn(['a', 'b', 'c']);
-        $this->registry->expects($this->once())->method('getModulePaths')->willReturn(['/path/to/d', '/path/to/e']);
-        $this->dir->expects($this->exactly(3))->method('readFile')->will($this->returnValueMap([
-            ['a', null, null, self::$sampleXml],
-            ['b', null, null, self::$sampleXml],
-            ['c', null, null, self::$sampleXml],
-        ]));
-        $this->driver->expects($this->exactly(2))->method('fileGetContents')->will($this->returnValueMap([
+        $this->driver->expects($this->exactly(5))->method('fileGetContents')->will($this->returnValueMap([
+            ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
+            ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
+            ['/path/to/c/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/d/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/e/etc/module.xml', null, null, self::$sampleXml],
         ]));
         $index = 0;
-        foreach ($fixtures as $name => $fixture) {
+        foreach ($this->loadFixture as $name => $fixture) {
             $this->converter->expects($this->at($index++))->method('convert')->willReturn([$name => $fixture]);
         }
         $this->parser->expects($this->atLeastOnce())->method('loadXML')
@@ -101,9 +97,26 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->parser->expects($this->atLeastOnce())->method('getDom');
         $result = $this->loader->load();
         $this->assertSame(['a', 'e', 'c', 'd', 'b'], array_keys($result));
-        foreach ($fixtures as $name => $fixture) {
+        foreach ($this->loadFixture as $name => $fixture) {
             $this->assertSame($fixture, $result[$name]);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function testLoadDataProvider()
+    {
+        return [
+            'Ordered modules list returned by registrar' =>
+                [[
+                    '/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e'
+                ]],
+            'UnOrdered modules list returned by registrar' =>
+                [[
+                    '/path/to/b', '/path/to/a', '/path/to/c', '/path/to/e', '/path/to/d'
+                ]],
+        ];
     }
 
     public function testLoadExclude()
@@ -115,16 +128,15 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             'd' => ['name' => 'd', 'sequence' => ['a']], // d is after a
             // exclude d, so expected sequence is a -> c -> b
         ];
-        $this->dir->expects($this->once())->method('search')->willReturn(['a', 'b', 'c', 'd']);
-        $this->dir->expects($this->exactly(4))->method('readFile')->will($this->returnValueMap([
-            ['a', null, null, self::$sampleXml],
-            ['b', null, null, self::$sampleXml],
-            ['c', null, null, self::$sampleXml],
-            ['d', null, null, self::$sampleXml],
-        ]));
         $this->registry->expects($this->once())
-            ->method('getModulePaths')
-            ->willReturn([]);
+            ->method('getPaths')
+            ->willReturn(['/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d']);
+        $this->driver->expects($this->exactly(4))->method('fileGetContents')->will($this->returnValueMap([
+            ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
+            ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
+            ['/path/to/c/etc/module.xml', null, null, self::$sampleXml],
+            ['/path/to/d/etc/module.xml', null, null, self::$sampleXml],
+        ]));
         $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
         $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
         $this->converter->expects($this->at(2))->method('convert')->willReturn(['c' => $fixture['c']]);
@@ -148,14 +160,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             'a' => ['name' => 'a', 'sequence' => ['b']],
             'b' => ['name' => 'b', 'sequence' => ['a']],
         ];
-        $this->dir->expects($this->once())->method('search')->willReturn(['a', 'b']);
-        $this->dir->expects($this->exactly(2))->method('readFile')->will($this->returnValueMap([
-            ['a', null, null, self::$sampleXml],
-            ['b', null, null, self::$sampleXml],
-        ]));
         $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
         $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
-        $this->registry->expects($this->once())->method('getModulePaths')->willReturn([]);
+        $this->registry->expects($this->once())->method('getPaths')->willReturn(['/path/to/a', '/path/to/b']);
+        $this->driver->expects($this->exactly(2))->method('fileGetContents')->will($this->returnValueMap([
+            ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
+            ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
+        ]));
         $this->loader->load();
     }
 }

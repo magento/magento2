@@ -73,6 +73,13 @@ class AttributeMerger
     private $directoryHelper;
 
     /**
+     * List of codes of countries that must be shown on the top of country list
+     *
+     * @var array
+     */
+    private $topCountryCodes;
+
+    /**
      * @param AddressHelper $addressHelper
      * @param Session $customerSession
      * @param CustomerRepository $customerRepository
@@ -88,6 +95,7 @@ class AttributeMerger
         $this->customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
         $this->directoryHelper = $directoryHelper;
+        $this->topCountryCodes = $directoryHelper->getTopCountryCodes();
     }
 
     /**
@@ -177,7 +185,7 @@ class AttributeMerger
                 ? $additionalConfig['sortOrder']
                 : $attributeConfig['sortOrder'],
             'validation' => $this->mergeConfigurationNode('validation', $additionalConfig, $attributeConfig),
-            'options' => isset($attributeConfig['options']) ? $attributeConfig['options'] : [],
+            'options' => $this->getFieldOptions($attributeCode, $attributeConfig),
             'filterBy' => isset($additionalConfig['filterBy']) ? $additionalConfig['filterBy'] : null,
             'customEntry' => isset($additionalConfig['customEntry']) ? $additionalConfig['customEntry'] : null,
             'visible' => isset($additionalConfig['visible']) ? $additionalConfig['visible'] : true,
@@ -185,6 +193,8 @@ class AttributeMerger
 
         if (isset($attributeConfig['value']) && $attributeConfig['value'] != null) {
             $element['value'] = $attributeConfig['value'];
+        } elseif (isset($attributeConfig['default']) && $attributeConfig['default'] != null) {
+            $element['value'] = $attributeConfig['default'];
         } else {
             $defaultValue = $this->getDefaultValue($attributeCode);
             if (null !== $defaultValue) {
@@ -246,7 +256,7 @@ class AttributeMerger
         unset($attributeConfig['validation']['required-entry']);
         for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
             $isFirstLine = $lineIndex === 0;
-            $lines[] = [
+            $line = [
                 'component' => 'Magento_Ui/js/form/element/abstract',
                 'config' => [
                     // customScope is used to group elements within a single form e.g. they can be validated separately
@@ -263,7 +273,12 @@ class AttributeMerger
                     )
                     : $attributeConfig['validation'],
                 'additionalClasses' => $isFirstLine ? : 'additional'
+
             ];
+            if ($isFirstLine && isset($attributeConfig['default']) && $attributeConfig['default'] != null) {
+                $line['value'] = $attributeConfig['default'];
+            }
+            $lines[] = $line;
         }
         return [
             'component' => 'Magento_Ui/js/form/components/group',
@@ -317,5 +332,47 @@ class AttributeMerger
             }
         }
         return $this->customer;
+    }
+
+    /**
+     * Retrieve field options from attribute configuration
+     *
+     * @param string $attributeCode
+     * @param array $attributeConfig
+     * @return array
+     */
+    protected function getFieldOptions($attributeCode, array $attributeConfig)
+    {
+        $options = isset($attributeConfig['options']) ? $attributeConfig['options'] : [];
+        return ($attributeCode == 'country_id') ? $this->orderCountryOptions($options) : $options;
+    }
+
+    /**
+     * Order country options. Move top countries to the beginning of the list.
+     *
+     * @param array $countryOptions
+     * @return array
+     */
+    protected function orderCountryOptions(array $countryOptions)
+    {
+        if (empty($this->topCountryCodes)) {
+            return $countryOptions;
+        }
+
+        $headOptions = [];
+        $tailOptions = [[
+            'value' => 'delimiter',
+            'label' => '──────────',
+            'disabled' => true,
+        ]];
+        foreach ($countryOptions as $countryOption) {
+            if (empty($countryOption['value']) || in_array($countryOption['value'], $this->topCountryCodes)) {
+                array_push($headOptions, $countryOption);
+            } else {
+                array_push($tailOptions, $countryOption);
+            }
+
+        }
+        return array_merge($headOptions, $tailOptions);
     }
 }

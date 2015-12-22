@@ -132,52 +132,6 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedCustomerGroups, $this->getPropertyValue($this->tierPrice, 'customerGroups'));
     }
 
-    public function testIsValidInitCall()
-    {
-        $tierPrice = $this->tierPrice = $this->getMock(
-            'Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\GroupPrice',
-            ['init', '_clearMessages'],
-            [
-                $this->groupRepository,
-                $this->searchCriteriaBuilder,
-                $this->storeResolver,
-            ],
-            ''
-        );
-        $tierPrice->expects($this->once())->method('_clearMessages');
-        $this->setPropertyValue($tierPrice, 'customerGroups', false);
-        $tierPrice->expects($this->once())->method('init');
-
-        $tierPrice->isValid([]);
-    }
-
-    /**
-     * @dataProvider isValidResultFalseDataProvider
-     *
-     * @param array $value
-     * @param bool  $hasEmptyColumns
-     * @param array $customerGroups
-     */
-    public function testIsValidResultFalse($value, $hasEmptyColumns, $customerGroups)
-    {
-        $tierPrice = $this->getMock(
-            'Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\GroupPrice',
-            ['init', '_clearMessages', 'isValidValueAndLength', 'hasEmptyColumns'],
-            [
-                $this->groupRepository,
-                $this->searchCriteriaBuilder,
-                $this->storeResolver,
-            ],
-            ''
-        );
-        $tierPrice->expects($this->once())->method('isValidValueAndLength')->willReturn(true);
-        $tierPrice->expects($this->any())->method('hasEmptyColumns')->willReturn($hasEmptyColumns);
-        $this->setPropertyValue($tierPrice, 'customerGroups', $customerGroups);
-
-        $result = $tierPrice->isValid($value);
-        $this->assertFalse($result);
-    }
-
     public function testIsValidResultTrue()
     {
         $this->tierPrice->expects($this->once())->method('isValidValueAndLength')->willReturn(false);
@@ -203,10 +157,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             [
                 '\Magento\Framework\Json\Helper\Data',
                 '\Magento\ImportExport\Helper\Data',
-                '\Magento\ImportExport\Model\Resource\Import\Data',
+                '\Magento\ImportExport\Model\ResourceModel\Import\Data',
                 '\Magento\Eav\Model\Config',
-                '\Magento\Framework\App\Resource',
-                '\Magento\ImportExport\Model\Resource\Helper',
+                '\Magento\Framework\App\ResourceConnection',
+                '\Magento\ImportExport\Model\ResourceModel\Helper',
                 '\Magento\Framework\Stdlib\StringUtils',
                 'ProcessingErrorAggregatorInterface',
             ],

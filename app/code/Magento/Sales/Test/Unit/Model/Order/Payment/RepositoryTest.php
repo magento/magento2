@@ -53,7 +53,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->metaData = $this->getMock(
-            'Magento\Sales\Model\Resource\Metadata',
+            'Magento\Sales\Model\ResourceModel\Metadata',
             [],
             [],
             '',
@@ -74,14 +74,14 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collection = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Payment\Collection',
             [],
             [],
             '',
             false
         );
         $this->paymentResource = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Payment',
+            'Magento\Sales\Model\ResourceModel\Order\Payment',
             [],
             [],
             '',
@@ -139,9 +139,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $paymentId = 1;
         $payment = $this->mockPayment($paymentId);
+        $payment->expects($this->any())->method('load')->with($paymentId)->willReturn($payment);
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($payment);
-        $this->metaData->expects($this->once())->method('getMapper')->willReturn($this->paymentResource);
-        $this->paymentResource->expects($this->once())->method('load')->with($payment, $paymentId);
         $this->assertSame($payment, $this->repository->get($paymentId));
     }
 
@@ -164,9 +163,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $paymentId = 1;
         $payment = $this->mockPayment(null);
+        $payment->expects($this->any())->method('load')->with($paymentId)->willReturn($payment);
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($payment);
-        $this->metaData->expects($this->once())->method('getMapper')->willReturn($this->paymentResource);
-        $this->paymentResource->expects($this->once())->method('load')->with($payment, $paymentId);
         $this->assertSame($payment, $this->repository->get($paymentId));
     }
 
@@ -187,6 +185,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         if ($id !== false) {
             $payment->expects($this->once())->method('getId')->willReturn($id);
         }

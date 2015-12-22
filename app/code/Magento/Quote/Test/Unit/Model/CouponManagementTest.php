@@ -40,7 +40,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->quoteMock = $this->getMock(
             '\Magento\Quote\Model\Quote',

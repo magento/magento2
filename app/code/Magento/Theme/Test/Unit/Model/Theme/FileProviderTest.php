@@ -15,24 +15,24 @@ class FileProviderTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\File\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\File\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $file;
 
     protected function setUp()
     {
-        $fileFactory = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\File\CollectionFactory')
+        $fileFactory = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->file = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\File\Collection')
+        $this->file = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\File\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $fileFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->file);
 
-        /** @var $fileFactory \Magento\Theme\Model\Resource\Theme\File\CollectionFactory */
+        /** @var $fileFactory \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory */
         $this->model = new FileProvider($fileFactory);
     }
 

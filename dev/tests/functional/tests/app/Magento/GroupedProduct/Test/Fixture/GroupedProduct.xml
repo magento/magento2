@@ -11,7 +11,7 @@
              type="eav"
              entity_type="catalog_product"
              product_type="grouped"
-             collection="Magento\Catalog\Model\Resource\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
              identifier="sku"
              repository_class="Magento\GroupedProduct\Test\Repository\GroupedProduct"
              handler_interface="Magento\GroupedProduct\Test\Handler\GroupedProduct\GroupedProductInterface"

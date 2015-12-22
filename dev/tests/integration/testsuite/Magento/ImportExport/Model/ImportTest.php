@@ -80,9 +80,9 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportSource()
     {
-        /** @var $customersCollection \Magento\Customer\Model\Resource\Customer\Collection */
+        /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Customer\Collection'
+            'Magento\Customer\Model\ResourceModel\Customer\Collection'
         );
 
         $existCustomersCount = count($customersCollection->load());

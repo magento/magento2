@@ -40,7 +40,7 @@ class InstallData implements InstallDataInterface
          * Install grouped product link type
          */
         $data = [
-            'link_type_id' => \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED,
+            'link_type_id' => \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED,
             'code' => 'super',
         ];
         $setup->getConnection()
@@ -56,19 +56,19 @@ class InstallData implements InstallDataInterface
             )
             ->where(
                 "c.link_type_id=?",
-                \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+                \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
             );
         $result = $setup->getConnection()->fetchAll($select);
 
         if (!$result) {
             $data = [
                 [
-                    'link_type_id' => \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED,
+                    'link_type_id' => \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED,
                     'product_link_attribute_code' => 'position',
                     'data_type' => 'int',
                 ],
                 [
-                    'link_type_id' => \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED,
+                    'link_type_id' => \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED,
                     'product_link_attribute_code' => 'qty',
                     'data_type' => 'decimal'
                 ],

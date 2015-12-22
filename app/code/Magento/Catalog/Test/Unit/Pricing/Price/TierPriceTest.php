@@ -223,7 +223,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         $attributeMock = $this->getMock('Magento\Eav\Model\Entity\Attribute\AbstractAttribute', [], [], '', false);
         $attributeMock->expects($this->once())->method('getBackend')->will($this->returnValue($backendMock));
 
-        $productResource = $this->getMock('Magento\Catalog\Model\Resource\Product', [], [], '', false);
+        $productResource = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $productResource->expects($this->once())->method('getAttribute')->with(TierPrice::PRICE_CODE)
             ->will($this->returnValue($attributeMock));
 

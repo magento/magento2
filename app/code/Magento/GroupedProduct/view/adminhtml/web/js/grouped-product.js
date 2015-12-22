@@ -132,7 +132,7 @@ define([
 
                 if (!target.is('input')) {
                     target.closest('[data-role=row]')
-                        .find('[data-column=entity_id] input')
+                        .find('[data-column=entity_ids] input')
                         .prop('checked', function (element, value) {
                             return !value;
                         })
@@ -142,7 +142,7 @@ define([
 
             popup.on(
                 'change',
-                '[data-role=row] [data-column=entity_id] input',
+                '[data-role=row] [data-column=entity_ids] input',
                 $.proxy(function (event) {
                     var element = $(event.target),
                         product = {};
@@ -175,12 +175,12 @@ define([
                         return $(element).val();
                     }).toArray();
                     ajaxSettings.data.filter = $.extend(ajaxSettings.data.filter || {}, {
-                        'entity_id': ids
+                        'entity_ids': ids
                     });
                 })
                 .on('gridajax', function (event, ajaxRequest) {
                     ajaxRequest.done(function () {
-                        popup.find('[data-role=row] [data-column=entity_id] input')
+                        popup.find('[data-role=row] [data-column=entity_ids] input')
                             .each(function (index, element) {
                                 var $element = $(element);
                                 $element.prop('checked', !!selectedProductList[$element.val()]);

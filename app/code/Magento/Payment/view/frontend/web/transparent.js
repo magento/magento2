@@ -6,9 +6,10 @@
 define([
     "jquery",
     "mage/template",
+    'Magento_Ui/js/modal/alert',
     "jquery/ui",
     "Magento_Payment/js/model/credit-card-validation/validator"
-], function($, mageTemplate){
+], function($, mageTemplate, alert){
     'use strict';
 
     $.widget('mage.transparent', {
@@ -45,6 +46,11 @@ define([
                     .off('click')
                     .on('click', $.proxy(this._placeOrderHandler, this));
             }
+
+            this.element.validation();
+            $('[data-container="' + this.options.gateway + '-cc-number"]').on('focusout', function () {
+                $(this).valid();
+            });
         },
 
         /**
@@ -101,10 +107,14 @@ define([
                     } else {
                         msg = response.error_messages;
                         if (typeof (msg) === 'object') {
-                            alert(msg.join("\n"));
+                            alert({
+                                content: msg.join("\n")
+                            });
                         }
                         if (msg) {
-                            alert(msg);
+                            alert({
+                                content: msg
+                            });
                         }
                     }
                 }

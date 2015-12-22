@@ -13,7 +13,9 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
     private $context;
 
     /**
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @codingStandardsIgnoreStart
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @codingStandardsIgnoreEnd
      */
     private $agreementCollection;
 
@@ -85,7 +87,7 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMockForAbstractClass('Magento\Framework\App\CacheInterface', [], '', false);
         $this->context->expects($this->once())->method('getCache')->willReturn($this->cache);
         $this->agreementCollection = $this->getMockBuilder(
-            'Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory'
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory'
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->helper = $this->getMock('Magento\Paypal\Helper\Data', [], [], '', false);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -102,7 +104,13 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBillingAgreements()
     {
-        $collection = $this->getMock('Magento\Paypal\Model\Resource\Billing\Agreement\Collection', [], [], '', false);
+        $collection = $this->getMock(
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection',
+            [],
+            [],
+            '',
+            false
+        );
         $this->agreementCollection->expects($this->once())->method('create')->willReturn($collection);
         $collection->expects($this->once())->method('addFieldToFilter')->willReturn($collection);
         $collection->expects($this->once())->method('setOrder')->willReturn($collection);

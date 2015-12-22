@@ -15,7 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
-use Magento\Wishlist\Model\Resource\Item\Option\Collection as OptionCollection;
+use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

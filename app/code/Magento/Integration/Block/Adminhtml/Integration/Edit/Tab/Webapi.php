@@ -26,7 +26,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Acl resource provider
      *
-     * @var \Magento\Framework\Acl\Resource\ProviderInterface
+     * @var \Magento\Framework\Acl\AclResource\ProviderInterface
      */
     protected $aclResourceProvider;
 
@@ -43,7 +43,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider
+     * @param \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param array $data
@@ -55,7 +55,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
+        \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
         array $data = []

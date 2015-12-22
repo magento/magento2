@@ -10,7 +10,7 @@
              module="Magento_Sitemap"
              type="flat"
              entity_type="sitemap"
-             collection="Magento\Sitemap\Model\Resource\Sitemap\Collection"
+             collection="Magento\Sitemap\Model\ResourceModel\Sitemap\Collection"
              repository_class="Magento\Sitemap\Test\Repository\Sitemap"
              handler_interface="Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface"
              class="Magento\Sitemap\Test\Fixture\Sitemap">

@@ -9,7 +9,6 @@ namespace Magento\User\Block\Role\Tab;
 /**
  * Rolesedit Tab Display Block.
  *
- * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -28,7 +27,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Rules collection factory
      *
-     * @var \Magento\Authorization\Model\Resource\Rules\CollectionFactory
+     * @var \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory
      */
     protected $_rulesCollectionFactory;
 
@@ -42,7 +41,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * Acl resource provider
      *
-     * @var \Magento\Framework\Acl\Resource\ProviderInterface
+     * @var \Magento\Framework\Acl\AclResource\ProviderInterface
      */
     protected $_aclResourceProvider;
 
@@ -52,18 +51,18 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
+     * @param \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever
-     * @param \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider
+     * @param \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever,
-        \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
+        \Magento\Framework\Acl\RootResource $rootResource,
+        \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory,
+        \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         array $data = []
     ) {

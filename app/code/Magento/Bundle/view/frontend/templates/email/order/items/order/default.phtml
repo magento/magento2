@@ -29,7 +29,7 @@
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
             <tr class="bundle-option-label">
                 <td colspan="3">
-                    <strong><em><?= $attributes['option_label'] ?></em></strong>
+                    <strong><em><?= /* @escapeNotVerified */  $attributes['option_label'] ?></em></strong>
                 </td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
@@ -39,13 +39,13 @@
         <tr class="bundle-item bundle-parent">
             <td class="item-info">
                 <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-                <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+                <p class="sku"><?= /* @escapeNotVerified */  __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
             </td>
             <td class="item-qty">
-                <?= $_item->getQtyOrdered() * 1 ?>
+                <?= /* @escapeNotVerified */  $_item->getQtyOrdered() * 1 ?>
             </td>
             <td class="item-price">
-                <?= $block->getItemPrice($_item); ?>
+                <?= /* @escapeNotVerified */  $block->getItemPrice($_item); ?>
             </td>
         </tr>
     <?php else: ?>
@@ -64,8 +64,8 @@
             <?php if ($block->getItemOptions()): ?>
             <dl>
                 <?php foreach ($block->getItemOptions() as $option): ?>
-                <dt><strong><em><?= $option['label'] ?></em></strong></dt>
-                            <dd><?= $option['value'] ?></dd>
+                <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
+                            <dd><?= /* @escapeNotVerified */  $option['value'] ?></dd>
                 <?php endforeach; ?>
             </dl>
             <?php endif; ?>
@@ -73,10 +73,10 @@
                 <table class="message-gift">
                     <tr>
                         <td>
-                            <h3><?= __('Gift Message') ?></h3>
-                            <strong><?= __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-                            <br /><strong><?= __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                            <br /><strong><?= __('Message:'); ?></strong>
+                            <h3><?= /* @escapeNotVerified */  __('Gift Message') ?></h3>
+                            <strong><?= /* @escapeNotVerified */  __('From:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                            <br /><strong><?= /* @escapeNotVerified */  __('To:'); ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                            <br /><strong><?= /* @escapeNotVerified */  __('Message:'); ?></strong>
                             <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
                         </td>
                     </tr>

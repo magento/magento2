@@ -9,11 +9,12 @@ namespace Magento\CatalogInventory\Observer;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Catalog inventory module observer
  */
-class RefundOrderInventoryObserver
+class RefundOrderInventoryObserver implements ObserverInterface
 {
     /**
      * @var StockConfigurationInterface
@@ -59,7 +60,7 @@ class RefundOrderInventoryObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         /* @var $creditmemo \Magento\Sales\Model\Order\Creditmemo */
         $creditmemo = $observer->getEvent()->getCreditmemo();

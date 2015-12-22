@@ -273,7 +273,7 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
     /**
      * Get attribute model associated with filter
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributeModel()
@@ -371,7 +371,7 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
     /**
      * Check whether specified attribute can be used in LN
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return int
      */
     protected function getAttributeIsFilterable($attribute)

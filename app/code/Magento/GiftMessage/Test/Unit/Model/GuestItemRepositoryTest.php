@@ -69,7 +69,7 @@ class GuestItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->messageFactoryMock = $this->getMock(
             'Magento\GiftMessage\Model\MessageFactory',
             [
@@ -82,7 +82,7 @@ class GuestItemRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->messageMock = $this->getMock('Magento\GiftMessage\Model\Message', [], [], '', false);
         $this->quoteItemMock = $this->getMock(
-            '\Magento\Qote\Model\Quote\Item',
+            '\Magento\Quote\Model\Quote\Item',
             [
                 'getGiftMessageId',
                 '__wakeup'
@@ -219,6 +219,7 @@ class GuestItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setMessage')
             ->with($this->quoteMock, 'quote_item', $this->messageMock, $itemId)
             ->will($this->returnValue($this->giftMessageManagerMock));
+        $this->messageMock->expects($this->once())->method('getMessage')->willReturn('message');
 
         $this->assertTrue($this->itemRepository->save($this->cartId, $this->messageMock, $itemId));
     }

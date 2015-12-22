@@ -61,7 +61,7 @@ class CheckoutTotalsJsLayoutDataProvider implements JsLayoutDataProviderInterfac
     protected function getTotalsConfig()
     {
         return [
-            'display_subtotal_incl_tax' => (int)$this->taxConfig->displayCartSubtotalInclTax(),
+            'display_cart_subtotal_incl_tax' => (int)$this->taxConfig->displayCartSubtotalInclTax(),
             'display_cart_subtotal_excl_tax' => (int)$this->taxConfig->displayCartSubtotalExclTax(),
         ];
     }
