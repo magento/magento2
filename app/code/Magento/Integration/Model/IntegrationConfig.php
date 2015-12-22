@@ -59,13 +59,6 @@ class IntegrationConfig
                 $this->_integrations = unserialize($integrations);
             } else {
                 $this->_integrations = $this->_configReader->read();
-                // Make it consistent with non-config integrations
-                foreach (array_keys($this->_integrations) as $name) {
-                    if (isset($this->_integrations[$name]['resources'])) {
-                        $this->_integrations[$name]['resource'] = $this->_integrations[$name]['resources'];
-                        unset($this->_integrations[$name]['resources']);
-                    }
-                }
                 $this->_configCacheType->save(
                     serialize($this->_integrations),
                     self::CACHE_ID,
