@@ -7,7 +7,7 @@
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <fieldset name="general">
+    <fieldset name="search_engine_optimization">
         <container name="url_key_group">
             <field name="url_key_create_redirect">
                 <argument name="data" xsi:type="array">
