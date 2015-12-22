@@ -96,8 +96,8 @@ class Elasticsearch implements ClientInterface
         }
         $config = [
             'hosts' => [
-                $host,
-            ],
+                $host
+            ]
         ];
         return $config;
     }
@@ -115,7 +115,7 @@ class Elasticsearch implements ClientInterface
 
     /**
      * Gets all document Ids from specified index
-     * 
+     *
      * @param string $index
      * @param string $entityType
      * @return array
