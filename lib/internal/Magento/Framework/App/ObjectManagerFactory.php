@@ -120,10 +120,10 @@ class ObjectManagerFactory
         $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
         $relations = $definitionFactory->createRelations();
 
-        /** @var EnvironmentFactory $enFactory */
-        $enFactory = new $this->envFactoryClassName($relations, $definitions);
+        /** @var EnvironmentFactory $envFactory */
+        $envFactory = new $this->envFactoryClassName($relations, $definitions);
         /** @var EnvironmentInterface $env */
-        $env =  $enFactory->createEnvironment();
+        $env =  $envFactory->createEnvironment();
 
         /** @var ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();
@@ -176,8 +176,16 @@ class ObjectManagerFactory
 
         $this->factory->setObjectManager($objectManager);
         ObjectManager::setInstance($objectManager);
-        $definitionFactory->getCodeGenerator()->setObjectManager($objectManager);
 
+        $generatorParams = $diConfig->getArguments('Magento\Framework\Code\Generator');
+        $definitionFactory->getCodeGenerator()
+            ->setObjectManager($objectManager)
+            ->setGeneratedEntities(
+                isset($generatorParams['generatedEntities']) ? $generatorParams['generatedEntities'] : []
+            );
+
+        // TODO: Investigate how difficult would it be to move this before code generator initialization
+        // TODO: (this would allow to add custom code generators in custom modules)
         $env->configureObjectManager($diConfig, $sharedInstances);
 
         return $objectManager;

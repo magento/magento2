@@ -177,22 +177,7 @@ class DefinitionFactory
                 $this->_filesystemDriver,
                 $this->_generationDir
             );
-            $this->codeGenerator = new \Magento\Framework\Code\Generator(
-                $generatorIo,
-                [
-                    Generator\Factory::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Factory',
-                    Generator\Proxy::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Proxy',
-                    Generator\Repository::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Repository',
-                    Generator\Persistor::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Persistor',
-                    InterceptionGenerator\Interceptor::ENTITY_TYPE => '\Magento\Framework\Interception\Code\Generator\Interceptor',
-                    MapperGenerator::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\Mapper',
-                    SearchResults::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\SearchResults',
-                    ConverterGenerator::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Converter',
-                    ProfilerGenerator\Logger::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger',
-                    ExtensionAttributesGenerator::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator',
-                    ExtensionAttributesInterfaceGenerator::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator'
-                ]
-            );
+            $this->codeGenerator = new \Magento\Framework\Code\Generator($generatorIo);
         }
         return $this->codeGenerator;
     }
