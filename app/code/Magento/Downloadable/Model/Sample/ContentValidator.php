@@ -44,7 +44,7 @@ class ContentValidator
      */
     public function isValid(SampleInterface $sample, $validateSampleContent = true)
     {
-        if (!is_int($sample->getSortOrder()) || $sample->getSortOrder() < 0) {
+        if (filter_var($sample->getSortOrder(), FILTER_VALIDATE_INT) === false || $sample->getSortOrder() < 0) {
             throw new InputException(__('Sort order must be a positive integer.'));
         }
 
