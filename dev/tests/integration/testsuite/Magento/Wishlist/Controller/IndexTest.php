@@ -89,7 +89,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             'form_key' => $formKey->getFormKey(),
         ]);
 
-        $this->dispatch('wishlist/index/add/product/1?nocookie=1');
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+        $product = $productRepository->get('product-with-xss');
+
+        $this->dispatch('wishlist/index/add/product/' . $product->getId() . '?nocookie=1');
         $messages = $this->_messages->getMessages()->getItems();
         $isProductNamePresent = false;
 
