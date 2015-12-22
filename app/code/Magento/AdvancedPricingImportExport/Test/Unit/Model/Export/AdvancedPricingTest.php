@@ -108,6 +108,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $groupRepository;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
+
+    /**
      * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter| \PHPUnit_Framework_MockObject_MockObject
      */
     protected $writer;
@@ -285,6 +290,13 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->metadataPool = $this->getMock(
+            '\Magento\Framework\Model\Entity\MetadataPool',
+            [],
+            [],
+            '',
+            false
+        );
         $this->writer = $this->getMock(
             'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter',
             [
@@ -343,6 +355,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             $this->typeFactory,
             $this->linkTypeProvider,
             $this->rowCustomizer,
+            $this->metadataPool,
             $this->storeResolver,
             $this->groupRepository
         );

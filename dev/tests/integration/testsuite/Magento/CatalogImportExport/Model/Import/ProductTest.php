@@ -79,7 +79,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveProductsVisibility()
     {
-        $existingProductIds = [10, 11, 12];
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Api\ProductRepositoryInterface'
+        );
+        $id1 = $productRepository->get('simple1')->getId();
+        $id2 = $productRepository->get('simple2')->getId();
+        $id3 = $productRepository->get('simple3')->getId();
+        $existingProductIds = [$id1, $id2, $id3];
         $productsBeforeImport = [];
         foreach ($existingProductIds as $productId) {
             $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -130,7 +137,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveStockItemQty()
     {
-        $existingProductIds = [10, 11, 12];
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Api\ProductRepositoryInterface'
+        );
+        $id1 = $productRepository->get('simple1')->getId();
+        $id2 = $productRepository->get('simple2')->getId();
+        $id3 = $productRepository->get('simple3')->getId();
+        $existingProductIds = [$id1, $id2, $id3];
         $stockItems = [];
         foreach ($existingProductIds as $productId) {
             /** @var $stockRegistry \Magento\CatalogInventory\Model\StockRegistry */
@@ -228,14 +242,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
 
-        /** @var \Magento\Catalog\Model\Product $productModel */
-        $productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
-        $product = $productModel->loadByAttribute('sku', $sku);
+        $product = $productRepository->get($sku);
 
         $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
-        $options = $product->getProductOptionsCollection();
+        $options = $product->getOptionInstance()->getProductOptions($product);
 
         $expectedData = $this->getExpectedOptionsData($pathToFile);
         $expectedData = $this->mergeWithExistingData($expectedData, $options);
@@ -298,7 +311,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveDatetimeAttribute()
     {
-        $existingProductIds = [10, 11, 12];
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Api\ProductRepositoryInterface'
+        );
+        $id1 = $productRepository->get('simple1')->getId();
+        $id2 = $productRepository->get('simple2')->getId();
+        $id3 = $productRepository->get('simple3')->getId();
+        $existingProductIds = [$id1, $id2, $id3];
         $productsBeforeImport = [];
         foreach ($existingProductIds as $productId) {
             $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -402,13 +422,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function mergeWithExistingData(
         array $expected,
-        \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options
+        $options
     ) {
         $expectedOptionId = $expected['id'];
         $expectedOptions = $expected['options'];
         $expectedData = $expected['data'];
         $expectedValues = $expected['values'];
-        foreach ($options->getItems() as $option) {
+        foreach ($options as $option) {
             $optionKey = $option->getType() . '|' . $option->getTitle();
             if (!in_array($optionKey, $expectedOptions)) {
                 $expectedOptionId++;
@@ -434,7 +454,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options
      * @return array
      */
-    protected function getActualOptionsData(\Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options)
+    protected function getActualOptionsData($options)
     {
         $actualOptionId = 0;
         $actualOptions = [];
@@ -444,7 +464,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $actualValues = [];
         // array of option values data
         /** @var $option \Magento\Catalog\Model\Product\Option */
-        foreach ($options->getItems() as $option) {
+        foreach ($options as $option) {
             $lastOptionKey = $option->getType() . '|' . $option->getTitle();
             $actualOptionId++;
             if (!in_array($lastOptionKey, $actualOptions)) {
