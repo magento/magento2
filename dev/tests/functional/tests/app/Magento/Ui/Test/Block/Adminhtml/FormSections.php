@@ -6,6 +6,8 @@
 
 namespace Magento\Ui\Test\Block\Adminhtml;
 
+use Magento\Mtf\Client\Locator;
+
 /**
  * Is used to represent a new unified form with collapsible sections on the page.
  */
