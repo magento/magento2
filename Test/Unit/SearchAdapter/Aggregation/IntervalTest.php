@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Aggregation;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Interval;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Elasticsearch\Model\Config;

@@ -9,7 +9,7 @@ use Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider;
 use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session as CustomerSession;

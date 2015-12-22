@@ -7,7 +7,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Aggregation;
 
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Elasticsearch\Model\Config;

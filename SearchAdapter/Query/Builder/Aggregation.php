@@ -7,7 +7,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 class Aggregation
 {
