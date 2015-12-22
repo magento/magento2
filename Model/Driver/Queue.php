@@ -61,7 +61,6 @@ class Queue implements QueueInterface
         EnvelopeFactory $envelopeFactory,
         LoggerInterface $logger,
         $queueName,
-        LoggerInterface $logger,
         $interval = 5,
         $maxNumberOfTrials = 3
     ) {
