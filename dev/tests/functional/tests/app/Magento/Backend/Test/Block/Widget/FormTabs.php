@@ -8,8 +8,6 @@ namespace Magento\Backend\Test\Block\Widget;
 
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers;
-use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -93,23 +91,8 @@ class FormTabs extends AbstractFormContainers
                 'Tab "' . $tabName . '" is not visible.'
             );
         }
-        $this->getTabElement($tabName)->click();
+        $this->getContainerElement($tabName)->click();
         return $this;
-    }
-
-    /**
-     * Get tab element.
-     *
-     * @param string $tabName
-     * @return ElementInterface
-     */
-    protected function getTabElement($tabName)
-    {
-        $selector = $this->containers[$tabName]['selector'];
-        $strategy = isset($this->containers[$tabName]['strategy'])
-            ? $this->containers[$tabName]['strategy']
-            : Locator::SELECTOR_CSS;
-        return $this->_rootElement->find($selector, $strategy);
     }
 
     /**
@@ -120,6 +103,6 @@ class FormTabs extends AbstractFormContainers
      */
     public function isTabVisible($tabName)
     {
-        return $this->getTabElement($tabName)->isVisible();
+        return $this->getContainerElement($tabName)->isVisible();
     }
 }

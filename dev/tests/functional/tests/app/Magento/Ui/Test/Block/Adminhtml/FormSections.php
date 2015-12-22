@@ -16,7 +16,15 @@ class FormSections extends AbstractFormContainers
      *
      * @var string
      */
-    protected $sectionTitle = 'strong';
+    protected $sectionTitle = '.fieldset-wrapper-title';
+
+    /**
+     * XPath locator of the collapsible fieldset
+     *
+     * @var string
+     */
+    protected $collapsible = 'div[contains(@class,"fieldset-wrapper")]
+                                 [contains(@class,"admin__collapsible-block-wrapper")]';
 
     /**
      * Get Section class.
@@ -47,9 +55,24 @@ class FormSections extends AbstractFormContainers
     public function openSection($sectionName)
     {
         $this->browser->find($this->header)->hover();
-        if ($sectionName) {
-            $this->getSection($sectionName)->find($this->sectionTitle)->click();
+        if ($this->isCollapsible($sectionName)) {
+            $this->getContainerElement($sectionName)->click();
         }
         return $this;
+    }
+
+    /**
+     * Checks if the section is collapsible on the form
+     *
+     * @param string $sectionName
+     * @return bool
+     */
+    public function isCollapsible($sectionName)
+    {
+        $title = $this->getContainerElement($sectionName)->find($this->sectionTitle);
+        if (! $title->isVisible()) {
+            return false;
+        };
+        return $title->find('parent::' . $this->collapsible, 'xpath')->isVisible();
     }
 }
