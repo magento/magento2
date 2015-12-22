@@ -16,7 +16,7 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="imports" xsi:type="array">
-                            <item name="handleChanges" xsi:type="string">${ $.provider }:data.general.url_key</item>
+                            <item name="handleChanges" xsi:type="string">${ $.provider }:data.url_key</item>
                         </item>
                         <item name="component" xsi:type="string">Magento_Catalog/js/components/url-key-handle-changes</item>
                         <item name="sortOrder" xsi:type="number">15</item>
