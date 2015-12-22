@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 class ProductTypesConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,10 @@ class ProductTypesConfigFilesTest extends \PHPUnit_Framework_TestCase
         $moduleDirSearch = $objectManager->get('Magento\Framework\Component\DirSearch');
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
         $xmlFiles = $fileIteratorFactory->create(
-            $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/product_types.xml,product_types.xml}')
+            $moduleDirSearch->collectFiles(
+                ComponentRegistrarInterface::MODULE,
+                'etc/{*/product_types.xml,product_types.xml}'
+            )
         );
 
         $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');

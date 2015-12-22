@@ -7,7 +7,7 @@
 namespace Magento\Framework\View\Design\Fallback;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -145,7 +145,7 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
         $componentRegistrar = $objectManager->get(
             '\Magento\Framework\Component\ComponentRegistrarInterface'
         );
-        $coreModulePath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Theme');
+        $coreModulePath = $componentRegistrar->getPath(ComponentRegistrarInterface::MODULE, 'Magento_Theme');
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $objectManager->get('\Magento\Framework\Filesystem');
         $libPath = rtrim($filesystem->getDirectoryRead(DirectoryList::LIB_WEB)->getAbsolutePath(), '/');

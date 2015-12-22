@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
@@ -56,7 +55,7 @@ class Module implements RuleInterface
             );
         }
         $params['module_dir'] = $this->componentRegistrar->getPath(
-            ComponentRegistrar::MODULE,
+            ComponentRegistrarInterface::MODULE,
             $params['module_name']
         );
         if (empty($params['module_dir'])) {

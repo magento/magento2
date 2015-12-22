@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfigFiles
 {
@@ -38,7 +38,7 @@ class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfi
      */
     protected function _getXsdPath()
     {
-        return $this->componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
+        return $this->componentRegistrar->getPath(ComponentRegistrarInterface::LIBRARY, 'magento/framework')
             . '/View/PageLayout/etc/layouts.xsd';
     }
 }

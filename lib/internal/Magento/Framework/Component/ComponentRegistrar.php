@@ -12,15 +12,6 @@ namespace Magento\Framework\Component;
  */
 class ComponentRegistrar implements ComponentRegistrarInterface
 {
-    /**#@+
-     * Different types of components
-     */
-    const MODULE = 'module';
-    const LIBRARY = 'library';
-    const THEME = 'theme';
-    const LANGUAGE = 'language';
-    /**#@- */
-
     /**
      * All paths
      *

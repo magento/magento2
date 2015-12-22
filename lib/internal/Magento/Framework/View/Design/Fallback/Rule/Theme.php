@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 
@@ -63,7 +62,7 @@ class Theme implements RuleInterface
         while ($theme) {
             if ($theme->getFullPath()) {
                 $params['theme_dir'] = $this->componentRegistrar->getPath(
-                    ComponentRegistrar::THEME,
+                    ComponentRegistrarInterface::THEME,
                     $theme->getFullPath()
                 );
                 $result = array_merge($result, $this->rule->getPatternDirs($params));

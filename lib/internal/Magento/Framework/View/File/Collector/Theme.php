@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\File\Collector;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
@@ -52,7 +51,7 @@ class Theme implements CollectorInterface
         if (empty($themePath)) {
             return [];
         }
-        $themeAbsolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
+        $themeAbsolutePath = $this->componentRegistrar->getPath(ComponentRegistrarInterface::THEME, $themePath);
         if (!$themeAbsolutePath) {
             return [];
         }

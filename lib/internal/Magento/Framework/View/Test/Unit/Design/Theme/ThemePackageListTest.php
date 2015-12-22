@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 
 class ThemePackageListTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +41,7 @@ class ThemePackageListTest extends \PHPUnit_Framework_TestCase
         $themeKey = 'theme';
         $this->registrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $themeKey)
+            ->with(ComponentRegistrarInterface::THEME, $themeKey)
             ->willReturn(null);
         $this->factory->expects($this->never())
             ->method('create');
@@ -54,7 +54,7 @@ class ThemePackageListTest extends \PHPUnit_Framework_TestCase
         $themePath = 'path';
         $this->registrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $themeKey)
+            ->with(ComponentRegistrarInterface::THEME, $themeKey)
             ->willReturn($themePath);
         $themePackage = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
         $this->factory->expects($this->once())
@@ -68,7 +68,7 @@ class ThemePackageListTest extends \PHPUnit_Framework_TestCase
     {
         $this->registrar->expects($this->once())
             ->method('getPaths')
-            ->with(ComponentRegistrar::THEME)
+            ->with(ComponentRegistrarInterface::THEME)
             ->willReturn(['theme1' => 'path1', 'theme2' => 'path2']);
         $themePackage = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
         $this->factory->expects($this->exactly(2))

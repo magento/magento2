@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\App\ObjectManager;
@@ -14,7 +15,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
 use Magento\Framework\Autoload\AutoloaderRegistry;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
@@ -98,7 +98,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     private $log;
 
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
@@ -107,12 +107,12 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param DirectoryList $directoryList
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
         DirectoryList $directoryList,
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->directoryList = $directoryList;
@@ -175,7 +175,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     private function getModuleExcludePatterns()
     {
         $modulesExcludePatterns = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrarInterface::MODULE) as $modulePath) {
             $modulesExcludePatterns[] = "#^" . $modulePath . "/Test#";
         }
         return $modulesExcludePatterns;
@@ -189,7 +189,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     private function getLibraryExcludePatterns()
     {
         $libraryExcludePatterns = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrarInterface::LIBRARY) as $libraryPath) {
             $libraryExcludePatterns[] = "#^" . $libraryPath . "/([\\w]+/)?Test#";
         }
         return $libraryExcludePatterns;
@@ -254,7 +254,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         // 1.1 Code scan
         $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
         $directoryScanner = new Scanner\DirectoryScanner();
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $codeScanDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrarInterface::MODULE) as $codeScanDir) {
             $this->files = array_merge_recursive(
                 $this->files,
                 $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns)
@@ -352,8 +352,8 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         ];
         $compilationDirs = array_merge(
             $compilationDirs,
-            $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
-            $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY)
+            $this->componentRegistrar->getPaths(ComponentRegistrarInterface::MODULE),
+            $this->componentRegistrar->getPaths(ComponentRegistrarInterface::LIBRARY)
         );
         $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
         // 2.1 Code scan

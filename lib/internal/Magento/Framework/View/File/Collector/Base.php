@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\File\Collector;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
@@ -59,7 +59,7 @@ class Base implements CollectorInterface
     {
         $result = [];
         $sharedFiles = $this->componentDirSearch->collectFilesWithContext(
-            ComponentRegistrar::MODULE,
+            ComponentRegistrarInterface::MODULE,
             "view/base/{$this->subDir}{$filePath}"
         );
         foreach ($sharedFiles as $file) {
@@ -67,7 +67,7 @@ class Base implements CollectorInterface
         }
         $area = $theme->getData('area');
         $themeFiles = $this->componentDirSearch->collectFilesWithContext(
-            ComponentRegistrar::MODULE,
+            ComponentRegistrarInterface::MODULE,
             "view/{$area}/{$this->subDir}{$filePath}"
         );
         foreach ($themeFiles as $file) {

@@ -47,7 +47,7 @@ class Dir
      */
     public function getDir($moduleName, $type = '')
     {
-        $path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+        $path = $this->componentRegistrar->getPath(ComponentRegistrarInterface::MODULE, $moduleName);
 
         if ($type) {
             if (!in_array($type, [

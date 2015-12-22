@@ -11,7 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\ResourceConnection\Config;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
@@ -214,7 +214,7 @@ class Installer
     /**
      * Component Registrar
      *
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
@@ -240,7 +240,7 @@ class Installer
      * @param SetupFactory $setupFactory
      * @param DataSetupFactory $dataSetupFactory
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -264,7 +264,7 @@ class Installer
         SetupFactory $setupFactory,
         DataSetupFactory $dataSetupFactory,
         \Magento\Framework\Setup\SampleData\State $sampleDataState,
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;

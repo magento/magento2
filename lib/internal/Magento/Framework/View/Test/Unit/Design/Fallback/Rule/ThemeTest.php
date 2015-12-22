@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use \Magento\Framework\View\Design\Fallback\Rule\Theme;
@@ -56,8 +55,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->componentRegistrar->expects($this->any())
             ->method('getPath')
             ->will($this->returnValueMap([
-                [ComponentRegistrar::THEME, 'package/parent_theme', '/path/to/parent/theme'],
-                [ComponentRegistrar::THEME, 'package/current_theme', '/path/to/current/theme'],
+                [ComponentRegistrarInterface::THEME, 'package/parent_theme', '/path/to/parent/theme'],
+                [ComponentRegistrarInterface::THEME, 'package/current_theme', '/path/to/current/theme'],
             ]));
 
         $ruleDirsMap = [

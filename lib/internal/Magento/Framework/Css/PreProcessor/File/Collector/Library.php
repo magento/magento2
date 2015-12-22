@@ -6,7 +6,6 @@
 namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
@@ -84,7 +83,7 @@ class Library implements CollectorInterface
         foreach ($theme->getInheritedThemes() as $currentTheme) {
             $themeFullPath = $currentTheme->getFullPath();
             $path = $this->componentRegistrar->getPath(
-                ComponentRegistrar::THEME,
+                ComponentRegistrarInterface::THEME,
                 $themeFullPath
             );
             if (empty($path)) {

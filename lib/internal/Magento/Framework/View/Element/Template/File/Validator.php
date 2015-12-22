@@ -6,7 +6,7 @@
 namespace Magento\Framework\View\Element\Template\File;
 
 use \Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
  * Class Validator
@@ -73,19 +73,19 @@ class Validator
      *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param string|null $scope
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface,
-        ComponentRegistrar $componentRegistrar,
+        ComponentRegistrarInterface $componentRegistrar,
         $scope = null
     ) {
         $this->_filesystem = $filesystem;
         $this->_isAllowSymlinks = $scopeConfigInterface->getValue(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK, $scope);
-        $this->_themesDir = $componentRegistrar->getPaths(ComponentRegistrar::THEME);
-        $this->moduleDirs = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
+        $this->_themesDir = $componentRegistrar->getPaths(ComponentRegistrarInterface::THEME);
+        $this->moduleDirs = $componentRegistrar->getPaths(ComponentRegistrarInterface::MODULE);
         $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
             ->getAbsolutePath();
     }

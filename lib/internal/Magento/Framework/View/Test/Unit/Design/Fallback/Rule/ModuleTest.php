@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use \Magento\Framework\View\Design\Fallback\Rule\Module;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
@@ -52,7 +51,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $modulePath = '/module/path';
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::MODULE, $module)
+            ->with(ComponentRegistrarInterface::MODULE, $module)
             ->will($this->returnValue($modulePath));
         $this->rule->expects($this->once())
             ->method('getPatternDirs')

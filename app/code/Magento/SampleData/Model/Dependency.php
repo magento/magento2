@@ -5,7 +5,7 @@
  */
 namespace Magento\SampleData\Model;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Config\Composer\Package;
@@ -37,7 +37,7 @@ class Dependency
     private $packageFactory;
 
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
@@ -45,13 +45,13 @@ class Dependency
      * @param ComposerInformation $composerInformation
      * @param Filesystem $filesystem
      * @param PackageFactory $packageFactory
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
     public function __construct(
         ComposerInformation $composerInformation,
         Filesystem $filesystem,
         PackageFactory $packageFactory,
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->composerInformation = $composerInformation;
         $this->filesystem = $filesystem;
@@ -85,7 +85,7 @@ class Dependency
     protected function getSuggestsFromModules()
     {
         $suggests = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrarInterface::MODULE) as $moduleDir) {
             $file = $moduleDir . '/composer.json';
 
             /** @var Package $package */

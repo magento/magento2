@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Model\Theme;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 class ThemePackageInfo
 {
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
@@ -31,11 +31,11 @@ class ThemePackageInfo
     /**
      * Constructor
      *
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param ReadFactory $readDirFactory
      */
     public function __construct(
-        ComponentRegistrar $componentRegistrar,
+        ComponentRegistrarInterface $componentRegistrar,
         ReadFactory $readDirFactory
     ) {
         $this->componentRegistrar = $componentRegistrar;
@@ -51,7 +51,7 @@ class ThemePackageInfo
      */
     public function getPackageName($themePath)
     {
-        $themePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
+        $themePath = $this->componentRegistrar->getPath(ComponentRegistrarInterface::THEME, $themePath);
         $themeDir = $this->readDirFactory->create($themePath);
         if ($themeDir->isExist('composer.json')) {
             $rawData = [];
@@ -87,7 +87,7 @@ class ThemePackageInfo
      */
     private function initializeMap()
     {
-        $themePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::THEME);
+        $themePaths = $this->componentRegistrar->getPaths(ComponentRegistrarInterface::THEME);
         /** @var \Magento\Theme\Model\Theme $theme */
         foreach ($themePaths as $fullThemePath => $themeDir) {
             $themeDirRead = $this->readDirFactory->create($themeDir);

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\File\Collector\Override;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 class ThemeModularTest extends \PHPUnit_Framework_TestCase
 {
@@ -117,7 +117,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
             );
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $themePath)
+            ->with(ComponentRegistrarInterface::THEME, $themePath)
             ->will($this->returnValue('/full/theme/path'));
 
         $this->assertSame([$fileOne, $fileTwo], $this->model->getFiles($theme, $inputPath));
@@ -156,7 +156,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
             ->willReturn('preset/3.xml');
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $themePath)
+            ->with(ComponentRegistrarInterface::THEME, $themePath)
             ->will($this->returnValue('/full/theme/path'));
 
         $this->assertSame([$fileOne], $this->model->getFiles($theme, $inputPath));
@@ -186,7 +186,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
             ->willReturn('[^/]*\\.xml');
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $themePath)
+            ->with(ComponentRegistrarInterface::THEME, $themePath)
             ->will($this->returnValue('/full/theme/path'));
 
         $this->model->getFiles($theme, $inputPath);

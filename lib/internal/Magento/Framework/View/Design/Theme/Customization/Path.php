@@ -6,7 +6,6 @@
 namespace Magento\Framework\View\Design\Theme\Customization;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
@@ -90,7 +89,7 @@ class Path
     {
         $path = null;
         if ($theme->getFullPath()) {
-            $path = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $theme->getFullPath());
+            $path = $this->componentRegistrar->getPath(ComponentRegistrarInterface::THEME, $theme->getFullPath());
         }
         return $path;
     }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\File\Collector;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\File\Collector\Theme;
 use Magento\Framework\View\File\Factory;
 
@@ -92,7 +92,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $this->themePath)
+            ->with(ComponentRegistrarInterface::THEME, $this->themePath)
             ->will($this->returnValue(self::FULL_THEME_PATH));
         $this->themeDirectoryMock->expects($this->any())
             ->method('search')
@@ -110,7 +110,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $this->themePath)
+            ->with(ComponentRegistrarInterface::THEME, $this->themePath)
             ->will($this->returnValue(self::FULL_THEME_PATH));
         $fileMock = $this->getMockBuilder('Magento\Framework\View\File')
             ->disableOriginalConstructor()
@@ -140,7 +140,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->with(ComponentRegistrar::THEME, $this->themePath)
+            ->with(ComponentRegistrarInterface::THEME, $this->themePath)
             ->will($this->returnValue(self::FULL_THEME_PATH));
         $fileMock = $this->getMockBuilder('Magento\Framework\View\File')
             ->disableOriginalConstructor()

@@ -6,7 +6,7 @@
 namespace Magento\Framework\View\Test\Unit\Element\Template\File;
 
 use \Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use \Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -51,7 +51,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     private $compiledDirectoryMock;
 
     /**
-     * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $componentRegistrar;
 
@@ -80,14 +80,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getAbsolutePath')
             ->will($this->returnValue('/magento/var/compiled'));
 
-        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $this->componentRegistrar = $this->getMock(ComponentRegistrarInterface::class, [], [], '', false);
         $this->componentRegistrar->expects($this->any())
             ->method('getPaths')
             ->will(
                 $this->returnValueMap(
                     [
-                        [ComponentRegistrar::MODULE, ['/magento/app/code/Some/Module']],
-                        [ComponentRegistrar::THEME, ['/magento/themes/default']]
+                        [ComponentRegistrarInterface::MODULE, ['/magento/app/code/Some/Module']],
+                        [ComponentRegistrarInterface::THEME, ['/magento/themes/default']]
                     ]
                 )
             );

@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 class ExportConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class ExportConfigFilesTest extends \PHPUnit_Framework_TestCase
         $moduleDirSearch = $objectManager->get('Magento\Framework\Component\DirSearch');
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
         $xmlFiles = $fileIteratorFactory->create(
-            $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/export.xml,export.xml}')
+            $moduleDirSearch->collectFiles(ComponentRegistrarInterface::MODULE, 'etc/{*/export.xml,export.xml}')
         );
 
         $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');

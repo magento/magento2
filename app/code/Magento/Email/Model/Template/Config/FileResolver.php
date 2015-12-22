@@ -7,7 +7,7 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Config\FileIteratorFactory;
 
@@ -43,7 +43,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     public function get($filename, $scope)
     {
         $iterator = $this->iteratorFactory->create(
-            $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/' . $filename)
+            $this->dirSearch->collectFiles(ComponentRegistrarInterface::MODULE, 'etc/' . $filename)
         );
         return $iterator;
     }
