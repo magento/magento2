@@ -17,6 +17,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
+    /** @var  \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory */
+    protected $customOptionFactory;
+
     /**
      *
      */
@@ -59,7 +62,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->assertPrice(11);
     }
 
-
     /**
      *
      */
@@ -76,7 +78,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function testGetFinalPriceWithCustomOption()
     {
         $product = $this->getProduct(1);
-        $product->setProductOptions(
+
+        $options = $this->prepareOptions(
             [
                 [
                     'id' => 1,
@@ -91,15 +94,44 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                     'sku' => '1-text',
                     'max_characters' => 100,
                 ],
-            ]
-        )->setCanSaveCustomOptions(true)->save();
+            ],
+            $product
+        );
+
+        $product->setOptions($options)
+            ->setCanSaveCustomOptions(true)
+            ->save();
 
         $product = $this->getProduct(1);
-        $optionId = array_keys($product->getOptions());
-        $optionId = reset($optionId);
+        $optionId = $product->getOptions()[0]->getId();
         $product->addCustomOption(AbstractType::OPTION_PREFIX . $optionId, 'text');
         $product->addCustomOption('option_ids', $optionId);
         $this->assertPrice(110, $product);
+    }
+
+    /**
+     * @param array $options
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
+     */
+    protected function prepareOptions($options, $product)
+    {
+        $preparedOptions = [];
+
+        if (!$this->customOptionFactory) {
+            $this->customOptionFactory = $this->objectManager->create(
+                'Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory'
+            );
+        }
+
+        foreach ($options as $option) {
+            $option = $this->customOptionFactory->create(['data' => $option]);
+            $option->setProductSku($product->getSku());
+
+            $preparedOptions[] = $option;
+        }
+
+        return $preparedOptions;
     }
 
     /**
