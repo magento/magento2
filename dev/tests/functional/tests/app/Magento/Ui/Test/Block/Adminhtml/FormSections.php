@@ -12,11 +12,20 @@ namespace Magento\Ui\Test\Block\Adminhtml;
 class FormSections extends AbstractFormContainers
 {
     /**
+     * CSS locator of the section collapsible title
+     *
+     * @var string
+     */
+    protected $sectionTitle = 'strong';
+
+    /**
+     * Get Section class.
+     *
      * @param string $sectionName
      * @return Section
      * @throws \Exception
      */
-    protected function getSection($sectionName)
+    public function getSection($sectionName)
     {
         return $this->getContainer($sectionName);
     }
@@ -37,16 +46,10 @@ class FormSections extends AbstractFormContainers
      */
     public function openSection($sectionName)
     {
-        //TODO: needs to be implemented when ready
         $this->browser->find($this->header)->hover();
+        if ($sectionName) {
+            $this->getSection($sectionName)->find($this->sectionTitle)->click();
+        }
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function isContainerVisible($containerName)
-    {
-        return true;
     }
 }

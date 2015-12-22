@@ -79,6 +79,8 @@ abstract class AbstractFormContainers extends Form
      * @param FixtureInterface|null $fixture
      * @param SimpleElement|null $element
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getData(FixtureInterface $fixture = null, SimpleElement $element = null)
     {
@@ -178,7 +180,7 @@ abstract class AbstractFormContainers extends Form
     {
         foreach (array_keys($this->containers) as $containerName) {
             $container = $this->getContainer($containerName);
-            if ($this->openContainer($containerName) && $this->isContainerVisible($containerName)) {
+            if ($this->openContainer($containerName)) {
                 $mapping = $container->dataMapping($this->unassignedFields);
                 foreach ($mapping as $fieldName => $data) {
                     $element = $container->_rootElement->find($data['selector'], $data['strategy'], $data['input']);
@@ -207,12 +209,4 @@ abstract class AbstractFormContainers extends Form
      * @return $this
      */
     abstract protected function openContainer($containerName);
-
-    /**
-     * Check whether container is visible.
-     *
-     * @param string $containerName
-     * @return bool
-     */
-    abstract protected function isContainerVisible($containerName);
 }

@@ -65,7 +65,7 @@ class AttributeForm extends FormTabs
             }
         } else {
             $isHasData = ($fixture instanceof InjectableFixture) ? $fixture->hasData() : true;
-            $tabsFields = $isHasData ? $this->getFieldsByTabs($fixture) : [];
+            $tabsFields = $isHasData ? $this->getFixtureFieldsByContainers($fixture) : [];
             foreach ($tabsFields as $tabName => $fields) {
                 if ($this->isTabVisible($tabName)) {
                     $this->openTab($tabName);

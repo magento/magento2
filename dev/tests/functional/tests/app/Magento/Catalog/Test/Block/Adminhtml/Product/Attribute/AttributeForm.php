@@ -45,19 +45,19 @@ class AttributeForm extends FormTabs
     /**
      * @constructor
      * @param SimpleElement $element
-     * @param Mapper $mapper
      * @param BlockFactory $blockFactory
+     * @param Mapper $mapper
      * @param BrowserInterface $browser
      * @param array $config
      */
     public function __construct(
         SimpleElement $element,
-        Mapper $mapper,
         BlockFactory $blockFactory,
+        Mapper $mapper,
         BrowserInterface $browser,
         array $config = []
     ) {
-        parent::__construct($element, $mapper, $blockFactory, $browser, $config);
+        parent::__construct($element, $blockFactory, $mapper, $browser, $config);
         $this->browser->switchToFrame(new Locator($this->iFrame));
     }
 
