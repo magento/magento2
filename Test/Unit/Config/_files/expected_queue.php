@@ -31,8 +31,8 @@ return [
             ],
             'publisher' => 'test-publisher-1',
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
         ],
         'customer.created.one' => [
@@ -43,8 +43,8 @@ return [
             ],
             'publisher' => 'test-publisher-1',
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
         ],
         'customer.created.one.two' => [
@@ -55,8 +55,8 @@ return [
             ],
             'publisher' => 'test-publisher-1',
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
         ],
         'customer.created.two' => [
@@ -67,8 +67,8 @@ return [
             ],
             'publisher' => 'test-publisher-1',
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
         ],
         'customer.updated' => [
@@ -79,8 +79,8 @@ return [
             ],
             'publisher' => 'test-publisher-2',
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
         ],
         'customer.deleted' => [
@@ -91,8 +91,8 @@ return [
             ],
             'publisher' => 'test-publisher-2',
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
         ],
         'cart.created' => [
@@ -103,8 +103,8 @@ return [
             ],
             'publisher' => 'test-publisher-3',
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
         ],
         'cart.created.one' => [
@@ -115,8 +115,8 @@ return [
             ],
             'publisher' => 'test-publisher-3',
             "response_schema" => [
-                "schema_type" => NULL,
-                "schema_value" => NULL
+                "schema_type" => null,
+                "schema_value" => null
             ],
         ],
     ],
@@ -250,9 +250,11 @@ return [
     ],
     'exchange_topic_to_queues_map' => [
         'magento--customer.created' => ['test-queue-1', 'test-queue-2', 'test-queue-4', 'test-queue-5', 'test-queue-9'],
-        'magento--customer.created.one' => ['test-queue-1', 'test-queue-5', 'test-queue-6', 'test-queue-7', 'test-queue-8', 'test-queue-9'],
+        'magento--customer.created.one' =>
+            ['test-queue-1', 'test-queue-5', 'test-queue-6', 'test-queue-7', 'test-queue-8', 'test-queue-9'],
         'magento--customer.created.one.two' => ['test-queue-1', 'test-queue-5', 'test-queue-8', 'test-queue-9'],
-        'magento--customer.created.two' => ['test-queue-1', 'test-queue-5', 'test-queue-7', 'test-queue-8', 'test-queue-9'],
+        'magento--customer.created.two' =>
+            ['test-queue-1', 'test-queue-5', 'test-queue-7', 'test-queue-8', 'test-queue-9'],
         'magento--customer.updated' => ['test-queue-1', 'test-queue-4', 'test-queue-5', 'test-queue-9'],
         'test-exchange-1--cart.created' => ['test-queue-1', 'test-queue-3'],
         'magento--customer.deleted' => ['test-queue-2', 'test-queue-4', 'test-queue-5', 'test-queue-9'],
