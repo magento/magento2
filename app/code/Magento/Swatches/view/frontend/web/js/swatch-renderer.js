@@ -6,9 +6,8 @@
 define([
     'jquery',
     'underscore',
-    'mage/gallery/preloadImages',
     'jquery/ui'
-], function ($, _, preloadImages) {
+], function ($, _) {
     'use strict';
 
     /**
@@ -272,27 +271,6 @@ define([
                     'img': $main.find('.product-image-photo').attr('src')
                 }];
             }
-            this._preloadSwatchesImages();
-        },
-
-        /**
-         * Preloads optional configuration images.
-         * @private
-         */
-        _preloadSwatchesImages: function () {
-            var options = this.options;
-
-            _.each(options.jsonConfig.images, function (array) {
-                var fullImagesList = [], 
-                    imagesList = [];
-
-                _.each(array, function (item) {
-                    imagesList.push(item.img);
-                    fullImagesList.push(item.full);
-                });
-                preloadImages(imagesList);
-                preloadImages(fullImagesList);
-            });
         },
 
         /**
@@ -915,7 +893,8 @@ define([
             var justAnImage = images[0],
                 updateImg,
                 imagesToUpdate,
-                gallery = context.find(this.options.mediaGallerySelector).data('gallery');
+                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
+                item;
 
             if (images) {
                 imagesToUpdate = this._setImageType($.extend(true, [], images));
@@ -927,11 +906,8 @@ define([
                         return img.isMain;
                     });
 
-                    if (updateImg.length) {
-                        gallery.updateDataByIndex(0, updateImg[0]);
-                    } else {
-                        gallery.updateDataByIndex(0, imagesToUpdate[0]);
-                    }
+                    item = updateImg.length ? updateImg[0]: imagesToUpdate[0];
+                    gallery.updateDataByIndex(0, item);
 
                     gallery.seek(1);
                 } else {
