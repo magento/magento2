@@ -193,8 +193,10 @@
                         </item>
                         <item name="files_browser_window_url" xsi:type="boolean">false</item>
                         <item name="height" xsi:type="string">100px</item>
-                        <item name="plugin_buttons_hidden" xsi:type="boolean">true</item>
-                        <item name="show_hide_button_hidden" xsi:type="boolean">true</item>
+                        <item name="toggle_button" xsi:type="boolean">false</item>
+                        <item name="add_variables" xsi:type="boolean">false</item>
+                        <item name="add_widgets" xsi:type="boolean">false</item>
+                        <item name="add_images" xsi:type="boolean">false</item>
                     </item>
                     <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="source" xsi:type="string">category</item>

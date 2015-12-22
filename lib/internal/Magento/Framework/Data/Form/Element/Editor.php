@@ -208,12 +208,8 @@ class Editor extends Textarea
     {
         $buttonsHtml = '<div id="buttons' . $this->getHtmlId() . '" class="buttons-set">';
         if ($this->isEnabled()) {
-            if (!$this->isShowHideButtonHidden()) {
-                $buttonsHtml .= $this->_getToggleButtonHtml();
-            }
-            if (!$this->isPluginButtonsHidden()) {
-                $buttonsHtml .= $this->_getPluginButtonsHtml($this->isHidden());
-            }
+            $buttonsHtml .= $this->_getToggleButtonHtml($this->isToggleButtonVisible());
+            $buttonsHtml .= $this->_getPluginButtonsHtml($this->isHidden());
         } else {
             $buttonsHtml .= $this->_getPluginButtonsHtml(true);
         }
@@ -459,16 +455,8 @@ class Editor extends Textarea
     /**
      * @return bool
      */
-    protected function isShowHideButtonHidden()
+    protected function isToggleButtonVisible()
     {
-        return $this->getConfig('show_hide_button_hidden');
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isPluginButtonsHidden()
-    {
-        return $this->getConfig('plugin_buttons_hidden');
+        return !$this->getConfig()->hasData('toggle_button') || $this->getConfig('toggle_button');
     }
 }
