@@ -255,9 +255,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $productClassName = 'DefaultProductClass'
     ) {
         $this->setUpDefaultRules();
-        $fixtureProductId = 1;
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load($fixtureProductId);
+        $product = $productRepository->get('simple');
         $product->setTaxClassId($this->taxClasses[$productClassName]);
         $shippingAddress = $this->getCustomerAddress();
         $billingAddress = $shippingAddress;
