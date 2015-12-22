@@ -57,6 +57,6 @@ class ColumnsRenderer implements RendererInterface
                 }
             }
         }
-        return $sql .= implode(', ', $columns);
+        return $sql . ' ' . implode(', ', $columns);
     }
 }

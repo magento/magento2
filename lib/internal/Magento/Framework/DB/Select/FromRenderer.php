@@ -54,7 +54,7 @@ class FromRenderer implements RendererInterface
             $tmp .= $this->getQuotedTable($table['tableName'], $correlationName);
 
             // Add join conditions (if applicable)
-            if (!empty($from) && ! empty($table['joinCondition'])) {
+            if (!empty($from) && !empty($table['joinCondition'])) {
                 $tmp .= ' ' . Select::SQL_ON . ' ' . $table['joinCondition'];
             }
             // Add the table name and condition add to the list

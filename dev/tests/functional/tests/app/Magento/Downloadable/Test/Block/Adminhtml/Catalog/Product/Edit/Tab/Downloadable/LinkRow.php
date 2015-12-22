@@ -7,6 +7,8 @@
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
 use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class LinkRow
@@ -21,6 +23,13 @@ class LinkRow extends Form
      * @var string
      */
     protected $deleteButton = '.action-delete';
+
+    /**
+     * Sort draggable handle
+     *
+     * @var string
+     */
+    protected $sortDraggableHandle = '*[@data-role="draggable-handle"]';
 
     /**
      * Fill item link
@@ -54,5 +63,26 @@ class LinkRow extends Form
     public function clickDeleteButton()
     {
         $this->_rootElement->find($this->deleteButton)->click();
+    }
+
+    /**
+     * Drag and drop block element to specific target
+     *
+     * @param ElementInterface $target
+     * @return void
+     */
+    public function dragAndDropTo(ElementInterface $target)
+    {
+        $this->getSortHandle()->dragAndDrop($target);
+    }
+
+    /**
+     * Get sort handle
+     *
+     * @return ElementInterface
+     */
+    public function getSortHandle()
+    {
+        return $this->_rootElement->find($this->sortDraggableHandle, Locator::SELECTOR_XPATH);
     }
 }

@@ -38,11 +38,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     protected $optionResource;
 
     /**
-     * @var Converter
-     */
-    protected $converter;
-
-    /**
      * @var MetadataPool
      */
     protected $metadataPool;
@@ -52,7 +47,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
-     * @param Converter $converter
      * @param MetadataPool $metadataPool
      */
     public function __construct(
@@ -60,13 +54,11 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource,
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory,
-        \Magento\Catalog\Model\Product\Option\Converter $converter,
         MetadataPool $metadataPool
     ) {
         $this->productRepository = $productRepository;
         $this->optionResource = $optionResource;
         $this->optionFactory = $optionFactory;
-        $this->converter = $converter;
         $this->collectionFactory = $collectionFactory;
         $this->metadataPool = $metadataPool;
     }
