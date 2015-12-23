@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-class UpgradeInsecureTestCase extends AbstractHeaderTestCase
+class UpgradeInsecureTest extends AbstractHeaderTestCase
 {
     /**
      * @magentoAdminConfigFixture web/secure/enable_upgrade_insecure 1

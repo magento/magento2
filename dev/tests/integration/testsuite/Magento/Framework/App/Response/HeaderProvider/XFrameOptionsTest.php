@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-class XFrameOptionsTestCase extends AbstractHeaderTestCase
+class XFrameOptionsTest extends AbstractHeaderTestCase
 {
     public function testHeaderPresent()
     {
