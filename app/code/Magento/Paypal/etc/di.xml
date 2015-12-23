@@ -127,4 +127,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Vault\Model\PaymentTokenRepositoryProxy">
+        <arguments>
+            <argument name="repositories" xsi:type="array">
+                <item name="payflowpro" xsi:type="string">Magento\Vault\Model\PaymentTokenRepository</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

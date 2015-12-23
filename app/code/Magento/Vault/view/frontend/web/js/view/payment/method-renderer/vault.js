@@ -46,14 +46,14 @@ define(
              * @returns {String}
              */
             getTitle: function () {
-                return this.title;
+                return '';
             },
 
             /**
              * @returns {String}
              */
             getToken: function () {
-                return this.token;
+                return '';
             },
 
             /**
@@ -68,6 +68,40 @@ define(
              */
             getCode: function () {
                 return 'vault';
+            },
+
+            /**
+             * Get last 4 digits of card
+             * @returns {String}
+             */
+            getMaskedCard: function () {
+                return '';
+            },
+
+            /**
+             * Get expiration date
+             * @returns {String}
+             */
+            getExpirationDate: function () {
+                return '';
+            },
+
+            /**
+             * Get card type
+             * @returns {String}
+             */
+            getCardType: function () {
+                return '';
+            },
+
+            /**
+             * @param type
+             * @returns {boolean}
+             */
+            getIcons: function (type) {
+                return window.checkoutConfig.payment.ccform.icons.hasOwnProperty(type)
+                    ? window.checkoutConfig.payment.ccform.icons[type]
+                    : false
             },
 
             /**
