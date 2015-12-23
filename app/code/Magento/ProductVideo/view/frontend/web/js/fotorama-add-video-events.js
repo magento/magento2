@@ -401,7 +401,7 @@ define([
             thumbsParent = fotorama.activeFrame.$navThumbFrame.parent();
             thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
 
-            fotorama.data.map($.proxy(function(item, i){
+            fotorama.data.map($.proxy(function (item, i) {
                 !item.type && (item.type = this.options.videoData[i].mediaType);
             }, this));
 
@@ -416,7 +416,6 @@ define([
                 if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs' &&
                     fotorama.data[t].type ===  this.VID) {
                     currentItem.addClass(iconClass);
-
                 }
                 this._checkForVideo(e, fotorama, t);
             }
@@ -425,8 +424,6 @@ define([
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
             }, this));
         },
-
-
 
         /**
          * Attach
