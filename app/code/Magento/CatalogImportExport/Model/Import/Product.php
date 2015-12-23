@@ -562,6 +562,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $cachedImages = null;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -636,6 +641,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ObjectRelationProcessor $objectRelationProcessor,
         TransactionManagerInterface $transactionManager,
         Product\TaxClassProcessor $taxClassProcessor,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -663,6 +669,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->objectRelationProcessor = $objectRelationProcessor;
         $this->transactionManager = $transactionManager;
         $this->taxClassProcessor = $taxClassProcessor;
+        $this->metadataPool = $metadataPool;
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -1120,7 +1127,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         foreach ($attributesData as $tableName => $skuData) {
             $tableData = [];
-            $where = [];
             foreach ($skuData as $sku => $attributes) {
                 $productId = $this->skuProcessor->getNewSku($sku)['entity_id'];
 
@@ -1133,29 +1139,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             'value' => $storeValue,
                         ];
                     }
-                    /*
-                    If the store based values are not provided for a particular store,
-                    we default to the default scope values.
-                    In this case, remove all the existing store based values stored in the table.
-                    */
-                    $where[] = $this->_connection->quoteInto(
-                            '(store_id NOT IN (?)',
-                            array_keys($storeValues)
-                        ) . $this->_connection->quoteInto(
-                            ' AND attribute_id = ?',
-                            $attributeId
-                        ) . $this->_connection->quoteInto(
-                            ' AND entity_id = ?)',
-                            $productId
-                        );
-                    if (count($where) >= self::ATTRIBUTE_DELETE_BUNCH) {
-                        $this->_connection->delete($tableName, implode(' OR ', $where));
-                        $where = [];
-                    }
                 }
-            }
-            if (!empty($where)) {
-                $this->_connection->delete($tableName, implode(' OR ', $where));
             }
             $this->_connection->insertOnDuplicate($tableName, $tableData, ['value']);
         }
@@ -1288,13 +1272,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!$productMediaGalleryTableName) {
             $productMediaGalleryTableName = $resource->getTable('catalog_product_entity_media_gallery');
         }
+        $linkField = $this->metadataPool
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
         $select = $this->_connection->select()->from(
             ['mg' => $resource->getTable('catalog_product_entity_media_gallery')],
             ['value' => 'mg.value']
         )->joinLeft(
             ['mgvte' => $resource->getTable('catalog_product_entity_media_gallery_value_to_entity')],
             '(mg.value_id = mgvte.value_id)',
-            ['entity_id' => 'mgvte.entity_id']
+            [$linkField => 'mgvte.' . $linkField]
         )->where(
             'mg.value IN(?)',
             $images

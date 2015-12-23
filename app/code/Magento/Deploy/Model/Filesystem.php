@@ -161,7 +161,7 @@ class Filesystem
                 DirectoryList::DI,
             ]
         );
-        $cmd = $this->functionCallPath . 'setup:di:compile-multi-tenant';
+        $cmd = $this->functionCallPath . 'setup:di:compile';
 
         /**
          * exec command is necessary for now to isolate the autoloaders in the compiler from the memory state
