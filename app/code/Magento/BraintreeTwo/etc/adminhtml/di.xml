@@ -19,6 +19,12 @@
         </arguments>
     </type>
 
+    <type name="Magento\BraintreeTwo\Block\Form">
+        <arguments>
+            <argument name="vaultConfigProvider" xsi:type="object">Magento\Vault\Model\Ui\VaultConfigProvider</argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap">
         <arguments>
             <argument name="options" xsi:type="array">
@@ -36,4 +42,12 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider">
+        <arguments>
+            <argument name="tokenUiComponentProviders" xsi:type="array">
+                <item name="braintreetwo" xsi:type="object">Magento\BraintreeTwo\Model\Ui\Adminhtml\TokenUiComponentProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

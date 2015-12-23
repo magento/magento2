@@ -9,10 +9,10 @@ use Magento\Backend\Model\Session\Quote;
 use Magento\BraintreeTwo\Gateway\Config\Config as GatewayConfig;
 use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType;
 use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
+use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Block\Form\Cc;
 use Magento\Payment\Model\Config;
-use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
@@ -37,7 +37,7 @@ class Form extends Cc
     protected $ccType;
 
     /**
-     * @var VaultConfigProvider
+     * @var ConfigProviderInterface
      */
     protected $vaultConfigProvider;
 
@@ -47,7 +47,7 @@ class Form extends Cc
      * @param Quote $sessionQuote
      * @param GatewayConfig $gatewayConfig
      * @param CcType $ccType
-     * @param VaultConfigProvider $vaultConfigProvider
+     * @param ConfigProviderInterface $vaultConfigProvider
      * @param array $data
      */
     public function __construct(
@@ -56,7 +56,7 @@ class Form extends Cc
         Quote $sessionQuote,
         GatewayConfig $gatewayConfig,
         CcType $ccType,
-        VaultConfigProvider $vaultConfigProvider,
+        ConfigProviderInterface $vaultConfigProvider,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $data);
