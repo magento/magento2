@@ -80,6 +80,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation5">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="isLoggedIn" xsi:type="string">1</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule5 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
@@ -243,6 +244,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />
         </variation>
         <variation name="CreateSalesRuleEntityTestVariation13">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule13 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
             <data name="salesRule/data/is_active" xsi:type="string">Active</data>
