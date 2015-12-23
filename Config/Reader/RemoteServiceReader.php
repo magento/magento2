@@ -17,7 +17,6 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
     const DEFAULT_PUBLISHER = 'default';
     const DEFAULT_CONNECTION = 'amqp';
     const DEFAULT_EXCHANGE = 'magento';
-    const DEFAULT_HANDLER = 'default';
 
     /**
      * @var CommunicationRemoteServiceReader
@@ -47,12 +46,7 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
         $queueTopics = [];
         $queueBinds = [];
         $queueExchangeTopicToQueueMap = [];
-        $queueConsumers = [];
-        foreach ($remoteServiceTopics as $topicName => $communicationConfig) {
-            if (!isset($communicationConfig[CommunicationConfig::TOPIC_REQUEST])) {
-                // TODO: Investigate why this can happen
-                continue;
-            }
+        foreach ($remoteServiceTopics[CommunicationConfig::TOPICS] as $topicName => $communicationConfig) {
             $queueTopics[$topicName] = [
                 QueueConfig::TOPIC_NAME => $topicName,
                 QueueConfig::TOPIC_SCHEMA => [
@@ -76,27 +70,6 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
             ];
 
             $queueExchangeTopicToQueueMap[self::DEFAULT_EXCHANGE . '--' . $topicName] = [$queueName];
-
-            $consumerName = 'consumer' . ucfirst(str_replace('.', '', $queueName));
-            $topicHandlers = [
-                self::DEFAULT_HANDLER => [
-                    QueueConfig::CONSUMER_HANDLER_TYPE => $communicationConfig[CommunicationConfig::HANDLER_TYPE],
-                    QueueConfig::CONSUMER_HANDLER_METHOD => $communicationConfig[CommunicationConfig::HANDLER_METHOD]
-                ]
-            ];
-            $queueConsumers = [
-                $consumerName => [
-                    QueueConfig::CONSUMER_NAME => $consumerName,
-                    QueueConfig::CONSUMER_QUEUE => $queueName,
-                    QueueConfig::CONSUMER_CONNECTION => self::DEFAULT_CONNECTION,
-                    QueueConfig::CONSUMER_TYPE => $communicationConfig[CommunicationConfig::TOPIC_IS_SYNCHRONOUS]
-                        ? QueueConfig::CONSUMER_TYPE_SYNC
-                        : QueueConfig::CONSUMER_TYPE_ASYNC,
-                    QueueConfig::CONSUMER_HANDLERS => [$topicName => $topicHandlers],
-                    QueueConfig::CONSUMER_MAX_MESSAGES => null,
-                    QueueConfig::CONSUMER_INSTANCE_TYPE => null
-                ]
-            ];
         }
         $queuePublishers = [
             self::DEFAULT_PUBLISHER => [
@@ -108,7 +81,7 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
         return [
             QueueConfig::PUBLISHERS => $queuePublishers,
             QueueConfig::TOPICS => $queueTopics,
-            QueueConfig::CONSUMERS => $queueConsumers,
+            QueueConfig::CONSUMERS => [],
             QueueConfig::BINDS => $queueBinds,
             QueueConfig::EXCHANGE_TOPIC_TO_QUEUES_MAP => $queueExchangeTopicToQueueMap,
         ];

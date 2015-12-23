@@ -71,9 +71,9 @@ class PublisherPool
         try {
             $topic = $this->communicationConfig->getTopic($topicName);
         } catch (\Exception $e) {
-            $topic = [];
+            $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] = true;
         }
-        $type = !empty($topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS]) ? self::MODE_SYNC : self::MODE_ASYNC;
+        $type = $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? self::MODE_SYNC : self::MODE_ASYNC;
         return $this->getPublisherForConnectionNameAndType($type, $publisherConfig[QueueConfig::PUBLISHER_CONNECTION]);
     }
 
