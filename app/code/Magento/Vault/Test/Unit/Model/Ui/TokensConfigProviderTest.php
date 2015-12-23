@@ -94,7 +94,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         $expectedConfig = [
             'payment' => [
                 VaultPaymentInterface::CODE => [
-                    VaultPaymentInterface::CODE . '0' => [
+                    VaultPaymentInterface::CODE . '_item_' . '0' => [
                         'config' => ['token_code' => 'code'],
                         'component' => 'Vendor_Module/js/vault_component'
                     ]
