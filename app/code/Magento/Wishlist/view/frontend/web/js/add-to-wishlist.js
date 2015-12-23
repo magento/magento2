@@ -123,6 +123,13 @@ define([
                     params = $(event.currentTarget).data('post'),
                     form = $(element).closest('form'),
                     action = params.action;
+                if (params.data.id) {
+                    $('<input>', {
+                        type: 'hidden',
+                        name: 'id',
+                        value: params.data.id
+                    }).appendTo(form);
+                }
                 if (params.data.uenc) {
                     action += 'uenc/' + params.data.uenc;
                 }
