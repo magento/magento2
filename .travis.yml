@@ -1,3 +1,6 @@
+sudo: required
+dist: trusty
+
 language: php
 php:
   - 5.5
@@ -44,12 +47,10 @@ before_script:
   # Install MySQL 5.6, create DB for integration tests
   - >
       sh -c "if [ '$TEST_SUITE' = 'integration_part_1' ] || [ '$TEST_SUITE' = 'integration_part_2' ] || [ '$TEST_SUITE' = 'integration_integrity' ]; then
-      sudo apt-get remove --purge mysql-common mysql-server-5.5 mysql-server-core-5.5 mysql-client-5.5 mysql-client-core-5.5;
-      sudo apt-get autoremove;
-      sudo apt-get autoclean;
-      sudo apt-add-repository ppa:ondrej/mysql-5.6 -y;
-      sudo apt-get update;
-      sudo apt-get install mysql-server-5.6 mysql-client-5.6;
+      sudo apt-get remove -y -qq --purge mysql-common mysql-server-5.5 mysql-server-core-5.5 mysql-client-5.5 mysql-client-core-5.5;
+      sudo apt-get -y -qq autoremove;
+      sudo apt-get -y -qq autoclean;
+      sudo apt-get install -y -qq mysql-server-5.6 mysql-client-5.6;
       mysql -uroot -e 'SET @@global.sql_mode = NO_ENGINE_SUBSTITUTION; CREATE DATABASE magento_integration_tests;';
       mv dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php;
       fi"
