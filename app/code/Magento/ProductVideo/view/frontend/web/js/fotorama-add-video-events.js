@@ -92,8 +92,8 @@ define([
     //create AddFotoramaVideoEvents widget
     $.widget('mage.AddFotoramaVideoEvents', {
         options: {
-            VideoData: '',
-            VideoSettings: ''
+            videoData: '',
+            videoSettings: ''
         },
 
         PV: 'product-video', // [CONST]
@@ -136,8 +136,8 @@ define([
 
         _setOptions: function (options) {
 
-            if (options.VideoData.length) {
-                this.options.VideoData = options.VideoData;
+            if (options.videoData.length) {
+                this.options.videoData = options.videoData;
             }
             this._initialize();
         },
@@ -235,7 +235,7 @@ define([
 
             if (
                 isBase &&
-                this.options.VideoData[fotorama.activeIndex].isBase &&
+                this.options.videoData[fotorama.activeIndex].isBase &&
                 $(window).width() > this.MobileMaxWidth) {
                 this._showCloseVideo();
             }
@@ -288,16 +288,16 @@ define([
         _checkForVideoExist: function () {
             var key, result, checker, videoSettings;
 
-            if (!this.options.VideoData) {
+            if (!this.options.videoData) {
                 return false;
             }
 
-            if (!this.options.VideoSettings) {
+            if (!this.options.videoSettings) {
                 return false;
             }
-            result = this._createVideoData(this.options.VideoData, false),
+            result = this._createVideoData(this.options.videoData, false),
                 checker = false;
-            videoSettings = this.options.VideoSettings[0];
+            videoSettings = this.options.videoSettings[0];
             videoSettings.playIfBase = parseInt(videoSettings.playIfBase, 10);
             videoSettings.showRelated = parseInt(videoSettings.showRelated, 10);
             videoSettings.videoAutoRestart = parseInt(videoSettings.videoAutoRestart, 10);
@@ -309,7 +309,7 @@ define([
             }
 
             if (checker) {
-                this.options.VideoData = result;
+                this.options.videoData = result;
             }
 
             return checker;
@@ -320,7 +320,7 @@ define([
          * @private
          */
         _checkForVimeo: function () {
-            var allVideoData = this.options.VideoData,
+            var allVideoData = this.options.videoData,
                 videoItem;
 
             for (videoItem in allVideoData) {
@@ -335,7 +335,7 @@ define([
          * @private
          */
         _isVideoBase: function () {
-            var allVideoData = this.options.VideoData,
+            var allVideoData = this.options.videoData,
                 videoItem,
                 allVideoDataKeys,
                 key,
@@ -349,7 +349,7 @@ define([
 
                 if (
                     videoItem.mediaType === this.VID && videoItem.isBase &&
-                    this.options.VideoSettings[0].playIfBase && allowBase
+                    this.options.videoSettings[0].playIfBase && allowBase
                 ) {
                     this.Base = true;
                     allowBase = false;
@@ -403,11 +403,11 @@ define([
             thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
 
             fotorama.data.map($.proxy(function(item, i){
-                !item.type && (item.type = this.options.VideoData[i].mediaType);
+                !item.type && (item.type = this.options.videoData[i].mediaType);
             }, this));
 
             for (t = 0; t < thumbs.length; t++) {
-                tmpVideoData = this.options.VideoData[t];
+                tmpVideoData = this.options.videoData[t];
                 currentItem = thumbs.eq(t);
 
                 if (fotorama.options.nav === 'dots' && currentItem.hasClass(iconClass)) {
@@ -468,7 +468,7 @@ define([
          * @private
          */
         _checkForVideo: function (e, fotorama, number) {
-            var videoData = this.options.VideoData[number - 1],
+            var videoData = this.options.videoData[number - 1],
                 $image = fotorama.data[number - 1];
 
             if ($image) {
@@ -515,7 +515,7 @@ define([
                 return;
             }
 
-            videoSettings = this.options.VideoSettings[0];
+            videoSettings = this.options.videoSettings[0];
             $image.append(
                 '<div class="' +
                 this.PV +
@@ -577,7 +577,7 @@ define([
          */
         _handleBaseVideo: function (fotorama, srcNumber) {
             var waitForFroogaloop,
-                videoData = this.options.VideoData,
+                videoData = this.options.videoData,
                 activeIndex = fotorama.activeIndex,
                 number = parseInt(srcNumber, 10),
                 activeIndexIsBase = videoData[activeIndex];
@@ -587,7 +587,7 @@ define([
             }
 
             if (activeIndexIsBase && number === 0 && $(window).width() > this.MobileMaxWidth) {
-                if (this.options.VideoData[fotorama.activeIndex].provider === this.VI) {
+                if (this.options.videoData[fotorama.activeIndex].provider === this.VI) {
                     waitForFroogaloop = setInterval($.proxy(function () {
                         if (window.Froogaloop) {
                             clearInterval(waitForFroogaloop);
