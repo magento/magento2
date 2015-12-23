@@ -149,7 +149,7 @@ class Minifier implements MinifierInterface
     /**
      * Gets the relative path of minified file to generation directory
      *
-     * @param $sourcePath
+     * @param string $sourcePath
      * @return string
      */
     private function getRelativeGeneratedPath($sourcePath)
