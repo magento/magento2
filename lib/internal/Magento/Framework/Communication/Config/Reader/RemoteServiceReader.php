@@ -77,6 +77,7 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
                     $serviceInterface,
                     $methodName
                 );
+                $result[$topicName][CommunicationConfig::TOPIC_HANDLERS] = [];
             }
         }
         return [CommunicationConfig::TOPICS => $result];
