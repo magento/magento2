@@ -86,8 +86,7 @@ class Minifier implements MinifierInterface
     public function getMinified($file)
     {
         $file = $this->htmlDirectory->getDriver()->getRealPathSafety($file);
-        $relativeMinifiedFile = ltrim($file, '/');
-        if (!$this->htmlDirectory->isExist($relativeMinifiedFile)) {
+        if (!$this->htmlDirectory->isExist($this->getRelativeGeneratedPath($file))) {
             $this->minify($file);
         }
         return $this->getPathToMinified($file);
@@ -101,8 +100,7 @@ class Minifier implements MinifierInterface
      */
     public function getPathToMinified($file)
     {
-        $file = ltrim($file, '/');
-        return $this->htmlDirectory->getAbsolutePath($file);
+        return $this->htmlDirectory->getAbsolutePath($this->getRelativeGeneratedPath($file));
     }
 
     /**
@@ -145,7 +143,17 @@ class Minifier implements MinifierInterface
         if (!$this->htmlDirectory->isExist()) {
             $this->htmlDirectory->create();
         }
-        $file = ltrim($file, '/');
-        $this->htmlDirectory->writeFile($file, rtrim($content));
+        $this->htmlDirectory->writeFile($this->getRelativeGeneratedPath($file), rtrim($content));
+    }
+
+    /**
+     * Gets the relative path of minified file to generation directory
+     *
+     * @param $sourcePath
+     * @return string
+     */
+    private function getRelativeGeneratedPath($sourcePath)
+    {
+        return ltrim($sourcePath, '/');
     }
 }
