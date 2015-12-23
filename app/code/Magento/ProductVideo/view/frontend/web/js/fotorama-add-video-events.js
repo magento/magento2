@@ -386,8 +386,7 @@ define([
                 t,
                 tmpVideoData,
                 currentItem,
-                iconClass = 'video-thumb-icon',
-                videoContainerClass = 'fotorama-video-container';
+                iconClass = 'video-thumb-icon';
 
             if (!fotorama.activeFrame.$navThumbFrame) {
                 this.fotoramaItem.on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
@@ -472,7 +471,10 @@ define([
                 $image = fotorama.data[number - 1];
 
             if ($image) {
-                if ($image.type !== 'video') return;
+
+                if ($image.type !== 'video') {
+                    return;
+                }
                 $image = $image.$stageFrame;
             }
 
@@ -648,6 +650,7 @@ define([
                 $(this).remove();
                 $item.append(cloneVideoDiv);
                 $item.addClass('video-unplayed');
+
                 if ($('.fotorama-item').data('fotorama').options.arrows) {
                     $('.fotorama__arr--next').show();
                     $('.fotorama__arr--prev').show();
