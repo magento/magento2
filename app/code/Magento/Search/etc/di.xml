@@ -24,11 +24,18 @@
     </type>
     <preference for="Magento\Search\Model\QueryFactoryInterface" type="Magento\Search\Model\QueryFactory" />
     <preference for="Magento\Search\Model\QueryInterface" type="Magento\Search\Model\Query" />
+    <preference for="Magento\Search\Api\SynonymAnalyzerInterface" type="Magento\Search\Model\SynonymAnalyzer" />
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">
                 <item name="mysql" xsi:type="string">MySQL</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Model\EngineResolver">
+        <arguments>
+            <argument name="path" xsi:type="string">catalog/search/engine</argument>
+            <argument name="scopeType" xsi:type="string">default</argument>
         </arguments>
     </type>
     <preference for="Magento\Search\Model\AutocompleteInterface" type="Magento\Search\Model\Autocomplete" />

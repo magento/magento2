@@ -50,14 +50,14 @@ class Content extends Tab
      *
      * @var string
      */
-    protected $content = '#page_content';
+    protected $content = '#contentEditor';
 
     /**
      * Content Heading input locator.
      *
      * @var string
      */
-    protected $contentHeading = '#page_content_heading';
+    protected $contentHeading = '[name="content_heading"]';
 
     /**
      * Clicking in content tab 'Insert Variable' button.
@@ -124,7 +124,8 @@ class Content extends Tab
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
-        $element->find($this->content)->setValue($fields['content']['value']['content']);
+        $context = $element === null ? $this->_rootElement : $element;
+        $context->find($this->content)->setValue($fields['content']['value']['content']);
         if (isset($fields['content_heading']['value'])) {
             $element->find($this->contentHeading)->setValue($fields['content_heading']['value']);
         }

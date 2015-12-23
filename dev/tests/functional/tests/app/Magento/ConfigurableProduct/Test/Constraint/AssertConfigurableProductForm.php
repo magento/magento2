@@ -141,17 +141,14 @@ class AssertConfigurableProductForm extends AssertProductForm
     }
 
     /**
-     * Remove price field from fixture as it should not be retrieved from product page
+     * Remove price\special price fields from fixture as it should not be retrieved from product form
      *
      * @param FixtureInterface $product
      * @return mixed
      */
     protected function processFixture(FixtureInterface $product)
     {
-        $data = $product->getData();
-        if (isset($data['price'])) {
-            unset($data['price']);
-        }
+        $data = array_diff_key($product->getData(), ['price' => 0, 'special_price' => 0]);
         return $this->objectManager->create(
             'Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct',
             ['data' => $data]

@@ -35,7 +35,7 @@ class CreateOrderBackendTest extends Scenario
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test, 3rd_party_test';
     /* end tags */
 
     /**
