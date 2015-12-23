@@ -8,6 +8,10 @@
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Attribute;
 
+/**
+ * Class CollectionTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -65,6 +69,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $select;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $selectRenderer;
+
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
@@ -90,8 +99,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false);
+        $this->selectRenderer = $this->getMockBuilder('Magento\Framework\DB\Select\SelectRenderer')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->select = new \Magento\Framework\DB\Select($this->connectionMock);
+        $this->select = new \Magento\Framework\DB\Select($this->connectionMock, $this->selectRenderer);
 
         $this->resourceMock = $this->getMockForAbstractClass(
             'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
@@ -158,12 +170,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that Magento\Eav\Model\ResourceModel\Attribute\Collection::_initSelect sets expressions
-     * that can be properly quoted by Zend_Db_Expr::quoteIdentifier
-     *
      * @dataProvider initSelectDataProvider
      */
-    public function testInitSelect($column, $value, $expected)
+    public function testInitSelect($column, $value)
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject('Magento\Customer\Model\ResourceModel\Attribute\Collection',
@@ -180,7 +189,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model->addFieldToFilter($column, $value);
-        $this->assertEquals($expected, $this->model->getSelectCountSql()->assemble());
+        $this->selectRenderer->expects($this->once())
+            ->method('render')
+            ->withAnyParameters();
+        $this->model->getSelectCountSql()->assemble();
     }
 
     public function initSelectDataProvider()
@@ -188,25 +200,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         return [
             'main_table_expression' => [
                 'col2', '1',
-                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM `some_main_table` AS `main_table`' . "\n"
-                . ' INNER JOIN `some_extra_table` AS `additional_table`'
-                . ' ON additional_table.attribute_id = main_table.attribute_id' . "\n"
-                . ' LEFT JOIN `some_extra_table` AS `scope_table`'
-                . ' ON scope_table.attribute_id = main_table.attribute_id'
-                . ' AND scope_table.website_id = :scope_website_id'
-                . ' WHERE (main_table.entity_type_id = :mt_entity_type_id)'
-                . ' AND (IF(main_table.col2 IS NULL, scope_table.col2, main_table.col2) = 1)',
             ],
             'additional_table_expression' => [
                 'col3', '2',
-                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM `some_main_table` AS `main_table`' . "\n"
-                . ' INNER JOIN `some_extra_table` AS `additional_table`'
-                . ' ON additional_table.attribute_id = main_table.attribute_id' . "\n"
-                . ' LEFT JOIN `some_extra_table` AS `scope_table`'
-                . ' ON scope_table.attribute_id = main_table.attribute_id'
-                . ' AND scope_table.website_id = :scope_website_id'
-                . ' WHERE (main_table.entity_type_id = :mt_entity_type_id)'
-                . ' AND (IF(additional_table.col3 IS NULL, scope_table.col3, additional_table.col3) = 2)',
             ]
         ];
     }
