@@ -47,14 +47,18 @@ class Decimal extends AbstractEav
         $productValueExpression = $connection->getCheckSql('pds.value_id > 0', 'pds.value', 'pdd.value');
         $select = $connection->select()->from(
             ['pdd' => $this->getTable('catalog_product_entity_decimal')],
-            ['entity_id', 'attribute_id']
+            [$this->getProductIdFieldName(), 'attribute_id']
         )->join(
             ['cs' => $this->getTable('store')],
             '',
             ['store_id']
         )->joinLeft(
             ['pds' => $this->getTable('catalog_product_entity_decimal')],
-            'pds.entity_id = pdd.entity_id AND pds.attribute_id = pdd.attribute_id' . ' AND pds.store_id=cs.store_id',
+            sprintf(
+                'pds.%s = pdd.%s AND pds.attribute_id = pdd.attribute_id'.' AND pds.store_id=cs.store_id',
+                $this->getProductIdFieldName(),
+                $this->getProductIdFieldName()
+            ),
             ['value' => $productValueExpression]
         )->where(
             'pdd.store_id=?',
@@ -73,10 +77,22 @@ class Decimal extends AbstractEav
             '=?',
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         );
-        $this->_addAttributeToSelect($select, 'status', 'pdd.entity_id', 'cs.store_id', $statusCond);
+        $this->_addAttributeToSelect(
+            $select,
+            'status',
+            sprintf(
+                'pdd.%s',
+                $this->getProductIdFieldName()
+            ),
+            'cs.store_id',
+            $statusCond
+        );
 
         if ($entityIds !== null) {
-            $select->where('pdd.entity_id IN(?)', $entityIds);
+            $select->where(
+                sprintf('pdd.%s IN(?)', $this->getProductIdFieldName()),
+                $entityIds
+            );
         }
 
         /**
@@ -86,7 +102,7 @@ class Decimal extends AbstractEav
             'prepare_catalog_product_index_select',
             [
                 'select' => $select,
-                'entity_field' => new \Zend_Db_Expr('pdd.entity_id'),
+                'entity_field' => new \Zend_Db_Expr(sprintf('pdd.%s', $this->getProductIdFieldName())),
                 'website_field' => new \Zend_Db_Expr('cs.website_id'),
                 'store_field' => new \Zend_Db_Expr('cs.store_id')
             ]
@@ -131,6 +147,7 @@ class Decimal extends AbstractEav
      *
      * @param string $table
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getIdxTable($table = null)
     {

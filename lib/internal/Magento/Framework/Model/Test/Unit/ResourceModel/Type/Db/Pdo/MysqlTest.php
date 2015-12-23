@@ -20,10 +20,18 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     private $dateTime;
 
+    /**
+     * @var \Magento\Framework\DB\SelectFactory
+     */
+    protected $selectFactory;
+
     protected function setUp()
     {
-        $this->string = $this->getMock('\Magento\Framework\Stdlib\StringUtils');
-        $this->dateTime = $this->getMock('\Magento\Framework\Stdlib\DateTime');
+        $this->string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
+        $this->dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
+        $this->selectFactory = $this->getMockBuilder('Magento\Framework\DB\SelectFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -34,7 +42,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
-        $object = new Mysql($this->string, $this->dateTime, $inputConfig);
+        $object = new Mysql($this->string, $this->dateTime, $this->selectFactory, $inputConfig);
         $this->assertAttributeEquals($expectedConfig, 'connectionConfig', $object);
     }
 
@@ -77,7 +85,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException()
     {
-        new Mysql($this->string, $this->dateTime, []);
+        new Mysql($this->string, $this->dateTime, $this->selectFactory, []);
     }
 
     /**
@@ -87,7 +95,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testGetConnectionInactive()
     {
         $config = ['host' => 'localhost', 'active' => false];
-        $object = new Mysql($this->string, $this->dateTime, $config);
+        $object = new Mysql($this->string, $this->dateTime, $this->selectFactory, $config);
         $logger = $this->getMockForAbstractClass('Magento\Framework\DB\LoggerInterface');
         $this->assertNull($object->getConnection($logger));
     }
