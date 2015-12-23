@@ -56,8 +56,6 @@ class SynonymReader extends AbstractDb
      */
     public function loadByPhrase(SynReaderModel $object, $phrase)
     {
-        $phrase = strtolower($phrase);
-
         $rows = $this->queryByPhrase(strtolower($phrase));
 
         $storeViewId = $this->storeManager->getStore()->getId();
