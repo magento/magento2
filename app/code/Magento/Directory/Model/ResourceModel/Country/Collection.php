@@ -54,6 +54,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $helperData;
 
     /**
+     * @var string[]
+     */
+    protected $countiesWithNotRequiredRegions;
+
+    /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -64,6 +71,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\Helper\AbstractHelper $helperData
+     * @param array $countiesWithNotRequiredRegions
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -79,6 +87,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\Helper\AbstractHelper $helperData,
+        array $countiesWithNotRequiredRegions = [],
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
@@ -89,6 +98,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->_countryFactory = $countryFactory;
         $this->_arrayUtils = $arrayUtils;
         $this->helperData = $helperData;
+        $this->countiesWithNotRequiredRegions = $countiesWithNotRequiredRegions;
     }
 
     /**
@@ -256,5 +266,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         }
         $this->_foregroundCountries = (array)$foregroundCountries;
         return $this;
+    }
+
+    /**
+     * Get list of countries with required states
+     *
+     * @return \Magento\Directory\Model\Country[]
+     */
+    public function getCountriesWithRequiredStates()
+    {
+        $countries = [];
+        foreach ($this->getItems() as $country) {
+            /** @var \Magento\Directory\Model\Country $country  */
+            if ($country->getRegionCollection()->getSize() > 0
+                && !in_array($country->getId(), $this->countiesWithNotRequiredRegions)
+            ) {
+                $countries[$country->getId()] = $country;
+            }
+        }
+        return $countries;
     }
 }
