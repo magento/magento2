@@ -22,7 +22,7 @@ class Generator
     protected $_ioObject;
 
     /**
-     * @var string[] of EntityAbstract classes
+     * @var array
      */
     protected $_generatedEntities;
 
@@ -57,11 +57,23 @@ class Generator
     /**
      * Get generated entities
      *
-     * @return string[]
+     * @return array
      */
     public function getGeneratedEntities()
     {
         return $this->_generatedEntities;
+    }
+
+    /**
+     * Set entity-to-generator map
+     *
+     * @param array $generatedEntities
+     * @return $this
+     */
+    public function setGeneratedEntities($generatedEntities)
+    {
+        $this->_generatedEntities = $generatedEntities;
+        return $this;
     }
 
     /**
