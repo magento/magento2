@@ -11,7 +11,6 @@
             <data name="description" xsi:type="string">Use saved for Braintree credit card on checkout</data>
             <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
@@ -23,7 +22,11 @@
             <data name="configData" xsi:type="string">braintreetwo, braintreetwo_use_vault</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Cancel, Send Email, Hold, Invoice, Ship</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
         </variation>
     </testCase>
 </config>
