@@ -49,23 +49,13 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
         $component = $this->componentFactory->create(
             [
                 'config' => [
-                    TokenUiComponentProviderInterface::COMPONENT_NONCE_URL => $this->getNonceRetrieveUrl(),
                     TokenUiComponentProviderInterface::COMPONENT_DETAILS => $jsonDetails,
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash()
                 ],
-                'name' => 'Magento_BraintreeTwo/js/view/payment/method-renderer/vault'
+                'name' => 'Magento_Paypal/js/view/payment/method-renderer/payflowpro/vault'
             ]
         );
 
         return $component;
-    }
-
-    /**
-     * Get url to retrieve payment method nonce
-     * @return string
-     */
-    private function getNonceRetrieveUrl()
-    {
-        return $this->urlBuilder->getUrl(ConfigProvider::CODE . '/payment/getnonce', ['_secure' => true]);
     }
 }
