@@ -39,11 +39,26 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             'getPriceType',
             'setCanSaveCustomOptions',
             'getProductOptions',
-            'setProductOptions',
+            'setOptions',
             'setCanSaveBundleSelections',
             '__wakeup',
         ];
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', $methods, [], '', false);
+        $optionInterfaceFactory = $this->getMockBuilder('Magento\Bundle\Api\Data\OptionInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $linkInterfaceFactory = $this->getMockBuilder('Magento\Bundle\Api\Data\LinkInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productRepository = $this->getMockBuilder('Magento\Catalog\Api\ProductRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $customOptionFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->subjectMock = $this->getMock(
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
             [],
@@ -52,14 +67,18 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->model = new \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle(
-            $this->requestMock
+            $this->requestMock,
+            $optionInterfaceFactory,
+            $linkInterfaceFactory,
+            $productRepository,
+            $storeManager,
+            $customOptionFactory
         );
     }
 
     public function testAfterInitializeIfBundleAnsCustomOptionsAndBundleSelectionsExist()
     {
         $productOptionsBefore = [0 => ['key' => 'value'], 1 => ['is_delete' => false]];
-        $productOptionsAfter = [0 => ['key' => 'value', 'is_delete' => 1], 1 => ['is_delete' => 1]];
         $postValue = 'postValue';
         $valueMap = [
             ['bundle_options', null, $postValue],
@@ -80,7 +99,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($productOptionsBefore)
         );
-        $this->productMock->expects($this->once())->method('setProductOptions')->with($productOptionsAfter);
+        $this->productMock->expects($this->once())->method('setOptions')->with(null);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
         $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
