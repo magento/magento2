@@ -21,6 +21,51 @@ define([
             content:        '',
             showSpinner:    false,
             loading:        false
+        },
+
+        /**
+         *
+         * @returns {} Chainable.
+         */
+        initialize: function () {
+            this._super()
+                .initNodeListener();
+
+            return this;
+        },
+
+        /**
+         *
+         * @returns {exports}
+         */
+        initObservable: function () {
+            this._super()
+                .observe('value');
+
+            return this;
+        },
+
+        /**
+         *
+         * @returns {} Chainable.
+         */
+        initNodeListener: function () {
+            $.async({
+                component: this,
+                selector: this.elementSelector
+            }, this.setElementNode.bind(this));
+
+            return this;
+        },
+
+        /**
+         *
+         * @param {HTMLElement} node
+         */
+        setElementNode: function (node) {
+            $(node).bindings({
+                value: this.value
+            });
         }
     });
 });
