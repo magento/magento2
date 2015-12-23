@@ -1,24 +1,24 @@
 <?php
 /**
- * Copyright Â© 2015 Magento. All rights reserved.
+ * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Model\Ui;
+namespace Magento\Vault\Model\Ui\Adminhtml;
 
-use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class ConfigProvider
  * @api
  */
-final class TokensConfigProvider implements ConfigProviderInterface
+final class TokensConfigProvider
 {
     /**
      * @var PaymentTokenRepositoryInterface
@@ -112,9 +112,6 @@ final class TokensConfigProvider implements ConfigProviderInterface
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
             ->setValue($customerId)
             ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_VISIBLE)
-            ->setValue(1)
-            ->create();
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
             ->setValue($vaultProviderCode)
             ->create();
@@ -129,11 +126,7 @@ final class TokensConfigProvider implements ConfigProviderInterface
             ];
         }
 
-        return [
-            'payment' => [
-                VaultPaymentInterface::CODE => $vaultPayments
-            ]
-        ];
+        return $vaultPayments;
     }
 
     /**

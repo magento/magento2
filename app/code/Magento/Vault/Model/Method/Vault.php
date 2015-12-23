@@ -6,15 +6,16 @@
 namespace Magento\Vault\Model\Method;
 
 use Magento\Framework\DataObject;
-use Magento\Payment\Gateway\Command;
-use Magento\Payment\Gateway\ConfigFactoryInterface;
-use Magento\Payment\Model\InfoInterface;
-use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Payment\Model\MethodInterface;
-use Magento\Vault\Model\VaultPaymentInterface;
-use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
+use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
+use Magento\Payment\Gateway\ConfigFactoryInterface;
+use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Vault\Block\Form;
+use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
+use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class Vault
@@ -136,7 +137,7 @@ class Vault implements VaultPaymentInterface
      */
     public function getFormBlockType()
     {
-        return $this->getVaultProvider()->getFormBlockType();
+        return Form::class;
     }
 
     /**
@@ -144,7 +145,7 @@ class Vault implements VaultPaymentInterface
      */
     public function getTitle()
     {
-        return $this->getVaultProvider()->getTitle();
+        return __('Stored Cards');
     }
 
     /**
@@ -232,7 +233,7 @@ class Vault implements VaultPaymentInterface
      */
     public function canUseInternal()
     {
-        return false;
+        return $this->getVaultProvider()->canUseInternal();
     }
 
     /**
