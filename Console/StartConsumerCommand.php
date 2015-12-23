@@ -28,7 +28,7 @@ class StartConsumerCommand extends Command
     private $consumerFactory;
 
     /**
-     * @var \Magento\Framework\App\State $appState
+     * @var \Magento\Framework\App\State
      */
     private $appState;
 
@@ -38,6 +38,7 @@ class StartConsumerCommand extends Command
      *
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
+     * @param string $name
      */
     public function __construct(
         \Magento\Framework\App\State $appState,

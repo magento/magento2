@@ -44,6 +44,7 @@ class StartConsumerCommandTest extends \PHPUnit_Framework_TestCase
         /** Exception will be thrown if argument is not declared */
         $this->command->getDefinition()->getArgument(StartConsumerCommand::ARGUMENT_CONSUMER);
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES);
+        $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_AREACODE);
         $this->assertContains('To start consumer which will process', $this->command->getHelp());
     }
 }
