@@ -568,33 +568,22 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             '/setup/src/',
         ];
         $pathToSource = BP;
-        $libraryPaths = $this->getLibraryPaths($componentRegistrar, $pathToSource);
+        $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
         $directories = array_merge($directories, $libraryPaths);
         // Full list of directories where there may be namespace classes
-        foreach ($directories as $directory) {
+        foreach ($directories as $dirId => $directory) {
+            $inVendorPath = $directory . $namespacePath . '/' . str_replace('\\', '/', $badClass) . '.php';
+            if (!is_int($dirId) && file_exists($inVendorPath)) {
+                unset($badClasses[array_search($badClass, $badClasses)]);
+                return true;
+            }
+
             $fullPath = $pathToSource . $directory . $namespacePath . '/' . str_replace('\\', '/', $badClass) . '.php';
             if (file_exists($fullPath)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
                 return true;
             }
         }
-    }
-
-    /**
-     * @param ComponentRegistrar $componentRegistrar
-     * @param string $pathToSource
-     * @return array
-     */
-    private function getLibraryPaths($componentRegistrar, $pathToSource)
-    {
-        $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
-        foreach ($libraryPaths as $key => $libraryPath) {
-            $libraryPath = str_replace($pathToSource, '', $libraryPath);
-            $partsOfLibraryPath = explode('/', $libraryPath);
-            $libraryPaths[$key] = implode('/', array_slice($partsOfLibraryPath, 0, sizeof($partsOfLibraryPath)-2));
-            $libraryPaths[$key] .=  '/';
-        }
-        return $libraryPaths;
     }
 
     /**
