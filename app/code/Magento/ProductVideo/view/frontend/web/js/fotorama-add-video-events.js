@@ -366,8 +366,7 @@ define([
                 t,
                 tmpVideoData,
                 currentItem,
-                iconClass = 'video-thumb-icon',
-                videoContainerClass = 'fotorama-video-container';
+                iconClass = 'video-thumb-icon';
 
             if (!fotorama.activeFrame.$navThumbFrame) {
                 $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
