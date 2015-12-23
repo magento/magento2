@@ -9,7 +9,7 @@ namespace Magento\Framework\View\Layout;
  * Proxy class for @see \Magento\Framework\View\Layout
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Proxy extends \Magento\Framework\View\Layout
+class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
