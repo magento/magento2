@@ -120,10 +120,10 @@ class ObjectManagerFactory
         $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
         $relations = $definitionFactory->createRelations();
 
-        /** @var EnvironmentFactory $enFactory */
-        $enFactory = new $this->envFactoryClassName($relations, $definitions);
+        /** @var EnvironmentFactory $envFactory */
+        $envFactory = new $this->envFactoryClassName($relations, $definitions);
         /** @var EnvironmentInterface $env */
-        $env =  $enFactory->createEnvironment();
+        $env =  $envFactory->createEnvironment();
 
         /** @var ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();
@@ -176,7 +176,10 @@ class ObjectManagerFactory
 
         $this->factory->setObjectManager($objectManager);
         ObjectManager::setInstance($objectManager);
-        $definitionFactory->getCodeGenerator()->setObjectManager($objectManager);
+
+        $definitionFactory->getCodeGenerator()
+            ->setObjectManager($objectManager)
+            ->setGeneratedEntities($diConfig->getArguments('Magento\Framework\Code\Generator')['generatedEntities']);
 
         $env->configureObjectManager($diConfig, $sharedInstances);
 
