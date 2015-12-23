@@ -12,10 +12,10 @@ namespace Magento\CatalogInventory\Api;
 interface StockRegistryInterface
 {
     /**
-     * @param int $scopeId
+     * @param int|null $stockId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
-    public function getStock($scopeId = null);
+    public function getStock($stockId = null);
 
     /**
      * @param int $productId

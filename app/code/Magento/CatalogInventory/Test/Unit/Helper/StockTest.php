@@ -37,6 +37,11 @@ class StockTest extends \PHPUnit_Framework_TestCase
      */
     protected $statusFactoryMock;
 
+    /**
+     * @var \Magento\CatalogInventory\Model\Spi\StockResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockResolverMock;
+
     protected function setUp()
     {
         $this->stockRegistryProviderMock = $this->getMockBuilder(
@@ -55,18 +60,26 @@ class StockTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->stockResolverMock =
+            $this->getMockBuilder('Magento\CatalogInventory\Model\Spi\StockResolverInterface')
+                ->disableOriginalConstructor()
+                ->setMethods(['getStockId'])
+                ->getMock();
         $this->stock = new Stock(
             $this->storeManagerMock,
             $this->scopeConfigMock,
             $this->statusFactoryMock,
-            $this->stockRegistryProviderMock
+            $this->stockRegistryProviderMock,
+            $this->stockResolverMock
         );
     }
 
     public function testAssignStatusToProduct()
     {
-        $websiteId = 1;
-        $status = 'test';
+        $websiteId = 0;
+        $productId = 2;
+        $stockId = 3;
+        $status = 1;
 
         $stockStatusMock = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockStatusInterface')
             ->disableOriginalConstructor()
@@ -93,15 +106,23 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())
             ->method('setIsSalable')
             ->with($status);
+        $productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($productId);
+        $this->stockResolverMock->expects($this->once())
+            ->method('getStockId')
+            ->with($productId, $websiteId)
+            ->willReturn($stockId);
         $this->assertNull($this->stock->assignStatusToProduct($productMock));
     }
 
     public function testAddStockStatusToProducts()
     {
         $storeId = 1;
+        $websiteId = 0;
         $productId = 2;
-        $status = 'test';
-
+        $stockId = 3;
+        $status = 1;
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->setMethods(['setIsSalable', 'getId'])
@@ -137,14 +158,21 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
             ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
+            ->with($storeId)
             ->willReturn($storeMock);
         $this->stockRegistryProviderMock->expects($this->once())
             ->method('getStockStatus')
             ->withAnyParameters()
             ->willReturn($stockStatusMock);
-
+        $this->stockResolverMock->expects($this->once())
+            ->method('getStockId')
+            ->with($productId, $websiteId)
+            ->willReturn($stockId);
         $this->assertNull($this->stock->addStockStatusToProducts($productCollectionMock));
     }
 
