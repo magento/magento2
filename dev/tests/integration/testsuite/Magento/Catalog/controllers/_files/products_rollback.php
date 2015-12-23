@@ -13,11 +13,11 @@ $registry = $objectManager->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-$productIds = [1, 2];
-foreach ($productIds as $productId) {
+$productSkuList = ['simple_product_1', 'simple_product_2'];
+foreach ($productSkuList as $sku) {
     /** @var $product \Magento\Catalog\Model\Product */
     $product = $objectManager->create('Magento\Catalog\Model\Product');
-    $product->load($productId);
+    $product->loadByAttribute('sku', $sku);
     if ($product->getId()) {
         $product->delete();
     }

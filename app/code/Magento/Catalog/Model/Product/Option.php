@@ -56,6 +56,11 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
 
     const OPTION_TYPE_TIME = 'time';
 
+    /**
+     * @var Option\Repository
+     */
+    protected $optionRepository;
+
     /**#@+
      * Constants
      */
@@ -122,6 +127,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param Option\Type\Factory $optionFactory
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param Option\Validator\Pool $validatorPool
+     * @param \Magento\Catalog\Model\Product\Option\Repository $optionRepository,
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -136,6 +142,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
         \Magento\Framework\Stdlib\StringUtils $string,
         Option\Validator\Pool $validatorPool,
+        \Magento\Catalog\Model\Product\Option\Repository $optionRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -144,6 +151,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         $this->optionTypeFactory = $optionFactory;
         $this->validatorPool = $validatorPool;
         $this->string = $string;
+        $this->optionRepository = $optionRepository;
         parent::__construct(
             $context,
             $registry,
@@ -332,82 +340,48 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
-     * Save options.
-     *
-     * @return $this
+     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function saveOptions()
+    public function beforeSave()
     {
-        foreach ($this->getOptions() as $option) {
-            $this->_validatorBeforeSave = null;
-            $this->setData(
-                $option
-            )->setData(
-                'product_id',
-                $this->getProduct()->getId()
-            )->setData(
-                'store_id',
-                $this->getProduct()->getStoreId()
-            );
-            /** Reset is delete flag from the previous iteration */
-            $this->isDeleted(false);
+        parent::beforeSave();
+        if ($this->getData('previous_type') != '') {
+            $previousType = $this->getData('previous_type');
 
-            if ($this->getData('option_id') == '0') {
-                $this->unsetData('option_id');
-            } else {
-                $this->setId($this->getData('option_id'));
-            }
-            $isEdit = (bool)$this->getId() ? true : false;
-
-            if ($this->getData('is_delete') == '1') {
-                if ($isEdit) {
-                    $this->getValueInstance()->deleteValue($this->getId());
-                    $this->deletePrices($this->getId());
-                    $this->deleteTitles($this->getId());
-                    $this->delete();
+            /**
+             * if previous option has different group from one is came now
+             * need to remove all data of previous group
+             */
+            if ($this->getGroupByType($previousType) != $this->getGroupByType($this->getData('type'))) {
+                switch ($this->getGroupByType($previousType)) {
+                    case self::OPTION_GROUP_SELECT:
+                        $this->unsetData('values');
+                        if ($this->getId()) {
+                            $this->getValueInstance()->deleteValue($this->getId());
+                        }
+                        break;
+                    case self::OPTION_GROUP_FILE:
+                        $this->setData('file_extension', '');
+                        $this->setData('image_size_x', '0');
+                        $this->setData('image_size_y', '0');
+                        break;
+                    case self::OPTION_GROUP_TEXT:
+                        $this->setData('max_characters', '0');
+                        break;
+                    case self::OPTION_GROUP_DATE:
+                        break;
                 }
-            } else {
-                if ($this->getData('previous_type') != '') {
-                    $previousType = $this->getData('previous_type');
-
-                    /**
-                     * if previous option has different group from one is came now
-                     * need to remove all data of previous group
-                     */
-                    if ($this->getGroupByType($previousType) != $this->getGroupByType($this->getData('type'))) {
-                        switch ($this->getGroupByType($previousType)) {
-                            case self::OPTION_GROUP_SELECT:
-                                $this->unsetData('values');
-                                if ($isEdit) {
-                                    $this->getValueInstance()->deleteValue($this->getId());
-                                }
-                                break;
-                            case self::OPTION_GROUP_FILE:
-                                $this->setData('file_extension', '');
-                                $this->setData('image_size_x', '0');
-                                $this->setData('image_size_y', '0');
-                                break;
-                            case self::OPTION_GROUP_TEXT:
-                                $this->setData('max_characters', '0');
-                                break;
-                            case self::OPTION_GROUP_DATE:
-                                break;
-                        }
-                        if ($this->getGroupByType($this->getData('type')) == self::OPTION_GROUP_SELECT) {
-                            $this->setData('sku', '');
-                            $this->unsetData('price');
-                            $this->unsetData('price_type');
-                            if ($isEdit) {
-                                $this->deletePrices($this->getId());
-                            }
-                        }
+                if ($this->getGroupByType($this->getData('type')) == self::OPTION_GROUP_SELECT) {
+                    $this->setData('sku', '');
+                    $this->unsetData('price');
+                    $this->unsetData('price_type');
+                    if ($this->getId()) {
+                        $this->deletePrices($this->getId());
                     }
                 }
-                $this->save();
             }
         }
-        //eof foreach()
         return $this;
     }
 
@@ -418,9 +392,15 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     public function afterSave()
     {
         $this->getValueInstance()->unsetValues();
-        if (is_array($this->getData('values'))) {
-            foreach ($this->getData('values') as $value) {
-                $this->getValueInstance()->addValue($value);
+        $values = $this->getValues() ?: $this->getData('values');
+        if (is_array($values)) {
+            foreach ($values as $value) {
+                if ($value instanceof \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface) {
+                    $data = $value->getData();
+                } else {
+                    $data = $value;
+                }
+                $this->getValueInstance()->addValue($data);
             }
 
             $this->getValueInstance()->setOption($this)->saveValues();
@@ -478,30 +458,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      */
-    public function getProductOptionCollection(Product $product)
+    public function getProductOptions(Product $product)
     {
-        $collection = clone $this->getCollection();
-        $collection->addFieldToFilter(
-            'product_id',
-            $product->getId()
-        )->addTitleToResult(
-            $product->getStoreId()
-        )->addPriceToResult(
-            $product->getStoreId()
-        )->setOrder(
-            'sort_order',
-            'asc'
-        )->setOrder(
-            'title',
-            'asc'
-        );
-
-        if ($this->getAddRequiredFilter()) {
-            $collection->addRequiredFilter($this->getAddRequiredFilterValue());
-        }
-
-        $collection->addValuesToResult($product->getStoreId());
-        return $collection;
+        return $this->optionRepository->getProductOptions($product, $this->getAddRequiredFilter());
     }
 
     /**
@@ -861,6 +820,36 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     public function getExtensionAttributes()
     {
         return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @param Product $product
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     */
+    public function getProductOptionCollection(Product $product)
+    {
+        $collection = clone $this->getCollection();
+        $collection->addFieldToFilter(
+            'product_id',
+            $product->getId()
+        )->addTitleToResult(
+            $product->getStoreId()
+        )->addPriceToResult(
+            $product->getStoreId()
+        )->setOrder(
+            'sort_order',
+            'asc'
+        )->setOrder(
+            'title',
+            'asc'
+        );
+
+        if ($this->getAddRequiredFilter()) {
+            $collection->addRequiredFilter($this->getAddRequiredFilterValue());
+        }
+
+        $collection->addValuesToResult($product->getStoreId());
+        return $collection;
     }
 
     /**
