@@ -44,6 +44,9 @@ define(
                 if (!this.isVaultEnabled()) {
                     return;
                 }
+                if (!('additional_data' in data)) {
+                    data['additional_data'] = {};
+                }
 
                 data['additional_data']['is_active_payment_token_enabler'] = this.isActivePaymentTokenEnabler();
             },

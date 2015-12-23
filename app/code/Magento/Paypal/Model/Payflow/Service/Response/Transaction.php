@@ -106,7 +106,7 @@ class Transaction
 
         /** @var InfoInterface $payment */
         $payment = $this->paymentManagement->get($quote->getId());
-        $payment->setAdditionalInformation('pnref', $response->getPnref());
+        $payment->setAdditionalInformation(Transparent::PNREF, $response->getPnref());
 
         $this->errorHandler->handle($payment, $response);
 
