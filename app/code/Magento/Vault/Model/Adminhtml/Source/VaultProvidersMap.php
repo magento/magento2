@@ -25,7 +25,7 @@ class VaultProvidersMap implements ArrayInterface
     /**
      * Constructor
      *
-     * @param PaymentMethodInterface[] $options
+     * @param MethodInterface[] $options
      */
     public function __construct(array $options = [])
     {

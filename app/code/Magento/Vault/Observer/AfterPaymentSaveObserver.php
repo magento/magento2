@@ -9,6 +9,7 @@ namespace Magento\Vault\Observer;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -34,15 +35,23 @@ class AfterPaymentSaveObserver implements ObserverInterface
     protected $encryptor;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $timezone;
+
+    /**
      * @param PaymentTokenManagementInterface $paymentTokenManagement
      * @param EncryptorInterface $encryptor
+     * @param TimezoneInterface $timezone
      */
     public function __construct(
         PaymentTokenManagementInterface $paymentTokenManagement,
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        TimezoneInterface $timezone
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
         $this->encryptor = $encryptor;
+        $this->timezone = $timezone;
     }
 
     /**
@@ -64,8 +73,12 @@ class AfterPaymentSaveObserver implements ObserverInterface
             return $this;
         }
 
+        $order = $payment->getOrder();
+
         $paymentToken->setPublicHash($this->generatePublicHash($paymentToken));
+        $paymentToken->setCustomerId($order->getCustomerId());
         $paymentToken->setIsActive(true);
+        $paymentToken->setPaymentMethodCode($payment->getMethod());
 
         $additionalInformation = $payment->getAdditionalInformation();
         if (isset($additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE])) {

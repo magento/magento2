@@ -110,14 +110,9 @@ class VaultDetailsHandler implements HandlerInterface
             return null;
         }
 
-        $order = $payment->getOrder();
-
         /** @var PaymentTokenInterface $paymentToken */
         $paymentToken = $this->paymentTokenFactory->create();
         $paymentToken->setGatewayToken($token);
-        $paymentToken->setCustomerId($order->getCustomerId());
-        $paymentToken->setPaymentMethodCode($payment->getMethod());
-        $paymentToken->setCreatedAt($order->getCreatedAt());
 
         $paymentToken->setTokenDetails($this->convertDetailsToJSON([
             'type' => $this->getCreditCardType($transaction->creditCardDetails->cardType),
