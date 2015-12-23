@@ -218,9 +218,14 @@ abstract class AbstractAction
             'ROUND(tp.value * cwd.rate, 4)',
             'tp.value'
         );
+        $linkField = $this->getProductIdFieldName();
         $select = $this->_connection->select()->from(
+            ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
+            ['cpe.entity_id']
+        )->join(
             ['tp' => $this->_defaultIndexerResource->getTable(['catalog_product_entity', 'tier_price'])],
-            ['entity_id']
+            'tp.' . $linkField . ' = cpe.' . $linkField,
+            []
         )->join(
             ['cg' => $this->_defaultIndexerResource->getTable('customer_group')],
             'tp.all_groups = 1 OR (tp.all_groups = 0 AND tp.customer_group_id = cg.customer_group_id)',
@@ -238,11 +243,11 @@ abstract class AbstractAction
         )->columns(
             new \Zend_Db_Expr("MIN({$websiteExpression})")
         )->group(
-            ['tp.entity_id', 'cg.customer_group_id', 'cw.website_id']
+            ['cpe.entity_id', 'cg.customer_group_id', 'cw.website_id']
         );
 
         if (!empty($entityIds)) {
-            $select->where('tp.entity_id IN(?)', $entityIds);
+            $select->where("cpe.entity_id IN(?)", $entityIds);
         }
 
         $query = $select->insertFromSelect($table);
@@ -442,5 +447,15 @@ abstract class AbstractAction
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProductIdFieldName()
+    {
+        $table = $this->_defaultIndexerResource->getTable('catalog_product_entity');
+        $indexList = $this->_connection->getIndexList($table);
+        return $indexList[$this->_connection->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }

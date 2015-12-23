@@ -924,11 +924,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getProductCount()
     {
-        if (!$this->hasProductCount()) {
-            $count = $this->_getResource()->getProductCount($this);
-            // load product count
-            $this->setData(self::KEY_PRODUCT_COUNT, $count);
-        }
+        $count = $this->_getResource()->getProductCount($this);
+        $this->setData(self::KEY_PRODUCT_COUNT, $count);
         return $this->getData(self::KEY_PRODUCT_COUNT);
     }
 

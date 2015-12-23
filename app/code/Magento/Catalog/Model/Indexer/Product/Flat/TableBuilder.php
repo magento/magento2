@@ -23,6 +23,11 @@ class TableBuilder
     protected $_connection;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * Check whether builder was executed
      *
      * @var bool
@@ -32,13 +37,16 @@ class TableBuilder
     /**
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\Framework\App\ResourceConnection $resource
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->_connection = $resource->getConnection();
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -235,6 +243,7 @@ class TableBuilder
         $valueFieldSuffix,
         $storeId
     ) {
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         if (!empty($tableColumns)) {
             $columnsChunks = array_chunk(
                 $tableColumns,
@@ -263,9 +272,10 @@ class TableBuilder
                 foreach ($columnsList as $columnName => $attribute) {
                     $countTableName = 't' . $iterationNum++;
                     $joinCondition = sprintf(
-                        'e.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = 0',
+                        'e.%3$s = %1$s.%3$s AND %1$s.attribute_id = %2$d AND %1$s.store_id = 0',
                         $countTableName,
-                        $attribute->getId()
+                        $attribute->getId(),
+                        $metadata->getLinkField()
                     );
 
                     $select->joinLeft(
