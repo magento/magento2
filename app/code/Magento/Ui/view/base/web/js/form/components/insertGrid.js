@@ -4,36 +4,16 @@
  */
 
 define([
-    'uiElement',
-    'jquery',
-    'mage/translate',
+    './insert',
     'mageUtils',
-    'underscore',
-    'uiLayout',
-    'Magento_Ui/js/modal/alert',
-    'Magento_Ui/js/lib/view/utils/bindings',
-    'Magento_Ui/js/lib/view/utils/async'
-], function (Element, $, $t, utils, _, layout, alert) {
+    'underscore'
+], function (Insert, utils, _) {
     'use strict';
 
-    return Element.extend({
+    return Insert.extend({
         defaults: {
-            content: '',
-            template: 'Magento_TestForm/robin',
-            showSpinner: true,
-            loading: false,
-            contentSelector: '.${$.name}',
             behaviourType: 'simple',
-            params: {
-                namespace: '${ $.ns }'
-            },
-            renderSettings: {
-                url: '${ $.render_url }',
-                dataType: 'html'
-            },
             settings: {
-                simple: {
-                },
                 edit: {
                     externalLinks: {
                         listens: {
@@ -44,7 +24,6 @@ define([
             },
             externalLinks: {
                 imports: {
-                    updateUrl: '${ $.externalProvider }:update_url',
                     onSelectedChange: '${ $.selectionsProvider }:selected'
                 },
                 exports: {
@@ -55,9 +34,6 @@ define([
                 selections: '${ $.selectionsProvider }'
             },
             immediateUpdateBySelection: false,
-            links: {
-                value: '${ $.provider }:${ $.dataScope}'
-            },
             listens: {
                 value: 'updateExternalFiltersModifier',
                 externalValue: 'onSetExternalValue'
@@ -83,91 +59,11 @@ define([
             this.externalValue.valueHasMutated();
         },
 
-        initialize: function () {
-            var self = this._super();
-
-            _.bindAll(this, 'onRender');
-
-            $.async('.' + this.contentSelector, function (el) {
-                self.contentEl = $(el);
-                self.render();
-            });
-
-            return this;
-        },
-
         initObservable: function () {
             return this._super()
                 .observe([
-                    'content',
-                    'value',
-                    'externalValue',
-                    'loading'
+                    'externalValue'
                 ]);
-        },
-
-        initConfig: function () {
-            this._super();
-            utils.extend(this, this.settings[this.behaviourType]);
-            this.contentSelector = this.contentSelector.replace(/\./g, '_').substr(1);
-
-            return this;
-        },
-
-        render: function () {
-            var request = this.requestData(this.params, this.renderSettings);
-
-            request
-                .done(this.onRender)
-                .fail(this.onError);
-
-            return request;
-        },
-
-        requestData: function (params, ajaxSettings) {
-            var query = utils.copy(params);
-
-            ajaxSettings = _.extend({
-                url: this.updateUrl,
-                method: 'GET',
-                data: query,
-                dataType: 'json'
-            }, ajaxSettings);
-
-            this.loading(true);
-
-            return $.ajax(ajaxSettings);
-        },
-
-        onRender: function (data) {
-            this.loading(false);
-            this.set('content', data);
-            this.contentEl.children().applyBindings();
-            this.contentEl.trigger('contentUpdated');
-            this.initExternalLinks(this.externalLinks);
-        },
-
-        onError: function (xhr) {
-            if (xhr.statusText === 'abort') {
-                return;
-            }
-
-            alert({
-                content: $t('Something went wrong.')
-            });
-        },
-
-        initExternalLinks: function (external) {
-            this.setListeners(external.listens)
-                .setLinks(external.links, 'imports')
-                .setLinks(external.links, 'exports');
-
-            _.each({
-                exports: external.exports,
-                imports: external.imports
-            }, this.setLinks, this);
-
-            return this;
         },
 
         onSelectedChange: function () {
