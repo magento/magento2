@@ -1114,4 +1114,13 @@ interface AdapterInterface
      * @return \Zend_Db_Expr
      */
     public function getCaseSql($valueName, $casesResults, $defaultValue = null);
+
+    /**
+     * Returns auto increment field if exists
+     *
+     * @param string $tableName
+     * @param string|null $schemaName
+     * @return string|bool
+     */
+    public function getAutoIncrementField($tableName, $schemaName = null);
 }
