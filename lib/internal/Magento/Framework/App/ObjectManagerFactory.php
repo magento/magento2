@@ -177,15 +177,10 @@ class ObjectManagerFactory
         $this->factory->setObjectManager($objectManager);
         ObjectManager::setInstance($objectManager);
 
-        $generatorParams = $diConfig->getArguments('Magento\Framework\Code\Generator');
         $definitionFactory->getCodeGenerator()
             ->setObjectManager($objectManager)
-            ->setGeneratedEntities(
-                isset($generatorParams['generatedEntities']) ? $generatorParams['generatedEntities'] : []
-            );
+            ->setGeneratedEntities($diConfig->getArguments('Magento\Framework\Code\Generator')['generatedEntities']);
 
-        // TODO: Investigate how difficult would it be to move this before code generator initialization
-        // TODO: (this would allow to add custom code generators in custom modules)
         $env->configureObjectManager($diConfig, $sharedInstances);
 
         return $objectManager;
