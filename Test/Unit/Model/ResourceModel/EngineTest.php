@@ -6,11 +6,12 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\ResourceModel;
 
 use Magento\Elasticsearch\Model\ResourceModel\Engine;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class EngineTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\ResourceModel\Engine
+     * @var Engine
      */
     private $model;
 
@@ -62,9 +63,13 @@ class EngineTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getVisibleInSiteIds'])
             ->getMock();
 
-        $this->model = new Engine(
-            $this->catalogProductVisibility,
-            $this->indexScopeResolver
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
+            '\Magento\Elasticsearch\Model\ResourceModel\Engine',
+            [
+                'catalogProductVisibility' => $this->catalogProductVisibility,
+                'indexScopeResolver' => $this->indexScopeResolver
+            ]
         );
     }
 

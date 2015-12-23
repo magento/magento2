@@ -11,8 +11,6 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 /**
  * Search engine resource model
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Engine implements EngineInterface
 {
@@ -38,8 +36,8 @@ class Engine implements EngineInterface
     /**
      * Construct
      *
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @param Visibility $catalogProductVisibility
+     * @param IndexScopeResolver $indexScopeResolver
      */
     public function __construct(
         Visibility $catalogProductVisibility,
@@ -70,7 +68,7 @@ class Engine implements EngineInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAttributeValue($attribute, $value)
     {
@@ -92,7 +90,7 @@ class Engine implements EngineInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isAvailable()
     {

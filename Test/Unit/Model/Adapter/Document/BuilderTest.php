@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Document;
 
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Unit test for Magento\Elasticsearch\Model\Adapter\Document\Builder
@@ -13,16 +14,19 @@ use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\Document\Builder
+     * @var Builder
      */
-    private $builder;
+    protected $builder;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function setUp()
     {
-        $this->builder = new Builder();
+        $objectManager = new ObjectManagerHelper($this);
+        $this->builder = $objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Adapter\Document\Builder'
+        );
     }
 
     /**
@@ -99,6 +103,23 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         ];
         $field = 'nameOfField';
         $values = ['value1', 'value2'];
+
+        $this->builder->addField($field, $values);
+
+        $result = $this->builder->build();
+        $this->assertEquals($document, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testBuildWithEmptyArrayField()
+    {
+        $document = [
+            'nameOfField' => []
+        ];
+        $field = 'nameOfField';
+        $values = [];
 
         $this->builder->addField($field, $values);
 

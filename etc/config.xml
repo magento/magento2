@@ -11,7 +11,7 @@
             <search>
                 <elasticsearch_server_hostname>localhost</elasticsearch_server_hostname>
                 <elasticsearch_server_port>9200</elasticsearch_server_port>
-                <elasticsearch_index_name>magento2</elasticsearch_index_name>
+                <elasticsearch_index_prefix>magento2</elasticsearch_index_prefix>
                 <elasticsearch_enable_auth>0</elasticsearch_enable_auth>
                 <elasticsearch_server_timeout>15</elasticsearch_server_timeout>
             </search>
