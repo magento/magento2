@@ -58,11 +58,12 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testGetPathToMinified()
     {
         $file = '/absolute/path/to/phtml/template/file';
+        $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
         $absolutePath = '/full/path/to/compiled/html/file';
 
         $this->htmlDirectory->expects($this->once())
             ->method('getAbsolutePath')
-            ->with(ltrim($file, '/'))
+            ->with($relativeGeneratedPath)
             ->willReturn($absolutePath);
 
         $this->assertEquals($absolutePath, $this->object->getPathToMinified($file));
@@ -76,6 +77,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testMinify()
     {
         $file = '/absolute/path/to/phtml/template/file';
+        $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
         $baseContent = <<<TEXT
 <?php
 /**
@@ -140,7 +142,7 @@ TEXT;
             ->method('create');
         $this->htmlDirectory->expects($this->once())
             ->method('writeFile')
-            ->with(ltrim($file, '/'), $expectedContent);
+            ->with($relativeGeneratedPath, $expectedContent);
 
         $this->object->minify($file);
     }
@@ -153,6 +155,7 @@ TEXT;
     public function testGetMinified()
     {
         $file = '/absolute/path/to/phtml/template/file';
+        $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
 
         $htmlDriver = $this->getMock('Magento\Framework\Filesystem\DriverInterface', [], [], '', false);
         $htmlDriver
@@ -163,7 +166,7 @@ TEXT;
         $this->htmlDirectory
             ->expects($this->at(1))
             ->method('isExist')
-            ->with(ltrim($file, '/'))
+            ->with($relativeGeneratedPath)
             ->willReturn(false);
 
         $this->htmlDirectory
