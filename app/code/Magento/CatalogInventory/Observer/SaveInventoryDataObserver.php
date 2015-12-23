@@ -11,6 +11,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockIndexInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Spi\StockResolverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 class SaveInventoryDataObserver implements ObserverInterface
@@ -34,6 +35,11 @@ class SaveInventoryDataObserver implements ObserverInterface
      * @var StockItemRepositoryInterface
      */
     protected $stockItemRepository;
+
+    /**
+     * @var StockResolverInterface
+     */
+    protected $stockResolver;
 
     /**
      * @var array
@@ -74,17 +80,20 @@ class SaveInventoryDataObserver implements ObserverInterface
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
      * @param StockItemRepositoryInterface $stockItemRepository
+     * @param StockResolverInterface $stockResolver
      */
     public function __construct(
         StockIndexInterface $stockIndex,
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry,
-        StockItemRepositoryInterface $stockItemRepository
+        StockItemRepositoryInterface $stockItemRepository,
+        StockResolverInterface $stockResolver
     ) {
         $this->stockIndex = $stockIndex;
         $this->stockConfiguration = $stockConfiguration;
         $this->stockRegistry = $stockRegistry;
         $this->stockItemRepository = $stockItemRepository;
+        $this->stockResolver = $stockResolver;
     }
 
     /**
@@ -125,7 +134,8 @@ class SaveInventoryDataObserver implements ObserverInterface
         if (!isset($stockItemData['website_id'])) {
             $stockItemData['website_id'] = $this->stockConfiguration->getDefaultScopeId();
         }
-        $stockItemData['stock_id'] = $this->stockRegistry->getStock($stockItemData['website_id'])->getStockId();
+        $stockItemData['stock_id'] = $this->stockResolver
+            ->getStockId($stockItemData['product_id'], $stockItemData['website_id']);
 
         foreach ($this->paramListToCheck as $dataKey => $configPath) {
             if (null !== $product->getData($configPath['item']) && null === $product->getData($configPath['config'])) {
