@@ -6,10 +6,20 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\Entity\MetadataPool;
 
+/**
+ * Class Indexer
+ */
 class Indexer
 {
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
     /**
      * Maximum size of attributes chunk
      */
@@ -24,16 +34,20 @@ class Indexer
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
+
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
+        \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
+        MetadataPool $metadataPool
     ) {
         $this->_productIndexerHelper = $productHelper;
         $this->_connection = $resource->getConnection();
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -86,17 +100,17 @@ class Indexer
                             $ids[$attribute->getId()] = $columnName;
                         }
                     }
-
+                    $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
                     $select->joinLeft(
                         ['t' => $tableName],
-                        'e.entity_id = t.entity_id ' . $this->_connection->quoteInto(
+                        sprintf('e.%s = t.%s ', $linkField, $linkField) . $this->_connection->quoteInto(
                             ' AND t.attribute_id IN (?)',
                             array_keys($ids)
                         ) . ' AND t.store_id = 0',
                         []
                     )->joinLeft(
                         ['t2' => $tableName],
-                        't.entity_id = t2.entity_id ' .
+                        sprintf('t.%s = t2.%s ', $linkField, $linkField) .
                         ' AND t.attribute_id = t2.attribute_id  ' .
                         $this->_connection->quoteInto(
                             ' AND t2.store_id = ?',
