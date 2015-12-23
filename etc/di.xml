@@ -135,4 +135,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider">
+        <arguments>
+            <argument name="indexerId" xsi:type="const">\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID</argument>
+        </arguments>
+    </type>
 </config>

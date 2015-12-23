@@ -60,6 +60,11 @@ class DataProvider implements DataProviderInterface
     protected $searchIndexNameResolver;
 
     /**
+     * @var string
+     */
+    protected $indexerId;
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param Range $range
@@ -68,6 +73,7 @@ class DataProvider implements DataProviderInterface
      * @param StoreManagerInterface $storeManager
      * @param CustomerSession $customerSession
      * @param SearchIndexNameResolver $searchIndexNameResolver
+     * @param string $indexerId
      */
     public function __construct(
         ConnectionManager $connectionManager,
@@ -77,7 +83,8 @@ class DataProvider implements DataProviderInterface
         Config $clientConfig,
         StoreManagerInterface $storeManager,
         CustomerSession $customerSession,
-        SearchIndexNameResolver $searchIndexNameResolver
+        SearchIndexNameResolver $searchIndexNameResolver,
+        $indexerId
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
@@ -87,6 +94,7 @@ class DataProvider implements DataProviderInterface
         $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
         $this->searchIndexNameResolver = $searchIndexNameResolver;
+        $this->indexerId = $indexerId;
     }
 
     /**
@@ -114,7 +122,7 @@ class DataProvider implements DataProviderInterface
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
         $storeId = $this->storeManager->getStore()->getId();
         $requestQuery = [
-            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->clientConfig->getEntityType()),
+            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->indexerId),
             'type' => $this->clientConfig->getEntityType(),
             'body' => [
                 'fields' => [
@@ -225,7 +233,7 @@ class DataProvider implements DataProviderInterface
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
         $requestQuery = [
-            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->clientConfig->getEntityType()),
+            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->indexerId),
             'type' => $this->clientConfig->getEntityType(),
             'body' => [
                 'fields' => [
