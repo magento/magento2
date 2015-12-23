@@ -28,10 +28,6 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
         parent::__construct($configuration, $eventManager);
 
         $this->mappingData += [
-            'is_percent' => [
-                'Yes' => 1,
-                'No' => 0,
-            ],
             'include' => [
                 'Yes' => 1,
                 'No' => 0,
@@ -95,7 +91,6 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
     {
         $optionFields = [
             'pricing_value',
-            'is_percent',
             'include',
         ];
         $result = [];

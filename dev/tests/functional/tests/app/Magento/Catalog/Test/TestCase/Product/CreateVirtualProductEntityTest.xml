@@ -35,6 +35,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation3">
             <data name="description" xsi:type="string">Create product with out of stock</data>
@@ -52,6 +53,26 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation4">
+            <data name="description" xsi:type="string">Create product with tier price for "General" group</data>
+            <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">None</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
+            <data name="product/data/product_has_weight" xsi:type="string">No</data>
+            <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">general</data>
+            <data name="product/data/inventory_manage_stock" xsi:type="string">Yes</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPageWithCustomer" />
+        </variation>
+        <variation name="CreateVirtualProductEntityTestVariation5">
             <data name="description" xsi:type="string">Create product with custom options suite and import options</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
@@ -67,7 +88,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
         </variation>
-        <variation name="CreateVirtualProductEntityTestVariation5">
+        <variation name="CreateVirtualProductEntityTestVariation6">
             <data name="description" xsi:type="string">Create product without manage stock</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>

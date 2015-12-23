@@ -5,6 +5,8 @@
  */
 namespace Magento\Downloadable\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Downloadable Product  Samples resource model
  *
@@ -12,6 +14,11 @@ namespace Magento\Downloadable\Model\ResourceModel;
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
     /**
      * Catalog data
      *
@@ -40,6 +47,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -48,12 +56,14 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_catalogData = $catalogData;
         $this->_configuration = $configuration;
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
+        $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
 
@@ -198,12 +208,19 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['s' => $this->getTable('downloadable_link_title')],
             's.link_id=m.link_id AND s.store_id=0',
             []
+        )->join(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf(
+                'cpe.entity_id = m.product_id',
+                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+            ),
+            []
         )->joinLeft(
             ['st' => $this->getTable('downloadable_link_title')],
             'st.link_id=m.link_id AND st.store_id=:store_id',
             ['title' => $ifNullDefaultTitle]
         )->where(
-            'm.product_id=:product_id'
+            'cpe.entity_id=:product_id'
         );
         $bind = [':store_id' => (int)$storeId, ':product_id' => $productId];
 
