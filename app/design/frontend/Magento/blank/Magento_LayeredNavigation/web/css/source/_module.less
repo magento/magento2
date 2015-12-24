@@ -21,10 +21,31 @@
         }
     }
 
-    .filter-subtitle {
-        display: none;
+    .block-subtitle {
+        display: inline-block;
+        margin-bottom: @indent__s;
     }
-    
+
+    .filter-current {
+
+        .item {
+            margin-bottom: @indent__s;
+        }
+
+        .filter-label {
+            display: block;
+            font-weight: @font-weight__bold;
+
+            &:after {
+                content: ':';
+            }
+        }
+
+        + .filter-actions {
+            margin-bottom: @indent__l;
+        }
+    }
+
     .filter-options-content {
         .filter-count-label {
             &:extend(.abs-visually-hidden all);
