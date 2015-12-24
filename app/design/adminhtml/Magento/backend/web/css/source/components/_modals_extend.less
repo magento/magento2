@@ -158,7 +158,12 @@
 .modal-slide {
     .modal-content-new-attribute {
         overflow: auto;
+        padding-bottom: 0;
         -webkit-overflow-scrolling: touch;
+
+        iframe {
+            margin-bottom: -@indent__m;
+        }
     }
 
     .modal-title {
