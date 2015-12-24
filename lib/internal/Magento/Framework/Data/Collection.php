@@ -404,7 +404,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
                 throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'
+                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
             }
             $this->_items[$itemId] = $item;

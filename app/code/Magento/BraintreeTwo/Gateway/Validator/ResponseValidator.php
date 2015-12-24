@@ -25,7 +25,7 @@ class ResponseValidator extends AbstractValidator
             $this->validateSuccess($response)
             && $this->validateErrors($response)
             && $this->validateTransactionStatus($response),
-            [__('Transaction has been declined, please, try again later.')]
+            [__('Transaction has been declined. Please try again later.')]
         );
 
         return $result;

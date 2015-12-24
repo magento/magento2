@@ -68,7 +68,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'Exception',
-            'Output format is not specified. Please, specify "format" key in constructor, or set it using setFormat().'
+            'Output format is not specified. Please specify "format" key in constructor, or set it using setFormat().'
         );
         $formMock = $this->getFormMock('never');
         $this->model->setForm($formMock);
