@@ -41,8 +41,8 @@ class DataProvider
      */
     public function afterPrepareMeta(\Magento\Catalog\Model\Category\DataProvider $subject, $result)
     {
-        $result['category_view_optimization']['fields']['google_experiment_container']['visible'] =
-            $this->_helper->isGoogleExperimentActive();
+        $result['category_view_optimization']['componentDisabled'] =
+            !$this->_helper->isGoogleExperimentActive();
 
         return $result;
     }
