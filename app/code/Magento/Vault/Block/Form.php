@@ -43,15 +43,6 @@ class Form extends \Magento\Payment\Block\Form
     }
 
     /**
-     * Get payment provider method code
-     * @return null|string
-     */
-    public function getProviderMethodCode()
-    {
-        return $this->tokensProvider->getProviderMethodCode();
-    }
-
-    /**
      * @inheritdoc
      */
     protected function _prepareLayout()
@@ -67,11 +58,12 @@ class Form extends \Magento\Payment\Block\Form
     {
         $icons = $this->cardConfigProvider->getConfig()['payment']['ccform']['icons'];
         $payments = $this->tokensProvider->getConfig();
+        $code = $this->tokensProvider->getProviderMethodCode();
         foreach ($payments as $key => $payment) {
             $data = $payment['config'];
             $data['id'] = $key;
             $data['icons'] = $icons;
-            $data['code'] = $this->getProviderMethodCode();
+            $data['code'] = $code;
             $this->addChild($key, $payment['component'], $data);
         }
     }
