@@ -244,14 +244,24 @@ class ThemeUninstallCommand extends Command
         $messages = [];
         $unknownPackages = [];
         $unknownThemes = [];
+        $incorrectThemes = [];
         $installedPackages = $this->composer->getRootRequiredPackages();
         foreach ($themePaths as $themePath) {
+            if (!preg_match('/^[^\/]+\/[^\/]+\/[^\/]+$/', $themePath)) {
+                $incorrectThemes[] = $themePath;
+                continue;
+            }
             if (array_search($this->themePackageInfo->getPackageName($themePath), $installedPackages) === false) {
                 $unknownPackages[] = $themePath;
             }
             if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
                 $unknownThemes[] = $themePath;
             }
+        }
+        if (!empty($incorrectThemes)) {
+            $text = 'Theme path should be specified as full path which is area/vendor/name.';
+            $messages[] = '<error>Incorrect theme(s) format: ' . implode(', ', $incorrectThemes)
+                . '. ' . $text . '</error>';
         }
         $unknownPackages = array_diff($unknownPackages, $unknownThemes);
         if (!empty($unknownPackages)) {
