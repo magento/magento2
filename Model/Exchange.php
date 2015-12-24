@@ -84,7 +84,7 @@ class Exchange implements ExchangeInterface
             if ($envelope->getProperties()['reply_to']) {
                 $replyTo = $envelope->getProperties()['reply_to'];
             } else {
-                $replyTo = to_snake_case($topic) . '.response';
+                $replyTo = $this->queueConfig->getResponseQueueName($topic);
             }
             $channel->basic_consume(
                 $replyTo,

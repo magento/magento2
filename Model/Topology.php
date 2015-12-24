@@ -196,6 +196,11 @@ class Topology
                 $queues[] = $consumer[QueueConfig::CONSUMER_QUEUE];
             }
         }
+        foreach (array_keys($this->communicationConfig->getTopics()) as $topicName) {
+            if ($this->queueConfig->getConnectionByTopic($topicName) === $connection) {
+                $queues = array_merge($queues, $this->queueConfig->getQueuesByTopic($topicName));
+            }
+        }
         $queues = array_unique($queues);
         return $queues;
     }
@@ -210,9 +215,9 @@ class Topology
     {
         $exchanges = [];
         $queueConfig = $this->queueConfig->getPublishers();
-        foreach ($queueConfig as $consumer) {
-            if ($consumer[QueueConfig::PUBLISHER_CONNECTION] === $connection) {
-                $exchanges[] = $consumer[QueueConfig::PUBLISHER_EXCHANGE];
+        foreach ($queueConfig as $publisher) {
+            if ($publisher[QueueConfig::PUBLISHER_CONNECTION] === $connection) {
+                $exchanges[] = $publisher[QueueConfig::PUBLISHER_EXCHANGE];
             }
         }
         $exchanges = array_unique($exchanges);
