@@ -27,15 +27,11 @@ define([
 
     function validateFields(selector){
         var result = true,
-            errorClassName = 'mage-error',
             items = document.querySelectorAll(selector);
 
         _.each(items, function (item){
-           if (!$.validator.validateElement(item)){
+           if (!$.validator.validateAndShowLabel(item)){
                result = false;
-               $(item).addClass(errorClassName);
-           } else if ($(item).hasClass(errorClassName)) {
-               $(item).toggleClass(errorClassName);
            }
         });
 
