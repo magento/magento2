@@ -13,7 +13,6 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
@@ -94,6 +93,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $uiManager;
 
     /**
+     * @var Config
+     */
+    private $eavConfig;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -101,11 +105,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $requestFieldName
      * @param EavValidationRules $eavValidationRules
      * @param CategoryCollectionFactory $categoryCollectionFactory
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param Config $eavConfig
-     * @param FilterPool $filterPool
-     * @param StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Ui\Model\Manager $uiManager
      * @param array $meta
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -120,7 +124,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         Config $eavConfig,
-        FilterPool $filterPool,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Ui\Model\Manager $uiManager,
         array $meta = [],
@@ -130,7 +133,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection = $categoryCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
-        $this->filterPool = $filterPool;
         $this->registry = $registry;
         $this->storeManager = $storeManager;
         $this->request = $request;
@@ -165,7 +167,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $fields = [];
         foreach ($formConfig['children'] as $fieldset => $child) {
-            $callable = function($component) use (&$callable, $fieldsMeta) {
+            $callable = function ($component) use (&$callable, $fieldsMeta) {
                 $result = [];
                 foreach ($component as $k => $v) {
                     if (isset($fieldsMeta[$k])) {
