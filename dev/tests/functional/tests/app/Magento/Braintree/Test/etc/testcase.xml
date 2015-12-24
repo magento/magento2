@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+    <scenario name="OnePageCheckoutWith3dSecureTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts"/>
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule"/>
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart"/>
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax"/>
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout"/>
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="createCustomer"/>
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod"/>
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress"/>
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod"/>
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod"/>
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation"/>
+        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrderWith3dSecure"/>
+        <step name="placeOrderWith3dSecure" module="Magento_Braintree"/>
+    </scenario>
+</config>
