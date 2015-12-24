@@ -209,11 +209,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
              * @param array $file
              */
             function ($file) {
-                $relativePath = str_replace(
-                    Files::init()->getPathToSource() . "/",
-                    "",
-                    $file
-                );
+                $relativePath = str_replace(BP . "/", "", $file);
                 // exceptions made for fixture files from tests
                 if (strpos($relativePath, '/_files/') !== false) {
                     return;
@@ -291,11 +287,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
              * @param string $file
              */
             function ($file) {
-                $relativePath = str_replace(
-                    Files::init()->getPathToSource(),
-                    "",
-                    $file
-                );
+                $relativePath = str_replace(BP, "", $file);
                 // Due to the examples given with the regex patterns, we skip this test file itself
                 if ($relativePath == "/dev/tests/static/testsuite/Magento/Test/Integrity/ClassesTest.php") {
                     return;
@@ -575,7 +567,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             '/dev/tests/static/testsuite/',
             '/setup/src/',
         ];
-        $pathToSource = Files::init()->getPathToSource();
+        $pathToSource = BP;
         $libraryPaths = $this->getLibraryPaths($componentRegistrar, $pathToSource);
         $directories = array_merge($directories, $libraryPaths);
         // Full list of directories where there may be namespace classes

@@ -131,13 +131,13 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
         // Serialize conditions
         if ($this->getConditions()) {
             $this->setConditionsSerialized(serialize($this->getConditions()->asArray()));
-            $this->unsConditions();
+            $this->_conditions = null;
         }
 
         // Serialize actions
         if ($this->getActions()) {
             $this->setActionsSerialized(serialize($this->getActions()->asArray()));
-            $this->unsActions();
+            $this->_actions = null;
         }
 
         /**

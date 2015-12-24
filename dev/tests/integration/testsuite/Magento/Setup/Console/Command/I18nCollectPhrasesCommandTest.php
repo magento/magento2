@@ -75,4 +75,22 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
             ]
         );
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Directory path is not needed when --magento flag is set.
+     */
+    public function testExecuteMagentoFlagDirectoryPath()
+    {
+        $this->tester->execute(['directory' => 'a', '--magento' => true]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Directory path is needed when --magento flag is not set.
+     */
+    public function testExecuteNoMagentoFlagNoDirectoryPath()
+    {
+        $this->tester->execute([]);
+    }
 }
