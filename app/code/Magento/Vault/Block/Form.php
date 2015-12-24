@@ -43,6 +43,15 @@ class Form extends \Magento\Payment\Block\Form
     }
 
     /**
+     * Get payment provider method code
+     * @return null|string
+     */
+    public function getProviderMethodCode()
+    {
+        return $this->tokensProvider->getProviderMethodCode();
+    }
+
+    /**
      * @inheritdoc
      */
     protected function _prepareLayout()
@@ -62,6 +71,7 @@ class Form extends \Magento\Payment\Block\Form
             $data = $payment['config'];
             $data['id'] = $key;
             $data['icons'] = $icons;
+            $data['code'] = $this->getProviderMethodCode();
             $this->addChild($key, $payment['component'], $data);
         }
     }

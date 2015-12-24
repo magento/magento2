@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Ui\Adminhtml;
@@ -16,7 +16,6 @@ use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class ConfigProvider
- * @api
  */
 final class TokensConfigProvider
 {
@@ -56,6 +55,11 @@ final class TokensConfigProvider
     private $tokenUiComponentProviders;
 
     /**
+     * @var string
+     */
+    private $providerCode;
+
+    /**
      * Constructor
      *
      * @param SessionManagerInterface $session
@@ -85,7 +89,7 @@ final class TokensConfigProvider
     }
 
     /**
-     * Retrieve assoc array of checkout configuration
+     * Retrieve assoc array of configuration
      *
      * @return array
      */
@@ -98,12 +102,7 @@ final class TokensConfigProvider
             return $vaultPayments;
         }
 
-        $storeId = $this->storeManager->getStore()->getId();
-        if (!$this->vaultPayment->isActive($storeId)) {
-            return $vaultPayments;
-        }
-
-        $vaultProviderCode = $this->vaultPayment->getProviderCode($storeId);
+        $vaultProviderCode = $this->getProviderMethodCode();
         $componentProvider = $this->getComponentProvider($vaultProviderCode);
         if (null === $componentProvider) {
             return $vaultPayments;
@@ -127,6 +126,32 @@ final class TokensConfigProvider
         }
 
         return $vaultPayments;
+    }
+
+    /**
+     * Get code of payment method provider
+     * @return null|string
+     */
+    public function getProviderMethodCode()
+    {
+        if (!$this->providerCode) {
+            $storeId = $this->getStoreId();
+            $this->providerCode = $storeId ? $this->vaultPayment->getProviderCode($storeId) : null;
+        }
+        return $this->providerCode;
+    }
+
+    /**
+     * Get store id for current active vault payment
+     * @return int|null
+     */
+    private function getStoreId()
+    {
+        $storeId = $this->storeManager->getStore()->getId();
+        if (!$this->vaultPayment->isActive($storeId)) {
+            return null;
+        }
+        return $storeId;
     }
 
     /**
