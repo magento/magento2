@@ -12,9 +12,10 @@ define([
 ], function ($, _, loader, resolver, adapter, Collection) {
     'use strict';
 
-    function collectData(selector) {
-        var items = document.querySelectorAll(selector),
-            result = {};
+    var items;
+
+    function collectData() {
+        var result = {};
 
         items = Array.prototype.slice.call(items);
 
@@ -26,8 +27,9 @@ define([
     }
 
     function validateFields(selector){
-        var result = true,
-            items = document.querySelectorAll(selector);
+        var result = true;
+
+        items = document.querySelectorAll(selector);
 
         _.each(items, function (item){
            if (!$.validator.validateAndShowLabel(item)){
@@ -84,7 +86,7 @@ define([
          * Submits form
          */
         submit: function (redirect) {
-            var additional = collectData(this.selector),
+            var additional = collectData(),
                 source = this.source;
 
             _.each(additional, function (value, name) {
