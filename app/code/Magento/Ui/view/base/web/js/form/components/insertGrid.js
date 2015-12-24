@@ -13,35 +13,32 @@ define([
     return Insert.extend({
         defaults: {
             behaviourType: 'simple',
-            settings: {
-                edit: {
-                    externalLinks: {
-                        listens: {
-                            '${ $.editorProvider }:changed': 'onChangeRecord'
-                        }
-                    }
-                }
-            },
-            externalLinks: {
-                imports: {
-                    onSelectedChange: '${ $.selectionsProvider }:selected'
-                },
-                exports: {
-                    externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
-                }
-            },
-            modules: {
-                selections: '${ $.selectionsProvider }'
-            },
             immediateUpdateBySelection: false,
-            listens: {
-                value: 'updateExternalFiltersModifier',
-                externalValue: 'onSetExternalValue'
-            },
             externalFiltersModifier: {},
             externalFilter: {
                 'condition_type': 'nin',
                 value: []
+            },
+            settings: {
+                edit: {
+                    listens: {
+                        '${ $.editorProvider }:changed': 'onChangeRecord'
+                    }
+                }
+            },
+            imports: {
+                onSelectedChange: '${ $.selectionsProvider }:selected',
+                updateUrl: '${ $.externalProvider }:update_url'
+            },
+            exports: {
+                externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
+            },
+            listens: {
+                value: 'updateExternalFiltersModifier',
+                externalValue: 'onSetExternalValue'
+            },
+            modules: {
+                selections: '${ $.selectionsProvider }'
             }
         },
 
@@ -138,15 +135,6 @@ define([
 
             this.externalFilter.value = _.pluck(items, index);
             this.set('externalFiltersModifier.' + provider.indexField, this.externalFilter);
-        },
-
-        onSetExternalValue: function () {
-            debugger;
-            //if (this.immediateUpdateBySelection) {
-            //    this.save();
-            //}
-            //
-            //return this;
         },
 
         save: function () {

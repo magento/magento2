@@ -251,10 +251,6 @@ define([
             return this;
         },
 
-        my: function () {
-            return getItems(this);
-        },
-
         /**
          * Retrieves a collection of elements that match
          * provided search criteria.
