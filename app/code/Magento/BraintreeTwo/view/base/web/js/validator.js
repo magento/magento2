@@ -30,7 +30,7 @@ define([
 
         /**
          * Get list of card types
-         * @returns {exports.defaults.ccTypesMapper|{}|*}
+         * @returns {Object}
          */
         getCcTypesMapper: function () {
             return this.config.ccTypesMapper;
