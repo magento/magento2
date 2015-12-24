@@ -3,12 +3,13 @@
  * See COPYING.txt for license details.
  */
 define([
+    'jquery',
     'underscore',
     'Magento_Ui/js/lib/spinner',
     'rjsResolver',
     './adapter',
     'uiCollection'
-], function (_, loader, resolver, adapter, Collection) {
+], function ($, _, loader, resolver, adapter, Collection) {
     'use strict';
 
     function collectData(selector) {
@@ -19,6 +20,20 @@ define([
 
         items.forEach(function (item) {
             result[item.name] = item.type === 'checkbox' ? +!!item.checked : item.value;
+        });
+
+        return result;
+    }
+
+    function validateFields(selector){
+        var result = true,
+            items = document.querySelectorAll(selector);
+
+        _.each(items, function (item){
+           if (!$.validator.validateElement(item)){
+               result = false;
+               $(item).addClass('mage-error');
+           }
         });
 
         return result;
@@ -61,7 +76,7 @@ define([
         save: function (redirect) {
             this.validate();
 
-            if (!this.source.get('params.invalid')) {
+            if (validateFields(this.selector) && !this.source.get('params.invalid')) {
                 this.submit(redirect);
             }
         },
