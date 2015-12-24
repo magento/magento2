@@ -275,8 +275,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function addUseConfigSettings($categoryData)
     {
         foreach ($this->elementsWithUseConfigSetting as $elementsWithUseConfigSetting) {
-            if (
-                !isset($categoryData[$elementsWithUseConfigSetting]) ||
+            if (!isset($categoryData[$elementsWithUseConfigSetting]) ||
                 ($categoryData[$elementsWithUseConfigSetting] == '')
             ) {
                 $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
@@ -296,8 +295,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     protected function addUseDefaultSettings($category, $categoryData)
     {
-        if (
-            $category->getExistsStoreValueFlag('url_key') ||
+        if ($category->getExistsStoreValueFlag('url_key') ||
             $category->getStoreId() === \Magento\Store\Model\Store::DEFAULT_STORE_ID
         ) {
             $categoryData['use_default']['url_key'] = false;
@@ -329,8 +327,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function getScopeLabel(EavAttribute $attribute)
     {
         $html = '';
-        if (
-            !$attribute || $this->storeManager->isSingleStoreMode()
+        if (!$attribute || $this->storeManager->isSingleStoreMode()
             || $attribute->getFrontendInput() === AttributeInterface::FRONTEND_INPUT
         ) {
             return $html;
