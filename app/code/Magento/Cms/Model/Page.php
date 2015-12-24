@@ -6,17 +6,20 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Model\ResourceModel\Page as ResourceCmsPage;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Cms\Model\PageExtensionInterface;
 
 /**
  * Cms Page Model
  *
- * @method \Magento\Cms\Model\ResourceModel\Page _getResource()
- * @method \Magento\Cms\Model\ResourceModel\Page getResource()
+ * @method ResourceCmsPage _getResource()
+ * @method ResourceCmsPage getResource()
  * @method Page setStoreId(array $storeId)
  * @method array getStoreId()
  */
-class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
+class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
     /**
      * No route page id
@@ -502,5 +505,27 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     public function setIsActive($isActive)
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return PageExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getData(self::EXTENSION_ATTRIBUTES_KEY);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param PageExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(PageExtensionInterface $extensionAttributes)
+    {
+        $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
+        return $this;
     }
 }
