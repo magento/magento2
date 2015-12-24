@@ -8,7 +8,6 @@ namespace Magento\Cms\Model;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\ResourceModel\Block as ResourceCmsBlock;
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Cms\Model\BlockExtensionInterface;
 use Magento\Framework\Model\AbstractModel;
 
 /**
@@ -245,27 +244,5 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     public function getAvailableStatuses()
     {
         return [self::STATUS_ENABLED => __('Enabled'), self::STATUS_DISABLED => __('Disabled')];
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return BlockExtensionInterface|null
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->_getData(self::EXTENSION_ATTRIBUTES_KEY);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param BlockExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(BlockExtensionInterface $extensionAttributes)
-    {
-        $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
-        return $this;
     }
 }

@@ -5,14 +5,11 @@
  */
 namespace Magento\Cms\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\Cms\Model\BlockExtensionInterface;
-
 /**
  * CMS block interface.
  * @api
  */
-interface BlockInterface extends ExtensibleDataInterface
+interface BlockInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -130,21 +127,4 @@ interface BlockInterface extends ExtensibleDataInterface
      * @return BlockInterface
      */
     public function setIsActive($isActive);
-
-    /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @api
-     * @return BlockExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @api
-     * @param BlockExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(BlockExtensionInterface $extensionAttributes);
 }

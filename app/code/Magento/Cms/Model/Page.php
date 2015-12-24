@@ -9,7 +9,6 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\ResourceModel\Page as ResourceCmsPage;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Cms\Model\PageExtensionInterface;
 
 /**
  * Cms Page Model
@@ -505,27 +504,5 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     public function setIsActive($isActive)
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return PageExtensionInterface|null
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->_getData(self::EXTENSION_ATTRIBUTES_KEY);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param PageExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(PageExtensionInterface $extensionAttributes)
-    {
-        $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
-        return $this;
     }
 }
