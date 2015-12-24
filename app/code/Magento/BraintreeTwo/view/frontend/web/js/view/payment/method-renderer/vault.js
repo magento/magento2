@@ -15,7 +15,7 @@ define([
 
     return VaultComponent.extend({
         defaults: {
-            template: 'Magento_BraintreeTwo/payment/vault',
+            template: 'Magento_Vault/payment/form',
             modules: {
                 hostedFields: '${ $.parentName }.braintreetwo'
             }
@@ -27,14 +27,6 @@ define([
          */
         getId: function () {
             return 'braintreetwo_' + this.index;
-        },
-
-        /**
-         * Get name of scope
-         * @returns {String}
-         */
-        getScopeName: function () {
-            return this.parentName + '.braintreetwo';
         },
 
         /**
