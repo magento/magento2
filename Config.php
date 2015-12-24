@@ -159,7 +159,7 @@ class Config implements ConfigInterface
      */
     public function getResponseQueueName($topicName)
     {
-        return str_replace('-', '_', $topicName) . ConfigInterface::CONSUMER_RESPONSE_QUEUE_SUFFIX;
+        return ConfigInterface::RESPONSE_QUEUE_PREFIX . str_replace('-', '_', $topicName);
     }
 
     /**

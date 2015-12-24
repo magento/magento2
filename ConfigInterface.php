@@ -45,7 +45,8 @@ interface ConfigInterface
     const CONSUMER_TYPE = 'consumer_type';
     const CONSUMER_TYPE_SYNC = 'sync';
     const CONSUMER_TYPE_ASYNC = 'async';
-    const CONSUMER_RESPONSE_QUEUE_SUFFIX = '.response';
+
+    const RESPONSE_QUEUE_PREFIX = 'responseQueue.';
 
     const BINDS = 'binds';
     const BIND_QUEUE = 'queue';
