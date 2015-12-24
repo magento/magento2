@@ -30,8 +30,8 @@ class Curl extends AbstractCurl implements CmsBlockInterface
      */
     protected $mappingData = [
         'is_active' => [
-            'Enabled' => 1,
-            'Disabled' => 0,
+            'Yes' => 1,
+            'No' => 0,
         ],
     ];
 
