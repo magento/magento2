@@ -5,14 +5,11 @@
  */
 namespace Magento\Cms\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\Cms\Model\PageExtensionInterface;
-
 /**
  * CMS page interface.
  * @api
  */
-interface PageInterface extends ExtensibleDataInterface
+interface PageInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -306,21 +303,4 @@ interface PageInterface extends ExtensibleDataInterface
      * @return \Magento\Cms\Api\Data\PageInterface
      */
     public function setIsActive($isActive);
-
-    /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @api
-     * @return PageExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @api
-     * @param PageExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(PageExtensionInterface $extensionAttributes);
 }
