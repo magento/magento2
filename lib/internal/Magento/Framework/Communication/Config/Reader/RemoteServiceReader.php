@@ -87,7 +87,7 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
      * Generate topic name based on service type and method name.
      *
      * Perform the following conversion:
-     * \Magento\Customer\Api\RepositoryInterface + getById => Magento.Customer.Api.RepositoryInterface.GetById
+     * \Magento\Customer\Api\RepositoryInterface + getById => magento.customer.api.repositoryInterface.getById
      *
      * @param string $typeName
      * @param string $methodName
@@ -95,6 +95,10 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
      */
     public function generateTopicName($typeName, $methodName)
     {
-        return preg_replace('/\\\\([A-Z])/', '.$1', ltrim($typeName, '\\')) . '.' . ucfirst($methodName);
+        $parts = explode('\\', ltrim($typeName, '\\'));
+        foreach ($parts as &$part) {
+            $part = lcfirst($part);
+        }
+        return implode('.', $parts) . '.' . $methodName;
     }
 }
