@@ -22,6 +22,10 @@ define([
             showSpinner: true,
             loading: false,
             contentSelector: '${$.name}',
+            externalTransfer: false,
+            internalTransfer: false,
+            externalData: [],
+            deps: '${ $.externalProvider }',
             params: {
                 namespace: '${ $.ns }'
             },
@@ -29,13 +33,14 @@ define([
                 url: '${ $.render_url }',
                 dataType: 'html'
             },
-            externalLinks: {
-                imports: {
-                    updateUrl: '${ $.externalProvider }:update_url'
-                }
-            },
+            imports: {},
+            exports: {},
+            listens: {},
             links: {
                 value: '${ $.provider }:${ $.dataScope}'
+            },
+            modules: {
+                externalSource: '${ $.externalProvider }'
             }
         },
 
@@ -64,9 +69,33 @@ define([
         },
 
         /** @inheritdoc */
-        initConfig: function () {
-            this._super();
-            this.contentSelector = this.contentSelector.replace(/\./g, '_').substr(1);
+        initConfig: function (config) {
+            this.initTransferConfig(config)._super();
+            this.contentSelector = this.contentSelector.replace(/\./g, '_');
+
+            return this;
+        },
+
+        /**
+         * Sync data with external provider.
+         *
+         * @param {Object} config
+         * @returns {Object}
+         */
+        initTransferConfig: function (config) {
+            var key, value;
+
+            if (config.externalTransfer) {
+                _.each(config.externalData, function (val) {
+                    value = val;
+                    key = 'externalValue.' + val.replace('data.', '');
+                    this.links[key] = '${ $.externalProvider }:' + value;
+                }, this.constructor.defaults);
+            }
+
+            if (config.internalTransfer) {
+                this.constructor.defaults.links.externalValue = 'value';
+            }
 
             return this;
         },
@@ -118,7 +147,6 @@ define([
             this.set('content', data);
             this.contentEl.children().applyBindings();
             this.contentEl.trigger('contentUpdated');
-            this.initExternalLinks();
         },
 
         /**
@@ -137,21 +165,18 @@ define([
         },
 
         /**
-         * Initialize links to external provider.
+         * Getter for external data.
          *
          * @returns {Object}
          */
-        initExternalLinks: function () {
-            this.setListeners(this.externalLinks.listens)
-                .setLinks(this.externalLinks.links, 'imports')
-                .setLinks(this.externalLinks.links, 'exports');
+        getExternalData: function () {
+            var data = {};
 
-            _.each({
-                exports: this.externalLinks.exports,
-                imports: this.externalLinks.imports
-            }, this.setLinks, this);
+            _.each(this.externalData, function (path) {
+                utils.nested(data, path.replace('data.', ''), this.externalSource().get(path));
+            }, this);
 
-            return this;
+            return data;
         }
     });
 });

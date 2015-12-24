@@ -15,9 +15,6 @@ use Magento\Framework\View\Element\UiComponentInterface;
  */
 class Render extends AbstractAction
 {
-    const XML_VERSION = '1.0';
-
-    const XML_ENCODING = 'UTF-8';
     /**
      * Action for AJAX request
      *
