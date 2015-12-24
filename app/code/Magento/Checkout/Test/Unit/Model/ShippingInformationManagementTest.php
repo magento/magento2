@@ -263,7 +263,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to save address. Please, check input data.
+     * @expectedExceptionMessage Unable to save address. Please check input data.
      */
     public function testSaveAddressInformationThrowExceptionWhileAddressSaving()
     {
@@ -494,7 +494,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to save shipping information. Please, check input data.
+     * @expectedExceptionMessage Unable to save shipping information. Please check input data.
      */
     public function testSaveAddressInformationIfCanNotSaveQuote()
     {

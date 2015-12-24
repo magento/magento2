@@ -104,7 +104,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save address. Please, check input data.'));
+            throw new InputException(__('Unable to save address. Please check input data.'));
         }
         return $quote->getBillingAddress()->getId();
     }

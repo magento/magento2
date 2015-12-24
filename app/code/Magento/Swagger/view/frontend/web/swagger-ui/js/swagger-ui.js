@@ -6059,7 +6059,7 @@
                 var i, j, l, tmp, placeHolders, arr
 
                 if (b64.length % 4 > 0) {
-                    throw new Error('Invalid string. Length must be a multiple of 4')
+                    throw new Error('Invalid string. Length must be a multiple of 4.')
                 }
 
                 // the number of equal signs (place holders)

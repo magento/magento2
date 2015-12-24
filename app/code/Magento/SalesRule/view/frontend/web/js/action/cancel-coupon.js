@@ -25,7 +25,7 @@ define(
         return function (isApplied, isLoading) {
             var quoteId = quote.getQuoteId(),
                 url = urlManager.getCancelCouponUrl(quoteId),
-                message = $t('Your coupon was successfully removed');
+                message = $t('Your coupon was successfully removed.');
             messageContainer.clear();
 
             return storage.delete(

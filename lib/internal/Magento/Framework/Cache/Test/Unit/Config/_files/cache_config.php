@@ -17,7 +17,7 @@ return [
             'translate' => 'label,description',
             'instance' => 'Magento\Framework\App\Cache\Type\Layout',
             'label' => 'Layouts',
-            'description' => 'Layout building instructions.',
+            'description' => 'Layout building instructions',
         ],
     ]
 ];
