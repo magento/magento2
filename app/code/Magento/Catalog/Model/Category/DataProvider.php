@@ -98,6 +98,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $eavConfig;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Constructor
      *
      * @param string $name
