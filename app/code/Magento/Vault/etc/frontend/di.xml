@@ -9,7 +9,8 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="vault_config_provider" xsi:type="object">Magento\Vault\Model\Ui\ConfigProvider</item>
+                <item name="vault_config_provider" xsi:type="object">Magento\Vault\Model\Ui\VaultConfigProvider</item>
+                <item name="vault_cards_config_provider" xsi:type="object">Magento\Vault\Model\Ui\TokensConfigProvider</item>
             </argument>
         </arguments>
     </type>
