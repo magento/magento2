@@ -4,19 +4,19 @@
  */
 
 define([
+    'jquery',
     './insert',
     'mageUtils',
     'underscore'
-], function (Insert, utils, _) {
+], function ($, Insert, utils, _) {
     'use strict';
 
     return Insert.extend({
         defaults: {
             behaviourType: 'simple',
-            immediateUpdateBySelection: false,
-            externalFiltersModifier: {},
+            externalCondition: 'nin',
             externalFilter: {
-                'condition_type': 'nin',
+                'condition_type': '${ $.externalCondition }',
                 value: []
             },
             settings: {
@@ -34,12 +34,22 @@ define([
                 externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
             },
             listens: {
-                value: 'updateExternalFiltersModifier',
-                externalValue: 'onSetExternalValue'
+                value: 'updateExternalFiltersModifier'
             },
             modules: {
                 selections: '${ $.selectionsProvider }'
             }
+        },
+
+        /**
+         * Invokes initialize method of parent class,
+         * contains initialization logic
+         */
+        initialize: function () {
+            this._super();
+            _.bindAll(this, 'updateValue');
+
+            return this;
         },
 
         onChangeRecord: function (record) {
@@ -64,7 +74,7 @@ define([
         },
 
         onSelectedChange: function () {
-            if (!this.immediateUpdateBySelection) {
+            if (!this.externalTransfer) {
                 return;
             }
 
@@ -72,7 +82,8 @@ define([
         },
 
         updateExternalValue: function () {
-            var provider = this.selections(),
+            var result = $.Deferred(),
+                provider = this.selections(),
                 selections = provider && provider.getSelections(),
                 itemsType = selections && selections.excludeMode ? 'excluded' : 'selected',
                 index = provider && provider.indexField,
@@ -90,9 +101,13 @@ define([
 
             if (canUpdateFromSelection) {
                 this.updateFromSelectionData(selections, index, rows);
+                result.resolve();
             } else {
-                this.updateFromServerData(selections, index, itemsType);
+                this.updateFromServerData(selections, index, itemsType).done(function () {
+                    result.resolve();
+                });
             }
+            return result;
         },
 
         updateFromSelectionData: function (selections, index, rows) {
@@ -119,26 +134,33 @@ define([
             request = this.requestData(selectionsData);
             request
                 .done(function (data) {
-                    this.set('externalValue', data);
+                    this.set('externalValue', data.items || data);
                     this.loading(false);
                 }.bind(this))
                 .fail(this.onError);
+            return request;
         },
 
         updateExternalFiltersModifier: function (items) {
             var provider = this.selections(),
-                index = provider && provider.indexField;
+                index = provider && provider.indexField,
+                filter = {};
 
             if (!items || !items.length) {
                 return;
             }
 
-            this.externalFilter.value = _.pluck(items, index);
-            this.set('externalFiltersModifier.' + provider.indexField, this.externalFilter);
+            filter[provider.indexField] = this.externalFilter;
+            filter[provider.indexField].value = _.pluck(items, index);
+            this.set('externalFiltersModifier', filter);
+        },
+
+        updateValue: function () {
+            this.set('value', this.externalValue());
         },
 
         save: function () {
-            this.set('value', this.externalValue());
+            this.updateExternalValue().done(this.updateValue);
         }
     });
 });
