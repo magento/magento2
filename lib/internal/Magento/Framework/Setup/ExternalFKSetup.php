@@ -87,6 +87,7 @@ class ExternalFKSetup
      * @param string $targetTable
      * @param string $targetColumn
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function getForeignKeys(
         $targetTable,
