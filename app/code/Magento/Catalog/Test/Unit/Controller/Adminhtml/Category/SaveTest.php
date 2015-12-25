@@ -295,7 +295,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
          */
         $sessionMock = $this->getMock(
             'Magento\Backend\Model\Auth\Session',
-            ['setActiveTabId'],
+            [],
             [],
             '',
             false
