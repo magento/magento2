@@ -7,6 +7,7 @@ namespace Magento\Payment\Gateway;
 
 /**
  * Interface CommandExecutorInterface
+ * @api
  */
 interface CommandExecutorInterface
 {

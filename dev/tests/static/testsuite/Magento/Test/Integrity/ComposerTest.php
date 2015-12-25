@@ -53,7 +53,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         }
         self::$shell = self::createShell();
         self::$isComposerAvailable = self::isComposerAvailable();
-        self::$root = Files::init()->getPathToSource();
+        self::$root = BP;
         self::$rootJson = json_decode(file_get_contents(self::$root . '/composer.json'), true);
         self::$dependencies = [];
     }
@@ -84,7 +84,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
      */
     public function validateComposerJsonDataProvider()
     {
-        $root = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $root = BP;
         $componentRegistrar = new ComponentRegistrar();
         $result = [];
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $dir) {
