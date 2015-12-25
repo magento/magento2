@@ -1055,3 +1055,4 @@ vendor/magento/theme-adminhtml-backend/web/js/theme.js
 vendor/magento/theme-frontend-blank/web/js/navigation-menu.js
 vendor/magento/theme-frontend-blank/web/js/responsive.js
 vendor/magento/theme-frontend-blank/web/js/theme.js
+app/code/Magento/BraintreeTwo/view/frontend/requirejs-config.js
