@@ -11,13 +11,12 @@ use Magento\Sales\Test\Page\Adminhtml\InvoiceIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesInvoiceView;
 
 /**
- * Class AssertInvoiceItems
- * Assert invoice items on invoice view page
+ * Assert invoice items on invoice view page.
  */
 class AssertInvoiceItems extends AbstractAssertItems
 {
     /**
-     * Assert invoice items on invoice view page
+     * Assert invoice items on invoice view page.
      *
      * @param InvoiceIndex $invoiceIndex
      * @param SalesInvoiceView $salesInvoiceView
@@ -33,7 +32,6 @@ class AssertInvoiceItems extends AbstractAssertItems
         array $ids,
         array $data = null
     ) {
-        $invoiceIndex->open();
         $orderId = $order->getId();
         $productsData = $this->prepareOrderProducts($order, $data['items_data']);
         foreach ($ids['invoiceIds'] as $invoiceId) {
@@ -41,6 +39,7 @@ class AssertInvoiceItems extends AbstractAssertItems
                 'order_id' => $orderId,
                 'id' => $invoiceId,
             ];
+            $invoiceIndex->open();
             $invoiceIndex->getInvoicesGrid()->searchAndOpen($filter);
             $itemsData = $this->preparePageItems($salesInvoiceView->getItemsBlock()->getData());
             $error = $this->verifyData($productsData, $itemsData);
@@ -49,7 +48,7 @@ class AssertInvoiceItems extends AbstractAssertItems
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

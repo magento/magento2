@@ -9,6 +9,7 @@ namespace Magento\Test\Integrity\Di;
 
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
@@ -66,7 +67,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
-        $basePath = Files::init()->getPathToSource();
+        $basePath = BP;
         $basePath = str_replace('\\', '/', $basePath);
 
 
@@ -195,25 +196,27 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _phpClassesDataProvider()
     {
-        $basePath = Files::init()->getPathToSource();
-
-        $libPath = 'lib\\internal';
-        $appPath = 'app\\code';
-        $generationPathPath = str_replace('/', '\\', str_replace($basePath . '/', '', $this->_generationDir));
+        $generationPath = str_replace('/', '\\', $this->_generationDir);
 
         $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_LIBS);
 
-        $patterns = [
-            '/' . preg_quote($libPath) . '/',
-            '/' . preg_quote($appPath) . '/',
-            '/' . preg_quote($generationPathPath) . '/',
-        ];
-        $replacements = ['', '', ''];
+        $patterns = ['/' . preg_quote($generationPath) . '/',];
+        $replacements = [''];
+
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
+            $patterns[] = '/' . preg_quote(str_replace('/', '\\', $modulePath)) . '/';
+            $replacements[] = '\\' . str_replace('_', '\\', $moduleName);
+        }
+
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libPath) {
+            $patterns[] = '/' . preg_quote(str_replace('/', '\\', $libPath)) . '/';
+            $replacements[] = '\\Magento\\Framework';
+        }
 
         /** Convert file names into class name format */
         $classes = [];
         foreach ($files as $file) {
-            $file = str_replace($basePath . '/', '', $file);
             $file = str_replace('/', '\\', $file);
             $filePath = preg_replace($patterns, $replacements, $file);
             $className = substr($filePath, 0, -4);
@@ -258,10 +261,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $parent = $class->getParentClass();
         $file = false;
         if ($parent) {
-            $basePath = Files::init()->getPathToSource();
             $file = str_replace('\\', DIRECTORY_SEPARATOR, $parent->getFileName());
-            $basePath = str_replace('\\', DIRECTORY_SEPARATOR, $basePath);
-            $file = str_replace($basePath . DIRECTORY_SEPARATOR, '', $file);
         }
         /** Prevent analysis of non Magento classes  */
         if ($parent && in_array($file, $allowedFiles)) {
