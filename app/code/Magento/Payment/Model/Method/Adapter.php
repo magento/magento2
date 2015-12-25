@@ -7,6 +7,7 @@ namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -592,12 +593,21 @@ final class Adapter implements MethodInterface, CommandExecutorInterface
         $this->eventManager->dispatch(
             'payment_method_assign_data_' . $this->getCode(),
             [
-                'method' => $this,
-                'data' => $data
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
             ]
         );
 
-        $this->getInfoInstance()->addData($data->getData());
+        $this->eventManager->dispatch(
+            'payment_method_assign_data',
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
         return $this;
     }
 

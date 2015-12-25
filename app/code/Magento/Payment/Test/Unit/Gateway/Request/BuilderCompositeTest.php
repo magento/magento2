@@ -37,18 +37,13 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
         static::assertEquals([], $builder->build([]));
     }
 
-    public function testBuild()
+    /**
+     * @param array $expected
+     * @covers \Magento\Payment\Gateway\Request\BuilderComposite::build
+     * @dataProvider buildDataProvider
+     */
+    public function testBuild(array $expected)
     {
-        $expectedRequest = [
-            'user' => 'Mrs G. Crump',
-            'url' => 'https://url.in',
-            'amount' => 10.00,
-            'currency' => 'pound',
-            'address' => '46 Egernon Crescent',
-            'item' => 'gas cooker',
-            'quantity' => 1
-        ];
-
         $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -67,25 +62,27 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
             ->method('build')
             ->willReturn(
                 [
-                    'user' => 'Mrs G. Crump',
-                    'address' => '46 Egernon Crescent'
+                    'user' => $expected['user'],
+                    'address' => $expected['address']
                 ]
             );
         $productBuilder->expects(static::once())
             ->method('build')
             ->willReturn(
                 [
-                    'amount' => 10.00,
-                    'currency' => 'pound',
-                    'item' => 'gas cooker',
-                    'quantity' => 1
+                    'amount' => $expected['amount'],
+                    'currency' => $expected['currency'],
+                    'item' => $expected['item'],
+                    'quantity' => $expected['quantity'],
+                    'options' => ['product' => $expected['options']['product']]
                 ]
             );
         $magentoBuilder->expects(static::once())
             ->method('build')
             ->willReturn(
                 [
-                    'url' => 'https://url.in'
+                    'url' => $expected['url'],
+                    'options' => ['magento' => $expected['options']['magento']]
                 ]
             );
 
@@ -115,6 +112,45 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        static::assertEquals($expectedRequest, $builder->build([]));
+        static::assertEquals($expected, $builder->build([]));
+    }
+
+    /**
+     * Get list of variations
+     */
+    public function buildDataProvider()
+    {
+        return [
+            [[
+                'user' => 'Mrs G. Crump',
+                'address' => '46 Egernon Crescent',
+                'amount' => 10.00,
+                'currency' => 'pound',
+                'item' => 'gas cooker',
+                'quantity' => 1,
+                'options' => ['product' => '', 'magento' => 'magento'],
+                'url' => 'https://url.in',
+            ]],
+            [[
+                'user' => 'John Doe',
+                'address' => '46 Main Street',
+                'amount' => 250.00,
+                'currency' => 'usd',
+                'item' => 'phone',
+                'quantity' => 2,
+                'options' => ['product' => 'product', 'magento' => 'magento'],
+                'url' => 'https://url.io',
+            ]],
+            [[
+                'user' => 'John Smit',
+                'address' => '46 Egernon Crescent',
+                'amount' => 1100.00,
+                'currency' => 'usd',
+                'item' => 'notebook',
+                'quantity' => 1,
+                'options' => ['product' => ['discount' => ['price' => 2.00]], 'magento' => 'magento'],
+                'url' => 'http://url.ua',
+            ]],
+        ];
     }
 }
