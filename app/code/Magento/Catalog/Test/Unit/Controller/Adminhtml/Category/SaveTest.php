@@ -203,10 +203,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
         $products = [['any_product']];
         $postData = [
-            'general' => [
-                'general-data',
-
-            ],
+            'general-data',
             'parent' => $parentId,
             'category_products' => json_encode($products),
         ];
