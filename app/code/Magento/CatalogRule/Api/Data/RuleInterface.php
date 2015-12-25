@@ -31,12 +31,6 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
 
     const SIMPLE_ACTION = 'simple_action';
 
-    const SUB_IS_ENABLED = 'sub_is_enabled';
-
-    const SUB_SIMPLE_ACTION = 'sub_simple_action';
-
-    const SUB_DISCOUNT_AMOUNT = 'sub_discount_amount';
-
     const DISCOUNT_AMOUNT = 'discount_amount';
 
     /**#@-*/
@@ -170,45 +164,6 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
      * @return $this
      */
     public function setDiscountAmount($amount);
-
-    /**
-     * Returns sub enabled flag
-     *
-     * @return int
-     */
-    public function getSubIsEnabled();
-
-    /**
-     * @param int $subIsEnabled
-     * @return $this
-     */
-    public function setSubIsEnabled($subIsEnabled);
-
-    /**
-     * Returns sub simple action
-     *
-     * @return string
-     */
-    public function getSubSimpleAction();
-
-    /**
-     * @param string $subSimpleAction
-     * @return $this
-     */
-    public function setSubSimpleAction($subSimpleAction);
-
-    /**
-     * Returns sub discount amount
-     *
-     * @return float
-     */
-    public function getSubDiscountAmount();
-
-    /**
-     * @param float $subDiscountAmount
-     * @return $this
-     */
-    public function setSubDiscountAmount($subDiscountAmount);
 
     /**
      * Retrieve existing extension attributes object or create a new one.
