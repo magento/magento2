@@ -363,7 +363,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $result['use_config.available_sort_by']['default'] = true;
         $result['use_config.default_sort_by']['default'] = true;
         $result['use_config.filter_price_range']['default'] = true;
-        $result['url_key_group']['default'] = true;
+        $result['use_default.url_key']['default'] = true;
 
         // image fields
         $result['savedImage.value']['default'] = '';
