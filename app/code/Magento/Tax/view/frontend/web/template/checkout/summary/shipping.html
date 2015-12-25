@@ -42,7 +42,7 @@
     <!-- ko if: isIncludingDisplayed() -->
     <tr class="totals shipping incl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: title"></span>
+            <span class="label" data-bind="i18n: title"></span>
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
@@ -60,7 +60,7 @@
     <!-- ko if: isExcludingDisplayed() -->
     <tr class="totals shipping excl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: title"></span>
+            <span class="label" data-bind="i18n: title"></span>
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">

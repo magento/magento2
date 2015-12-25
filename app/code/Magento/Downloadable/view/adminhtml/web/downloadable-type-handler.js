@@ -61,7 +61,7 @@ define([
         _initType: function () {
             if (productType.type.current === 'downloadable') {
                 weight.change(false);
-                weight.$weightSwitcher.one('change', function () {
+                weight.$weightSwitcher().one('change', function () {
                     $(document).trigger('setTypeProduct', null);
                 });
                 this.show();

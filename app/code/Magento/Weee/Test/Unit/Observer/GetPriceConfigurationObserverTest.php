@@ -28,14 +28,14 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
         $weeeObject1 = new \Magento\Framework\DataObject(
             [
                 'code' => 'fpt1',
-                'amount_excl_tax' => '15.0000',
+                'amount' => '15.0000',
             ]
         );
 
         $weeeObject2 = new \Magento\Framework\DataObject(
             [
                 'code' => 'fpt2',
-                'amount_excl_tax' => '16.0000',
+                'amount' => '16.0000',
             ]
         );
 

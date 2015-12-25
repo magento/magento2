@@ -211,7 +211,7 @@
             </item>
         </argument>
     </select>
-    <multiselect class="Magento\Ui\Component\Form\Element\Multiselect">
+    <multiselect class="Magento\Ui\Component\Form\Element\MultiSelect">
         <argument name="data" xsi:type="array">
             <item name="template" xsi:type="string">ui/form/element/multiselect</item>
             <item name="config" xsi:type="array">
