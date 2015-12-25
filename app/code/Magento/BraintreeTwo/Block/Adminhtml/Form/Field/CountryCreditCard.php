@@ -10,7 +10,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Class CountryCreditCard
- * @package Magento\BraintreeTwo\Block\Adminhtml\Form\Field
  */
 class CountryCreditCard extends AbstractFieldArray
 {

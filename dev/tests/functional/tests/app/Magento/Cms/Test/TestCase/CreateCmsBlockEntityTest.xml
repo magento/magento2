@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Cms\Test\TestCase\CreateCmsBlockEntityTest" summary="Create CMS Block" ticketId="MAGETWO-25578">
         <variation name="CreateCmsBlockEntityTestVariation1">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="cmsBlock/data/title" xsi:type="string">block_%isolation%</data>
             <data name="cmsBlock/data/identifier" xsi:type="string">identifier_%isolation%</data>
             <data name="cmsBlock/data/stores/dataset/option_0" xsi:type="string">All Store Views</data>
