@@ -9,6 +9,9 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType;
+use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use \Magento\Customer\Model\Session as CustomerSession;
 
 /**
  * Class ProductFieldMapper
@@ -26,6 +29,25 @@ class ProductFieldMapper implements FieldMapperInterface
     protected $fieldType;
 
     /**
+     * @var CustomerSession
+     */
+    protected $customerSession;
+
+    /**
+     * Store manager
+     *
+     * @var StoreManager
+     */
+    protected $storeManager;
+
+    /**
+     * Core registry
+     *
+     * @var Registry
+     */
+    protected $coreRegistry;
+
+    /**
      * @param Config $eavConfig
      * @param FieldType $fieldType
      */
@@ -39,16 +61,18 @@ class ProductFieldMapper implements FieldMapperInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFieldName($attributeCode, $context = [])
     {
-        if (in_array($attributeCode, ['id', 'sku', 'store_id', 'visibility'], true)) {
+        $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
+        if (!$attribute || in_array($attributeCode, ['id', 'sku', 'store_id', 'visibility'], true)) {
             return $attributeCode;
         }
-        $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
-        if (!$attribute) {
-            return $attributeCode;
+        if ($attributeCode === 'price') {
+            return $this->getPriceFieldName($context);
+        }
+        if ($attributeCode === 'position') {
+            return $this->getPositionFiledName($context);
         }
         $fieldType = $this->fieldType->getFieldType($attribute);
         $frontendInput = $attribute->getFrontendInput();
@@ -61,15 +85,9 @@ class ProductFieldMapper implements FieldMapperInterface
                     array_merge($context, ['type' => FieldMapperInterface::TYPE_QUERY])
                 );
             }
-            $fieldName = (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'int')
-                ? $attributeCode . '_value' : $attributeCode;
+            $fieldName = $this->getRefinedFieldName($frontendInput, $fieldType, $attributeCode);
         } elseif ($context['type'] === FieldMapperInterface::TYPE_QUERY) {
-            if ($attributeCode === '*') {
-                $fieldName = '_all';
-            } else {
-                $fieldName = (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'int')
-                    ? $attributeCode . '_value' : $attributeCode;
-            }
+            $fieldName = $this->getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode);
         } else {
             $fieldName = 'sort_' . $attributeCode;
         }
@@ -125,5 +143,66 @@ class ProductFieldMapper implements FieldMapperInterface
         return $attribute->getIsVisibleInAdvancedSearch()
         || $attribute->getIsFilterable()
         || $attribute->getIsFilterableInSearch();
+    }
+
+    /**
+     * @param string $frontendInput
+     * @param string $fieldType
+     * @param string $attributeCode
+     * @return string
+     */
+    protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode) {
+        return (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'int')
+            ? $attributeCode . '_value' : $attributeCode;
+    }
+
+    /**
+     * @param string $frontendInput
+     * @param string $fieldType
+     * @param string $attributeCode
+     * @return string
+     */
+    protected function getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode) {
+        if ($attributeCode === '*') {
+            $fieldName = '_all';
+        } else {
+            $fieldName = $this->getRefinedFieldName($frontendInput, $fieldType, $attributeCode);
+        }
+        return $fieldName;
+    }
+
+    /**
+     * Get "position" field name
+     *
+     * @param array $context
+     * @return string
+     */
+    protected function getPositionFiledName($context)
+    {
+        if (isset($context['categoryId'])) {
+            $category = $context['categoryId'];
+        } else {
+            $category = $this->coreRegistry->registry('current_category')
+                ? $this->coreRegistry->registry('current_category')->getId()
+                : $this->storeManager->getStore()->getRootCategoryId();
+        }
+        return 'position_category_' . $category;
+    }
+
+    /**
+     * Prepare price field name for search engine
+     *
+     * @param array $context
+     * @return string
+     */
+    protected function getPriceFieldName($context)
+    {
+        $customerGroupId = !empty($context['customerGroupId'])
+            ? $context['customerGroupId']
+            : $this->customerSession->getCustomerGroupId();
+        $websiteId = !empty($context['websiteId'])
+            ? $context['websiteId']
+            : $this->storeManager->getStore()->getWebsiteId();
+        return 'price_' . $customerGroupId . '_' . $websiteId;
     }
 }
