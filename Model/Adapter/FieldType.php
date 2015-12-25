@@ -18,8 +18,6 @@ class FieldType
     const ES_DATA_TYPE_INT = 'integer';
     const ES_DATA_TYPE_DATE = 'date';
     const ES_DATA_TYPE_ARRAY = 'array';
-    const ES_DATA_TYPE_NESTED = 'nested';
-    const ES_DATA_TYPE_OBJECT = 'object';
     /**#@-*/
 
     /**
@@ -31,23 +29,17 @@ class FieldType
     {
         $backendType = $attribute->getBackendType();
         $frontendInput = $attribute->getFrontendInput();
-        $attributeCode = $attribute->getAttributeCode();
 
-        if ($attributeCode === 'price' || $attributeCode === 'media_gallery') {
-            $fieldType = self::ES_DATA_TYPE_NESTED;
-        } elseif ($attributeCode === 'quantity_and_stock_status' || $attributeCode === 'tier_price') {
-            $fieldType = self::ES_DATA_TYPE_OBJECT;
-        } elseif ($backendType === 'timestamp' || $backendType === 'datetime') {
+        if (in_array($backendType, ['timestamp', 'datetime'], true)) {
             $fieldType = self::ES_DATA_TYPE_DATE;
-        } elseif ($backendType === 'int' || $backendType === 'smallint') {
+        } elseif (
+            in_array($backendType, ['int', 'smallint'], true)
+            || (in_array($frontendInput, ['select', 'boolean'], true) && $backendType !== 'varchar')
+        ) {
             $fieldType = self::ES_DATA_TYPE_INT;
         } elseif ($backendType === 'decimal') {
             $fieldType = self::ES_DATA_TYPE_FLOAT;
-        } elseif ($backendType === 'varchar') {
-            $fieldType = self::ES_DATA_TYPE_STRING;
-        } elseif (in_array($frontendInput, ['select', 'boolean'], true)) {
-            $fieldType = self::ES_DATA_TYPE_INT;
-        } elseif ($frontendInput === 'multiselect') {
+        } elseif ($frontendInput === 'multiselect' && $backendType !== 'varchar') {
             $fieldType = self::ES_DATA_TYPE_ARRAY;
         } else {
             $fieldType = self::ES_DATA_TYPE_STRING;

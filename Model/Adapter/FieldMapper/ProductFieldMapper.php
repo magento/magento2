@@ -61,14 +61,14 @@ class ProductFieldMapper implements FieldMapperInterface
                     array_merge($context, ['type' => FieldMapperInterface::TYPE_QUERY])
                 );
             }
-            $fieldName = in_array($frontendInput, ['select', 'boolean'], true) ? $attributeCode . '_value' :
-                $attributeCode;
+            $fieldName = (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'int')
+                ? $attributeCode . '_value' : $attributeCode;
         } elseif ($context['type'] === FieldMapperInterface::TYPE_QUERY) {
             if ($attributeCode === '*') {
                 $fieldName = '_all';
             } else {
-                $fieldName = in_array($frontendInput, ['select', 'boolean'], true) ? $attributeCode . '_value' :
-                    $attributeCode;
+                $fieldName = (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'int')
+                    ? $attributeCode . '_value' : $attributeCode;
             }
         } else {
             $fieldName = 'sort_' . $attributeCode;
@@ -94,20 +94,10 @@ class ProductFieldMapper implements FieldMapperInterface
                 && $attributeCode !=='category_ids') {
                 $notUsedInSearch = ['index' => 'no'];
             }
-            if ($attributeCode == 'price') {
-                $allAttributes[$attributeCode] = [
-                    'type' => $this->fieldType->getFieldType($attribute),
-                    'properties' => [
-                        'price' => ['type' => FieldType::ES_DATA_TYPE_FLOAT],
-                        'customer_group_id' => ['type' => FieldType::ES_DATA_TYPE_INT],
-                        'website_id' => ['type' => FieldType::ES_DATA_TYPE_STRING]
-                    ]
-                ];
-            } else {
-                $allAttributes[$attributeCode] = [
-                    'type' => $this->fieldType->getFieldType($attribute)
-                ];
-            }
+
+            $allAttributes[$attributeCode] = [
+                'type' => $this->fieldType->getFieldType($attribute)
+            ];
 
             if ($notUsedInSearch) {
                 $allAttributes[$attributeCode] = array_merge(
@@ -115,11 +105,7 @@ class ProductFieldMapper implements FieldMapperInterface
                     $notUsedInSearch
                 );
             }
-            if ($attributeCode == 'category_ids') {
-                $allAttributes['category'] = [
-                    'type' => FieldType::ES_DATA_TYPE_NESTED,
-                ];
-            }
+
             if ($frontendInput == 'select') {
                 $allAttributes[$attributeCode . '_value'] = [
                     'type' => FieldType::ES_DATA_TYPE_STRING,

@@ -187,31 +187,16 @@ class ProductDataMapper implements DataMapperInterface
             if (in_array($attributeCode, $this->mediaGalleryRoles)) {
                 $mediaGalleryRoles[$attributeCode] = $value;
             }
-            if ($attributeCode === 'category_ids') {
-                $this->builder->addField($attributeCode, implode(' ', $value));
-                continue;
-            }
             if ($attributeCode === 'media_gallery') {
-                $this->builder->addField(
-                    'media_gallery',
-                    $this->getProductMediaGalleryData($value, $mediaGalleryRoles)
-                );
+                $this->builder->addFields($this->getProductMediaGalleryData($value, $mediaGalleryRoles));
                 continue;
             }
             if ($attributeCode === 'quantity_and_stock_status') {
-                if (!is_array($value)) {
-                    $value = [
-                        'is_in_stock' => $value ? 1 : 0,
-                        'qty' => $value
-                    ];
-                }
-                $this->builder->addField($this->fieldMapper->getFieldName(
-                    $attributeCode, ['entityType' => self::PRODUCT_ENTITY_TYPE]
-                ), $value);
+                $this->builder->addFields($this->getQtyAndStatus($value));
                 continue;
             }
             if ($attributeCode === 'tier_price') {
-                $this->builder->addField('tier_price', $this->getProductTierPriceData($value));
+                $this->builder->addFields($this->getProductTierPriceData($value));
                 continue;
             }
             if (is_array($value)) {
@@ -230,8 +215,8 @@ class ProductDataMapper implements DataMapperInterface
             unset($attribute);
         }
 
-        $this->builder->addField('price', $this->getProductPriceData($productId, $storeId, $productPriceIndexData));
-        $this->builder->addField('category', $this->getProductCategoryData($productId, $productCategoryIndexData));
+        $this->builder->addFields($this->getProductPriceData($productId, $storeId, $productPriceIndexData));
+        $this->builder->addFields($this->getProductCategoryData($productId, $productCategoryIndexData));
 
         return $this->builder->build();
     }
@@ -246,19 +231,20 @@ class ProductDataMapper implements DataMapperInterface
     {
         $result = [];
         if (!empty($data)) {
+            $i = 0;
             foreach ($data as $tierPrice) {
-                $result[] = [
-                    'price_id' => $tierPrice['price_id'],
-                    'website_id' => $tierPrice['website_id'],
-                    'all_groups' => $tierPrice['all_groups'],
-                    'cust_group' => $tierPrice['cust_group'] == GroupInterface::CUST_GROUP_ALL
-                        ? '' : $tierPrice['cust_group'],
-                    'price_qty' => $tierPrice['price_qty'],
-                    'website_price' => $tierPrice['website_price'],
-                    'price' => $tierPrice['price'],
-                ];
+                $result['tier_price_id_'.$i] = $tierPrice['price_id'];
+                $result['tier_website_id_'.$i] = $tierPrice['website_id'];
+                $result['tier_all_groups_'.$i] = $tierPrice['all_groups'];
+                $result['tier_cust_group_'.$i] = $tierPrice['cust_group'] == GroupInterface::CUST_GROUP_ALL
+                    ? '' : $tierPrice['cust_group'];
+                $result['tier_price_qty_'.$i] = $tierPrice['price_qty'];
+                $result['tier_website_price_'.$i] = $tierPrice['website_price'];
+                $result['tier_price_'.$i] = $tierPrice['price'];
+                $i++;
             }
         }
+
         return $result;
     }
 
@@ -277,30 +263,61 @@ class ProductDataMapper implements DataMapperInterface
         if (!empty($media['images'])) {
             $i = 0;
             foreach ($media['images'] as $data) {
-                $result[$i] = [
-                    'file' => $data['file'],
-                    'media_type' => $data['media_type'],
-                    'position' => $data['position'],
-                    'disabled' => $data['disabled'],
-                    'label' => $data['label'],
-                    'title' => $data['label'],
-                    'base_image' => $data['file'] == $roles[self::MEDIA_ROLE_IMAGE] ? '1' : '0',
-                    'small_image' => $data['file'] == $roles[self::MEDIA_ROLE_SMALL_IMAGE] ? '1' : '0',
-                    'thumbnail' => $data['file'] == $roles[self::MEDIA_ROLE_THUMBNAIL] ? '1' : '0',
-                    'swatch_image' => $data['file'] == $roles[self::MEDIA_ROLE_SWATCH_IMAGE] ? '1' : '0'
-                ];
-                if ($data['media_type'] !== 'image') {
-                    $video = [
-                        'video_title' => $data['video_title'],
-                        'video_url' => $data['video_url'],
-                        'video_description' => $data['video_description'],
-                        'video_metadata' => $data['video_metadata'],
-                        'video_provider' => $data['video_provider']
-                    ];
-                    $result[$i] = array_merge($result[$i], $video);
+                if ($data['media_type'] === 'image') {
+                    $result['image_file_' . $i] = $data['file'];
+                    $result['image_position_' . $i] = $data['position'];
+                    $result['image_disabled_' . $i] = $data['disabled'];
+                    $result['image_label_' . $i] = $data['label'];
+                    $result['image_title_' . $i] = $data['label'];
+                    $result['image_base_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_IMAGE]
+                        ? '1' : '0';
+                    $result['image_small_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_SMALL_IMAGE]
+                        ? '1' : '0';
+                    $result['image_thumbnail_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_THUMBNAIL]
+                        ? '1' : '0';
+                    $result['image_swatch_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_SWATCH_IMAGE]
+                        ? '1' : '0';
+                } else {
+                    $result['video_file_' . $i] = $data['file'];
+                    $result['video_position_' . $i] = $data['position'];
+                    $result['video_disabled_' . $i] = $data['disabled'];
+                    $result['video_label_' . $i] = $data['label'];
+                    $result['video_title_' . $i] = $data['video_title'];
+                    $result['video_base_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_IMAGE]
+                        ? '1' : '0';
+                    $result['video_small_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_SMALL_IMAGE]
+                        ? '1' : '0';
+                    $result['video_thumbnail_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_THUMBNAIL]
+                        ? '1' : '0';
+                    $result['video_swatch_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_SWATCH_IMAGE]
+                        ? '1' : '0';
+                    $result['video_url_' . $i] = $data['video_url'];
+                    $result['video_description_' . $i] = $data['video_description'];
+                    $result['video_metadata_' . $i] = $data['video_metadata'];
+                    $result['video_provider_' . $i] = $data['video_provider'];
                 }
                 $i++;
             }
+        }
+        return $result;
+    }
+
+    /**
+     * Prepare quantity and stock status for product
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function getQtyAndStatus($data)
+    {
+        $result = [];
+
+        if (!is_array($data)) {
+            $result['is_in_stock'] = $data ? 1 : 0;
+            $result['qty'] = $data;
+        } else {
+            $result['is_in_stock'] = $data['is_in_stock'] ? 1 : 0;
+            $result['qty'] = $data['qty'];
         }
         return $result;
     }
@@ -322,11 +339,8 @@ class ProductDataMapper implements DataMapperInterface
 
             $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
             foreach ($productPriceIndexData as $customerGroupId => $price) {
-                $result[] = [
-                    'price' => $price,
-                    'customer_group_id' => $customerGroupId,
-                    'website_id' => $websiteId
-                ];
+                $fieldName = 'price_' . $customerGroupId . '_' . $websiteId;
+                $result[$fieldName] = sprintf('%F', $price);
             }
         }
         return $result;
@@ -372,12 +386,28 @@ class ProductDataMapper implements DataMapperInterface
     protected function getProductCategoryData($productId, array $categoryIndexData)
     {
         $result = [];
+        $categoryIds = [];
 
         if (array_key_exists($productId, $categoryIndexData)) {
             $indexData = $categoryIndexData[$productId];
             $result = $indexData;
         }
 
+        if (array_key_exists($productId, $categoryIndexData)) {
+            $indexData = $categoryIndexData[$productId];
+
+            foreach ($indexData as $categoryData) {
+                $categoryIds[] = $categoryData['id'];
+            }
+            if (count($categoryIds)) {
+                $result = ['category_ids' => implode(' ', $categoryIds)];
+
+                foreach ($indexData as $data) {
+                    $result['position_category_' . $data['id']] = $data['position'];
+                    $result['name_category_' . $data['id']] = $data['name'];
+                }
+            }
+        }
         return $result;
     }
 }
