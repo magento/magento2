@@ -19,6 +19,7 @@ $billingAddress->setAddressType('billing');
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
+/** @var \Magento\Sales\Model\Order\Payment $payment */
 $payment = $objectManager->create('Magento\Sales\Model\Order\Payment');
 $payment->setMethod('checkmo');
 
@@ -65,6 +66,21 @@ $order->setCustomerId($customerIdFromFixture)->setCustomerIsGuest(false);
 $tokenString = 'asdfg';
 $payment->setTransactionId('trx1');
 $payment->addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH);
-$payment->setTransactionAdditionalInfo('token', $tokenString);
+//$payment->setTransactionAdditionalInfo('token', $tokenString);
+
+
+/** @var \Magento\Vault\Model\PaymentToken $paymentToken */
+$paymentToken = $objectManager->create('Magento\Vault\Model\PaymentToken');
+$paymentToken->setCustomerId($customerIdFromFixture);
+$paymentToken->setGatewayToken($tokenString);
+$paymentToken->setPaymentMethodCode($payment->getMethod());
+$paymentToken->setCreatedAt('2015-12-08 18:06:10');
+
+/** @var \Magento\Sales\Api\Data\OrderPaymentExtensionFactory $orderPaymentExtensionFactory */
+$orderPaymentExtensionFactory = $objectManager->create('Magento\Sales\Api\Data\OrderPaymentExtensionFactory');
+$orderPaymentExtension = $orderPaymentExtensionFactory->create();
+$orderPaymentExtension->setVaultPaymentToken($paymentToken);
+$payment->setExtensionAttributes($orderPaymentExtension);
+
 
 $order->save();

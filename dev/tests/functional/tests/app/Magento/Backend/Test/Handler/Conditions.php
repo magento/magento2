@@ -52,6 +52,8 @@ abstract class Conditions extends Curl
             'is not' => '!=',
             'equal to' => '==',
             'matches' => '==',
+            'greater than' => '>',
+            'equals or greater than' => '>=',
         ],
         'value_type' => [
             'same_as' => 'the Same as Matched Product Categories',
@@ -60,9 +62,15 @@ abstract class Conditions extends Curl
             'California' => '12',
             'United States' => 'US',
             '[flatrate] Fixed' => 'flatrate_flatrate',
+            'FOUND' => '1',
+            'TRUE' => '1',
         ],
         'aggregator' => [
             'ALL' => 'all',
+            'ANY' => 'any',
+        ],
+        'attribute'=> [
+            'total quantity' => 'qty',
         ],
     ];
 
@@ -181,7 +189,7 @@ abstract class Conditions extends Curl
             );
         }
 
-        return $typeParam + $ruleParam;
+        return $ruleParam + $typeParam;
     }
 
     /**

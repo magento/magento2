@@ -64,8 +64,24 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      */
     protected $jsHelperMock;
 
+    /**
+     * @var \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productLinkFactoryMock;
+
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface\Proxy|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productRepositoryMock;
+
     protected function setUp()
     {
+        $this->productLinkFactoryMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productRepositoryMock = $this->getMockBuilder('Magento\Catalog\Api\ProductRepositoryInterface\Proxy')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->jsHelperMock = $this->getMock('Magento\Backend\Helper\Js', [], [], '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
@@ -100,10 +116,12 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'getAttributes',
                 'unlockAttribute',
                 'getOptionsReadOnly',
-                'setProductOptions',
+                'setOptions',
                 'setCanSaveCustomOptions',
                 '__sleep',
-                '__wakeup'
+                '__wakeup',
+                'getSku',
+                'getProductLinks'
             ],
             [],
             '',
@@ -131,20 +149,35 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->storeMock));
 
         $this->jsHelperMock = $this->getMock('\Magento\Backend\Helper\Js', [], [], '', false);
+        $customOptionFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $customOption = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->helper = new Helper(
             $this->requestMock,
             $this->storeManagerMock,
             $this->stockFilterMock,
             $this->productLinksMock,
             $this->jsHelperMock,
-            $this->dateFilterMock
+            $this->dateFilterMock,
+            $customOptionFactory,
+            $this->productLinkFactoryMock,
+            $this->productRepositoryMock
         );
 
         $productData = [
             'stock_data' => ['stock_data'],
-            'options' => ['option1', 'option2']
+            'options' => ['option1' => ['is_delete' => true], 'option2' => ['is_delete' => false]]
         ];
-
+        $customOptionFactory->expects($this->once())->method('create')
+            ->with(['data' => ['is_delete' => false]])
+            ->willReturn($customOption);
+        $customOption->expects($this->once())->method('setProductSku');
+        $customOption->expects($this->once())->method('setOptionId');
         $attributeNonDate = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $attributeDate = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
 
@@ -161,7 +194,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getBackend')
             ->will($this->returnValue($attributeDateBackEnd));
 
-
+        $this->productMock->expects($this->any())
+            ->method('getProductLinks')
+            ->willReturn([]);
         $attributeNonDateBackEnd->expects($this->any())
             ->method('getType')
             ->will($this->returnValue('non-datetime'));
@@ -220,6 +255,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('unlockAttribute')
             ->with('media');
 
+        $this->productMock->expects($this->any())
+            ->method('getProductLinks')
+            ->willReturn([]);
+
         $this->productMock->expects($this->once())
             ->method('lockAttribute')
             ->with('media');
@@ -233,6 +272,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('addData')
             ->with($productData);
+        $this->productMock->expects($this->once())
+            ->method('getSku')->willReturn('sku');
 
         $this->productMock->expects($this->once())
             ->method('setWebsiteIds')
@@ -243,8 +284,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $this->productMock->expects($this->once())
-            ->method('setProductOptions')
-            ->with($productData['options']);
+            ->method('setOptions')
+            ->with([$customOption]);
 
         $this->productMock->expects($this->once())
             ->method('setCanSaveCustomOptions')
@@ -293,13 +334,19 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     public function testMergeProductOptions($productOptions, $defaultOptions, $expectedResults)
     {
         $this->jsHelperMock = $this->getMock('\Magento\Backend\Helper\Js', [], [], '', false);
+        $customOptionFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->helper = new Helper(
             $this->requestMock,
             $this->storeManagerMock,
             $this->stockFilterMock,
             $this->productLinksMock,
             $this->jsHelperMock,
-            $this->dateFilterMock
+            $this->dateFilterMock,
+            $customOptionFactory,
+            $this->productLinkFactoryMock,
+            $this->productRepositoryMock
         );
         $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
         $this->assertEquals($expectedResults, $result);

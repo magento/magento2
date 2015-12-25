@@ -7,7 +7,10 @@
 namespace Magento\Downloadable\Model\Product\TypeHandler;
 
 use Magento\Catalog\Model\Product;
+use Magento\Downloadable\Helper\File;
 use Magento\Downloadable\Model\ComponentInterface;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Class AbstractTypeHandler
@@ -24,25 +27,33 @@ abstract class AbstractTypeHandler
     protected $deletedItems = [];
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var Data
      */
     protected $jsonHelper;
 
     /**
-     * @var \Magento\Downloadable\Helper\File
+     * @var File
      */
     protected $downloadableFile;
 
     /**
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Magento\Downloadable\Helper\File $downloadableFile
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @param Data $jsonHelper
+     * @param File $downloadableFile
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Downloadable\Helper\File $downloadableFile
+        Data $jsonHelper,
+        File $downloadableFile,
+        MetadataPool $metadataPool
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->downloadableFile = $downloadableFile;
+        $this->metadataPool = $metadataPool;
     }
 
     /**

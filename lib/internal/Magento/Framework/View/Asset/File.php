@@ -115,7 +115,7 @@ class File implements MergeableInterface
     public function getRelativeSourceFilePath()
     {
         $path = $this->filePath;
-        $sourcePath = $this->source->findRelativeSourceFilePath($this);
+        $sourcePath = $this->source->findSource($this);
         if ($sourcePath) {
             $origExt = pathinfo($path, PATHINFO_EXTENSION);
             $ext = pathinfo($sourcePath, PATHINFO_EXTENSION);
