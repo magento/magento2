@@ -29,7 +29,7 @@ define([
                         '<!-- ko with: getRecord($row()._rowIndex, true) -->' +
                             '<!-- ko template: rowTmpl --><!-- /ko -->' +
                         '<!-- /ko -->' +
-                        '<!-- ko if: isSingleEditing -->' +
+                        '<!-- ko if: isSingleEditing && singleEditingButtons -->' +
                             '<!-- ko template: rowButtonsTmpl --><!-- /ko -->' +
                         '<!-- /ko -->' +
                     '<!-- /ko -->' +
