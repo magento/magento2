@@ -25,8 +25,7 @@ class FormSections extends AbstractFormContainers
      *
      * @var string
      */
-    protected $collapsible = 'div[contains(@class,"fieldset-wrapper")]
-                                 [contains(@class,"admin__collapsible-block-wrapper")]';
+    protected $collapsible = 'div[contains(@class,"fieldset-wrapper")][contains(@class,"admin__collapsible-block-wrapper")]';
 
     /**
      * Get Section class.
