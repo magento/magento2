@@ -1262,7 +1262,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $buyRequest->expects($this->once())
             ->method('getBundleOption')
             ->willReturn([3 => 5]);
-        $selectionCollection->expects($this->once())
+        $selectionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$selection]);
         $selection->expects($this->once())
@@ -1921,8 +1921,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                     'setPositionOrder',
                     'addFilterByRequiredOptions',
                     'setSelectionIdsFilter',
-                    'joinPrices',
-                    'getItems'
+                    'joinPrices'
                 ]
             )
             ->disableOriginalConstructor()
@@ -1991,9 +1990,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->method('setSelectionIdsFilter')
             ->with($selectionIds)
             ->will($this->returnSelf());
-        $usedSelectionsMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn($usedSelectionsIds);
 
         $usedSelectionsMock->expects($this->once())
             ->method('joinPrices')
@@ -2007,96 +2003,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->model->getSelectionsByIds($selectionIds, $productMock);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The options you selected are not available.
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testGetSelectionsByIdsException()
-    {
-        $selectionIds = [1, 2, 3];
-        $usedSelectionsIds = [4, 5];
-        $storeId = 2;
-        $storeFilter = 'store_filter';
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $usedSelectionsMock = $this->getMockBuilder('Magento\Bundle\Model\ResourceModel\Selection\Collection')
-            ->setMethods(
-                [
-                    'addAttributeToSelect',
-                    'setFlag',
-                    'addStoreFilter',
-                    'setStoreId',
-                    'setPositionOrder',
-                    'addFilterByRequiredOptions',
-                    'setSelectionIdsFilter',
-                    'joinPrices',
-                    'getItems'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productGetMap = [
-            ['_cache_instance_used_selections', null, null],
-            ['_cache_instance_used_selections_ids', null, $usedSelectionsIds],
-            ['_cache_instance_store_filter', null, $storeFilter],
-        ];
-        $productMock->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValueMap($productGetMap));
-        $productSetMap = [
-            ['_cache_instance_used_selections', $usedSelectionsMock, $productMock],
-            ['_cache_instance_used_selections_ids', $selectionIds, $productMock],
-        ];
-        $productMock->expects($this->any())
-            ->method('setData')
-            ->will($this->returnValueMap($productSetMap));
-        $productMock->expects($this->once())
-            ->method('getStoreId')
-            ->will($this->returnValue($storeId));
-
-        $this->bundleCollection->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($usedSelectionsMock));
-
-        $usedSelectionsMock->expects($this->once())
-            ->method('addAttributeToSelect')
-            ->with('*')
-            ->will($this->returnSelf());
-        $flagMap = [
-            ['require_stock_items', true, $usedSelectionsMock],
-            ['product_children', true, $usedSelectionsMock],
-        ];
-        $usedSelectionsMock->expects($this->any())
-            ->method('setFlag')
-            ->will($this->returnValueMap($flagMap));
-        $usedSelectionsMock->expects($this->once())
-            ->method('addStoreFilter')
-            ->with($storeFilter)
-            ->will($this->returnSelf());
-        $usedSelectionsMock->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId)
-            ->will($this->returnSelf());
-        $usedSelectionsMock->expects($this->once())
-            ->method('setPositionOrder')
-            ->will($this->returnSelf());
-        $usedSelectionsMock->expects($this->once())
-            ->method('addFilterByRequiredOptions')
-            ->will($this->returnSelf());
-        $usedSelectionsMock->expects($this->once())
-            ->method('setSelectionIdsFilter')
-            ->with($selectionIds)
-            ->will($this->returnSelf());
-        $usedSelectionsMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn($usedSelectionsIds);
-
-
-        $this->model->getSelectionsByIds($selectionIds, $productMock);
-    }
     /**
      * @return void
      */
