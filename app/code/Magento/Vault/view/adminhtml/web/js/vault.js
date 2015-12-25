@@ -15,7 +15,6 @@ define([
             $selector: null,
             selector: 'edit_form',
             active: false,
-            originalCode: null,
             imports: {
                 onActiveChange: 'active'
             }

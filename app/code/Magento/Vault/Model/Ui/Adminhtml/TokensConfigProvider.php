@@ -132,7 +132,7 @@ final class TokensConfigProvider
      * Get code of payment method provider
      * @return null|string
      */
-    public function getProviderMethodCode()
+    protected function getProviderMethodCode()
     {
         if (!$this->providerCode) {
             $storeId = $this->getStoreId();

@@ -58,12 +58,10 @@ class Form extends \Magento\Payment\Block\Form
     {
         $icons = $this->cardConfigProvider->getConfig()['payment']['ccform']['icons'];
         $payments = $this->tokensProvider->getConfig();
-        $code = $this->tokensProvider->getProviderMethodCode();
         foreach ($payments as $key => $payment) {
             $data = $payment['config'];
             $data['id'] = $key;
             $data['icons'] = $icons;
-            $data['code'] = $code;
             $this->addChild($key, $payment['component'], $data);
         }
     }

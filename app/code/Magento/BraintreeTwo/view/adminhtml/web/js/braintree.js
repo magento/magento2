@@ -58,8 +58,6 @@ define([
                 }
             });
 
-            this.loadScript();
-
             return this;
         },
 
@@ -94,6 +92,10 @@ define([
             }
 
             this.enableEventListeners();
+
+            if (!this.scriptLoaded()) {
+                this.loadScript();
+            }
         },
 
         /**
