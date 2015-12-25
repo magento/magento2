@@ -11,7 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Api\AuthorizationServiceInterface;
 use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Integration\Model\IntegrationConfig;
+use Magento\Integration\Model\IntegrationConfig as IntegrationApiConfig;
 
 /**
  * Plugin for \Magento\Integration\Model\IntegrationService.
@@ -27,25 +27,25 @@ class Integration
     /**
      * Integration config
      *
-     * @var IntegrationConfig
+     * @var IntegrationApiConfig
      */
-    protected $integrationConfig;
+    protected $integrationApiConfig;
 
     /**
      * Initialize dependencies.
      *
      * @param AuthorizationServiceInterface $integrationAuthorizationService
      * @param AclRetriever $aclRetriever
-     * @param IntegrationConfig $integrationConfig
+     * @param IntegrationApiConfig $integrationApiConfig
      */
     public function __construct(
         AuthorizationServiceInterface $integrationAuthorizationService,
         AclRetriever $aclRetriever,
-        IntegrationConfig $integrationConfig
+        IntegrationApiConfig $integrationApiConfig
     ) {
         $this->integrationAuthorizationService = $integrationAuthorizationService;
         $this->aclRetriever  = $aclRetriever;
-        $this->integrationConfig = $integrationConfig;
+        $this->integrationApiConfig = $integrationApiConfig;
     }
 
     /**
@@ -109,10 +109,7 @@ class Integration
     {
         if ($integration->getId()) {
             if ($integration->getSetupType() == IntegrationModel::TYPE_CONFIG) {
-                $integration->setData(
-                    'resource',
-                    $this->integrationConfig->getIntegrations()[$integration->getData('name')]['resource']
-                );
+                $integration->setData('resource', $this->getIntegrationApiResource($integration));
             } else {
                 $integration->setData(
                     'resource',
@@ -163,5 +160,22 @@ class Integration
         $integrationId = (int)$integrationData[IntegrationModel::ID];
         $this->integrationAuthorizationService->removePermissions($integrationId);
         return $integrationData;
+    }
+
+    /**
+     * Return available resourses for integration model
+     *
+     * @param IntegrationModel $integration
+     * @return string[]
+     */
+    private function getIntegrationApiResource(IntegrationModel $integration)
+    {
+        $resources = [];
+        $integrationResources = $this->integrationApiConfig->getIntegrations();
+        $integrationName = $integration->getData('name');
+        if (!empty($integrationResources[$integrationName]['resource'])) {
+            $resources = $integrationResources[$integrationName]['resource'];
+        }
+        return $resources;
     }
 }
