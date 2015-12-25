@@ -123,7 +123,7 @@ final class TokensConfigProvider implements ConfigProviderInterface
 
         foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $index => $token) {
             $component = $componentProvider->getComponentForToken($token);
-            $vaultPayments[VaultPaymentInterface::CODE . $index] = [
+            $vaultPayments[VaultPaymentInterface::CODE . '_item_' . $index] = [
                 'config' => $component->getConfig(),
                 'component' => $component->getName()
             ];
