@@ -6,14 +6,19 @@
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Framework\View\Element\Template $block */
-
-$id = $block->escapeHtml($block->getData('id'));
 $details = $block->getData('details');
 $icon = $block->getData('icons')[$details['type']];
+$id = $block->escapeHtml($block->getData('id'));
 ?>
-<div id="payment-<?php /* @noEscape */ echo $id;?>" class="admin__field">
+<div data-mage-init='{
+        "Magento_BraintreeTwo/js/vault": {
+            "container": "payment_<?php /* @noEscape */ echo $id; ?>",
+            "publicHash": "<?php echo $block->escapeHtml($block->getData('publicHash')); ?>",
+            "nonceUrl": "<?php echo $block->escapeUrl($block->getData('nonceUrl')); ?>"
+        }
+    }' id="payment_<?php /* @noEscape */ echo $id;?>" class="admin__field">
     <div class="admin__field-control control">
-        <input type="radio" id="<?php /* @noEscape */ echo $id; ?>" name="payment[token_switcher]" />
+        <input type="radio" name="payment[token_switcher]" />
         <img src="<?php echo $block->escapeUrl($icon['url']); ?>"
              width="<?php echo $block->escapeHtml($icon['width']); ?>"
              height="<?php echo $block->escapeHtml($icon['height']); ?>"
@@ -24,14 +29,3 @@ $icon = $block->getData('icons')[$details['type']];
         <span><?php echo $block->escapeHtml($details['expirationDate']); ?></span>)
     </div>
 </div>
-
-<script type="text/x-magento-init">
-{
-    "*": {
-        "Magento_BraintreeTwo/js/vault": {
-            "publicHash": "<?php echo $block->escapeHtml($block->getData('publicHash')); ?>",
-            "nonceUrl": "<?php echo $block->escapeUrl($block->getData('nonceUrl')); ?>"
-        }
-    }
-}
-</script>

@@ -50,4 +50,10 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\BraintreeTwo\Controller\Adminhtml\Payment\GetNonce">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
+    </type>
 </config>
