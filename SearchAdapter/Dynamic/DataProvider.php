@@ -95,6 +95,7 @@ class DataProvider implements DataProviderInterface
         $this->customerSession = $customerSession;
         $this->searchIndexNameResolver = $searchIndexNameResolver;
         $this->indexerId = $indexerId;
+
     }
 
     /**
@@ -117,9 +118,15 @@ class DataProvider implements DataProviderInterface
             'std' => 0,
         ];
         $entityIds = $entityStorage->getSource();
-        $fieldName = $this->fieldMapper->getFieldName('price');
         $customerGroupId = $this->customerSession->getCustomerGroupId();
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $fieldName = $this->fieldMapper->getFieldName(
+            'price',
+            [
+                'customerGroupId' => $customerGroupId,
+                'websiteId' => $websiteId,
+            ]
+        );
         $storeId = $this->storeManager->getStore()->getId();
         $requestQuery = [
             'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->indexerId),
@@ -147,35 +154,8 @@ class DataProvider implements DataProviderInterface
                 ],
                 'aggregations' => [
                     'prices' => [
-                        'nested' => [
-                            'path' => $fieldName,
-                        ],
-                        'aggregations' => [
-                            'price_filter' => [
-                                'filter' => [
-                                    'bool' => [
-                                        'must' => [
-                                            [
-                                                'term' => [
-                                                    'price.customer_group_id' => $customerGroupId,
-                                                ],
-                                            ],
-                                            [
-                                                'term' => [
-                                                    'price.website_id' => $websiteId,
-                                                ],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                                'aggregations' => [
-                                    'price_stats' => [
-                                        'extended_stats' => [
-                                            'field' => $fieldName . '.price',
-                                        ],
-                                    ],
-                                ],
-                            ],
+                        'extended_stats' => [
+                            'field' => $fieldName,
                         ],
                     ],
                 ],
@@ -227,9 +207,15 @@ class DataProvider implements DataProviderInterface
     ) {
         $result = [];
         $entityIds = $entityStorage->getSource();
-        $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
         $customerGroupId = $this->customerSession->getCustomerGroupId();
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $fieldName = $this->fieldMapper->getFieldName(
+            $bucket->getField(),
+            [
+                'customerGroupId' => $customerGroupId,
+                'websiteId' => $websiteId,
+            ]
+        );
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
         $requestQuery = [
@@ -244,11 +230,6 @@ class DataProvider implements DataProviderInterface
                     'bool' => [
                         'must' => [
                             [
-                                'term' => [
-                                    'store_id' => $storeId,
-                                ],
-                            ],
-                            [
                                 'terms' => [
                                     '_id' => $entityIds,
                                 ],
@@ -258,36 +239,9 @@ class DataProvider implements DataProviderInterface
                 ],
                 'aggregations' => [
                     'prices' => [
-                        'nested' => [
-                            'path' => $fieldName,
-                        ],
-                        'aggregations' => [
-                            'price_filter' => [
-                                'filter' => [
-                                    'bool' => [
-                                        'must' => [
-                                            [
-                                                'term' => [
-                                                    'price.customer_group_id' => $customerGroupId,
-                                                ],
-                                            ],
-                                            [
-                                                'term' => [
-                                                    'price.website_id' => $websiteId,
-                                                ],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                                'aggregations' => [
-                                    'price_stats' => [
-                                        'histogram' => [
-                                            'field' => $fieldName . '.price',
-                                            'interval' => $range,
-                                        ],
-                                    ],
-                                ],
-                            ],
+                        'histogram' => [
+                            'field' => $fieldName,
+                            'interval' => $range,
                         ],
                     ],
                 ],
@@ -295,7 +249,7 @@ class DataProvider implements DataProviderInterface
         ];
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
-        foreach ($queryResult['aggregations']['prices']['price_filter']['price_stats']['buckets'] as $bucket) {
+        foreach ($queryResult['aggregations']['prices']['buckets'] as $bucket) {
             $result[$bucket['key'] / $range + 1] = $bucket['doc_count'];
         }
         return $result;
