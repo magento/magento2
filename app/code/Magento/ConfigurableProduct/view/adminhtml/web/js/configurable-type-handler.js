@@ -71,7 +71,10 @@ define([
          */
         bindAll: function () {
             $(document).on('changeConfigurableTypeProduct', function (event, isConfigurable) {
-                $(document).trigger('setTypeProduct', isConfigurable ? 'configurable' : null);
+                $(document).trigger('setTypeProduct', isConfigurable ?
+                    'configurable' :
+                    productType.type.init === 'configurable' ? 'simple' : productType.type.init
+                );
             });
             $(document).on('changeTypeProduct', this._initType.bind(this));
         },
