@@ -88,28 +88,21 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private $request;
 
-    /**
-     * @var \Magento\Ui\Model\Manager
-     */
-    private $uiManager;
 
     /**
-     * Constructor
-     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param EavValidationRules $eavValidationRules
      * @param CategoryCollectionFactory $categoryCollectionFactory
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param Config $eavConfig
      * @param FilterPool $filterPool
-     * @param StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param array $meta
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -122,7 +115,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         Config $eavConfig,
         FilterPool $filterPool,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Ui\Model\Manager $uiManager,
         array $meta = [],
         array $data = []
     ) {
@@ -134,13 +126,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->registry = $registry;
         $this->storeManager = $storeManager;
         $this->request = $request;
-        $this->uiManager = $uiManager;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
     }
 
     /**
-     * Prepatre meta data
+     * Prepare meta data
      *
      * @param array $meta
      * @return array
@@ -148,40 +139,31 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function prepareMeta($meta)
     {
         $meta = array_replace_recursive($meta, $this->prepareFieldsMeta(
-            $this->uiManager->getData('category_form')['category_form'],
+            $this->getFieldsMap(),
             $this->getAttributesMeta($this->eavConfig->getEntityType('catalog_category'))
         ));
+
         return $meta;
     }
 
     /**
      * Prepare fields meta based on xml declaration of form and fields metadata
      *
-     * @param array $formConfig
+     * @param array $fieldsMap
      * @param array $fieldsMeta
      * @return array
      */
-    private function prepareFieldsMeta($formConfig, $fieldsMeta)
+    private function prepareFieldsMeta($fieldsMap, $fieldsMeta)
     {
-        $fields = [];
-        foreach ($formConfig['children'] as $fieldset => $child) {
-            $callable = function($component) use (&$callable, $fieldsMeta) {
-                $result = [];
-                foreach ($component as $k => $v) {
-                    if (isset($fieldsMeta[$k])) {
-                        $result[$k] = $fieldsMeta[$k];
-                    }
-                    if (isset($v['children'])) {
-                        $result = array_merge($result, $callable($v['children']));
-                    }
+        $result = [];
+        foreach ($fieldsMap as $fieldSet => $fields) {
+            foreach ($fields as $field) {
+                if (isset($fieldsMeta[$field])) {
+                    $result[$fieldSet]['fields'][$field] = $fieldsMeta[$field];
                 }
-                return $result;
-            };
-            if (isset($child['children']) && $child['children']) {
-                $fields[$fieldset]['fields'] = $callable($child['children']);
             }
         }
-        return $fields;
+        return $result;
     }
 
     /**
@@ -376,5 +358,72 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $result['savedImage.delete']['default'] = false;
 
         return $result;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getFieldsMap()
+    {
+        return [
+            'general' =>
+                [
+                    'parent',
+                    'path',
+                    'is_active',
+                    'include_in_menu',
+                    'name',
+                ],
+            'content' =>
+                [
+                    'image',
+                    'savedImage.delete',
+                    'savedImage.value',
+                    'description',
+                    'landing_page',
+                ],
+            'display_settings' =>
+                [
+                    'display_mode',
+                    'is_anchor',
+                    'available_sort_by',
+                    'use_config.available_sort_by',
+                    'default_sort_by',
+                    'use_config.default_sort_by',
+                    'filter_price_range',
+                    'use_config.filter_price_range',
+                ],
+            'search_engine_optimization' =>
+                [
+                    'url_key_group',
+                    'url_key',
+                    'url_key_create_redirect',
+                    'meta_title',
+                    'meta_keywords',
+                    'meta_description',
+                ],
+            'assign_products' =>
+                [
+                ],
+            'design' =>
+                [
+                    'custom_use_parent_settings',
+                    'custom_apply_to_products',
+                    'page_layout',
+                    'custom_layout_update',
+                ],
+            'schedule_design_update' =>
+                [
+                    'custom_design_from',
+                    'custom_design_to',
+                    'custom_design',
+                ],
+            'category_view_optimization' =>
+                [
+                ],
+            'category_permissions' =>
+                [
+                ],
+        ];
     }
 }
