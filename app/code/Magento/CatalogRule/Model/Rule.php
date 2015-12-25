@@ -738,54 +738,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getSubIsEnabled()
-    {
-        return $this->getData(self::SUB_IS_ENABLED);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSubIsEnabled($subIsEnabled)
-    {
-        return $this->setData(self::SUB_IS_ENABLED, $subIsEnabled);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSubSimpleAction()
-    {
-        return $this->getData(self::SUB_SIMPLE_ACTION);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSubSimpleAction($subSimpleAction)
-    {
-        return $this->setData(self::SUB_SIMPLE_ACTION, $subSimpleAction);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSubDiscountAmount()
-    {
-        return $this->getData(self::SUB_DISCOUNT_AMOUNT);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSubDiscountAmount($subDiscountAmount)
-    {
-        return $this->setData(self::SUB_DISCOUNT_AMOUNT, $subDiscountAmount);
-    }
-
-    /**
      * @return string
      */
     public function getFromDate()
