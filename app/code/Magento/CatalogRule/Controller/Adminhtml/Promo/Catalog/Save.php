@@ -17,9 +17,16 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     public function execute()
     {
         if ($this->getRequest()->getPostValue()) {
+
+            /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
+            $ruleRepository = $this->_objectManager->create(
+                'Magento\CatalogRule\Api\CatalogRuleRepositoryInterface'
+            );
+
+            /** @var \Magento\CatalogRule\Model\Rule $model */
+            $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
+
             try {
-                /** @var \Magento\CatalogRule\Model\Rule $model */
-                $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
                 $this->_eventManager->dispatch(
                     'adminhtml_controller_catalogrule_prepare_save',
                     ['request' => $this->getRequest()]
@@ -33,10 +40,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $data = $inputFilter->getUnescaped();
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
-                    $model->load($id);
-                    if ($id != $model->getId()) {
-                        throw new LocalizedException(__('Wrong rule specified.'));
-                    }
+                    $model = $ruleRepository->get($id);
                 }
 
                 $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
@@ -55,8 +59,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $model->loadPost($data);
 
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($model->getData());
-
-                $model->save();
+                $ruleRepository->save($model);
 
                 $this->messageManager->addSuccess(__('You saved the rule.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData(false);
@@ -85,7 +88,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     __('Something went wrong while saving the rule data. Please review the error log.')
                 );
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
+                $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($model->getData());
                 $this->_redirect('catalog_rule/*/edit', ['id' => $this->getRequest()->getParam('rule_id')]);
                 return;
             }
