@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\Html\Select;
 
 /**
  * Class Countries
- * @package Magento\BraintreeTwo\Block\Adminhtml\Form\Field
  */
 class Countries extends Select
 {

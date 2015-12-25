@@ -14,7 +14,6 @@ use Magento\Payment\Model\Config;
 
 /**
  * Class FormTest
- * @package Magento\BraintreeTwo\Test\Unit\Block
  */
 class FormTest extends \PHPUnit_Framework_TestCase
 {
