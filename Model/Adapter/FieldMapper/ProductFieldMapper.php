@@ -50,13 +50,22 @@ class ProductFieldMapper implements FieldMapperInterface
     /**
      * @param Config $eavConfig
      * @param FieldType $fieldType
+     * @param CustomerSession $customerSession
+     * @param StoreManager $storeManager
+     * @param Registry $coreRegistry
      */
     public function __construct(
         Config $eavConfig,
-        FieldType $fieldType
+        FieldType $fieldType,
+        CustomerSession $customerSession,
+        StoreManager $storeManager,
+        Registry $coreRegistry
     ) {
         $this->eavConfig = $eavConfig;
         $this->fieldType = $fieldType;
+        $this->customerSession = $customerSession;
+        $this->storeManager = $storeManager;
+        $this->coreRegistry = $coreRegistry;
     }
 
     /**
