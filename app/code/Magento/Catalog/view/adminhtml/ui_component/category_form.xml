@@ -386,9 +386,6 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="sortOrder" xsi:type="number">20</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">${ $.provider }:data.store_id</item>
-                        </item>
                     </item>
                 </argument>
             </field>
