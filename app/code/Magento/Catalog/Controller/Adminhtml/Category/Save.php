@@ -141,11 +141,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
             $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
-            if (isset($data['category_products'])
-                && is_string($data['category_products'])
+            if (isset($data['general']['category_products'])
+                && is_string($data['general']['category_products'])
                 && !$category->getProductsReadonly()
             ) {
-                $products = json_decode($data['category_products'], true);
+                $products = json_decode($data['general']['category_products'], true);
                 $category->setPostedProducts($products);
             }
             $this->_eventManager->dispatch(
