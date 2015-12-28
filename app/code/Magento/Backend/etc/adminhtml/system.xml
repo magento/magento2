@@ -167,6 +167,7 @@
                 <field id="minify_html" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify Html</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Minification is not applied in developer mode.</comment>
                 </field>
             </group>
             <group id="translate_inline" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -196,6 +197,7 @@
                 <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Minification is not applied in developer mode.</comment>
                 </field>
             </group>
             <group id="css" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -207,6 +209,7 @@
                 <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Minification is not applied in developer mode.</comment>
                 </field>
             </group>
             <group id="image" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
