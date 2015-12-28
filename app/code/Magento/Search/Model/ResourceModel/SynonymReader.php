@@ -8,10 +8,8 @@ namespace Magento\Search\Model\ResourceModel;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Search\Model\SynonymReader as SynReaderModel;
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Synonym Reader resource model
@@ -19,7 +17,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 class SynonymReader extends AbstractDb
 {
     /**
-     * @var Fulltext $fullTextSelect
+     * @var \Magento\Framework\DB\Helper\Mysql\Fulltext $fullTextSelect
      */
     private $fullTextSelect;
 
@@ -31,15 +29,15 @@ class SynonymReader extends AbstractDb
     protected $storeManager;
 
     /**
-     * @param Context $context
-     * @param StoreManagerInterface $storeManager
-     * @param Fulltext $fulltext
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\DB\Helper\Mysql\Fulltext $fulltext
      * @param string $connectionName
      */
     public function __construct(
-        Context $context,
-        StoreManagerInterface $storeManager,
-        Fulltext $fulltext,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\DB\Helper\Mysql\Fulltext $fulltext,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
@@ -50,11 +48,11 @@ class SynonymReader extends AbstractDb
     /**
      * Custom load model: Get data by user query phrase
      *
-     * @param SynReaderModel $object
+     * @param \Magento\Search\Model\SynonymReader $object
      * @param string $phrase
      * @return $this
      */
-    public function loadByPhrase(SynReaderModel $object, $phrase)
+    public function loadByPhrase(\Magento\Search\Model\SynonymReader $object, $phrase)
     {
         $rows = $this->queryByPhrase(strtolower($phrase));
 
@@ -123,4 +121,3 @@ class SynonymReader extends AbstractDb
         return $this->getConnection()->fetchAll($query);
     }
 }
-
