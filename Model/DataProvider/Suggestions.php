@@ -10,12 +10,20 @@ use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Search\Model\QueryResultFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 class Suggestions implements SuggestedQueriesInterface
 {
+    /**#@+
+     * Suggestions settings config paths
+     */
     const CONFIG_SUGGESTION_COUNT = 'catalog/search/search_suggestion_count';
     const CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED = 'catalog/search/search_suggestion_count_results_enabled';
     const CONFIG_SUGGESTION_ENABLED = 'catalog/search/search_suggestion_enabled';
+    /**#@-*/
 
     /**
      * @var Config
@@ -23,7 +31,7 @@ class Suggestions implements SuggestedQueriesInterface
     private $config;
 
     /**
-     * @var \Magento\Search\Model\QueryResultFactory
+     * @var QueryResultFactory
      */
     private $queryResultFactory;
 
@@ -33,54 +41,42 @@ class Suggestions implements SuggestedQueriesInterface
     private $connectionManager;
 
     /**
-     * @var \Magento\Solr\Model\QueryFactory
-     */
-    private $queryFactory;
-
-    /**
-     * @var \Magento\Solr\SearchAdapter\AccessPointMapperInterface
-     */
-    private $accessPointMapper;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Search\Request\Builder
+     * @var SearchIndexNameResolver
      */
-    private $requestBuilder;
+    private $searchIndexNameResolver;
 
     /**
-     * @var \Magento\Framework\Search\SearchEngineInterface
+     * @var StoreManager
      */
-    private $searchEngine;
+    private $storeManager;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      * @param Config $config
-     * @param \Magento\Search\Model\QueryResultFactory $queryResultFactory
+     * @param QueryResultFactory $queryResultFactory
      * @param ConnectionManager $connectionManager
-     * @param \Magento\Framework\Search\Request\Builder $requestBuilder
-     * @param \Magento\Framework\Search\SearchEngineInterface $searchEngine
+     * @param SearchIndexNameResolver $searchIndexNameResolver
+     * @param StoreManager $storeManager
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        ScopeConfigInterface $scopeConfig,
         Config $config,
-        \Magento\Search\Model\QueryResultFactory $queryResultFactory,
+        QueryResultFactory $queryResultFactory,
         ConnectionManager $connectionManager,
-        \Magento\Framework\Search\Request\Builder $requestBuilder,
-        \Magento\Framework\Search\SearchEngineInterface $searchEngine
+        SearchIndexNameResolver $searchIndexNameResolver,
+        StoreManager $storeManager
     ) {
-        // @TODO
         $this->queryResultFactory = $queryResultFactory;
         $this->connectionManager = $connectionManager;
-        $this->queryResultFactory = $queryResultFactory;
         $this->scopeConfig = $scopeConfig;
         $this->config = $config;
-        $this->requestBuilder = $requestBuilder;
-        $this->searchEngine = $searchEngine;
+        $this->searchIndexNameResolver = $searchIndexNameResolver;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -132,7 +128,10 @@ class Suggestions implements SuggestedQueriesInterface
         $searchSuggestionsCount = $this->getSearchSuggestionsCount();
 
         $suggestRequest = [
-            'index' => $this->config->getIndexName(),
+            'index' => $this->searchIndexNameResolver->getIndexName(
+                $this->storeManager->getStore()->getId(),
+                Config::ELASTICSEARCH_TYPE_DEFAULT
+            ),
             'body' => [
                 'suggestions' => [
                     'text' => $query->getQueryText(),
