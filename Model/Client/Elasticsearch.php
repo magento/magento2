@@ -113,46 +113,6 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * Gets all document ids from specified index
-     *
-     * @param string $index
-     * @param string $entityType
-     * @return array
-     */
-    public function getAllIds($index, $entityType)
-    {
-        $ids = [];
-        $scrollData = $this->client->search([
-            'search_type' => 'scan',
-            'scroll' => '1m',
-            'index' => $index,
-            'type' => $entityType,
-            'body' => [
-                'query' => [
-                    'match_all' => [],
-                ],
-                'fields' => [ '_id' ]
-            ]
-        ]);
-        while (true) {
-            $scrollId = $scrollData['_scroll_id'];
-            $scrollData = $this->client->scroll([
-                'scroll_id' => $scrollId,
-                'scroll' => '1m',
-            ]);
-            if (count($scrollData['hits']['hits']) > 0) {
-                foreach ($scrollData['hits']['hits'] as $hit) {
-                    $ids[$hit['_id']] = $hit['_id'];
-                }
-            } else {
-                break;
-            }
-        }
-
-        return $ids;
-    }
-
-    /**
      * Creates an Elasticsearch index.
      *
      * @param string $index

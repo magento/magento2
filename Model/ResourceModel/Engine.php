@@ -14,13 +14,6 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
  */
 class Engine implements EngineInterface
 {
-    const ATTRIBUTE_PREFIX = 'attr_';
-
-    /**
-     * Scope identifier
-     */
-    const SCOPE_FIELD_NAME = 'scope';
-
     /**
      * Catalog product visibility
      *
