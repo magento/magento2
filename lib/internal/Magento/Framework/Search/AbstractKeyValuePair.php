@@ -46,7 +46,7 @@ class AbstractKeyValuePair
     /**
      * Get field values
      *
-     * @return mixed
+     * @return mixed Return data in raw-formt. Must be escaped for using in sql
      * @codeCoverageIgnore
      */
     public function getValue()
