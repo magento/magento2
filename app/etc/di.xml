@@ -1072,4 +1072,55 @@
             <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolver</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\DB\SelectFactory">
+        <arguments>
+            <argument name="selectRenderer" xsi:type="object">Magento\Framework\DB\Select\RendererProxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\Select\SelectRenderer">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="distinct" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\DistinctRenderer</item>
+                    <item name="sort" xsi:type="string">100</item>
+                </item>
+                <item name="columns" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\ColumnsRenderer</item>
+                    <item name="sort" xsi:type="string">200</item>
+                </item>
+                <item name="union" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\UnionRenderer</item>
+                    <item name="sort" xsi:type="string">300</item>
+                </item>
+                <item name="from" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\FromRenderer</item>
+                    <item name="sort" xsi:type="string">400</item>
+                </item>
+                <item name="where" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\WhereRenderer</item>
+                    <item name="sort" xsi:type="string">500</item>
+                </item>
+                <item name="group" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\GroupRenderer</item>
+                    <item name="sort" xsi:type="string">600</item>
+                </item>
+                <item name="having" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\HavingRenderer</item>
+                    <item name="sort" xsi:type="string">700</item>
+                </item>
+                <item name="order" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\OrderRenderer</item>
+                    <item name="sort" xsi:type="string">800</item>
+                </item>
+                <item name="limit" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\LimitRenderer</item>
+                    <item name="sort" xsi:type="string">900</item>
+                </item>
+                <item name="for_update" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\ForUpdateRenderer</item>
+                    <item name="sort" xsi:type="string">1000</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
