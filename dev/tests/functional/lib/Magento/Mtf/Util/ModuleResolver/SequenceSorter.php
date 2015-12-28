@@ -55,7 +55,7 @@ class SequenceSorter implements SequenceSorterInterface
      * Sort files according to specified sequence.
      *
      * @param array $paths
-     * @return mixed
+     * @return array
      */
     public function sort(array $paths)
     {
@@ -70,7 +70,7 @@ class SequenceSorter implements SequenceSorterInterface
                 }
             }
         }
-        $sortedPaths = array_merge_recursive($sortedPaths, $paths);
+        $sortedPaths = array_merge($sortedPaths, $paths);
 
         return $sortedPaths;
     }
