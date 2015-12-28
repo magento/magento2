@@ -42,7 +42,7 @@ class CreateEntityRow
             }
             if (isset($data[strtolower($column['COLUMN_NAME'])])) {
                 $output[strtolower($column['COLUMN_NAME'])] = $data[strtolower($column['COLUMN_NAME'])];
-            } else {
+            } elseif ($column['DEFAULT'] === null) {
                 $output[strtolower($column['COLUMN_NAME'])] = null;
             }
         }
