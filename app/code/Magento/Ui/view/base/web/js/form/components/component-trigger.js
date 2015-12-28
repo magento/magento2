@@ -12,7 +12,7 @@ define([
     'use strict';
 
     return Element.extend({
-        defaults:{
+        defaults: {
             template: 'ui/form/components/component-trigger'
         },
 
@@ -26,36 +26,52 @@ define([
         },
 
         /**
-         * Perform configured action on target component,
-         * but previously create this component from template if it is not existed
+         * Performs configured actions
          */
         action: function () {
-            var target = this.target,
-                targetName = this.targetName,
-                parentName = targetName.split('.'),
-                child,
-                index;
+            this.actions.forEach(this.applyAction, this);
+        },
 
-            if (!target) {
-                if (registry.has(targetName)) {
-                    target = registry.async(targetName);
-                } else {
-                    index = parentName.pop();
-                    parentName = parentName.join('.');
+        /**
+         * Apply action on target component,
+         * but previously create this component from template if it is not existed
+         *
+         * @param {Object} action - action configuration
+         */
+        applyAction: function (action) {
+            var targetName = action.targetName,
+                params = action.params,
+                actionName = action.actionName,
+                target;
 
-                    child = utils.template({
-                        parent: parentName,
-                        name: index,
-                        nodeTemplate: targetName
-                    });
-                    layout([child]);
-                    target = registry.async(this.targetName);
-                }
+            if (!registry.has(targetName)) {
+                this.getFromTemplate(targetName);
             }
+            target = registry.async(targetName);
 
-            if (target && typeof target === 'function' && this.actionName) {
-                target(this.actionName);
+            if (target && typeof target === 'function' && actionName) {
+                target(actionName, params);
             }
+        },
+
+        /**
+         * Create target component from template
+         *
+         * @param {Object} targetName - name of component,
+         * that supposed to be a template and need to be initialized
+         */
+        getFromTemplate: function (targetName) {
+            var parentName = targetName.split('.'),
+                index = parentName.pop(),
+                child;
+
+            parentName = parentName.join('.');
+            child = utils.template({
+                parent: parentName,
+                name: index,
+                nodeTemplate: targetName
+            });
+            layout([child]);
         }
     });
 });
