@@ -97,7 +97,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             // Add 'scope_type' to 'search_synonyms'
             $connection->addColumn(
-                $connection->getTable('search_synonyms'),
+                $installer->getTable('search_synonyms'),
                 'scope_type',
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -109,8 +109,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
 
             $connection->dropForeignKey(
-                $connection->getTable('search_synonyms'),
-                $connection->getFkName(
+                $installer->getTable('search_synonyms'),
+                $installer->getFkName(
                     'search_synonyms',
                     'store_id',
                     'store',
@@ -119,13 +119,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
 
             $connection->dropIndex(
-                $connection->getTable('search_synonyms'),
+                $installer->getTable('search_synonyms'),
                 $installer->getIdxName('search_synonyms', ['store_id'])
             );
 
             // Rename store_id to scope_id
             $connection->changeColumn(
-                $connection->getTable('search_synonyms'),
+                $installer->getTable('search_synonyms'),
                 'store_id',
                 'scope_id',
                 [
@@ -138,7 +138,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
 
             $connection->addIndex(
-                $connection->getTable('search_synonyms'),
+                $installer->getTable('search_synonyms'),
                 $installer->getIdxName(
                     'search_synonyms',
                     ['scope_type', 'scope_id'],
