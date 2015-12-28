@@ -230,6 +230,17 @@ class Elasticsearch implements ClientInterface
                         'type' => 'string'
                     ],
                     'properties' => [],
+                    'dynamic_templates' => [
+                        [
+                            'price_mapping' => [
+                                'match' => 'price_*',
+                                'match_mapping' => 'string',
+                                'mapping' => [
+                                    'type' => 'float'
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];
