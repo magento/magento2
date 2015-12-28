@@ -8,23 +8,29 @@
 
 namespace Magento\Cms\Model\ResourceModel;
 
+use Magento\Cms\Model\Page as CmsPage;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Model\EntityManager;
 use Magento\Cms\Api\Data\PageInterface;
 
 /**
  * Cms page mysql resource
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Page extends AbstractDb
 {
     /**
      * Store model
      *
-     * @var null|\Magento\Store\Model\Store
+     * @var null|Store
      */
     protected $_store = null;
 
@@ -86,11 +92,11 @@ class Page extends AbstractDb
     /**
      * Process page data before saving
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         /*
          * For two attributes which represent timestamp data in DB
@@ -104,13 +110,13 @@ class Page extends AbstractDb
         }
 
         if (!$this->isValidPageIdentifier($object)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The page URL key contains capital letters or disallowed symbols.')
             );
         }
 
         if ($this->isNumericPageIdentifier($object)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The page URL key cannot be made of only numbers.')
             );
         }
@@ -120,12 +126,12 @@ class Page extends AbstractDb
     /**
      * Load an object
      *
-     * @param \Magento\Cms\Model\Page|\Magento\Framework\Model\AbstractModel $object
+     * @param CmsPage|AbstractModel $object
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
      */
-    public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
+    public function load(AbstractModel $object, $value, $field = null)
     {
         $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
 
@@ -138,7 +144,7 @@ class Page extends AbstractDb
         $isId = true;
         if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
             $select = $this->_getLoadSelect($field, $value, $object);
-            $select->reset(\Magento\Framework\DB\Select::COLUMNS)
+            $select->reset(Select::COLUMNS)
                 ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
                 ->limit(1);
             $result = $this->getConnection()->fetchCol($select);
@@ -158,8 +164,8 @@ class Page extends AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Cms\Model\Page|\Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\DB\Select
+     * @param CmsPage|AbstractModel $object
+     * @return Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -170,7 +176,7 @@ class Page extends AbstractDb
 
         if ($object->getStoreId()) {
             $storeIds = [
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                Store::DEFAULT_STORE_ID,
                 (int)$object->getStoreId(),
             ];
             $select->join(
@@ -193,7 +199,7 @@ class Page extends AbstractDb
      * @param string $identifier
      * @param int|array $store
      * @param int $isActive
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     protected function _getLoadByIdentifierSelect($identifier, $store, $isActive = null)
     {
@@ -220,10 +226,10 @@ class Page extends AbstractDb
     /**
      *  Check whether page identifier is numeric
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return bool
      */
-    protected function isNumericPageIdentifier(\Magento\Framework\Model\AbstractModel $object)
+    protected function isNumericPageIdentifier(AbstractModel $object)
     {
         return preg_match('/^[0-9]+$/', $object->getData('identifier'));
     }
@@ -231,10 +237,10 @@ class Page extends AbstractDb
     /**
      *  Check whether page identifier is valid
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return bool
      */
-    protected function isValidPageIdentifier(\Magento\Framework\Model\AbstractModel $object)
+    protected function isValidPageIdentifier(AbstractModel $object)
     {
         return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier'));
     }
@@ -251,9 +257,9 @@ class Page extends AbstractDb
     {
         $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
 
-        $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId];
+        $stores = [Store::DEFAULT_STORE_ID, $storeId];
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores, 1);
-        $select->reset(\Magento\Framework\DB\Select::COLUMNS)
+        $select->reset(Select::COLUMNS)
             ->columns('cp.' . $entityMetadata->getIdentifierField())
             ->order('cps.store_id DESC')
             ->limit(1);
@@ -269,13 +275,13 @@ class Page extends AbstractDb
      */
     public function getCmsPageTitleByIdentifier($identifier)
     {
-        $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID];
+        $stores = [Store::DEFAULT_STORE_ID];
         if ($this->_store) {
             $stores[] = (int)$this->getStore()->getId();
         }
 
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores);
-        $select->reset(\Magento\Framework\DB\Select::COLUMNS)
+        $select->reset(Select::COLUMNS)
             ->columns('cp.title')
             ->order('cps.store_id DESC')
             ->limit(1);
@@ -347,7 +353,7 @@ class Page extends AbstractDb
     /**
      * Set store model
      *
-     * @param \Magento\Store\Model\Store $store
+     * @param Store $store
      * @return $this
      */
     public function setStore($store)
@@ -359,7 +365,7 @@ class Page extends AbstractDb
     /**
      * Retrieve store model
      *
-     * @return \Magento\Store\Model\Store
+     * @return Store
      */
     public function getStore()
     {
@@ -367,11 +373,11 @@ class Page extends AbstractDb
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      * @throws \Exception
      */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    public function save(AbstractModel $object)
     {
         if ($object->isDeleted()) {
             return $this->delete($object);
