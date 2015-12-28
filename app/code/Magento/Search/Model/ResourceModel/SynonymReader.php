@@ -69,30 +69,26 @@ class SynonymReader extends AbstractDb
         // will be considered.
 
         foreach ($rows as $index => $row) {
-            // Check for current store view
             if ($row['scope_id'] === $storeViewId &&
                 $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_STORES) {
+                    // Check for current store view
                     $synRowsForStoreView[] = $row;
-            }
-            // Check for current website
-            else if (empty($synRowsForStoreView) &&
+            } else if (empty($synRowsForStoreView) &&
                 ($row['scope_id'] === $websiteId &&
                     $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES)) {
+                        // Check for current website
                         $synRowsForWebsite[] = $row;
-            }
-            // Check for all store views (i.e. default)
-            elseif (empty($synRowsForStoreView) && empty($synRowsForWebsite)) {
+            } else if (empty($synRowsForStoreView) && empty($synRowsForWebsite)) {
+                // Check for all store views (i.e. default)
                 $synRowsForDefault[] = $row;
             }
         }
 
         if (!empty($synRowsForStoreView)) {
             $object->setData($synRowsForStoreView);
-        }
-        elseif (!empty($synRowsForWebsite)) {
+        } elseif (!empty($synRowsForWebsite)) {
             $object->setData($synRowsForWebsite);
-        }
-        else {
+        } else {
             $object->setData($synRowsForDefault);
         }
         $this->_afterLoad($object);
@@ -127,3 +123,4 @@ class SynonymReader extends AbstractDb
         return $this->getConnection()->fetchAll($query);
     }
 }
+
