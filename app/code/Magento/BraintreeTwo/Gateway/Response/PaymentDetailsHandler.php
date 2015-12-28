@@ -5,16 +5,15 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Response;
 
-use Braintree_Transaction;
+use Braintree\Transaction;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Helper\ContextHelper;
-use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
- * Class PaymentDetailsHandler
- * @package Magento\BraintreeTwo\Gateway\Response
+ * Payment Details Handler
  */
 class PaymentDetailsHandler implements HandlerInterface
 {
@@ -44,17 +43,32 @@ class PaymentDetailsHandler implements HandlerInterface
     ];
 
     /**
+     * @var SubjectReader
+     */
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(SubjectReader $subjectReader)
+    {
+        $this->subjectReader = $subjectReader;
+    }
+
+    /**
      * @inheritdoc
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $paymentDO = SubjectReader::readPayment($handlingSubject);
-        /** @var \Braintree_Transaction $transaction */
-        $transaction = $response['object']->transaction;
+        $paymentDO = $this->subjectReader->readPayment($handlingSubject);
+        /** @var \Braintree\Transaction $transaction */
+        $transaction = $this->subjectReader->readTransaction($response);
         /**
          * @TODO after changes in sales module should be refactored for new interfaces
          */
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
+        /** @var OrderPaymentInterface $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
