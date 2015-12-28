@@ -13,7 +13,6 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
@@ -90,6 +89,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
 
     /**
+     * @var Config
+     */
+    private $eavConfig;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * Constructor
+     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -98,11 +109,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param Config $eavConfig
-     * @param FilterPool $filterPool
      * @param \Magento\Framework\App\RequestInterface $request
      * @param array $meta
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -113,7 +124,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         Config $eavConfig,
-        FilterPool $filterPool,
         \Magento\Framework\App\RequestInterface $request,
         array $meta = [],
         array $data = []
@@ -122,7 +132,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection = $categoryCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
-        $this->filterPool = $filterPool;
         $this->registry = $registry;
         $this->storeManager = $storeManager;
         $this->request = $request;
@@ -250,8 +259,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function addUseConfigSettings($categoryData)
     {
         foreach ($this->elementsWithUseConfigSetting as $elementsWithUseConfigSetting) {
-            if (
-                !isset($categoryData[$elementsWithUseConfigSetting]) ||
+            if (!isset($categoryData[$elementsWithUseConfigSetting]) ||
                 ($categoryData[$elementsWithUseConfigSetting] == '')
             ) {
                 $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
@@ -271,8 +279,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     protected function addUseDefaultSettings($category, $categoryData)
     {
-        if (
-            $category->getExistsStoreValueFlag('url_key') ||
+        if ($category->getExistsStoreValueFlag('url_key') ||
             $category->getStoreId() === \Magento\Store\Model\Store::DEFAULT_STORE_ID
         ) {
             $categoryData['use_default']['url_key'] = false;
@@ -304,8 +311,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function getScopeLabel(EavAttribute $attribute)
     {
         $html = '';
-        if (
-            !$attribute || $this->storeManager->isSingleStoreMode()
+        if (!$attribute || $this->storeManager->isSingleStoreMode()
             || $attribute->getFrontendInput() === AttributeInterface::FRONTEND_INPUT
         ) {
             return $html;
