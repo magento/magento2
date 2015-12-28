@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
+namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\DataMapper;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -12,20 +12,20 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContainer;
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Elasticsearch\Model\Adapter\DocumentDataMapper;
+use Magento\Elasticsearch\Model\Adapter\DataMapper\ProductDataMapper;
 use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\AdvancedSearch\Model\ResourceModel\Index as AdvancedSearchIndex;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
- * Class DocumentDataMapperTest
+ * Class ProductDataMapperTest
  */
-class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
+class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DocumentDataMapper
+     * @var ProductDataMapper
      */
     protected $model;
 
@@ -55,7 +55,7 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
     private $advancedSearchIndex;
 
     /**
-     * @var FieldMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fieldMapperMock;
 
@@ -108,8 +108,8 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->fieldMapperMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapper')
-            ->setMethods(['getFieldName'])
+        $this->fieldMapperMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
+            ->setMethods(['getFieldName','getAllAttributesTypes'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -144,7 +144,7 @@ class DocumentDataMapperTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\DocumentDataMapper',
+            '\Magento\Elasticsearch\Model\Adapter\DataMapper\ProductDataMapper',
             [
                 'builder' => $this->builderMock,
                 'attributeContainer' => $this->attributeContainerMock,
