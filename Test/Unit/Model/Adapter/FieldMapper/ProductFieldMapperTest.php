@@ -252,7 +252,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
             ['color', 'color', 'select', ['type'=>'default']],
             ['description', 'sort_description', 'string', ['type'=>'some']],
             ['*', '_all', 'string', ['type'=>'text']],
-            ['description', 'sort_description', 'string', ['type'=>'text']],
+            ['description', 'description', 'string', ['type'=>'text']],
         ];
     }
 
