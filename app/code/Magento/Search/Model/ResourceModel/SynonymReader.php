@@ -96,6 +96,12 @@ class SynonymReader extends AbstractDb
         return $this->getConnection()->fetchAll($query);
     }
 
+    /**
+     * A private helper function to retrieve matching synonym groups per scope
+     * 
+     * @param array $rows
+     * @return array
+     */
     private function getSynRowsPerScope($rows)
     {
 
@@ -126,5 +132,6 @@ class SynonymReader extends AbstractDb
         $synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES] = $synRowsForStoreView;
         $synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES] = $synRowsForWebsite;
         $synsPerScope[\Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT] = $synRowsForDefault;
+        return $synsPerScope;
     }
 }
