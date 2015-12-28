@@ -14,11 +14,19 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
+
+        /** @var \Magento\CatalogRule\Model\Rule $model */
         $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
 
+        /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
+        $ruleRepository = $this->_objectManager->create(
+            'Magento\CatalogRule\Api\CatalogRuleRepositoryInterface'
+        );
+
         if ($id) {
-            $model->load($id);
-            if (!$model->getRuleId()) {
+            try {
+                $model = $ruleRepository->get($id);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
                 $this->messageManager->addError(__('This rule no longer exists.'));
                 $this->_redirect('catalog_rule/*');
                 return;
@@ -39,12 +47,9 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         $this->_view->getPage()->getConfig()->getTitle()->prepend(
             $model->getRuleId() ? $model->getName() : __('New Catalog Price Rule')
         );
-        $this->_view->getLayout()->getBlock(
-            'promo_catalog_edit'
-        )->setData(
-            'action',
-            $this->getUrl('catalog_rule/promo_catalog/save')
-        );
+        $this->_view->getLayout()
+            ->getBlock('promo_catalog_edit')
+            ->setData('action', $this->getUrl('catalog_rule/promo_catalog/save'));
 
         $breadcrumb = $id ? __('Edit Rule') : __('New Rule');
         $this->_addBreadcrumb($breadcrumb, $breadcrumb);
