@@ -43,14 +43,14 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      */
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $fromDate = $object->getFromDate();
+        $fromDate = $object->getData('from_date');
         if ($fromDate instanceof \DateTime) {
             $object->setFromDate($fromDate->format('Y-m-d H:i:s'));
         } elseif (!is_string($fromDate) || empty($fromDate)) {
             $object->setFromDate(null);
         }
 
-        $toDate = $object->getToDate();
+        $toDate = $object->getData('to_date');
         if ($toDate instanceof \DateTime) {
             $object->setToDate($toDate->format('Y-m-d H:i:s'));
         } elseif (!is_string($toDate) || empty($toDate)) {

@@ -6,11 +6,7 @@
 
 namespace Magento\Braintree\Test\Block\Form;
 
-
-use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Payment\Test\Block\Form\Cc as CreditCard;
@@ -37,8 +33,21 @@ class Cc extends CreditCard
     {
         $mapping = $this->dataMapping($fixture->getData());
         foreach ($this->braintreeForm as $field => $iframe) {
+            $element = $this->browser->find('body');
+            $this->browser->waitUntil(
+                function () use ($element, $iframe) {
+                    $fieldElement = $element->find($iframe);
+                    return $fieldElement->isVisible() ? true : null;
+                }
+            );
             $this->browser->switchToFrame(new Locator($iframe));
             $element = $this->browser->find('body');
+            $this->browser->waitUntil(
+                function () use ($element) {
+                    $fieldElement = $element->find('input');
+                    return $fieldElement->isVisible() ? true : null;
+                }
+            );
             $this->_fill([$mapping[$field]], $element);
             $this->browser->switchToFrame();
         }
