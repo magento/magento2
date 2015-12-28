@@ -17,6 +17,8 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
 
 /**
  * Mapper class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mapper
 {
