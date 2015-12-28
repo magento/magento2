@@ -146,20 +146,10 @@ class ProductDataMapper implements DataMapperInterface
      * @param int $storeId
      * @param array $context
      * @return array|false
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function map($productId, array $indexData, $storeId, $context = [])
     {
         $this->builder->addField('store_id', $storeId);
-        $mediaGalleryRoles = array_fill_keys($this->mediaGalleryRoles, '');
-
-        $productPriceIndexData = $this->attributeContainer->getAttribute('price')
-            ? $this->resourceIndex->getPriceIndexData([$productId], $storeId)
-            : [];
-        $productCategoryIndexData = $this->resourceIndex->getFullCategoryProductIndexData(
-            $storeId,
-            [$productId => $productId]
-        );
         if (count($indexData)) {
             $productIndexData = $this->resourceIndex->getFullProductIndexData($productId, $indexData);
         }
@@ -172,36 +162,20 @@ class ProductDataMapper implements DataMapperInterface
             }
             /* @var Attribute|null $attribute */
             $attribute = $this->attributeContainer->getAttribute($attributeCode);
-            if (!$attribute
-                || in_array($attributeCode, ['price', 'media_gallery'], true)
-                ) {
+            if (!$attribute || in_array(
+                    $attributeCode,
+                    [
+                        'price',
+                        'media_gallery',
+                        'tier_price',
+                        'quantity_and_stock_status',
+                        'media_gallery',
+                    ]
+                )) {
                 continue;
             }
-
-            if ($attributeCode === 'tier_price') {
-                $this->builder->addFields($this->getProductTierPriceData($value));
-                continue;
-            }
-
-            if ($attributeCode === 'quantity_and_stock_status') {
-                $this->builder->addFields($this->getQtyAndStatus($value));
-                continue;
-            }
-
-            if ($attributeCode === 'media_gallery') {
-                $this->builder->addFields(
-                    $this->getProductMediaGalleryData(
-                        $value,
-                        $mediaGalleryRoles
-                    )
-                );
-                continue;
-            }
-
             $attribute->setStoreId($storeId);
-            $mediaGalleryRoles[$attributeCode] = $this->getMediaGalleryRole($attributeCode, $value);
             $value = $this->checkValue($value, $attribute, $storeId);
-
             $this->builder->addField(
                 $this->fieldMapper->getFieldName(
                     $attributeCode,
@@ -209,14 +183,48 @@ class ProductDataMapper implements DataMapperInterface
                 ),
                 $value
             );
-
-            unset($attribute);
         }
-
-        $this->builder->addFields($this->getProductPriceData($productId, $storeId, $productPriceIndexData));
-        $this->builder->addFields($this->getProductCategoryData($productId, $productCategoryIndexData));
+        $this->processAdvancedAttributes($productId, $productIndexData, $storeId);
 
         return $this->builder->build();
+    }
+
+    /**
+     * Process advanced attribute values
+     *
+     * @param int $productId
+     * @param array $productIndexData
+     * @param int $storeId
+     * @return void
+     */
+    protected function processAdvancedAttributes($productId, array $productIndexData, $storeId)
+    {
+        $mediaGalleryRoles = array_fill_keys($this->mediaGalleryRoles, '');
+        $productPriceIndexData = $this->attributeContainer->getAttribute('price')
+            ? $this->resourceIndex->getPriceIndexData([$productId], $storeId)
+            : [];
+        $productCategoryIndexData = $this->resourceIndex->getFullCategoryProductIndexData(
+            $storeId,
+            [$productId => $productId]
+        );
+        foreach ($productIndexData as $attributeCode => $value) {
+            if (in_array($attributeCode, $this->mediaGalleryRoles)) {
+                $mediaGalleryRoles[$attributeCode] = $value;
+            } elseif ($attributeCode == 'tier_price') {
+                $this->builder->addFields($this->getProductTierPriceData($value));
+            } elseif ($attributeCode == 'quantity_and_stock_status') {
+                $this->builder->addFields($this->getQtyAndStatus($value));
+            } elseif ($attributeCode == 'media_gallery') {
+                $this->builder->addFields(
+                    $this->getProductMediaGalleryData(
+                        $value,
+                        $mediaGalleryRoles
+                    )
+                );
+            }
+        }
+        $this->builder->addFields($this->getProductPriceData($productId, $storeId, $productPriceIndexData));
+        $this->builder->addFields($this->getProductCategoryData($productId, $productCategoryIndexData));
     }
 
     /**
@@ -245,7 +253,7 @@ class ProductDataMapper implements DataMapperInterface
     protected function getMediaGalleryRole($attributeCode, $value)
     {
         if (in_array($attributeCode, $this->mediaGalleryRoles)) {
-            return  $value;
+            return $value;
         }
     }
 
