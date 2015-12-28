@@ -6,17 +6,14 @@
 namespace Magento\Elasticsearch\Model\Adapter\DataMapper;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContainer;
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
 
 class ProductDataMapper implements DataMapperInterface
 {
@@ -46,13 +43,6 @@ class ProductDataMapper implements DataMapperInterface
     const PRODUCT_ENTITY_TYPE = 'product';
 
     /**
-     * Array of \DateTime objects per store
-     *
-     * @var \DateTime[]
-     */
-    protected $dateFormats = [];
-
-    /**
      * @var Builder
      */
     private $builder;
@@ -73,24 +63,14 @@ class ProductDataMapper implements DataMapperInterface
     private $fieldMapper;
 
     /**
-     * @var DateTime
-     */
-    private $dateTime;
-
-    /**
-     * @var TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var DateFieldType
+     */
+    private $dateFieldType;
 
     /**
      * Media gallery roles
@@ -106,29 +86,23 @@ class ProductDataMapper implements DataMapperInterface
      * @param AttributeContainer $attributeContainer
      * @param Index $resourceIndex
      * @param FieldMapperInterface $fieldMapper
-     * @param DateTime $dateTime
-     * @param TimezoneInterface $localeDate
-     * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
+     * @param DateFieldType $dateFieldType
      */
     public function __construct(
         Builder $builder,
         AttributeContainer $attributeContainer,
         Index $resourceIndex,
         FieldMapperInterface $fieldMapper,
-        DateTime $dateTime,
-        TimezoneInterface $localeDate,
-        ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        DateFieldType $dateFieldType
     ) {
         $this->builder = $builder;
         $this->attributeContainer = $attributeContainer;
         $this->resourceIndex = $resourceIndex;
         $this->fieldMapper = $fieldMapper;
-        $this->dateTime = $dateTime;
-        $this->localeDate = $localeDate;
-        $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
+        $this->dateFieldType = $dateFieldType;
 
         $this->mediaGalleryRoles = [
             self::MEDIA_ROLE_IMAGE,
@@ -160,7 +134,6 @@ class ProductDataMapper implements DataMapperInterface
                 $this->builder->addField($attributeCode, $value);
                 continue;
             }
-            /* @var Attribute|null $attribute */
             $attribute = $this->attributeContainer->getAttribute($attributeCode);
             if (!$attribute || in_array(
                     $attributeCode,
@@ -239,7 +212,7 @@ class ProductDataMapper implements DataMapperInterface
             return array_shift($value);
         } elseif ($attribute->getBackendType() === 'datetime' || $attribute->getBackendType() === 'timestamp'
             || $attribute->getFrontendInput() === 'date') {
-            return $this->formatDate($storeId, $value);
+            return $this->dateFieldType->formatDate($storeId, $value);
         } else {
             return $value;
         }
@@ -408,36 +381,6 @@ class ProductDataMapper implements DataMapperInterface
             }
         }
         return $result;
-    }
-
-    /**
-     * Retrieve date value in elasticsearch format (ISO 8601) with Z
-     * Example: 1995-12-31T23:59:59Z
-     *
-     * @param int $storeId
-     * @param string|null $date
-     * @return string|null
-     */
-    protected function formatDate($storeId, $date = null)
-    {
-        if ($this->dateTime->isEmptyDate($date)) {
-            return null;
-        }
-
-        if (!array_key_exists($storeId, $this->dateFormats)) {
-            $timezone = $this->scopeConfig->getValue(
-                $this->localeDate->getDefaultTimezonePath(),
-                ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-
-            $dateObj = new \DateTime();
-            $dateObj->setTimezone(new \DateTimeZone($timezone));
-            $this->dateFormats[$storeId] = $dateObj;
-        }
-
-        $dateObj = $this->dateFormats[$storeId];
-        return $dateObj->format('c');
     }
 
     /**

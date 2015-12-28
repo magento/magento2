@@ -88,22 +88,4 @@ class SearchIndexNameResolverTest extends \PHPUnit_Framework_TestCase
             $this->model->getIndexName($this->storeId, 'else_index_id')
         );
     }
-
-    /**
-     * Get elasticsearch client options
-     *
-     * @return array
-     */
-    protected function getClientOptions()
-    {
-        return [
-            'hostname' => 'localhost',
-            'port' => '9200',
-            'timeout' => 15,
-            'index' => 'magento2',
-            'enableAuth' => 1,
-            'username' => 'user',
-            'password' => 'my-password',
-        ];
-    }
 }
