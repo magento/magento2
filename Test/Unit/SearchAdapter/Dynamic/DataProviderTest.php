@@ -17,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -76,6 +77,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     protected $clientMock;
 
     /**
+     * @var SearchIndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchIndexNameResolver;
+
+    /**
      * Setup method
      * @return void
      */
@@ -85,9 +91,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\FieldMapperInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+
         $this->range = $this->getMockBuilder('Magento\Catalog\Model\Layer\Filter\Price\Range')
             ->setMethods(['getPriceRange'])
             ->disableOriginalConstructor()
@@ -109,7 +113,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCustomerGroupId'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->entityStorage = $this->getMockBuilder('Magento\Framework\Search\Dynamic\EntityStorage')
             ->setMethods(['getSource'])
             ->disableOriginalConstructor()
@@ -117,9 +120,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->entityStorage->expects($this->any())
             ->method('getSource')
             ->willReturn([1]);
-        $this->fieldMapper->expects($this->any())
-            ->method('getFieldName')
-            ->willReturn('price');
         $this->customerSession->expects($this->any())
             ->method('getCustomerGroupId')
             ->willReturn(1);
@@ -149,6 +149,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($this->clientMock);
 
+        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->searchIndexNameResolver = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             '\Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider',
@@ -159,7 +167,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'intervalFactory' => $this->intervalFactory,
                 'clientConfig' => $this->clientConfig,
                 'storeManager' => $this->storeManager,
-                'customerSession' => $this->customerSession
+                'customerSession' => $this->customerSession,
+                'searchIndexNameResolver' => $this->searchIndexNameResolver,
+                'indexerId' => 'catalogsearch_fulltext'
             ]
         );
     }
@@ -194,14 +204,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([
                 'aggregations' => [
                     'prices' => [
-                        'price_filter' => [
-                            'price_stats' => [
-                                'count' => 1,
-                                'max' => 1,
-                                'min' => 1,
-                                'std_deviation' => 1,
-                            ],
-                        ],
+                        'count' => 1,
+                        'max' => 1,
+                        'min' => 1,
+                        'std_deviation' => 1,
                     ],
                 ],
             ]);
@@ -267,14 +273,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([
                 'aggregations' => [
                     'prices' => [
-                        'price_filter' => [
-                            'price_stats' => [
-                                'buckets' => [
-                                    [
-                                        'key' => 1,
-                                        'doc_count' => 1,
-                                    ],
-                                ],
+                        'buckets' => [
+                            [
+                                'key' => 1,
+                                'doc_count' => 1,
                             ],
                         ],
                     ],
