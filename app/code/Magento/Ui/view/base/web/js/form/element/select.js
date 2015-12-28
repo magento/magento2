@@ -110,7 +110,6 @@ define([
         /**
          * Extends instance with defaults, extends config with formatted values
          *     and options, and invokes initialize method of AbstractElement class.
-         *     If instance's 'customEntry' property is set to true, calls 'initInput'
          */
         initialize: function () {
             this._super();
@@ -230,9 +229,7 @@ define([
         },
 
         /**
-         * Sets 'data' to 'options' observable array, if instance has
-         * 'customEntry' property set to true, calls 'setHidden' method
-         *  passing !options.length as a parameter
+         * Sets 'data' to 'options' observable array
          *
          * @param {Array} data
          * @returns {Object} Chainable
