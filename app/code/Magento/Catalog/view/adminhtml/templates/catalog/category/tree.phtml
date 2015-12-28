@@ -111,6 +111,10 @@
                     var selectedNode = this.getNodeById(parameters['category_id']);
                     if (selectedNode) {
                         this.currentNodeId = parameters['category_id'];
+                    } else {
+                        if (parameters['parent'] > 0 && parameters['category_id'] === 0) {
+                            this.currentNodeId = parameters['parent'];
+                        }
                     }
                     this.selectCurrentNode();
 
@@ -391,13 +395,14 @@
 
                 defaultLoadTreeParams = {
                     parameters: {
-                        text: '<?php /* @escapeNotVerified */ echo htmlentities($block->getRoot()->getName()) ?>',
+                        text: <?php echo json_encode(htmlentities($block->getRoot()->getName())) ?>,
                         draggable: false,
                         allowDrop: <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-                        id: <?php /* @escapeNotVerified */ echo (int)$block->getRoot()->getId() ?>,
-                        expanded: <?php /* @escapeNotVerified */ echo (int)$block->getIsWasExpanded() ?>,
-                        store_id: <?php /* @escapeNotVerified */ echo (int)$block->getStore()->getId() ?>,
-                        category_id: <?php /* @escapeNotVerified */ echo (int)$block->getCategoryId() ?>
+                        id: <?php echo (int)$block->getRoot()->getId() ?>,
+                        expanded: <?php echo (int)$block->getIsWasExpanded() ?>,
+                        store_id: <?php echo (int)$block->getStore()->getId() ?>,
+                        category_id: <?php echo (int)$block->getCategoryId() ?>,
+                        parent: <?php echo (int)$block->getRequest()->getParam('parent') ?>
                     },
                     data: <?php  /* @escapeNotVerified */ echo $block->getTreeJson() ?>
                 };
