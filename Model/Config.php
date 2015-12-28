@@ -6,10 +6,8 @@
 namespace Magento\Elasticsearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
-use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 
 /**
  * Elasticsearch config model
@@ -42,30 +40,14 @@ class Config implements ClientOptionsInterface
     protected $scopeConfig;
 
     /**
-     * @var EncryptorInterface
-     */
-    protected $encryptor;
-
-    /**
-     * @var ElasticsearchFactory
-     */
-    protected $adapterFactory;
-
-    /**
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
-     * @param EncryptorInterface $encryptor
-     * @param ElasticsearchFactory $adapterFactory
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        EncryptorInterface $encryptor,
-        ElasticsearchFactory $adapterFactory
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->encryptor = $encryptor;
-        $this->adapterFactory = $adapterFactory;
     }
 
     /**

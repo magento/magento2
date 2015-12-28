@@ -8,8 +8,6 @@ namespace Magento\Elasticsearch\Test\Unit\Model;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 
 /**
  * Class ConfigTest
@@ -27,16 +25,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfig;
 
     /**
-     * @var EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $encryptor;
-
-    /**
-     * @var ElasticsearchFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $adapterFactory;
-
-    /**
      * Setup
      *
      * @return void
@@ -46,21 +34,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->encryptor = $this->getMockBuilder('Magento\Framework\Encryption\EncryptorInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->adapterFactory = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
             '\Magento\Elasticsearch\Model\Config',
             [
-                'scopeConfig' => $this->scopeConfig,
-                'encryptor' => $this->encryptor,
-                'adapterFactory' => $this->adapterFactory
+                'scopeConfig' => $this->scopeConfig
             ]
         );
     }
