@@ -14,7 +14,6 @@ use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 class DataProvider implements DataProviderInterface
@@ -50,11 +49,6 @@ class DataProvider implements DataProviderInterface
     protected $storeManager;
 
     /**
-     * @var CustomerSession
-     */
-    protected $customerSession;
-
-    /**
      * @var SearchIndexNameResolver
      */
     protected $searchIndexNameResolver;
@@ -71,7 +65,6 @@ class DataProvider implements DataProviderInterface
      * @param IntervalFactory $intervalFactory
      * @param Config $clientConfig
      * @param StoreManagerInterface $storeManager
-     * @param CustomerSession $customerSession
      * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param string $indexerId
      */
@@ -82,7 +75,6 @@ class DataProvider implements DataProviderInterface
         IntervalFactory $intervalFactory,
         Config $clientConfig,
         StoreManagerInterface $storeManager,
-        CustomerSession $customerSession,
         SearchIndexNameResolver $searchIndexNameResolver,
         $indexerId
     ) {
@@ -92,10 +84,8 @@ class DataProvider implements DataProviderInterface
         $this->intervalFactory = $intervalFactory;
         $this->clientConfig = $clientConfig;
         $this->storeManager = $storeManager;
-        $this->customerSession = $customerSession;
         $this->searchIndexNameResolver = $searchIndexNameResolver;
         $this->indexerId = $indexerId;
-
     }
 
     /**
@@ -118,15 +108,7 @@ class DataProvider implements DataProviderInterface
             'std' => 0,
         ];
         $entityIds = $entityStorage->getSource();
-        $customerGroupId = $this->customerSession->getCustomerGroupId();
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        $fieldName = $this->fieldMapper->getFieldName(
-            'price',
-            [
-                'customerGroupId' => $customerGroupId,
-                'websiteId' => $websiteId,
-            ]
-        );
+        $fieldName = $this->fieldMapper->getFieldName('price');
         $storeId = $this->storeManager->getStore()->getId();
         $requestQuery = [
             'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->indexerId),
@@ -139,11 +121,6 @@ class DataProvider implements DataProviderInterface
                 'query' => [
                     'bool' => [
                         'must' => [
-                            [
-                                'term' => [
-                                    'store_id' => $storeId,
-                                ],
-                            ],
                             [
                                 'terms' => [
                                     '_id' => $entityIds,
@@ -164,12 +141,12 @@ class DataProvider implements DataProviderInterface
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
 
-        if (isset($queryResult['aggregations']['prices']['price_filter']['price_stats'])) {
+        if (isset($queryResult['aggregations']['prices'])) {
             $aggregations = [
-                'count' => $queryResult['aggregations']['prices']['price_filter']['price_stats']['count'],
-                'max' => $queryResult['aggregations']['prices']['price_filter']['price_stats']['max'],
-                'min' => $queryResult['aggregations']['prices']['price_filter']['price_stats']['min'],
-                'std' => $queryResult['aggregations']['prices']['price_filter']['price_stats']['std_deviation'],
+                'count' => $queryResult['aggregations']['prices']['count'],
+                'max' => $queryResult['aggregations']['prices']['max'],
+                'min' => $queryResult['aggregations']['prices']['min'],
+                'std' => $queryResult['aggregations']['prices']['std_deviation'],
             ];
         }
 
@@ -207,15 +184,7 @@ class DataProvider implements DataProviderInterface
     ) {
         $result = [];
         $entityIds = $entityStorage->getSource();
-        $customerGroupId = $this->customerSession->getCustomerGroupId();
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        $fieldName = $this->fieldMapper->getFieldName(
-            $bucket->getField(),
-            [
-                'customerGroupId' => $customerGroupId,
-                'websiteId' => $websiteId,
-            ]
-        );
+        $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
         $requestQuery = [
@@ -250,7 +219,8 @@ class DataProvider implements DataProviderInterface
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
         foreach ($queryResult['aggregations']['prices']['buckets'] as $bucket) {
-            $result[$bucket['key'] / $range + 1] = $bucket['doc_count'];
+            $key = intval($bucket['key'] / $range + 1);
+            $result[$key] = $bucket['doc_count'];
         }
         return $result;
     }
@@ -264,11 +234,9 @@ class DataProvider implements DataProviderInterface
         if (!empty($dbRanges)) {
             $lastIndex = array_keys($dbRanges);
             $lastIndex = $lastIndex[count($lastIndex) - 1];
-
             foreach ($dbRanges as $index => $count) {
                 $fromPrice = $index == 1 ? '' : ($index - 1) * $range;
                 $toPrice = $index == $lastIndex ? '' : $index * $range;
-
                 $data[] = [
                     'from' => $fromPrice,
                     'to' => $toPrice,
@@ -276,7 +244,6 @@ class DataProvider implements DataProviderInterface
                 ];
             }
         }
-
         return $data;
     }
 }

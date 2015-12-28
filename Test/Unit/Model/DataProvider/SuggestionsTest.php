@@ -117,8 +117,6 @@ class SuggestionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItems()
     {
-        $result = [];
-
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturn(1);
