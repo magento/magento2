@@ -31,11 +31,17 @@ class BatchIndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceRule;
 
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
     protected function setUp()
     {
         $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\ResourceModel\Rule');
         $this->product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
         $this->productRepository = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductRepository');
+        $this->metadataPool = Bootstrap::getObjectManager()->get('Magento\Framework\Model\Entity\MetadataPool');
     }
 
     /**
@@ -73,25 +79,35 @@ class BatchIndexTest extends \PHPUnit_Framework_TestCase
     {
         $this->product = $this->productRepository->get('simple');
         $productSecond = clone $this->product;
-        $productSecond->setId(null)
-            ->setUrlKey(null)
-            ->setSku(uniqid($this->product->getSku() . '-'))
-            ->setName(uniqid($this->product->getName() . '-'))
-            ->setWebsiteIds([1]);
+
+        $idField = $this->getLinkIdField(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productSecond->setData($idField, null);
+        $productSecond->setUrlKey(null);
+        $productSecond->setSku(uniqid($this->product->getSku() . '-'));
+        $productSecond->setName(uniqid($this->product->getName() . '-'));
+        $productSecond->setWebsiteIds([1]);
+
         $productSecond->save();
         $productSecond->setPrice($price)->save();
+
         $productThird = clone $this->product;
-        $productThird->setId(null)
-            ->setUrlKey(null)
-            ->setSku(uniqid($this->product->getSku() . '-'))
-            ->setName(uniqid($this->product->getName() . '-'))
-            ->setWebsiteIds([1])
-            ->save();
+        $productThird->setData($idField, null);
+        $productThird->setUrlKey(null);
+        $productThird->setSku(uniqid($this->product->getSku() . '-'));
+        $productThird->setName(uniqid($this->product->getName() . '-'));
+        $productThird->setWebsiteIds([1]);
+        $productThird->save();
         $productThird->setPrice($price)->save();
         return [
             $productSecond->getEntityId(),
             $productThird->getEntityId(),
         ];
+    }
+
+    protected function getLinkIdField($entityType)
+    {
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        return $metadata->getLinkField();
     }
 
     /**
