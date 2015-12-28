@@ -17,12 +17,12 @@ class Engine implements EngineInterface
     /**
      * Catalog product visibility
      *
-     * @var \Magento\Catalog\Model\Product\Visibility
+     * @var Visibility
      */
     protected $catalogProductVisibility;
 
     /**
-     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
+     * @var IndexScopeResolver
      */
     private $indexScopeResolver;
 
