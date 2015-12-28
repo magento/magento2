@@ -8,8 +8,6 @@ namespace Magento\Elasticsearch\SearchAdapter\Aggregation;
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Elasticsearch\Model\Config;
 
 class Interval implements IntervalInterface
@@ -28,16 +26,6 @@ class Interval implements IntervalInterface
      * @var FieldMapperInterface
      */
     protected $fieldMapper;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var CustomerSession
-     */
-    protected $customerSession;
 
     /**
      * @var Config
@@ -62,8 +50,6 @@ class Interval implements IntervalInterface
     /**
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
-     * @param StoreManagerInterface $storeManager
-     * @param CustomerSession $customerSession
      * @param Config $clientConfig
      * @param string $fieldName
      * @param string $storeId
@@ -72,8 +58,6 @@ class Interval implements IntervalInterface
     public function __construct(
         ConnectionManager $connectionManager,
         FieldMapperInterface $fieldMapper,
-        StoreManagerInterface $storeManager,
-        CustomerSession $customerSession,
         Config $clientConfig,
         $fieldName,
         $storeId,
@@ -81,8 +65,6 @@ class Interval implements IntervalInterface
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
-        $this->storeManager = $storeManager;
-        $this->customerSession = $customerSession;
         $this->clientConfig = $clientConfig;
         $this->fieldName = $fieldName;
         $this->storeId = $storeId;
@@ -94,9 +76,7 @@ class Interval implements IntervalInterface
      */
     public function load($limit, $offset = null, $lower = null, $upper = null)
     {
-        $requestQuery = $from = $to = [];
-        $customerGroupId = $this->customerSession->getCustomerGroupId();
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $from = $to = [];
 
         if ($lower) {
             $from = ['gte' => $lower - self::DELTA];
@@ -121,39 +101,13 @@ class Interval implements IntervalInterface
                             'bool' => [
                                 'must' => [
                                     [
-                                        'term' => [
-                                            'store_id' => $this->storeId,
-                                        ],
-                                    ],
-                                    [
                                         'terms' => [
                                             '_id' => $this->entityIds,
                                         ],
                                     ],
                                     [
-                                        'nested' => [
-                                            'path' => $this->fieldName,
-                                            'filter' => [
-                                                'bool' => [
-                                                    'must' => [
-                                                        [
-                                                            'term' => [
-                                                                'price.customer_group_id' => $customerGroupId,
-                                                            ],
-                                                        ],
-                                                        [
-                                                            'term' => [
-                                                                'price.website_id' => $websiteId,
-                                                            ],
-                                                        ],
-                                                        [
-                                                            'range' => [
-                                                                $this->fieldName.'.price' => array_merge($from, $to),
-                                                            ],
-                                                        ],
-                                                    ],
-                                                ],
-                                            ],
+                                        'range' => [
+                                            $this->fieldName => array_merge($from, $to),
                                         ],
                                     ],
                                 ],
@@ -162,12 +116,12 @@ class Interval implements IntervalInterface
                     ],
                 ],
                 'sort' => [
-                    'price.price' => [
+                    'price' => [
                         'order' => 'asc',
                         'mode' => 'min',
-                        'nested_filter' => [
+                        'filter' => [
                             'range' => [
-                                $this->fieldName.'.price' => array_merge($from, $to),
+                                $this->fieldName => array_merge($from, $to),
                             ]
                         ]
                     ]
@@ -177,7 +131,7 @@ class Interval implements IntervalInterface
         ];
 
         if ($offset) {
-            $filterQuery['from'] = $offset;
+            $requestQuery['body']['from'] = $offset;
         }
 
         $queryResult = $this->connectionManager->getConnection()
@@ -191,9 +145,6 @@ class Interval implements IntervalInterface
      */
     public function loadPrevious($data, $index, $lower = null)
     {
-        $customerGroupId = $this->customerSession->getCustomerGroupId();
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
-
         if ($lower) {
             $from = ['gte' => $lower - self::DELTA];
         }
@@ -218,39 +169,13 @@ class Interval implements IntervalInterface
                             'bool' => [
                                 'must' => [
                                     [
-                                        'term' => [
-                                            'store_id' => $this->storeId,
-                                        ],
-                                    ],
-                                    [
                                         'terms' => [
                                             '_id' => $this->entityIds,
                                         ],
                                     ],
                                     [
-                                        'nested' => [
-                                            'path' => $this->fieldName,
-                                            'filter' => [
-                                                'bool' => [
-                                                    'must' => [
-                                                        [
-                                                            'term' => [
-                                                                'price.customer_group_id' => $customerGroupId,
-                                                            ],
-                                                        ],
-                                                        [
-                                                            'term' => [
-                                                                'price.website_id' => $websiteId,
-                                                            ],
-                                                        ],
-                                                        [
-                                                            'range' => [
-                                                                $this->fieldName.'.price' => array_merge($from, $to),
-                                                            ],
-                                                        ],
-                                                    ],
-                                                ],
-                                            ],
+                                        'range' => [
+                                            $this->fieldName => array_merge($from, $to),
                                         ],
                                     ],
                                 ],
@@ -259,12 +184,12 @@ class Interval implements IntervalInterface
                     ],
                 ],
                 'sort' => [
-                    'price.price' => [
+                    'price' => [
                         'order' => 'asc',
                         'mode' => 'min',
-                        'nested_filter' => [
+                        'filter' => [
                             'range' => [
-                                $this->fieldName.'.price' => array_merge($from, $to),
+                                $this->fieldName => array_merge($from, $to),
                             ]
                         ]
                     ]
@@ -287,12 +212,8 @@ class Interval implements IntervalInterface
      */
     public function loadNext($data, $rightIndex, $upper = null)
     {
-        $customerGroupId = $this->customerSession->getCustomerGroupId();
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
-
         $from = ['gt' => $data + self::DELTA];
         $to = ['lt' => $data - self::DELTA];
-
 
         $requestCountQuery = [
             'index' => $this->clientConfig->getIndexName(),
@@ -311,39 +232,13 @@ class Interval implements IntervalInterface
                             'bool' => [
                                 'must' => [
                                     [
-                                        'term' => [
-                                            'store_id' => $this->storeId,
-                                        ],
-                                    ],
-                                    [
                                         'terms' => [
                                             '_id' => $this->entityIds,
                                         ],
                                     ],
                                     [
-                                        'nested' => [
-                                            'path' => $this->fieldName,
-                                            'filter' => [
-                                                'bool' => [
-                                                    'must' => [
-                                                        [
-                                                            'term' => [
-                                                                'price.customer_group_id' => $customerGroupId,
-                                                            ],
-                                                        ],
-                                                        [
-                                                            'term' => [
-                                                                'price.website_id' => $websiteId,
-                                                            ],
-                                                        ],
-                                                        [
-                                                            'range' => [
-                                                                $this->fieldName.'.price' => array_merge($from, $to),
-                                                            ],
-                                                        ],
-                                                    ],
-                                                ],
-                                            ],
+                                        'range' => [
+                                            $this->fieldName.'.price' => array_merge($from, $to),
                                         ],
                                     ],
                                 ],
@@ -352,12 +247,12 @@ class Interval implements IntervalInterface
                     ],
                 ],
                 'sort' => [
-                    'price.price' => [
+                    'price' => [
                         'order' => 'asc',
                         'mode' => 'min',
                         'nested_filter' => [
                             'range' => [
-                                $this->fieldName.'.price' => array_merge($from, $to),
+                                $this->fieldName => array_merge($from, $to),
                             ]
                         ]
                     ]
@@ -394,38 +289,14 @@ class Interval implements IntervalInterface
                             'bool' => [
                                 'must' => [
                                     [
-                                        'term' => [
-                                            'store_id' => $this->storeId,
-                                        ],
-                                    ],
-                                    [
                                         'terms' => [
                                             '_id' => $this->entityIds,
                                         ],
                                     ],
                                     [
-                                        'nested' => [
-                                            'path' => $this->fieldName,
-                                            'filter' => [
-                                                'bool' => [
-                                                    'must' => [
-                                                        [
-                                                            'term' => [
-                                                                'price.customer_group_id' => $customerGroupId,
-                                                            ],
-                                                        ],
-                                                        [
-                                                            'term' => [
-                                                                'price.website_id' => $websiteId,
-                                                            ],
-                                                        ],
-                                                        [
-                                                            'range' => [
-                                                                $this->fieldName.'.price' => array_merge($from, $to),
-                                                            ],
-                                                        ],
-                                                    ],
-                                                ],
+                                        [
+                                            'range' => [
+                                                $this->fieldName => array_merge($from, $to),
                                             ],
                                         ],
                                     ],
@@ -435,12 +306,12 @@ class Interval implements IntervalInterface
                     ],
                 ],
                 'sort' => [
-                    'price.price' => [
+                    'price' => [
                         'order' => 'asc',
                         'mode' => 'min',
                         'nested_filter' => [
                             'range' => [
-                                $this->fieldName.'.price' => array_merge($from, $to),
+                                $this->fieldName => array_merge($from, $to),
                             ]
                         ]
                     ]

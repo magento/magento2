@@ -153,6 +153,7 @@ class ProductDataMapper implements DataMapperInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function map($productId, array $indexData, $storeId, $context = [])
     {
