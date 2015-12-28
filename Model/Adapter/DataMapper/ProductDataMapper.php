@@ -18,34 +18,30 @@ use Magento\Elasticsearch\Model\ResourceModel\Index;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- */
 class ProductDataMapper implements DataMapperInterface
 {
     /**
-     * Attribute code for image.
+     * Attribute code for image
      */
     const MEDIA_ROLE_IMAGE = 'image';
 
     /**
-     * Attribute code for small image.
+     * Attribute code for small image
      */
     const MEDIA_ROLE_SMALL_IMAGE = 'small_image';
 
     /**
-     * Attribute code for thumbnail.
+     * Attribute code for thumbnail
      */
     const MEDIA_ROLE_THUMBNAIL = 'thumbnail';
 
     /**
-     * Attribute code for swatches.
+     * Attribute code for swatches
      */
     const MEDIA_ROLE_SWATCH_IMAGE = 'swatch_image';
 
     /**
-     * Entyity type for product.
+     * Entity type for product
      */
     const PRODUCT_ENTITY_TYPE = 'product';
 
@@ -151,9 +147,6 @@ class ProductDataMapper implements DataMapperInterface
      * @param array $context
      * @return array|false
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function map($productId, array $indexData, $storeId, $context = [])
     {
@@ -289,7 +282,6 @@ class ProductDataMapper implements DataMapperInterface
      * @param array $media
      * @param array $roles
      * @return array
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getProductMediaGalleryData($media, $roles)
     {
@@ -399,10 +391,8 @@ class ProductDataMapper implements DataMapperInterface
     protected function getProductPriceData($productId, $storeId, array $priceIndexData)
     {
         $result = [];
-
         if (array_key_exists($productId, $priceIndexData)) {
             $productPriceIndexData = $priceIndexData[$productId];
-
             $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
             foreach ($productPriceIndexData as $customerGroupId => $price) {
                 $fieldName = 'price_' . $customerGroupId . '_' . $websiteId;
@@ -461,13 +451,11 @@ class ProductDataMapper implements DataMapperInterface
 
         if (array_key_exists($productId, $categoryIndexData)) {
             $indexData = $categoryIndexData[$productId];
-
             foreach ($indexData as $categoryData) {
                 $categoryIds[] = $categoryData['id'];
             }
             if (count($categoryIds)) {
                 $result = ['category_ids' => implode(' ', $categoryIds)];
-
                 foreach ($indexData as $data) {
                     $result['position_category_' . $data['id']] = $data['position'];
                     $result['name_category_' . $data['id']] = $data['name'];

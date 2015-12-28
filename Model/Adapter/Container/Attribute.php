@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Model\Adapter\Container;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 
 class Attribute
 {
@@ -20,7 +21,7 @@ class Attribute
     private $attributeCollection;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
+     * @var EavAttribute[]
      */
     private $attributes = [];
 
@@ -65,7 +66,7 @@ class Attribute
 
     /**
      * @param string $attributeCode
-     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute|null
+     * @return EavAttribute|null
      */
     public function getAttribute($attributeCode)
     {
@@ -76,20 +77,18 @@ class Attribute
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Attribute[]
+     * @return EavAttribute[]
      */
     public function getAttributes()
     {
         if (0 === count($this->attributes)) {
-            /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $attributesCollection */
+            /** @var Collection $attributesCollection */
             $attributesCollection = $this->attributeCollection;
-
             foreach ($attributesCollection as $attribute) {
-                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+                /** @var EavAttribute $attribute */
                 $this->attributes[$attribute->getAttributeCode()] = $attribute;
             }
         }
-
         return $this->attributes;
     }
 }

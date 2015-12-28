@@ -272,54 +272,9 @@ class Interval implements IntervalInterface
             $to = ['lt' => $data - self::DELTA];
         }
 
-        $requestQuery = [
-            'index' => $this->clientConfig->getIndexName(),
-            'type' => $this->clientConfig->getEntityType(),
-            'search_type' => 'count',
-            'body' => [
-                'fields' => [
-                    '_id'
-                ],
-                'query' => [
-                    'filtered' => [
-                        'query' => [
-                            'match_all' => [],
-                        ],
-                        'filter' => [
-                            'bool' => [
-                                'must' => [
-                                    [
-                                        'terms' => [
-                                            '_id' => $this->entityIds,
-                                        ],
-                                    ],
-                                    [
-                                        [
-                                            'range' => [
-                                                $this->fieldName => array_merge($from, $to),
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                'sort' => [
-                    'price' => [
-                        'order' => 'asc',
-                        'mode' => 'min',
-                        'nested_filter' => [
-                            'range' => [
-                                $this->fieldName => array_merge($from, $to),
-                            ]
-                        ]
-                    ]
-                ],
-                'from' => $offset - 1,
-                'size' => $rightIndex - $offset + 1,
-            ]
-        ];
+        // TODO: change only some part of the query which is different
+        $requestQuery = $requestCountQuery;
+
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
 

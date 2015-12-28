@@ -6,7 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
 use Magento\Elasticsearch\SearchAdapter\Mapper;
-use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder as QueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -19,9 +19,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $clientConfig;
+    protected $queryBuilder;
 
     /**
      * @var MatchQueryBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -39,10 +39,10 @@ class MapperTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
+        $this->queryBuilder = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Query\Builder')
             ->setMethods([
-                'getIndexPrefix',
-                'getEntityType',
+                'initQuery',
+                'initAggregations',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -53,13 +53,20 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $this->filterBuilder = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Filter\Builder')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->clientConfig->expects($this->any())
-            ->method('getIndexPrefix')
-            ->willReturn('indexPrefix');
-        $this->clientConfig->expects($this->any())
-            ->method('getEntityType')
-            ->willReturn('product');
+        $this->queryBuilder->expects($this->any())
+            ->method('initQuery')
+            ->willReturn([
+                'body' => [
+                    'query' => [],
+                ],
+            ]);
+        $this->queryBuilder->expects($this->any())
+            ->method('initAggregations')
+            ->willReturn([
+                'body' => [
+                    'query' => [],
+                ],
+            ]);
         $this->matchQueryBuilder->expects($this->any())
             ->method('build')
             ->willReturn([]);
@@ -68,7 +75,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManagerHelper->getObject(
             '\Magento\Elasticsearch\SearchAdapter\Mapper',
             [
-                'clientConfig' => $this->clientConfig,
+                'queryBuilder' => $this->queryBuilder,
                 'matchQueryBuilder' => $this->matchQueryBuilder,
                 'filterBuilder' => $this->filterBuilder
             ]
@@ -84,26 +91,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
-            ->setMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $query = $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $request->expects($this->once())
-            ->method('getDimensions')
-            ->willReturn([$dimension]);
-        $dimension->expects($this->once())
-            ->method('getValue')
-            ->willReturn(1);
-        $request->expects($this->once())
-            ->method('getFrom')
-            ->willReturn(0);
-        $request->expects($this->once())
-            ->method('getSize')
-            ->willReturn(10);
         $request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
@@ -128,10 +118,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
-            ->setMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $query = $this->getMockBuilder($queryMock)
             ->disableOriginalConstructor()
             ->getMock();
@@ -141,19 +127,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $filterQuery = $this->getMockBuilder($filterMock)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $request->expects($this->once())
-            ->method('getDimensions')
-            ->willReturn([$dimension]);
-        $dimension->expects($this->once())
-            ->method('getValue')
-            ->willReturn(1);
-        $request->expects($this->once())
-            ->method('getFrom')
-            ->willReturn(0);
-        $request->expects($this->once())
-            ->method('getSize')
-            ->willReturn(10);
         $request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);

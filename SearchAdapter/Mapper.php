@@ -10,22 +10,19 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
 use Magento\Framework\Search\Request\Query\Match as MatchQuery;
-use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder as QueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
 
 /**
  * Mapper class
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Mapper
 {
     /**
-     * @var Config
+     * @var QueryBuilder
      */
-    protected $clientConfig;
+    protected $queryBuilder;
 
     /**
      * @var MatchQueryBuilder
@@ -38,34 +35,18 @@ class Mapper
     protected $filterBuilder;
 
     /**
-     * @var AggregationBuilder
-     */
-    protected $aggregationBuilder;
-
-    /**
-     * @var SearchIndexNameResolver
-     */
-    protected $searchIndexNameResolver;
-
-    /**
-     * @param Config $clientConfig
+     * @param QueryBuilder $queryBuilder
      * @param MatchQueryBuilder $matchQueryBuilder
      * @param FilterBuilder $filterBuilder
-     * @param AggregationBuilder $aggregationBuilder
-     * @param SearchIndexNameResolver $searchIndexNameResolver
      */
     public function __construct(
-        Config $clientConfig,
+        QueryBuilder $queryBuilder,
         MatchQueryBuilder $matchQueryBuilder,
-        FilterBuilder $filterBuilder,
-        AggregationBuilder $aggregationBuilder,
-        SearchIndexNameResolver $searchIndexNameResolver
+        FilterBuilder $filterBuilder
     ) {
-        $this->clientConfig = $clientConfig;
+        $this->queryBuilder = $queryBuilder;
         $this->matchQueryBuilder = $matchQueryBuilder;
         $this->filterBuilder = $filterBuilder;
-        $this->aggregationBuilder = $aggregationBuilder;
-        $this->searchIndexNameResolver = $searchIndexNameResolver;
     }
 
     /**
@@ -76,24 +57,16 @@ class Mapper
      */
     public function buildQuery(RequestInterface $request)
     {
-        $dimension = current($request->getDimensions());
-        $storeId = $dimension->getValue();
-        $searchQuery = [
-            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $request->getIndex()),
-            'type' => $this->clientConfig->getEntityType(),
-            'body' => [
-                'from' => $request->getFrom(),
-                'size' => $request->getSize(),
-                'fields' => ['_id', '_score'],
-                'query' => $this->processQuery(
-                    $request->getQuery(),
-                    [],
-                    BoolQuery::QUERY_CONDITION_MUST
-                ),
-            ],
-        ];
-        $searchQuery['body']['query']['bool']['minimum_should_match'] = 1;
-        $searchQuery = $this->aggregationBuilder->build($request, $searchQuery);
+        $searchQuery = $this->queryBuilder->initQuery($request);
+        $searchQuery['body']['query'] = array_merge(
+            $searchQuery['body']['query'],
+            $this->processQuery(
+                $request->getQuery(),
+                [],
+                BoolQuery::QUERY_CONDITION_MUST
+            )
+        );
+        $searchQuery = $this->queryBuilder->initAggregations($request, $searchQuery);
         return $searchQuery;
     }
 
