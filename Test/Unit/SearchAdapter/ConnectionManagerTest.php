@@ -9,6 +9,7 @@ use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ConnectionManagerTest
@@ -64,10 +65,14 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
                 'password' => 'passwd',
             ]);
 
-        $this->model = new ConnectionManager(
-            $this->clientFactory,
-            $this->clientConfig,
-            $this->logger
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\ConnectionManager',
+            [
+                'clientFactory' => $this->clientFactory,
+                'clientConfig' => $this->clientConfig,
+                'logger' => $this->logger
+            ]
         );
     }
 

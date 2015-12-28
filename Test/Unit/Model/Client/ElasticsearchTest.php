@@ -6,7 +6,7 @@
 namespace Magento\Elasticsearch\Test\Unit\Model\Client;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
-use Elasticsearch\Common\Exceptions\Missing404Exception;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ElasticsearchTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,6 +24,11 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      * @var \Elasticsearch\Namespaces\IndicesNamespace|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indicesMock;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManager;
 
     /**
      * Setup
@@ -47,16 +52,31 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'exists',
                 'getSettings',
                 'create',
+                'delete',
                 'putMapping',
                 'deleteMapping',
+                'stats',
+                'updateAliases',
+                'existsAlias',
+                'getAlias'
             ])
             ->disableOriginalConstructor()
             ->getMock();
         $this->elasticsearchClientMock->expects($this->any())
             ->method('indices')
             ->willReturn($this->indicesMock);
+        $this->elasticsearchClientMock->expects($this->any())
+            ->method('ping')
+            ->willReturn(true);
 
-        $this->model = new ElasticsearchClient($this->getOptions(), $this->elasticsearchClientMock);
+        $this->objectManager = new ObjectManagerHelper($this);
+        $this->model = $this->objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Client\Elasticsearch',
+            [
+                'options' => $this->getOptions(),
+                'elasticsearchClient' => $this->elasticsearchClientMock
+            ]
+        );
     }
 
     /**
@@ -64,7 +84,12 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorOptionsException()
     {
-        new ElasticsearchClient([]);
+        $this->objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Client\Elasticsearch',
+            [
+                'options' => []
+            ]
+        );
     }
 
     /**
@@ -72,7 +97,12 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorWithOptions()
     {
-        new ElasticsearchClient($this->getOptions());
+        $this->objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Client\Elasticsearch',
+            [
+                'options' => $this->getOptions()
+            ]
+        );
     }
 
     /**
@@ -89,7 +119,16 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testTestConnection()
     {
-        $this->indicesMock->expects($this->once())->method('exists')->willReturn(true);
+        $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(true);
+        $this->assertEquals(true, $this->model->testConnection());
+    }
+
+    /**
+     * Test validation of connection parameters returns false
+     */
+    public function testTestConnectionFalse()
+    {
+        $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(false);
         $this->assertEquals(true, $this->model->testConnection());
     }
 
@@ -98,7 +137,14 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testTestConnectionPing()
     {
-        $this->model = new ElasticsearchClient($this->getEmptyIndexOption(), $this->elasticsearchClientMock);
+        $this->model = $this->objectManager->getObject(
+            '\Magento\Elasticsearch\Model\Client\Elasticsearch',
+            [
+                'options' => $this->getEmptyIndexOption(),
+                'elasticsearchClient' => $this->elasticsearchClientMock
+            ]
+        );
+
         $this->model->ping();
         $this->assertEquals(true, $this->model->testConnection());
     }
@@ -109,7 +155,8 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testBulkQuery()
     {
         $this->elasticsearchClientMock->expects($this->once())
-            ->method('bulk');
+            ->method('bulk')
+            ->with([]);
         $this->model->bulkQuery([]);
     }
 
@@ -118,37 +165,57 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllIds()
     {
+        $index = 'indexName';
+        $entityType = 'product';
+
         $this->elasticsearchClientMock->expects($this->once())
             ->method('search')
             ->with([
-                'scroll' => '1m',
                 'search_type' => 'scan',
-                'index' => 'indexName',
-                'type' => 'product',
+                'scroll' => '1m',
+                'index' => $index,
+                'type' => $entityType,
                 'body' => [
                     'query' => [
                         'match_all' => [],
                     ],
-                ],
+                    'fields' => [ '_id' ]
+                ]
             ])
-            ->willReturn(['_scroll_id' => 'scrollId']);
-        $this->elasticsearchClientMock->expects($this->once())
+            ->willReturn(['_scroll_id' => 'scrollId1']);
+        $this->elasticsearchClientMock->expects($this->at(1))
             ->method('scroll')
             ->with([
-                'scroll_id' => 'scrollId',
+                'scroll_id' => 'scrollId1',
                 'scroll' => '1m',
             ])
             ->willReturn([
+                '_scroll_id' => 'scrollId2',
                 'hits' => [
                     'hits' => [
-                        '0' => [
-                            '_id' => 1,
-                            'sku' => 'SKU',
+                        0 => [
+                            '_id' => '123',
+                        ],
+                        1 => [
+                            '_id' => '234',
                         ]
                     ],
                 ],
             ]);
-        $this->model->getAllIds('indexName', 'product');
+        $this->elasticsearchClientMock->expects($this->at(2))
+            ->method('scroll')
+            ->with([
+                'scroll_id' => 'scrollId2',
+                'scroll' => '1m',
+            ])
+            ->willReturn([
+                '_scroll_id' => 'scrollId3',
+                'hits' => [
+                    'hits' => [],
+                ],
+            ]);
+        $result = $this->model->getAllIds($index, $entityType);
+        $this->assertEquals(['123' => '123', '234' => '234'], $result);
     }
 
     /**
@@ -160,8 +227,84 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with([
                 'index' => 'indexName',
+                'body' => [],
             ]);
-        $this->model->createIndex('indexName');
+        $this->model->createIndex('indexName', []);
+    }
+
+    /**
+     * Test deleteIndex() method.
+     */
+    public function testDeleteIndex()
+    {
+        $this->indicesMock->expects($this->once())
+            ->method('delete')
+            ->with(['index' => 'indexName']);
+        $this->model->deleteIndex('indexName');
+    }
+
+    /**
+     * Test isEmptyIndex() method.
+     */
+    public function testIsEmptyIndex()
+    {
+        $indexName = 'magento2_index';
+        $stats['indices'][$indexName]['primaries']['docs']['count'] = 0;
+
+        $this->indicesMock->expects($this->once())
+            ->method('stats')
+            ->with(['index' => $indexName, 'metric' => 'docs'])
+            ->willReturn($stats);
+        $this->assertTrue($this->model->isEmptyIndex($indexName));
+    }
+
+    /**
+     * Test isEmptyIndex() method returns false.
+     */
+    public function testIsEmptyIndexFalse()
+    {
+        $indexName = 'magento2_index';
+        $stats['indices'][$indexName]['primaries']['docs']['count'] = 1;
+
+        $this->indicesMock->expects($this->once())
+            ->method('stats')
+            ->with(['index' => $indexName, 'metric' => 'docs'])
+            ->willReturn($stats);
+        $this->assertFalse($this->model->isEmptyIndex($indexName));
+    }
+
+    /**
+     * Test updateAlias() method with new index.
+     */
+    public function testUpdateAlias()
+    {
+        $alias = 'alias1';
+        $index = 'index1';
+
+        $params['body']['actions'][] = ['add' => ['alias' => $alias, 'index' => $index]];
+
+        $this->indicesMock->expects($this->once())
+            ->method('updateAliases')
+            ->with($params);
+        $this->model->updateAlias($alias, $index);
+    }
+
+    /**
+     * Test updateAlias() method with new and old index.
+     */
+    public function testUpdateAliasRemoveOldIndex()
+    {
+        $alias = 'alias1';
+        $newIndex = 'index1';
+        $oldIndex = 'indexOld';
+
+        $params['body']['actions'][] = ['remove' => ['alias' => $alias, 'index' => $oldIndex]];
+        $params['body']['actions'][] = ['add' => ['alias' => $alias, 'index' => $newIndex]];
+
+        $this->indicesMock->expects($this->once())
+            ->method('updateAliases')
+            ->with($params);
+        $this->model->updateAlias($alias, $newIndex, $oldIndex);
     }
 
     /**
@@ -180,6 +323,49 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests existsAlias() method checking for alias.
+     */
+    public function testExistsAlias()
+    {
+        $alias = 'alias1';
+        $params = ['name' => $alias];
+        $this->indicesMock->expects($this->once())
+            ->method('existsAlias')
+            ->with($params)
+            ->willReturn(true);
+        $this->assertTrue($this->model->existsAlias($alias));
+    }
+
+    /**
+     * Tests existsAlias() method checking for alias and index.
+     */
+    public function testExistsAliasWithIndex()
+    {
+        $alias = 'alias1';
+        $index = 'index1';
+        $params = ['name' => $alias, 'index' => $index];
+        $this->indicesMock->expects($this->once())
+            ->method('existsAlias')
+            ->with($params)
+            ->willReturn(true);
+        $this->assertTrue($this->model->existsAlias($alias, $index));
+    }
+
+    /**
+     * Test getAlias() method.
+     */
+    public function testGetAlias()
+    {
+        $alias = 'alias1';
+        $params = ['name' => $alias];
+        $this->indicesMock->expects($this->once())
+            ->method('getAlias')
+            ->with($params)
+            ->willReturn([]);
+        $this->assertEquals([], $this->model->getAlias($alias));
+    }
+
+    /**
      * Test createIndexIfNotExists() method, case when operation fails
      * @expectedException \Exception
      */
@@ -189,9 +375,10 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with([
                 'index' => 'indexName',
+                'body' => [],
             ])
             ->willThrowException(new \Exception('Something went wrong'));
-        $this->model->createIndex('indexName');
+        $this->model->createIndex('indexName', []);
     }
 
     /**
@@ -303,6 +490,20 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test query() method
+     * @return void
+     */
+    public function testQuery()
+    {
+        $query = 'test phrase query';
+        $this->elasticsearchClientMock->expects($this->once())
+            ->method('search')
+            ->with($query)
+            ->willReturn([]);
+        $this->assertEquals([], $this->model->query($query));
+    }
+
+    /**
      * Get elasticsearch client options
      *
      * @return array
@@ -320,6 +521,9 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     protected function getEmptyIndexOption()
     {
         return [

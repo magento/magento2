@@ -7,8 +7,8 @@ namespace Magento\Elasticsearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
 
 /**
@@ -16,11 +16,15 @@ use Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory;
  */
 class Config implements ClientOptionsInterface
 {
+    /**
+     * Search engine name
+     */
+    const ENGINE_NAME = 'elasticsearch';
 
     /**
-     * Elasticsearch Entity type for product
+     * Elasticsearch Entity type
      */
-    const ELASTICSEARCH_TYPE_PRODUCT = 'product';
+    const ELASTICSEARCH_TYPE_DOCUMENT = 'document';
 
     /**
      * Default Elasticsearch server timeout
@@ -67,7 +71,7 @@ class Config implements ClientOptionsInterface
         $defaultOptions = [
             'hostname' => $this->getElasticsearchConfigData('server_hostname'),
             'port' => $this->getElasticsearchConfigData('server_port'),
-            'index' => $this->getElasticsearchConfigData('index_name'),
+            'index' => $this->getElasticsearchConfigData('index_prefix'),
             'enableAuth' => $this->getElasticsearchConfigData('enable_auth'),
             'username' => $this->getElasticsearchConfigData('username'),
             'password' => $this->getElasticsearchConfigData('password'),
@@ -81,22 +85,45 @@ class Config implements ClientOptionsInterface
      * Retrieve information from Elasticsearch search engine configuration
      *
      * @param string $field
+     * @param int $storeId
      * @return string|int
      */
-    public function getElasticsearchConfigData($field)
+    public function getElasticsearchConfigData($field, $storeId = null)
     {
-        $path = 'catalog/search/elasticsearch_' . $field;
-        return $this->scopeConfig->getValue($path);
+        return $this->getSearchConfigData('elasticsearch_' . $field, $storeId);
     }
 
     /**
-     * Get Elasticsearch index name
+     * Retrieve information from search engine configuration
+     *
+     * @param string $field
+     * @param int|null $storeId
+     * @return string|int
+     */
+    public function getSearchConfigData($field, $storeId = null)
+    {
+        $path = 'catalog/search/' . $field;
+        return $this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $storeId);
+    }
+
+    /**
+     * Return true if third party search engine is used
+     *
+     * @return bool
+     */
+    public function isElasticsearchEnabled()
+    {
+        return $this->getSearchConfigData('engine') == self::ENGINE_NAME;
+    }
+
+    /**
+     * Get Elasticsearch index prefix
      *
      * @return string
      */
-    public function getIndexName()
+    public function getIndexPrefix()
     {
-        return $this->getElasticsearchConfigData('index_name');
+        return $this->getElasticsearchConfigData('index_prefix');
     }
 
     /**
@@ -106,6 +133,6 @@ class Config implements ClientOptionsInterface
      */
     public function getEntityType()
     {
-        return self::ELASTICSEARCH_TYPE_PRODUCT;
+        return self::ELASTICSEARCH_TYPE_DOCUMENT;
     }
 }

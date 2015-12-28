@@ -7,6 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Elasticsearch\SearchAdapter\FieldMapperInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper" />
+    <preference for="Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Builder" />
+    <preference for="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig" />
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">
@@ -31,11 +33,35 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexStructureFactory">
+        <arguments>
+            <argument name="structures" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexStructure</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogSearch\Model\ResourceModel\EngineProvider">
         <arguments>
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Engine</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Model\AdapterFactory">
+        <arguments>
+            <argument name="adapters" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Adapter</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Elasticsearch\SearchAdapter\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
+        <arguments>
+            <argument name="entityId" xsi:type="string">_id</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Elasticsearch\SearchAdapter\DocumentFactory">
+        <arguments>
+            <argument name="entityMetadata" xsi:type="object">Magento\Elasticsearch\SearchAdapter\ProductEntityMetadata</argument>
         </arguments>
     </type>
     <type name="Magento\Elasticsearch\SearchAdapter\ConnectionManager">
@@ -44,9 +70,17 @@
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </type>
-    <type name="Magento\Elasticsearch\Model\Adapter\Elasticsearch">
+    <virtualType name="Magento\Elasticsearch\Model\Adapter\Index\Config\Reader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
-            <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
+            <argument name="converter" xsi:type="object">Magento\Elasticsearch\Model\Adapter\Index\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Elasticsearch\Model\Adapter\Index\Config\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">esconfig.xml</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Elasticsearch\Model\Adapter\Index\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">elasticsearch_index_config</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Elasticsearch\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">

@@ -26,6 +26,11 @@ class Elasticsearch implements ClientInterface
     protected $clientOptions;
 
     /**
+     * @var bool
+     */
+    protected $pingResult;
+
+    /**
      * Initialize Elasticsearch Client
      *
      * @param array $options
@@ -45,7 +50,7 @@ class Elasticsearch implements ClientInterface
 
         if (!($elasticsearchClient instanceof \Elasticsearch\Client)) {
             $config = $this->buildConfig($options);
-            $elasticsearchClient = \Elasticsearch\ClientBuilder::fromConfig($config);
+            $elasticsearchClient = \Elasticsearch\ClientBuilder::fromConfig($config, true);
         }
         $this->client = $elasticsearchClient;
         $this->clientOptions = $options;
@@ -58,7 +63,10 @@ class Elasticsearch implements ClientInterface
      */
     public function ping()
     {
-        return $this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]]);
+        if ($this->pingResult === null) {
+            $this->pingResult = $this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]]);
+        }
+        return $this->pingResult;
     }
 
     /**
@@ -68,13 +76,7 @@ class Elasticsearch implements ClientInterface
      */
     public function testConnection()
     {
-        if (!empty($this->clientOptions['index'])) {
-            return $this->client->indices()->exists(['index' => $this->clientOptions['index']]);
-        } else {
-            // if no index is given simply perform a ping
-            $this->ping();
-        }
-        return true;
+        return $this->ping();
     }
 
     /**
@@ -94,12 +96,9 @@ class Elasticsearch implements ClientInterface
         if (!empty($options['enableAuth']) && ($options['enableAuth'] == 1)) {
             $host = sprintf('%s://%s:%s@%s', $protocol, $options['username'], $options['password'], $host);
         }
-        $config = [
-            'hosts' => [
-                $host
-            ]
-        ];
-        return $config;
+
+        $options['hosts'] = [$host];
+        return $options;
     }
 
     /**
@@ -114,7 +113,7 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
-     * Gets all document Ids from specified index
+     * Gets all document ids from specified index
      *
      * @param string $index
      * @param string $entityType
@@ -124,38 +123,95 @@ class Elasticsearch implements ClientInterface
     {
         $ids = [];
         $scrollData = $this->client->search([
-             'scroll' => '1m',
-             'search_type' => 'scan',
-             'index' => $index,
-             'type' => $entityType,
-             'body' => [
-                 'query' => [
-                     'match_all' => [],
-                 ],
-             ],
-        ]);
-        $scrollId = $scrollData['_scroll_id'];
-        $indexData = $this->client->scroll([
-            'scroll_id' => $scrollId,
+            'search_type' => 'scan',
             'scroll' => '1m',
+            'index' => $index,
+            'type' => $entityType,
+            'body' => [
+                'query' => [
+                    'match_all' => [],
+                ],
+                'fields' => [ '_id' ]
+            ]
         ]);
-        if (!empty($indexData['hits']['hits'])) {
-            foreach ($indexData['hits']['hits'] as $hit) {
-                $ids[$hit['_id']] = $hit['_id'];
+        while (true) {
+            $scrollId = $scrollData['_scroll_id'];
+            $scrollData = $this->client->scroll([
+                'scroll_id' => $scrollId,
+                'scroll' => '1m',
+            ]);
+            if (count($scrollData['hits']['hits']) > 0) {
+                foreach ($scrollData['hits']['hits'] as $hit) {
+                    $ids[$hit['_id']] = $hit['_id'];
+                }
+            } else {
+                break;
             }
         }
+
         return $ids;
     }
 
     /**
-     * Creates an Elasticsearch index
+     * Creates an Elasticsearch index.
+     *
+     * @param string $index
+     * @param array $settings
+     * @return void
+     */
+    public function createIndex($index, $settings)
+    {
+        $this->client->indices()->create([
+            'index' => $index,
+            'body' => $settings,
+        ]);
+    }
+
+    /**
+     * Delete an Elasticsearch index.
      *
      * @param string $index
      * @return void
      */
-    public function createIndex($index)
+    public function deleteIndex($index)
     {
-        $this->client->indices()->create(['index' => $index]);
+        $this->client->indices()->delete(['index' => $index]);
+    }
+
+    /**
+     * Check if index is empty.
+     *
+     * @param string $index
+     * @return bool
+     */
+    public function isEmptyIndex($index)
+    {
+        $stats = $this->client->indices()->stats(['index' => $index, 'metric' => 'docs']);
+        if ($stats['indices'][$index]['primaries']['docs']['count'] == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Updates alias.
+     *
+     * @param string $alias
+     * @param string $newIndex
+     * @param string $oldIndex
+     * @return void
+     */
+    public function updateAlias($alias, $newIndex, $oldIndex = '')
+    {
+        $params['body'] = ['actions' => []];
+        if ($oldIndex) {
+            $params['body']['actions'][] = ['remove' => ['alias' => $alias, 'index' => $oldIndex]];
+        }
+        if ($newIndex) {
+            $params['body']['actions'][] = ['add' => ['alias' => $alias, 'index' => $newIndex]];
+        }
+
+        $this->client->indices()->updateAliases($params);
     }
 
     /**
@@ -167,6 +223,31 @@ class Elasticsearch implements ClientInterface
     public function indexExists($index)
     {
          return $this->client->indices()->exists(['index' => $index]);
+    }
+
+    /**
+     * @param string $alias
+     * @param string $index
+     *
+     * @return bool
+     */
+    public function existsAlias($alias, $index = '')
+    {
+        $params = ['name' => $alias];
+        if ($index) {
+            $params['index'] = $index;
+        }
+        return $this->client->indices()->existsAlias($params);
+    }
+
+    /**
+     * @param string $alias
+     *
+     * @return array
+     */
+    public function getAlias($alias)
+    {
+        return $this->client->indices()->getAlias(['name' => $alias]);
     }
 
     /**
@@ -211,5 +292,16 @@ class Elasticsearch implements ClientInterface
             'index' => $index,
             'type' => $entityType,
         ]);
+    }
+
+    /**
+     * Execute search by $query
+     *
+     * @param array $query
+     * @return array
+     */
+    public function query($query)
+    {
+        return $this->client->search($query);
     }
 }

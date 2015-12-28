@@ -50,13 +50,14 @@ class ConnectionManager
     /**
      * Get shared connection
      *
+     * @param array $options
      * @throws \RuntimeException
      * @return Elasticsearch
      */
-    public function getConnection()
+    public function getConnection($options = [])
     {
         if (!$this->client) {
-            $this->connect();
+            $this->connect($options);
         }
 
         return $this->client;
@@ -65,13 +66,14 @@ class ConnectionManager
     /**
      * Connect to Elasticsearch client with default options
      *
+     * @param array $options
      * @throws \RuntimeException
      * @return void
      */
-    private function connect()
+    private function connect($options)
     {
         try {
-            $this->client = $this->clientFactory->create($this->clientConfig->prepareClientOptions());
+            $this->client = $this->clientFactory->create($this->clientConfig->prepareClientOptions($options));
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new \RuntimeException('Elasticsearch client is not set.');
