@@ -148,9 +148,13 @@ define([
                             return false;
                         }
 
+                        // Handle a change in validation or card type
+                        if (event.target.fieldKey === 'number') {
+                            self.selectedCardType(null);
+                        }
+
                         // remove previously set classes
                         $cardType.attr('class', 'icon-type');
-                        self.selectedCardType(null);
 
                         if (event.card) {
                             $cardType.addClass('icon-type-' + event.card.type);
