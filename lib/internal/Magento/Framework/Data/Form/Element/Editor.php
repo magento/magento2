@@ -436,10 +436,11 @@ class Editor extends Textarea
      */
     public function isEnabled()
     {
-        if ($this->hasData('wysiwyg')) {
-            return $this->getWysiwyg();
+        $result = false;
+        if ($this->getConfig('enabled')) {
+            $result = $this->hasData('wysiwyg') ? $result = $this->getWysiwyg() : true;
         }
-        return $this->getConfig('enabled');
+        return $result;
     }
 
     /**
