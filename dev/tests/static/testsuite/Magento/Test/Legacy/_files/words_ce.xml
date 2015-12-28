@@ -49,5 +49,8 @@
             <path>dev/tests/api-functional/testsuite/Magento/Webapi/Routing/RequestIdOverrideTest.php</path>
             <word>overriden</word>
         </item>
+        <item>
+            <path>composer.lock</path>
+        </item>
     </whitelist>
 </config>
