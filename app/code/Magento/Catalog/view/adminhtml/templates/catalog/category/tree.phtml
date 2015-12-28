@@ -111,6 +111,10 @@
                     var selectedNode = this.getNodeById(parameters['category_id']);
                     if (selectedNode) {
                         this.currentNodeId = parameters['category_id'];
+                    } else {
+                        if (parameters['parent'] > 0 && parameters['category_id'] === 0) {
+                            this.currentNodeId = parameters['parent'];
+                        }
                     }
                     this.selectCurrentNode();
 
@@ -397,7 +401,8 @@
                         id: <?php /* @escapeNotVerified */ echo (int)$block->getRoot()->getId() ?>,
                         expanded: <?php /* @escapeNotVerified */ echo (int)$block->getIsWasExpanded() ?>,
                         store_id: <?php /* @escapeNotVerified */ echo (int)$block->getStore()->getId() ?>,
-                        category_id: <?php /* @escapeNotVerified */ echo (int)$block->getCategoryId() ?>
+                        category_id: <?php /* @escapeNotVerified */ echo (int)$block->getCategoryId() ?>,
+                        parent: <?php /* @escapeNotVerified */ echo (int)$block->getRequest()->getParam('parent') ?>
                     },
                     data: <?php  /* @escapeNotVerified */ echo $block->getTreeJson() ?>
                 };
