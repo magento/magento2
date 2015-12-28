@@ -55,39 +55,14 @@ class SynonymReader extends AbstractDb
     public function loadByPhrase(\Magento\Search\Model\SynonymReader $object, $phrase)
     {
         $rows = $this->queryByPhrase(strtolower($phrase));
+        $synsPerScope = $this->getSynRowsPerScope($rows);
 
-        $storeViewId = $this->storeManager->getStore()->getId();
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        $synRowsForStoreView = [];
-        $synRowsForWebsite = [];
-        $synRowsForDefault = [];
-
-        // The synonyms configured for current store view gets highest priority. Second highest is current website
-        // scope. If there were no store view and website specific synonyms then at last 'default' (All store views)
-        // will be considered.
-
-        foreach ($rows as $row) {
-            if ($row['scope_id'] === $storeViewId &&
-                $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_STORES) {
-                    // Check for current store view
-                    $synRowsForStoreView[] = $row;
-            } else if (empty($synRowsForStoreView) &&
-                ($row['scope_id'] === $websiteId &&
-                    $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES)) {
-                        // Check for current website
-                        $synRowsForWebsite[] = $row;
-            } else if (empty($synRowsForStoreView) && empty($synRowsForWebsite)) {
-                // Check for all store views (i.e. default)
-                $synRowsForDefault[] = $row;
-            }
-        }
-
-        if (!empty($synRowsForStoreView)) {
-            $object->setData($synRowsForStoreView);
-        } elseif (!empty($synRowsForWebsite)) {
-            $object->setData($synRowsForWebsite);
+        if (!empty($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES])) {
+            $object->setData($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES]);
+        } elseif (!empty($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES])) {
+            $object->setData($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES]);
         } else {
-            $object->setData($synRowsForDefault);
+            $object->setData($synsPerScope[\Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT]);
         }
         $this->_afterLoad($object);
         return $this;
@@ -119,5 +94,37 @@ class SynonymReader extends AbstractDb
         )->where($matchQuery);
 
         return $this->getConnection()->fetchAll($query);
+    }
+
+    private function getSynRowsPerScope($rows)
+    {
+
+        $storeViewId = $this->storeManager->getStore()->getId();
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        $synRowsForStoreView = [];
+        $synRowsForWebsite = [];
+        $synRowsForDefault = [];
+
+        // The synonyms configured for current store view gets highest priority. Second highest is current website
+        // scope. If there were no store view and website specific synonyms then at last 'default' (All store views)
+        // will be considered.
+        foreach ($rows as $row) {
+            if ($row['scope_id'] === $storeViewId &&
+                $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_STORES) {
+                // Check for current store view
+                $synRowsForStoreView[] = $row;
+            } else if (empty($synRowsForStoreView) &&
+                ($row['scope_id'] === $websiteId &&
+                    $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES)) {
+                // Check for current website
+                $synRowsForWebsite[] = $row;
+            } else if (empty($synRowsForStoreView) && empty($synRowsForWebsite)) {
+                // Check for all store views (i.e. default)
+                $synRowsForDefault[] = $row;
+            }
+        }
+        $synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES] = $synRowsForStoreView;
+        $synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES] = $synRowsForWebsite;
+        $synsPerScope[\Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT] = $synRowsForDefault;
     }
 }
