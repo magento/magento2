@@ -162,9 +162,9 @@ class ConfigModel
      */
     private function checkInstallationFilePermissions()
     {
-        $results = $this->filePermissions->getMissingWritableDirectoriesForInstallation();
+        $results = $this->filePermissions->getMissingWritablePathsForInstallation();
         if ($results) {
-            $errorMsg = "Missing write permissions to the following directories: '" . implode("', '", $results) . "'";
+            $errorMsg = "Missing write permissions to the following paths: '" . implode("', '", $results) . "'";
             throw new \Exception($errorMsg);
         }
     }
