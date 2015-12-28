@@ -140,19 +140,6 @@ class Suggestions implements SuggestedQueriesInterface
                         'analyzer' => 'standard',
                         'size' => $searchSuggestionsCount,
                         'max_errors' => 2,
-                        'collate' => [
-                            'query' => [
-                                'bool' => [
-                                    'must' => [
-                                        'match' => [
-                                            '{{field_name}}' => '{{suggestion}}'
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            'params' => [ 'field_name' => '_all' ],
-                            'prune' => true
-                        ],
                         'direct_generator' => [
                             [
                                 'field' => '_all',
