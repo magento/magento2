@@ -35,6 +35,7 @@ class Config extends Widget implements TabInterface
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param Configurable $configurableType
      * @param array $data
      */
     public function __construct(
