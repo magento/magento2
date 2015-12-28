@@ -161,7 +161,7 @@ class ProductFieldMapper implements FieldMapperInterface
      * @return string
      */
     protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode) {
-        return (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'int')
+        return (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'integer')
             ? $attributeCode . '_value' : $attributeCode;
     }
 
