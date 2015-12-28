@@ -18,4 +18,21 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item xsi:type="object" name="braintree">BraintreeTwoFacade</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="BraintreeTwoAuthorizeDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\AddressDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
