@@ -952,14 +952,24 @@ class Config extends AbstractConfig
             return $this->getPaymentMarkImageUrl($localeCode);
         }
 
-        if ($this->_getSupportedLocaleCode($localeCode) == 'en_US') {
+        return $this->getExpressCheckoutInContextImageUrl($localeCode);
+    }
+
+    /**
+     * Express in context checkout shortcut pic URL getter
+     *
+     * @param string $localeCode
+     * @return string
+     */
+    public function getExpressCheckoutInContextImageUrl($localeCode)
+    {
+        $localeCode = $this->_getSupportedLocaleCode($localeCode);
+
+        if ($localeCode === 'en_US') {
             return 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-medium.png';
         }
 
-        return sprintf(
-            'https://www.paypal.com/%s/i/btn/btn_xpressCheckout.gif',
-            $this->_getSupportedLocaleCode($localeCode)
-        );
+        return sprintf('https://www.paypal.com/%s/i/btn/btn_xpressCheckout.gif', $localeCode);
     }
 
     /**
