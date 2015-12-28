@@ -151,7 +151,6 @@ class ProductDataMapper implements DataMapperInterface
      * @param array $context
      * @return array|false
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -179,34 +178,19 @@ class ProductDataMapper implements DataMapperInterface
             }
             /* @var Attribute|null $attribute */
             $attribute = $this->attributeContainer->getAttribute($attributeCode);
-            if (!$attribute || $attributeCode === 'price') {
+            if (!$attribute
+                || in_array($attributeCode, ['price', 'media_gallery', 'quantity_and_stock_status'], true)
+                ) {
                 continue;
+            }
+
+            if ($attributeCode === 'tier_price') {
+                $this->builder->addFields($this->getProductTierPriceData($value));
             }
 
             $attribute->setStoreId($storeId);
-            if (in_array($attributeCode, $this->mediaGalleryRoles)) {
-                $mediaGalleryRoles[$attributeCode] = $value;
-            }
-            if ($attributeCode === 'media_gallery') {
-                $this->builder->addFields($this->getProductMediaGalleryData($value, $mediaGalleryRoles));
-                continue;
-            }
-            if ($attributeCode === 'quantity_and_stock_status') {
-                $this->builder->addFields($this->getQtyAndStatus($value));
-                continue;
-            }
-            if ($attributeCode === 'tier_price') {
-                $this->builder->addFields($this->getProductTierPriceData($value));
-                continue;
-            }
-            if (is_array($value)) {
-                $value = array_shift($value);
-            }
-
-            if ($attribute->getBackendType() === 'datetime' || $attribute->getBackendType() === 'timestamp'
-                || $attribute->getFrontendInput() === 'date') {
-                $value = $this->formatDate($storeId, $value);
-            }
+            $mediaGalleryRoles[$attributeCode] = $this->getMediaGalleryRole($attributeCode, $value);
+            $value = $this->checkValue($value, $attribute, $storeId);
 
             $this->builder->addField($this->fieldMapper->getFieldName(
                 $attributeCode, ['entityType' => self::PRODUCT_ENTITY_TYPE]
@@ -215,10 +199,43 @@ class ProductDataMapper implements DataMapperInterface
             unset($attribute);
         }
 
+        $this->builder->addFields($this->getProductMediaGalleryData(
+            $productIndexData[$productId]['media_gallery'], $mediaGalleryRoles)
+        );
+
+        $this->builder->addFields($this->getQtyAndStatus($productIndexData[$productId]['quantity_and_stock_status']));
         $this->builder->addFields($this->getProductPriceData($productId, $storeId, $productPriceIndexData));
         $this->builder->addFields($this->getProductCategoryData($productId, $productCategoryIndexData));
 
         return $this->builder->build();
+    }
+
+    /**
+     * @param mixed $value
+     * @param Attribute $attribute
+     * @param string $storeId
+     * @return array|mixed|null|string
+     */
+    protected function checkValue($value, $attribute, $storeId) {
+        if (is_array($value)) {
+            return array_shift($value);
+        } elseif ($attribute->getBackendType() === 'datetime' || $attribute->getBackendType() === 'timestamp'
+            || $attribute->getFrontendInput() === 'date') {
+            return $this->formatDate($storeId, $value);
+        } else {
+            return $value;
+        }
+    }
+
+    /**
+     * @param string $attributeCode
+     * @param string $value
+     * @return mixed
+     */
+    protected function getMediaGalleryRole($attributeCode, $value) {
+        if (in_array($attributeCode, $this->mediaGalleryRoles)) {
+            return  $value;
+        }
     }
 
     /**
@@ -269,28 +286,20 @@ class ProductDataMapper implements DataMapperInterface
                     $result['image_disabled_' . $i] = $data['disabled'];
                     $result['image_label_' . $i] = $data['label'];
                     $result['image_title_' . $i] = $data['label'];
-                    $result['image_base_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_IMAGE]
-                        ? '1' : '0';
-                    $result['image_small_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_SMALL_IMAGE]
-                        ? '1' : '0';
-                    $result['image_thumbnail_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_THUMBNAIL]
-                        ? '1' : '0';
-                    $result['image_swatch_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_SWATCH_IMAGE]
-                        ? '1' : '0';
+                    $result['image_base_image_' . $i] = $this->getMediaRoleImage($data['file'], $roles);
+                    $result['image_small_image_' . $i] = $this->getMediaRoleSmallImage($data['file'], $roles);
+                    $result['image_thumbnail_' . $i] = $this->getMediaRoleThumbnail($data['file'], $roles);
+                    $result['image_swatch_image_' . $i] = $this->getMediaRoleSwatchImage($data['file'], $roles);
                 } else {
                     $result['video_file_' . $i] = $data['file'];
                     $result['video_position_' . $i] = $data['position'];
                     $result['video_disabled_' . $i] = $data['disabled'];
                     $result['video_label_' . $i] = $data['label'];
                     $result['video_title_' . $i] = $data['video_title'];
-                    $result['video_base_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_IMAGE]
-                        ? '1' : '0';
-                    $result['video_small_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_SMALL_IMAGE]
-                        ? '1' : '0';
-                    $result['video_thumbnail_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_THUMBNAIL]
-                        ? '1' : '0';
-                    $result['video_swatch_image_' . $i] = $data['file'] == $roles[self::MEDIA_ROLE_SWATCH_IMAGE]
-                        ? '1' : '0';
+                    $result['video_base_image_' . $i] = $this->getMediaRoleImage($data['file'], $roles);
+                    $result['video_small_image_' . $i] = $this->getMediaRoleSmallImage($data['file'], $roles);
+                    $result['video_thumbnail_' . $i] = $this->getMediaRoleThumbnail($data['file'], $roles);
+                    $result['video_swatch_image_' . $i] = $this->getMediaRoleSwatchImage($data['file'], $roles);
                     $result['video_url_' . $i] = $data['video_url'];
                     $result['video_description_' . $i] = $data['video_description'];
                     $result['video_metadata_' . $i] = $data['video_metadata'];
@@ -300,6 +309,42 @@ class ProductDataMapper implements DataMapperInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * @param string $file
+     * @param array $roles
+     * @return string
+     */
+    protected function getMediaRoleImage($file, $roles) {
+        return $file == $roles[self::MEDIA_ROLE_IMAGE] ? '1' : '0';
+    }
+
+    /**
+     * @param string $file
+     * @param array $roles
+     * @return string
+     */
+    protected function getMediaRoleSmallImage($file, $roles) {
+        return $file == $roles[self::MEDIA_ROLE_SMALL_IMAGE] ? '1' : '0';
+    }
+
+    /**
+     * @param string $file
+     * @param array $roles
+     * @return string
+     */
+    protected function getMediaRoleThumbnail($file, $roles) {
+        return $file == $roles[self::MEDIA_ROLE_THUMBNAIL] ? '1' : '0';
+    }
+
+    /**
+     * @param string $file
+     * @param array $roles
+     * @return string
+     */
+    protected function getMediaRoleSwatchImage($file, $roles) {
+        return $file == $roles[self::MEDIA_ROLE_SWATCH_IMAGE] ? '1' : '0';
     }
 
     /**
