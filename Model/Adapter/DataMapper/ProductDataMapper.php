@@ -146,7 +146,7 @@ class ProductDataMapper implements DataMapperInterface
      * Prepare index data for using in search engine metadata.
      *
      * @param int $productId
-     * @param array $productIndexData
+     * @param array $indexData
      * @param int $storeId
      * @param array $context
      * @return array|false
@@ -154,7 +154,7 @@ class ProductDataMapper implements DataMapperInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function map($productId, array $productIndexData, $storeId, $context = [])
+    public function map($productId, array $indexData, $storeId, $context = [])
     {
         $this->builder->addField('store_id', $storeId);
         $mediaGalleryRoles = array_fill_keys($this->mediaGalleryRoles, '');
@@ -166,11 +166,11 @@ class ProductDataMapper implements DataMapperInterface
             $storeId,
             [$productId => $productId]
         );
-        if (count($productIndexData)) {
-            $productIndexData = $this->resourceIndex->getFullProductIndexData([$productId]);
+        if (count($indexData)) {
+            $productIndexData = $this->resourceIndex->getFullProductIndexData($productId, $indexData);
         }
 
-        foreach ($productIndexData[$productId] as $attributeCode => $value) {
+        foreach ($productIndexData as $attributeCode => $value) {
             // Prepare processing attribute info
             if (strpos($attributeCode, '_value') !== false) {
                 $this->builder->addField($attributeCode, $value);
@@ -179,13 +179,26 @@ class ProductDataMapper implements DataMapperInterface
             /* @var Attribute|null $attribute */
             $attribute = $this->attributeContainer->getAttribute($attributeCode);
             if (!$attribute
-                || in_array($attributeCode, ['price', 'media_gallery', 'quantity_and_stock_status'], true)
+                || in_array($attributeCode, ['price', 'media_gallery'], true)
                 ) {
                 continue;
             }
 
             if ($attributeCode === 'tier_price') {
                 $this->builder->addFields($this->getProductTierPriceData($value));
+                continue;
+            }
+
+            if ($attributeCode === 'quantity_and_stock_status') {
+                $this->builder->addFields($this->getQtyAndStatus($value));
+                continue;
+            }
+
+            if ($attributeCode === 'media_gallery') {
+                $this->builder->addFields($this->getProductMediaGalleryData(
+                    $value, $mediaGalleryRoles)
+                );
+                continue;
             }
 
             $attribute->setStoreId($storeId);
@@ -199,11 +212,6 @@ class ProductDataMapper implements DataMapperInterface
             unset($attribute);
         }
 
-        $this->builder->addFields($this->getProductMediaGalleryData(
-            $productIndexData[$productId]['media_gallery'], $mediaGalleryRoles)
-        );
-
-        $this->builder->addFields($this->getQtyAndStatus($productIndexData[$productId]['quantity_and_stock_status']));
         $this->builder->addFields($this->getProductPriceData($productId, $storeId, $productPriceIndexData));
         $this->builder->addFields($this->getProductCategoryData($productId, $productCategoryIndexData));
 

@@ -257,6 +257,7 @@ class Elasticsearch
             'index' => $indexName,
             'type' => $this->clientConfig->getEntityType(),
             'body' => [],
+            'refresh' => true,
         ];
 
         foreach ($documents as $id => $document) {
