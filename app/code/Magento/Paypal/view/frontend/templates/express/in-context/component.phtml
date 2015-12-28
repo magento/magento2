@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Paypal\Block\Express\InContext\Button;
+
+/** @var \Magento\Paypal\Block\Express\InContext\Component $block */
+
+$configuration = [
+    '*' => [
+        'Magento_Paypal/js/in-context/express-checkout' => [
+            'id' => Button::PAYPAL_BUTTON_ID,
+            'path' => $block->getUrl('paypal/express/getToken'),
+            'merchantId' => $block->getMerchantId(),
+            'button' => true,
+            'clientConfig' => [
+                'locale' => $block->getLocale(),
+                'environment' => $block->getEnvironment(),
+                'button' => [
+                    Button::PAYPAL_BUTTON_ID,
+                ],
+            ]
+        ]
+    ]
+];
+
+?>
+<div style="display: none;" id="<?php echo Button::PAYPAL_BUTTON_ID; ?>"></div>
+<script type="text/x-magento-init">
+    <?php /* @noEscape */ echo json_encode($configuration); ?>
+</script>

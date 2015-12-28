@@ -47,34 +47,4 @@ if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()) {
             <img src="<?php echo $block->escapeHtml($linkImage['src']);?>" />
         </a>
     <?php endif; ?>
-<script type="text/x-magento-init">
-    {
-        ".paypal-logo.<?php echo $shortcutHtmlId ?>": {
-            "paypalCheckout": {
-                "confirmMessage": "<?php echo $block->escapeJsQuote($block->getConfirmationMessage())?>",
-                "confirmUrl": "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
-                "isCatalogProduct": "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
-                "paypalCheckoutSelector": "#pp-checkout-url",
-                "shortcutContainerClass": "<?php echo "." . $shortcutHtmlId ?>"
-            }
-        }
-    }
-</script>
-    <form id="myContainer" method="post" action="<?php echo $block->getCheckoutUrl() ?>"></form>
-    <script>
-        window.paypalCheckoutReady = function () {
-            paypal.checkout.setup('HFCTQCHQ3JB8S', {
-                environment: 'sandbox',
-                container: 'myContainer'
-            });
-        };
-    </script>
-    <script>
-        (function (d, t) {
-            "use strict";
-            var s = d.getElementsByTagName(t)[0], n = d.createElement(t);
-            n.src = "//www.paypalobjects.com/api/checkout.js";
-            s.parentNode.insertBefore(n, s);
-        }(document, "script"));
-    </script>
 </div>
