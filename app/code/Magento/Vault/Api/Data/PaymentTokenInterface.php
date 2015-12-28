@@ -10,7 +10,7 @@ namespace Magento\Vault\Api\Data;
  *
  * @api
  */
-interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface PaymentTokenInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -55,6 +55,10 @@ interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Is vault payment record active.
      */
     const IS_ACTIVE = 'is_active';
+    /*
+     * Is vault payment token visible.
+     */
+    const IS_VISIBLE = 'is_visible';
 
     /**
      * Gets the entity ID.
@@ -208,17 +212,18 @@ interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function setIsActive($isActive);
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
+     * Gets is vault payment record visible.
      *
-     * @return \Magento\Vault\Api\Data\PaymentTokenExtensionInterface|null
+     * @return bool Is visible.
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getExtensionAttributes();
+    public function getIsVisible();
 
     /**
-     * Set an extension attributes object.
+     * Sets is vault payment record visible.
      *
-     * @param \Magento\Vault\Api\Data\PaymentTokenExtensionInterface $extensionAttributes
+     * @param bool $isVisible
      * @return $this
      */
-    public function setExtensionAttributes(PaymentTokenExtensionInterface $extensionAttributes);
+    public function setIsVisible($isVisible);
 }

@@ -6,15 +6,19 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Model\ResourceModel\Page as ResourceCmsPage;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Cms Page Model
  *
- * @method \Magento\Cms\Model\ResourceModel\Page _getResource()
- * @method \Magento\Cms\Model\ResourceModel\Page getResource()
+ * @method ResourceCmsPage _getResource()
+ * @method ResourceCmsPage getResource()
+ * @method Page setStoreId(array $storeId)
+ * @method array getStoreId()
  */
-class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
+class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
     /**
      * No route page id
