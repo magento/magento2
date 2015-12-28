@@ -78,17 +78,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setProductIdFilter($productId)
     {
-        $productTable = $this->getTable('catalog_product_entity');
-        $linkField = $this->getConnection()->getAutoIncrementField($productTable);
-        $this->getSelect()->join(
-            ['cpe' => $productTable],
-            'cpe.'.$linkField.' = main_table.parent_id',
-            []
-        )->where(
-            'cpe.entity_id = ?',
-            $productId
-        );
-
+        $this->addFieldToFilter('main_table.parent_id', $productId);
         return $this;
     }
 

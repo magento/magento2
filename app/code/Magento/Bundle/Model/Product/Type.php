@@ -425,7 +425,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $this->_bundleOption->create()
                 ->getResourceCollection();
-            $optionsCollection->setProductIdFilter($product->getId());
+            $optionsCollection->setProductIdFilter($product->getEntityId());
             $this->setStoreFilter($product->getStoreId(), $product);
             $optionsCollection->setPositionOrder();
             $storeId = $this->getStoreFilter($product);
@@ -497,7 +497,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $selections = $this->getSelectionsCollection($optionCollection->getAllIds(), $product);
 
         foreach ($selections as $selection) {
-            if ($selection->getProductId() == $optionProduct->getId()) {
+            if ($selection->getProductId() == $optionProduct->getEntityId()) {
                 foreach ($options as &$option) {
                     if ($option->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
@@ -666,7 +666,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }
             if (count($selections) > 0 || !$isStrictProcessMode) {
-                $uniqueKey = [$product->getId()];
+                $uniqueKey = [$product->getEntityId()];
                 $selectionIds = [];
                 $qtys = $buyRequest->getBundleOptionQty();
 
@@ -703,7 +703,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                         ->prepareForCart($buyRequest, $selection);
                     $this->checkIsResult($_result);
 
-                    $result[] = $_result[0]->setParentProductId($product->getId())
+                    $result[] = $_result[0]->setParentProductId($product->getEntityId())
                         ->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)))
                         ->addCustomOption('bundle_selection_attributes', serialize($attributes));
 
@@ -844,7 +844,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $usedOptions = $this->_bundleOption
                 ->create()
                 ->getResourceCollection()
-                ->setProductIdFilter($product->getId())
+                ->setProductIdFilter($product->getEntityId())
                 ->setPositionOrder()
                 ->joinValues(
                     $this->_storeManager->getStore()
@@ -1001,7 +1001,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $optionSearchData = $this->_bundleOption->create()
             ->getSearchableData(
-                $product->getId(),
+                $product->getEntityId(),
                 $product->getStoreId()
             );
         if ($optionSearchData) {

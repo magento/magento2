@@ -89,7 +89,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
         }
 
         // retrieve bundle product ids
-        $bundleIds = $resource->getParentIdsByChild($product->getId());
+        $bundleIds = $resource->getParentIdsByChild($product->getEntityId());
         // exclude up-sell product ids
         $bundleIds = array_diff($bundleIds, $productIds);
 
