@@ -30,4 +30,3 @@ $synonymsModel->setSynonyms('universe,cosmos')->setScopeId(0)->setScopeType('def
 
 $synonymsModel = $objectManager->create('Magento\Search\Model\SynonymReader');
 $synonymsModel->setSynonyms('big,huge,large,enormous')->setScopeId(0)->setScopeType('default')->save();
-
