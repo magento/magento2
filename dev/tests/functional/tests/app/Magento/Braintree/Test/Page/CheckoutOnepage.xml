@@ -7,6 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="CheckoutOnepage" mca="checkout/index">
-        <block name="braintreeBlock" class="\Magento\Braintree\Test\Block\Form\Сс" locator="body" strategy="xpath"/>
+        <block name="braintreeBlock" class="Magento\Braintree\Test\Block\Form\Cc" locator="body" strategy="xpath"/>
+        <block name="braintree3dSecureBlock" class="Magento\Braintree\Test\Block\Form\Secure3d" locator="body" strategy="xpath"/>
     </page>
 </config>
