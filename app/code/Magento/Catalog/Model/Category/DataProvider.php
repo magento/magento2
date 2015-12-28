@@ -346,7 +346,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function getDefaultMetaData($result)
     {
-        $result['url_key_group']['componentDisabled'] = false;
         $result['parent']['default'] = (int)$this->request->getParam('parent');
         $result['is_anchor']['default'] = false;
         $result['use_config.available_sort_by']['default'] = true;
@@ -402,9 +401,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 ],
             'search_engine_optimization' =>
                 [
-                    'url_key_group',
                     'url_key',
                     'url_key_create_redirect',
+                    'use_default.url_key',
                     'meta_title',
                     'meta_keywords',
                     'meta_description',
