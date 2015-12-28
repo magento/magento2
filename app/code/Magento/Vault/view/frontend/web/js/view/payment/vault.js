@@ -21,8 +21,8 @@ define(
             rendererList.push(
                 {
                     type: index,
-                    config: config,
-                    component: 'Magento_Vault/js/view/payment/method-renderer/vault'
+                    config: config.config,
+                    component: config.component
                 }
             );
         });

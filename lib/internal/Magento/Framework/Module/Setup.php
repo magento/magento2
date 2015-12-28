@@ -81,6 +81,17 @@ class Setup implements SetupInterface
     }
 
     /**
+     * Gets table placeholder by table name
+     *
+     * @param string $tableName
+     * @return string
+     */
+    public function getTablePlaceholder($tableName)
+    {
+        return $this->resourceModel->getTablePlaceholder($tableName);
+    }
+
+    /**
      * Get table name (validated by db adapter) by table placeholder
      *
      * @param string|array $tableName
