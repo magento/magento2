@@ -8,7 +8,7 @@
 
 namespace Magento\Paypal\Model;
 
-use Magento\Paypal\Helper\Formatter;
+use Magento\Payment\Helper\Formatter;
 
 /**
  * Config model that is aware of all \Magento\Paypal payment methods

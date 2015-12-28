@@ -47,18 +47,48 @@ class PaymentToken extends AbstractDb
     /**
      * Get payment token by gateway token.
      *
-     * @param int $customerId Customer ID.
      * @param string $token The gateway token.
+     * @param string $paymentMethodCode
+     * @param int $customerId Customer ID.
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getByGatewayToken($customerId, $token)
+    public function getByGatewayToken($token, $paymentMethodCode, $customerId = 0)
     {
         $connection = $this->getConnection();
         $select = $connection
             ->select()
             ->from($this->getMainTable())
-            ->where('customer_id = ?', $customerId, $token)
-            ->where('gateway_token = ?', $token);
+            ->where('gateway_token = ?', $token)
+            ->where('payment_method_code = ?', $paymentMethodCode);
+        if ($customerId > 0) {
+            $select = $select->where('customer_id = ?', $customerId);
+        } else {
+            $select = $select->where('customer_id IS NULL');
+        }
+        return $connection->fetchRow($select);
+    }
+
+    /**
+     * Get payment token by public hash.
+     *
+     * @param string $hash Public hash.
+     * @param int $customerId Customer ID.
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getByPublicHash($hash, $customerId = 0)
+    {
+        $connection = $this->getConnection();
+        $select = $connection
+            ->select()
+            ->from($this->getMainTable())
+            ->where('public_hash = ?', $hash);
+        if ($customerId > 0) {
+            $select = $select->where('customer_id = ?', $customerId);
+        } else {
+            $select = $select->where('customer_id IS NULL');
+        }
         return $connection->fetchRow($select);
     }
 
@@ -72,10 +102,9 @@ class PaymentToken extends AbstractDb
     public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
     {
         $connection = $this->getConnection();
-        $insertedRows = $connection->insert(
+        return 1 === $connection->insert(
             $this->getTable(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE),
-            ['order_payment_id' => intval($orderPaymentId), 'payment_token_id' => intval($paymentTokenId)]
+            ['order_payment_id' => (int) $orderPaymentId, 'payment_token_id' => (int) $paymentTokenId]
         );
-        return $insertedRows == 1;
     }
 }
