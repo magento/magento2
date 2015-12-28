@@ -87,6 +87,7 @@ class ExternalFKSetup
      * @param string $targetTable
      * @param string $targetColumn
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function getForeignKeys(
         $targetTable,
@@ -101,8 +102,7 @@ class ExternalFKSetup
             $foreignKeys,
             function ($key) use ($targetColumn, $refTable, $refColumn) {
                 return $key['COLUMN_NAME'] == $targetColumn
-                && $key['REF_TABLE_NAME'] == $refTable
-                && $key['REF_COLUMN_NAME'] == $refColumn;
+                && $key['REF_TABLE_NAME'] == $refTable;
             }
         );
         return $foreignKeys;
