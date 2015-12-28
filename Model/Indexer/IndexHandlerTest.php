@@ -7,10 +7,9 @@ namespace Magento\Elasticsearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
-use Magento\Framework\Search\Request\Dimension;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
@@ -20,11 +19,6 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  */
 class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var IndexerInterface
-     */
-    protected $indexer;
-
     /**
      * @var ConnectionManager
      */
@@ -36,9 +30,14 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
     protected $client;
 
     /**
-     * @var Dimension[]
+     * @var StoreManagerInterface
      */
-    protected $dimensions;
+    protected $storeManager;
+
+    /**
+     * @var int[]
+     */
+    protected $storeIds;
 
     /**
      * @var Config
@@ -80,26 +79,16 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(
-            'Magento\Indexer\Model\Indexer'
-        );
-        $this->indexer->load('catalogsearch_fulltext');
-
         $this->connectionManager = Bootstrap::getObjectManager()->create(
             'Magento\Elasticsearch\SearchAdapter\ConnectionManager'
         );
 
         $this->client = $this->connectionManager->getConnection();
 
-        $mainStore = Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Search\Request\Dimension',
-            ['name' => 'scope', 'value' => '1']
+        $this->storeManager = Bootstrap::getObjectManager()->create(
+            'Magento\Store\Model\StoreManagerInterface'
         );
-        $secondaryStore = Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Search\Request\Dimension',
-            ['name' => 'scope', 'value' => '2']
-        );
-        $this->dimensions = [$mainStore, $secondaryStore];
+        $this->storeIds = array_keys($this->storeManager->getStores());
 
         $this->clientConfig = Bootstrap::getObjectManager()->create(
             'Magento\Elasticsearch\Model\Config'
@@ -122,11 +111,8 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexAll()
     {
-        $this->indexer->reindexAll();
-
-        foreach ($this->dimensions as $dimension) {
-            $storeId = $dimension->getValue();
-
+        $this->reindexAll();
+        foreach ($this->storeIds as $storeId) {
             $products = $this->searchByName('Apple', $storeId);
             $this->assertCount(1, $products);
             $this->assertEquals($this->productApple->getId(), $products[0]['_id']);
@@ -144,9 +130,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
-        foreach ($this->dimensions as $dimension) {
-            $storeId = $dimension->getValue();
-
+        foreach ($this->storeIds as $storeId) {
             $products = $this->searchByName('Apple', $storeId);
             $this->assertCount(0, $products);
 
@@ -176,10 +160,9 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
         $action = Bootstrap::getObjectManager()->get(
             'Magento\Catalog\Model\Product\Action'
         );
-        $action->updateAttributes($productIds, $attrData, 1);
 
-        foreach ($this->dimensions as $dimension) {
-            $storeId = $dimension->getValue();
+        foreach ($this->storeIds as $storeId) {
+            $action->updateAttributes($productIds, $attrData, $storeId);
 
             $products = $this->searchByName('Apple', $storeId);
             $this->assertCount(0, $products);
@@ -204,12 +187,10 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterDelete()
     {
-        $this->indexer->reindexAll();
+        $this->reindexAll();
         $this->productBanana->delete();
 
-        foreach ($this->dimensions as $dimension) {
-            $storeId = $dimension->getValue();
-
+        foreach ($this->storeIds as $storeId) {
             $products = $this->searchByName('Simple Product', $storeId);
             $this->assertCount(4, $products);
         }
@@ -260,5 +241,19 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product'
         );
         return $product->loadByAttribute('sku', $sku);
+    }
+
+    /**
+     * Perform full reindex
+     *
+     * @return void
+     */
+    private function reindexAll()
+    {
+        $indexer = Bootstrap::getObjectManager()->create(
+            'Magento\Indexer\Model\Indexer'
+        );
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
     }
 }
