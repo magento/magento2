@@ -153,7 +153,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchIndexNameResolver = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver')
+        $this->searchIndexNameResolver = $this
+            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver')
             ->disableOriginalConstructor()
             ->getMock();
 

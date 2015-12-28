@@ -109,7 +109,7 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->fieldMapperMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
-            ->setMethods(['getFieldName','getAllAttributesTypes'])
+            ->setMethods(['getFieldName', 'getAllAttributesTypes'])
             ->disableOriginalConstructor()
             ->getMock();
 

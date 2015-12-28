@@ -418,7 +418,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType(
             'array',
-            $this->model->getFullProductIndexData(1, [
+            $this->model->getFullProductIndexData(
+                1,
+                [
                     1 => '240-LV04'
                 ]
             )

@@ -135,7 +135,8 @@ class ProductDataMapper implements DataMapperInterface
                 continue;
             }
             $attribute = $this->attributeContainer->getAttribute($attributeCode);
-            if (!$attribute || in_array(
+            if (!$attribute ||
+                in_array(
                     $attributeCode,
                     [
                         'price',
@@ -144,7 +145,8 @@ class ProductDataMapper implements DataMapperInterface
                         'quantity_and_stock_status',
                         'media_gallery',
                     ]
-                )) {
+                )
+            ) {
                 continue;
             }
             $attribute->setStoreId($storeId);

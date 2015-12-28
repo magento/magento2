@@ -89,7 +89,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
             false,
             false,
             true,
-            ['getWebsiteId','getRootCategoryId']
+            ['getWebsiteId', 'getRootCategoryId']
         );
 
         $this->coreRegistry = $this->getMock('\Magento\Framework\Registry');

@@ -308,7 +308,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->model,
-            $this->model->cleanIndex(1,'product')
+            $this->model->cleanIndex(1, 'product')
         );
     }
 
