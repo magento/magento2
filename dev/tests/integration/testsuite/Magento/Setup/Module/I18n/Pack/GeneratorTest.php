@@ -61,7 +61,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             "/app/code/Magento/FirstModule/i18n/{$this->_locale}.csv",
             "/app/code/Magento/SecondModule/i18n/{$this->_locale}.csv",
             "/app/design/adminhtml/default/i18n/{$this->_locale}.csv",
-            "/lib/web/i18n/{$this->_locale}.csv",
         ];
 
         $this->_generator = ServiceLocator::getPackGenerator();
@@ -92,19 +91,20 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         ComponentRegistrar::register(
             ComponentRegistrar::MODULE,
             'Magento_FirstModule',
-            BP . '/app/code/Magento/FirstModule'
+            $this->_packPath . '/app/code/Magento/FirstModule'
         );
         ComponentRegistrar::register(
             ComponentRegistrar::MODULE,
             'Magento_SecondModule',
-            BP. '/app/code/Magento/SecondModule'
+            $this->_packPath. '/app/code/Magento/SecondModule'
         );
         ComponentRegistrar::register(
             ComponentRegistrar::THEME,
             'adminhtml/default',
-            BP. '/app/design/adminhtml/default'
+            $this->_packPath. '/app/design/adminhtml/default'
         );
-        $this->_generator->generate($this->_dictionaryPath, $this->_packPath, $this->_locale);
+
+        $this->_generator->generate($this->_dictionaryPath, $this->_locale);
 
         foreach ($this->_expectedFiles as $file) {
             $this->assertFileEquals($this->_expectedDir . $file, $this->_packPath . $file);
