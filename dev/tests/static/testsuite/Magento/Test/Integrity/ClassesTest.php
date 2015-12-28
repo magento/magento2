@@ -556,34 +556,28 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
     {
         // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
         $directories = [
-            '/dev/tools/',
-            '/dev/tests/api-functional/framework/',
-            '/dev/tests/functional/',
-            '/dev/tests/integration/framework/',
-            '/dev/tests/integration/framework/tests/unit/testsuite/',
-            '/dev/tests/integration/testsuite/',
-            '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
-            '/dev/tests/static/framework/',
-            '/dev/tests/static/testsuite/',
-            '/setup/src/',
+            BP . '/dev/tools/',
+            BP . '/dev/tests/api-functional/framework/',
+            BP . '/dev/tests/functional/',
+            BP . '/dev/tests/integration/framework/',
+            BP . '/dev/tests/integration/framework/tests/unit/testsuite/',
+            BP . '/dev/tests/integration/testsuite/',
+            BP . '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
+            BP . '/dev/tests/static/framework/',
+            BP . '/dev/tests/static/testsuite/',
+            BP . '/setup/src/',
         ];
-        $pathToSource = BP;
         $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
         $directories = array_merge($directories, $libraryPaths);
         // Full list of directories where there may be namespace classes
-        foreach ($directories as $dirId => $directory) {
-            $inVendorPath = $directory . $namespacePath . '/' . str_replace('\\', '/', $badClass) . '.php';
-            if (!is_int($dirId) && file_exists($inVendorPath)) {
-                unset($badClasses[array_search($badClass, $badClasses)]);
-                return true;
-            }
-
-            $fullPath = $pathToSource . $directory . $namespacePath . '/' . str_replace('\\', '/', $badClass) . '.php';
+        foreach ($directories as $directory) {
+            $fullPath = $directory . $namespacePath . '/' . str_replace('\\', '/', $badClass) . '.php';
             if (file_exists($fullPath)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
                 return true;
             }
         }
+        return false;
     }
 
     /**
