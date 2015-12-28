@@ -21,12 +21,19 @@ class FormSections extends AbstractFormContainers
     protected $sectionTitle = '.fieldset-wrapper-title';
 
     /**
+     * CSS locator of the section content
+     *
+     * @var string
+     */
+    protected $content = '.admin__fieldset-wrapper-content';
+
+    /**
      * XPath locator of the collapsible fieldset
      *
      * @var string
      */
-    protected $collapsible = 'div[contains(@class,"fieldset-wrapper")]
-                                 [contains(@class,"admin__collapsible-block-wrapper")]';
+    protected $collapsible =
+        'div[contains(@class,"fieldset-wrapper")][contains(@class,"admin__collapsible-block-wrapper")]';
 
     /**
      * Get Section class.
@@ -49,6 +56,18 @@ class FormSections extends AbstractFormContainers
     }
 
     /**
+     * Get the section title element
+     *
+     * @param string $sectionName
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    protected function getSectionTitleElement($sectionName)
+    {
+        $container = $this->getContainerElement($sectionName);
+        return $container->find($this->sectionTitle);
+    }
+
+    /**
      * Opens the section.
      *
      * @param string $sectionName
@@ -58,7 +77,7 @@ class FormSections extends AbstractFormContainers
     {
         $this->browser->find($this->header)->hover();
         if ($this->isCollapsible($sectionName)) {
-            $this->getContainerElement($sectionName)->click();
+            $this->getSectionTitleElement($sectionName)->click();
         }
         return $this;
     }
@@ -71,7 +90,7 @@ class FormSections extends AbstractFormContainers
      */
     public function isCollapsible($sectionName)
     {
-        $title = $this->getContainerElement($sectionName)->find($this->sectionTitle);
+        $title = $this->getSectionTitleElement($sectionName);
         if (!$title->isVisible()) {
             return false;
         };
