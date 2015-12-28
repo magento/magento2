@@ -61,7 +61,8 @@ class DynamicTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dataProviderContainer = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider')
+        $this->dataProviderContainer = $this
+            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -73,7 +74,8 @@ class DynamicTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->algorithmInterface = $this->getMockBuilder('Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface')
+        $this->algorithmInterface = $this
+            ->getMockBuilder('Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -169,7 +171,5 @@ class DynamicTest extends \PHPUnit_Framework_TestCase
             $queryResult,
             $this->dataProviderContainer
         );
-
     }
 }
-

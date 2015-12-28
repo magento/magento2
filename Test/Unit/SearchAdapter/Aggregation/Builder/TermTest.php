@@ -20,11 +20,6 @@ class TermTest extends \PHPUnit_Framework_TestCase
      */
     protected $requestBuckedInterface;
 
-//    /**
-//     * @var \Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider|\PHPUnit_Framework_MockObject_MockObject
-//     */
-//    protected $dataProviderContainer;
-
     /**
      * @var \Magento\Framework\Search\Dynamic\DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -46,10 +41,6 @@ class TermTest extends \PHPUnit_Framework_TestCase
         $this->requestBuckedInterface = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
             ->disableOriginalConstructor()
             ->getMock();
-
-//        $this->dataProviderContainer = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider')
-//            ->disableOriginalConstructor()
-//            ->getMock();
 
         $this->dataProviderContainer = $this->getMockBuilder('Magento\Framework\Search\Dynamic\DataProviderInterface')
             ->disableOriginalConstructor()
@@ -113,4 +104,3 @@ class TermTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-

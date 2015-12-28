@@ -195,8 +195,11 @@ class ProductDataMapper implements DataMapperInterface
             }
 
             if ($attributeCode === 'media_gallery') {
-                $this->builder->addFields($this->getProductMediaGalleryData(
-                    $value, $mediaGalleryRoles)
+                $this->builder->addFields(
+                    $this->getProductMediaGalleryData(
+                        $value,
+                        $mediaGalleryRoles
+                    )
                 );
                 continue;
             }
@@ -205,9 +208,13 @@ class ProductDataMapper implements DataMapperInterface
             $mediaGalleryRoles[$attributeCode] = $this->getMediaGalleryRole($attributeCode, $value);
             $value = $this->checkValue($value, $attribute, $storeId);
 
-            $this->builder->addField($this->fieldMapper->getFieldName(
-                $attributeCode, ['entityType' => self::PRODUCT_ENTITY_TYPE]
-            ), $value);
+            $this->builder->addField(
+                $this->fieldMapper->getFieldName(
+                    $attributeCode,
+                    ['entityType' => self::PRODUCT_ENTITY_TYPE]
+                ),
+                $value
+            );
 
             unset($attribute);
         }
@@ -224,7 +231,8 @@ class ProductDataMapper implements DataMapperInterface
      * @param string $storeId
      * @return array|mixed|null|string
      */
-    protected function checkValue($value, $attribute, $storeId) {
+    protected function checkValue($value, $attribute, $storeId)
+    {
         if (is_array($value)) {
             return array_shift($value);
         } elseif ($attribute->getBackendType() === 'datetime' || $attribute->getBackendType() === 'timestamp'
@@ -240,7 +248,8 @@ class ProductDataMapper implements DataMapperInterface
      * @param string $value
      * @return mixed
      */
-    protected function getMediaGalleryRole($attributeCode, $value) {
+    protected function getMediaGalleryRole($attributeCode, $value)
+    {
         if (in_array($attributeCode, $this->mediaGalleryRoles)) {
             return  $value;
         }
@@ -324,7 +333,8 @@ class ProductDataMapper implements DataMapperInterface
      * @param array $roles
      * @return string
      */
-    protected function getMediaRoleImage($file, $roles) {
+    protected function getMediaRoleImage($file, $roles)
+    {
         return $file == $roles[self::MEDIA_ROLE_IMAGE] ? '1' : '0';
     }
 
@@ -333,7 +343,8 @@ class ProductDataMapper implements DataMapperInterface
      * @param array $roles
      * @return string
      */
-    protected function getMediaRoleSmallImage($file, $roles) {
+    protected function getMediaRoleSmallImage($file, $roles)
+    {
         return $file == $roles[self::MEDIA_ROLE_SMALL_IMAGE] ? '1' : '0';
     }
 
@@ -342,7 +353,8 @@ class ProductDataMapper implements DataMapperInterface
      * @param array $roles
      * @return string
      */
-    protected function getMediaRoleThumbnail($file, $roles) {
+    protected function getMediaRoleThumbnail($file, $roles)
+    {
         return $file == $roles[self::MEDIA_ROLE_THUMBNAIL] ? '1' : '0';
     }
 
@@ -351,7 +363,8 @@ class ProductDataMapper implements DataMapperInterface
      * @param array $roles
      * @return string
      */
-    protected function getMediaRoleSwatchImage($file, $roles) {
+    protected function getMediaRoleSwatchImage($file, $roles)
+    {
         return $file == $roles[self::MEDIA_ROLE_SWATCH_IMAGE] ? '1' : '0';
     }
 
@@ -364,7 +377,6 @@ class ProductDataMapper implements DataMapperInterface
     protected function getQtyAndStatus($data)
     {
         $result = [];
-
         if (!is_array($data)) {
             $result['is_in_stock'] = $data ? 1 : 0;
             $result['qty'] = $data;
@@ -400,7 +412,7 @@ class ProductDataMapper implements DataMapperInterface
     }
 
     /**
-     * Retrieve date value in elasticseacrh format (ISO 8601) with Z
+     * Retrieve date value in elasticsearch format (ISO 8601) with Z
      * Example: 1995-12-31T23:59:59Z
      *
      * @param int $storeId

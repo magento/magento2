@@ -160,7 +160,8 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param string $attributeCode
      * @return string
      */
-    protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode) {
+    protected function getRefinedFieldName($frontendInput, $fieldType, $attributeCode)
+    {
         return (in_array($frontendInput, ['select', 'boolean'], true) && $fieldType === 'integer')
             ? $attributeCode . '_value' : $attributeCode;
     }
@@ -171,7 +172,8 @@ class ProductFieldMapper implements FieldMapperInterface
      * @param string $attributeCode
      * @return string
      */
-    protected function getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode) {
+    protected function getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode)
+    {
         if ($attributeCode === '*') {
             $fieldName = '_all';
         } else {

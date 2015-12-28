@@ -5,6 +5,8 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter;
 
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+
 /**
  * Class FieldType
  */
@@ -21,8 +23,7 @@ class FieldType
     /**#@-*/
 
     /**
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param AbstractAttribute $attribute
      * @return string
      */
     public function getFieldType($attribute)
