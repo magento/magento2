@@ -240,6 +240,16 @@ class Elasticsearch implements ClientInterface
                                 ],
                             ],
                         ],
+                        [
+                            'string_mapping' => [
+                                'match' => '*',
+                                'match_mapping' => 'string',
+                                'mapping' => [
+                                    'type' => 'string',
+                                    'index' => 'no'
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],
