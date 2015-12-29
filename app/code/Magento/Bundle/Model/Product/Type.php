@@ -425,7 +425,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $this->_bundleOption->create()
                 ->getResourceCollection();
-            $optionsCollection->setProductIdFilter($product->getId());
+            $optionsCollection->setProductIdFilter($product->getEntityId());
             $this->setStoreFilter($product->getStoreId(), $product);
             $optionsCollection->setPositionOrder();
             $storeId = $this->getStoreFilter($product);
@@ -1001,7 +1001,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $optionSearchData = $this->_bundleOption->create()
             ->getSearchableData(
-                $product->getId(),
+                $product->getEntityId(),
                 $product->getStoreId()
             );
         if ($optionSearchData) {
