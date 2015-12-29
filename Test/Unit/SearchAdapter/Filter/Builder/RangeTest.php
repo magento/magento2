@@ -25,24 +25,9 @@ class RangeTest extends \PHPUnit_Framework_TestCase
     protected $fieldMapper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customerSession;
-
-    /**
      * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filterInterface;
-
-    /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeInterface;
 
     /**
      * Set up test environment.
@@ -53,19 +38,6 @@ class RangeTest extends \PHPUnit_Framework_TestCase
     {
         $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
             ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->storeInterface = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerGroupId'])
             ->getMock();
 
         $this->filterInterface = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\Range')
@@ -81,9 +53,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManagerHelper->getObject(
             '\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range',
             [
-                'fieldMapper' => $this->fieldMapper,
-                'storeManager' => $this->storeManager,
-                'customerSession' => $this->customerSession
+                'fieldMapper' => $this->fieldMapper
             ]
         );
     }
@@ -100,54 +70,6 @@ class RangeTest extends \PHPUnit_Framework_TestCase
         $this->filterInterface->expects($this->any())
             ->method('getField')
             ->willReturn('field');
-
-        $this->customerSession->expects($this->any())
-            ->method('getCustomerGroupId')
-            ->willReturn(1);
-
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn(1);
-
-        $this->storeManager->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn(1);
-
-        $this->filterInterface->expects($this->any())
-            ->method('getFrom')
-            ->willReturn('field');
-
-        $this->filterInterface->expects($this->any())
-            ->method('getTo')
-            ->willReturn('field');
-
-        $this->model->buildFilter($this->filterInterface);
-    }
-
-    /**
-     *  Test buildFilter method with field name 'price'
-     */
-    public function testPriceBuildFilter()
-    {
-        $this->fieldMapper->expects($this->any())
-            ->method('getFieldName')
-            ->willReturn('price');
-
-        $this->filterInterface->expects($this->any())
-            ->method('getField')
-            ->willReturn('field');
-
-        $this->customerSession->expects($this->any())
-            ->method('getCustomerGroupId')
-            ->willReturn(1);
-
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeInterface);
-
-        $this->storeInterface->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn(1);
 
         $this->filterInterface->expects($this->any())
             ->method('getFrom')
