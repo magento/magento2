@@ -14,8 +14,8 @@ define([
     return function (config) {
         var categoryForm = {
             options: {
-                categoryIdSelector: 'input[name="general[id]"]',
-                categoryPathSelector: 'input[name="general[path]"]',
+                categoryIdSelector: 'input[name="id"]',
+                categoryPathSelector: 'input[name="path"]',
                 refreshUrl: config.refreshUrl
             },
 
