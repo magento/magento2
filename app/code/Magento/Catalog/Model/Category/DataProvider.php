@@ -404,6 +404,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     'url_key',
                     'url_key_create_redirect',
                     'use_default.url_key',
+                    'url_key_group',
                     'meta_title',
                     'meta_keywords',
                     'meta_description',
