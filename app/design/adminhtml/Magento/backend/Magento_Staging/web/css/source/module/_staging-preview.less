@@ -24,7 +24,7 @@
 @staging-preview-form-element-icon__color: @staging-preview-form-element__border-color;
 
 @staging-preview-form-element__hover__border-color: darken(@color-lighter-grayish-almost, 10%);
-@staging-preview-form-element__focus__border-color: darken(@color-lighter-grayish-almost, 15%);
+@staging-preview-form-element__focus__border-color: @color-blue-pure;
 
 @staging-preview-form-select-control__background-color: @color-very-dark-grayish-orange;
 
@@ -113,6 +113,7 @@
         width: 1px;
     }
 
+    &:focus,
     &._active {
         &:before {
             display: none;
@@ -227,7 +228,7 @@
         }
 
         &:focus {
-            border-color: @color-blue-pure;
+            border-color: @staging-preview-form-element__focus__border-color;
         }
     }
 
@@ -299,13 +300,23 @@
     bottom: 0;
     height: 400px;
     left: 0;
+    overflow: auto;
     right: 0;
     top: 0;
+
+    iframe {
+        border: none;
+        height: 100%;
+        width: 100%;
+    }
 }
 
 .staging-preview-content-dynamic {
-    margin: 0 auto;
     border: 1px solid @staging-preview-table-lighten__border-color;
+    margin: 0 auto;
+    transition: width 1s, height 1s;
+    height: 100%;
+    width: 100%;
 }
 
 //
@@ -609,12 +620,6 @@
         }
     }
 
-    > .admin__field {
-        &:first-of-type {
-            margin-left: @indent__s;
-        }
-    }
-
     ul {
         display: table;
         margin: @indent__m 0;
@@ -624,8 +629,10 @@
 
     li {
         display: table-cell;
-        padding: 0 @indent__xs 0 @indent__base;
+        max-width: 30rem;
+        padding: 0 @indent__base;
         position: relative;
+        vertical-align: top;
 
         &:first-child {
             padding-left: 0;
@@ -650,18 +657,23 @@
                 width: 5rem;
             }
 
-            p {
+            .admin__control-text {
+                width: 6rem;
+            }
+
+            .platform {
                 &:after {
                     content: none;
                 }
             }
         }
 
-        p {
+        .platform {
+            display: inline-block;
             margin-bottom: @indent__s;
 
             &:after {
-                background: repeating-linear-gradient( 0deg, @staging-preview-table-lighten__border-color, @staging-preview-table-lighten__border-color 1px, transparent 1px, transparent 5px);
+                background: repeating-linear-gradient(0deg, @staging-preview-table-lighten__border-color, @staging-preview-table-lighten__border-color 1px, transparent 1px, transparent 5px);
                 content: '';
                 display: block;
                 height: 100%;
