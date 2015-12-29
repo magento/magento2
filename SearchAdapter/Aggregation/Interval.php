@@ -9,6 +9,8 @@ use Magento\Framework\Search\Dynamic\IntervalInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;;
 
 class Interval implements IntervalInterface
 {
@@ -48,9 +50,15 @@ class Interval implements IntervalInterface
     private $entityIds;
 
     /**
+     * @var SearchIndexNameResolver
+     */
+    private $searchIndexNameResolver;
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param Config $clientConfig
+     * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param string $fieldName
      * @param string $storeId
      * @param array $entityIds
@@ -59,6 +67,7 @@ class Interval implements IntervalInterface
         ConnectionManager $connectionManager,
         FieldMapperInterface $fieldMapper,
         Config $clientConfig,
+        SearchIndexNameResolver $searchIndexNameResolver,
         $fieldName,
         $storeId,
         $entityIds
@@ -69,6 +78,7 @@ class Interval implements IntervalInterface
         $this->fieldName = $fieldName;
         $this->storeId = $storeId;
         $this->entityIds = $entityIds;
+        $this->searchIndexNameResolver = $searchIndexNameResolver;
     }
 
     /**
@@ -86,7 +96,7 @@ class Interval implements IntervalInterface
         }
 
         $requestQuery = [
-            'index' => $this->clientConfig->getIndexName(),
+            'index' => $this->searchIndexNameResolver->getIndexName($this->storeId, Fulltext::INDEXER_ID),
             'type' => $this->clientConfig->getEntityType(),
             'body' => [
                 'fields' => [
@@ -153,7 +163,7 @@ class Interval implements IntervalInterface
         }
 
         $requestQuery = [
-            'index' => $this->clientConfig->getIndexName(),
+            'index' => $this->searchIndexNameResolver->getIndexName($this->storeId, Fulltext::INDEXER_ID),
             'type' => $this->clientConfig->getEntityType(),
             'search_type' => 'count',
             'body' => [
@@ -216,7 +226,7 @@ class Interval implements IntervalInterface
         $to = ['lt' => $data - self::DELTA];
 
         $requestCountQuery = [
-            'index' => $this->clientConfig->getIndexName(),
+            'index' => $this->searchIndexNameResolver->getIndexName($this->storeId, Fulltext::INDEXER_ID),
             'type' => $this->clientConfig->getEntityType(),
             'search_type' => 'count',
             'body' => [
