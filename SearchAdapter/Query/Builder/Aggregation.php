@@ -64,26 +64,11 @@ class Aggregation
                 ];
                 break;
             case BucketInterface::TYPE_DYNAMIC:
-                if ($field == 'price') {
-                    $searchQuery['body']['aggregations'][$bucket->getName()]= [
-                        'nested' => [
-                            'path' => $field,
-                        ],
-                        'aggregations' => [
-                            $bucket->getName() => [
-                                'extended_stats' => [
-                                    'field' => $field . '.price',
-                                ],
-                            ],
-                        ],
-                    ];
-                } else {
-                    $searchQuery['body']['aggregations'][$bucket->getName()]= [
-                        'extended_stats' => [
-                            'field' => $field,
-                        ],
-                    ];
-                }
+                $searchQuery['body']['aggregations'][$bucket->getName()]= [
+                    'extended_stats' => [
+                        'field' => $field,
+                    ],
+                ];
                 break;
         }
         return $searchQuery;
