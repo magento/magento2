@@ -7,6 +7,7 @@
 namespace Magento\Ui\Test\Block\Adminhtml;
 
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Is used to represent a new unified form with collapsible sections on the page.
@@ -59,7 +60,7 @@ class FormSections extends AbstractFormContainers
      * Get the section title element
      *
      * @param string $sectionName
-     * @return \Magento\Mtf\Client\ElementInterface
+     * @return ElementInterface
      */
     protected function getSectionTitleElement($sectionName)
     {
