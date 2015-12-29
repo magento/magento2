@@ -24,22 +24,17 @@ define([
          */
         update: function (value) {
             var country = registry.get(this.parentName + '.' + 'country_id'),
-                regionSelect = registry.get(this.parentName + '.' + 'region_id'),
                 options = country.indexedOptions,
                 option;
 
             if (!value) {
                 this.setVisible(true);
+
                 return;
             }
 
             option = options[value];
-
-            if (regionSelect.visible()) {
-                this.setVisible(false);
-            } else {
-                this.setVisible(true);
-            }
+            this.setVisible(!option['is_region_required']);
         }
     });
 });
