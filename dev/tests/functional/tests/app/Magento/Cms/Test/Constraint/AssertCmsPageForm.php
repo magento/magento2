@@ -46,8 +46,6 @@ class AssertCmsPageForm extends AbstractAssertForm
         $filter = ['title' => $cms->getTitle()];
         $cmsIndex->getCmsPageGridBlock()->searchAndOpen($filter);
 
-        $cmsPageNew->getPageForm()->waitForm();
-        $cmsPageNew->getPageForm()->showCollapsible();
         $cmsFormData = $cmsPageNew->getPageForm()->getData($cms);
         $cmsFormData['store_id'] = implode('/', $cmsFormData['store_id']);
         $cmsFixtureData = $cms->getData();

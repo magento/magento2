@@ -553,17 +553,22 @@ class Full
         $result = [];
         $selects = [];
         $ifStoreValue = $this->connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
+        $productIdField = $this->getProductIdFieldName();
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
                 $selects[] = $this->connection->select()->from(
+                    ['cpe' => $this->getTable('catalog_product_entity')],
+                    ['entity_id']
+                )->joinInner(
                     ['t_default' => $tableName],
-                    ['entity_id', 'attribute_id']
+                    'cpe.' . $productIdField . ' = t_default.' . $productIdField,
+                    ['attribute_id']
                 )->joinLeft(
                     ['t_store' => $tableName],
                     $this->connection->quoteInto(
-                        't_default.entity_id=t_store.entity_id' .
-                        ' AND t_default.attribute_id=t_store.attribute_id' .
+                        "t_default.{$productIdField} = t_store.{$productIdField}" .
+                        ' AND t_default.attribute_id = t_store.attribute_id' .
                         ' AND t_store.store_id = ?',
                         $storeId
                     ),
@@ -575,7 +580,7 @@ class Full
                     't_default.attribute_id IN (?)',
                     $attributeIds
                 )->where(
-                    't_default.entity_id IN (?)',
+                    "cpe.entity_id IN (?)",
                     $productIds
                 );
             }
@@ -798,5 +803,15 @@ class Full
         foreach ($data as $key => $value) {
             yield $key => $value;
         }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProductIdFieldName()
+    {
+        $table = $this->getTable('catalog_product_entity');
+        $indexList = $this->connection->getIndexList($table);
+        return $indexList[$this->connection->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }

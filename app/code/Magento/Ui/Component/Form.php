@@ -34,7 +34,11 @@ class Form extends AbstractComponent
         array $data = []
     ) {
         $this->filterBuilder = $filterBuilder;
-        parent::__construct($context, $components, $data);
+        parent::__construct(
+            $context,
+            $components,
+            $data
+        );
     }
 
     /**
@@ -68,9 +72,15 @@ class Form extends AbstractComponent
                 $dataSource = [
                     'data' => $data[$id]
                 ];
+            } elseif (isset($data['items'])) {
+                foreach ($data['items'] as $item) {
+                    if ($item[$item['id_field_name']] == $id) {
+                        $dataSource = ['data' => ['general' => $item]];
+                    }
+                }
             }
-        }
 
+        }
         return $dataSource;
     }
 }

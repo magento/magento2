@@ -846,6 +846,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $this->bundleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($bundle));
         $productSku = 'productSku';
         $optionId = 1;
+        $productId = 1;
         $childSku = 'childSku';
 
         $this->product
@@ -862,13 +863,13 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $selection->expects($this->any())->method('getSku')->will($this->returnValue($childSku));
         $selection->expects($this->any())->method('getOptionId')->will($this->returnValue($optionId));
         $selection->expects($this->any())->method('getSelectionId')->will($this->returnValue(55));
-        $selection->expects($this->any())->method('getProductId')->will($this->returnValue(1));
+        $selection->expects($this->any())->method('getProductId')->willReturn($productId);
 
         $this->option->expects($this->any())->method('getSelections')->will($this->returnValue([$selection]));
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
 
         $bundle->expects($this->once())->method('dropAllUnneededSelections')->with(3, []);
-        $bundle->expects($this->once())->method('removeProductRelations')->with(3, []);
+        $bundle->expects($this->once())->method('removeProductRelations')->with(3, [$productId]);
         //Params come in lowercase to method
         $this->assertTrue($this->model->removeChild($productSku, $optionId, $childSku));
     }
