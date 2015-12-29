@@ -574,8 +574,12 @@ abstract class AbstractType
     {
         $transport = new \StdClass();
         $transport->options = [];
+        $options = null;
         if ($product->getHasOptions()) {
-            foreach ($product->getOptions() as $option) {
+            $options = $product->getOptions();
+        }
+        if ($options !== null) {
+            foreach ($options as $option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */
                 $group = $option->groupFactory($option->getType())
                     ->setOption($option)
