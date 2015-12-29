@@ -31,7 +31,6 @@ class Validator extends ConfigValidator
      */
     private $booleanUtils;
 
-
     /**
      * @param TypeProcessor $typeProcessor
      * @param MethodsMap $methodsMap
@@ -52,6 +51,7 @@ class Validator extends ConfigValidator
      * Validate config data
      *
      * @param array $configData
+     * @return void
      */
     public function validate($configData)
     {
