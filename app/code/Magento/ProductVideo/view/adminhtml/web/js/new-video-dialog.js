@@ -1002,6 +1002,7 @@ define([
          */
         _onClose: function () {
             var newVideoForm;
+
             this._isEditPage = true;
             this.imageData = null;
 
