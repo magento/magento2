@@ -18,12 +18,12 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
     protected $mapper;
 
     /**
-     * @var \Magento\Eav\Model\Config|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\Registry|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreRegistry;
 
@@ -53,7 +53,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
     protected $store;
 
     /**
-     * Set up test environment.
+     * Set up test environment
      *
      * @return void
      */
@@ -126,7 +126,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
      * @param string $fieldType
      * @param array $context
      *
-     * @return string
+     * @return void
      */
     public function testGetFieldName($attributeCode, $fieldName, $fieldType, $context = [])
     {
@@ -167,7 +167,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return string
+     * @return void
      */
     public function testGetFieldNameWithoutAttribute()
     {
@@ -185,7 +185,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
      * @dataProvider attributeProvider
      * @param string $attributeCode
      *
-     * @return array
+     * @return void
      */
     public function testGetAllAttributesTypes($attributeCode)
     {
