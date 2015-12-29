@@ -14,7 +14,6 @@ use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType;
 
 /**
  * Class Form
- * @package Magento\BraintreeTwo\Block
  */
 class Form extends Cc
 {
