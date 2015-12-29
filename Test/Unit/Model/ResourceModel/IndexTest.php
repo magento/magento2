@@ -395,7 +395,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([
                 'getFrontendInput',
-                'getOptions'
+                'getOptions',
+                'getData',
+                'getAttributeId',
             ])
             ->getMock();
 
@@ -403,6 +405,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getAttribute')
             ->with('catalog_product', 'name')
             ->willReturn($attributeMock);
+
+        $attributeMock->expects($this->any())
+            ->method('getAttributeId')
+            ->willReturn(1);
 
         $attributeMock->expects($this->any())
             ->method('getFrontendInput')
