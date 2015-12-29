@@ -5,12 +5,12 @@
  */
 return [
     'TestIntegration1' => [
-        'resources' => [
+        'resource' => [
             'Magento_Customer::manage',
-            'Magento_Customer::online',
-            'Magento_Sales::capture',
+            'Magento_Customer::manageParent',
             'Magento_SalesRule::quote',
+            'Magento_SalesRule::quoteParent'
         ],
     ],
-    'TestIntegration2' => ['resources' => ['Magento_Catalog::product_read']]
+    'TestIntegration2' => ['resource' => ['Magento_Sales::sales']]
 ];
