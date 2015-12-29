@@ -14,13 +14,13 @@ define([
     return function (config) {
         var categoryForm = {
             options: {
-                categoryIdSelector: 'input[name="general[id]"]',
-                categoryPathSelector: 'input[name="general[path]"]',
+                categoryIdSelector: 'input[name="id"]',
+                categoryPathSelector: 'input[name="path"]',
                 refreshUrl: config.refreshUrl
             },
 
             /**
-             * Sending ajax to server to refresh field 'general[path]'
+             * Sending ajax to server to refresh field 'path'
              * @protected
              */
             refreshPath: function () {
@@ -35,7 +35,7 @@ define([
             },
 
             /**
-             * Refresh field 'general[path]' on ajax success
+             * Refresh field 'path' on ajax success
              * @param {Object} data
              * @private
              */
