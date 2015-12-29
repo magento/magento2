@@ -97,7 +97,8 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->searchIndexNameResolver = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver')
+        $this->searchIndexNameResolver = $this
+            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver')
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock->expects($this->any())

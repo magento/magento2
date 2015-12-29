@@ -31,7 +31,7 @@ class Range implements FilterInterface
      */
     public function buildFilter(RequestFilterInterface $filter)
     {
-        $filterQuery = $from = $to = [];
+        $filterQuery = [];
         $fieldName = $this->fieldMapper->getFieldName($filter->getField());
         if ($filter->getFrom()) {
             $filterQuery['range'][$fieldName]['gte'] = $filter->getFrom();

@@ -280,4 +280,3 @@ class Interval implements IntervalInterface
         return $returnPrices;
     }
 }
-
