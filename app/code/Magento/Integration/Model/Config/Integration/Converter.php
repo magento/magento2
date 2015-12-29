@@ -13,11 +13,31 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**#@+
      * Array keys for config internal representation.
      */
-    const API_RESOURCES = 'resources';
+    const API_RESOURCES = 'resource';
 
     const API_RESOURCE_NAME = 'name';
 
     /**#@-*/
+
+    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface */
+    protected $resourceProvider;
+
+    /** @var \Magento\Integration\Helper\Data */
+    protected $integrationData;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Framework\Acl\AclResource\ProviderInterface $resourceProvider
+     * @param \Magento\Integration\Helper\Data $integrationData
+     */
+    public function __construct(
+        \Magento\Framework\Acl\AclResource\ProviderInterface $resourceProvider,
+        \Magento\Integration\Helper\Data $integrationData
+    ) {
+        $this->resourceProvider = $resourceProvider;
+        $this->integrationData = $integrationData;
+    }
 
     /**
      * {@inheritdoc}
@@ -25,6 +45,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     public function convert($source)
     {
         $result = [];
+        $allResources = $this->resourceProvider->getAclResources();
+        $hashAclResourcesTree = $this->integrationData->hashResources($allResources[1]['children']);
         /** @var \DOMNodeList $integrations */
         $integrations = $source->getElementsByTagName('integration');
         /** @var \DOMElement $integration */
@@ -43,8 +65,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     continue;
                 }
                 $resource = $resource->attributes->getNamedItem('name')->nodeValue;
-                $result[$integrationName][self::API_RESOURCES][] = $resource;
+                $resourceNames = $this->integrationData->addParents($hashAclResourcesTree, $resource);
+                foreach ($resourceNames as $name) {
+                    $result[$integrationName][self::API_RESOURCES][] = $name;
+                }
             }
+            // Remove any duplicates added parents
+            $result[$integrationName][self::API_RESOURCES] =
+                array_unique($result[$integrationName][self::API_RESOURCES]);
         }
         return $result;
     }
