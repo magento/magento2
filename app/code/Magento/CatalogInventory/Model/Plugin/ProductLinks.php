@@ -41,6 +41,7 @@ class ProductLinks
      * @param Link $subject
      * @param Collection $collection
      * @return Collection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetProductCollection(Link $subject, Collection $collection)
     {
