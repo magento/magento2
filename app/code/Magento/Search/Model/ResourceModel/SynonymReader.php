@@ -98,7 +98,7 @@ class SynonymReader extends AbstractDb
 
     /**
      * A private helper function to retrieve matching synonym groups per scope
-     * 
+     *
      * @param array $rows
      * @return array
      */
@@ -124,7 +124,9 @@ class SynonymReader extends AbstractDb
                     $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES)) {
                 // Check for current website
                 $synRowsForWebsite[] = $row;
-            } else if (empty($synRowsForStoreView) && empty($synRowsForWebsite)) {
+            } else if (empty($synRowsForStoreView) &&
+                empty($synRowsForWebsite) &&
+                $row['scope_type'] === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
                 // Check for all store views (i.e. default)
                 $synRowsForDefault[] = $row;
             }
