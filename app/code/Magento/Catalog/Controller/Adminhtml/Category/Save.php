@@ -237,9 +237,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Image data preprocessing
      *
-     * @param [] $data
+     * @param array $data
      *
-     * @return []
+     * @return array
      */
     public function imagePreprocessing($data)
     {
