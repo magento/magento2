@@ -142,7 +142,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             $selectionModel,
             $linkedProduct,
             $linkProductModel->getId(),
-            $product->getId()
+            $product->getEntityId()
         );
 
         try {
@@ -232,7 +232,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         if ($selections) {
             foreach ($selections as $selection) {
                 if ($selection['option_id'] == $optionId &&
-                    $selection['product_id'] == $linkProductModel->getId()) {
+                    $selection['product_id'] == $linkProductModel->getEntityId()) {
                     throw new CouldNotSaveException(
                         __(
                             'Child with specified sku: "%1" already assigned to product: "%2"',
@@ -247,14 +247,14 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $selectionModel = $this->mapProductLinkToSelectionModel(
             $selectionModel,
             $linkedProduct,
-            $linkProductModel->getId(),
-            $product->getId()
+            $linkProductModel->getEntityId(),
+            $product->getEntityId()
         );
         $selectionModel->setOptionId($optionId);
 
         try {
             $selectionModel->save();
-            $resource->addProductRelation($product->getId(), $linkProductModel->getId());
+            $resource->addProductRelation($product->getId(), $linkProductModel->getEntityId());
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
         }
