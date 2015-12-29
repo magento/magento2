@@ -21,17 +21,23 @@ define([
             template: 'ui/form/insert',
             showSpinner: true,
             loading: false,
+            autoRender: true,
             contentSelector: '${$.name}',
             externalTransfer: false,
             internalTransfer: false,
             externalData: [],
             deps: '${ $.externalProvider }',
+            'update_url': '${ $.render_url }',
             params: {
                 namespace: '${ $.ns }'
             },
             renderSettings: {
                 url: '${ $.render_url }',
                 dataType: 'html'
+            },
+            updateSettings: {
+                url: '${ $.update_url }',
+                dataType: 'json'
             },
             imports: {},
             exports: {},
@@ -48,7 +54,7 @@ define([
         initialize: function () {
             var self = this._super();
 
-            _.bindAll(this, 'onRender');
+            _.bindAll(this, 'onRender', 'onUpdate');
 
             $.async('.' + this.contentSelector, function (el) {
                 self.contentEl = $(el);
@@ -103,10 +109,26 @@ define([
         /**
          * Request for render content.
          *
-         * @returns {Object}
+         * @returns {Object|Boolean}
          */
-        render: function () {
-            var request = this.requestData(this.params, this.renderSettings);
+        render: function (autoRender, params) {
+            var request, method;
+
+            _.extend(this.params, params);
+            this.autoRender = autoRender || this.autoRender;
+
+            if (!this.autoRender) {
+                return false;
+            }
+
+            if (this.isRendered) {
+                method = params.method;
+                delete params.method;
+                this[method].apply(this);
+
+                return false;
+            }
+            request = this.requestData(this.params, this.renderSettings);
 
             request
                 .done(this.onRender)
@@ -147,6 +169,7 @@ define([
             this.set('content', data);
             this.contentEl.children().applyBindings();
             this.contentEl.trigger('contentUpdated');
+            this.isRendered = true;
         },
 
         /**
@@ -177,6 +200,32 @@ define([
             }, this);
 
             return data;
+        },
+
+        /**
+         * Request for update data.
+         *
+         * @returns {*|Object}
+         */
+        updateData: function () {
+            var request = this.requestData(this.params, this.updateSettings);
+
+            request
+                .done(this.onUpdate)
+                .fail(this.onError);
+
+            return request;
+        },
+
+        /**
+         * Set data to external provider, clear changes.
+         *
+         * @param {*} data
+         */
+        onUpdate: function (data) {
+            this.externalSource().set('data', data);
+            this.externalSource().trigger('data.overload');
+            this.loading(false);
         }
     });
 });

@@ -159,7 +159,7 @@ define([
             return {
                 css: {
                     '_in-edit': ko.computed(function () {
-                        return model.hasActive();
+                        return model.hasActive() && !model.permanentlyActive;
                     })
                 }
             };
