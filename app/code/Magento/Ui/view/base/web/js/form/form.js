@@ -37,6 +37,7 @@ define([
         initAdapter: function () {
             adapter.on({
                 'reset': this.reset.bind(this),
+                'overload': this.overload.bind(this),
                 'save': this.save.bind(this, true),
                 'saveAndContinue': this.save.bind(this, false)
             });
@@ -95,6 +96,10 @@ define([
 
         reset: function () {
             this.source.trigger('data.reset');
+        },
+
+        overload: function () {
+            this.source.trigger('data.overload');
         }
     });
 });
