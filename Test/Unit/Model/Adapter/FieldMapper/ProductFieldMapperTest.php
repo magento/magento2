@@ -9,7 +9,6 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,12 +18,12 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
     protected $mapper;
 
     /**
-     * @var \Magento\Eav\Model\Config|MockObject
+     * @var \Magento\Eav\Model\Config|PHPUnit_Framework_MockObject_MockObject
      */
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\Registry|MockObject
+     * @var \Magento\Framework\Registry|PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreRegistry;
 
