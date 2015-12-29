@@ -44,6 +44,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'bulk',
                 'search',
                 'scroll',
+                'suggest',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -513,7 +514,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     {
         $query = 'query';
         $this->elasticsearchClientMock->expects($this->once())
-            ->method('search')
+            ->method('suggest')
             ->willReturn([]);
         $this->assertEquals([], $this->model->suggest($query));
     }
