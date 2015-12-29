@@ -221,18 +221,6 @@ class ProductDataMapper implements DataMapperInterface
     }
 
     /**
-     * @param string $attributeCode
-     * @param string $value
-     * @return mixed
-     */
-    protected function getMediaGalleryRole($attributeCode, $value)
-    {
-        if (in_array($attributeCode, $this->mediaGalleryRoles)) {
-            return $value;
-        }
-    }
-
-    /**
      * Prepare tier price data for product
      *
      * @param array $data

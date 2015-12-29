@@ -515,7 +515,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $this->elasticsearchClientMock->expects($this->once())
             ->method('search')
             ->willReturn([]);
-        $this->assertEquals([], $this->model->query($query));
+        $this->assertEquals([], $this->model->suggest($query));
     }
 
     /**
