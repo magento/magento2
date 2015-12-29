@@ -165,10 +165,12 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
      * @param int $productId
      * @param array $productData
      * @param int $storeId
+     * @param bool $emptyDate
+     * @param string $type
      *
-     * @return array
+     * @return void
      */
-    public function testGetMap($productId, $productData, $storeId, $emptyDate)
+    public function testGetMap($productId, $productData, $storeId, $emptyDate, $type)
     {
         $this->attributeContainerMock->expects($this->any())->method('getAttribute')->will(
             $this->returnValue($this->attribute)
@@ -210,13 +212,10 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->attributeContainerMock)
         );
         $this->attribute->expects($this->any())->method('getBackendType')->will(
-            $this->returnValue('datetime')
+            $this->returnValue($type)
         );
         $this->dateTimeMock->expects($this->any())->method('isEmptyDate')->will(
             $this->returnValue($emptyDate)
-        );
-        $this->attributeContainerMock->expects($this->any())->method('getFrontendInput')->will(
-            $this->returnValue('date')
         );
         $this->scopeConfigMock->expects($this->any())->method('getValue')->will(
             $this->returnValue('Europe/London')
@@ -231,10 +230,9 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
             $this->returnValue([])
         );
 
-        $data = [$productId => $productData];
         $this->resourceIndex->expects($this->once())
             ->method('getFullProductIndexData')
-            ->willReturn($data);
+            ->willReturn($productData);
 
         $this->assertInternalType(
             'array',
@@ -254,12 +252,14 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
                 ['price'=>'11','created_at'=>'00-00-00 00:00:00', 'color_value'=>'11'],
                 '1',
                 false,
+                'datetime'
             ],
             [
                 '1',
                 ['price'=>'11','created_at'=>null,'color_value'=>'11', ],
                 '1',
                 true,
+                'datetime'
             ],
             [
                 '1',
@@ -278,12 +278,14 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
                 ],
                 '1',
                 false,
+                'string'
             ],
             [
                 '1',
                 ['image'=>'11','created_at'=>'00-00-00 00:00:00'],
                 '1',
                 false,
+                'string'
             ],
             [
                 '1',
@@ -313,6 +315,7 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
                 ],
                 '1',
                 false,
+                'string'
             ],
             [
                 '1',
@@ -347,18 +350,28 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
                 ],
                 '1',
                 false,
+                'string'
             ],
             [
                 '1',
                 ['quantity_and_stock_status'=>'11','created_at'=>'00-00-00 00:00:00'],
                 '1',
                 false,
+                'string'
+            ],
+            [
+                '1',
+                ['quantity_and_stock_status'=>['is_in_stock' => '1', 'qty' => '12'],'created_at'=>'00-00-00 00:00:00'],
+                '1',
+                false,
+                'string'
             ],
             [
                 '1',
                 ['price'=>'11','created_at'=>'1995-12-31 23:59:59','options'=>['value1','value2']],
                 '1',
                 false,
+                'string'
             ],
         ];
     }
