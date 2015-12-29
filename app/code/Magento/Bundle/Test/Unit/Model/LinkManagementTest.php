@@ -374,7 +374,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->any())->method('getId')->will($this->returnValue('product_id'));
 
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $linkedProductMock->expects($this->any())->method('getId')->will($this->returnValue(13));
+        $linkedProductMock->expects($this->any())->method('getEntityId')->will($this->returnValue(13));
         $linkedProductMock->expects($this->once())->method('isComposite')->will($this->returnValue(false));
         $this->productRepository
             ->expects($this->once())
@@ -576,7 +576,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(
             \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
         ));
-        $productMock->expects($this->any())->method('getId')->will($this->returnValue($parentProductId));
+        $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($parentProductId));
 
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $linkedProductMock->expects($this->any())->method('getId')->will($this->returnValue($linkProductId));
