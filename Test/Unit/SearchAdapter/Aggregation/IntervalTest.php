@@ -14,6 +14,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 class IntervalTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,6 +59,11 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
     protected $storeMock;
 
     /**
+     * @var SearchIndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchIndexNameResolver;
+
+    /**
      * Set up test environment.
      *
      * @return void
@@ -68,7 +74,7 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\FieldMapperInterface')
+        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
@@ -89,6 +95,9 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerGroupId')
             ->willReturn(1);
         $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->searchIndexNameResolver = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver')
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock->expects($this->any())
@@ -117,9 +126,11 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
             [
                 'connectionManager' => $this->connectionManager,
                 'fieldMapper' => $this->fieldMapper,
-                'storeManager' => $this->storeManager,
-                'customerSession' => $this->customerSession,
-                'clientConfig' => $this->clientConfig
+                'clientConfig' => $this->clientConfig,
+                'searchIndexNameResolver' => $this->searchIndexNameResolver,
+                'fieldName' => 'price_0_1',
+                'storeId' => 1,
+                'entityIds' => [265, 313, 281]
             ]
         );
     }
@@ -137,14 +148,14 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn(1);
+        $this->searchIndexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('magento2_product_1');
+        $this->clientConfig->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn('document');
 
-        $expectedResult = ['25', '26'];
+        $expectedResult = [25];
 
         $this->clientMock->expects($this->once())
             ->method('query')
@@ -152,11 +163,12 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
                 'hits' => [
                     'hits' => [
                         [
-                            'sort' => ['25'],
+                            'fields' => [
+
+                                'price_0_1' => [25],
+
+                            ],
                         ],
-                        [
-                            'sort' => ['26'],
-                        ]
                     ],
                 ],
             ]);
@@ -175,19 +187,30 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadPrevArray($data, $index, $lower)
     {
-        $queryResult = ['hits' => ['total'=> '1','hits' => [['sort' => '25'],['sort' =>'26']]]];
+        $queryResult = [
+            'hits' => [
+                'total'=> '1',
+                'hits' => [
+                    [
+                        'fields' => [
+                            'price_0_1' => ['25']
+                        ]
+                    ],
+                ],
+            ],
+        ];
 
         $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn(1);
+        $this->searchIndexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('magento2_product_1');
+        $this->clientConfig->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn('document');
 
-        $expectedResult = ['2.0', '2.0'];
+        $expectedResult = ['25.0'];
 
         $this->clientMock->expects($this->any())
             ->method('query')
@@ -212,12 +235,12 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn(1);
+        $this->searchIndexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('magento2_product_1');
+        $this->clientConfig->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn('document');
 
         $this->clientMock->expects($this->any())
             ->method('query')
@@ -236,19 +259,30 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadNextArray($data, $rightIndex, $upper)
     {
-        $queryResult = ['hits' => ['total'=> '1','hits' => [['sort' => '25'],['sort' =>'26']]]];
+        $queryResult = [
+            'hits' => [
+                'total'=> '1',
+                'hits' => [
+                    [
+                        'fields' => [
+                            'price_0_1' => ['25']
+                        ]
+                    ],
+                ],
+            ]
+        ];
 
         $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn(1);
+        $this->searchIndexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('magento2_product_1');
+        $this->clientConfig->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn('document');
 
-        $expectedResult = ['2.0', '2.0'];
+        $expectedResult = ['25.0'];
 
         $this->clientMock->expects($this->any())
             ->method('query')
@@ -273,12 +307,12 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn(1);
+        $this->searchIndexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('magento2_product_1');
+        $this->clientConfig->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn('document');
 
         $this->clientMock->expects($this->any())
             ->method('query')

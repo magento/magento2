@@ -10,7 +10,7 @@ use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 class Interval implements IntervalInterface
 {
@@ -100,7 +100,7 @@ class Interval implements IntervalInterface
             'type' => $this->clientConfig->getEntityType(),
             'body' => [
                 'fields' => [
-                    '_id'
+                    '_id', $this->fieldName
                 ],
                 'query' => [
                     'filtered' => [
@@ -125,17 +125,6 @@ class Interval implements IntervalInterface
                         ],
                     ],
                 ],
-                'sort' => [
-                    'price' => [
-                        'order' => 'asc',
-                        'mode' => 'min',
-                        'filter' => [
-                            'range' => [
-                                $this->fieldName => array_merge($from, $to),
-                            ]
-                        ]
-                    ]
-                ],
                 'size' => $limit
             ]
         ];
@@ -147,7 +136,8 @@ class Interval implements IntervalInterface
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
 
-        return $this->arrayValuesToFloat($queryResult['hits']['hits']);
+
+        return $this->arrayValuesToFloat($queryResult['hits']['hits'], $this->fieldName);
     }
 
     /**
@@ -193,21 +183,11 @@ class Interval implements IntervalInterface
                         ],
                     ],
                 ],
-                'sort' => [
-                    'price' => [
-                        'order' => 'asc',
-                        'mode' => 'min',
-                        'filter' => [
-                            'range' => [
-                                $this->fieldName => array_merge($from, $to),
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+            ],
         ];
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
+
 
         $offset = $queryResult['hits']['total'];
         if (!$offset) {
@@ -248,7 +228,7 @@ class Interval implements IntervalInterface
                                     ],
                                     [
                                         'range' => [
-                                            $this->fieldName.'.price' => array_merge($from, $to),
+                                            $this->fieldName => array_merge($from, $to),
                                         ],
                                     ],
                                 ],
@@ -256,18 +236,7 @@ class Interval implements IntervalInterface
                         ],
                     ],
                 ],
-                'sort' => [
-                    'price' => [
-                        'order' => 'asc',
-                        'mode' => 'min',
-                        'nested_filter' => [
-                            'range' => [
-                                $this->fieldName => array_merge($from, $to),
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+            ],
         ];
         $queryCountResult = $this->connectionManager->getConnection()
             ->query($requestCountQuery);
@@ -282,27 +251,33 @@ class Interval implements IntervalInterface
             $to = ['lt' => $data - self::DELTA];
         }
 
-        // TODO: change only some part of the query which is different
         $requestQuery = $requestCountQuery;
+        $requestCountQuery['body']['query']['filtered']['filter']['bool']['must']['range'] =
+            [$this->fieldName => array_merge($from, $to)];
+
+        $requestCountQuery['body']['from'] = $offset - 1;
+        $requestCountQuery['body']['size'] = $rightIndex - $offset + 1;
 
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
 
-        return array_reverse($this->arrayValuesToFloat($queryResult['hits']['hits']));
+        return array_reverse($this->arrayValuesToFloat($queryResult['hits']['hits'], $this->fieldName));
     }
 
     /**
      * @param array $hits
-     * 
+     * @param string $fieldName
+     *
      * @return float[]
      */
-    private function arrayValuesToFloat($hits)
+    private function arrayValuesToFloat($hits, $fieldName)
     {
         $returnPrices = [];
         foreach ($hits as $hit) {
-            $returnPrices[] = (float) $hit['sort'][0];
+            $returnPrices[] = (float) $hit['fields'][$fieldName][0];
         }
 
         return $returnPrices;
     }
 }
+
