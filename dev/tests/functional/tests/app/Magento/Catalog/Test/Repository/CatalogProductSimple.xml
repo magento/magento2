@@ -335,6 +335,10 @@
                 <item name="value" xsi:type="string">100</item>
                 <item name="dataset" xsi:type="string" />
             </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">100</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -398,7 +402,7 @@
 
         <dataset name="simple_for_salesrule_2">
             <field name="attribute_set_id" xsi:type="array">
-                <item name="dataset" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">custom_attribute_set_with_colors</item>
             </field>
             <field name="name" xsi:type="string">Simple Product %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
@@ -408,6 +412,10 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">50</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">52</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -428,6 +436,10 @@
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
                 <item name="dataset" xsi:type="string" />
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">86</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="special_price" xsi:type="string">90</field>
             <field name="category_ids" xsi:type="array">
@@ -450,6 +462,10 @@
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
                 <item name="dataset" xsi:type="string" />
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">63</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="special_price" xsi:type="string">9</field>
             <field name="website_ids" xsi:type="array">
@@ -590,6 +606,10 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">99</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
             <field name="special_price" xsi:type="string">9</field>
         </dataset>
@@ -605,6 +625,10 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">34</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="tier_price" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -622,6 +646,10 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">85</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="tier_price" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -645,6 +673,10 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">23</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -668,6 +700,10 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">842</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="custom_options" xsi:type="array">
                 <item name="dataset" xsi:type="string">drop_down_with_one_option_percent_price</item>
             </field>
@@ -694,6 +730,10 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">953</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
             <field name="custom_options" xsi:type="array">
                 <item name="dataset" xsi:type="string">all_types</item>
@@ -836,7 +876,9 @@
                 <item name="dataset" xsi:type="string">simple_order_default</item>
             </field>
             <field name="stock_data" xsi:type="array">
+                <item name="use_config_min_sale_qty" xsi:type="string">No</item>
                 <item name="min_sale_qty" xsi:type="string">2</item>
+                <item name="use_config_max_sale_qty" xsi:type="string">No</item>
                 <item name="max_sale_qty" xsi:type="string">5</item>
             </field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
@@ -853,6 +895,10 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">63</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="custom_options" xsi:type="array">
                 <item name="dataset" xsi:type="string">drop_down_with_one_option_percent_price</item>
             </field>
@@ -891,7 +937,9 @@
                 <item name="dataset" xsi:type="string">simple_order_default</item>
             </field>
             <field name="stock_data" xsi:type="array">
+                <item name="use_config_enable_qty_increments" xsi:type="string">No</item>
                 <item name="enable_qty_increments" xsi:type="string">Yes</item>
+                <item name="use_config_qty_increments" xsi:type="string">No</item>
                 <item name="qty_increments" xsi:type="string">2</item>
             </field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
@@ -967,6 +1015,10 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">954</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
             <field name="custom_options" xsi:type="array">
                 <item name="dataset" xsi:type="string">drop_down_with_one_option_fixed_price</item>
             </field>
@@ -996,6 +1048,10 @@
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">110</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">345</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="special_price" xsi:type="string">100</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
@@ -1039,5 +1095,13 @@
                 <item name="dataset" xsi:type="string">default_subcategory</item>
             </field>
         </dataset>
+
+        <dataset name="sample_data_simple_product">
+            <field name="id" xsi:type="string">1</field>
+            <field name="name" xsi:type="string">Overnight Duffle</field>
+            <field name="sku" xsi:type="string">24-WB07</field>
+            <field name="url_key" xsi:type="string">overnight-duffle</field>
+        </dataset>
+
     </repository>
 </config>

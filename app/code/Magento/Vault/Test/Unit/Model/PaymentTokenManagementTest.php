@@ -6,6 +6,7 @@
 namespace Magento\Vault\Test\Unit\Model;
 
 use Magento\Framework\Api\Filter;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
@@ -204,7 +205,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->paymentTokenResourceModelMock->expects(self::once())
             ->method('getByGatewayToken')
-            ->with(1, 'token')
+            ->with('token', 1, 1)
             ->willReturn(['token-data']);
 
         $this->paymentTokenFactoryMock->expects(self::once())
@@ -212,7 +213,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->with(['data' => ['token-data']])
             ->willReturn($tokenMock);
 
-        self::assertEquals($tokenMock, $this->paymentTokenManagement->getByGatewayToken(1, 'token'));
+        self::assertEquals($tokenMock, $this->paymentTokenManagement->getByGatewayToken('token', 1, 1));
     }
 
     /**
@@ -222,13 +223,13 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->paymentTokenResourceModelMock->expects(self::once())
             ->method('getByGatewayToken')
-            ->with(1, 'token')
+            ->with('some-not-exists-token', 1, 1)
             ->willReturn([]);
 
         $this->paymentTokenFactoryMock->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByGatewayToken(1, 'token'));
+        self::assertEquals(null, $this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
     }
 
     /**
@@ -236,10 +237,8 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveTokenWithPaymentLink()
     {
-        /** @var Payment|\PHPUnit_Framework_MockObject_MockObject $paymentMock */
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var OrderPaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentMock */
+        $paymentMock = $this->getMock(OrderPaymentInterface::class);
         /** @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject $tokenMock */
         $tokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
             ->getMockForAbstractClass();
@@ -251,8 +250,8 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($tokenMock);
 
-        $paymentMock->expects(self::never())
-            ->method('getId');
+        $paymentMock->expects(self::once())
+            ->method('getEntityId');
 
         $this->paymentTokenManagement->saveTokenWithPaymentLink($tokenMock, $paymentMock);
     }
