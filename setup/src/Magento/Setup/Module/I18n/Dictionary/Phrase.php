@@ -270,7 +270,7 @@ class Phrase
     {
         $encloseQuote = $this->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
 
-        $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
+        $evalString = 'return ' . $encloseQuote . addslashes($string) . $encloseQuote . ';';
         $result = @eval($evalString);
         return is_string($result) ? $result :  $string;
     }
