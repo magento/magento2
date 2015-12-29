@@ -395,7 +395,7 @@
 
                 defaultLoadTreeParams = {
                     parameters: {
-                        text: <?php echo json_encode(htmlentities($block->getRoot()->getName())) ?>,
+                        text: <?php /* @escapeNotVerified */ echo json_encode(htmlentities($block->getRoot()->getName())) ?>,
                         draggable: false,
                         allowDrop: <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
                         id: <?php echo (int)$block->getRoot()->getId() ?>,
