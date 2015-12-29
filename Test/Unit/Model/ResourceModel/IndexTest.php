@@ -395,7 +395,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([
                 'getFrontendInput',
-                'getOptions'
+                'getOptions',
+                'getData',
+                'getAttributeId',
             ])
             ->getMock();
 
@@ -405,11 +407,15 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->willReturn($attributeMock);
 
         $attributeMock->expects($this->any())
+            ->method('getAttributeId')
+            ->willReturn(1);
+
+        $attributeMock->expects($this->any())
             ->method('getFrontendInput')
             ->willReturn($frontendInput);
 
         $attributeOption = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Option', [], [], '', false);
-        $attributeOption->expects($this->any())->method('getValue')->willReturn('Product Name');
+        $attributeOption->expects($this->any())->method('getValue')->willReturn('240-LV04');
         $attributeOption->expects($this->any())->method('getLabel')->willReturn('label');
 
         $attributeMock->expects($this->any())
