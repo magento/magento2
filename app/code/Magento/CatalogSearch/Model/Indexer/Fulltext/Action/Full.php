@@ -714,6 +714,8 @@ class Full
             $productData['type_id']
         )->setId(
             $productData['entity_id']
+        )->setEntityId(
+            $productData['entity_id']
         )->setStoreId(
             $storeId
         );
