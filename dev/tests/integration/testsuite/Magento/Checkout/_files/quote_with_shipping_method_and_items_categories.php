@@ -8,7 +8,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-require __DIR__ . '/../../Catalog/_files/categories.php';
+require __DIR__ . '/../../Catalog/_files/categories_no_products.php';
 require __DIR__ . '/../../Checkout/_files/quote_with_shipping_method.php';
 
 $quote->load('test_order_1', 'reserved_order_id');
