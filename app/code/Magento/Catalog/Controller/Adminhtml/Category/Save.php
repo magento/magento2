@@ -243,7 +243,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function imagePreprocessing($data)
     {
-        if (!isset($_FILES) || ($_FILES['image']['name'] === '' )) {
+        if (!isset($_FILES) || (isset($_FILES['image']) && $_FILES['image']['name'] === '' )) {
             unset($data['general']['image']);
             if (
                 isset($data['general']['savedImage']['delete']) &&
