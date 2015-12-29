@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
-class ProductLinks extends \PHPUnit_Framework_TestCase
+class ProductLinksTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Plugin\ProductLinks
