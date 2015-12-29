@@ -16,7 +16,6 @@ use Magento\Framework\Registry;
 
 /**
  * Class CountryCreditCard
- * @package Magento\BraintreeTwo\Model\Adminhtml\System\Config
  */
 class CountryCreditCard extends Value
 {

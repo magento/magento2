@@ -124,7 +124,7 @@ define([
             this._createButtons();
             $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
             this._on(this.modal.find(this.options.modalCloseBtn), {
-                'click': this.closeModal
+                'click': this.options.modalCloseBtnHandler ? this.options.modalCloseBtnHandler : this.closeModal
             });
             this._on(this.element, {
                 'openModal': this.openModal,

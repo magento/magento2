@@ -100,15 +100,13 @@ class Context
     {
         switch ($type) {
             case self::CONTEXT_TYPE_MODULE:
-                $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $value);
-                $path = str_replace(BP . '/', '', $absolutePath);
+                $path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $value);
                 break;
             case self::CONTEXT_TYPE_THEME:
-                $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $value);
-                $path = str_replace(BP . '/', '', $absolutePath);
+                $path = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $value);
                 break;
             case self::CONTEXT_TYPE_LIB:
-                $path = 'lib/web';
+                $path = BP . '/lib/web';
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Invalid context given: "%s".', $type));

@@ -19,6 +19,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexStructureFactory">
+        <arguments>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="structures" xsi:type="array">
+                <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Indexer\IndexStructure</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Indexer\IndexStructureInterface" type="Magento\CatalogSearch\Model\Indexer\IndexStructureProxy" />
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
