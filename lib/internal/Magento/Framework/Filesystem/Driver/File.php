@@ -195,7 +195,7 @@ class File implements DriverInterface
      */
     public function createDirectory($path, $permissions)
     {
-        $result = @mkdir($this->getScheme() . $path, $permissions, true);
+        $result = $this->mkdirRecursive($path, $permissions);
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
@@ -203,6 +203,40 @@ class File implements DriverInterface
                     [$path, $this->getWarningMessage()]
                 )
             );
+        }
+        return $result;
+    }
+
+    /**
+     * Create a directory recursively taking into account race conditions
+     *
+     * @param string $path
+     * @param int $permissions
+     * @return bool
+     * @throws FileSystemException
+     */
+    private function mkdirRecursive($path, $permissions)
+    {
+        $path = $this->getScheme() . $path;
+        if (is_dir($path)) {
+            return true;
+        }
+        $parentDir = dirname($path);
+        while (!is_dir($parentDir)) {
+            $this->mkdirRecursive($parentDir, $permissions);
+        }
+        $result = @mkdir($path, $permissions);
+        if (!$result) {
+            if (is_dir($path)) {
+                $result = true;
+            } else {
+                throw new FileSystemException(
+                    new \Magento\Framework\Phrase(
+                        'Directory "%1" cannot be created %2',
+                        [$path, $this->getWarningMessage()]
+                    )
+                );
+            }
         }
         return $result;
     }
