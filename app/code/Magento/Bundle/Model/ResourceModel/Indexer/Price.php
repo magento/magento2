@@ -404,12 +404,17 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             );
         }
 
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
             ['i' => $this->_getBundlePriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
+            ['parent_product' => $this->getTable('catalog_product_entity')],
+            'parent_product.entity_id = i.entity_id',
+            []
+        )->join(
             ['bo' => $this->getTable('catalog_product_bundle_option')],
-            'bo.parent_id = i.entity_id',
+            "bo.parent_id = parent_product.$linkField",
             ['option_id']
         )->join(
             ['bs' => $this->getTable('catalog_product_bundle_selection')],
