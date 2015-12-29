@@ -24,7 +24,7 @@ class IntegrationConfigTest extends \PHPUnit_Framework_TestCase
     protected $configCacheTypeMock;
 
     /**
-     * @var  \Magento\Integration\Model\Config\Integration\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Integration\Model\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configReaderMock;
 
@@ -33,7 +33,7 @@ class IntegrationConfigTest extends \PHPUnit_Framework_TestCase
         $this->configCacheTypeMock = $this->getMockBuilder('Magento\Integration\Model\Cache\TypeIntegration')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configReaderMock = $this->getMockBuilder('Magento\Integration\Model\Config\Integration\Reader')
+        $this->configReaderMock = $this->getMockBuilder('Magento\Integration\Model\Config\Reader')
             ->disableOriginalConstructor()
             ->getMock();
         $this->integrationConfigModel = new IntegrationConfig(

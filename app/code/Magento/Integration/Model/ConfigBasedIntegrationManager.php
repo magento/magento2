@@ -23,29 +23,19 @@ class ConfigBasedIntegrationManager
     protected $integrationService;
 
     /**
-     * Integration config
-     *
-     * @var IntegrationConfig
-     */
-    protected $integrationConfig;
-
-    /**
      * @var  AclRetriever
      */
     protected $aclRetriever;
 
     /**
-     * @param IntegrationConfig $integrationConfig
      * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param AclRetriever $aclRetriever
      */
     public function __construct(
-        IntegrationConfig $integrationConfig,
         \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
         AclRetriever $aclRetriever
     ) {
         $this->integrationService = $integrationService;
-        $this->integrationConfig = $integrationConfig;
         $this->aclRetriever = $aclRetriever;
     }
 
@@ -61,8 +51,6 @@ class ConfigBasedIntegrationManager
             return [];
         }
 
-        /** @var array $integrationsResource */
-        $integrationsResource = $this->integrationConfig->getIntegrations();
         foreach (array_keys($integrations) as $name) {
             $integrationDetails = $integrations[$name];
             $integrationData = [Integration::NAME => $name];
@@ -78,8 +66,8 @@ class ConfigBasedIntegrationManager
                 $integrationData[Integration::IDENTITY_LINK_URL] =
                     $integrationDetails[Converter::KEY_IDENTITY_LINKING_URL];
             }
-            if (isset($integrationsResource[$name]['resource'])) {
-                $integrationData['resource'] = $integrationsResource[$name]['resource'];
+            if (isset($integrationDetails[$name]['resource'])) {
+                $integrationData['resource'] = $integrationDetails[$name]['resource'];
             }
             $integrationData[Integration::SETUP_TYPE] = Integration::TYPE_CONFIG;
 

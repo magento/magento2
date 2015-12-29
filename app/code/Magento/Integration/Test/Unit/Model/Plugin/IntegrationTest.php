@@ -35,7 +35,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $integrationAuthServiceMock;
 
     /**
-     * @var \Magento\Integration\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $integrationConfig;
 
@@ -56,7 +56,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->integrationConfig = $this->getMockBuilder('Magento\Integration\Model\IntegrationConfig')
+        $this->integrationConfig = $this->getMockBuilder('Magento\Integration\Model\Config')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

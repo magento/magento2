@@ -16,18 +16,34 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Converter
      */
-    protected $_model;
+    protected $model;
+
+    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $resourceProviderMock;
 
     public function setUp()
     {
-        $this->_model = new Converter();
+        $this->resourceProviderMock = $this->getMockBuilder('Magento\Framework\Acl\AclResource\ProviderInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $objectManagerHelper->getObject(
+            'Magento\Integration\Model\Config\Converter',
+            [
+                'resourceProvider' => $this->resourceProviderMock
+            ]
+        );
     }
 
     public function testConvert()
     {
+        $aclResources = require __DIR__ . '/_files/acl.php';
         $inputData = new \DOMDocument();
         $inputData->load(__DIR__ . '/_files/integration.xml');
         $expectedResult = require __DIR__ . '/_files/integration.php';
-        $this->assertEquals($expectedResult, $this->_model->convert($inputData));
+        $this->resourceProviderMock->expects($this->once())->method('getAclResources')->willReturn($aclResources);
+
+        $this->assertEquals($expectedResult, $this->model->convert($inputData));
     }
 }

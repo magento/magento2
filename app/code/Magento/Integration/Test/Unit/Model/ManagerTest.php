@@ -20,13 +20,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected $_integrationServiceMock;
 
     /**
-     * Integration config
-     *
-     * @var \Magento\Integration\Model\IntegrationConfig
-     */
-    protected $_integrationConfigMock;
-
-    /**
      * @var \Magento\Authorization\Model\Acl\AclRetriever
      */
     protected $aclRetriever;
@@ -40,12 +33,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_integrationConfigMock = $this->getMockBuilder(
-            '\Magento\Integration\Model\IntegrationConfig'
-        )->disableOriginalConstructor()->setMethods(
-            ['getIntegrations']
-        )->getMock();
-
         $this->_integrationServiceMock = $this->getMockBuilder(
             '\Magento\Integration\Api\IntegrationServiceInterface'
         )->disableOriginalConstructor()->setMethods(
@@ -67,7 +54,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->_integrationManager = new \Magento\Integration\Model\ConfigBasedIntegrationManager(
-            $this->_integrationConfigMock,
             $this->_integrationServiceMock,
             $this->aclRetriever
         );
@@ -75,14 +61,12 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        unset($this->_integrationConfigMock);
         unset($this->_integrationServiceMock);
         unset($this->_integrationManager);
     }
 
     public function testProcessIntegrationConfigNoIntegrations()
     {
-        $this->_integrationConfigMock->expects($this->never())->method('getIntegrations');
         $this->_integrationManager->processIntegrationConfig([]);
     }
 
@@ -101,6 +85,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 Integration::EMAIL => 'test-integration1@magento.com',
                 Integration::ENDPOINT => 'http://endpoint.com',
                 Integration::IDENTITY_LINK_URL => 'http://www.example.com/identity',
+                'resources' => [
+                    'Magento_Customer::manage',
+                    'Magento_Customer::customer'
+                ]
             ]
         ];
         $originalResources = [
@@ -111,7 +99,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'Magento_Customer::customer'
         ];
 
-        $this->_integrationConfigMock->expects($this->once())->method('getIntegrations')->willReturn($newResources);
         $integrationObject = $this->getMockBuilder('Magento\Integration\Model\Integration')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -141,6 +128,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 Integration::EMAIL => 'test-integration1@magento.com',
                 Integration::ENDPOINT => 'http://endpoint.com',
                 Integration::IDENTITY_LINK_URL => 'http://www.example.com/identity',
+                'resources' => [
+                    'Magento_Customer::manage',
+                    'Magento_Customer::customer'
+                ]
             ],
             'TestIntegration2' => [
                 Integration::EMAIL => 'test-integration2@magento.com',
@@ -148,12 +139,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 Integration::IDENTITY_LINK_URL => 'http://www.example.com/identity',
             ]
         ];
-        $newResources = [
-            'Magento_Customer::manage',
-            'Magento_Customer::customer'
-        ];
 
-        $this->_integrationConfigMock->expects($this->once())->method('getIntegrations')->willReturn($newResources);
         $integrationObject = $this->getMockBuilder('Magento\Integration\Model\Integration')
             ->disableOriginalConstructor()
             ->setMethods([])

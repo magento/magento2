@@ -7,7 +7,7 @@
 namespace Magento\Integration\Model;
 
 use Magento\Integration\Model\Cache\TypeIntegration;
-use Magento\Integration\Model\Config\Integration\Reader;
+use Magento\Integration\Model\Config\Reader;
 
 /**
  * Integration Api Config Model.
@@ -24,7 +24,7 @@ class IntegrationConfig
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Integration\Model\Config\Integration\Reader
+     * @var \Magento\Integration\Model\Config\Reader
      */
     protected $_configReader;
 

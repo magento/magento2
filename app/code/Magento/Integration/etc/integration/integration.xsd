@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Schema for API integration configuration.
+ * Schema for integration configuration.
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -16,10 +16,28 @@
     </xs:complexType>
     <xs:complexType name="integrationType">
         <xs:sequence>
+            <xs:element name="email" type="emailType"/>
+            <xs:element name="endpoint_url" type="urlType" minOccurs="0"/>
+            <xs:element name="identity_link_url" type="urlType" minOccurs="0"/>
             <xs:element name="resources" type="resourcesType"/>
         </xs:sequence>
         <xs:attribute name="name" type="integrationNameType" use="required"/>
     </xs:complexType>
+    <xs:simpleType name="urlType">
+        <xs:restriction base="xs:anyURI">
+            <xs:minLength value="4"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="integrationNameType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="emailType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^@]+@[^\.]+\..+"/>
+        </xs:restriction>
+    </xs:simpleType>
     <xs:complexType name="resourcesType">
         <xs:sequence>
             <xs:element name="resource" type="resourceType" maxOccurs="unbounded" minOccurs="1"/>
@@ -35,11 +53,6 @@
     <xs:simpleType name="resourceNameType">
         <xs:restriction base="xs:string">
             <xs:pattern value=".+_.+::.+"/>
-        </xs:restriction>
-    </xs:simpleType>
-    <xs:simpleType name="integrationNameType">
-        <xs:restriction base="xs:string">
-            <xs:minLength value="2"/>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

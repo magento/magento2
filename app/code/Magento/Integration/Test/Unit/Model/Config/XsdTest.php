@@ -22,7 +22,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         }
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->_schemaFile = $urnResolver->getRealPath(
-            'urn:magento:module:Magento_Integration:etc/integration/config.xsd'
+            'urn:magento:module:Magento_Integration:etc/integration/integration.xsd'
         );
     }
 
@@ -57,6 +57,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration@magento.com</email>
                         <endpoint_url>https://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 [],
@@ -67,9 +71,16 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                     <integration name="TestIntegration2">
                         <email>test-integration2@magento.com</email>
+                        <resources>
+                            <resource name="Magento_Catalog::product_read" />
+                        </resources>
                     </integration>
                 </integrations>',
                 [],
@@ -90,9 +101,25 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 ["Element 'endpoint_url': This element is not expected. Expected is ( email )."],
+            ],
+            'empty resources' => [
+                '<integrations>
+                    <integration name="TestIntegration1">
+                        <email>test-integration1@magento.com</email>
+                        <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                        </resources>
+                    </integration>
+                </integrations>',
+                ["Element 'resources': Missing child element(s). Expected is ( resource )."],
             ],
             /** Empty nodes */
             'empty email' => [
@@ -101,6 +128,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email></email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 [
@@ -114,6 +145,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     <integration name="TestIntegration1">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url></endpoint_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 [
@@ -128,6 +163,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url></identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 [
@@ -147,6 +186,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                     <invalid/>
                 </integrations>',
@@ -158,21 +201,48 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                         <invalid/>
                     </integration>
                 </integrations>',
                 ["Element 'invalid': This element is not expected."],
             ],
-            'irrelevant node in authentication' => [
+            'irrelevant node in resources' => [
                 '<integrations>
                     <integration name="TestIntegration1">
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
-                        <invalid/>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                            <invalid/>
+                        </resources>
                     </integration>
                 </integrations>',
-                ["Element 'invalid': This element is not expected."],
+                ["Element 'invalid': This element is not expected. Expected is ( resource )."],
+            ],
+            'irrelevant node in resource' => [
+                '<integrations>
+                    <integration name="TestIntegration1">
+                        <email>test-integration1@magento.com</email>
+                        <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online">
+                                <invalid/>
+                            </resource>
+                        </resources>
+                    </integration>
+                </integrations>',
+                [
+                    "Element 'resource': Element content is not allowed, " .
+                    "because the content type is a simple type definition."
+                ],
             ],
             /** Excessive attributes */
             'invalid attribute in root' => [
@@ -181,6 +251,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 ["Element 'integrations', attribute 'invalid': The attribute 'invalid' is not allowed."],
@@ -191,6 +265,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 ["Element 'integration', attribute 'invalid': The attribute 'invalid' is not allowed."],
@@ -201,9 +279,41 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email invalid="invalid">test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage"/>
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 ["Element 'email', attribute 'invalid': The attribute 'invalid' is not allowed."],
+            ],
+            'invalid attribute in resources' => [
+                '<integrations>
+                    <integration name="TestIntegration1">
+                        <email>test-integration1@magento.com</email>
+                        <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources invalid="invalid">
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
+                    </integration>
+                </integrations>',
+                ["Element 'resources', attribute 'invalid': The attribute 'invalid' is not allowed."],
+            ],
+            'invalid attribute in resource' => [
+                '<integrations>
+                    <integration name="TestIntegration1">
+                        <email>test-integration1@magento.com</email>
+                        <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" invalid="invalid" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
+                    </integration>
+                </integrations>',
+                ["Element 'resource', attribute 'invalid': The attribute 'invalid' is not allowed."],
             ],
             'invalid attribute in endpoint_url' => [
                 '<integrations>
@@ -211,6 +321,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url invalid="invalid">http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage"/>
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 ["Element 'endpoint_url', attribute 'invalid': The attribute 'invalid' is not allowed."],
@@ -221,6 +335,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url invalid="invalid">http://endpoint.url</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage"/>
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 ["Element 'identity_link_url', attribute 'invalid': The attribute 'invalid' is not allowed."],
@@ -232,6 +350,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 ["Element 'integration': The attribute 'name' is required but missing."],
@@ -242,6 +364,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>test-integration1@magento.com</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 [
@@ -251,6 +377,39 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     "'' is not a valid value of the atomic type 'integrationNameType'."
                 ],
             ],
+            'resource without name' => [
+                '<integrations>
+                    <integration name="TestIntegration1">
+                        <email>test-integration1@magento.com</email>
+                        <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource />
+                        </resources>
+                    </integration>
+                </integrations>',
+                ["Element 'resource': The attribute 'name' is required but missing."],
+            ],
+            'resource with empty name' => [
+                '<integrations>
+                    <integration name="TestIntegration1">
+                        <email>test-integration1@magento.com</email>
+                        <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="" />
+                        </resources>
+                    </integration>
+                </integrations>',
+                [
+                    "Element 'resource', attribute 'name': [facet 'pattern'] " .
+                    "The value '' is not accepted by the pattern '.+_.+::.+'.",
+                    "Element 'resource', attribute 'name': '' " .
+                    "is not a valid value of the atomic type 'resourceNameType'."
+                ],
+            ],
             /** Invalid values */
             'invalid email' => [
                 '<integrations>
@@ -258,12 +417,36 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <email>invalid</email>
                         <endpoint_url>http://endpoint.url</endpoint_url>
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::manage" />
+                            <resource name="Magento_Customer::online" />
+                        </resources>
                     </integration>
                 </integrations>',
                 [
                     "Element 'email': [facet 'pattern'] The value 'invalid' " .
                     "is not accepted by the pattern '[^@]+@[^\.]+\..+'.",
                     "Element 'email': 'invalid' is not a valid value of the atomic type 'emailType'."
+                ],
+            ],
+            /** Invalid values */
+            'resource with invalid name' => [
+                '<integrations>
+                    <integration name="TestIntegration1">
+                        <email>test-integration1@magento.com</email>
+                        <endpoint_url>http://endpoint.url</endpoint_url>
+                        <identity_link_url>http://www.example.com/identity</identity_link_url>
+                        <resources>
+                            <resource name="Magento_Customer::online" />
+                            <resource name="customer_manage" />
+                        </resources>
+                    </integration>
+                </integrations>',
+                [
+                    "Element 'resource', attribute 'name': [facet 'pattern'] " .
+                    "The value 'customer_manage' is not accepted by the pattern '.+_.+::.+'.",
+                    "Element 'resource', attribute 'name': 'customer_manage' " .
+                    "is not a valid value of the atomic type 'resourceNameType'."
                 ],
             ]
         ];

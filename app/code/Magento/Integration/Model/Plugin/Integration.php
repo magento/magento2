@@ -11,7 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Api\AuthorizationServiceInterface;
 use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Integration\Model\IntegrationConfig;
+use Magento\Integration\Model\Config;
 
 /**
  * Plugin for \Magento\Integration\Model\IntegrationService.
@@ -27,7 +27,7 @@ class Integration
     /**
      * Integration config
      *
-     * @var IntegrationConfig
+     * @var Config`
      */
     protected $integrationConfig;
 
@@ -36,12 +36,12 @@ class Integration
      *
      * @param AuthorizationServiceInterface $integrationAuthorizationService
      * @param AclRetriever $aclRetriever
-     * @param IntegrationConfig $integrationConfig
+     * @param Config $integrationConfig
      */
     public function __construct(
         AuthorizationServiceInterface $integrationAuthorizationService,
         AclRetriever $aclRetriever,
-        IntegrationConfig $integrationConfig
+        Config $integrationConfig
     ) {
         $this->integrationAuthorizationService = $integrationAuthorizationService;
         $this->aclRetriever  = $aclRetriever;
