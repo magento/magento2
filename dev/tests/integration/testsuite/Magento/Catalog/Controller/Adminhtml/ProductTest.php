@@ -27,7 +27,9 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndNew()
     {
         $this->getRequest()->setPostValue(['back' => 'new']);
-        $this->dispatch('backend/catalog/product/save/id/1');
+        $repository = $this->_objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
@@ -41,10 +43,16 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndDuplicate()
     {
         $this->getRequest()->setPostValue(['back' => 'duplicate']);
-        $this->dispatch('backend/catalog/product/save/id/1');
+        $repository = $this->_objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
         $this->assertRedirect(
-            $this->logicalNot($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/id/1/'))
+            $this->logicalNot(
+                $this->stringStartsWith(
+                    'http://localhost/index.php/backend/catalog/product/edit/id/' . $product->getEntityId() . '/'
+                )
+            )
         );
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
@@ -92,7 +100,9 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     public function testEditAction()
     {
-        $this->dispatch('backend/catalog/product/edit/id/1');
+        $repository = $this->_objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
 
         $this->assertSelectCount('#save-split-button', 1, $body, '"Save" button isn\'t present on Edit Product page');

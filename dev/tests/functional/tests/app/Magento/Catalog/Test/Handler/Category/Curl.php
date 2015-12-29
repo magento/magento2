@@ -196,10 +196,11 @@ class Curl extends AbstractCurl implements CategoryInterface
 
         $this->prepareAvailableSortBy();
 
-        $diff = array_diff($this->dataUseConfig, array_keys($this->fields['general']));
-        if (!empty($diff)) {
-            $this->fields['use_config'] = $diff;
+        $useConfig = array_diff($this->dataUseConfig, array_keys($this->fields['general']));
+        if (!empty($useConfig)) {
+            $this->fields['use_config'] = $useConfig;
         }
+        unset($this->fields['general']['use_config']);
     }
 
     /**
