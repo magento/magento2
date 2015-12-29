@@ -133,7 +133,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param Option\Type\Factory $optionFactory
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param Option\Validator\Pool $validatorPool
-     * @param \Magento\Catalog\Model\Product\Option\Repository $optionRepository,
+     * @param \Magento\Catalog\Model\Product\Option\Repository $optionRepository ,
+     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
