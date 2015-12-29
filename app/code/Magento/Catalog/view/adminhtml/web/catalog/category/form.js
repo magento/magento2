@@ -20,7 +20,7 @@ define([
             },
 
             /**
-             * Sending ajax to server to refresh field 'general[path]'
+             * Sending ajax to server to refresh field 'path'
              * @protected
              */
             refreshPath: function () {
@@ -35,7 +35,7 @@ define([
             },
 
             /**
-             * Refresh field 'general[path]' on ajax success
+             * Refresh field 'path' on ajax success
              * @param {Object} data
              * @private
              */
