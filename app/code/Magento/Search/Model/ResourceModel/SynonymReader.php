@@ -79,7 +79,9 @@ class SynonymReader extends AbstractDb
     }
 
     /**
-     * @param string $value
+     * A helper function to query by phrase and get results
+     *
+     * @param string $phrase
      * @return array
      */
     private function queryByPhrase($phrase)
