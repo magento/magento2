@@ -106,7 +106,6 @@
                     <item name="filter" xsi:type="string">text</item>
                     <item name="sortOrder" xsi:type="number">40</item>
                     <item name="label" xsi:type="string" translate="true">Scope Type</item>
-                    <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
