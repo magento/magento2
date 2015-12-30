@@ -103,6 +103,7 @@ class SynonymReader extends AbstractDb
      *
      * @param array $rows
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getSynRowsPerScope($rows)
     {
