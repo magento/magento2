@@ -13,4 +13,8 @@
         <en_US>english</en_US>
         <de_DE>german</de_DE>
     </stemmer>
+    <stopwords_file>
+        <default>stopwords.csv</default>
+        <en_US>stopwords_en_US.csv</en_US>
+    </stopwords_file>
 </config>
