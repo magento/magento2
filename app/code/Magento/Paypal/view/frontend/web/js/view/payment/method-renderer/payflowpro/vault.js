@@ -19,7 +19,7 @@ define([
          * @returns {String}
          */
         getToken: function () {
-            return this.token;
+            return this.public_hash;
         },
 
         /**

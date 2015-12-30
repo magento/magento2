@@ -6,21 +6,20 @@
 namespace Magento\Payment\Gateway\Command;
 
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Payment\Gateway\CommandInterface;
 
 /**
- * Interface CommandPoolInterface
+ * Interface CommandManagerPoolInterface
  * @package Magento\Payment\Gateway\Command
  * @api
  */
-interface CommandPoolInterface
+interface CommandManagerPoolInterface
 {
     /**
-     * Retrieves operation
+     * Returns Command executor for defined payment provider
      *
-     * @param string $commandCode
-     * @return CommandInterface
+     * @param string $paymentProviderCode
+     * @return CommandManagerInterface
      * @throws NotFoundException
      */
-    public function get($commandCode);
+    public function get($paymentProviderCode);
 }

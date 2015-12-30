@@ -110,6 +110,14 @@ class Transparent extends Payflowpro implements TransparentInterface
         $this->paymentTokenFactory = $paymentTokenFactory;
     }
 
+    /**
+     * @return ResponseValidator
+     */
+    public function getResponceValidator()
+    {
+        return $this->responseValidator;
+    }
+
 
     /**
      * Do not validate payment form using server methods
@@ -149,7 +157,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         $this->processErrors($response);
 
         try {
-            $this->responseValidator->validate($response);
+            $this->responseValidator->validate($response, $this);
         } catch (LocalizedException $exception) {
             $payment->setParentTransactionId($response->getData(self::PNREF));
             $this->void($payment);
