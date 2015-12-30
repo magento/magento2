@@ -65,6 +65,13 @@ define([
         },
 
         /**
+         * Init toolbar section so other components will be able to place something in it
+         */
+        initToolbarSection: function () {
+            this.set('toolbarSection', this.modal.data('modal').modal.find('header').get(0));
+        },
+
+        /**
          * Initializes observable properties.
          *
          * @returns {Object} Chainable.
@@ -87,6 +94,7 @@ define([
                 this.overrideModalButtonCallback();
                 this.options.modalCloseBtnHandler = this.actionCancel;
                 this.modal = $(element).modal(this.options);
+                this.initToolbarSection();
 
                 if (this.waitCbk) {
                     this.waitCbk();
