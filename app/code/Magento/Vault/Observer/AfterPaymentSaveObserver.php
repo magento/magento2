@@ -68,11 +68,6 @@ class AfterPaymentSaveObserver implements ObserverInterface
 
         $paymentToken = $this->getPaymentToken($extensionAttributes);
 
-        // Save only new tokens that has been set during first order placement
-        if ($paymentToken === null || $paymentToken->getEntityId() > 0) {
-            return $this;
-        }
-
         $order = $payment->getOrder();
 
         $paymentToken->setCustomerId($order->getCustomerId());

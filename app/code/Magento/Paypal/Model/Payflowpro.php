@@ -848,7 +848,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param Order $order
      * @return void
      */
-    protected function addRequestOrderInfo(DataObject $request, Order $order)
+    public function addRequestOrderInfo(DataObject $request, Order $order)
     {
         $id = $order->getId();
         // for auth request order id is not exists yet
