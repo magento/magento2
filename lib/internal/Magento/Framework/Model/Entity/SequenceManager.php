@@ -62,7 +62,7 @@ class SequenceManager
         $sequenceInfo = $this->sequenceRegistry->retrieve($entityType);
 
         if (!isset($sequenceInfo['sequenceTable'])) {
-            throw new \Exception('TODO: use correct Exception class');
+            throw new \Exception('TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists');
         }
         try {
             return $metadata->getEntityConnection()->insert(
@@ -71,7 +71,27 @@ class SequenceManager
             );
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
-            throw new \Exception('TODO: use correct Exception class');
+//            return true;
+            throw new \Exception('TODO: use correct Exception class' . PHP_EOL . $e->getMessage());
+        }
+    }
+
+    public function delete($entityType, $identifier)
+    {
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $sequenceInfo = $this->sequenceRegistry->retrieve($entityType);
+        if (!isset($sequenceInfo['sequenceTable'])) {
+            throw new \Exception('TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists');
+        }
+        try {
+            return $metadata->getEntityConnection()->delete(
+                $sequenceInfo['sequenceTable'],
+                ['sequence_value = ?' => $identifier]
+            );
+        } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage(), $e->getTrace());
+//            return true;
+            throw new \Exception('TODO: use correct Exception class' . PHP_EOL . $e->getMessage());
         }
     }
 }
