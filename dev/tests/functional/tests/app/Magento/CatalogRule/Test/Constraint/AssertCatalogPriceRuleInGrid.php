@@ -33,6 +33,7 @@ class AssertCatalogPriceRuleInGrid extends AbstractConstraint
             : array_merge($catalogPriceRuleOriginal->getData(), $catalogPriceRule->getData());
         $filter = [
             'name' => $data['name'],
+            'is_active' => $data['is_active'],
         ];
         //add ruleWebsite to filter if there is one
         if ($catalogPriceRule->getWebsiteIds() != null) {
