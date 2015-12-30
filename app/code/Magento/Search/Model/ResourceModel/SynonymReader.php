@@ -116,18 +116,18 @@ class SynonymReader extends AbstractDb
         // scope. If there were no store view and website specific synonyms then at last 'default' (All store views)
         // will be considered.
         foreach ($rows as $row) {
-            if ($row['scope_id'] === $storeViewId &&
-                $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_STORES) {
+            if ($row['scope_id'] === $storeViewId
+                && $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_STORES) {
                 // Check for current store view
                 $synRowsForStoreView[] = $row;
-            } else if (empty($synRowsForStoreView) &&
-                ($row['scope_id'] === $websiteId &&
-                    $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES)) {
+            } else if (empty($synRowsForStoreView)
+                && ($row['scope_id'] === $websiteId
+                && $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES)) {
                 // Check for current website
                 $synRowsForWebsite[] = $row;
-            } else if (empty($synRowsForStoreView) &&
-                empty($synRowsForWebsite) &&
-                $row['scope_type'] === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            } else if (empty($synRowsForStoreView)
+                && empty($synRowsForWebsite)
+                && $row['scope_type'] === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
                 // Check for all store views (i.e. default)
                 $synRowsForDefault[] = $row;
             }
