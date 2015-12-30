@@ -106,7 +106,6 @@ class SynonymReader extends AbstractDb
      */
     private function getSynRowsPerScope($rows)
     {
-
         $storeViewId = $this->storeManager->getStore()->getId();
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
         $synRowsForStoreView = [];

@@ -55,7 +55,7 @@
             <argument name="primaryFieldName" xsi:type="string">group_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="mainTable" xsi:type="string">search_synonyms</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Search\Model\ResourceModel\SynonymGroups</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Search\Model\ResourceModel\SynonymReader</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
