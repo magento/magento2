@@ -8,7 +8,8 @@ define([
     'Magento_Ui/js/lib/spinner',
     'rjsResolver',
     './adapter',
-    'uiCollection'
+    'uiCollection',
+    'mage/validation'
 ], function ($, _, loader, resolver, adapter, Collection) {
     'use strict';
 
