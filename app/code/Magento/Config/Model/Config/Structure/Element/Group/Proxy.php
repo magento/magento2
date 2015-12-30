@@ -5,7 +5,8 @@
  */
 namespace Magento\Config\Model\Config\Structure\Element\Group;
 
-class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group
+class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group implements
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object manager

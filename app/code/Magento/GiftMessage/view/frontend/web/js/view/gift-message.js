@@ -78,12 +78,7 @@ define([
                 return false;
             },
             isActive: function() {
-                switch (this.itemId) {
-                    case 'orderLevel':
-                        return this.model.getConfigValue('isOrderLevelGiftOptionsEnabled') == true;
-                    default:
-                        return this.model.getConfigValue('isItemLevelGiftOptionsEnabled') == true;
-                }
+                return this.model.isGiftMessageAvailable();
             },
             submitOptions: function() {
                 giftOptionsService(this.model);

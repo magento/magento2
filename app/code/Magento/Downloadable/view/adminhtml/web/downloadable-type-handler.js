@@ -48,7 +48,10 @@ define([
          */
         bindAll: function () {
             this.$checkbox.on('change', function (event) {
-                $(document).trigger('setTypeProduct', $(event.target).prop('checked') ? 'downloadable' : null);
+                $(document).trigger('setTypeProduct', $(event.target).prop('checked') ?
+                    'downloadable' :
+                    productType.type.init === 'downloadable' ? 'virtual' : productType.type.init
+                );
             });
 
             $(document).on('changeTypeProduct', this._initType.bind(this));
