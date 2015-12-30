@@ -23,6 +23,12 @@ use Magento\Mtf\TestCase\Scenario;
  * 8. Fill data according dataset.
  * 9. Click Get Shipping Method and rates.
  * 10. Fill data according dataset.
+ * 11. Select payment method with enabled Vault.
+ * 12. Place Order.
+ * 13. Reorder placed order.
+ * 14. Select stored cards as payment method.
+ * 15. Select any available payment token.
+ * 16. Place order.
  *
  * @group Order_Management_(CS)
  */

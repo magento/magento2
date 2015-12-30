@@ -15,7 +15,6 @@ use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
  */
 class SaveCreditCardOnBackendStep implements TestStepInterface
 {
-
     /**
      * @var OrderCreateIndex
      */

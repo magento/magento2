@@ -13,7 +13,6 @@ use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
  */
 class UseVaultPaymentTokenStep implements TestStepInterface
 {
-
     /**
      * @var OrderCreateIndex
      */

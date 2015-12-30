@@ -363,6 +363,7 @@ class Create extends Block
     /**
      * Select vault payment token radio button
      * @param string $selector
+     * @return void
      */
     public function selectVaultToken($selector)
     {
