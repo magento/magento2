@@ -18,7 +18,10 @@ define([
                 title: '',
                 buttons: []
             },
-            valid: true
+            valid: true,
+            listens: {
+                state: 'onState'
+            }
         },
 
         /**
@@ -48,7 +51,8 @@ define([
          */
         initConfig: function () {
             this._super();
-            this.uniqueClass = this.name.replace(/\./g, '_');
+            this.modalClass = this.name.replace(/\./g, '_');
+            this.rootSelector = '.' + this.modalClass;
 
             return this;
         },
@@ -57,17 +61,17 @@ define([
          * Initialize modal's content components
          */
         initializeContent: function () {
-            $.async('.' + this.uniqueClass(), this, this.initModal);
+            $.async(this.rootSelector, this, this.initModal);
         },
 
         /**
          * Initializes observable properties.
          *
-         * @returns {Massactions} Chainable.
+         * @returns {Object} Chainable.
          */
         initObservable: function () {
-            this._super()
-                .observe('uniqueClass');
+            this._super();
+            this.observe('state');
 
             return this;
         },
@@ -98,8 +102,7 @@ define([
          */
         openModal: function () {
             if (this.modal) {
-                this.modal.modal('openModal');
-                this.applyData();
+                this.state(true);
             } else {
                 this.waitCbk = this.openModal;
             }
@@ -110,7 +113,7 @@ define([
          */
         closeModal: function () {
             if (this.modal) {
-                this.modal.modal('closeModal');
+                this.state(false);
             } else {
                 this.waitCbk = this.closeModal;
             }
@@ -120,18 +123,24 @@ define([
          * Toggle modal
          */
         toggleModal: function () {
-            var state;
-
             if (this.modal) {
-                state = this.modal.data('mage-modal').options.isOpen;
-
-                if (state) {
-                    this.closeModal();
-                } else {
-                    this.openModal();
-                }
+                this.state(!this.state());
             } else {
                 this.waitCbk = this.toggleModal;
+            }
+        },
+
+        /**
+         * Wrap content in a modal of certain type
+         *
+         * @param {Boolean} state
+         */
+        onState: function (state) {
+            if (state) {
+                this.modal.modal('openModal');
+                this.applyData();
+            } else {
+                this.modal.modal('closeModal');
             }
         },
 
@@ -231,13 +240,7 @@ define([
                     this.triggerActionInChildElem.bind(this, clickConfig.actionName, clickConfig.targetName, this);
             }
 
-            return (this[clickConfig] || this.actionNothing).bind(this);
-        },
-
-        /**
-         * Placeholder for unrecognized action
-         */
-        actionNothing: function () {
+            return this[clickConfig] ? this[clickConfig].bind(this) : function () {};
         },
 
         /**
