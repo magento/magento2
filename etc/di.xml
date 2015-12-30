@@ -25,4 +25,11 @@
             <argument name="scopeType" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
+    <type name="Magento\AdvancedSearch\Model\SuggestedQueries">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="mysql" xsi:type="string">Magento\AdvancedSearch\Model\DataProvider\Suggestions</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
