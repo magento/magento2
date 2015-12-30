@@ -95,6 +95,7 @@ class IframeConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 'iframe' => [
+                    'timeoutTime' => [$this->methodCode => 30 * 1000], // 30 sec
                     'dateDelim' => [$this->methodCode => $this->getDateDelim()],
                     'cardFieldsMap' => [$this->methodCode => $this->getCardFieldsMap()],
                     'source' =>  [$this->methodCode => $this->getViewFileUrl('blank.html')],

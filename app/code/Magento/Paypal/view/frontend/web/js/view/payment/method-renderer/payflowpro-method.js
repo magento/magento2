@@ -6,12 +6,9 @@
 define(
     [
         'jquery',
-        'Magento_Payment/js/view/payment/iframe',
-        'Magento_Checkout/js/model/payment/additional-validators',
-        'Magento_Checkout/js/action/set-payment-information',
-        'Magento_Checkout/js/model/full-screen-loader'
+        'Magento_Payment/js/view/payment/iframe'
     ],
-    function ($, Component, additionalValidators, setPaymentInformationAction, fullScreenLoader) {
+    function ($, Component) {
         'use strict';
 
         return Component.extend({
@@ -21,50 +18,46 @@ define(
             placeOrderHandler: null,
             validateHandler: null,
 
-            setPlaceOrderHandler: function(handler) {
+            /**
+             * @param {Function} handler
+             */
+            setPlaceOrderHandler: function (handler) {
                 this.placeOrderHandler = handler;
             },
 
-            setValidateHandler: function(handler) {
+            /**
+             * @param {Function} handler
+             */
+            setValidateHandler: function (handler) {
                 this.validateHandler = handler;
             },
 
-            context: function() {
+            /**
+             * @returns {Object}
+             */
+            context: function () {
                 return this;
             },
 
-            isShowLegend: function() {
-                return true;
-            },
-
-            getCode: function() {
-                return 'payflowpro';
-            },
-
-            isActive: function() {
+            /**
+             * @returns {Boolean}
+             */
+            isShowLegend: function () {
                 return true;
             },
 
             /**
-             * @override
+             * @returns {String}
              */
-            placeOrder: function () {
-                var self = this;
+            getCode: function () {
+                return 'payflowpro';
+            },
 
-                if (this.validateHandler() && additionalValidators.validate()) {
-                    fullScreenLoader.startLoader();
-                    this.isPlaceOrderActionAllowed(false);
-                    $.when(setPaymentInformationAction(this.messageContainer, {
-                        'method': self.getCode()
-                    })).done(function () {
-                        self.placeOrderHandler().fail(function () {
-                            fullScreenLoader.stopLoader();
-                        });
-                    }).fail(function () {
-                        fullScreenLoader.stopLoader();
-                        self.isPlaceOrderActionAllowed(true);
-                    });
-                }
+            /**
+             * @returns {Boolean}
+             */
+            isActive: function () {
+                return true;
             }
         });
     }
