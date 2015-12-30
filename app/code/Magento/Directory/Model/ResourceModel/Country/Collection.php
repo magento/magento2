@@ -56,7 +56,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @var string[]
      */
-    protected $countiesWithNotRequiredRegions;
+    protected $countriesWithNotRequiredStates;
 
     /**
      * Initialize dependencies.
@@ -71,7 +71,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\Helper\AbstractHelper $helperData
-     * @param array $countiesWithNotRequiredRegions
+     * @param array $countriesWithNotRequiredStates
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -87,7 +87,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\Helper\AbstractHelper $helperData,
-        array $countiesWithNotRequiredRegions = [],
+        array $countriesWithNotRequiredStates = [],
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
@@ -98,7 +98,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->_countryFactory = $countryFactory;
         $this->_arrayUtils = $arrayUtils;
         $this->helperData = $helperData;
-        $this->countiesWithNotRequiredRegions = $countiesWithNotRequiredRegions;
+        $this->countriesWithNotRequiredStates = $countriesWithNotRequiredStates;
     }
 
     /**
@@ -279,7 +279,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         foreach ($this->getItems() as $country) {
             /** @var \Magento\Directory\Model\Country $country  */
             if ($country->getRegionCollection()->getSize() > 0
-                && !in_array($country->getId(), $this->countiesWithNotRequiredRegions)
+                && !in_array($country->getId(), $this->countriesWithNotRequiredStates)
             ) {
                 $countries[$country->getId()] = $country;
             }

@@ -25,7 +25,7 @@
     <type name="Magento\Directory\Model\ResourceModel\Country\Collection" shared="false">
         <arguments>
             <argument name="helperData" xsi:type="object">DirectoryHelperDataProxy</argument>
-            <argument name="countiesWithNotRequiredRegions" xsi:type="array">
+            <argument name="countriesWithNotRequiredStates" xsi:type="array">
                 <item name="FR" xsi:type="string">FR</item>
                 <item name="DE" xsi:type="string">DE</item>
             </argument>

@@ -21,13 +21,13 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
     private $deploymentConfig;
 
     /**
-     * @var \Magento\Framework\Communication\Config\Reader\EnvReader\Validator
+     * @var Validator
      */
     private $envValidator;
 
     /**
      * @param DeploymentConfig $deploymentConfig
-     * @param \Magento\Framework\Communication\Config\Reader\EnvReader\Validator $envValidator
+     * @param Validator $envValidator
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -42,6 +42,7 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function read($scope = null)
     {
@@ -51,5 +52,4 @@ class EnvReader implements \Magento\Framework\Config\ReaderInterface
         }
         return $configData ?: [];
     }
-
 }
