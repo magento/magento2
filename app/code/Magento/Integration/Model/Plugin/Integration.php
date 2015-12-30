@@ -27,7 +27,7 @@ class Integration
     /**
      * Integration config
      *
-     * @var Config`
+     * @var Config
      */
     protected $integrationConfig;
 
