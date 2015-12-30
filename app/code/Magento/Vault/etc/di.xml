@@ -30,6 +30,7 @@
         <arguments>
             <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
             <argument name="valueHandlerPool" xsi:type="object">VaultPaymentValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">Magento\Vault\Model\Method\NullPaymentProvider</argument>
         </arguments>
     </type>
 

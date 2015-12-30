@@ -80,7 +80,7 @@ class Transaction
      * Returns gateway response data object
      *
      * @param array $gatewayTransactionResponse
-     * @return Object
+     * @return DataObject
      */
     public function getResponseObject($gatewayTransactionResponse)
     {
