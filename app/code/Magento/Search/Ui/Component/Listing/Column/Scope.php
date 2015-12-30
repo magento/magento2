@@ -83,12 +83,12 @@ class Scope extends Column
 
         if ($item['scope_type'] === 'stores') {
             $storeViewName = $this->storeManager->getStore($item['scope_id'])->getName();
-            return __($storeViewName . ' (store view)');
+            return __($storeViewName);
         } else if ($item['scope_type'] === 'websites') {
             $websiteName = $this->storeManager->getWebsite($item['scope_id'])->getName();
-            return __($websiteName . ' (website)');
+            return __($websiteName);
         } else if ($item['scope_type'] === 'default') {
-            return __('Global');
+            return __('Global (All Store Views)');
         }
 
         $data = $this->systemStore->getStoresStructure(false, $storeViewIds, [], $websiteIds);
