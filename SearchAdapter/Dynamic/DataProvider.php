@@ -5,51 +5,40 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter\Dynamic;
 
-use Magento\Catalog\Model\Layer\Filter\Price\Range;
-use Magento\Framework\Search\Dynamic\DataProviderInterface;
-use Magento\Framework\Search\Dynamic\EntityStorage;
-use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Framework\Search\Dynamic\IntervalFactory;
-use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Elasticsearch\Model\Config;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
-
-class DataProvider implements DataProviderInterface
+class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInterface
 {
     /**
-     * @var ConnectionManager
+     * @var \Magento\Elasticsearch\SearchAdapter\ConnectionManager
      */
     protected $connectionManager;
 
     /**
-     * @var FieldMapperInterface
+     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface
      */
     protected $fieldMapper;
 
     /**
-     * @var Range
+     * @var \Magento\Catalog\Model\Layer\Filter\Price\Range
      */
     protected $range;
 
     /**
-     * @var IntervalFactory
+     * @var \Magento\Framework\Search\Dynamic\IntervalFactory
      */
     protected $intervalFactory;
 
     /**
-     * @var Config
+     * @var \Magento\Elasticsearch\Model\Config
      */
     protected $clientConfig;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var SearchIndexNameResolver
+     * @var \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver
      */
     protected $searchIndexNameResolver;
 
@@ -59,23 +48,23 @@ class DataProvider implements DataProviderInterface
     protected $indexerId;
 
     /**
-     * @param ConnectionManager $connectionManager
-     * @param FieldMapperInterface $fieldMapper
-     * @param Range $range
-     * @param IntervalFactory $intervalFactory
-     * @param Config $clientConfig
-     * @param StoreManagerInterface $storeManager
-     * @param SearchIndexNameResolver $searchIndexNameResolver
+     * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
+     * @param \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface $fieldMapper
+     * @param \Magento\Catalog\Model\Layer\Filter\Price\Range $range
+     * @param \Magento\Framework\Search\Dynamic\IntervalFactory $intervalFactory
+     * @param \Magento\Elasticsearch\Model\Config $clientConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver
      * @param string $indexerId
      */
     public function __construct(
-        ConnectionManager $connectionManager,
-        FieldMapperInterface $fieldMapper,
-        Range $range,
-        IntervalFactory $intervalFactory,
-        Config $clientConfig,
-        StoreManagerInterface $storeManager,
-        SearchIndexNameResolver $searchIndexNameResolver,
+        \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,
+        \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface $fieldMapper,
+        \Magento\Catalog\Model\Layer\Filter\Price\Range $range,
+        \Magento\Framework\Search\Dynamic\IntervalFactory $intervalFactory,
+        \Magento\Elasticsearch\Model\Config $clientConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver,
         $indexerId
     ) {
         $this->connectionManager = $connectionManager;
@@ -99,7 +88,7 @@ class DataProvider implements DataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getAggregations(EntityStorage $entityStorage)
+    public function getAggregations(\Magento\Framework\Search\Dynamic\EntityStorage $entityStorage)
     {
         $aggregations = [
             'count' => 0,
@@ -157,9 +146,9 @@ class DataProvider implements DataProviderInterface
      * {@inheritdoc}
      */
     public function getInterval(
-        BucketInterface $bucket,
+        \Magento\Framework\Search\Request\BucketInterface $bucket,
         array $dimensions,
-        EntityStorage $entityStorage
+        \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
     ) {
         $entityIds = $entityStorage->getSource();
         $fieldName = $this->fieldMapper->getFieldName('price');
@@ -177,10 +166,10 @@ class DataProvider implements DataProviderInterface
      * {@inheritdoc}
      */
     public function getAggregation(
-        BucketInterface $bucket,
+        \Magento\Framework\Search\Request\BucketInterface $bucket,
         array $dimensions,
         $range,
-        EntityStorage $entityStorage
+        \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
     ) {
         $result = [];
         $entityIds = $entityStorage->getSource();

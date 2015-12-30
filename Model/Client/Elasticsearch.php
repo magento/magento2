@@ -298,7 +298,7 @@ class Elasticsearch implements ClientInterface
     /**
      * Execute suggest query
      *
-     * @param $query
+     * @param array $query
      * @return array
      */
     public function suggest($query)
