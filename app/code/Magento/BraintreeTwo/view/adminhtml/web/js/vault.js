@@ -33,6 +33,14 @@ define([
         },
 
         /**
+         * Get payment code
+         * @returns {String}
+         */
+        getCode: function () {
+            return 'braintreetwo';
+        },
+
+        /**
          * Init event handlers
          */
         initEventHandlers: function () {
@@ -113,6 +121,7 @@ define([
          * @param {String} nonce
          */
         setPaymentDetails: function (nonce) {
+            this.$selector.find('[name="payment[method]"]').val(this.getCode());
             this.$selector.find('[name="payment[payment_method_nonce]"]').val(nonce);
         },
 
