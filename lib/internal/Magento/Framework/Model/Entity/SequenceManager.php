@@ -66,7 +66,7 @@ class SequenceManager
         }
         try {
             return $metadata->getEntityConnection()->insert(
-                $sequenceInfo['sequenceTable'],
+                $metadata->getEntityConnection()->getTableName($sequenceInfo['sequenceTable']),
                 ['sequence_value' => $identifier]
             );
         } catch (\Exception $e) {
