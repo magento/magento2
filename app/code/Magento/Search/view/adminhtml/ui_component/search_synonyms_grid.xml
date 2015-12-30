@@ -31,6 +31,9 @@
                 <item name="config" xsi:type="array">
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">group_id</item>
+                    </item>
                 </item>
             </argument>
         </argument>
@@ -42,39 +45,17 @@
             </item>
         </argument>
         <bookmark name="bookmarks"/>
-        <columnsControls name="columns_controls"/>
+        <columnsControls name="synonyms_columns_controls"/>
         <exportButton name="export_button"/>
         <filterSearch name="fulltext"/>
-        <filters name="listing_filters"/>
-        <massaction name="listing_massaction"/>
+        <filters name="synonyms_listing_filters"/>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="search_synonyms_columns">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="childDefaults" xsi:type="array">
-                    <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">search_synonyms_grid.search_synonyms_grid.search_synonyms_columns.actions</item>
-                        <item name="target" xsi:type="string">applyAction</item>
-                        <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">view</item>
-                            <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
-                        </item>
-                    </item>
-                </item>
-            </item>
-        </argument>
-        <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">group_id</item>
-                </item>
-            </argument>
-        </selectionsColumn>
         <column name="group_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="sortOrder" xsi:type="number">10</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
@@ -82,28 +63,27 @@
             </argument>
         </column>
         <column name="synonyms">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="filter" xsi:type="string">text</item>
-                <item name="sortOrder" xsi:type="number">20</item>
-                <item name="label" xsi:type="string" translate="true">Synonyms</item>
-            </item>
-        </argument>
-        </column>
-        <column name="" class="Magento\Search\Ui\Component\Listing\Column\Scope">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="label" xsi:type="string" translate="true">Synonyms</item>
+                </item>
+            </argument>
+        </column>
+        <column name="scope" class="Magento\Search\Ui\Component\Listing\Column\Scope">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">30</item>
                     <item name="label" xsi:type="string" translate="true">Scope</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
         <column name="scope_type">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
                     <item name="sortOrder" xsi:type="number">40</item>
                     <item name="label" xsi:type="string" translate="true">Scope Type</item>
                 </item>
