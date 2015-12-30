@@ -8,7 +8,13 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="integrations" type="integrationsType"/>
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="integrations" type="integrationsType" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
     <xs:complexType name="integrationsType">
         <xs:sequence>
             <xs:element name="integration" type="integrationType" maxOccurs="unbounded" minOccurs="1"/>
