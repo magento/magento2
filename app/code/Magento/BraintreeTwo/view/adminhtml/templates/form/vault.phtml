@@ -18,7 +18,7 @@ $id = $block->escapeHtml($block->getData('id'));
         }
     }' id="payment_<?php /* @noEscape */ echo $id;?>" class="admin__field">
     <div class="admin__field-control control">
-        <input type="radio" name="payment[token_switcher]" />
+        <input type="radio" id="token_switcher_<?php /* @noEscape */ echo $id; ?>" name="payment[token_switcher]"/>
         <img src="<?php echo $block->escapeUrl($icon['url']); ?>"
              width="<?php echo $block->escapeHtml($icon['width']); ?>"
              height="<?php echo $block->escapeHtml($icon['height']); ?>"

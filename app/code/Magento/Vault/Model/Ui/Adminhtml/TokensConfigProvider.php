@@ -119,7 +119,7 @@ final class TokensConfigProvider
 
         foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $index => $token) {
             $component = $componentProvider->getComponentForToken($token);
-            $vaultPayments[VaultPaymentInterface::CODE . $index] = [
+            $vaultPayments[VaultPaymentInterface::CODE . '_item_' . $index] = [
                 'config' => $component->getConfig(),
                 'component' => $component->getName()
             ];
@@ -132,7 +132,7 @@ final class TokensConfigProvider
      * Get code of payment method provider
      * @return null|string
      */
-    protected function getProviderMethodCode()
+    public function getProviderMethodCode()
     {
         if (!$this->providerCode) {
             $storeId = $this->getStoreId();
