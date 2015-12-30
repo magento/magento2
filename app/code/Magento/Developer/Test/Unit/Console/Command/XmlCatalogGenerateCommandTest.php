@@ -42,27 +42,23 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit_Framework_TestCase
             )->will($this->returnValue(null));
 
         $formats = ['phpstorm' => $phpstormFormatMock];
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $readFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $readDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);
 
         $content = file_get_contents($fixtureXmlFile);
 
         $readDirMock->expects($this->once())
-            ->method('getRelativePath')
-            ->with($this->equalTo($fixtureXmlFile))
-            ->will($this->returnValue('test'));
-        $readDirMock->expects($this->once())
             ->method('readFile')
-            ->with($this->equalTo('test'))
+            ->with($this->equalTo('test.xml'))
             ->will($this->returnValue($content));
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
+        $readFactory->expects($this->once())
+            ->method('create')
             ->will($this->returnValue($readDirMock));
 
         $this->command = new XmlCatalogGenerateCommand(
             $filesMock,
             $urnResolverMock,
-            $filesystem,
+            $readFactory,
             $formats
         );
 
