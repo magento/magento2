@@ -13,7 +13,7 @@ define([
 
     return Element.extend({
         defaults: {
-            template: 'ui/form/components/component-trigger'
+            template: 'ui/form/components/button'
         },
 
         /**

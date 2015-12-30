@@ -61,6 +61,7 @@
             <xs:element name="actionsColumn" type="actionsColumn" />
             <xs:element name="selectionsColumn" type="selectionsColumn" />
             <xs:element type="modal" name="modal"/>
+            <xs:element type="button" name="button"/>
         </xs:all>
     </xs:complexType>
     <!-- Custom configuration -->
