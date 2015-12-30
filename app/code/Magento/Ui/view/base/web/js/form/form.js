@@ -13,9 +13,7 @@ define([
 ], function ($, _, loader, resolver, adapter, Collection) {
     'use strict';
 
-    var items;
-
-    function collectData() {
+    function collectData(items) {
         var result = {};
 
         items = Array.prototype.slice.call(items);
@@ -27,7 +25,7 @@ define([
         return result;
     }
 
-    function validateFields(selector){
+    function validateFields(items){
         var result = true;
 
         items = document.querySelectorAll(selector);
@@ -42,6 +40,8 @@ define([
     }
 
     return Collection.extend({
+        items: [],
+
         initialize: function () {
             this._super()
                 .initAdapter();
@@ -77,8 +77,9 @@ define([
 
         save: function (redirect) {
             this.validate();
+            this.items = document.querySelectorAll(selector);
 
-            if (validateFields(this.selector) && !this.source.get('params.invalid')) {
+            if (validateFields(this.items) && !this.source.get('params.invalid')) {
                 this.submit(redirect);
             }
         },
@@ -87,7 +88,7 @@ define([
          * Submits form
          */
         submit: function (redirect) {
-            var additional = collectData(),
+            var additional = collectData(this.items),
                 source = this.source;
 
             _.each(additional, function (value, name) {
