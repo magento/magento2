@@ -139,7 +139,8 @@ class SynonymReader extends AbstractDb
      * @param array $row
      * @return bool
      */
-    private function isSynRowForStoreView($row) {
+    private function isSynRowForStoreView($row)
+    {
         $storeViewId = $this->storeManager->getStore()->getId();
         return ($row['scope_id'] === $storeViewId
             && $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_STORES);
@@ -151,7 +152,8 @@ class SynonymReader extends AbstractDb
      * @param array $row
      * @return bool
      */
-    private function isSynRowForWebsite($row) {
+    private function isSynRowForWebsite($row)
+    {
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
         return ($row['scope_id'] === $websiteId
             && $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES);
@@ -163,7 +165,8 @@ class SynonymReader extends AbstractDb
      * @param array $row
      * @return bool
      */
-    private function isSynRowForDefaultScope($row) {
+    private function isSynRowForDefaultScope($row)
+    {
         return ($row['scope_type'] === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
     }
 }
