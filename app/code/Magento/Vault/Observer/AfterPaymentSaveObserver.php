@@ -35,23 +35,15 @@ class AfterPaymentSaveObserver implements ObserverInterface
     protected $encryptor;
 
     /**
-     * @var TimezoneInterface
-     */
-    private $timezone;
-
-    /**
      * @param PaymentTokenManagementInterface $paymentTokenManagement
      * @param EncryptorInterface $encryptor
-     * @param TimezoneInterface $timezone
      */
     public function __construct(
         PaymentTokenManagementInterface $paymentTokenManagement,
-        EncryptorInterface $encryptor,
-        TimezoneInterface $timezone
+        EncryptorInterface $encryptor
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
         $this->encryptor = $encryptor;
-        $this->timezone = $timezone;
     }
 
     /**
@@ -67,6 +59,9 @@ class AfterPaymentSaveObserver implements ObserverInterface
         $extensionAttributes = $payment->getExtensionAttributes();
 
         $paymentToken = $this->getPaymentToken($extensionAttributes);
+        if ($paymentToken === null || $paymentToken->getEntityId() !== null) {
+            return $this;
+        }
 
         $order = $payment->getOrder();
 
