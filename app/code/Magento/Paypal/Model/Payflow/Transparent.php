@@ -214,7 +214,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         parent::capture($payment, $amount);
 
         if ($token) {
-            $this->createPaymentToken($payment, $token);
+            //$this->createPaymentToken($payment, $token);
         }
 
         return $this;
