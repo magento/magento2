@@ -424,6 +424,7 @@ class Page extends AbstractDb
      */
     public function delete(AbstractModel $object)
     {
+        $this->transactionManager->start($this->getConnection());
         try {
             $object->beforeDelete();
             $this->_beforeDelete($object);
