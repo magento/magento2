@@ -90,6 +90,14 @@ class Page extends AbstractDb
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getConnection()
+    {
+        return $this->metadataPool->getMetadata(PageInterface::class)->getEntityConnection();
+    }
+
+    /**
      * Process page data before saving
      *
      * @param AbstractModel $object

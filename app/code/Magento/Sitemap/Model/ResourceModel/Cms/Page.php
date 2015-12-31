@@ -58,6 +58,14 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getConnection()
+    {
+        return $this->metadataPool->getMetadata(PageInterface::class)->getEntityConnection();
+    }
+
+    /**
      * Retrieve cms page collection array
      *
      * @param int $storeId
