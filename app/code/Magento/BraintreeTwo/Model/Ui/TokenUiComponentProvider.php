@@ -49,7 +49,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
         $component = $this->componentFactory->create(
             [
                 'config' => [
-                    'nonce_url' => $this->getNonceRetrieveUrl(),
+                    'nonceUrl' => $this->getNonceRetrieveUrl(),
                     TokenUiComponentProviderInterface::COMPONENT_DETAILS => $jsonDetails,
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash()
                 ],

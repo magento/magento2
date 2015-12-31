@@ -121,7 +121,7 @@ define([
          * @param {String} nonce
          */
         setPaymentDetails: function (nonce) {
-            this.$selector.find('[name="payment[method]"]').val(this.getCode());
+            this.$selector.find('[name="payment[token]"]').val(this.publicHash);
             this.$selector.find('[name="payment[payment_method_nonce]"]').val(nonce);
         },
 

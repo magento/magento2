@@ -15,7 +15,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 interface TokenUiComponentProviderInterface
 {
     const COMPONENT_DETAILS = 'details';
-    const COMPONENT_PUBLIC_HASH = 'public_hash';
+    const COMPONENT_PUBLIC_HASH = 'publicHash';
 
     /**
      * @param PaymentTokenInterface $paymentToken
