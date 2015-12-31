@@ -69,6 +69,14 @@ class Block extends AbstractDb
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getConnection()
+    {
+        return $this->metadataPool->getMetadata(BlockInterface::class)->getEntityConnection();
+    }
+
+    /**
      * Perform operations before object save
      *
      * @param AbstractModel $object
