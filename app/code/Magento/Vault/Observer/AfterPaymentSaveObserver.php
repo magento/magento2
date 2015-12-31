@@ -67,6 +67,9 @@ class AfterPaymentSaveObserver implements ObserverInterface
         $extensionAttributes = $payment->getExtensionAttributes();
 
         $paymentToken = $this->getPaymentToken($extensionAttributes);
+        if ($paymentToken->getEntityId() !== null) {
+            return $this;
+        }
 
         $order = $payment->getOrder();
 

@@ -1,4 +1,5 @@
 <?php
+use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,7 +14,7 @@ $id = $block->escapeHtml($block->getData('id'));
 <div data-mage-init='{
         "Magento_BraintreeTwo/js/vault": {
             "container": "payment_<?php /* @noEscape */ echo $id; ?>",
-            "publicHash": "<?php echo $block->escapeHtml($block->getData('publicHash')); ?>",
+            "publicHash": "<?php echo $block->escapeHtml($block->getData(TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH)); ?>",
             "nonceUrl": "<?php echo $block->escapeUrl($block->getData('nonceUrl')); ?>"
         }
     }' id="payment_<?php /* @noEscape */ echo $id;?>" class="admin__field">

@@ -13,6 +13,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Webapi\Exception;
 use Psr\Log\LoggerInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 
 /**
  * Class GetNonce
@@ -62,7 +63,7 @@ class GetNonce extends Action
         try {
             $publicHash = $this->getRequest()->getParam('public_hash');
             $customerId = $this->session->getCustomerId();
-            $result = $this->command->execute(['publicHash' => $publicHash, 'customerId' => $customerId])->get();
+            $result = $this->command->execute(['public_hash' => $publicHash, 'customer_id' => $customerId])->get();
             $response->setData(['paymentMethodNonce' => $result['paymentMethodNonce']]);
 
         } catch (\Exception $e) {
