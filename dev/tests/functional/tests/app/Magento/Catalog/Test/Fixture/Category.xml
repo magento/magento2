@@ -28,6 +28,7 @@
         <field name="is_active" group="general_information" />
         <field name="include_in_menu" group="general_information" />
         <field name="name" group="general_information" />
+        <field name="use_default_name" group="general_information"/>
         <field name="description" is_required="0" group="content" />
         <field name="landing_page" group="content" source="Magento\Catalog\Test\Fixture\Category\LandingPage" />
         <field name="display_mode" group="display_setting" />
