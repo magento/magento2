@@ -9,7 +9,6 @@ use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType as CcTypeSource;
 
 /**
  * Class CcType
- * @package Magento\BraintreeTwo\Helper
  */
 class CcType
 {
