@@ -839,4 +839,48 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ['import_new_categories_custom_separator.csv', '|']
         ];
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @magentoDataIsolation disabled
+     * @dataProvider validateUrlKeysDataProvider
+     * @param $importFile string
+     * @param $errorsCount int
+     */
+    public function testValidateUrlKeys($importFile, $errorsCount)
+    {
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Filesystem'
+        );
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv(
+            __DIR__ . '/_files/' . $importFile,
+            $directory
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == $errorsCount);
+        if ($errorsCount >= 1) {
+            $this->assertEquals(
+            "Specified url key is already exist",
+            $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
+            );
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function validateUrlKeysDataProvider()
+    {
+        return [
+            ['products_to_check_valid_url_keys.csv', 0],
+            ['products_to_check_duplicated_url_keys.csv', 2]
+        ];
+    }
 }
