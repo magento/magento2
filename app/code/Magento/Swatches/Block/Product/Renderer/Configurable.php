@@ -8,7 +8,6 @@ namespace Magento\Swatches\Block\Product\Renderer;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product as CatalogProduct;
 use Magento\ConfigurableProduct\Helper\Data;
-use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -18,6 +17,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Swatches\Helper\Data as SwatchData;
 use Magento\Swatches\Helper\Media;
 use Magento\Swatches\Model\Swatch;
+use Magento\Swatches\Model\SwatchAttributeData;
 
 /**
  * Swatch renderer block
@@ -62,6 +62,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     protected $swatchMediaHelper;
 
     /**
+     * @var SwatchAttributeData
+     */
+    protected $swatchAttributeData;
+
+    /**
      * Indicate if product has one or more Swatch attributes
      *
      * @var boolean
@@ -76,7 +81,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * @param CatalogProduct $catalogProduct
      * @param CurrentCustomer $currentCustomer
      * @param PriceCurrencyInterface $priceCurrency
-     * @param ConfigurableAttributeData $configurableAttributeData
+     * @param SwatchAttributeData $swatchAttributeData
      * @param SwatchData $swatchHelper
      * @param Media $swatchMediaHelper
      * @param array $data other data
@@ -90,7 +95,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         CatalogProduct $catalogProduct,
         CurrentCustomer $currentCustomer,
         PriceCurrencyInterface $priceCurrency,
-        ConfigurableAttributeData $configurableAttributeData,
+        SwatchAttributeData $swatchAttributeData,
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
         array $data = []
@@ -106,7 +111,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             $catalogProduct,
             $currentCustomer,
             $priceCurrency,
-            $configurableAttributeData,
+            $swatchAttributeData,
             $data
         );
     }
