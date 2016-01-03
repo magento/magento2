@@ -18,6 +18,9 @@ $rule->loadPost([
     'simple_action' => 'by_percent',
     'from_date' => '',
     'to_date' => '',
+    'sort_order' => 0,
+    'sub_is_enable' => 0,
+    'sub_discount_amount' => 0,
     'conditions' => [
         '1' => [
             'type' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',
@@ -42,6 +45,9 @@ $rule->loadPost([
         'simple_action' => 'by_fixed',
         'from_date' => '',
         'to_date' => '',
+        'sort_order' => 0,
+        'sub_is_enable' => 0,
+        'sub_discount_amount' => 0,
         'conditions' => [
             '1' => [
                 'type' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',
