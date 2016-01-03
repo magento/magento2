@@ -32,13 +32,6 @@ class Addresses extends Tab
     protected $customerAddress = '//*[contains(@class, "address-list-item")][%d]';
 
     /**
-     * Active address tab.
-     *
-     * @var string
-     */
-    protected $addressTab = '.address-item-edit[data-bind="visible: element.active"]:not([style="display: none;"])';
-
-    /**
      * Magento loader.
      *
      * @var string
@@ -153,7 +146,6 @@ class Addresses extends Tab
     protected function addNewAddress()
     {
         $this->_rootElement->find($this->addNewAddress)->click();
-        $this->waitForElementVisible($this->addressTab);
     }
 
     /**

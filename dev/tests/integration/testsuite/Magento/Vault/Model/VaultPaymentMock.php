@@ -12,11 +12,11 @@ use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Class VaultPaymentMock
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class VaultPaymentMock implements \Magento\Vault\Model\VaultPaymentInterface
 {
-    const CODE = 'test_method';
-
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -31,7 +31,7 @@ class VaultPaymentMock implements \Magento\Vault\Model\VaultPaymentInterface
      */
     public function getCode()
     {
-        return self::getCode();
+        return self::CODE;
     }
 
     /**
@@ -377,5 +377,23 @@ class VaultPaymentMock implements \Magento\Vault\Model\VaultPaymentInterface
     public function getConfigPaymentAction()
     {
         //
+    }
+
+    /**
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function isActiveForPayment($paymentCode, $storeId = null)
+    {
+        //
+    }
+
+    /**
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getProviderCode($storeId = null)
+    {
+        return self::CODE;
     }
 }
