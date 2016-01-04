@@ -6,9 +6,10 @@
 define([
     'Magento_Ui/js/lib/view/utils/async',
     'uiCollection',
+    'uiRegistry',
     'underscore',
     './modal'
-], function ($, Collection, _) {
+], function ($, Collection, registry, _) {
     'use strict';
 
     return Collection.extend({
@@ -210,15 +211,20 @@ define([
         /**
          * Triggers some method in every modal child elem, if this method is defined
          *
-         * @param {String} actionName
-         * @param {String} targetName
-         * @param {HTMLElement} elem
+         * @param {Object} action - action configuration,
+         * must contain actionName and targetName and
+         * can contain params
          */
-        triggerActionInChildElem: function (actionName, targetName, elem) {
-            if (typeof elem[actionName] === 'function' && (!targetName || elem.index === targetName)) {
-                elem[actionName]();
-            } else if (elem.elems) {
-                elem.elems().forEach(this.triggerActionInChildElem.bind(this, actionName, targetName), this);
+        triggerAction: function (action) {
+            var targetName = action.targetName,
+                params = action.params,
+                actionName = action.actionName,
+                target;
+
+            target = registry.async(targetName);
+
+            if (target && typeof target === 'function' && actionName) {
+                target(actionName, params);
             }
         },
 
@@ -242,10 +248,10 @@ define([
             if (_.isObject(clickConfig)) {
                 return clickConfig.closeAfter ?
                     function () {
-                        this.triggerActionInChildElem(clickConfig.actionName, clickConfig.targetName, this);
+                        this.triggerAction(clickConfig);
                         this.closeModal();
                     }.bind(this) :
-                    this.triggerActionInChildElem.bind(this, clickConfig.actionName, clickConfig.targetName, this);
+                    this.triggerAction.bind(this, clickConfig);
             }
 
             return this[clickConfig] ? this[clickConfig].bind(this) : function () {};
