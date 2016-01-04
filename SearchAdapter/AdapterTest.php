@@ -61,16 +61,18 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         return $queryResponse;
     }
 
+    /**
+     * Perform full reindex
+     *
+     * @return void
+     */
     private function reindexAll()
     {
-        /** @var \Magento\Indexer\Model\Indexer[] $indexerList */
-        $indexerList = $this->objectManager->get('Magento\Indexer\Model\Indexer\CollectionFactory')
-            ->create()
-            ->getItems();
-
-        foreach ($indexerList as $indexer) {
-            $indexer->reindexAll();
-        }
+        $indexer = Bootstrap::getObjectManager()->create(
+            'Magento\Indexer\Model\Indexer'
+        );
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
     }
 
     /**
