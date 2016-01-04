@@ -11,6 +11,10 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Framework\Model\EntityManager;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -66,12 +70,25 @@ class Category extends AbstractResource
     protected $_categoryTreeFactory;
 
     /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
+     * @param EntityManager $entityManager
+     * @param MetadataPool $metadataPool
      * @param array $data
      */
     public function __construct(
@@ -81,6 +98,8 @@ class Category extends AbstractResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        EntityManager $entityManager,
+        MetadataPool $metadataPool,
         $data = []
     ) {
         parent::__construct(
@@ -92,6 +111,8 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
+        $this->entityManager = $entityManager;
+        $this->metadataPool = $metadataPool;
 
         $this->connectionName  = 'catalog';
     }
@@ -978,5 +999,69 @@ class Category extends AbstractResource
         $select = $connection->select();
         $select->from($this->getEntityTable(), 'COUNT(*)')->where('parent_id != ?', 0);
         return (int)$connection->fetchOne($select);
+    }
+
+    /**
+     * Save object collected data
+     *
+     * @param   array $saveData array('newObject', 'entityRow', 'insert', 'update', 'delete')
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function _processSaveData($saveData)
+    {
+        extract($saveData, EXTR_SKIP);
+        /**
+         * Import variables into the current symbol table from save data array
+         *
+         * @see \Magento\Eav\Model\Entity\AbstractEntity::_collectSaveData()
+         *
+         * @var array $entityRow
+         * @var \Magento\Framework\Model\AbstractModel $newObject
+         * @var array $insert
+         * @var array $update
+         * @var array $delete
+         */
+
+        /**
+         * Process base row
+         */
+        $this->entityManager->save(CategoryInterface::class, $newObject);
+
+        /**
+         * insert attribute values
+         */
+        if (!empty($insert)) {
+            foreach ($insert as $attributeId => $value) {
+                $attribute = $this->getAttribute($attributeId);
+                $this->_insertAttribute($newObject, $attribute, $value);
+            }
+        }
+
+        /**
+         * update attribute values
+         */
+        if (!empty($update)) {
+            foreach ($update as $attributeId => $v) {
+                $attribute = $this->getAttribute($attributeId);
+                $this->_updateAttribute($newObject, $attribute, $v['value_id'], $v['value']);
+            }
+        }
+
+        /**
+         * delete empty attribute values
+         */
+        if (!empty($delete)) {
+            foreach ($delete as $table => $values) {
+                $this->_deleteAttributes($newObject, $table, $values);
+            }
+        }
+
+        $this->_processAttributeValues();
+
+        $newObject->isObjectNew(false);
+
+        return $this;
     }
 }
