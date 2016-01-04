@@ -131,9 +131,22 @@
                     <group id="express_checkout_required_express_checkout"/>
                 </requires>
             </field>
-
-
-            <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1">
+            <field id="enable_in_context_checkout" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1">
+                <label>Enable In-Context Checkout Experience</label>
+                <comment>
+                    <![CDATA[See PayPal Feature Support details and list of supported regions
+                    <a href="https://developer.paypal.com/docs/classic/express-checkout/in-context/" target="_blank">here</a>.]]>
+                </comment>
+                <config_path>payment/paypal_express/in_context</config_path>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\InContextApi</frontend_model>
+            </field>
+            <field id="merchant_id" translate="label" type="text" sortOrder="22" showInDefault="1" showInWebsite="1">
+                <label>Your PayPal Merchant account Id</label>
+                <config_path>payment/paypal_express/merchant_id</config_path>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\MerchantId</frontend_model>
+            </field>
+            <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="23" showInDefault="1" showInWebsite="1">
                 <label>Enable PayPal Credit</label>
                 <comment><![CDATA[PayPal Express Checkout lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
@@ -142,9 +155,6 @@
                 <config_path>payment/paypal_express_bml/active</config_path>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\BmlApi</frontend_model>
-                <requires>
-                    <field id="enable_express_checkout"/>
-                </requires>
             </field>
             <group id="advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="30">
                 <label>Advertise PayPal Credit</label>
