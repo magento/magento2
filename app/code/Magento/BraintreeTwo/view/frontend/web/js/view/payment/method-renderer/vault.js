@@ -74,7 +74,7 @@ define([
                     fullScreenLoader.stopLoader();
                     self.hostedFields(function (formComponent) {
                         formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
-                        formComponent.additionalData.token = self.publicHash;
+                        formComponent.additionalData['public_hash'] = self.publicHash;
                         formComponent.code = 'vault';
                         formComponent.placeOrder();
                     });
