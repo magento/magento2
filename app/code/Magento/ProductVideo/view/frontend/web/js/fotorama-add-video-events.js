@@ -97,6 +97,7 @@ define([
         },
 
         PV: 'product-video', // [CONST]
+        PVLOADED: 'fotorama__product-video--loaded', // [CONST]
         VID: 'video', // [CONST]
         VI: 'vimeo', // [CONST]
         FTVC: 'fotorama__video-close',
@@ -147,7 +148,7 @@ define([
          * @private
          */
         _checkFullscreen: function () {
-            if (this.fotoramaItem.hasClass('fotorama--fullscreen')) {
+            if (this.element.data('fotorama').fullScreen || false) {
                 this.isFullscreen = true;
             }
         },
@@ -246,11 +247,9 @@ define([
          * @private
          */
         _hideCloseVideo: function () {
-            this.fotoramaItem.find('.' + this.FTVC).css({
-                opacity: 0,
-                transform: 'translate3d(95px, -95px, 0)',
-                display: 'none'
-            });
+            $(this.element)
+                .find('.' + this.FTVC)
+                .removeClass('fotorama-show-control');
             $('.' + this.FTAR).removeClass('hidden-video');
         },
 
@@ -259,11 +258,9 @@ define([
          * @private
          */
         _showCloseVideo: function () {
-            this.fotoramaItem.find('.' + this.FTVC).css({
-                opacity: 1,
-                transform: 'translate3d(0px, 0px, 0)',
-                display: 'block'
-            });
+            $(this.element)
+                .find('.' + this.FTVC)
+                .addClass('fotorama-show-control');
             $('.' + this.FTAR).addClass('hidden-video');
         },
 
@@ -614,21 +611,16 @@ define([
          */
         _unloadVideoPlayer: function ($wrapper, current, close) {
             var self = this;
-
+            $wrapper.find('.' + this.PVLOADED).not('.fotorama__active').removeClass(this.PVLOADED);
             $wrapper.find('.' + this.PV).each(function () {
                 var $item = $(this).parent(),
                     cloneVideoDiv,
                     iframeElement = $(this).find('iframe'),
                     currentIndex,
-                    itemIndex,
-                    videoPreview = $item.find('img').not('.fotorama__img--full');
+                    itemIndex;
 
                 if (iframeElement.length === 0) {
                     return;
-                }
-
-                if (!videoPreview.is(':visible')) {
-                    videoPreview.show();
                 }
 
                 currentIndex = current.activeFrame.$stageFrame.index();

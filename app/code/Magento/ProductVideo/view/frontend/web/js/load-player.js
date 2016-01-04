@@ -189,7 +189,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                              */
                             'onReady': function onPlayerReady() {
                                 self._player.getDuration();
-                                self.element.closest('.fotorama-video-container').find('img').hide();
+                                self.element.closest('.fotorama__stage__frame').addClass('fotorama__product-video--loaded');
                             },
 
                             /**
@@ -336,7 +336,7 @@ define(['jquery', 'jquery/ui'], function ($) {
 
             // Froogaloop throws error without a registered ready event
             this._player.addEvent('ready', function (id) {
-                $('#' + id).closest('.fotorama-video-container').find('img').hide();
+                $('#' + id).closest('.fotorama__stage__frame').addClass('fotorama__product-video--loaded');
             });
         },
 
