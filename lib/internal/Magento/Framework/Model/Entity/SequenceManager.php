@@ -34,18 +34,26 @@ class SequenceManager
     protected $logger;
 
     /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    protected $appResource;
+
+    /**
      * @param MetadataPool $metadataPool
      * @param SequenceRegistry $sequenceRegistry
      * @param LoggerInterface $logger
+     * @param \Magento\Framework\App\ResourceConnection $appResource
      */
     public function __construct(
         MetadataPool $metadataPool,
         SequenceRegistry $sequenceRegistry,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        \Magento\Framework\App\ResourceConnection $appResource
     ) {
         $this->metadataPool = $metadataPool;
         $this->sequenceRegistry = $sequenceRegistry;
         $this->logger = $logger;
+        $this->appResource = $appResource;
     }
 
     /**
@@ -66,7 +74,7 @@ class SequenceManager
         }
         try {
             return $metadata->getEntityConnection()->insert(
-                $metadata->getEntityConnection()->getTableName($sequenceInfo['sequenceTable']),
+                $this->appResource->getTableName($sequenceInfo['sequenceTable']),
                 ['sequence_value' => $identifier]
             );
         } catch (\Exception $e) {
@@ -85,7 +93,7 @@ class SequenceManager
         }
         try {
             return $metadata->getEntityConnection()->delete(
-                $metadata->getEntityConnection()->getTableName($sequenceInfo['sequenceTable']),
+                $this->appResource->getTableName($sequenceInfo['sequenceTable']),
                 ['sequence_value = ?' => $identifier]
             );
         } catch (\Exception $e) {
