@@ -154,6 +154,8 @@ define(
              */
             clearTimeout: function () {
                 clearTimeout(this.timeoutId);
+
+                return this;
             },
 
             /**
@@ -170,10 +172,7 @@ define(
                             /**
                              * {Function}
                              */
-                            always: function () {
-                                fullScreenLoader.startLoader();
-                                window.location.reload();
-                            }
+                            always: this.alertActionHandler.bind(this)
                         }
                     }
                 );
@@ -184,9 +183,19 @@ define(
             /**
              * {Function}
              */
+            alertActionHandler: function () {
+                fullScreenLoader.startLoader();
+                window.location.reload();
+            },
+
+            /**
+             * {Function}
+             */
             fail: function () {
                 fullScreenLoader.stopLoader();
                 this.isPlaceOrderActionAllowed(true);
+
+                return this;
             },
 
             /**
@@ -196,6 +205,8 @@ define(
                 this.placeOrderHandler().fail(function () {
                     fullScreenLoader.stopLoader();
                 });
+
+                return this;
             }
         });
     }
