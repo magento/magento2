@@ -5,8 +5,9 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Helper;
 
-use Magento\Payment\Gateway\Helper;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Payment\Gateway\Helper;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**
  * Class SubjectReader
@@ -94,10 +95,10 @@ class SubjectReader
      */
     public function readPublicHash(array $subject)
     {
-        if (empty($subject['public_hash'])) {
+        if (empty($subject[PaymentTokenInterface::PUBLIC_HASH])) {
             throw new \InvalidArgumentException('The "public_hash" field does not exists');
         }
 
-        return $subject['public_hash'];
+        return $subject[PaymentTokenInterface::PUBLIC_HASH];
     }
 }
