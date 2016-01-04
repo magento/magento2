@@ -14,11 +14,8 @@ define([
     return Insert.extend({
         defaults: {
             behaviourType: 'simple',
+            externalFilterMode: true,
             externalCondition: 'nin',
-            externalFilter: {
-                'condition_type': '${ $.externalCondition }',
-                value: []
-            },
             settings: {
                 edit: {
                     listens: {
@@ -142,16 +139,20 @@ define([
         },
 
         updateExternalFiltersModifier: function (items) {
-            var provider = this.selections(),
-                index = provider && provider.indexField,
+            var provider ,
+                index,
                 filter = {};
 
-            if (!items || !items.length) {
+            if (!this.externalFilterMode || !items || !items.length) {
                 return;
             }
 
-            filter[provider.indexField] = this.externalFilter;
-            filter[provider.indexField].value = _.pluck(items, index);
+            provider = this.selections();
+            index = provider && provider.indexField;
+            filter[provider.indexField] = {
+                'condition_type': this.externalCondition,
+                value: _.pluck(items, index)
+            };
             this.set('externalFiltersModifier', filter);
         },
 
