@@ -12,6 +12,7 @@ define(
         Component,
         $
     ) {
+        'use strict';
 
         return Component.extend({
 
@@ -26,6 +27,9 @@ define(
                 return this.initEvents();
             },
 
+            /**
+             * @returns {Object}
+             */
             initEvents: function () {
                 $('#' + this.id).off('click.' + this.id)
                     .on('click.' + this.id, this.click.bind(this));
@@ -33,6 +37,10 @@ define(
                 return this;
             },
 
+            /**
+             * @param {Object} event
+             * @returns void
+             */
             click: function (event) {
                 var $paypalButton = $('#' + this.paypalButton),
                     $addToCartButton = $('#' + this.id)
@@ -55,6 +63,9 @@ define(
                 $addToCartButton.click();
             },
 
+            /**
+             * @returns void
+             */
             cartUpdate: function () {
                 $('#' + this.paypalButton).click();
             }

@@ -18,11 +18,16 @@ define(
         paypalExpressCheckout,
         customerData
     ) {
+        'use strict';
 
         return Component.extend({
 
             defaults: {
                 clientConfig: {
+
+                    /**
+                     * @param {Object} event
+                     */
                     click: function (event) {
                         event.preventDefault();
 
@@ -30,7 +35,9 @@ define(
 
                         $.get(
                             this.path,
-                            {button: this.button}
+                            {
+                                button: this.button
+                            }
                         ).done(
                             function (response) {
                                 paypal.checkout.startFlow(response.token);
