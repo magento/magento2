@@ -23,10 +23,7 @@ define([
             loading: false,
             autoRender: true,
             contentSelector: '${$.name}',
-            externalTransfer: false,
-            internalTransfer: false,
             externalData: [],
-            deps: '${ $.externalProvider }',
             'update_url': '${ $.render_url }',
             params: {
                 namespace: '${ $.ns }'
@@ -76,7 +73,7 @@ define([
 
         /** @inheritdoc */
         initConfig: function (config) {
-            this.initTransferConfig(config)._super();
+            this.initDataLink(config)._super();
             this.contentSelector = this.contentSelector.replace(/\./g, '_');
 
             return this;
@@ -88,18 +85,26 @@ define([
          * @param {Object} config
          * @returns {Object}
          */
-        initTransferConfig: function (config) {
+        initDataLink: function (config) {
             var key, value;
 
-            if (config.externalTransfer) {
+            if (config.dataLinks) {
                 _.each(config.externalData, function (val) {
                     value = val;
                     key = 'externalValue.' + val.replace('data.', '');
+
+                    if (config.dataLinks.imports) {
+                        this.imports[key] = '${ $.externalProvider }:' + value;
+                    }
+
+                    if (config.dataLinks.exports) {
+                        this.exports[key] = '${ $.externalProvider }:' + value;
+                    }
                     this.links[key] = '${ $.externalProvider }:' + value;
                 }, this.constructor.defaults);
             }
 
-            if (config.internalTransfer) {
+            if (config.realTimeLink) {
                 this.constructor.defaults.links.externalValue = 'value';
             }
 
