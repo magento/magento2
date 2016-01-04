@@ -47,9 +47,6 @@ define(
                     .on('cartUpdate.' + this.id, this.cartUpdate.bind(this));
 
                 if (!$addToCartButton.length) {
-
-                    debugger;
-
                     $paypalButton.click();
 
                     return;

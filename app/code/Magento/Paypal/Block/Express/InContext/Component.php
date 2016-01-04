@@ -14,6 +14,8 @@ use Magento\Framework\View\Element\Template\Context;
  */
 class Component extends Template
 {
+    const IS_BUTTON_CONTEXT_INDEX = 'is_button_context';
+
     /**
      * @var ResolverInterface
      */
@@ -74,5 +76,13 @@ class Component extends Template
     public function getMerchantId()
     {
         return 'HFCTQCHQ3JB8S';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isButtonContext()
+    {
+        return (bool) $this->getData(self::IS_BUTTON_CONTEXT_INDEX);
     }
 }
