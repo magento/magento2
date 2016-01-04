@@ -19,6 +19,10 @@
             <include_in_menu>
                 <input>select</input>
             </include_in_menu>
+            <use_default_name>
+                <selector>[name="use_default[]"][value="name"]</selector>
+                <input>checkbox</input>
+            </use_default_name>
         </fields>
     </general_information>
     <display_setting>
