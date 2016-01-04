@@ -74,7 +74,8 @@ class Stopwords implements PreprocessorInterface
         $this->readFactory = $readFactory;
         $this->configCache = $configCache;
         $this->esConfig = $esConfig;
-        $this->fileDir = $fileDir;
+        $rootDir = preg_replace('/app\/code.*/i', '', dirname(__DIR__));
+        $this->fileDir = $rootDir . $fileDir;
     }
 
     /**
