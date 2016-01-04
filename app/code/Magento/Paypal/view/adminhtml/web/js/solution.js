@@ -35,6 +35,23 @@ define([
             enableExpress:  '[data-enable="express"]',
 
             /**
+             * An attribute of the element responsible for the activation of the
+             * Payflow Express In-Context Checkout Experience (data attribute)
+             */
+            enableInContext: '[data-enable="in-context"]',
+
+            /**
+             * An attribute of the element responsible for the activation of the
+             * PayPal Express In-Context Checkout Experience (data attribute)
+             */
+            enableInContextPayPal: '[data-enable="in-context-api"]',
+
+            /**
+             * PayPal Merchant account Id
+             */
+            enableMerchantId: '[data-enable="merchant-id"]',
+
+            /**
              * An attribute of the element responsible for the activation of the Payflow Bml (data attribute)
              */
             enableBml:      '[data-enable="bml"]',
@@ -148,6 +165,9 @@ define([
                                 buttonConfiguration: this.buttonConfiguration,
                                 enableButton: this.enableButton,
                                 enableExpress: this.enableExpress,
+                                enableInContext: this.enableInContext,
+                                enableInContextPayPal: this.enableInContextPayPal,
+                                enableMerchantId: this.enableMerchantId,
                                 enableBml: this.enableBml,
                                 enableBmlPayPal: this.enableBmlPayPal,
                                 solutionsElements: this.solutionsElements,
