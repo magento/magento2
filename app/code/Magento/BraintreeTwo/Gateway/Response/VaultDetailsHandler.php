@@ -84,7 +84,7 @@ class VaultDetailsHandler implements HandlerInterface
         $payment = $paymentDO->getPayment();
 
         // add vault payment token entity to extension attributes
-        $paymentToken = $this->getVaultPaymentToken($transaction, $payment);
+        $paymentToken = $this->getVaultPaymentToken($transaction);
         if (null !== $paymentToken) {
             $extensionAttributes = $payment->getExtensionAttributes();
             if (null === $extensionAttributes) {
@@ -99,10 +99,9 @@ class VaultDetailsHandler implements HandlerInterface
      * Get vault payment token entity
      *
      * @param \Braintree\Transaction $transaction
-     * @param OrderPaymentInterface $payment
      * @return PaymentTokenInterface|null
      */
-    protected function getVaultPaymentToken(Transaction $transaction, OrderPaymentInterface $payment)
+    protected function getVaultPaymentToken(Transaction $transaction)
     {
         // Check token existing in gateway response
         $token = $transaction->creditCardDetails->token;
