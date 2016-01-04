@@ -11,6 +11,9 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Paypal\Helper\Data as PaypalHelper;
 
+/**
+ * Class ExpressConfigProvider
+ */
 class ExpressConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -86,6 +89,7 @@ class ExpressConfigProvider implements ConfigProviderInterface
         $config = [
             'payment' => [
                 'paypalExpress' => [
+                    'isContextCheckout' => true,
                     'paymentAcceptanceMarkHref' => $this->config->getPaymentMarkWhatIsPaypalUrl(
                         $this->localeResolver
                     ),
