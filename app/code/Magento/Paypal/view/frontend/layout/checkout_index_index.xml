@@ -7,6 +7,13 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceContainer name="after.body.start">
+            <referenceBlock name="paypal.express-in-context.component">
+                <arguments>
+                    <argument name="is_button_context" xsi:type="boolean">false</argument>
+                </arguments>
+            </referenceBlock>
+        </referenceContainer>
         <referenceBlock name="checkout.root">
             <arguments>
                 <argument name="jsLayout" xsi:type="array">

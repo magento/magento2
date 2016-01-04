@@ -1,0 +1,89 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+define(
+    [
+        'underscore',
+        'jquery',
+        'uiComponent',
+        'paypalInContextExpressCheckout',
+        'Magento_Customer/js/customer-data',
+        'domReady!'
+    ],
+    function (
+        _,
+        $,
+        Component,
+        paypalExpressCheckout,
+        customerData
+    ) {
+
+        return Component.extend({
+
+            defaults: {
+                clientConfig: {
+                    click: function (event) {
+                        event.preventDefault();
+
+                        paypalExpressCheckout.checkout.initXO();
+
+                        $.get(
+                            this.path,
+                            {button: this.button}
+                        ).done(
+                            function (response) {
+                                paypal.checkout.startFlow(response.token);
+                            }
+                        ).fail(
+                            function () {
+                                paypalExpressCheckout.checkout.closeFlow();
+                            }
+                        ).always(
+                            function () {
+                                $('body').trigger('processStop');
+                            }
+                        );
+                    }
+                }
+            },
+
+            /**
+             * @returns {Object}
+             */
+            initialize: function () {
+                this._super();
+
+                return this.initClient()
+                    .initEvent();
+            },
+
+            /**
+             * @returns {Object}
+             */
+            initClient: function () {
+                _.each(this.clientConfig, function (fn, name) {
+                    if (typeof fn === 'function') {
+                        this.clientConfig[name] = fn.bind(this);
+                    }
+                }, this);
+
+                paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
+
+                return this;
+            },
+
+            /**
+             * @returns {Object}
+             */
+            initEvent: function () {
+                customerData.get('cart')
+                    .subscribe(function () {
+                        $('#' + this.id).trigger('cartUpdate');
+                    }.bind(this));
+
+                return this;
+            }
+        });
+    }
+);

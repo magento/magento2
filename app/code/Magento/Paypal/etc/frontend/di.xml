@@ -21,6 +21,11 @@
             <argument name="paypalSession" xsi:type="object">Magento\Paypal\Model\Session</argument>
         </arguments>
     </type>
+    <type name="Magento\Paypal\Controller\Express\GetToken">
+        <arguments>
+            <argument name="paypalSession" xsi:type="object">Magento\Paypal\Model\Session</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Paypal\Model\PayflowSession\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">paypal_payflow</argument>
@@ -69,6 +74,15 @@
                 <item name="paypal_iframe_config_provider" xsi:type="object">Magento\Paypal\Model\IframeConfigProvider</item>
                 <item name="paypal_billing_agreement_config_provider" xsi:type="object">Magento\Paypal\Model\BillingAgreementConfigProvider</item>
                 <item name="paypal_iframe_cc_config_provider" xsi:type="object">PaypalIframeCcConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Block\Express\InContext\Minicart\Button">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Magento_Paypal::express/in-context/shortcut/button.phtml</item>
+                <item name="alias" xsi:type="string">paypal.express-in-context.mini-cart</item>
+                <item name="button_id" xsi:type="string">paypal-express-in-context-mini-cart</item>
             </argument>
         </arguments>
     </type>

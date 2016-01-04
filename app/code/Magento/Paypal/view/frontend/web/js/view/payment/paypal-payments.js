@@ -12,10 +12,20 @@ define(
         rendererList
     ) {
         'use strict';
+
+        var isContextCheckout = window.checkoutConfig.payment.paypalExpress.isContextCheckout,
+            paypalExpress,
+            payflowExpress;
+
+            paypalExpress = 'Magento_Paypal/js/view/payment/method-renderer'
+                + (isContextCheckout ? '/in-context/checkout-express' : '/paypal-express');
+            payflowExpress = 'Magento_Paypal/js/view/payment/method-renderer'
+                + (isContextCheckout ? '/in-context/checkout-express' : '/payflow-express');
+
         rendererList.push(
             {
                 type: 'paypal_express',
-                component: 'Magento_Paypal/js/view/payment/method-renderer/paypal-express'
+                component: paypalExpress
             },
             {
                 type: 'paypal_express_bml',
@@ -23,7 +33,7 @@ define(
             },
             {
                 type: 'payflow_express',
-                component: 'Magento_Paypal/js/view/payment/method-renderer/payflow-express'
+                component: payflowExpress
             },
             {
                 type: 'payflow_express_bml',
