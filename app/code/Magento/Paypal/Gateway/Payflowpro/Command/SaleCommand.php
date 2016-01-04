@@ -8,10 +8,13 @@ namespace Magento\Paypal\Gateway\Payflowpro\Command;
 use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Payment\Helper\Formatter;
 use Magento\Paypal\Model\Payflow\Transparent;
 
 class SaleCommand implements CommandInterface
 {
+    use Formatter;
+
     /**
      * @var Transparent
      */
@@ -48,7 +51,7 @@ class SaleCommand implements CommandInterface
         $token = $payment->getExtensionAttributes()->getVaultPaymentToken();
 
         $request = $this->payflowFacade->buildBasicRequest();
-        $request->setAmt(round($amount, 2));
+        $request->setAmt($this->formatPrice($amount));
         $request->setTrxtype(Transparent::TRXTYPE_SALE);
         $request->setOrigid($token->getGatewayToken());
 

@@ -191,7 +191,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * @param int $orderPaymentId Order payment ID.
      * @return bool
      */
-    protected function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
+    public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
     {
         return $this->paymentTokenResourceModel->addLinkToOrderPayment($paymentTokenId, $orderPaymentId);
     }

@@ -9,9 +9,7 @@ namespace Magento\Vault\Observer;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
-use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
@@ -59,7 +57,16 @@ class AfterPaymentSaveObserver implements ObserverInterface
         $extensionAttributes = $payment->getExtensionAttributes();
 
         $paymentToken = $this->getPaymentToken($extensionAttributes);
-        if ($paymentToken === null || $paymentToken->getEntityId() !== null) {
+        if ($paymentToken === null) {
+            return $this;
+        }
+
+        if ($paymentToken->getEntityId() !== null) {
+            $this->paymentTokenManagement->addLinkToOrderPayment(
+                $paymentToken->getEntityId(),
+                $payment->getEntityId()
+            );
+
             return $this;
         }
 

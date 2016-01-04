@@ -36,6 +36,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->componentFactory = $this->getMockBuilder(TokenUiComponentInterfaceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 

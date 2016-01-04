@@ -19,7 +19,7 @@ define([
          * @returns {String}
          */
         getToken: function () {
-            return this.public_hash;
+            return this.publicHash;
         },
 
         /**
@@ -27,7 +27,7 @@ define([
          * @returns {String}
          */
         getMaskedCard: function () {
-            return 'XXXX-XXXX-XXXX-' + this.details.cc_last_4;
+            return 'XXXX-XXXX-XXXX-' + this.details['cc_last_4'];
         },
 
         /**
@@ -35,7 +35,7 @@ define([
          * @returns {String}
          */
         getExpirationDate: function () {
-            return this.details.cc_exp_month + '/' + this.details.cc_exp_year;
+            return this.details['cc_exp_month'] + '/' + this.details['cc_exp_year'];
         },
 
         /**
@@ -43,7 +43,7 @@ define([
          * @returns {String}
          */
         getCardType: function () {
-            return this.details.cc_type;
+            return this.details['cc_type'];
         }
     });
 });

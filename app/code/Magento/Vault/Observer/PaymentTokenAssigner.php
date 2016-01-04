@@ -14,13 +14,15 @@ use Magento\Vault\Model\PaymentTokenManagement;
 
 class PaymentTokenAssigner extends AbstractDataAssignObserver
 {
-    const TOKEN_KEY = "token";
-
     /**
      * @var PaymentTokenManagement
      */
     private $paymentTokenManagement;
 
+    /**
+     * PaymentTokenAssigner constructor.
+     * @param PaymentTokenManagement $paymentTokenManagement
+     */
     public function __construct(
         PaymentTokenManagement $paymentTokenManagement
     ) {
@@ -35,7 +37,7 @@ class PaymentTokenAssigner extends AbstractDataAssignObserver
     {
         $dataObject = $this->readDataArgument($observer);
 
-        $tokenPublicHash = $dataObject->getData(self::TOKEN_KEY);
+        $tokenPublicHash = $dataObject->getData(PaymentTokenInterface::PUBLIC_HASH);
 
         if ($tokenPublicHash === null) {
             return;
