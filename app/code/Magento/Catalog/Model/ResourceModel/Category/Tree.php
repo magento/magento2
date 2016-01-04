@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -88,15 +91,20 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     protected $_catalogCategory;
 
     /**
-     * Construct
-     *
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * Tree constructor.
      * @param \Magento\Catalog\Model\ResourceModel\Category $catalogCategory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
-     * @param \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory $collectionFactory
+     * @param Collection\Factory $collectionFactory
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category $catalogCategory,
@@ -105,7 +113,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
-        \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory $collectionFactory
+        \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory $collectionFactory,
+        MetadataPool $metadataPool
     ) {
         $this->_catalogCategory = $catalogCategory;
         $this->_cache = $cache;
@@ -124,6 +133,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         $this->_eventManager = $eventManager;
         $this->_attributeConfig = $attributeConfig;
         $this->_collectionFactory = $collectionFactory;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -300,22 +310,25 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         $filter = $collection->getAllIdsSql();
         $attributeId = $this->_catalogCategory->getIsActiveAttributeId();
 
+        $meta = $this->metadataPool->getMetadata(CategoryInterface::class);
+        $linkField = $meta->getLinkField();
+
         $conditionSql = $this->_conn->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
         $table = $this->_coreResource->getTableName('catalog_category_entity_int');
         $bind = ['attribute_id' => $attributeId, 'store_id' => $storeId, 'zero_store_id' => 0, 'cond' => 0];
         $select = $this->_conn->select()->from(
             ['d' => $table],
-            ['d.entity_id']
+            ['d.' . $linkField]
         )->where(
             'd.attribute_id = :attribute_id'
         )->where(
             'd.store_id = :zero_store_id'
         )->where(
-            'd.entity_id IN (?)',
+            'd.' . $linkField . ' IN (?)',
             new \Zend_Db_Expr($filter)
         )->joinLeft(
             ['c' => $table],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = d.entity_id',
+            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $linkField . ' = d.' . $linkField,
             []
         )->where(
             $conditionSql . ' = :cond'

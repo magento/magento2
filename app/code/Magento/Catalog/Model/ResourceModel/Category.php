@@ -540,6 +540,9 @@ class Category extends AbstractResource
      */
     public function getChildrenAmount($category, $isActiveFlag = true)
     {
+        $meta = $this->metadataPool->getMetadata(CategoryInterface::class);
+        $linkField = $meta->getLinkField();
+
         $storeId = $this->_storeManager->getStore()->getId();
         $attributeId = $this->getIsActiveAttributeId();
         $table = $this->getTable([$this->getEntityTablePrefix(), 'int']);
@@ -557,11 +560,11 @@ class Category extends AbstractResource
             ['COUNT(m.entity_id)']
         )->joinLeft(
             ['d' => $table],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.entity_id = m.entity_id',
+            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.' . $linkField . ' = m.entity_id',
             []
         )->joinLeft(
             ['c' => $table],
-            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = m.entity_id",
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $linkField . ' = m.entity_id",
             []
         )->where(
             'm.path LIKE :c_path'
@@ -766,6 +769,9 @@ class Category extends AbstractResource
      */
     public function getChildren($category, $recursive = true)
     {
+        $meta = $this->metadataPool->getMetadata(CategoryInterface::class);
+        $linkField = $meta->getLinkField();
+
         $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
@@ -781,11 +787,11 @@ class Category extends AbstractResource
             'entity_id'
         )->joinLeft(
             ['d' => $backendTable],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.entity_id = m.entity_id',
+            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.' . $linkField . ' = m.entity_id',
             []
         )->joinLeft(
             ['c' => $backendTable],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = m.entity_id',
+            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $linkField . ' = m.entity_id',
             []
         )->where(
             $checkSql . ' = :scope'
@@ -999,6 +1005,26 @@ class Category extends AbstractResource
         $select = $connection->select();
         $select->from($this->getEntityTable(), 'COUNT(*)')->where('parent_id != ?', 0);
         return (int)$connection->fetchOne($select);
+    }
+
+    /**
+     * Reset firstly loaded attributes
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @param integer $entityId
+     * @param array|null $attributes
+     * @return $this
+     */
+    public function load($object, $entityId, $attributes = [])
+    {
+        $this->_attributes = [];
+        $this->loadAttributesMetadata($attributes);
+        $this->entityManager->load(CategoryInterface::class, $object, $entityId);
+        if (!$object->getId()) {
+            $object->isObjectNew(true);
+        }
+        $this->_afterLoad($object);
+        return $this;
     }
 
     /**
