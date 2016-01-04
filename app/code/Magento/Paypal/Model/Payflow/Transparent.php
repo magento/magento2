@@ -6,8 +6,10 @@
 namespace Magento\Paypal\Model\Payflow;
 
 use Magento\Framework\DataObject;
+use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Payflowpro;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Framework\Exception\LocalizedException;
@@ -26,6 +28,8 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
  */
 class Transparent extends Payflowpro implements TransparentInterface
 {
+    use Formatter;
+
     const CC_DETAILS = 'cc_details';
 
     /**
@@ -49,6 +53,11 @@ class Transparent extends Payflowpro implements TransparentInterface
     private $paymentTokenFactory;
 
     /**
+     * @var OrderPaymentExtensionInterfaceFactory
+     */
+    private $paymentExtensionFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -63,6 +72,8 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @param Gateway $gateway
      * @param HandlerInterface $errorHandler
      * @param ResponseValidator $responseValidator
+     * @param PaymentTokenInterfaceFactory $paymentTokenFactory
+     * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -84,6 +95,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         HandlerInterface $errorHandler,
         ResponseValidator $responseValidator,
         PaymentTokenInterfaceFactory $paymentTokenFactory,
+        OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -108,6 +120,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         );
         $this->responseValidator = $responseValidator;
         $this->paymentTokenFactory = $paymentTokenFactory;
+        $this->paymentExtensionFactory = $paymentExtensionFactory;
     }
 
     /**
@@ -140,7 +153,7 @@ class Transparent extends Payflowpro implements TransparentInterface
      */
     public function authorize(InfoInterface $payment, $amount)
     {
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
+        /** @var Payment $payment */
         $request = $this->buildBasicRequest();
 
         /** @var \Magento\Sales\Model\Order $order */
@@ -151,7 +164,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         $token = $payment->getAdditionalInformation(self::PNREF);
         $request->setData('trxtype', self::TRXTYPE_AUTH_ONLY);
         $request->setData('origid', $token);
-        $request->setData('amt', round($amount, 2));
+        $request->setData('amt', $this->formatPrice($amount));
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
@@ -182,11 +195,11 @@ class Transparent extends Payflowpro implements TransparentInterface
     }
 
     /**
-     * @param InfoInterface|Payment $payment
+     * @param Payment $payment
      * @param string $token
      * @throws LocalizedException
      */
-    protected function createPaymentToken(InfoInterface $payment, $token)
+    protected function createPaymentToken(Payment $payment, $token)
     {
         /** @var PaymentTokenInterface $paymentToken */
         $paymentToken = $this->paymentTokenFactory->create();
@@ -196,7 +209,22 @@ class Transparent extends Payflowpro implements TransparentInterface
             json_encode($payment->getAdditionalInformation(Transparent::CC_DETAILS))
         );
 
-        $payment->getExtensionAttributes()->setVaultPaymentToken($paymentToken);
+        $this->getPaymentExtensionAttributes($payment)->setVaultPaymentToken($paymentToken);
+    }
+
+    /**
+     * @param Payment $payment
+     * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface
+     */
+    private function getPaymentExtensionAttributes(Payment $payment)
+    {
+        $extensionAttributes = $payment->getExtensionAttributes();
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->paymentExtensionFactory->create();
+            $payment->setExtensionAttributes($extensionAttributes);
+        }
+
+        return $extensionAttributes;
     }
 
     /**
@@ -210,11 +238,12 @@ class Transparent extends Payflowpro implements TransparentInterface
      */
     public function capture(InfoInterface $payment, $amount)
     {
+        /** @var Payment $payment */
         $token = $payment->getAdditionalInformation(self::PNREF);
         parent::capture($payment, $amount);
 
-        if ($token) {
-            //$this->createPaymentToken($payment, $token);
+        if ($token && !$payment->getAuthorizationTransaction()) {
+            $this->createPaymentToken($payment, $token);
         }
 
         return $this;

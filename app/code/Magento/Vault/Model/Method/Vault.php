@@ -9,7 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\Command;
-use Magento\Payment\Gateway\Command\CommandManagerInterface;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\ConfigFactoryInterface;
 use Magento\Payment\Gateway\ConfigInterface;
@@ -78,6 +78,11 @@ final class Vault implements VaultPaymentInterface
     private $tokenManagement;
 
     /**
+     * @var OrderPaymentExtensionInterfaceFactory
+     */
+    private $paymentExtensionFactory;
+
+    /**
      * Constructor
      *
      * @param ConfigInterface $config
@@ -86,8 +91,9 @@ final class Vault implements VaultPaymentInterface
      * @param MethodInterface $vaultProvider
      * @param ManagerInterface $eventManager
      * @param ValueHandlerPoolInterface $valueHandlerPool
-     * @param Command\CommandManagerPoolInterface $commandExecutorPool
+     * @param Command\CommandManagerPoolInterface $commandManagerPool
      * @param PaymentTokenManagementInterface $tokenManagement
+     * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      */
     public function __construct(
         ConfigInterface $config,
@@ -96,8 +102,9 @@ final class Vault implements VaultPaymentInterface
         MethodInterface $vaultProvider,
         ManagerInterface $eventManager,
         ValueHandlerPoolInterface $valueHandlerPool,
-        Command\CommandManagerPoolInterface $commandExecutorPool,
-        PaymentTokenManagementInterface $tokenManagement
+        Command\CommandManagerPoolInterface $commandManagerPool,
+        PaymentTokenManagementInterface $tokenManagement,
+        OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
     ) {
         $this->config = $config;
         $this->configFactory = $configFactory;
@@ -105,8 +112,9 @@ final class Vault implements VaultPaymentInterface
         $this->valueHandlerPool = $valueHandlerPool;
         $this->vaultProvider = $vaultProvider;
         $this->eventManager = $eventManager;
-        $this->commandExecutorPool = $commandExecutorPool;
+        $this->commandExecutorPool = $commandManagerPool;
         $this->tokenManagement = $tokenManagement;
+        $this->paymentExtensionFactory = $paymentExtensionFactory;
     }
 
     /**
@@ -460,9 +468,24 @@ final class Vault implements VaultPaymentInterface
             throw new \LogicException("No token found");
         }
 
-        $extensionAttributes = $orderPayment->getExtensionAttributes();
+        $extensionAttributes = $this->getPaymentExtensionAttributes($orderPayment);
         $extensionAttributes->setVaultPaymentToken($paymentToken);
         $orderPayment->setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @param OrderPaymentInterface $payment
+     * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface
+     */
+    private function getPaymentExtensionAttributes(OrderPaymentInterface $payment)
+    {
+        $extensionAttributes = $payment->getExtensionAttributes();
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->paymentExtensionFactory->create();
+            $payment->setExtensionAttributes($extensionAttributes);
+        }
+
+        return $extensionAttributes;
     }
 
     /**

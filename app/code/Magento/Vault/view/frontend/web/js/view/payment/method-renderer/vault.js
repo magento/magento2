@@ -111,7 +111,7 @@ define(
                 return {
                     method: this.getCode(),
                     'additional_data': {
-                        token: this.getToken()
+                        public_hash: this.getToken()
                     }
                 };
             }

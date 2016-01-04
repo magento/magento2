@@ -10,10 +10,13 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Payment\Helper\Formatter;
 use Magento\Paypal\Model\Payflow\Transparent;
 
 class AuthorizationCommand implements CommandInterface
 {
+    use Formatter;
+
     /**
      * @var Transparent
      */
@@ -59,7 +62,7 @@ class AuthorizationCommand implements CommandInterface
         $token = $payment->getExtensionAttributes()->getVaultPaymentToken();
         $request->setData('trxtype', Transparent::TRXTYPE_AUTH_ONLY);
         $request->setData('origid', $token->getGatewayToken());
-        $request->setData('amt', round($amount, 2));
+        $request->setData('amt', $this->formatPrice($amount));
 
         $response = $this->payflowFacade->postRequest($request, $this->payflowFacade->getConfig());
         $this->payflowFacade->processErrors($response);

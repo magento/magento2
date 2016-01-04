@@ -7,25 +7,12 @@ namespace Magento\Vault\Model\Method;
 
 use Magento\Framework\DataObject;
 use Magento\Payment\Gateway\Command;
-use Magento\Payment\Gateway\Command\CommandManagerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
 class NullPaymentProvider implements MethodInterface
 {
-    /**
-     * Performs command
-     *
-     * @param string $commandCode
-     * @param array $arguments
-     * @return null|Command\ResultInterface
-     */
-    public function executeByCode($commandCode, array $arguments = [])
-    {
-        return null;
-    }
-
     /**
      * Retrieve payment method code
      *
