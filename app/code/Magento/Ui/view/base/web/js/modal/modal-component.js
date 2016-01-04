@@ -1,5 +1,5 @@
 /**
- * Copyright � 2015 Magento. All rights reserved.
+ * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,10 @@ define([
                 title: '',
                 buttons: []
             },
-            templateRootSelector: '.modal_component'
+            valid: true,
+            listens: {
+                state: 'onState'
+            }
         },
 
         /**
@@ -34,8 +37,22 @@ define([
                 'closeModal',
                 'toggleModal',
                 'setPrevValues',
-                'actionCancel');
+                'actionCancel',
+                'validate');
             this.initializeContent();
+
+            return this;
+        },
+
+        /**
+         * Initializes modal configuration
+         *
+         * @returns {Object} Chainable.
+         */
+        initConfig: function () {
+            this._super();
+            this.modalClass = this.name.replace(/\./g, '_');
+            this.rootSelector = '.' + this.modalClass;
 
             return this;
         },
@@ -44,14 +61,26 @@ define([
          * Initialize modal's content components
          */
         initializeContent: function () {
-            $.async(this.templateRootSelector, this, this.initModal);
+            $.async(this.rootSelector, this, this.initModal);
         },
 
         /**
-         * Reset data from provider
+         * Init toolbar section so other components will be able to place something in it
          */
-        resetData: function () {
-            this.elems().forEach(this.resetValue, this);
+        initToolbarSection: function () {
+            this.set('toolbarSection', this.modal.data('modal').modal.find('header').get(0));
+        },
+
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Object} Chainable.
+         */
+        initObservable: function () {
+            this._super();
+            this.observe('state');
+
+            return this;
         },
 
         /**
@@ -65,6 +94,7 @@ define([
                 this.overrideModalButtonCallback();
                 this.options.modalCloseBtnHandler = this.actionCancel;
                 this.modal = $(element).modal(this.options);
+                this.initToolbarSection();
 
                 if (this.waitCbk) {
                     this.waitCbk();
@@ -80,8 +110,7 @@ define([
          */
         openModal: function () {
             if (this.modal) {
-                this.modal.modal('openModal');
-                this.applyData();
+                this.state(true);
             } else {
                 this.waitCbk = this.openModal;
             }
@@ -92,7 +121,7 @@ define([
          */
         closeModal: function () {
             if (this.modal) {
-                this.modal.modal('closeModal');
+                this.state(false);
             } else {
                 this.waitCbk = this.closeModal;
             }
@@ -102,19 +131,43 @@ define([
          * Toggle modal
          */
         toggleModal: function () {
-            var state;
-
             if (this.modal) {
-                state = this.modal.data('mage-modal').options.isOpen;
-
-                if (state) {
-                    this.closeModal();
-                } else {
-                    this.openModal();
-                }
+                this.state(!this.state());
             } else {
                 this.waitCbk = this.toggleModal;
             }
+        },
+
+        /**
+         * Wrap content in a modal of certain type
+         *
+         * @param {Boolean} state
+         */
+        onState: function (state) {
+            if (state) {
+                this.modal.modal('openModal');
+                this.applyData();
+            } else {
+                this.modal.modal('closeModal');
+            }
+        },
+
+        /**
+         * Validate everything validatable in modal
+         */
+        validate: function (elem) {
+            if (typeof elem.validate === 'function') {
+                this.valid = this.valid & elem.validate().valid;
+            } else if (elem.elems) {
+                elem.elems().forEach(this.validate, this);
+            }
+        },
+
+        /**
+         * Reset data from provider
+         */
+        resetData: function () {
+            this.elems().forEach(this.resetValue, this);
         },
 
         /**
@@ -155,6 +208,21 @@ define([
         },
 
         /**
+         * Triggers some method in every modal child elem, if this method is defined
+         *
+         * @param {String} actionName
+         * @param {String} targetName
+         * @param {HTMLElement} elem
+         */
+        triggerActionInChildElem: function (actionName, targetName, elem) {
+            if (typeof elem[actionName] === 'function' && (!targetName || elem.index === targetName)) {
+                elem[actionName]();
+            } else if (elem.elems) {
+                elem.elems().forEach(this.triggerActionInChildElem.bind(this, actionName, targetName), this);
+            }
+        },
+
+        /**
          * Override modal buttons callback placeholders with real callbacks
          */
         overrideModalButtonCallback: function () {
@@ -162,15 +230,26 @@ define([
 
             if (buttons && buttons.length) {
                 buttons.forEach(function (button) {
-                    button.click = (this[button.click] || this.actionNothing).bind(this);
+                    button.click = this.getButtonClickHandler(button.click);
                 }, this);
             }
         },
 
         /**
-         * Placeholder for unrecognized action
+         * Override modal buttons callback placeholders with real callbacks
          */
-        actionNothing: function () {},
+        getButtonClickHandler: function (clickConfig) {
+            if (_.isObject(clickConfig)) {
+                return clickConfig.closeAfter ?
+                    function () {
+                        this.triggerActionInChildElem(clickConfig.actionName, clickConfig.targetName, this);
+                        this.closeModal();
+                    }.bind(this) :
+                    this.triggerActionInChildElem.bind(this, clickConfig.actionName, clickConfig.targetName, this);
+            }
+
+            return this[clickConfig] ? this[clickConfig].bind(this) : function () {};
+        },
 
         /**
          * Cancels changes in modal:
@@ -187,7 +266,12 @@ define([
          * Can be extended by exporting 'gatherValues' result somewhere
          */
         actionDone: function () {
-            this.closeModal();
+            this.valid = true;
+            this.elems().forEach(this.validate, this);
+
+            if (this.valid) {
+                this.closeModal();
+            }
         }
     });
 });

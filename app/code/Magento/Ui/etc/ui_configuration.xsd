@@ -42,6 +42,7 @@
                     <xs:element type="modalConfiguration" name="modal"/>
                     <xs:element type="columnsControls" name="columnsControls"/>
                     <xs:element type="listingToolbarConfiguration" name="listingToolbar"/>
+                    <xs:element type="button" name="button"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -58,6 +59,7 @@
                     <xs:element type="containerConfiguration" name="container"/>
                     <xs:element name="field" type="field" />
                     <xs:element type="modalConfiguration" name="modal"/>
+                    <xs:element type="button" name="button"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
