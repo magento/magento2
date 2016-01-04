@@ -18,6 +18,6 @@ $code = $block->escapeHtml($block->getMethodCode());
           style="display:none"
               >
     <input type="hidden" name="payment[payment_method_nonce]" id="<?php /* @noEscape */ echo $code; ?>_nonce" value="" />
-    <input type="hidden" name="payment[token]" id="<?php /* @noEscape */ echo $code; ?>_public_hash" value="" />
+    <input type="hidden" name="payment[public_hash]" id="<?php /* @noEscape */ echo $code; ?>_public_hash" value="" />
     <?php echo $block->getChildHtml(); ?>
 </fieldset>
