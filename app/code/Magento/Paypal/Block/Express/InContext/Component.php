@@ -70,7 +70,7 @@ class Component extends Template
      */
     public function getEnvironment()
     {
-        return 'sandbox';
+        return (int) $this->config->getValue('sandbox_flag') ? 'sandbox' : 'production';
     }
 
     /**
@@ -86,7 +86,7 @@ class Component extends Template
      */
     public function getMerchantId()
     {
-        return 'HFCTQCHQ3JB8S';
+        return $this->config->getValue('merchant_id');
     }
 
     /**

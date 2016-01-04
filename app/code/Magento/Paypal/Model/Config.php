@@ -1484,6 +1484,7 @@ class Config extends AbstractConfig
             case 'child_authorization_number':
             case 'allow_ba_signup':
             case 'in_context':
+            case 'merchant_id':
                 return "payment/{$this->_methodCode}/{$fieldName}";
             default:
                 return $this->_mapMethodFieldset($fieldName);
