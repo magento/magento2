@@ -43,6 +43,7 @@
                 <item name="clone" xsi:type="string">BraintreeTwoCloneGatewayCommand</item>
                 <item name="vault_authorize" xsi:type="string">BraintreeTwoVaultAuthorizeGatewayCommand</item>
                 <item name="vault_sale" xsi:type="string">BraintreeTwoVaultSaleGatewayCommand</item>
+                <item name="vault_capture" xsi:type="string">BraintreeTwoVaultCaptureGatewayCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -168,7 +169,6 @@
             <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\ResponseValidator</argument>
         </arguments>
     </virtualType>
-
     <virtualType name="BraintreeTwoCaptureDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
@@ -196,6 +196,25 @@
         </arguments>
     </virtualType>
 
+    <!-- Vault Capture command -->
+    <virtualType name="BraintreeTwoVaultCaptureGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BraintreeTwoVaultCaptureDataBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale</argument>
+            <argument name="handler" xsi:type="object">BraintreeTwoCloneResponseHandler</argument>
+            <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\ResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoVaultCaptureDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="vault_capture" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\VaultCaptureDataBuilder</item>
+                <item name="settlement" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\SettlementDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    
     <!-- Value handlers infrastructure -->
     <virtualType name="BraintreeTwoValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
