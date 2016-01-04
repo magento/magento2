@@ -15,10 +15,11 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
 class Builder implements BuilderInterface
 {
     /**#@+
-     * Text flags for Elasticsearch bulk actions
+     * Text flags for Elasticsearch filter query condition types
      */
-    const QUERY_OPERATOR_AND = 'AND';
-    const QUERY_OPERATOR_OR = 'OR';
+    const QUERY_CONDITION_MUST = 'must';
+    const QUERY_CONDITION_SHOULD = 'should';
+    const QUERY_CONDITION_MUST_NOT = 'must_not';
     /**#@-*/
 
     /**
@@ -48,79 +49,68 @@ class Builder implements BuilderInterface
      */
     public function build(RequestFilterInterface $filter, $conditionType)
     {
-        return $this->processFilter($filter, $this->isNegation($conditionType));
+        return $this->processFilter($filter, $conditionType);
     }
 
     /**
      * @param RequestFilterInterface $filter
-     * @param bool $isNegation
+     * @param string $conditionType
      * @return array
      */
-    protected function processFilter(RequestFilterInterface $filter, $isNegation)
+    protected function processFilter(RequestFilterInterface $filter, $conditionType)
     {
         if (RequestFilterInterface::TYPE_BOOL == $filter->getType()) {
-            $query = $this->processBoolFilter($filter, $isNegation);
+            $query = $this->processBoolFilter($filter);
         } else {
             if (!array_key_exists($filter->getType(), $this->filters)) {
                 throw new \InvalidArgumentException('Unknown filter type ' . $filter->getType());
             }
-            $query = $this->filters[$filter->getType()]->buildFilter($filter);
-            if ($isNegation) {
-                $query = ['not' => $query];
-            }
+            $query = [
+                'bool' => [
+                    $conditionType => $this->filters[$filter->getType()]->buildFilter($filter),
+                ]
+            ];
         }
 
         return $query;
     }
 
     /**
-     * @param RequestFilterInterface|\Magento\Framework\Search\Request\Filter\BoolExpression $filter
-     * @param bool $isNegation
+     * @param RequestFilterInterface|BoolExpression $filter
      * @return array
      */
-    protected function processBoolFilter(RequestFilterInterface $filter, $isNegation)
+    protected function processBoolFilter(RequestFilterInterface $filter)
     {
-        $must = $this->buildFilters($filter->getMust(), self::QUERY_OPERATOR_AND, $isNegation);
-        $should = $this->buildFilters($filter->getShould(), self::QUERY_OPERATOR_OR, $isNegation);
-        $mustNot = $this->buildFilters($filter->getMustNot(), self::QUERY_OPERATOR_AND, !$isNegation);
+        $must = $this->buildFilters($filter->getMust(), self::QUERY_CONDITION_MUST);
+        $should = $this->buildFilters($filter->getShould(), self::QUERY_CONDITION_SHOULD);
+        $mustNot = $this->buildFilters($filter->getMustNot(), self::QUERY_CONDITION_MUST_NOT);
 
         $queries = [
-            'bool' => [
-                'must' => $must,
-                'should' => $should,
-                'must_not' => $mustNot,
-            ]
+            'bool' => array_merge(
+                isset($must['bool']) ? $must['bool'] : [],
+                isset($should['bool']) ? $should['bool'] : [],
+                isset($mustNot['bool']) ? $mustNot['bool'] : []
+            ),
         ];
 
         return $queries;
     }
 
     /**
-     * @param \Magento\Framework\Search\Request\FilterInterface[] $filters
-     * @param string $unionOperator
-     * @param bool $isNegation
+     * @param RequestFilterInterface[] $filters
+     * @param string $conditionType
      * @return string
      */
-    private function buildFilters(array $filters, $unionOperator, $isNegation)
+    private function buildFilters(array $filters, $conditionType)
     {
         $queries = [];
         foreach ($filters as $filter) {
-            $queries[] = $this->processFilter($filter, $isNegation);
-        }
-        if ($unionOperator === self::QUERY_OPERATOR_OR) {
-            return [
-                'or' => $queries,
-            ];
+            $filterQuery = $this->processFilter($filter, $conditionType);
+            $queries['bool'][$conditionType] = array_merge(
+                isset($queries['bool'][$conditionType]) ? $queries['bool'][$conditionType] : [],
+                $filterQuery['bool'][$conditionType]
+            );
         }
         return $queries;
-    }
-
-    /**
-     * @param string $conditionType
-     * @return bool
-     */
-    protected function isNegation($conditionType)
-    {
-        return BoolExpression::QUERY_CONDITION_NOT === $conditionType;
     }
 }
