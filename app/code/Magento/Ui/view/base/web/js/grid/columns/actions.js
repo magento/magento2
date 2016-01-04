@@ -202,12 +202,41 @@ define([
                 args.unshift(callback.target);
 
                 callback = registry.async(callback.provider);
+            } else if (_.isArray(callback)) {
+                return this._getCallbacks(action);
             } else if (!_.isFunction(callback)) {
                 callback = this.defaultCallback.bind(this);
             }
 
             return function () {
                 callback.apply(callback, args);
+            };
+        },
+
+        /**
+         * Creates action callback for multiple actions.
+         *
+         * @private
+         * @param {Object} action - Actions' object.
+         * @returns {Function} Callback function.
+         */
+        _getCallbacks: function (action) {
+            var callback = action.callback,
+                callbacks = [],
+                tmpCallback;
+
+            _.each(callback, function (cb) {
+                tmpCallback = {
+                    action: registry.async(cb.provider),
+                    args: _.compact([cb.target, cb.params])
+                };
+                callbacks.push(tmpCallback);
+            });
+
+            return function () {
+                _.each(callbacks, function (cb) {
+                    cb.action.apply(cb.action, cb.args);
+                });
             };
         },
 

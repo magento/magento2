@@ -24,7 +24,6 @@ define([
             autoRender: true,
             contentSelector: '${$.name}',
             externalData: [],
-            'update_url': '${ $.render_url }',
             params: {
                 namespace: '${ $.ns }'
             },
@@ -55,7 +54,10 @@ define([
 
             $.async('.' + this.contentSelector, function (el) {
                 self.contentEl = $(el);
-                self.render();
+
+                if (this.autoRender) {
+                    self.render();
+                }
             });
 
             return this;
@@ -116,25 +118,12 @@ define([
          *
          * @returns {Object|Boolean}
          */
-        render: function (autoRender, params) {
-            var request, method;
+        render: function () {
+            var request;
 
-            _.extend(this.params, params);
-            this.autoRender = autoRender || this.autoRender;
-
-            if (!this.autoRender) {
-                return false;
-            }
-
-            if (this.isRendered) {
-                method = params.method;
-                delete params.method;
-                this[method].apply(this);
-
-                return false;
-            }
             request = this.requestData(this.params, this.renderSettings);
-
+            this.isRendered = false;
+            this.startRender = true;
             request
                 .done(this.onRender)
                 .fail(this.onError);
@@ -175,6 +164,7 @@ define([
             this.contentEl.children().applyBindings();
             this.contentEl.trigger('contentUpdated');
             this.isRendered = true;
+            this.startRender = false;
         },
 
         /**
@@ -212,9 +202,16 @@ define([
          *
          * @returns {*|Object}
          */
-        updateData: function () {
-            var request = this.requestData(this.params, this.updateSettings);
+        updateData: function (params) {
+            var request;
 
+            _.extend(this.params, params);
+
+            if (!this.startRender && !this.isRendered) {
+                return this.render();
+            }
+
+            request = this.requestData(this.params, this.updateSettings);
             request
                 .done(this.onUpdate)
                 .fail(this.onError);
