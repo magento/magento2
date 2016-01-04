@@ -9,7 +9,7 @@ use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
-use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
@@ -91,9 +91,9 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paymentExtensionFactory = $this->getMockBuilder(OrderPaymentExtensionFactory::class)
-            ->setMethods(['create'])
+        $this->paymentExtensionFactory = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->paymentExtensionFactory->expects(self::once())
             ->method('create')

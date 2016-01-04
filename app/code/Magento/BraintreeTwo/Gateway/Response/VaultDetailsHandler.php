@@ -7,11 +7,12 @@ namespace Magento\BraintreeTwo\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
-use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\PaymentTokenFactory;
 use Magento\Vault\Model\VaultPaymentInterface;
@@ -27,7 +28,7 @@ class VaultDetailsHandler implements HandlerInterface
     protected $paymentTokenFactory;
 
     /**
-     * @var OrderPaymentExtensionFactory
+     * @var OrderPaymentExtensionInterfaceFactory
      */
     protected $paymentExtensionFactory;
 
@@ -51,14 +52,14 @@ class VaultDetailsHandler implements HandlerInterface
      *
      * @param VaultPaymentInterface $vaultPayment
      * @param PaymentTokenFactory $paymentTokenFactory
-     * @param OrderPaymentExtensionFactory $paymentExtensionFactory
+     * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param Config $config
      * @param SubjectReader $subjectReader
      */
     public function __construct(
         VaultPaymentInterface $vaultPayment,
         PaymentTokenFactory $paymentTokenFactory,
-        OrderPaymentExtensionFactory $paymentExtensionFactory,
+        OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         Config $config,
         SubjectReader $subjectReader
     ) {
@@ -86,11 +87,7 @@ class VaultDetailsHandler implements HandlerInterface
         // add vault payment token entity to extension attributes
         $paymentToken = $this->getVaultPaymentToken($transaction);
         if (null !== $paymentToken) {
-            $extensionAttributes = $payment->getExtensionAttributes();
-            if (null === $extensionAttributes) {
-                $extensionAttributes = $this->paymentExtensionFactory->create();
-                $payment->setExtensionAttributes($extensionAttributes);
-            }
+            $extensionAttributes = $this->getExtensionAttributes($payment);
             $extensionAttributes->setVaultPaymentToken($paymentToken);
         }
     }
@@ -145,5 +142,20 @@ class VaultDetailsHandler implements HandlerInterface
         $mapper = $this->config->getCctypesMapper();
 
         return $mapper[$replaced];
+    }
+
+    /**
+     * Get payment extension attributes
+     * @param InfoInterface $payment
+     * @return OrderPaymentExtensionInterface
+     */
+    private function getExtensionAttributes(InfoInterface $payment)
+    {
+        $extensionAttributes = $payment->getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->paymentExtensionFactory->create();
+            $payment->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
     }
 }
