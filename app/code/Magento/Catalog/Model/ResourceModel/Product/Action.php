@@ -53,6 +53,7 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
                 foreach ($entityIds as $entityId) {
                     $i++;
                     $object->setId($entityId);
+                    $object->setEntityId($entityId);
                     // collect data for save
                     $this->_saveAttributeValue($object, $attribute, $value);
                     // save collected data every 1000 rows
