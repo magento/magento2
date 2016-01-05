@@ -557,12 +557,10 @@ define([
                 $(event.target).find('.' + this.PV).productVideoLoader();
 
                 if (this.isFullscreen) {
-                    setTimeout(function () {
-                        $('.' + this.FTAR).show();
-                    }, 50);
+                    $('.' + this.FTAR).addClass('fotorama__arr--shown');
                 } else {
                     this._showCloseVideo();
-                    $('.' + this.FTAR).hide();
+                    $('.' + this.FTAR).addClass('fotorama__arr--hidden');
                 }
             }
         },
@@ -613,7 +611,7 @@ define([
          */
         _unloadVideoPlayer: function ($wrapper, current, close) {
             var self = this;
-            $wrapper.find('.' + this.PVLOADED).not('.fotorama__active').removeClass(this.PVLOADED);
+            $wrapper.find('.' + this.PVLOADED).removeClass(this.PVLOADED);
             $wrapper.find('.' + this.PV).each(function () {
                 var $item = $(this).parent(),
                     cloneVideoDiv,
@@ -644,11 +642,8 @@ define([
 
                 self._hideCloseVideo();
 
-                if (self.fotoramaItem.data('fotorama').options.arrows) {
-                    $('.' + self.FTAR).show();
-                } else {
-                    $('.' + self.FTAR).hide();
-                }
+                $('.' + self.FTAR).removeClass('fotorama__arr--shown');
+                $('.' + self.FTAR).removeClass('fotorama__arr--hidden');
             });
         }
     });
