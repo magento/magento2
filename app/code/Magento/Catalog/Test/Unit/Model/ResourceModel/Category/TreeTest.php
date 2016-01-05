@@ -8,6 +8,10 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\Model\Entity\MetadataPool;
+
 class TreeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -30,6 +34,14 @@ class TreeTest extends \PHPUnit_Framework_TestCase
      */
     protected $_collectionFactory;
 
+    /**
+     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPoolMock;
+
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -71,13 +83,19 @@ class TreeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_model = $objectHelper->getObject(
             'Magento\Catalog\Model\ResourceModel\Category\Tree',
             [
                 'resource' => $this->_resource,
                 'eventManager' => $eventManager,
                 'attributeConfig' => $this->_attributeConfig,
-                'collectionFactory' => $this->_collectionFactory
+                'collectionFactory' => $this->_collectionFactory,
+                'metadataPool' => $this->metadataPoolMock,
             ]
         );
     }
@@ -182,6 +200,18 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
+        $categoryMetadataMock = $this->getMockBuilder(EntityMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $categoryMetadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('id');
+        $this->metadataPoolMock
+            ->expects($this->any())
+            ->method('getMetadata')
+            ->with(CategoryInterface::class)
+            ->willReturn($categoryMetadataMock);
+
         $model = $objectHelper->getObject(
             'Magento\Catalog\Model\ResourceModel\Category\Tree',
             [
@@ -189,7 +219,8 @@ class TreeTest extends \PHPUnit_Framework_TestCase
                 'resource' => $resource,
                 'eventManager' => $eventManager,
                 'attributeConfig' => $attributeConfig,
-                'collectionFactory' => $collectionFactory
+                'collectionFactory' => $collectionFactory,
+                'metadataPool' => $this->metadataPoolMock
             ]
         );
 
