@@ -55,7 +55,7 @@ define([
             $.async('.' + this.contentSelector, function (el) {
                 self.contentEl = $(el);
 
-                if (this.autoRender) {
+                if (self.autoRender) {
                     self.render();
                 }
             });
