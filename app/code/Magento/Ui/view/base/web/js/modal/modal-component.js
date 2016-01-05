@@ -17,7 +17,8 @@ define([
             template: 'ui/modal/modal-component',
             options: {
                 title: '',
-                buttons: []
+                buttons: [],
+                keyEventHandlers: {}
             },
             valid: true,
             listens: {
@@ -51,9 +52,31 @@ define([
          * @returns {Object} Chainable.
          */
         initConfig: function () {
-            this._super();
+            return this._super()
+                .initSelector()
+                .initModalEvents();
+        },
+
+        /**
+         * Configure modal selector
+         *
+         * @returns {Object} Chainable.
+         */
+        initSelector: function () {
             this.modalClass = this.name.replace(/\./g, '_');
             this.rootSelector = '.' + this.modalClass;
+
+            return this;
+        },
+
+        /**
+         * Configure modal keyboard handlers
+         * and outer click
+         *
+         * @returns {Object} Chainable.
+         */
+        initModalEvents: function () {
+            this.options.keyEventHandlers.escapeKey = this.options.outerClickHandler = this.actionCancel.bind(this);
 
             return this;
         },
@@ -202,6 +225,7 @@ define([
          */
         setPrevValues: function (elem) {
             if (typeof elem.value === 'function') {
+                elem.focused(false);
                 elem.value(this.applied[elem.index]);
             } else if (elem.elems) {
                 elem.elems().forEach(this.setPrevValues, this);
