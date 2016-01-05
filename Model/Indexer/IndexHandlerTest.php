@@ -14,7 +14,7 @@ use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 /**
- * @magentoDbIsolation disabled
+ * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  */
 class IndexHandlerTest extends \PHPUnit_Framework_TestCase
@@ -127,6 +127,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterEdit()
     {
+        $this->reindexAll();
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
@@ -148,6 +149,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterMassAction()
     {
+        $this->reindexAll();
         $productIds = [
             $this->productApple->getId(),
             $this->productBanana->getId(),
