@@ -208,13 +208,13 @@ define([
         updateData: function (params) {
             var request;
 
-            _.extend(this.params, params);
+            _.extend(params, this.params);
 
             if (!this.startRender && !this.isRendered) {
                 return this.render();
             }
 
-            request = this.requestData(this.params, this.updateSettings);
+            request = this.requestData(params, this.updateSettings);
             request
                 .done(this.onUpdate)
                 .fail(this.onError);
