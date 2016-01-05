@@ -5,27 +5,45 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Validator;
 
+use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
+use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
  * Class ResponseValidator
- * @package Magento\BraintreeTwo\Gateway\Validator
  */
 class ResponseValidator extends AbstractValidator
 {
+    /**
+     * @var SubjectReader
+     */
+    protected $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param ResultInterfaceFactory $resultFactory
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(ResultInterfaceFactory $resultFactory, SubjectReader $subjectReader)
+    {
+        parent::__construct($resultFactory);
+        $this->subjectReader = $subjectReader;
+    }
+
     /**
      * @inheritdoc
      */
     public function validate(array $validationSubject)
     {
-        $response = SubjectReader::readResponseObject($validationSubject);
+        $response = $this->subjectReader->readResponseObject($validationSubject);
 
         $result = $this->createResult(
             $this->validateSuccess($response)
             && $this->validateErrors($response)
             && $this->validateTransactionStatus($response),
-            [__('Transaction has been declined, please, try again later.')]
+            [__('Transaction has been declined. Please try again later.')]
         );
 
         return $result;
@@ -35,7 +53,7 @@ class ResponseValidator extends AbstractValidator
      * @param object $response
      * @return bool
      */
-    private function validateSuccess($response)
+    protected function validateSuccess($response)
     {
         return property_exists($response, 'success') && $response->success === true;
     }
@@ -44,7 +62,7 @@ class ResponseValidator extends AbstractValidator
      * @param object $response
      * @return bool
      */
-    private function validateErrors($response)
+    protected function validateErrors($response)
     {
         return !(property_exists($response, 'errors') && $response->errors->deepSize() > 0);
     }
@@ -57,7 +75,7 @@ class ResponseValidator extends AbstractValidator
     {
         return in_array(
             $response->transaction->status,
-            [\Braintree_Transaction::AUTHORIZED, \Braintree_Transaction::SUBMITTED_FOR_SETTLEMENT]
+            [Transaction::AUTHORIZED, Transaction::SUBMITTED_FOR_SETTLEMENT]
         );
     }
 }
