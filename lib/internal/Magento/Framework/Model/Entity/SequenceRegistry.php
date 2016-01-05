@@ -24,6 +24,7 @@ class SequenceRegistry
      * @param string $entityType
      * @param SequenceInterface|null $sequence
      * @param string|null $sequenceTable
+     * @return void
      */
     public function register($entityType, $sequence = null, $sequenceTable = null)
     {

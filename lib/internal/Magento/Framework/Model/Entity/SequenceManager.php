@@ -79,11 +79,16 @@ class SequenceManager
             );
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
-//            return true;
             throw new \Exception('TODO: use correct Exception class' . PHP_EOL . $e->getMessage());
         }
     }
 
+    /**
+     * @param string $entityType
+     * @param int $identifier
+     * @return int
+     * @throws \Exception
+     */
     public function delete($entityType, $identifier)
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
@@ -98,7 +103,6 @@ class SequenceManager
             );
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
-//            return true;
             throw new \Exception('TODO: use correct Exception class' . PHP_EOL . $e->getMessage());
         }
     }

@@ -261,7 +261,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
             }
         } else {
-            unset($this->instances[$productData['sku']]);
             $product = $this->get($productData['sku']);
             $this->initializationHelper->initialize($product);
         }
@@ -467,7 +466,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $tierPrices = $product->getData('tier_price');
 
-        $productId = $this->resourceModel->getIdBySku($product->getSku());
+        try {
+            $existingProduct = $this->get($product->getSku());
+
+            $product->setData(
+                $this->resourceModel->getLinkField(),
+                $existingProduct->getData($this->resourceModel->getLinkField())
+            );
+        } catch (NoSuchEntityException $e) {
+            $existingProduct = null;
+        }
 
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
@@ -480,7 +488,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productLinks = $product->getProductLinks();
         }
         $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
-        $product = $this->initializeProductData($productDataArray, empty($productId));
+        $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
         if (isset($productDataArray['media_gallery_entries'])) {
