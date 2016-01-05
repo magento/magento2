@@ -123,7 +123,7 @@ class SynonymReader extends AbstractDb
             } else if (empty($synRowsForStoreView)
                 && empty($synRowsForWebsite)
                 && $this->isSynRowForDefaultScope($row)) {
-                // Check for all store views (i.e. default)
+                // Check for all store views (i.e. global/default config)
                 $synRowsForDefault[] = $row;
             }
         }
@@ -142,8 +142,7 @@ class SynonymReader extends AbstractDb
     private function isSynRowForStoreView($row)
     {
         $storeViewId = $this->storeManager->getStore()->getId();
-        return ($row['scope_id'] === $storeViewId
-            && $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_STORES);
+        return ($row['store_id'] === $storeViewId);
     }
 
     /**
@@ -155,8 +154,7 @@ class SynonymReader extends AbstractDb
     private function isSynRowForWebsite($row)
     {
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        return ($row['scope_id'] === $websiteId
-            && $row['scope_type'] === \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES);
+        return ($row['website_id'] === $websiteId);
     }
 
     /**
@@ -167,6 +165,6 @@ class SynonymReader extends AbstractDb
      */
     private function isSynRowForDefaultScope($row)
     {
-        return ($row['scope_type'] === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        return (($row['website_id'] == 0) && ($row['store_id'] == 0));
     }
 }
