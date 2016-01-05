@@ -56,27 +56,6 @@ class Config extends Tab
     protected $template = './ancestor::body';
 
     /**
-     * Attribute element selector.
-     *
-     * @var string
-     */
-    protected $attributeElement = 'tr[data-row-number]';
-
-    /**
-     * Delete variation button selector.
-     *
-     * @var string
-     */
-    protected $deleteVariation = '[data-bind*="removeProduct"]';
-
-    /**
-     * Action menu
-     *
-     * @var string
-     */
-    protected $actionMenu = '.action-select';
-
-    /**
      * Variations content selector.
      *
      * @var string
@@ -213,13 +192,8 @@ class Config extends Tab
      *
      * @return void
      */
-    public function deleteAttributes()
+    public function deleteVariations()
     {
-        $attributeElements = $this->_rootElement->getElements($this->attributeElement);
-        foreach (array_reverse($attributeElements) as $element) {
-            $element->find($this->actionMenu)->hover();
-            $element->find($this->actionMenu)->click();
-            $element->find($this->deleteVariation)->click();
-        }
+        $this->getVariationsBlock()->deleteVariations();
     }
 }
