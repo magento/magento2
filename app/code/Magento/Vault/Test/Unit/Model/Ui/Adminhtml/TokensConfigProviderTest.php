@@ -23,6 +23,8 @@ use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class TokensConfigProviderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
