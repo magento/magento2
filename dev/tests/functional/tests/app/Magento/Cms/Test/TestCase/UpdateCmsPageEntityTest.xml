@@ -9,7 +9,7 @@
     <testCase name="Magento\Cms\Test\TestCase\UpdateCmsPageEntityTest" summary="Update Cms Page" ticketId="MAGETWO-25186">
         <variation name="UpdateCmsPageEntityTestVariation1">
             <data name="cms/data/title" xsi:type="string">CmsPageEdited%isolation%</data>
-            <data name="cms/data/is_active" xsi:type="string">Disabled</data>
+            <data name="cms/data/is_active" xsi:type="string">No</data>
             <data name="cms/data/content/content" xsi:type="string">cms_page_text_content_after_edit</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />

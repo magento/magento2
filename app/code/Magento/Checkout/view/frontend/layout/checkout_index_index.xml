@@ -197,7 +197,7 @@
                                                                             <item name="customEntry" xsi:type="string">shippingAddress.region</item>
                                                                         </item>
                                                                         <item name="validation" xsi:type="array">
-                                                                            <item name="validate-select" xsi:type="string">true</item>
+                                                                            <item name="required-entry" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <!-- Value of region_id field is filtered by the value of county_id attribute -->
                                                                         <item name="filterBy" xsi:type="array">

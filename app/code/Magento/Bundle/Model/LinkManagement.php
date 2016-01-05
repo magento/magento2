@@ -254,7 +254,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
         try {
             $selectionModel->save();
-            $resource->addProductRelations($product->getId(), [$linkProductModel->getId()]);
+            $resource->addProductRelation($product->getId(), $linkProductModel->getId());
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
         }
@@ -281,6 +281,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             foreach ($option->getSelections() as $selection) {
                 if ((strcasecmp($selection->getSku(), $childSku) == 0) && ($selection->getOptionId() == $optionId)) {
                     $removeSelectionIds[] = $selection->getSelectionId();
+                    $usedProductIds[] = $selection->getProductId();
                     continue;
                 }
                 $excludeSelectionIds[] = $selection->getSelectionId();
