@@ -49,6 +49,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->term->expects($this->any())
+            ->method('buildFilter')
+            ->willReturn([]);
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             '\Magento\Elasticsearch\SearchAdapter\Filter\Builder',
