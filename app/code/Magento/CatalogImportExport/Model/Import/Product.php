@@ -2220,19 +2220,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         // validate custom options
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
-        if (!empty($rowData[self::URL_KEY])) {
-            $storeCodes = (empty($rowData[self::COL_STORE_VIEW_CODE]))
+        if (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME])) {
+            $urlKey = !empty($rowData[self::URL_KEY])
+                ? $rowData[self::URL_KEY]
+                : $this->_proxyProdFactory->create()->formatUrlKey($rowData[self::COL_NAME]);
+            $storeCodes = empty($rowData[self::COL_STORE_VIEW_CODE])
                 ? array_flip($this->storeResolver->getStoreCodeToId())
                 : explode($this->getMultipleValueSeparator(), $rowData[self::COL_STORE_VIEW_CODE]);
             foreach ($storeCodes as $storeCode) {
                 $storeId = $this->storeResolver->getStoreCodeToId($storeCode);
                 $productUrlSuffix = $this->getProductUrlSuffix($storeId);
-                $urkKey = $rowData[self::URL_KEY] .$productUrlSuffix;
-                if (empty($this->urlKeys[$storeId][$urkKey])
-                    || ($this->urlKeys[$storeId][$urkKey] == $rowData[self::COL_SKU])
+                $urlPath = $urlKey . $productUrlSuffix;
+                if (empty($this->urlKeys[$storeId][$urlPath])
+                    || ($this->urlKeys[$storeId][$urlPath] == $rowData[self::COL_SKU])
                 ) {
-                    $this->urlKeys[$storeId][$urkKey] = $rowData[self::COL_SKU];
-                    $this->rowNumbers[$storeId][$urkKey] = $rowNum;
+                    $this->urlKeys[$storeId][$urlPath] = $rowData[self::COL_SKU];
+                    $this->rowNumbers[$storeId][$urlPath] = $rowNum;
                 } else {
                     $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum);
                 }
