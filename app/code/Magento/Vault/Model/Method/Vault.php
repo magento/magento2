@@ -17,6 +17,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Block\Form;
@@ -70,7 +71,7 @@ final class Vault implements VaultPaymentInterface
     /**
      * @var Command\CommandManagerPoolInterface
      */
-    private $commandExecutorPool;
+    private $commandManagerPool;
 
     /**
      * @var PaymentTokenManagementInterface
@@ -112,7 +113,7 @@ final class Vault implements VaultPaymentInterface
         $this->valueHandlerPool = $valueHandlerPool;
         $this->vaultProvider = $vaultProvider;
         $this->eventManager = $eventManager;
-        $this->commandExecutorPool = $commandManagerPool;
+        $this->commandManagerPool = $commandManagerPool;
         $this->tokenManagement = $tokenManagement;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
     }
@@ -393,11 +394,11 @@ final class Vault implements VaultPaymentInterface
         }
         /** @var $payment OrderPaymentInterface */
 
-        $commandExecutor = $this->commandExecutorPool->get(
+        $this->attachTokenExtensionAttribute($payment);
+
+        $commandExecutor = $this->commandManagerPool->get(
             $this->getVaultProvider()->getCode()
         );
-
-        $this->attachTokenExtensionAttribute($payment);
 
         $commandExecutor->executeByCode(
             VaultPaymentInterface::VAULT_AUTHORIZE_COMMAND,
@@ -420,17 +421,17 @@ final class Vault implements VaultPaymentInterface
         if (!$payment instanceof OrderPaymentInterface) {
             throw new \DomainException('Not implemented');
         }
-        /** @var $payment OrderPaymentInterface */
-
-        $commandExecutor = $this->commandExecutorPool->get(
-            $this->getVaultProvider()->getCode()
-        );
+        /** @var $payment Payment */
 
         if ($payment->getAuthorizationTransaction()) {
-            throw new \DomainException('Not implemented');
+            throw new \DomainException('Capture can not be performed through vault');
         }
 
         $this->attachTokenExtensionAttribute($payment);
+
+        $commandExecutor = $this->commandManagerPool->get(
+            $this->getVaultProvider()->getCode()
+        );
 
         $commandExecutor->executeByCode(
             VaultPaymentInterface::VAULT_SALE_COMMAND,
@@ -470,7 +471,6 @@ final class Vault implements VaultPaymentInterface
 
         $extensionAttributes = $this->getPaymentExtensionAttributes($orderPayment);
         $extensionAttributes->setVaultPaymentToken($paymentToken);
-        $orderPayment->setExtensionAttributes($extensionAttributes);
     }
 
     /**
