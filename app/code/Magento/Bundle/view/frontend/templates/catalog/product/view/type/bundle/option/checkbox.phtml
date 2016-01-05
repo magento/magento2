@@ -31,6 +31,7 @@
                                type="checkbox"
                                <?php if ($_option->getRequired()) echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $_option->getId() . ']&quot;]:checked\'}"'?>
                                name="bundle_option[<?php echo $_option->getId() ?>][<?php echo $_selection->getId() ?>]"
+                               data-selector="bundle_option[<?php echo $_option->getId() ?>][<?php echo $_selection->getId() ?>]"
                                <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>
                                <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>
                                value="<?php echo $_selection->getSelectionId() ?>"/>
