@@ -212,6 +212,7 @@ define([
          */
         reset: function () {
             this.value(this.initialValue);
+            this.error(false);
         },
 
         /**
