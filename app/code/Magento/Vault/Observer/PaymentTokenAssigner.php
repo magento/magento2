@@ -9,22 +9,22 @@ use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
-use Magento\Vault\Model\PaymentTokenManagement;
 
 class PaymentTokenAssigner extends AbstractDataAssignObserver
 {
     /**
-     * @var PaymentTokenManagement
+     * @var PaymentTokenManagementInterface
      */
     private $paymentTokenManagement;
 
     /**
      * PaymentTokenAssigner constructor.
-     * @param PaymentTokenManagement $paymentTokenManagement
+     * @param PaymentTokenManagementInterface $paymentTokenManagement
      */
     public function __construct(
-        PaymentTokenManagement $paymentTokenManagement
+        PaymentTokenManagementInterface $paymentTokenManagement
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
     }
@@ -50,7 +50,7 @@ class PaymentTokenAssigner extends AbstractDataAssignObserver
         }
 
         $quote = $paymentModel->getQuote();
-        $customerId = $quote->getCustomerId();
+        $customerId = $quote->getCustomer()->getId();
         if ($customerId === null) {
             return;
         }
