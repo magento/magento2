@@ -842,7 +842,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     * @magentoDataIsolation disabled
      * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
      * @param $errorsCount int
@@ -880,7 +879,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['products_to_check_valid_url_keys.csv', 0],
-            ['products_to_check_duplicated_url_keys.csv', 2]
+            ['products_to_check_duplicated_url_keys.csv', 2],
+            ['products_to_check_duplicated_names.csv' , 1]
         ];
     }
 }
