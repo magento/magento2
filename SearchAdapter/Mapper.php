@@ -66,6 +66,7 @@ class Mapper
                 BoolQuery::QUERY_CONDITION_MUST
             )
         );
+        $searchQuery['body']['query']['bool']['minimum_should_match'] = 1;
         $searchQuery = $this->queryBuilder->initAggregations($request, $searchQuery);
         return $searchQuery;
     }
