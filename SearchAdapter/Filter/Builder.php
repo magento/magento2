@@ -84,12 +84,12 @@ class Builder implements BuilderInterface
     {
         $must = $this->buildFilters(
             $filter->getMust(),
-            $isNegation ? self::QUERY_CONDITION_MUST_NOT : self::QUERY_CONDITION_MUST
+            $this->mapConditionType(self::QUERY_CONDITION_MUST, $isNegation)
         );
         $should = $this->buildFilters($filter->getShould(), self::QUERY_CONDITION_SHOULD);
         $mustNot = $this->buildFilters(
             $filter->getMustNot(),
-            $isNegation ? self::QUERY_CONDITION_MUST : self::QUERY_CONDITION_MUST_NOT
+            $this->mapConditionType(self::QUERY_CONDITION_MUST_NOT, $isNegation)
         );
 
         $queries = [
@@ -130,5 +130,22 @@ class Builder implements BuilderInterface
     protected function isNegation($conditionType)
     {
         return self::QUERY_CONDITION_MUST_NOT === $conditionType;
+    }
+
+    /**
+     * @param string $conditionType
+     * @param bool $isNegation
+     * @return string
+     */
+    private function mapConditionType($conditionType, $isNegation)
+    {
+        if ($isNegation) {
+            if ($conditionType == self::QUERY_CONDITION_MUST) {
+                $conditionType = self::QUERY_CONDITION_MUST_NOT;
+            } elseif ($conditionType == self::QUERY_CONDITION_MUST_NOT) {
+                $conditionType = self::QUERY_CONDITION_MUST;
+            }
+        }
+        return $conditionType;
     }
 }
