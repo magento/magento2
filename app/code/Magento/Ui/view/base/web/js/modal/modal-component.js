@@ -236,25 +236,31 @@ define([
 
             if (buttons && buttons.length) {
                 buttons.forEach(function (button) {
-                    button.click = this.getButtonClickHandler(button.click);
+                    button.click = this.getButtonClickHandler(button.actions);
                 }, this);
             }
         },
 
         /**
-         * Override modal buttons callback placeholders with real callbacks
+         * Generate button click handler based on button's 'actions' configuration
          */
-        getButtonClickHandler: function (clickConfig) {
-            if (_.isObject(clickConfig)) {
-                return clickConfig.closeAfter ?
-                    function () {
-                        this.triggerAction(clickConfig);
-                        this.closeModal();
-                    }.bind(this) :
-                    this.triggerAction.bind(this, clickConfig);
-            }
+        getButtonClickHandler: function (actionsConfig) {
+            var actions = actionsConfig.map(
+                function (actionConfig) {
+                    if (_.isObject(actionConfig)) {
+                        return this.triggerAction.bind(this, actionConfig);
+                    }
 
-            return this[clickConfig] ? this[clickConfig].bind(this) : function () {};
+                    return this[actionConfig] ? this[actionConfig].bind(this) : function () {};
+                }, this);
+
+            return function () {
+                actions.forEach(
+                    function (action) {
+                        action();
+                    }
+                );
+            };
         },
 
         /**
