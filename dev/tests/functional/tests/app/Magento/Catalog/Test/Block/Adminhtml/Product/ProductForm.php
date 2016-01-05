@@ -181,6 +181,7 @@ class ProductForm extends FormTabs
      */
     protected function showAdvancedSettings()
     {
+        $this->browser->find($this->header)->hover();
         if (!$this->_rootElement->find($this->advancedSettingContent)->isVisible()) {
             $this->_rootElement->find($this->advancedSettingTrigger)->click();
             $this->waitForElementVisible($this->advancedSettingContent);
