@@ -280,6 +280,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
+     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)

@@ -125,6 +125,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
+            $metadataPool,
             $connection
         );
     }
