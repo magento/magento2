@@ -84,12 +84,13 @@ class Adapter implements MethodInterface
     /**
      * @param ManagerInterface $eventManager
      * @param ValueHandlerPoolInterface $valueHandlerPool
-     * @param ValidatorPoolInterface $validatorPool
-     * @param CommandPoolInterface $commandPool
      * @param PaymentDataObjectFactory $paymentDataObjectFactory
      * @param string $code
      * @param string $formBlockType
      * @param string $infoBlockType
+     * @param CommandPoolInterface $commandPool
+     * @param ValidatorPoolInterface $validatorPool
+     * @param CommandManagerInterface $commandExecutor
      */
     public function __construct(
         ManagerInterface $eventManager,

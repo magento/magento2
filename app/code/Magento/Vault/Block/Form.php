@@ -53,6 +53,8 @@ class Form extends \Magento\Payment\Block\Form
 
     /**
      * Create block for own configuration for each payment token
+     *
+     * @return void
      */
     protected function createVaultBlocks()
     {

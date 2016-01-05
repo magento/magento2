@@ -18,6 +18,10 @@ use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Observer\PaymentTokenAssigner;
 
+/**
+ * Class PaymentTokenAssignerTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PaymentTokenAssignerTest extends \PHPUnit_Framework_TestCase
 {
     /**

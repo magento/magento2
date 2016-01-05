@@ -36,6 +36,10 @@ class TMapFactory
         return $this->objectManager->create(TMap::class, $args);
     }
 
+    /**
+     * @param array $args
+     * @return TMap
+     */
     public function createSharedObjectsMap(array $args)
     {
         return $this->objectManager->create(

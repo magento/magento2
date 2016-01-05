@@ -21,7 +21,8 @@ class UseVaultPaymentTokenStep implements TestStepInterface
     /**
      * @param OrderCreateIndex $orderCreateIndex
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex ) {
+    public function __construct(OrderCreateIndex $orderCreateIndex)
+    {
         $this->orderCreatePage = $orderCreateIndex;
     }
 

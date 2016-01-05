@@ -8,13 +8,14 @@ namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler;
+use Magento\Framework\DataObject;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Vault\Model\PaymentToken;
-use Magento\Vault\Model\PaymentTokenFactory;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Model\PaymentTokenInterfaceFactory;
 use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -40,12 +41,12 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     private $payment;
 
     /**
-     * @var \Magento\Vault\Model\PaymentTokenFactory|MockObject
+     * @var \Magento\Vault\Model\PaymentTokenInterfaceFactory|MockObject
      */
     private $paymentTokenFactory;
 
     /**
-     * @var \Magento\Vault\Model\PaymentToken|MockObject
+     * @var PaymentTokenInterface|MockObject
      */
     protected $paymentToken;
 
@@ -55,7 +56,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     private $paymentExtension;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtensionFactory|MockObject
+     * @var \Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory|MockObject
      */
     private $paymentExtensionFactory;
     /**
@@ -75,11 +76,8 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentToken = $this->getMockBuilder(PaymentToken::class)
-            ->setMethods(null)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenFactory::class)
+        $this->paymentToken = $this->getMock(PaymentTokenInterface::class);
+        $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -88,7 +86,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->paymentToken);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionFactory = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
@@ -170,10 +168,12 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
+        $this->paymentToken->expects(static::once())
+            ->method('setGatewayToken')
+            ->with('rh3gd4');
+
 
         $this->paymentHandler->handle($subject, $response);
-
-        $this->assertEquals('rh3gd4', $this->paymentToken->getGatewayToken());
         $this->assertSame($this->paymentToken, $this->payment->getExtensionAttributes()->getVaultPaymentToken());
     }
 
