@@ -23,11 +23,7 @@ define([
             loading: false,
             autoRender: true,
             contentSelector: '${$.name}',
-            externalTransfer: false,
-            internalTransfer: false,
             externalData: [],
-            deps: '${ $.externalProvider }',
-            'update_url': '${ $.render_url }',
             params: {
                 namespace: '${ $.ns }'
             },
@@ -58,7 +54,10 @@ define([
 
             $.async('.' + this.contentSelector, function (el) {
                 self.contentEl = $(el);
-                self.render();
+
+                if (this.autoRender) {
+                    self.render();
+                }
             });
 
             return this;
@@ -76,7 +75,7 @@ define([
 
         /** @inheritdoc */
         initConfig: function (config) {
-            this.initTransferConfig(config)._super();
+            this.initDataLink(config)._super();
             this.contentSelector = this.contentSelector.replace(/\./g, '_');
 
             return this;
@@ -88,18 +87,26 @@ define([
          * @param {Object} config
          * @returns {Object}
          */
-        initTransferConfig: function (config) {
+        initDataLink: function (config) {
             var key, value;
 
-            if (config.externalTransfer) {
+            if (config.dataLinks) {
                 _.each(config.externalData, function (val) {
                     value = val;
                     key = 'externalValue.' + val.replace('data.', '');
+
+                    if (config.dataLinks.imports) {
+                        this.imports[key] = '${ $.externalProvider }:' + value;
+                    }
+
+                    if (config.dataLinks.exports) {
+                        this.exports[key] = '${ $.externalProvider }:' + value;
+                    }
                     this.links[key] = '${ $.externalProvider }:' + value;
                 }, this.constructor.defaults);
             }
 
-            if (config.internalTransfer) {
+            if (config.realTimeLink) {
                 this.constructor.defaults.links.externalValue = 'value';
             }
 
@@ -111,25 +118,15 @@ define([
          *
          * @returns {Object|Boolean}
          */
-        render: function (autoRender, params) {
-            var request, method;
-
-            _.extend(this.params, params);
-            this.autoRender = autoRender || this.autoRender;
-
-            if (!this.autoRender) {
-                return false;
-            }
+        render: function () {
+            var request;
 
             if (this.isRendered) {
-                method = params.method;
-                delete params.method;
-                this[method].apply(this);
-
                 return false;
             }
-            request = this.requestData(this.params, this.renderSettings);
 
+            this.startRender = true;
+            request = this.requestData(this.params, this.renderSettings);
             request
                 .done(this.onRender)
                 .fail(this.onError);
@@ -170,6 +167,7 @@ define([
             this.contentEl.children().applyBindings();
             this.contentEl.trigger('contentUpdated');
             this.isRendered = true;
+            this.startRender = false;
         },
 
         /**
@@ -207,9 +205,16 @@ define([
          *
          * @returns {*|Object}
          */
-        updateData: function () {
-            var request = this.requestData(this.params, this.updateSettings);
+        updateData: function (params) {
+            var request;
 
+            _.extend(this.params, params);
+
+            if (!this.startRender && !this.isRendered) {
+                return this.render();
+            }
+
+            request = this.requestData(this.params, this.updateSettings);
             request
                 .done(this.onUpdate)
                 .fail(this.onError);
