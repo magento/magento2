@@ -22,6 +22,11 @@ class Config extends AbstractConfig
     use Formatter;
 
     /**
+     * PayPal Express
+     */
+    const METHOD_EXPRESS = 'paypal_express';
+
+    /**
      * PayPal Standard - alias METHOD_WPP_EXPRESS
      */
     const METHOD_WPS_EXPRESS = 'wps_express';
@@ -1425,6 +1430,7 @@ class Config extends AbstractConfig
                 break;
             case self::METHOD_WPP_EXPRESS:
             case self::METHOD_WPP_PE_EXPRESS:
+            case self::METHOD_EXPRESS:
                 $path = $this->_mapExpressFieldset($fieldName);
                 break;
             case self::METHOD_BILLING_AGREEMENT:
@@ -1477,6 +1483,8 @@ class Config extends AbstractConfig
             case 'order_valid_period':
             case 'child_authorization_number':
             case 'allow_ba_signup':
+            case 'in_context':
+            case 'merchant_id':
                 return "payment/{$this->_methodCode}/{$fieldName}";
             default:
                 return $this->_mapMethodFieldset($fieldName);

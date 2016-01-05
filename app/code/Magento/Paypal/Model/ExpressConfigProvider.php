@@ -89,7 +89,6 @@ class ExpressConfigProvider implements ConfigProviderInterface
         $config = [
             'payment' => [
                 'paypalExpress' => [
-                    'isContextCheckout' => true,
                     'paymentAcceptanceMarkHref' => $this->config->getPaymentMarkWhatIsPaypalUrl(
                         $this->localeResolver
                     ),
@@ -99,6 +98,9 @@ class ExpressConfigProvider implements ConfigProviderInterface
                 ]
             ]
         ];
+
+        $config['payment']['paypalExpress']['isContextCheckout'] = $this->isInContextCheckout();
+
         foreach ($this->methodCodes as $code) {
             if ($this->methods[$code]->isAvailable()) {
                 $config['payment']['paypalExpress']['redirectUrl'][$code] = $this->getMethodRedirectUrl($code);
@@ -107,6 +109,16 @@ class ExpressConfigProvider implements ConfigProviderInterface
             }
         }
         return $config;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isInContextCheckout()
+    {
+        $this->config->setMethod(Config::METHOD_EXPRESS);
+
+        return (bool)(int) $this->config->getValue('in_context');
     }
 
     /**
