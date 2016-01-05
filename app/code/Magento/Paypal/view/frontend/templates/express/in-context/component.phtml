@@ -26,7 +26,7 @@ $configuration = [
 ];
 
 ?>
-<div style="display: none;" id="<?php echo Button::PAYPAL_BUTTON_ID; ?>"></div>
+<div style="display: none;" id="<?php /* @noEscape */ echo Button::PAYPAL_BUTTON_ID; ?>"></div>
 <script type="text/x-magento-init">
     <?php /* @noEscape */ echo json_encode($configuration); ?>
 </script>

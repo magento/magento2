@@ -6,6 +6,7 @@
 namespace Magento\Paypal\Block\Express\InContext;
 
 use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\ConfigFactory;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\Template\Context;
@@ -38,17 +39,19 @@ class Button extends Template
     /**
      * @inheritdoc
      * @param ResolverInterface $localeResolver
-     * @param Config $config
+     * @param ConfigFactory $config
      */
     public function __construct(
         Context $context,
         ResolverInterface $localeResolver,
-        Config $config,
+        ConfigFactory $configFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
+
         $this->localeResolver = $localeResolver;
-        $this->config = $config;
+        $this->config = $configFactory->create();
+        $this->config->setMethod(Config::METHOD_EXPRESS);
     }
 
     /**
@@ -56,7 +59,7 @@ class Button extends Template
      */
     private function isInContext()
     {
-        return true;
+        return (bool)(int) $this->config->getValue('in_context');
     }
 
     /**

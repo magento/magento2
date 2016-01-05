@@ -45,6 +45,7 @@
                 <child_authorization_number>1</child_authorization_number>
                 <verify_peer>1</verify_peer>
                 <skip_order_review_step>1</skip_order_review_step>
+                <merchant_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
             </paypal_express>
             <paypal_express_bml>
                 <model>Magento\Paypal\Model\Bml</model>

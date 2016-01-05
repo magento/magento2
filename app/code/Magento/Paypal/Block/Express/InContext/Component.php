@@ -5,6 +5,8 @@
  */
 namespace Magento\Paypal\Block\Express\InContext;
 
+use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\ConfigFactory;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\Template\Context;
@@ -22,16 +24,25 @@ class Component extends Template
     private $localeResolver;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @inheritdoc
      * @param ResolverInterface $localeResolver
      */
     public function __construct(
         Context $context,
         ResolverInterface $localeResolver,
+        ConfigFactory $configFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->localeResolver = $localeResolver;
+        $this->config = $configFactory->create();
+
+        $this->config->setMethod(Config::METHOD_EXPRESS);
     }
 
     /**
@@ -51,7 +62,7 @@ class Component extends Template
      */
     private function isInContext()
     {
-        return true;
+        return (bool)(int) $this->config->getValue('in_context');
     }
 
     /**
@@ -59,7 +70,7 @@ class Component extends Template
      */
     public function getEnvironment()
     {
-        return 'sandbox';
+        return (int) $this->config->getValue('sandbox_flag') ? 'sandbox' : 'production';
     }
 
     /**
@@ -75,7 +86,7 @@ class Component extends Template
      */
     public function getMerchantId()
     {
-        return 'HFCTQCHQ3JB8S';
+        return $this->config->getValue('merchant_id');
     }
 
     /**
