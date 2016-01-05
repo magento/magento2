@@ -46,15 +46,13 @@ class SynonymsTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess()
     {
-        $synonyms = [['red', 'blue']];
-
-        $this->synonymAnalyzer->expects($this->once())
+        $this->synonymAnalyzer->expects($this->any())
             ->method('getSynonymsForPhrase')
-            ->willReturn($synonyms);
+            ->willReturn([]);
 
         $this->assertEquals(
-            'red blue',
-            $this->model->process('blue')
+            'red',
+            $this->model->process('red')
         );
     }
 }

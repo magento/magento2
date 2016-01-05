@@ -30,10 +30,12 @@ class Synonyms implements PreprocessorInterface
     {
         $synonyms = [];
         $synonymsArray = $this->synonymsAnalyzer->getSynonymsForPhrase($query);
-        foreach ($synonymsArray as $synonymPart) {
-            $synonyms []= implode(' ', $synonymPart);
+        if (count($synonymsArray) > 0) {
+            foreach ($synonymsArray as $synonymPart) {
+                $synonyms [] = implode(' ', $synonymPart);
+            }
+            $query = implode(' ', $synonyms);
         }
-        $queryWithSynonyms = implode(' ', $synonyms);
-        return $queryWithSynonyms;
+        return $query;
     }
 }
