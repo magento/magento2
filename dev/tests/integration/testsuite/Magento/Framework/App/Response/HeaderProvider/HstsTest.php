@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
-class HstsTestCase extends AbstractHeaderTestCase
+class HstsTest extends AbstractHeaderTestCase
 {
     /**
      * @magentoAdminConfigFixture web/secure/enable_hsts 1

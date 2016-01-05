@@ -44,7 +44,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
         $productId = (int) $this->getRequest()->getParam('id');
         $product = $this->productBuilder->build($this->getRequest());
 
-        if ($productId && !$product->getId()) {
+        if ($productId && !$product->getEntityId()) {
             $this->messageManager->addError(__('This product no longer exists.'));
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();

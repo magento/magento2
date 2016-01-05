@@ -6,11 +6,10 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
-use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Setup\Model\UpdatePackagesCache;
 
 /**
  * Tests Magento\Framework\ComposerInformation
@@ -88,19 +87,19 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($this->objectManager);
 
-        /** @var \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache */
-        $updatePackagesCache = $this->objectManager->create(
-            'Magento\Setup\Model\UpdatePackagesCache',
-            [
-                'applicationFactory' => new MagentoComposerApplicationFactory(
-                    $this->composerJsonFinder,
-                    $this->directoryList
-                ),
-                'filesystem' => $this->filesystem,
-                'composerInformation' => $this->composerInformation,
-                'objectManagerProvider' => $objectManagerProvider,
+        /** @var UpdatePackagesCache $updatePackagesCache|\PHPUnit_Framework_MockObject_MockObject */
+        $updatePackagesCache = $this->getMock('Magento\Setup\Model\UpdatePackagesCache', [], [], '', false);
+
+        $packages = [
+            'packages' => [
+                $packageName => [
+                    'latestVersion' => '1000.100.200'
+                ]
             ]
-        );
+        ];
+
+        $updatePackagesCache->expects($this->once())->method('syncPackagesForUpdate')->willReturn(true);
+        $updatePackagesCache->expects($this->once())->method('getPackagesForUpdate')->willReturn($packages);
 
         $requiredPackages = $this->composerInformation->getInstalledMagentoPackages();
         $this->assertArrayHasKey($packageName, $requiredPackages);

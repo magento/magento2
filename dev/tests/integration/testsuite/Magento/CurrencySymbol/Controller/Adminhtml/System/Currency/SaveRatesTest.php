@@ -84,7 +84,9 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->dispatch('backend/admin/system_currency/saveRates');
 
         $this->assertSessionMessages(
-            $this->contains((string)__('Please correct the input data for %1 => %2 rate', $currencyCode, $currencyTo)),
+            $this->contains(
+                (string)__('Please correct the input data for "%1 => %2" rate.', $currencyCode, $currencyTo)
+            ),
             \Magento\Framework\Message\MessageInterface::TYPE_WARNING
         );
     }
