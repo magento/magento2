@@ -351,14 +351,26 @@
         }
     }
 
-    .page-main .block {
-        &:extend(.abs-margin-for-blocks-and-widgets-desktop all);
+    .page-main {
+        .block {
+            &:extend(.abs-margin-for-blocks-and-widgets-desktop all);
+        }
     }
 
-    .form-edit-account,
     .form-address-edit {
         .fieldset {
             &:extend(.abs-blocks-2columns all);
+        }
+    }
+
+    .form-edit-account {
+        .fieldset {
+            &:extend(.abs-blocks-2columns all);
+
+            .fieldset {
+                margin-bottom: @indent__base;
+                width: 100%;
+            }
         }
     }
 
