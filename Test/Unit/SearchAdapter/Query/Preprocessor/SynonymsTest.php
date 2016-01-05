@@ -19,7 +19,7 @@ class SynonymsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SynonymAnalyzerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $synonymAnalyzer;
+    protected $synonymsAnalyzer;
 
     /**
      * Set up test environment.
@@ -28,15 +28,15 @@ class SynonymsTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->synonymAnalyzer = $this->getMockBuilder('Magento\Search\Api\SynonymAnalyzerInterface')
+        $this->synonymsAnalyzer = $this->getMockBuilder('\Magento\Search\Api\SynonymAnalyzerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Synonyms',
+            '\Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Synonyms',
             [
-                'synonymAnalyzer' => $this->synonymAnalyzer,
+                'synonymsAnalyzer' => $this->synonymsAnalyzer,
             ]
         );
     }
@@ -46,12 +46,14 @@ class SynonymsTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess()
     {
-        $this->synonymAnalyzer->expects($this->any())
+        $this->synonymsAnalyzer->expects($this->once())
             ->method('getSynonymsForPhrase')
-            ->willReturn([]);
+            ->willReturn([
+                ['red', 'blue']
+            ]);
 
         $this->assertEquals(
-            'red',
+            'red blue',
             $this->model->process('red')
         );
     }
