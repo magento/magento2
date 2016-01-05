@@ -16,8 +16,9 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = [
-        '/integrations/integration' => 'name',
-        '/integrations/integration/resources/resource' => 'name',
+        '/config/integration' => 'name',
+        '/config/integration/resources/resource' => 'name',
+        '/config/integration/'
     ];
 
     /**

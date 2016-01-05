@@ -22,7 +22,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $this->_fileResolverMock = $this->getMockBuilder('Magento\Framework\Config\FileResolverInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_configReader = $objectManager->create(
             'Magento\Integration\Model\Config\Reader',
@@ -34,7 +37,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         $configFiles = [
             file_get_contents(realpath(__DIR__ . '/_files/integrationA.xml')),
-            file_get_contents(realpath(__DIR__ . '/_files/integrationB.xml')),
+            file_get_contents(realpath(__DIR__ . '/_files/integrationB.xml'))
         ];
         $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
 
