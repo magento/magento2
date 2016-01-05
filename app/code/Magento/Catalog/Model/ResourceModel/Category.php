@@ -1090,4 +1090,12 @@ class Category extends AbstractResource
 
         return $this;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function evaluateDelete($object, $id, $connection)
+    {
+        $this->entityManager->delete(CategoryInterface::class, $object);
+    }
 }
