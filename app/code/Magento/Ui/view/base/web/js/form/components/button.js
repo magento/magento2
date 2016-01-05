@@ -13,7 +13,11 @@ define([
 
     return Element.extend({
         defaults: {
-            template: 'ui/form/components/button'
+            additionalClasses: {},
+            displayArea: 'outsideGroup',
+            displayAsLink: false,
+            elementTmpl: 'ui/form/element/button',
+            template: 'ui/form/components/button/simple'
         },
 
         /**
@@ -22,7 +26,8 @@ define([
          * @returns {Object} Chainable.
          */
         initialize: function () {
-            return this._super();
+            return this._super()
+                ._setClasses();
         },
 
         /**
@@ -72,6 +77,27 @@ define([
                 nodeTemplate: targetName
             });
             layout([child]);
+        },
+
+        /**
+         * Extends 'additionalClasses' object.
+         *
+         * @returns {Object} Chainable.
+         */
+        _setClasses: function () {
+            if (typeof this.additionalClasses === 'string') {
+                this.additionalClasses = this.additionalClasses
+                    .trim()
+                    .split(' ')
+                    .reduce(function (classes, name) {
+                        classes[name] = true;
+
+                        return classes;
+                    }, {}
+                );
+            }
+
+            return this;
         }
     });
 });
