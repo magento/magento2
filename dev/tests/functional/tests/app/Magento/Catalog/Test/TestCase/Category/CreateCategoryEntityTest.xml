@@ -153,7 +153,7 @@
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="description" xsi:type="string">Create category with three nesting</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
-            <data name="category/data/parent_id/dataset" xsi:type="string">two_nested_category</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">two_nested_categories</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
             <data name="category/data/name" xsi:type="string">Category%isolation%</data>
             <data name="category/data/description" xsi:type="string">Category Required</data>
