@@ -56,13 +56,12 @@ class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
     public function read($scope = null)
     {
         $preferences = $this->objectManagerConfig->getPreferences();
-        $remoteServices = array_filter(
-            $preferences,
-            function ($preferenceTypeName) {
-                $remoteServiceSuffix = 'Remote';
-                return (substr($preferenceTypeName, -strlen($remoteServiceSuffix)) == $remoteServiceSuffix);
+        $remoteServices = [];
+        foreach ($preferences as $type => $preference) {
+            if ($preference == $type . 'Remote') {
+                $remoteServices[$type] = $preference;
             }
-        );
+        }
         $result = [];
         foreach ($remoteServices as $serviceInterface => $remoteImplementation) {
             try {
