@@ -23,6 +23,10 @@
                 <input>text</input>
                 <selector>input[name='name']</selector>
             </name>
+            <use_default_name>
+                <selector>[name="use_default[]"][value="name"]</selector>
+                <input>checkbox</input>
+            </use_default_name>
         </fields>
     </general_information>
     <content>
