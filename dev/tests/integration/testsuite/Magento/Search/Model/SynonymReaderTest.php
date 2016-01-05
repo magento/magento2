@@ -32,21 +32,21 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
                 'ELIZABETH', []
             ],
             [
-                'ENGLISH', [['synonyms' => 'british,english', 'scope_id' => 1, 'scope_type' => 'stores']]
+                'ENGLISH', [['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]]
             ],
             [
-                'English', [['synonyms' => 'british,english', 'scope_id' => 1, 'scope_type' => 'stores']]
+                'English', [['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]]
             ],
             [
-                'QUEEN', [['synonyms' => 'queen,monarch', 'scope_id' => 1, 'scope_type' => 'stores']]
+                'QUEEN', [['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0]]
             ],
             [
-                'Monarch', [['synonyms' => 'queen,monarch', 'scope_id' => 1, 'scope_type' => 'stores']]
+                'Monarch', [['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0]]
             ],
             [
                 'MONARCH English', [
-                ['synonyms' => 'queen,monarch', 'scope_id' => 1, 'scope_type' => 'stores'],
-                ['synonyms' => 'british,english', 'scope_id' => 1, 'scope_type' => 'stores']
+                ['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0],
+                ['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]
             ]
             ]
         ];
@@ -64,8 +64,8 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
         $i = 0;
         foreach ($expectedResult as $r) {
             $this->assertEquals($r['synonyms'], $data[$i]['synonyms']);
-            $this->assertEquals($r['scope_id'], $data[$i]['scope_id']);
-            $this->assertEquals($r['scope_type'], $data[$i]['scope_type']);
+            $this->assertEquals($r['store_id'], $data[$i]['store_id']);
+            $this->assertEquals($r['website_id'], $data[$i]['website_id']);
             ++$i;
         }
     }
