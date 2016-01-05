@@ -23,11 +23,6 @@ define([
 
             return this;
         },
-        initialize: function(){
-            this._super();
-
-            return this;
-        },
 
         /**
          * Toggles value of the 'opened' property.
