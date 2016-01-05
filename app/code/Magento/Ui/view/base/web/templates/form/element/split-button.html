@@ -6,15 +6,12 @@
 -->
 
 <div class="action-select-wrap" >
-    <!--<button value="action" data-bind="click: $data.applyAction, style: {backgroundColor: $data.buttonColor}, css: {isEmpty: $data.isEmpty}" ></button>-->
-
     <!-- ko foreach: $data.elems() -->
         <!--ko if: index === 'buttonComponent' -->
             <!--ko template: getTemplate() -->
             <!-- /ko-->
         <!-- /ko-->
     <!-- /ko-->
-
     <button class="action-select" click="$data.toggleOpened"></button>
     <ul id='split-button-container' class="action-menu"css="_active: $data.opened" >
         <!-- ko foreach: $data.elems() -->
