@@ -14,12 +14,12 @@ define([
     return Insert.extend({
         defaults: {
             behaviourType: 'simple',
-            externalFilterMode: true,
+            externalFilterMode: false,//excludeselectedItems
             externalCondition: 'nin',
             settings: {
                 edit: {
-                    listens: {
-                        '${ $.editorProvider }:changed': 'onChangeRecord'
+                    imports: {
+                        'onChangeRecord': '${ $.editorProvider }:changed'
                     }
                 }
             },
@@ -49,6 +49,19 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
+        initConfig: function (config) {
+            var defaults = this.constructor.defaults;
+
+            if(config.behaviourType === 'edit' && defaults.settings && defaults.settings.edit) {
+                    _.map(defaults.settings.edit.imports, function (value, key) {
+                        this.imports[key] = value;
+                    }, defaults);
+            }
+
+            return this._super();
+        },
+
         onChangeRecord: function (record) {
             var id = utils.getKeys(record[0], true),
                 value = record[0][id],
@@ -71,7 +84,7 @@ define([
         },
 
         onSelectedChange: function () {
-            if (!this.externalTransfer) {
+            if (!this.dataLinks.imports) {
                 return;
             }
 
