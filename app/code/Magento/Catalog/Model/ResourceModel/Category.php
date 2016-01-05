@@ -564,7 +564,7 @@ class Category extends AbstractResource
             []
         )->joinLeft(
             ['c' => $table],
-            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $linkField . ' = m.entity_id",
+            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $linkField . ' = m.entity_id',
             []
         )->where(
             'm.path LIKE :c_path'
