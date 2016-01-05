@@ -60,7 +60,7 @@ class Builder implements BuilderInterface
     protected function processFilter(RequestFilterInterface $filter, $conditionType)
     {
         if (RequestFilterInterface::TYPE_BOOL == $filter->getType()) {
-            $query = $this->processBoolFilter($filter);
+            $query = $this->processBoolFilter($filter, $this->isNegation($conditionType));
         } else {
             if (!array_key_exists($filter->getType(), $this->filters)) {
                 throw new \InvalidArgumentException('Unknown filter type ' . $filter->getType());
@@ -77,13 +77,20 @@ class Builder implements BuilderInterface
 
     /**
      * @param RequestFilterInterface|BoolExpression $filter
+     * @param bool $isNegation
      * @return array
      */
-    protected function processBoolFilter(RequestFilterInterface $filter)
+    protected function processBoolFilter(RequestFilterInterface $filter, $isNegation)
     {
-        $must = $this->buildFilters($filter->getMust(), self::QUERY_CONDITION_MUST);
+        $must = $this->buildFilters(
+            $filter->getMust(),
+            $isNegation ? self::QUERY_CONDITION_MUST_NOT : self::QUERY_CONDITION_MUST
+        );
         $should = $this->buildFilters($filter->getShould(), self::QUERY_CONDITION_SHOULD);
-        $mustNot = $this->buildFilters($filter->getMustNot(), self::QUERY_CONDITION_MUST_NOT);
+        $mustNot = $this->buildFilters(
+            $filter->getMustNot(),
+            $isNegation ? self::QUERY_CONDITION_MUST : self::QUERY_CONDITION_MUST_NOT
+        );
 
         $queries = [
             'bool' => array_merge(
@@ -106,11 +113,22 @@ class Builder implements BuilderInterface
         $queries = [];
         foreach ($filters as $filter) {
             $filterQuery = $this->processFilter($filter, $conditionType);
-            $queries['bool'][$conditionType] = array_merge(
-                isset($queries['bool'][$conditionType]) ? $queries['bool'][$conditionType] : [],
-                $filterQuery['bool'][$conditionType]
-            );
+            if (isset($filterQuery['bool'][$conditionType])) {
+                $queries['bool'][$conditionType] = array_merge(
+                    isset($queries['bool'][$conditionType]) ? $queries['bool'][$conditionType] : [],
+                    $filterQuery['bool'][$conditionType]
+                );
+            }
         }
         return $queries;
+    }
+
+    /**
+     * @param string $conditionType
+     * @return bool
+     */
+    protected function isNegation($conditionType)
+    {
+        return self::QUERY_CONDITION_MUST_NOT === $conditionType;
     }
 }
