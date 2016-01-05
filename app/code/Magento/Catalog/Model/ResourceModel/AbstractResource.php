@@ -227,14 +227,13 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          * for default store id
          * In this case we clear all not default values
          */
-        $entityIdField = $this->getLinkField();
         if ($this->_storeManager->hasSingleStore()) {
             $storeId = $this->getDefaultStoreId();
             $connection->delete(
                 $table,
                 [
                     'attribute_id = ?' => $attribute->getAttributeId(),
-                    "{$entityIdField} = ?" => $object->getId(),
+                    $this->getLinkField() . ' = ?' => $object->getData($this->getLinkField()),
                     'store_id <> ?' => $storeId
                 ]
             );
@@ -244,7 +243,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             [
                 'attribute_id' => $attribute->getAttributeId(),
                 'store_id' => $storeId,
-                $entityIdField => $object->getId(),
+                $this->getLinkField() => $object->getData($this->getLinkField()),
                 'value' => $this->_prepareValueForSave($value, $attribute),
             ]
         );
