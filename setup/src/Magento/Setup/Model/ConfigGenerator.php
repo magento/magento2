@@ -262,6 +262,7 @@ class ConfigGenerator
             }
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS, $hosts);
         }
+        $configData->setOverrideWhenSave(true);
         return $configData;
     }
 }
