@@ -35,6 +35,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPerFileSchema()
     {
-        $this->assertNull($this->schemaLocator->getPerFileSchema());
+        $this->assertEquals($this->moduleDir . '/integration/integration_file.xsd',
+            $this->schemaLocator->getPerFileSchema());
     }
 }

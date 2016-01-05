@@ -31,8 +31,9 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Integration')
-            . '/integration/integration.xsd';
+        $etcDir = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Integration');
+        $this->_schema = $etcDir . '/integration/integration.xsd';
+        $this->_perFileSchema = $etcDir . '/integration/integration_file.xsd';
     }
 
     /**
