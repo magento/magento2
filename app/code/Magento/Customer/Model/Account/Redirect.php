@@ -8,14 +8,13 @@ namespace Magento\Customer\Model\Account;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\Result\Forward as ResultForward;
-use Magento\Framework\Controller\Result\RedirectFactory;
-use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Url\DecoderInterface;
 
 /**
@@ -54,14 +53,9 @@ class Redirect
     protected $url;
 
     /**
-     * @var RedirectFactory
+     * @var ResultFactory
      */
-    protected $resultRedirectFactory;
-
-    /**
-     * @var ForwardFactory
-     */
-    protected $resultForwardFactory;
+    protected $resultFactory;
 
     /**
      * @param RequestInterface $request
@@ -71,8 +65,7 @@ class Redirect
      * @param UrlInterface $url
      * @param DecoderInterface $urlDecoder
      * @param CustomerUrl $customerUrl
-     * @param RedirectFactory $resultRedirectFactory
-     * @param ForwardFactory $resultForwardFactory
+     * @param ResultFactory $resultFactory
      */
     public function __construct(
         RequestInterface $request,
@@ -82,8 +75,7 @@ class Redirect
         UrlInterface $url,
         DecoderInterface $urlDecoder,
         CustomerUrl $customerUrl,
-        RedirectFactory $resultRedirectFactory,
-        ForwardFactory $resultForwardFactory
+        ResultFactory $resultFactory
     ) {
         $this->request = $request;
         $this->session = $customerSession;
@@ -92,8 +84,7 @@ class Redirect
         $this->url = $url;
         $this->urlDecoder = $urlDecoder;
         $this->customerUrl = $customerUrl;
-        $this->resultRedirectFactory = $resultRedirectFactory;
-        $this->resultForwardFactory = $resultForwardFactory;
+        $this->resultFactory = $resultFactory;
     }
 
     /**
@@ -108,13 +99,13 @@ class Redirect
 
         /** @var ResultRedirect|ResultForward $result */
         if ($this->session->getBeforeRequestParams()) {
-            $result = $this->resultForwardFactory->create();
+            $result = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
             $result->setParams($this->session->getBeforeRequestParams())
                 ->setModule($this->session->getBeforeModuleName())
                 ->setController($this->session->getBeforeControllerName())
                 ->forward($this->session->getBeforeAction());
         } else {
-            $result = $this->resultRedirectFactory->create();
+            $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             $result->setUrl($this->session->getBeforeAuthUrl(true));
         }
         return $result;
