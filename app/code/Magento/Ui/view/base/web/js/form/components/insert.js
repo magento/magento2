@@ -121,9 +121,12 @@ define([
         render: function () {
             var request;
 
-            request = this.requestData(this.params, this.renderSettings);
-            this.isRendered = false;
+            if (this.isRendered) {
+                return false;
+            }
+
             this.startRender = true;
+            request = this.requestData(this.params, this.renderSettings);
             request
                 .done(this.onRender)
                 .fail(this.onError);
