@@ -30,14 +30,14 @@ class Sequence implements \Magento\Framework\DB\Sequence\SequenceInterface
 
     /**
      * @param ResourceConnection $resource
-     * @param $connectionName
-     * @param $sequenceTable
+     * @param string $connectionName
+     * @param string $sequenceTable
      */
     public function __construct(
         ResourceConnection $resource,
         $connectionName,
         $sequenceTable
-        ) {
+    ) {
         $this->resource = $resource;
         $this->connectionName = $connectionName;
         $this->sequenceTable = $sequenceTable;
