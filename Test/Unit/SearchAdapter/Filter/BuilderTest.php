@@ -114,6 +114,39 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test build() method with negation
+     * @param string $filterMock
+     * @param string $filterType
+     * @dataProvider buildDataProvider
+     */
+    public function testBuildNegation($filterMock, $filterType)
+    {
+        $filter = $this->getMockBuilder($filterMock)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filter->expects($this->any())
+            ->method('getType')
+            ->willReturn($filterType);
+        $childFilter = $this->getMockBuilder('Magento\Framework\Search\Request\FilterInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $childFilter->expects($this->any())
+            ->method('getType')
+            ->willReturn('termFilter');
+        $filter->expects($this->any())
+            ->method('getMust')
+            ->willReturn([$childFilter]);
+        $filter->expects($this->any())
+            ->method('getShould')
+            ->willReturn([$childFilter]);
+        $filter->expects($this->any())
+            ->method('getMustNot')
+            ->willReturn([$childFilter]);
+
+        $this->model->build($filter, 'must_not');
+    }
+
+    /**
      * @return array
      */
     public function buildDataProvider()
