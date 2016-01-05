@@ -33,6 +33,8 @@ class AddPaypalShortcutsObserverTest extends \PHPUnit_Framework_TestCase
      * @param array $blocks
      *
      * @dataProvider dataProviderShortcutsButtons
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testAddShortcutsButtons(array $blocks)
     {

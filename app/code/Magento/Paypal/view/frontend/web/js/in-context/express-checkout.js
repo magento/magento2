@@ -40,7 +40,7 @@ define(
                             }
                         ).done(
                             function (response) {
-                                paypal.checkout.startFlow(response.token);
+                                paypalExpressCheckout.checkout.startFlow(response.token);
                             }
                         ).fail(
                             function () {
