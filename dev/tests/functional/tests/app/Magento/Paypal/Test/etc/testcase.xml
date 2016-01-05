@@ -6,6 +6,24 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+    <scenario name="InContextExpressCheckoutFromProductPageTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProduct" />
+        <step name="createProduct" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="inContextCheckoutWithPaypalFromProductPage" />
+        <step name="inContextCheckoutWithPaypalFromProductPage" module="Magento_Paypal" next="continuePaypalCheckout" />
+        <step name="continuePaypalCheckout" module="Magento_Paypal" next="expressCheckoutOrderPlace" />
+        <step name="expressCheckoutOrderPlace" module="Magento_Paypal" />
+    </scenario>
+    <scenario name="InContextExpressCheckoutFromShoppingCartTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="inContextCheckoutWithPaypalFromShoppingCart" />
+        <!--<step name="inContextCheckoutWithPaypalFromShoppingCart" module="Magento_Paypal" next="continuePaypalCheckout" />-->
+        <step name="inContextCheckoutWithPaypalFromShoppingCart" module="Magento_Paypal" />
+        <!--<step name="continuePaypalCheckout" module="Magento_Paypal" next="expressCheckoutOrderPlace" />-->
+        <!--<step name="expressCheckoutOrderPlace" module="Magento_Paypal" />-->
+    </scenario>
     <scenario name="ExpressCheckoutFromProductPageTest" firstStep="createSandboxCustomer">
         <step name="createSandboxCustomer" module="Magento_Paypal" next="setupConfiguration" />
         <step name="setupConfiguration" module="Magento_Config" next="createProduct" />
