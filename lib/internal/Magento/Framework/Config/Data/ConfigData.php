@@ -78,7 +78,7 @@ class ConfigData
      *
      * @return bool
      */
-    public function getOverrideWhenSave()
+    public function isOverrideWhenSave()
     {
         return $this->overrideWhenSave;
     }

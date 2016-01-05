@@ -129,13 +129,13 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->will($this->returnValue($testSet1[ConfigFilePool::APP_CONFIG]));
         $configData1->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
-        $configData1->expects($this->once())->method('getOverrideWhenSave')->willReturn(false);
+        $configData1->expects($this->once())->method('isOverrideWhenSave')->willReturn(false);
 
         $configData2->expects($this->any())
             ->method('getData')
             ->will($this->returnValue($testSet2[ConfigFilePool::APP_CONFIG]));
         $configData2->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
-        $configData2->expects($this->once())->method('getOverrideWhenSave')->willReturn(false);
+        $configData2->expects($this->once())->method('isOverrideWhenSave')->willReturn(false);
 
         $configOption = $this->configOptionsList;
         $configOption->expects($this->once())
