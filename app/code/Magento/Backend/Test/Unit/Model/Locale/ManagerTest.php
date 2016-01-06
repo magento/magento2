@@ -28,6 +28,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Backend\Model\Auth\Session
      */
     protected $_authSession;
+    
+    /**
+     * @var \Magento\Backend\App\ConfigInterface
+     */
+    protected $_backendConfig;
 
     protected function setUp()
     {
@@ -40,7 +45,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        
+        $this->_backendConfig = $this->getMockForAbstractClass('Magento\Backend\App\ConfigInterface', [], '', false);
+        
         $userMock = new \Magento\Framework\DataObject();
 
         $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
@@ -54,7 +61,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Backend\Model\Locale\Manager(
             $this->_session,
             $this->_authSession,
-            $this->_translator
+            $this->_translator,
+            $this->_backendConfig
         );
     }
 
