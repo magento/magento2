@@ -126,12 +126,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'methodsMap' => $methodsMap
             ]
         );
+
+        $compositeReader = $objectManager->create(
+            'Magento\Framework\MessageQueue\Config\CompositeReader',
+            [
+                'readers' => [
+                    ['reader' => $xmlReader, 'sortOrder' => 10],
+                    ['reader' => $envReader, 'sortOrder' => 20]
+                ],
+            ]
+        );
+
         /** @var \Magento\Framework\MessageQueue\Config $configData */
         $configData = $objectManager->create(
             'Magento\Framework\MessageQueue\Config\Data',
             [
-                'reader' => $xmlReader,
-                'envReader' => $envReader,
+                'reader' => $compositeReader,
                 'envValidator' => $envValidator
             ]
         );
@@ -164,18 +174,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $compositeReader = $objectManager->create(
             'Magento\Framework\Communication\Config\CompositeReader',
             [
-                'readersList' => [
-                    ['reader' => $xmlReader, 'sortOrder' => 5],
+                'readers' => [
+                    ['reader' => $xmlReader, 'sortOrder' => 10],
                     [
                         'reader' => $objectManager->create('Magento\Framework\Communication\Config\Reader\EnvReader'),
-                        'sortOrder' => 10
-                    ],
-                    [
-                        'reader' => $objectManager->create(
-                            'Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication'
-                        ),
                         'sortOrder' => 20
-                    ],
+                    ]
                 ],
             ]
         );
