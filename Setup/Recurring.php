@@ -6,24 +6,23 @@
 
 namespace Magento\Amqp\Setup;
 
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Amqp\Model\Topology;
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
- * @codeCoverageIgnore
+ * Class Recurring
+ *
  */
-class InstallData implements InstallDataInterface
+class Recurring implements InstallSchemaInterface
 {
     /**
      * @var \Magento\Amqp\Model\Topology
      */
-    private $topology;
+    protected $topology;
 
     /**
-     * Constructor
-     *
      * @param Topology $topology
      */
     public function __construct(Topology $topology)
@@ -34,7 +33,7 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $this->topology->install();
     }
