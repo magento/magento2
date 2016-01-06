@@ -71,21 +71,19 @@
                 </item>
             </argument>
         </column>
-        <column name="scope" class="Magento\Search\Ui\Component\Listing\Column\Scope">
+        <column name="website_id" class="Magento\Search\Ui\Component\Listing\Column\Website">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">30</item>
-                    <item name="label" xsi:type="string" translate="true">Scope</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Website</item>
                 </item>
             </argument>
         </column>
-        <column name="scope_type">
+        <column name="store_id" class="Magento\Search\Ui\Component\Listing\Column\StoreView">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">40</item>
-                    <item name="label" xsi:type="string" translate="true">Scope Type</item>
+                    <item name="label" xsi:type="string" translate="true">Store View</item>
                 </item>
             </argument>
         </column>
