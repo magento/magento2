@@ -91,13 +91,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $converter = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter',
+            'Magento\Framework\MessageQueue\Config\Reader\Xml\Converter',
             [
                 'communicationConfig' => $this->getCommunicationConfigInstance()
             ]
         );
         $xmlReader = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\XmlReader',
+            'Magento\Framework\MessageQueue\Config\Reader\Xml',
             [
                 'fileResolver' => $fileResolver,
                 'converter' => $converter,
@@ -114,14 +114,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['reader' => $deploymentConfigReader]
         );
         $envReader = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\EnvReader',
+            'Magento\Framework\MessageQueue\Config\Reader\Env',
             [
                 'deploymentConfig' => $deploymentConfig
             ]
         );
         $methodsMap = $objectManager->create('Magento\Framework\Reflection\MethodsMap');
         $envValidator = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\EnvReader\Validator',
+            'Magento\Framework\MessageQueue\Config\Reader\Env\Validator',
             [
                 'methodsMap' => $methodsMap
             ]

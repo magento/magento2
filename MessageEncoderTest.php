@@ -139,9 +139,9 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn([$configPath => file_get_contents(($configPath))]);
 
-        /** @var \Magento\Framework\MessageQueue\Config\Reader\XmlReader $xmlReader */
+        /** @var \Magento\Framework\MessageQueue\Config\Reader\Xml $xmlReader */
         $xmlReader = $this->objectManager->create(
-            '\Magento\Framework\MessageQueue\Config\Reader\XmlReader',
+            '\Magento\Framework\MessageQueue\Config\Reader\Xml',
             ['fileResolver' => $fileResolverMock]
         );
 
