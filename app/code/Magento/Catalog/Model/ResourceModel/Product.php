@@ -296,12 +296,12 @@ class Product extends AbstractResource
     public function delete($object)
     {
         try {
-            $connection = $this->transactionManager->start($this->getConnection());
+            //$connection = $this->transactionManager->start($this->getConnection());
             if (is_numeric($object)) {
-                $id = (int) $object;
+                //$id = (int) $object;
             } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
                 $object->beforeDelete();
-                $id = (int) $object->getData($this->getLinkField());
+                //$id = (int) $object->getData($this->getLinkField());
             }
             $this->_beforeDelete($object);
             $this->entityManager->delete(\Magento\Catalog\Api\Data\ProductInterface::class, $object);
