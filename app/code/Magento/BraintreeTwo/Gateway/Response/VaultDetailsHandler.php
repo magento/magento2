@@ -14,7 +14,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Model\PaymentTokenInterfaceFactory;
+use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**

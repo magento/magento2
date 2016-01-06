@@ -9,7 +9,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class TMapFactory
- * @package Magento\Framework\ObjectManager
  */
 class TMapFactory
 {
