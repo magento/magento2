@@ -31,7 +31,7 @@ define([
                 externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
             },
             listens: {
-                value: 'updateExternalFiltersModifier'
+                value: 'updateExternalFiltersModifier updateSelections'
             },
             modules: {
                 selections: '${ $.selectionsProvider }'
@@ -53,15 +53,28 @@ define([
         initConfig: function (config) {
             var defaults = this.constructor.defaults;
 
-            if(config.behaviourType === 'edit' && defaults.settings && defaults.settings.edit) {
-                    _.map(defaults.settings.edit.imports, function (value, key) {
-                        this.imports[key] = value;
-                    }, defaults);
+            if (config.behaviourType === 'edit' && defaults.settings && defaults.settings.edit) {
+                _.map(defaults.settings.edit.imports, function (value, key) {
+                    this.imports[key] = value;
+                }, defaults);
             }
 
             return this._super();
         },
 
+        /** @inheritdoc */
+        initObservable: function () {
+            return this._super()
+                .observe([
+                    'externalValue'
+                ]);
+        },
+
+        /**
+         * Add data from edited record to externalValue
+         *
+         * @param {Object} record
+         */
         onChangeRecord: function (record) {
             var id = utils.getKeys(record[0], true),
                 value = record[0][id],
@@ -76,13 +89,11 @@ define([
             this.externalValue.valueHasMutated();
         },
 
-        initObservable: function () {
-            return this._super()
-                .observe([
-                    'externalValue'
-                ]);
-        },
-
+        /**
+         * Updates externalValue every time row is selected,
+         * if it is configured by 'dataLinks.imports'
+         *
+         */
         onSelectedChange: function () {
             if (!this.dataLinks.imports) {
                 return;
@@ -91,6 +102,12 @@ define([
             this.updateExternalValue();
         },
 
+        /**
+         * Updates externalValue, from selectionsProvider data (if it is enough)
+         * or ajax request to server
+         *
+         * @returns {Object} result - deferred that will be resolved when value is updated
+         */
         updateExternalValue: function () {
             var result = $.Deferred(),
                 provider = this.selections(),
@@ -101,7 +118,7 @@ define([
                 canUpdateFromSelection;
 
             if (!provider) {
-                return;
+                return result;
             }
 
             canUpdateFromSelection =
@@ -117,9 +134,17 @@ define([
                     result.resolve();
                 });
             }
+
             return result;
         },
 
+        /**
+         * Updates externalValue, from selectionsProvider data
+         *
+         * @param {Object} selections
+         * @param {Number} index
+         * @param {Object} rows
+         */
         updateFromSelectionData: function (selections, index, rows) {
             rows = selections.selected && selections.selected.length ?
                 _.filter(rows, function (row) {
@@ -128,6 +153,15 @@ define([
             this.set('externalValue', rows);
         },
 
+        /**
+         * Updates externalValue, from ajax request to grab selected rows data
+         *
+         * @param {Object} selections
+         * @param {Number} index
+         * @param {String} itemsType
+         *
+         * @returns {Object} request - deferred that will be resolved when ajax is done
+         */
         updateFromServerData: function (selections, index, itemsType) {
             var filterType = selections && selections.excludeMode ? 'nin' : 'in',
                 selectionsData = {},
@@ -148,15 +182,23 @@ define([
                     this.loading(false);
                 }.bind(this))
                 .fail(this.onError);
+
             return request;
         },
 
+        /**
+         * Updates external filter (if externalFilterMode is on)
+         * every time, when value is updated,
+         * so grid is re-filtered to exclude or include selected rows only
+         *
+         * @param {Object} items
+         */
         updateExternalFiltersModifier: function (items) {
-            var provider ,
+            var provider,
                 index,
                 filter = {};
 
-            if (!this.externalFilterMode || !items || !items.length) {
+            if (!this.externalFilterMode) {//|| !items || !items.length
                 return;
             }
 
@@ -169,10 +211,36 @@ define([
             this.set('externalFiltersModifier', filter);
         },
 
+        /**
+         * Updates grid selections
+         * every time, when value is updated,
+         * so grid is re-selected according to externally updated value
+         *
+         */
+        updateSelections: function () {
+            var provider = this.selections(),
+                ids;
+
+            if (!this.externalFilterMode) { //|| !this.dataLinks.exports
+                return;
+            }
+
+            ids = _.pluck(this.value() || [], provider.indexField);
+            provider.selected(ids || []);
+        },
+
+        /**
+         * Updates value from external value
+         *
+         */
         updateValue: function () {
             this.set('value', this.externalValue());
         },
 
+        /**
+         * Updates external value, then updates value from external value
+         *
+         */
         save: function () {
             this.updateExternalValue().done(this.updateValue);
         }
