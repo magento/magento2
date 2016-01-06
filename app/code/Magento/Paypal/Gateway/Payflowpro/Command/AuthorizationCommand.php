@@ -8,6 +8,7 @@ namespace Magento\Paypal\Gateway\Payflowpro\Command;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Payment\Gateway\Command;
+use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Helper\Formatter;
@@ -36,7 +37,7 @@ class AuthorizationCommand implements CommandInterface
      * Executes command basing on business object
      *
      * @param array $commandSubject
-     * @return Command\ResultInterface|null
+     * @return ResultInterface|null
      * @throws LocalizedException
      * @throws InvalidTransitionException
      */
