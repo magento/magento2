@@ -295,6 +295,36 @@
             </item>
         </argument>
     </email>
+    <insertForm class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insertForm</item>
+                <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                <item name="render_url" xsi:type="url" path="mui/index/render"/>
+                <item name="autoRender" xsi:type="boolean">false</item>
+                <item name="dataLinks" xsi:type="array">
+                    <item name="imports" xsi:type="boolean">false</item>
+                    <item name="exports" xsi:type="boolean">false</item>
+                </item>
+                <item name="realTimeLink" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+    </insertForm>
+    <insertGrid class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insertGrid</item>
+                <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                <item name="render_url" xsi:type="url" path="mui/index/render"/>
+                <item name="autoRender" xsi:type="boolean">false</item>
+                <item name="dataLinks" xsi:type="array">
+                    <item name="imports" xsi:type="boolean">true</item>
+                    <item name="exports" xsi:type="boolean">false</item>
+                </item>
+                <item name="realTimeLink" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+    </insertGrid>
     <!-- Form element data types -->
 
 
