@@ -30,11 +30,11 @@
             <argument name="methodCode" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</argument>
         </arguments>
     </type>
-    <virtualType name="BraintreeTwoPayPalGatewayConfig" type="Magento\BraintreeTwo\Gateway\Config\Config">
+    <type name="Magento\BraintreeTwo\Gateway\Config\PayPal\Config">
         <arguments>
             <argument name="methodCode" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::PAYPAL_CODE</argument>
         </arguments>
-    </virtualType>
+    </type>
 
     <!-- Logger, initialized with BraintreeConfig -->
     <virtualType name="BraintreeTwoLogger" type="Magento\Payment\Model\Method\Logger">
@@ -279,7 +279,7 @@
     </virtualType>
     <virtualType name="BraintreeTwoPayPalConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
-            <argument name="configInterface" xsi:type="object">BraintreeTwoPayPalGatewayConfig</argument>
+            <argument name="configInterface" xsi:type="object">Magento\BraintreeTwo\Gateway\Config\PayPal\Config</argument>
         </arguments>
     </virtualType>
 
