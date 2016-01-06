@@ -234,7 +234,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 $table,
                 [
                     'attribute_id = ?' => $attribute->getAttributeId(),
-                    "{$entityIdField} = ?" => $object->getId(),
+                    "{$entityIdField} = ?" => $object->getData($entityIdField),
                     'store_id <> ?' => $storeId
                 ]
             );
@@ -244,7 +244,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             [
                 'attribute_id' => $attribute->getAttributeId(),
                 'store_id' => $storeId,
-                $entityIdField => $object->getId(),
+                $entityIdField => $object->getData($entityIdField),
                 'value' => $this->_prepareValueForSave($value, $attribute),
             ]
         );
