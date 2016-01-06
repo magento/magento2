@@ -88,6 +88,12 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 'options' => $this->countryCollection->load()->toOptionArray(),
                 'value' => null
             ],
+            'region' => [
+                'visible' => true,
+                'formElement' => 'input',
+                'label' => __('State/Province'),
+                'value' => null
+            ],
             'region_id' => [
                 'visible' => true,
                 'formElement' => 'select',
