@@ -14,6 +14,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
  * Class TransparentTest
  *
  * Test class for \Magento\Paypal\Model\Payflow\Transparent
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TransparentTest extends \PHPUnit_Framework_TestCase
 {
