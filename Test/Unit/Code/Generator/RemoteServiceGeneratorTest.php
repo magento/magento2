@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Code\Generator;
 
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfigInterface;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
-use Magento\Framework\Communication\Config\Reader\RemoteServiceReader as CommunicationRemoteServiceReader;
+use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
 
 class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
     protected $serviceMethodsMapMock;
 
     /**
-     * @var CommunicationRemoteServiceReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var RemoteServiceReader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $communicationReaderMock;
 
@@ -43,7 +43,7 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->communicationReaderMock = $this
-            ->getMockBuilder('Magento\Framework\Communication\Config\Reader\RemoteServiceReader')
+            ->getMockBuilder('Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication')
             ->disableOriginalConstructor()
             ->getMock();
 

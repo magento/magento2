@@ -9,7 +9,7 @@ use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
-use Magento\Framework\Communication\Config\Reader\RemoteServiceReader as CommunicationRemoteServiceReader;
+use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
 
 /**
  * Code generator for remote services.
@@ -30,7 +30,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     private $serviceMethodsMap;
 
     /**
-     * @var CommunicationRemoteServiceReader
+     * @var RemoteServiceReader
      */
     private $communicationRemoteServiceReader;
 
@@ -39,7 +39,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      *
      * @param CommunicationConfig $communicationConfig
      * @param ServiceMethodsMap $serviceMethodsMap
-     * @param CommunicationRemoteServiceReader $communicationRemoteServiceReader
+     * @param RemoteServiceReader $communicationRemoteServiceReader
      * @param string|null $sourceClassName
      * @param string|null $resultClassName
      * @param Io $ioObject
@@ -49,7 +49,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     public function __construct(
         CommunicationConfig $communicationConfig,
         ServiceMethodsMap $serviceMethodsMap,
-        CommunicationRemoteServiceReader $communicationRemoteServiceReader,
+        RemoteServiceReader $communicationRemoteServiceReader,
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,

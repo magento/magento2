@@ -3,16 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Config\Reader;
+namespace Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
-use Magento\Framework\Communication\Config\Reader\RemoteServiceReader as CommunicationRemoteServiceReader;
+use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as CommunicationRemoteServiceReader;
 
 /**
  * Remote service configuration reader.
  */
-class RemoteServiceReader implements \Magento\Framework\Config\ReaderInterface
+class MessageQueue implements \Magento\Framework\Config\ReaderInterface
 {
     const DEFAULT_PUBLISHER = 'default';
     const DEFAULT_CONNECTION = 'amqp';

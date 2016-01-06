@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\MessageQueue\Config;
 
+use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\MessageQueue as RemoteServiceReader;
+
 /**
  * Class for access to MessageQueue configuration data.
  */
@@ -18,7 +20,7 @@ class Data extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\MessageQueue\Config\Reader\EnvReader $envReader
      * @param \Magento\Framework\MessageQueue\Config\Reader\EnvReader\Validator $envValidator
-     * @param \Magento\Framework\MessageQueue\Config\Reader\RemoteServiceReader $remoteServiceReader
+     * @param RemoteServiceReader $remoteServiceReader
      * @param string $cacheId
      */
     public function __construct(
@@ -26,7 +28,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\MessageQueue\Config\Reader\EnvReader $envReader,
         \Magento\Framework\MessageQueue\Config\Reader\EnvReader\Validator $envValidator,
-        \Magento\Framework\MessageQueue\Config\Reader\RemoteServiceReader $remoteServiceReader,
+        RemoteServiceReader $remoteServiceReader,
         $cacheId = 'message_queue_config_cache'
     ) {
         $this->merge($remoteServiceReader->read());

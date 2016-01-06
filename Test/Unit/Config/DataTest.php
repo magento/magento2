@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Config;
 
+use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\MessageQueue as RemoteServiceReader;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,6 +21,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $envReaderMock;
 
     /**
+     * @var RemoteServiceReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $remoteServiceReaderMock;
+
+    /**
      * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheMock;
@@ -30,6 +36,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->envReaderMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\EnvReader')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->remoteServiceReaderMock = $this
+            ->getMockBuilder('Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\MessageQueue')
             ->disableOriginalConstructor()
             ->getMock();
         $this->cacheMock = $this->getMockBuilder('Magento\Framework\Config\CacheInterface')
@@ -44,6 +54,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->will($this->returnValue(serialize($expected)));
         $this->envReaderMock->expects($this->any())->method('read')->willReturn([]);
+        $this->remoteServiceReaderMock->expects($this->any())->method('read')->willReturn([]);
         $this->assertEquals($expected, $this->getModel()->get());
     }
 
@@ -60,7 +71,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             [
                 'xmlReader' => $this->xmlReaderMock,
                 'cache' => $this->cacheMock,
-                'envReader' => $this->envReaderMock
+                'envReader' => $this->envReaderMock,
+                'remoteServiceReader' => $this->remoteServiceReaderMock
             ]
         );
     }
