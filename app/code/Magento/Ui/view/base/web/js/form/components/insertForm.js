@@ -71,7 +71,7 @@ define([
         initConfig: function (config) {
             var defaults = this.constructor.defaults;
 
-            utils.extend(defaults, defaults.settings[config.formSubmitType]);
+            utils.extend(defaults, defaults.settings[config.formSubmitType] || {});
 
             return this._super();
         },
