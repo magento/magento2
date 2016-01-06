@@ -151,13 +151,18 @@ define([
          * @param {*} newExportedValue
          */
         onExtendedValueChanged: function (newExportedValue) {
-            var oldChecked = this.checked.peek(),
+            var isMappedUsed = !_.isEmpty(this.valueMap),
+                oldChecked = this.checked.peek(),
                 oldValue = this.value.peek(),
                 newChecked;
 
-            newChecked = this.isMultiple ?
-                newExportedValue.indexOf(oldValue) !== -1 :
-                newExportedValue === oldValue;
+            if (this.isMultiple) {
+                newChecked = newExportedValue.indexOf(oldValue) !== -1;
+            } else if (isMappedUsed) {
+                newChecked = this.getReverseValueMap(newExportedValue);
+            } else {
+                newChecked = newExportedValue === oldValue;
+            }
 
             if (newChecked !== oldChecked) {
                 this.checked(newChecked);
@@ -179,6 +184,10 @@ define([
             } else {
                 newValue = oldValue;
             }
+
+            //if (isMappedUsed && newValue !== oldValue) {
+            //    this.value(newValue);
+            //}
 
             if (!this.isMultiple && newChecked) {
                 this.exportedValue(newValue);
