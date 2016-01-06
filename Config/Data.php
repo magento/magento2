@@ -16,15 +16,15 @@ class Data extends \Magento\Framework\Config\Data
      *
      * @param \Magento\Framework\MessageQueue\Config\CompositeReader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param \Magento\Framework\MessageQueue\Config\Reader\EnvReader $envReader
-     * @param \Magento\Framework\MessageQueue\Config\Reader\EnvReader\Validator $envValidator
+     * @param \Magento\Framework\MessageQueue\Config\Reader\Env $envReader
+     * @param \Magento\Framework\MessageQueue\Config\Reader\Env\Validator $envValidator
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Framework\MessageQueue\Config\CompositeReader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Framework\MessageQueue\Config\Reader\EnvReader $envReader,
-        \Magento\Framework\MessageQueue\Config\Reader\EnvReader\Validator $envValidator,
+        \Magento\Framework\MessageQueue\Config\Reader\Env $envReader,
+        \Magento\Framework\MessageQueue\Config\Reader\Env\Validator $envValidator,
         $cacheId = 'message_queue_config_cache'
     ) {
         parent::__construct($reader, $cache, $cacheId);

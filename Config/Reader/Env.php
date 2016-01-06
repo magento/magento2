@@ -10,7 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 /**
  * Communication configuration reader. Reads data from env.php.
  */
-class EnvReader implements \Magento\Framework\Config\ReaderInterface
+class Env implements \Magento\Framework\Config\ReaderInterface
 {
     const ENV_QUEUE  = 'queue';
     const ENV_TOPICS = 'topics';

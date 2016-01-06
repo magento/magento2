@@ -11,12 +11,12 @@ use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Mes
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Config\Reader\XmlReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Config\Reader\Xml|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $xmlReaderMock;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Config\Reader\EnvReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Config\Reader\Env|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $envReaderMock;
 
@@ -32,10 +32,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->xmlReaderMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\XmlReader')
+        $this->xmlReaderMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\Xml')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->envReaderMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\EnvReader')
+        $this->envReaderMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\Env')
             ->disableOriginalConstructor()
             ->getMock();
         $this->remoteServiceReaderMock = $this

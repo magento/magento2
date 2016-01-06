@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Config\Reader\XmlReader;
+namespace Magento\Framework\MessageQueue\Config\Reader\Xml;
 
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;

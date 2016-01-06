@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue\Test\Unit\Config;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\MessageQueue\Config\Reader\EnvReader;
+use Magento\Framework\MessageQueue\Config\Reader\Env;
 
 /**
  * @codingStandardsIgnoreFile
@@ -14,7 +14,7 @@ use Magento\Framework\MessageQueue\Config\Reader\EnvReader;
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter
+     * @var \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter
      */
     private $converter;
 
@@ -42,7 +42,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->converter = $objectManager->getObject(
-            'Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter',
+            'Magento\Framework\MessageQueue\Config\Reader\Xml\Converter',
             [
                 'communicationConfig' => $this->communicationConfigMock,
                 'xmlValidator' => $this->validatorMock

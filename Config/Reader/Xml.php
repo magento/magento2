@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue\Config\Reader;
 /**
  * MessageQueue configuration filesystem loader. Loads all publisher configuration from XML file
  */
-class XmlReader extends \Magento\Framework\Config\Reader\Filesystem
+class Xml extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of id attributes for merge
@@ -27,8 +27,8 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem
 
     /**
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter $converter
-     * @param \Magento\Framework\MessageQueue\Config\Reader\XmlReader\SchemaLocator $schemaLocator
+     * @param \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter $converter
+     * @param \Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
@@ -37,8 +37,8 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter $converter,
-        \Magento\Framework\MessageQueue\Config\Reader\XmlReader\SchemaLocator $schemaLocator,
+        \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter $converter,
+        \Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'queue.xml',
         $idAttributes = [],
