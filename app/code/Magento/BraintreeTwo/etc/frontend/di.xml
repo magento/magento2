@@ -16,7 +16,7 @@
     <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="braintreetwo" xsi:type="const">\Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</item>
+                <item name="braintreetwo" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</item>
             </argument>
         </arguments>
     </type>
