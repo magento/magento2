@@ -10,7 +10,7 @@
     ], function () {
 
         return function ($target, $owner, data) {
-            $target.find('tr[id$="_settings_express_checkout"]').show();
+            $target.find(data.enableInContext + ' option[value="0"]').prop('selected', true);
             $target.find('label[for="' + $target.find(data.enableInContext).attr('id') + '"]').removeClass('enabled');
         };
     });

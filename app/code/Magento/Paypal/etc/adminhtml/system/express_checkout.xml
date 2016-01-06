@@ -56,6 +56,10 @@
                         <field id="api_authentication">0</field>
                     </depends>
                 </field>
+                <field id="merchant_id" translate="label" sortOrder="55" showInDefault="1" showInWebsite="1">
+                    <label>Merchant ID</label>
+                    <config_path>payment/paypal_express/merchant_id</config_path>
+                </field>
                 <field id="api_cert" translate="label" type="file" sortOrder="60" showInDefault="1" showInWebsite="1">
                     <label>API Certificate</label>
                     <config_path>paypal/wpp/api_cert</config_path>
@@ -140,12 +144,7 @@
                 <config_path>payment/paypal_express/in_context</config_path>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\InContextApi</frontend_model>
-            </field>
-            <field id="merchant_id" translate="label" type="obscure" sortOrder="22" showInDefault="1" showInWebsite="1">
-                <label>Your PayPal Merchant account Id</label>
-                <config_path>payment/paypal_express/merchant_id</config_path>
-                <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\MerchantId</frontend_model>
+                <attribute type="shared">1</attribute>
             </field>
             <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="23" showInDefault="1" showInWebsite="1">
                 <label>Enable PayPal Credit</label>

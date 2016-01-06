@@ -10,7 +10,6 @@
     ], function (alert) {
 
         return function ($target, $owner, data) {
-            $target.find('tr[id$="_settings_express_checkout"]').hide();
             $target.find('label[for="' + $target.find(data.enableInContext).attr('id') + '"]').addClass('enabled');
 
             alert({

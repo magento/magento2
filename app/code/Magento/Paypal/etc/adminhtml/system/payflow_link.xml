@@ -98,6 +98,7 @@
                 <config_path>payment/paypal_express/in_context</config_path>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\InContext</frontend_model>
+                <attribute type="shared">1</attribute>
             </field>
             <field id="enable_express_checkout_basic" translate="label" type="select" sortOrder="40">
                 <label>Enable Express Checkout</label>
