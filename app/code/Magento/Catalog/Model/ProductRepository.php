@@ -261,6 +261,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
             }
         } else {
+            unset($this->instances[$productData['sku']]);
             $product = $this->get($productData['sku']);
             $this->initializationHelper->initialize($product);
         }
