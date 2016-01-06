@@ -47,11 +47,6 @@ define([
             enableInContextPayPal: '[data-enable="in-context-api"]',
 
             /**
-             * PayPal Merchant account Id
-             */
-            enableMerchantId: '[data-enable="merchant-id"]',
-
-            /**
              * An attribute of the element responsible for the activation of the Payflow Bml (data attribute)
              */
             enableBml:      '[data-enable="bml"]',
@@ -167,7 +162,6 @@ define([
                                 enableExpress: this.enableExpress,
                                 enableInContext: this.enableInContext,
                                 enableInContextPayPal: this.enableInContextPayPal,
-                                enableMerchantId: this.enableMerchantId,
                                 enableBml: this.enableBml,
                                 enableBmlPayPal: this.enableBmlPayPal,
                                 solutionsElements: this.solutionsElements,
