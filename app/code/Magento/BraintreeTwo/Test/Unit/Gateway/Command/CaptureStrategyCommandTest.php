@@ -23,6 +23,8 @@ use Magento\Vault\Model\PaymentToken;
 
 /**
  * Class CaptureStrategyCommandTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
 {

@@ -15,7 +15,7 @@ use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Model\PaymentTokenInterfaceFactory;
+use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -41,7 +41,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     private $payment;
 
     /**
-     * @var \Magento\Vault\Model\PaymentTokenInterfaceFactory|MockObject
+     * @var \Magento\Vault\Api\Data\PaymentTokenInterfaceFactory|MockObject
      */
     private $paymentTokenFactory;
 

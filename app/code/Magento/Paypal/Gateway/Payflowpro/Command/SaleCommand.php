@@ -6,6 +6,7 @@
 namespace Magento\Paypal\Gateway\Payflowpro\Command;
 
 use Magento\Payment\Gateway\Command;
+use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Helper\Formatter;
@@ -34,7 +35,7 @@ class SaleCommand implements CommandInterface
      * Executes command basing on business object
      *
      * @param array $commandSubject
-     * @return null|Command\ResultInterface
+     * @return null|ResultInterface
      */
     public function execute(array $commandSubject)
     {
