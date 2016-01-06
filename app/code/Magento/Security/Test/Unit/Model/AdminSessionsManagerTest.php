@@ -39,6 +39,11 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     protected $collectionMock;
 
     /**
+     * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo
+     */
+    protected $adminSessionInfoResourceMock;
+
+    /**
      * @var \Magento\Security\Helper\SecurityConfig
      */
     protected $securityConfig;
@@ -66,7 +71,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->adminSessionInfoFactory =  $this->getMock(
+        $this->adminSessionInfoFactory = $this->getMock(
             '\Magento\Security\Model\AdminSessionInfoFactory',
             ['create'],
             [],
@@ -74,7 +79,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->adminSessionInfoCollectionFactory =  $this->getMock(
+        $this->adminSessionInfoCollectionFactory = $this->getMock(
             '\Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory',
             ['create'],
             [],
@@ -82,23 +87,23 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->currentSession =  $this->getMock(
+        $this->currentSession = $this->getMock(
             '\Magento\Security\Model\AdminSessionInfo',
-            ['isActive', 'getStatus', 'load'],
+            ['isActive', 'getStatus', 'load', 'setData', 'setIsOtherSessionsTerminated', 'save'],
             [],
             '',
             false
         );
 
-        $this->authSession =  $this->getMock(
+        $this->authSession = $this->getMock(
             '\Magento\Backend\Model\Auth\Session',
-            ['isActive', 'getStatus', 'getUser', 'getId', 'getSessionId'],
+            ['isActive', 'getStatus', 'getUser', 'getId', 'getSessionId', 'getUpdatedAt'],
             [],
             '',
             false
         );
 
-        $this->collectionMock =  $this->getMock(
+        $this->collectionMock = $this->getMock(
             '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
             ['filterByUser', 'filterExpiredSessions', 'loadData', 'setDataToAll', 'save'],
             [],
@@ -106,15 +111,23 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->securityConfig =  $this->getMock(
-            '\Magento\Security\Helper\SecurityConfig',
-            ['getAdminSessionLifetime'],
+        $this->adminSessionInfoResourceMock = $this->getMock(
+            '\Magento\Security\Model\ResourceModel\AdminSessionInfo',
+            ['updateStatusByUserId', 'deleteSessionsOlderThen'],
             [],
             '',
             false
         );
 
-        $this->userMock =  $this->getMock(
+        $this->securityConfig = $this->getMock(
+            '\Magento\Security\Helper\SecurityConfig',
+            ['getAdminSessionLifetime', 'isAdminAccountSharingEnabled', 'getRemoteIp'],
+            [],
+            '',
+            false
+        );
+
+        $this->userMock = $this->getMock(
             '\Magento\User\Model\User',
             ['getId'],
             [],
@@ -127,10 +140,172 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             [
                 'authSession' => $this->authSession,
                 'adminSessionInfoFactory' => $this->adminSessionInfoFactory,
+                'adminSessionInfoResource' => $this->adminSessionInfoResourceMock,
                 'adminSessionInfoCollectionFactory' => $this->adminSessionInfoCollectionFactory,
                 'securityConfig' => $this->securityConfig
             ]
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessLogin()
+    {
+        $useId = 1;
+        $sessionLifetime = 100;
+        $ip = 12345;
+        $sessionId = 50;
+
+        $this->adminSessionInfoFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->currentSession);
+
+        $this->authSession->expects($this->once())
+            ->method('getSessionId')
+            ->willReturn($sessionId);
+
+        $this->authSession->expects($this->once())
+            ->method('getUser')
+            ->willReturn($this->userMock);
+        $this->userMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($useId);
+
+        $this->securityConfig->expects($this->once())
+            ->method('getRemoteIp')
+            ->willReturn($ip);
+
+        $this->currentSession->expects($this->once())
+            ->method('setData')
+            ->willReturnSelf();
+
+        $this->currentSession->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
+
+        $this->securityConfig->expects($this->once())
+            ->method('getAdminSessionLifetime')
+            ->willReturn($sessionLifetime);
+
+        $this->securityConfig->expects($this->once())
+            ->method('isAdminAccountSharingEnabled')
+            ->willReturn(0);
+
+        $this->adminSessionInfoResourceMock->expects($this->once())
+            ->method('updateStatusByUserId')
+            ->willReturn(1);
+
+        $this->currentSession->expects($this->once())
+            ->method('setIsOtherSessionsTerminated')
+            ->with(true)
+            ->willReturnSelf();
+
+        $this->model->processLogin();
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessProlong()
+    {
+        $sessionId = 50;
+        $updatedAt = '2015-12-31 23:59:59';
+
+        $this->adminSessionInfoFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->currentSession);
+
+        $this->authSession->expects($this->once())
+            ->method('getSessionId')
+            ->willReturn($sessionId);
+
+        $this->currentSession->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+
+        $this->authSession->expects($this->once())
+            ->method('getUpdatedAt')
+            ->willReturn($updatedAt);
+
+
+        $this->currentSession->expects($this->once())
+            ->method('setData')
+            ->with('updated_at', $updatedAt)
+            ->willReturnSelf();
+
+        $this->currentSession->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
+
+        $this->model->processProlong();
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessLogout()
+    {
+        $sessionId = 50;
+        $updatedAt = '2015-12-31 23:59:59';
+
+        $this->adminSessionInfoFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->currentSession);
+
+        $this->authSession->expects($this->once())
+            ->method('getSessionId')
+            ->willReturn($sessionId);
+
+        $this->currentSession->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+
+        $this->currentSession->expects($this->once())
+            ->method('setData')
+            ->with('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT)
+            ->willReturnSelf();
+
+        $this->currentSession->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
+
+        $this->model->processLogout();
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetCurrentSession()
+    {
+        $sessionId = 50;
+
+        $this->adminSessionInfoFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->currentSession);
+
+        $this->authSession->expects($this->once())
+            ->method('getSessionId')
+            ->willReturn($sessionId);
+
+        $this->currentSession->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+
+        $this->assertEquals($this->currentSession, $this->model->getCurrentSession());
+    }
+
+    /**
+     * @return void
+     */
+    public function testCleanExpiredSessions()
+    {
+        $this->adminSessionInfoResourceMock->expects($this->any())
+            ->method('deleteSessionsOlderThen')
+            ->with($this->securityConfig->getCurrentTimestamp() - \Magento\Security\Model\AdminSessionsManager::ADMIN_SESSION_LIFETIME)
+            ->willReturnSelf();
+
+        $this->model->cleanExpiredSessions();
     }
 
     /**

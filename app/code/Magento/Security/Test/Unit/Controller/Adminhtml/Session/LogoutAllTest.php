@@ -177,7 +177,7 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteException()
     {
-        $phrase = new \Magento\Framework\Phrase('We couldn\'t logout the messages because of an error.');
+        $phrase = new \Magento\Framework\Phrase('We couldn\'t logout because of an error.');
         $this->sessionsManager->expects($this->once())
             ->method('logoutAnotherUserSessions')
             ->willThrowException(new \Exception());
