@@ -275,7 +275,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Error processing payment, please try again later.
+     * @expectedExceptionMessage Error processing payment. Please try again later.
      */
     public function testAuthorizeValidationException()
     {

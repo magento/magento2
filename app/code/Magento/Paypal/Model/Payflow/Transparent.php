@@ -174,7 +174,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         } catch (LocalizedException $exception) {
             $payment->setParentTransactionId($response->getData(self::PNREF));
             $this->void($payment);
-            throw new LocalizedException(__('Error processing payment, please try again later.'));
+            throw new LocalizedException(__('Error processing payment. Please try again later.'));
         }
 
         $this->setTransStatus($payment, $response);
