@@ -24,6 +24,12 @@
         </arguments>
     </virtualType>
 
+    <type name="Magento\BraintreeTwo\Block\Form">
+        <arguments>
+            <argument name="vaultConfigProvider" xsi:type="object">Magento\Vault\Model\Ui\VaultConfigProvider</argument>
+        </arguments>
+    </type>
+
     <!-- Configuration reader -->
     <type name="Magento\BraintreeTwo\Gateway\Config\Config">
         <arguments>
