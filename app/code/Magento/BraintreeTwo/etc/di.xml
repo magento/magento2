@@ -17,18 +17,24 @@
             <argument name="commandPool" xsi:type="object">BraintreeTwoCommandPool</argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeTwoPayPalFacade" type="Magento\Payment\Model\Method\Adapter">
+    <virtualType name="BraintreeTwoPayPalFacade" type="BraintreeTwoFacade">
         <arguments>
             <argument name="code" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::PAYPAL_CODE</argument>
+            <argument name="valueHandlerPool" xsi:type="object">BraintreeTwoPayPalValueHandlerPool</argument>
         </arguments>
     </virtualType>
 
     <!-- Configuration reader -->
     <type name="Magento\BraintreeTwo\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">\Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="methodCode" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</argument>
         </arguments>
     </type>
+    <virtualType name="BraintreeTwoPayPalGatewayConfig" type="Magento\BraintreeTwo\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::PAYPAL_CODE</argument>
+        </arguments>
+    </virtualType>
 
     <!-- Logger, initialized with BraintreeConfig -->
     <virtualType name="BraintreeTwoLogger" type="Magento\Payment\Model\Method\Logger">
@@ -260,6 +266,20 @@
                 <item name="risk_data" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\RiskDataHandler</item>
                 <item name="3d_secure" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler</item>
             </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- PayPal value handlers infrastructure -->
+    <virtualType name="BraintreeTwoPayPalValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">BraintreeTwoPayPalConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoPayPalConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">BraintreeTwoPayPalGatewayConfig</argument>
         </arguments>
     </virtualType>
 
