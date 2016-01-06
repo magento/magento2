@@ -296,7 +296,7 @@ class Product extends AbstractResource
     public function delete($object)
     {
         try {
-            //$connection = $this->transactionManager->start($this->getConnection());
+            $this->transactionManager->start($this->getConnection());
             if (is_numeric($object)) {
                 //$id = (int) $object;
             } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
