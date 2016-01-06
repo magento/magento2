@@ -26,6 +26,14 @@
                             <group id="braintreetwo_required"/>
                         </requires>
                     </field>
+                    <field id="active_braintreetwo_paypal" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable PayPal through Braintree</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/braintreetwo_paypal/active</config_path>
+                        <requires>
+                            <group id="braintreetwo_required"/>
+                        </requires>
+                    </field>
                     <group id="braintreetwo_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="5">
                         <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.]]></comment>
                         <label>Basic BraintreeTwo Settings</label>
