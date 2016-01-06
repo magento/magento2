@@ -27,7 +27,7 @@ define([
          * @returns {String}
          */
         getMaskedCard: function () {
-            return 'XXXX-XXXX-XXXX-' + this.details['cc_last_4'];
+            return this.details['cc_last_4'];
         },
 
         /**
