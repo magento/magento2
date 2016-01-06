@@ -161,11 +161,30 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $compositeReader = $objectManager->create(
+            'Magento\Framework\Communication\Config\CompositeReader',
+            [
+                'readersList' => [
+                    ['reader' => $xmlReader, 'sortOrder' => 5],
+                    [
+                        'reader' => $objectManager->create('Magento\Framework\Communication\Config\Reader\EnvReader'),
+                        'sortOrder' => 10
+                    ],
+                    [
+                        'reader' => $objectManager->create(
+                            'Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication'
+                        ),
+                        'sortOrder' => 20
+                    ],
+                ],
+            ]
+        );
+
         /** @var \Magento\Framework\Communication\Config $configData */
         $configData = $objectManager->create(
             'Magento\Framework\Communication\Config\Data',
             [
-                'reader' => $xmlReader
+                'reader' => $compositeReader
             ]
         );
 
