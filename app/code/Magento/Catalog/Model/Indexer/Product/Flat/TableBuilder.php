@@ -28,11 +28,6 @@ class TableBuilder
     protected $metadataPool;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
-     */
-    protected $resource;
-
-    /**
      * Check whether builder was executed
      *
      * @var bool
@@ -50,7 +45,6 @@ class TableBuilder
         \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
-        $this->resource = $resource;
         $this->_connection = $resource->getConnection();
         $this->metadataPool = $metadataPool;
     }
@@ -270,12 +264,7 @@ class TableBuilder
                 $flatColumns = $this->_productIndexerHelper->getFlatColumns();
                 $iterationNum = 1;
 
-                $select->from(['et' => $entityTableName], $keyColumn)
-                    ->join(
-                        ['e' => $this->resource->getTableName('catalog_product_entity')],
-                        'e.entity_id = et.entity_id',
-                        []
-                    );
+                $select->from(['e' => $entityTableName], $keyColumn);
 
                 $selectValue->from(['e' => $temporaryTableName], $keyColumn);
 
