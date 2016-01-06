@@ -48,7 +48,55 @@
         <columnsControls name="synonyms_columns_controls"/>
         <exportButton name="export_button"/>
         <filterSearch name="fulltext"/>
-        <filters name="synonyms_listing_filters"/>
+        <filters name="synonyms_listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="templates" xsi:type="array">
+                        <item name="filters" xsi:type="array">
+                            <item name="select" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+            <filterSelect name="store_id">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Search\Ui\Component\Listing\Column\Store\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="provider" xsi:type="string">${ $.parentName }</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</item>
+                        </item>
+                        <item name="dataScope" xsi:type="string">store_id</item>
+                        <item name="label" xsi:type="string" translate="true">Store View</item>
+                        <item name="captionValue" xsi:type="string">--</item>
+                        <item name="sortOrder" xsi:type="number">40</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterSelect name="website_id">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Search\Ui\Component\Listing\Column\Website\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="provider" xsi:type="string">${ $.parentName }</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</item>
+                        </item>
+                        <item name="dataScope" xsi:type="string">website_id</item>
+                        <item name="label" xsi:type="string" translate="true">Website</item>
+                        <item name="captionValue" xsi:type="string">--</item>
+                        <item name="sortOrder" xsi:type="number">30</item>
+                    </item>
+                </argument>
+            </filterSelect>
+        </filters>
+
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="search_synonyms_columns">
