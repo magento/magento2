@@ -65,10 +65,10 @@ define([
          * @returns {Element}
          */
         initKeyboardHandlers: function () {
-            _.bindAll(this, 'goToPreviuos', 'goToNext');
+            _.bindAll(this, 'goToPrevious', 'goToNext');
             _.extend(this.keyboard, {
-                37: this.goToPreviuos, // Left arrow
-                38: this.goToPreviuos, // Up arrow
+                37: this.goToPrevious, // Left arrow
+                38: this.goToPrevious, // Up arrow
                 39: this.goToNext,     // Right arrow
                 40: this.goToNext      // down arrow
             });
@@ -80,7 +80,7 @@ define([
          * (Should) Move focus to previous <checkbox>
          * @param {jQuery.Event} event
          */
-        goToPreviuos: function (event) {
+        goToPrevious: function (event) {
             event.preventDefault();
         },
 
@@ -156,8 +156,8 @@ define([
                 newChecked;
 
             newChecked = this.isMultiple ?
-            newExportedValue.indexOf(oldValue) !== -1 :
-            newExportedValue === oldValue;
+                newExportedValue.indexOf(oldValue) !== -1 :
+                newExportedValue === oldValue;
 
             if (newChecked !== oldChecked) {
                 this.checked(newChecked);
@@ -183,7 +183,9 @@ define([
             if (!this.isMultiple && newChecked) {
                 this.exportedValue(newValue);
             } else if (!this.isMultiple && !newChecked) {
-                if (newValue === this.exportedValue.peek()) {
+                if (typeof newValue === 'boolean') {
+                    this.exportedValue(newChecked);
+                } else if (newValue === this.exportedValue.peek()) {
                     this.exportedValue('');
                 }
 
