@@ -119,10 +119,10 @@ class Preprocessor implements PreprocessorInterface
                 $value = sprintf(
                     '%s IN (%s)',
                     ($isNegation ? 'NOT' : ''),
-                    implode(',', $filter->getValue())
+                    $this->connection->quote(implode(',', $filter->getValue()))
                 );
             } else {
-                $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
+                $value = ($isNegation ? '!' : '') . '= ' . $this->connection->quote($filter->getValue());
             }
             $filterQuery = sprintf(
                 '%1$s.value %2$s',
