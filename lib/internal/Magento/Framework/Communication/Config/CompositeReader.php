@@ -13,18 +13,35 @@ use Magento\Framework\Config\ReaderInterface;
 class CompositeReader implements ReaderInterface
 {
     /**
-     * ReaderInterface[]
+     * @var ReaderInterface[]
      */
     private $readers;
 
     /**
      * Initialize dependencies.
      *
-     * @param array $readersList
+     * @param array $readers
      */
-    public function __construct(array $readersList)
+    public function __construct(array $readers)
     {
-        $this->readers = $this->sortReaders($readersList);
+        usort(
+            $readers,
+            function ($firstItem, $secondItem) {
+                if (!isset($firstItem['sortOrder']) || !isset($secondItem['sortOrder'])
+                    || $firstItem['sortOrder'] == $secondItem['sortOrder']
+                ) {
+                    return 0;
+                }
+                return $firstItem['sortOrder'] < $secondItem['sortOrder'] ? -1 : 1;
+            }
+        );
+        $this->readers = [];
+        foreach ($readers as $readerInfo) {
+            if (!isset($readerInfo['reader'])) {
+                continue;
+            }
+            $this->readers[] = $readerInfo['reader'];
+        }
     }
 
     /**
@@ -40,38 +57,5 @@ class CompositeReader implements ReaderInterface
             $result = array_replace_recursive($result, $reader->read($scope));
         }
         return $result;
-    }
-
-    /**
-     * Sort readers.
-     *
-     * @param array $readersList
-     * @return ReaderInterface[]
-     */
-    private function sortReaders(array $readersList)
-    {
-        usort(
-            $readersList,
-            function ($firstItem, $secondItem) {
-                if (!isset($firstItem['sortOrder'])) {
-                    return 1;
-                }
-                if (!isset($secondItem['sortOrder'])) {
-                    return -1;
-                }
-                if ($firstItem['sortOrder'] == $secondItem['sortOrder']) {
-                    return 0;
-                }
-                return $firstItem['sortOrder'] < $secondItem['sortOrder'] ? -1 : 1;
-            }
-        );
-        $readers = [];
-        foreach ($readersList as $readerInfo) {
-            if (!isset($readerInfo['reader'])) {
-                continue;
-            }
-            $readers[] = $readerInfo['reader'];
-        }
-        return $readers;
     }
 }
