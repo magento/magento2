@@ -87,39 +87,41 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
      * @param int $securityEventType
      * @param int $requestsMethod
      * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
-     * @expectedException \Magento\Framework\Exception\SecurityViolationException
-     * @expectedExceptionMessage Too many password reset requests. Please wait and try again or contact test@example.com.
      */
     public function testCheck($securityEventType, $requestsMethod)
     {
-        $this->securityConfigMock->expects($this->once())
-            ->method('getRemoteIp')
-            ->will($this->returnValue(12345));
-
-        $this->securityConfigMock->expects($this->any())
-            ->method('getLimitPasswordResetRequestsMethod')
-            ->will($this->returnValue($requestsMethod));
-
         $limitTimeBetweenPasswordResetRequests = 600;
-        $this->securityConfigMock->expects($this->once())
-            ->method('getLimitTimeBetweenPasswordResetRequests')
-            ->will($this->returnValue($limitTimeBetweenPasswordResetRequests));
 
-        $this->securityConfigMock->expects($this->any())
-            ->method('getCustomerServiceEmail')
-            ->will($this->returnValue('test@example.com'));
+        $this->prepareTestCheck($requestsMethod, $limitTimeBetweenPasswordResetRequests);
 
-        $this->passwordResetRequestEventCollectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->passwordResetRequestEventCollectionMock);
-
-        $this->passwordResetRequestEventCollectionMock->expects($this->any())
-            ->method('addFieldToFilter')
-            ->willReturnSelf();
+        /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
+        $record = $this->objectManager->getObject('\Magento\Security\Model\PasswordResetRequestEvent');
+        $record->setCreatedAt(
+            date(
+                "Y-m-d H:i:s",
+                $this->securityConfigMock->getCurrentTimestamp() - $limitTimeBetweenPasswordResetRequests
+            )
+        );
 
         $this->passwordResetRequestEventCollectionMock->expects($this->once())
-            ->method('filterLastItem')
-            ->willReturnSelf();
+            ->method('getFirstItem')
+            ->willReturn($record);
+
+        $this->model->check($securityEventType);
+    }
+
+    /**
+     * @param int $securityEventType
+     * @param int $requestsMethod
+     * @dataProvider dataProviderSecurityEventTypeWithRequestsMethod
+     * @expectedException \Magento\Framework\Exception\SecurityViolationException
+     * @expectedExceptionMessage Too many password reset requests. Please wait and try again or contact test@host.com.
+     */
+    public function testCheckException($securityEventType, $requestsMethod)
+    {
+        $limitTimeBetweenPasswordResetRequests = 600;
+
+        $this->prepareTestCheck($requestsMethod, $limitTimeBetweenPasswordResetRequests);
 
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
         $record = $this->objectManager->getObject('\Magento\Security\Model\PasswordResetRequestEvent');
@@ -168,5 +170,40 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
                 \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_EMAIL
             ],
         ];
+    }
+
+    /**
+     * @param int $requestsMethod
+     * @param int $limitTimeBetweenPasswordResetRequests
+     */
+    protected function prepareTestCheck($requestsMethod, $limitTimeBetweenPasswordResetRequests)
+    {
+        $this->securityConfigMock->expects($this->once())
+            ->method('getRemoteIp')
+            ->will($this->returnValue(12345));
+
+        $this->securityConfigMock->expects($this->any())
+            ->method('getLimitPasswordResetRequestsMethod')
+            ->will($this->returnValue($requestsMethod));
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getLimitTimeBetweenPasswordResetRequests')
+            ->will($this->returnValue($limitTimeBetweenPasswordResetRequests));
+
+        $this->securityConfigMock->expects($this->any())
+            ->method('getCustomerServiceEmail')
+            ->will($this->returnValue('test@host.com'));
+
+        $this->passwordResetRequestEventCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->passwordResetRequestEventCollectionMock);
+
+        $this->passwordResetRequestEventCollectionMock->expects($this->any())
+            ->method('addFieldToFilter')
+            ->willReturnSelf();
+
+        $this->passwordResetRequestEventCollectionMock->expects($this->once())
+            ->method('filterLastItem')
+            ->willReturnSelf();
     }
 }

@@ -70,10 +70,10 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
         $this->securityConfigMock->expects($this->once())
             ->method('getAdminSessionLifetime')
             ->will($this->returnValue($sessionLifetime));
-        $this->securityConfigMock->expects($this->once())
-            ->method('getCurrentTimestamp')
-            ->will($this->returnValue(10));
-        $this->model->setUpdatedAt(9);
+        $this->model->setUpdatedAt(date(
+            "Y-m-d H:i:s",
+            $this->securityConfigMock->getCurrentTimestamp() - 1
+        ));
 
         $this->assertEquals($expectedResult, $this->model->isSessionExpired());
     }
