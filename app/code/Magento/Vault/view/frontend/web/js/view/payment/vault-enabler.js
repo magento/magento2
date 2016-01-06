@@ -44,6 +44,7 @@ define(
                 if (!this.isVaultEnabled()) {
                     return;
                 }
+
                 if (!('additional_data' in data)) {
                     data['additional_data'] = {};
                 }

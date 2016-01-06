@@ -95,25 +95,27 @@ define(
             },
 
             /**
-             * @param type
-             * @returns {boolean}
+             * @param {String} type
+             * @returns {Boolean}
              */
             getIcons: function (type) {
-                return window.checkoutConfig.payment.ccform.icons.hasOwnProperty(type)
-                    ? window.checkoutConfig.payment.ccform.icons[type]
-                    : false
+                return window.checkoutConfig.payment.ccform.icons.hasOwnProperty(type) ?
+                    window.checkoutConfig.payment.ccform.icons[type]
+                    : false;
             },
 
             /**
              * @returns {*}
              */
             getData: function () {
-                return {
-                    method: this.getCode(),
-                    'additional_data': {
-                        public_hash: this.getToken()
-                    }
+                var data = {
+                    method: this.getCode()
                 };
+
+                data['additional_data'] = {};
+                data['additional_data']['public_hash'] = this.getToken();
+
+                return data;
             }
         });
     }
