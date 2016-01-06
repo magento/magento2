@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Observer;
 
+use Magento\Paypal\Helper\Shortcut\Factory;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Paypal\Model\Config as PaypalConfig;
 use Magento\Framework\Event\Observer as EventObserver;
@@ -15,7 +16,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 class AddPaypalShortcutsObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Paypal\Helper\Shortcut\Factory
+     * @var Factory
      */
     protected $shortcutFactory;
 
@@ -27,11 +28,11 @@ class AddPaypalShortcutsObserver implements ObserverInterface
     /**
      * Constructor
      *
-     * @param \Magento\Paypal\Helper\Shortcut\Factory $shortcutFactory
+     * @param Factory $shortcutFactory
      * @param PaypalConfig $paypalConfig
      */
     public function __construct(
-        \Magento\Paypal\Helper\Shortcut\Factory $shortcutFactory,
+        Factory $shortcutFactory,
         PaypalConfig $paypalConfig
     ) {
         $this->shortcutFactory = $shortcutFactory;

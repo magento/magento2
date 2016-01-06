@@ -64,6 +64,13 @@ class View extends AbstractConfigureBlock
     protected $paypalCheckout = '[data-action=checkout-form-submit]';
 
     /**
+     * 'Check out with PayPal' button.
+     *
+     * @var string
+     */
+    protected $inContextPaypalCheckout = '#paypal-express-in-context-mini-cart';
+
+    /**
      * Product name element.
      *
      * @var string
@@ -273,6 +280,17 @@ class View extends AbstractConfigureBlock
     {
         $this->_rootElement->find($this->paypalCheckout, Locator::SELECTOR_CSS)->click();
         $this->waitForElementNotVisible($this->paypalCheckout);
+    }
+
+    /**
+     * Press 'Check out with PayPal' button.
+     *
+     * @return void
+     */
+    public function inContextPaypalCheckout()
+    {
+        $this->_rootElement->find($this->inContextPaypalCheckout, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementNotVisible($this->inContextPaypalCheckout);
     }
 
     /**

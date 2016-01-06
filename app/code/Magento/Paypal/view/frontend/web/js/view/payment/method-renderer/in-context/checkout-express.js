@@ -15,6 +15,7 @@ define(
         setPaymentMethodAction,
         additionalValidators
     ) {
+        'use strict';
 
         return Component.extend({
 
@@ -23,6 +24,9 @@ define(
                 paypalButtonSelector: '#paypal-express-in-context-checkout-main'
             },
 
+            /**
+             * {Function}
+             */
             click: function () {
                 $(this.paypalButtonSelector).click();
             },
