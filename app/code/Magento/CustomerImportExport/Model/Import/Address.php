@@ -757,7 +757,6 @@ class Address extends AbstractCustomer
                     if (
                         isset($rowData[self::COLUMN_POSTCODE])
                         && isset($rowData[self::COLUMN_COUNTRY_ID])
-                        && !in_array($addressId, $this->_addresses[$customerId])
                         && !$this->postcodeValidator->isValid(
                             $rowData[self::COLUMN_COUNTRY_ID],
                             $rowData[self::COLUMN_POSTCODE]
