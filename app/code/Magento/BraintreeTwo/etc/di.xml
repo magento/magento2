@@ -17,6 +17,11 @@
             <argument name="commandPool" xsi:type="object">BraintreeTwoCommandPool</argument>
         </arguments>
     </virtualType>
+    <virtualType name="BraintreeTwoPayPalFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::PAYPAL_CODE</argument>
+        </arguments>
+    </virtualType>
 
     <!-- Configuration reader -->
     <type name="Magento\BraintreeTwo\Gateway\Config\Config">

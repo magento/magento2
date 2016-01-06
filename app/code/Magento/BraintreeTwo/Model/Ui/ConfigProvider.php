@@ -16,6 +16,8 @@ final class ConfigProvider implements ConfigProviderInterface
 {
     const CODE = 'braintreetwo';
 
+    const PAYPAL_CODE = 'braintreetwo_paypal';
+
     /**
      * @var Config
      */

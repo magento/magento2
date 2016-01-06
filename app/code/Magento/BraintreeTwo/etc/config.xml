@@ -35,6 +35,17 @@
                 <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</paymentInfoKeys>
                 <can_use_internal>1</can_use_internal>
             </braintreetwo>
+            <braintreetwo_paypal>
+                <model>BraintreeTwoPayPalFacade</model>
+                <title>PayPal (Braintree)</title>
+                <active>0</active>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+                <require_billing_address>0</require_billing_address>
+                <allow_shipping_address_override>1</allow_shipping_address_override>
+                <display_on_shopping_cart>1</display_on_shopping_cart>
+                <order_status>processing</order_status>
+            </braintreetwo_paypal>
         </payment>
     </default>
 </config>
