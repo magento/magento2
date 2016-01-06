@@ -208,7 +208,8 @@ class Editor extends Textarea
     {
         $buttonsHtml = '<div id="buttons' . $this->getHtmlId() . '" class="buttons-set">';
         if ($this->isEnabled()) {
-            $buttonsHtml .= $this->_getToggleButtonHtml() . $this->_getPluginButtonsHtml($this->isHidden());
+            $buttonsHtml .= $this->_getToggleButtonHtml($this->isToggleButtonVisible());
+            $buttonsHtml .= $this->_getPluginButtonsHtml($this->isHidden());
         } else {
             $buttonsHtml .= $this->_getPluginButtonsHtml(true);
         }
@@ -435,10 +436,11 @@ class Editor extends Textarea
      */
     public function isEnabled()
     {
-        if ($this->hasData('wysiwyg')) {
-            return $this->getWysiwyg();
+        $result = false;
+        if ($this->getConfig('enabled')) {
+            $result = $this->hasData('wysiwyg') ? $result = $this->getWysiwyg() : true;
         }
-        return $this->getConfig('enabled');
+        return $result;
     }
 
     /**
@@ -449,5 +451,13 @@ class Editor extends Textarea
     public function isHidden()
     {
         return $this->getConfig('hidden');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isToggleButtonVisible()
+    {
+        return !$this->getConfig()->hasData('toggle_button') || $this->getConfig('toggle_button');
     }
 }
