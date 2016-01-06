@@ -8,22 +8,14 @@ namespace Magento\Search\Ui\Component\Listing\Column;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Store\Model\System\Store as SystemStore;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class Scope
+ * Class StoreView
  */
-class Scope extends Column
+class StoreView extends Column
 {
-    /**
-     * System store
-     *
-     * @var SystemStore
-     */
-    protected $systemStore;
-
     /**
      * @var StoreManagerInterface
      */
@@ -34,7 +26,6 @@ class Scope extends Column
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param SystemStore $systemStore
      * @param StoreManagerInterface $storeManager
      * @param array $components
      * @param array $data
@@ -42,12 +33,10 @@ class Scope extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        SystemStore $systemStore,
         StoreManagerInterface $storeManager,
         array $components = [],
         array $data = []
     ) {
-        $this->systemStore = $systemStore;
         $this->storeManager = $storeManager;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
@@ -65,7 +54,6 @@ class Scope extends Column
                 $item[$this->getData('name')] = $this->prepareItem($item);
             }
         }
-
         return $dataSource;
     }
 
@@ -77,32 +65,10 @@ class Scope extends Column
      */
     protected function prepareItem(array $item)
     {
-        $content = '';
-        $storeViewIds = null;
-        $websiteIds = null;
 
-        if ($item['scope_type'] === 'stores') {
-            $storeViewName = $this->storeManager->getStore($item['scope_id'])->getName();
-            return __($storeViewName);
-        } else if ($item['scope_type'] === 'websites') {
-            $websiteName = $this->storeManager->getWebsite($item['scope_id'])->getName();
-            return __($websiteName);
-        } else if ($item['scope_type'] === 'default') {
-            return __('Global (All Store Views)');
+        if ($item['store_id'] == 0) {
+            return __('All Store Views');
         }
-
-        $data = $this->systemStore->getStoresStructure(false, $storeViewIds, [], $websiteIds);
-
-        foreach ($data as $website) {
-            $content .= $website['label'];
-            foreach ($website['children'] as $group) {
-                $content .= str_repeat(' ', 3) . $group['label'];
-                foreach ($group['children'] as $store) {
-                    $content .= str_repeat(' ', 6) . $store['label'];
-                }
-            }
-        }
-
-        return $content;
+        return __($this->storeManager->getStore($item['store_id'])->getName());
     }
 }
