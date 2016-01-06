@@ -104,7 +104,7 @@ class Preprocessor implements PreprocessorInterface
             );
             return $filterQuery;
         } elseif ($filter->getField() === 'category_ids') {
-            return 'category_ids_index.category_id = ' . $filter->getValue();
+            return 'category_ids_index.category_id = ' . (int) $filter->getValue();
         } elseif ($attribute->isStatic()) {
             $alias = $this->tableMapper->getMappingAlias($filter);
             $filterQuery = str_replace(
@@ -119,7 +119,7 @@ class Preprocessor implements PreprocessorInterface
                 $value = sprintf(
                     '%s IN (%s)',
                     ($isNegation ? 'NOT' : ''),
-                    $this->connection->quote(implode(',', $filter->getValue()))
+                    implode(',', array_map([$this->connection, 'quote'], $filter->getValue()))
                 );
             } else {
                 $value = ($isNegation ? '!' : '') . '= ' . $this->connection->quote($filter->getValue());
