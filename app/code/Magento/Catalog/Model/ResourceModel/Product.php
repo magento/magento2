@@ -598,7 +598,7 @@ class Product extends AbstractResource
     {
         $select = $this->getConnection()->select()->from(
             $this->getTable('catalog_product_entity'),
-            ['sku', $this->getLinkField()]
+            ['sku', 'entity_id']
         )->where(
             'sku IN (?)',
             $productSkuList
@@ -606,7 +606,7 @@ class Product extends AbstractResource
 
         $result = [];
         foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $result[$row['sku']] = $row[$this->getLinkField()];
+            $result[$row['sku']] = $row['entity_id'];
         }
         return $result;
     }
