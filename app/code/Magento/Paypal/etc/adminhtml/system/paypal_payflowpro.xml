@@ -89,6 +89,7 @@
                 <config_path>payment/paypal_express/in_context</config_path>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\InContext</frontend_model>
+                <attribute type="shared">1</attribute>
             </field>
         </group>
         <group id="settings_paypal_payflow" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
