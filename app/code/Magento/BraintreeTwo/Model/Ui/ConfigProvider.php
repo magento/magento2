@@ -7,6 +7,7 @@ namespace Magento\BraintreeTwo\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\BraintreeTwo\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
 
 /**
@@ -24,6 +25,11 @@ final class ConfigProvider implements ConfigProviderInterface
     private $config;
 
     /**
+     * @var PayPalConfig
+     */
+    private $payPalConfig;
+
+    /**
      * @var BraintreeAdapter
      */
     private $adapter;
@@ -37,11 +43,13 @@ final class ConfigProvider implements ConfigProviderInterface
      * Constructor
      *
      * @param Config $config
+     * @param PayPalConfig $payPalConfig;
      * @param BraintreeAdapter $adapter
      */
-    public function __construct(Config $config, BraintreeAdapter $adapter)
+    public function __construct(Config $config, PayPalConfig $payPalConfig, BraintreeAdapter $adapter)
     {
         $this->config = $config;
+        $this->payPalConfig = $payPalConfig;
         $this->adapter = $adapter;
     }
 
@@ -55,6 +63,7 @@ final class ConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 self::CODE => [
+                    'isActive' => $this->config->getValue(Config::KEY_ACTIVE),
                     'clientToken' => $this->getClientToken(),
                     'ccTypesMapper' => $this->config->getCctypesMapper(),
                     'sdkUrl' => $this->config->getSdkUrl(),
@@ -70,6 +79,9 @@ final class ConfigProvider implements ConfigProviderInterface
                     'enabled' => $this->config->isVerify3DSecure(),
                     'thresholdAmount' => $this->config->getThresholdAmount(),
                     'specificCountries' => $this->config->get3DSecureSpecificCountries()
+                ],
+                self::PAYPAL_CODE => [
+                    'isActive' => $this->payPalConfig->isActive()
                 ]
             ]
         ];
