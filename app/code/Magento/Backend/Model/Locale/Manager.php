@@ -89,7 +89,7 @@ class Manager
        $userData = $this->_authSession->getUser();
     	
         if ($userData && $userData->getInterfaceLocale()) {
-            $interfaceLocale = $userData->getInterfaceLocale();
+                $interfaceLocale = $userData->getInterfaceLocale();
             }elseif ($this->getGeneralLocale()) {
                 $interfaceLocale = $this->getGeneralLocale();
             }else {
