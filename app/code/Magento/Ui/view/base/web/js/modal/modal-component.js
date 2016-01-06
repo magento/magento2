@@ -225,7 +225,7 @@ define([
          */
         setPrevValues: function (elem) {
             if (typeof elem.value === 'function') {
-                elem.focused(false);
+                this.modal.focus();
                 elem.value(this.applied[elem.index]);
             } else if (elem.elems) {
                 elem.elems().forEach(this.setPrevValues, this);
