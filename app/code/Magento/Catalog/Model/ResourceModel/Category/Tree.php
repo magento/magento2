@@ -580,6 +580,9 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      */
     protected function _createCollectionDataSelect($sorted = true, $optionalAttributes = [])
     {
+        $meta = $this->metadataPool->getMetadata(CategoryInterface::class);
+        $linkField = $meta->getLinkField();
+
         $select = $this->_getDefaultCollection($sorted ? $this->_orderField : false)->getSelect();
         // add attributes to select
         $attributes = ['name', 'is_active', 'is_anchor'];
@@ -603,7 +606,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
                 $select->joinLeft(
                     [$tableDefault => $attribute->getBackend()->getTable()],
                     sprintf(
-                        '%1$s.entity_id=e.entity_id AND %1$s.attribute_id=%2$d AND %1$s.store_id=%3$d',
+                        '%1$s.' . $linkField . '=e.' . $linkField .
+                        ' AND %1$s.attribute_id=%2$d AND %1$s.store_id=%3$d',
                         $tableDefault,
                         $attribute->getId(),
                         \Magento\Store\Model\Store::DEFAULT_STORE_ID
@@ -612,7 +616,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
                 )->joinLeft(
                     [$tableStore => $attribute->getBackend()->getTable()],
                     sprintf(
-                        '%1$s.entity_id=e.entity_id AND %1$s.attribute_id=%2$d AND %1$s.store_id=%3$d',
+                        '%1$s.' . $linkField . '=e.' . $linkField .
+                        ' AND %1$s.attribute_id=%2$d AND %1$s.store_id=%3$d',
                         $tableStore,
                         $attribute->getId(),
                         $this->getStoreId()
