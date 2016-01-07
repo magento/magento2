@@ -244,9 +244,10 @@ class Bootstrap
      * Runs an application
      *
      * @param \Magento\Framework\AppInterface $application
+     * @param bool $alwaysHandleExceptions Whether to handle exceptions regardless of developer mode setting
      * @return void
      */
-    public function run(AppInterface $application)
+    public function run(AppInterface $application, $alwaysHandleExceptions = true)
     {
         $prelaunchSuccessful = $this->preLaunch($application);
         if (!$prelaunchSuccessful) {
@@ -254,7 +255,12 @@ class Bootstrap
         }
 
         // If ignoring exceptions, don't wrap in a try/catch block so that PHP/Xdebug can output a clean backtrace
-        if ($this->isDeveloperMode() && $this->ignoreExceptionsInDeveloperMode()) {
+        if ($this->isDeveloperMode()
+            && $this->ignoreExceptionsInDeveloperMode()
+            // Certain entry points such as get.php and static.php should always be handled by the try/catch block
+            // below since any exceptions should return a 404 header
+            && !$alwaysHandleExceptions
+        ) {
             Profiler::start('magento');
             $response = $application->launch();
             $response->sendResponse();
