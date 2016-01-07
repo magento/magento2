@@ -11,20 +11,6 @@ namespace Magento\Setup\Module\I18n\Dictionary;
 class Phrase
 {
     /**
-     * Single quote that enclose the phrase
-     *
-     * @var string
-     */
-    const QUOTE_SINGLE = "'";
-
-    /**
-     * Double quote that enclose the phrase
-     *
-     * @var string
-     */
-    const QUOTE_DOUBLE = '"';
-
-    /**
      * Phrase
      *
      * @var string
@@ -53,13 +39,6 @@ class Phrase
     private $_contextValue = [];
 
     /**
-     * Quote type that enclose the phrase, single or double
-     *
-     * @var string
-     */
-    private $_quote;
-
-    /**
      * Phrase construct
      *
      * @param string $phrase
@@ -68,13 +47,12 @@ class Phrase
      * @param string|array|null $contextValue
      * @param string|null $quote
      */
-    public function __construct($phrase, $translation, $contextType = null, $contextValue = null, $quote = null)
+    public function __construct($phrase, $translation, $contextType = null, $contextValue = null)
     {
         $this->setPhrase($phrase);
         $this->setTranslation($translation);
         $this->setContextType($contextType);
         $this->setContextValue($contextValue);
-        $this->setQuote($quote);
     }
 
     /**
@@ -93,36 +71,13 @@ class Phrase
     }
 
     /**
-     * Get quote type
+     * Get phrase
      *
      * @return string
      */
     public function getPhrase()
     {
         return $this->_phrase;
-    }
-
-    /**
-     * Set quote type
-     *
-     * @param string $quote
-     * @return void
-     */
-    public function setQuote($quote)
-    {
-        if (in_array($quote, [self::QUOTE_SINGLE, self::QUOTE_DOUBLE])) {
-            $this->_quote = $quote;
-        }
-    }
-
-    /**
-     * Get phrase
-     *
-     * @return string
-     */
-    public function getQuote()
-    {
-        return $this->_quote;
     }
 
     /**
@@ -268,9 +223,8 @@ class Phrase
      */
     private function getCompiledString($string)
     {
-        $encloseQuote = $this->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
-
-        $evalString = 'return ' . $encloseQuote . addslashes($string) . $encloseQuote . ';';
+        $string = str_replace('$' , '\\$', $string);
+        $evalString = 'return "' . str_replace('"', '\\"', $string) . '";';
         $result = @eval($evalString);
         return is_string($result) ? $result :  $string;
     }
