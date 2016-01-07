@@ -6,7 +6,6 @@
 
 namespace Magento\Search\Model\ResourceModel;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Store\Model\StoreManagerInterface;
