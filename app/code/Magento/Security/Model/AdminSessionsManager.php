@@ -33,11 +33,6 @@ class AdminSessionsManager
     protected $adminSessionInfoFactory;
 
     /**
-     * @var ResourceModel\AdminSessionInfo
-     */
-    protected $adminSessionInfoResource;
-
-    /**
      * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory
      */
     protected $adminSessionInfoCollectionFactory;
@@ -51,20 +46,17 @@ class AdminSessionsManager
      * @param \Magento\Security\Helper\SecurityConfig $securityConfig
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param AdminSessionInfoFactory $adminSessionInfoFactory
-     * @param ResourceModel\AdminSessionInfo $adminSessionInfoResource
      * @param CollectionFactory $adminSessionInfoCollectionFactory
      */
     public function __construct(
         \Magento\Security\Helper\SecurityConfig $securityConfig,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Security\Model\AdminSessionInfoFactory $adminSessionInfoFactory,
-        \Magento\Security\Model\ResourceModel\AdminSessionInfo $adminSessionInfoResource,
         \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory $adminSessionInfoCollectionFactory
     ) {
         $this->securityConfig = $securityConfig;
         $this->authSession = $authSession;
         $this->adminSessionInfoFactory = $adminSessionInfoFactory;
-        $this->adminSessionInfoResource = $adminSessionInfoResource;
         $this->adminSessionInfoCollectionFactory = $adminSessionInfoCollectionFactory;
     }
 
@@ -79,11 +71,10 @@ class AdminSessionsManager
 
         $olderThen = $this->securityConfig->getCurrentTimestamp() - $this->securityConfig->getAdminSessionLifetime();
         if (!$this->securityConfig->isAdminAccountSharingEnabled()) {
-            $result = $this->adminSessionInfoResource->updateStatusByUserId(
+            $result = $this->createAdminSessionInfoCollection()->updateActiveSessionsStatus(
                 AdminSessionInfo::LOGGED_OUT_BY_LOGIN,
                 $this->getCurrentSession()->getUserId(),
-                [AdminSessionInfo::LOGGED_IN],
-                [$this->getCurrentSession()->getSessionId()],
+                $this->getCurrentSession()->getSessionId(),
                 $olderThen
             );
             if ($result) {
@@ -142,18 +133,6 @@ class AdminSessionsManager
     }
 
     /**
-     * Get message with explanation of logout reason
-     *
-     * @return string
-     */
-    public function getLogoutReasonMessage()
-    {
-        return $this->getLogoutReasonMessageByStatus(
-            $this->getCurrentSession()->getStatus()
-        );
-    }
-
-    /**
      * @param int $statusCode
      * @return string
      */
@@ -183,6 +162,67 @@ class AdminSessionsManager
     }
 
     /**
+     * Get message with explanation of logout reason
+     *
+     * @return string
+     */
+    public function getLogoutReasonMessage()
+    {
+        return $this->getLogoutReasonMessageByStatus(
+            $this->getCurrentSession()->getStatus()
+        );
+    }
+
+    /**
+     * Get sessions for current user
+     *
+     * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
+     */
+    public function getSessionsForCurrentUser()
+    {
+        return $this->createAdminSessionInfoCollection()
+            ->filterByUser($this->authSession->getUser()->getId(), \Magento\Security\Model\AdminSessionInfo::LOGGED_IN)
+            ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
+            ->loadData();
+    }
+
+    /**
+     * Logout another user sessions
+     *
+     * @return $this
+     */
+    public function logoutAnotherUserSessions()
+    {
+        $collection = $this->createAdminSessionInfoCollection()
+            ->filterByUser(
+                $this->authSession->getUser()->getId(),
+                \Magento\Security\Model\AdminSessionInfo::LOGGED_IN,
+                $this->authSession->getSessionId()
+            )
+            ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
+            ->loadData();
+
+        $collection->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY)
+            ->save();
+
+        return $this;
+    }
+
+    /**
+     * Clean expired Admin Sessions
+     *
+     * @return $this
+     */
+    public function cleanExpiredSessions()
+    {
+        $this->createAdminSessionInfoCollection()->deleteSessionsOlderThen(
+            $this->securityConfig->getCurrentTimestamp() - self::ADMIN_SESSION_LIFETIME
+        );
+
+        return $this;
+    }
+
+    /**
      * Create new record
      *
      * @return $this
@@ -204,51 +244,10 @@ class AdminSessionsManager
     }
 
     /**
-     * Clean expired Admin Sessions
-     *
-     * @return $this
-     */
-    public function cleanExpiredSessions()
-    {
-        $this->adminSessionInfoResource->deleteSessionsOlderThen(
-            $this->securityConfig->getCurrentTimestamp() - self::ADMIN_SESSION_LIFETIME
-        );
-
-        return $this;
-    }
-
-    /**
-     * Get sessions for current user
-     *
      * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
      */
-    public function getSessionsForCurrentUser()
+    protected function createAdminSessionInfoCollection()
     {
-        return $this->adminSessionInfoCollectionFactory->create()
-            ->filterByUser($this->authSession->getUser()->getId(), \Magento\Security\Model\AdminSessionInfo::LOGGED_IN)
-            ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
-            ->loadData();
-    }
-
-    /**
-     * Logout another user sessions
-     *
-     * @return $this
-     */
-    public function logoutAnotherUserSessions()
-    {
-        $collection = $this->adminSessionInfoCollectionFactory->create()
-            ->filterByUser(
-                $this->authSession->getUser()->getId(),
-                \Magento\Security\Model\AdminSessionInfo::LOGGED_IN,
-                $this->authSession->getSessionId()
-            )
-            ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
-            ->loadData();
-
-        $collection->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY)
-                ->save();
-
-        return $this;
+        return $this->adminSessionInfoCollectionFactory->create();
     }
 }

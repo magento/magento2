@@ -65,6 +65,32 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Update active sessions status except a specific one
+     *
+     * @param int $status
+     * @param int $userId
+     * @param string $excludedSessionId
+     * @param int $updateOlderThen
+     * @return $this
+     */
+    public function updateActiveSessionsStatus(
+        $status,
+        $userId,
+        $excludedSessionId,
+        $updateOlderThen = null
+    ) {
+        $this->getResource()->updateStatusByUserId(
+            $status,
+            $userId,
+            [\Magento\Security\Model\AdminSessionInfo::LOGGED_IN],
+            [$excludedSessionId],
+            $updateOlderThen
+        );
+
+        return $this;
+    }
+
+    /**
      * Filter by user
      *
      * @param int $userId
@@ -98,5 +124,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ['gt' => $this->dateTime->formatDate($this->securityConfig->getCurrentTimestamp() - $sessionLifeTime)]
         );
         return $this;
+    }
+
+    /**
+     * @param $timestamp
+     */
+    public function deleteSessionsOlderThen($timestamp)
+    {
+        $this->getResource()->deleteSessionsOlderThen((int) $timestamp);
     }
 }
