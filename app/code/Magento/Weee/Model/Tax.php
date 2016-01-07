@@ -345,9 +345,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
                 $one = new \Magento\Framework\DataObject();
                 $one->setName(
-                        __($attribute['label_value']) ?
-                        __($attribute['label_value']) : __($attribute['frontend_label'])
-                    )
+                    __($attribute['label_value']) ? __($attribute['label_value']) : __($attribute['frontend_label'])
+                )
                     ->setAmount($amount)
                     ->setTaxAmount($taxAmount)
                     ->setAmountExclTax($amountExclTax)
