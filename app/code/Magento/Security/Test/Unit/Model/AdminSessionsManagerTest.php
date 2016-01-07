@@ -7,14 +7,15 @@
 namespace Magento\Security\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\AdminSessionsManager;
 
 /**
- * Test class for \Magento\Security\Model\AdminSessionsManager testing
+ * Test class for AdminSessionsManager testing
  */
 class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var  \Magento\Security\Model\AdminSessionsManager
+     * @var  AdminSessionsManager
      */
     protected $model;
 
@@ -247,7 +248,6 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     public function testProcessLogout()
     {
         $sessionId = 50;
-        $updatedAt = '2015-12-31 23:59:59';
 
         $this->adminSessionInfoFactory->expects($this->any())
             ->method('create')
@@ -302,7 +302,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->adminSessionInfoResourceMock->expects($this->any())
             ->method('deleteSessionsOlderThen')
-            ->with($this->securityConfig->getCurrentTimestamp() - \Magento\Security\Model\AdminSessionsManager::ADMIN_SESSION_LIFETIME)
+            ->with($this->securityConfig->getCurrentTimestamp() - AdminSessionsManager::ADMIN_SESSION_LIFETIME)
             ->willReturnSelf();
 
         $this->model->cleanExpiredSessions();

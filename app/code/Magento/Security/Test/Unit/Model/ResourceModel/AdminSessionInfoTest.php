@@ -88,7 +88,8 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testUpdateStatusByUserId() {
+    public function testUpdateStatusByUserId()
+    {
         $status = 2;
         $userId = 10;
         $withStatuses = [1, 5];

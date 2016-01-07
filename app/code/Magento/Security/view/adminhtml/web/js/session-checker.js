@@ -24,13 +24,13 @@ define(
                         success: function (response) {
                             if (response instanceof Object) {
                                 if (!response.isActive) {
-                                    window.location = redirectUrl;
+                                    setLocation(redirectUrl);
                                 }
                             }
                         }
                     });
                 },
-                15000
+                10000
             );
         }
 

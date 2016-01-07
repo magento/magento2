@@ -142,30 +142,41 @@ class AdminSessionsManager
     }
 
     /**
-     * Get message with explanation of logut reason
+     * Get message with explanation of logout reason
      *
      * @return string
      */
     public function getLogoutReasonMessage()
     {
-        $reasonMessage = '';
-        if (!$this->getCurrentSession()->isActive()) {
-            switch ($this->getCurrentSession()->getStatus()) {
-                case AdminSessionInfo::LOGGED_OUT_BY_LOGIN:
-                    $reasonMessage = _(
-                        'Someone logged into this account from another device or browser.'
-                        .' Your current session is terminated.'
-                    );
-                    break;
-                case AdminSessionInfo::LOGGED_OUT_MANUALLY:
-                    $reasonMessage = _(
-                        'Your current session is terminated by another user of this account.'
-                    );
-                    break;
-                default:
-                    $reasonMessage = _('Your current session has been expired.');
-                    break;
-            }
+        return $this->getLogoutReasonMessageByStatus(
+            $this->getCurrentSession()->getStatus()
+        );
+    }
+
+    /**
+     * @param int $statusCode
+     * @return string
+     */
+    public function getLogoutReasonMessageByStatus($statusCode)
+    {
+        switch ((int)$statusCode) {
+            case AdminSessionInfo::LOGGED_IN:
+                $reasonMessage = '';
+                break;
+            case AdminSessionInfo::LOGGED_OUT_BY_LOGIN:
+                $reasonMessage = _(
+                    'Someone logged into this account from another device or browser.'
+                    .' Your current session is terminated.'
+                );
+                break;
+            case AdminSessionInfo::LOGGED_OUT_MANUALLY:
+                $reasonMessage = _(
+                    'Your current session is terminated by another user of this account.'
+                );
+                break;
+            default:
+                $reasonMessage = _('Your current session has been expired.');
+                break;
         }
 
         return $reasonMessage;

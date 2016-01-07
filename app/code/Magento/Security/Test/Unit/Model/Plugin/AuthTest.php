@@ -109,7 +109,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
             ->method('addWarning')
             ->with($warningMessage);
 
-        $this->model->afterLogin($this->authMock, null);
+        $this->model->afterLogin($this->authMock);
     }
 
     /**

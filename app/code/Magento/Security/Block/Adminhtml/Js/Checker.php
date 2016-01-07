@@ -37,7 +37,7 @@ class Checker extends \Magento\Backend\Block\Template
         return $this->jsonEncoder->encode(
             [
                 'requestUrl' => $this->getUrl('security/session/check'),
-                'redirectUrl' => $this->getUrl('admin')
+                'redirectUrl' => $this->getUrl('adminhtml')
             ]
         );
     }

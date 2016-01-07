@@ -17,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 class LogoutAllTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var  \Magento\Security\Test\Unit\Controller\Adminhtml\Session\LogoutAll
+     * @var  \Magento\Security\Controller\Adminhtml\Session\LogoutAll
      */
     protected $controller;
 

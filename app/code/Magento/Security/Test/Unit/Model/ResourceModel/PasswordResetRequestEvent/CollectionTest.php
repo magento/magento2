@@ -6,8 +6,6 @@
 
 namespace Magento\Security\Test\Unit\Model\ResourceModel\PasswordResetRequestEvent;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 /**
  * Test class for \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection testing
  */
