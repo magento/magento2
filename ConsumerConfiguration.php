@@ -5,15 +5,22 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
+
 /**
  * Value class which stores the configuration
  */
 class ConsumerConfiguration implements ConsumerConfigurationInterface
 {
     const CONSUMER_NAME = "consumer_name";
+    const CONSUMER_TYPE = "consumer_type";
     const QUEUE_NAME = "queue_name";
     const MAX_MESSAGES = "max_messages";
-    const CALLBACK = "callback";
+    const SCHEMA_TYPE = "schema_type";
+    const HANDLERS = 'handlers';
+
+    const TYPE_SYNC = 'sync';
+    const TYPE_ASYNC = 'async';
 
     /**
      * @var array
@@ -21,13 +28,27 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     private $data;
 
     /**
+     * @var QueueRepository
+     */
+    private $queueRepository;
+
+    /**
+     * @var MessageQueueConfig
+     */
+    private $messageQueueConfig;
+
+    /**
      * Initialize dependencies.
      *
+     * @param QueueRepository $queueRepository
+     * @param MessageQueueConfig $messageQueueConfig
      * @param array $data configuration data
      */
-    public function __construct($data = [])
+    public function __construct(QueueRepository $queueRepository, MessageQueueConfig $messageQueueConfig, $data = [])
     {
         $this->data = $data;
+        $this->queueRepository = $queueRepository;
+        $this->messageQueueConfig = $messageQueueConfig;
     }
 
     /**
@@ -57,9 +78,44 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getCallback()
+    public function getType()
     {
-        return $this->getData(self::CALLBACK);
+        return $this->getData(self::CONSUMER_TYPE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHandlers($topicName)
+    {
+        $output = $this->getData(self::HANDLERS);
+        return isset($output[$topicName]) ? $output[$topicName] : [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTopicNames()
+    {
+        $output = $this->getData(self::HANDLERS);
+        return is_array($output) && count($output) ? array_keys($output) : [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getQueue()
+    {
+        $connectionName = $this->messageQueueConfig->getConnectionByConsumer($this->getConsumerName());
+        return $this->queueRepository->get($connectionName, $this->getQueueName());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessageSchemaType($topicName)
+    {
+        return $this->messageQueueConfig->getMessageSchemaType($topicName);
     }
 
     /**

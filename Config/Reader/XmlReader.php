@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\MessageQueue\Config;
+namespace Magento\Framework\MessageQueue\Config\Reader;
 
 /**
  * MessageQueue configuration filesystem loader. Loads all publisher configuration from XML file
  */
-class Reader extends \Magento\Framework\Config\Reader\Filesystem
+class XmlReader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of id attributes for merge
@@ -20,13 +20,15 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         '/config/publisher' => 'name',
         '/config/consumer' => 'name',
         '/config/topic' => 'name',
-        '/config/bind' => ['queue', 'exchange', 'topic']
+        '/config/bind' => ['queue', 'exchange', 'topic'],
+        '/config/broker' => 'topic',
+        '/config/broker/consumer' => 'name'
     ];
 
     /**
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Framework\MessageQueue\Config\Converter $converter
-     * @param \Magento\Framework\MessageQueue\Config\SchemaLocator $schemaLocator
+     * @param \Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter $converter
+     * @param \Magento\Framework\MessageQueue\Config\Reader\XmlReader\SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
@@ -35,8 +37,8 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Framework\MessageQueue\Config\Converter $converter,
-        \Magento\Framework\MessageQueue\Config\SchemaLocator $schemaLocator,
+        \Magento\Framework\MessageQueue\Config\Reader\XmlReader\Converter $converter,
+        \Magento\Framework\MessageQueue\Config\Reader\XmlReader\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'queue.xml',
         $idAttributes = [],

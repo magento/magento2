@@ -15,7 +15,7 @@ interface PublisherInterface
      *
      * @param string $topicName
      * @param array|object $data
-     * @return void
+     * @return null|mixed
      */
     public function publish($topicName, $data);
 }

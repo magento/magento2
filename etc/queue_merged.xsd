@@ -14,6 +14,7 @@
                 <xs:element name="topic" type="topicType"/>
                 <xs:element name="consumer" type="consumerType"/>
                 <xs:element name="bind" type="bindType"/>
+                <xs:element name="broker" type="brokerType"/>
             </xs:choice>
         </xs:complexType>
         <xs:unique name="consumer-unique-name">
@@ -32,5 +33,9 @@
             <xs:selector xpath="topic"/>
             <xs:field xpath="@name"/>
         </xs:key>
+        <xs:unique name="broker-unique-name">
+            <xs:selector xpath="broker"/>
+            <xs:field xpath="@topic"/>
+        </xs:unique>
     </xs:element>
 </xs:schema>

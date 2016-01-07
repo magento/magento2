@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\Config\Data as MessageQueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
@@ -52,11 +52,12 @@ class BatchConsumer implements ConsumerInterface
     private $resource;
 
     /**
-     * @param MessageQueueConfig $messageQueueConfig
+     * @param ConfigInterface $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
      * @param MergerFactory $mergerFactory
      * @param ResourceConnection $resource
+     * @param ConsumerConfigurationInterface $configuration
      * @param int $interval
      */
     public function __construct(
@@ -65,6 +66,7 @@ class BatchConsumer implements ConsumerInterface
         QueueRepository $queueRepository,
         MergerFactory $mergerFactory,
         ResourceConnection $resource,
+        ConsumerConfigurationInterface $configuration,
         $interval = 5
     ) {
         $this->messageQueueConfig = $messageQueueConfig;
@@ -73,13 +75,6 @@ class BatchConsumer implements ConsumerInterface
         $this->mergerFactory = $mergerFactory;
         $this->interval = $interval;
         $this->resource = $resource;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configure(ConsumerConfigurationInterface $configuration)
-    {
         $this->configuration = $configuration;
     }
 
@@ -103,17 +98,21 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
-     * Decode message and invoke callback method
+     * Decode message and invoke callbacks method
      *
-     * @param object[] $messages
+     * @param EnvelopeInterface[] $messages
      * @return void
      * @throws LocalizedException
      */
     private function dispatchMessage(array $messages)
     {
-        $callback = $this->configuration->getCallback();
         foreach ($messages as $message) {
-            call_user_func($callback, $message);
+            $properties = $message->getProperties();
+            $topicName = $properties['topic_name'];
+            $callbacks = $this->configuration->getHandlers($message[$topicName]);
+            foreach ($callbacks as $callback) {
+                call_user_func($callback, $message);
+            }
         }
     }
 

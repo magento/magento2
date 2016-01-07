@@ -15,7 +15,7 @@ interface ExchangeInterface
      *
      * @param string $topic
      * @param EnvelopeInterface $envelope
-     * @return void
+     * @return mixed
      */
     public function enqueue($topic, EnvelopeInterface $envelope);
 }

@@ -5,8 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\Config\Data as QueueConfig;
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
@@ -35,10 +34,6 @@ class ConsumerFactory
      */
     private $objectManager = null;
 
-    /**
-     * @var array
-     */
-    private $queueConfigData;
 
     /**
      * Initialize dependencies.
@@ -81,14 +76,21 @@ class ConsumerFactory
      */
     public function get($consumerName)
     {
-        $consumerConfig = $this->getConsumerConfigForName($consumerName);
+        $consumerConfig = $this->queueConfig->getConsumer($consumerName);
+        if ($consumerConfig === null) {
+            throw new LocalizedException(
+                new Phrase('Specified consumer "%consumer" is not declared.', ['consumer' => $consumerName])
+            );
+        }
+        $consumerConfigObject = $this->createConsumerConfiguration($consumerConfig);
         $consumer = $this->createConsumer(
-            $consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION],
-            isset($consumerConfig['executor']) ? $consumerConfig['executor'] : null
+            $consumerConfig[QueueConfig::CONSUMER_CONNECTION],
+            isset($consumerConfig[QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE])
+            ? $consumerConfig[QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE]
+            : null,
+            $consumerConfigObject
         );
 
-        $consumerConfigObject = $this->createConsumerConfiguration($consumerConfig);
-        $consumer->configure($consumerConfigObject);
         return $consumer;
     }
 
@@ -109,41 +111,24 @@ class ConsumerFactory
      * Return an instance of a consumer for a connection name.
      *
      * @param string $connectionName
-     * @param string|null $executorClass
+     * @param string|null $instanceType
+     * @param ConsumerConfigurationInterface $configuration
      * @return ConsumerInterface
      * @throws LocalizedException
      */
-    private function createConsumer($connectionName, $executorClass)
+    private function createConsumer($connectionName, $instanceType, $configuration)
     {
-        if ($executorClass !== null) {
-            $executorObject = $this->objectManager->create($executorClass, []);
-        } elseif (isset($this->consumers[$connectionName])) {
-            $typeName =  $this->consumers[$connectionName];
-            $executorObject = $this->objectManager->create($typeName, []);
+        if ($instanceType !== null) {
+            $executorObject = $this->objectManager->create($instanceType, ['configuration' => $configuration]);
+        } elseif (isset($this->consumers[$connectionName][$configuration->getType()])) {
+            $typeName = $this->consumers[$connectionName][$configuration->getType()];
+            $executorObject = $this->objectManager->create($typeName, ['configuration' => $configuration]);
         } else {
             throw new LocalizedException(
                 new Phrase('Could not find an implementation type for connection "%name".', ['name' => $connectionName])
             );
         }
         return $executorObject;
-    }
-
-    /**
-     * Returns the consumer configuration information.
-     *
-     * @param string $consumerName
-     * @return array
-     * @throws LocalizedException
-     */
-    private function getConsumerConfigForName($consumerName)
-    {
-        $queueConfig = $this->getQueueConfigData();
-        if (isset($queueConfig[QueueConfigConverter::CONSUMERS][$consumerName])) {
-            return $queueConfig[QueueConfigConverter::CONSUMERS][$consumerName];
-        }
-        throw new LocalizedException(
-            new Phrase('Specified consumer "%consumer" is not declared.', ['consumer' => $consumerName])
-        );
     }
 
     /**
@@ -154,35 +139,29 @@ class ConsumerFactory
      */
     private function createConsumerConfiguration($consumerConfig)
     {
-        $dispatchInstance = $this->objectManager->create(
-            $consumerConfig[QueueConfigConverter::CONSUMER_CLASS],
-            []
-        );
+        $handlers = [];
+        foreach ($consumerConfig[QueueConfig::CONSUMER_HANDLERS] as $topic => $topicHandlers) {
+            foreach ($topicHandlers as $handlerConfig) {
+                $handlers[$topic][] = [
+                    $this->objectManager->create($handlerConfig[QueueConfig::CONSUMER_CLASS]),
+                    $handlerConfig[QueueConfig::CONSUMER_METHOD]
+                ];
+            }
+        }
+
         $configData = [
-            ConsumerConfiguration::CONSUMER_NAME => $consumerConfig[QueueConfigConverter::CONSUMER_NAME],
-            ConsumerConfiguration::QUEUE_NAME => $consumerConfig[QueueConfigConverter::CONSUMER_QUEUE],
-            ConsumerConfiguration::CALLBACK => [
-                $dispatchInstance,
-                $consumerConfig[QueueConfigConverter::CONSUMER_METHOD],
-            ],
+            ConsumerConfiguration::CONSUMER_NAME => $consumerConfig[QueueConfig::CONSUMER_NAME],
+            ConsumerConfiguration::QUEUE_NAME => $consumerConfig[QueueConfig::CONSUMER_QUEUE],
+            ConsumerConfiguration::CONSUMER_TYPE =>
+                $consumerConfig[QueueConfig::CONSUMER_TYPE] == QueueConfig::CONSUMER_TYPE_SYNC
+                ? ConsumerConfiguration::TYPE_SYNC
+                : ConsumerConfiguration::TYPE_ASYNC,
+            ConsumerConfiguration::HANDLERS => $handlers,
         ];
 
         return $this->objectManager->create(
             'Magento\Framework\MessageQueue\ConsumerConfiguration',
-            [ 'data' => $configData]
+            ['data' => $configData]
         );
-    }
-
-    /**
-     * Returns the queue configuration.
-     *
-     * @return array
-     */
-    private function getQueueConfigData()
-    {
-        if ($this->queueConfigData == null) {
-            $this->queueConfigData = $this->queueConfig->get();
-        }
-        return $this->queueConfigData;
     }
 }

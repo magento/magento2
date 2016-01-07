@@ -5,8 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\Config\Data as QueueConfig;
-use Magento\Framework\MessageQueue\Config\Converter as QueueConfigConverter;
+use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\ServicePayloadConverterInterface;
@@ -72,12 +71,13 @@ class MessageEncoder
      *
      * @param string $topic
      * @param mixed $message
+     * @param bool $requestType
      * @return string
      * @throws LocalizedException
      */
-    public function encode($topic, $message)
+    public function encode($topic, $message, $requestType = true)
     {
-        $convertedMessage = $this->convertMessage($topic, $message, self::DIRECTION_ENCODE);
+        $convertedMessage = $this->convertMessage($topic, $message, self::DIRECTION_ENCODE, $requestType);
         return $this->jsonEncoder->encode($convertedMessage);
     }
 
@@ -86,33 +86,37 @@ class MessageEncoder
      *
      * @param string $topic
      * @param string $message
+     * @param bool $requestType
      * @return mixed
      * @throws LocalizedException
      */
-    public function decode($topic, $message)
+    public function decode($topic, $message, $requestType = true)
     {
         try {
             $decodedMessage = $this->jsonDecoder->decode($message);
         } catch (\Exception $e) {
             throw new LocalizedException(new Phrase("Error occurred during message decoding."));
         }
-        return $this->convertMessage($topic, $decodedMessage, self::DIRECTION_DECODE);
+        return $this->convertMessage($topic, $decodedMessage, self::DIRECTION_DECODE, $requestType);
     }
 
     /**
      * Identify message data schema by topic.
      *
      * @param string $topic
+     * @param bool $requestType
      * @return array
      * @throws LocalizedException
      */
-    protected function getTopicSchema($topic)
+    protected function getTopicSchema($topic, $requestType)
     {
-        $queueConfig = $this->queueConfig->get();
-        if (isset($queueConfig[QueueConfigConverter::TOPICS][$topic])) {
-            return $queueConfig[QueueConfigConverter::TOPICS][$topic][QueueConfigConverter::TOPIC_SCHEMA];
+        $topicConfig = $this->queueConfig->getTopic($topic);
+        if ($topicConfig === null) {
+            throw new LocalizedException(new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topic]));
         }
-        throw new LocalizedException(new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topic]));
+        return $requestType
+            ? $topicConfig[QueueConfig::TOPIC_SCHEMA]
+            : $topicConfig[QueueConfig::TOPIC_RESPONSE_SCHEMA];
     }
 
     /**
@@ -121,15 +125,16 @@ class MessageEncoder
      * @param string $topic
      * @param mixed $message
      * @param string $direction
+     * @param bool $requestType
      * @return mixed
      * @throws LocalizedException
      */
-    protected function convertMessage($topic, $message, $direction)
+    protected function convertMessage($topic, $message, $direction, $requestType)
     {
-        $topicSchema = $this->getTopicSchema($topic);
-        if ($topicSchema[QueueConfigConverter::TOPIC_SCHEMA_TYPE] == QueueConfigConverter::TOPIC_SCHEMA_TYPE_OBJECT) {
+        $topicSchema = $this->getTopicSchema($topic, $requestType);
+        if ($topicSchema[QueueConfig::TOPIC_SCHEMA_TYPE] == QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT) {
             /** Convert message according to the data interface associated with the message topic */
-            $messageDataType = $topicSchema[QueueConfigConverter::TOPIC_SCHEMA_VALUE];
+            $messageDataType = $topicSchema[QueueConfig::TOPIC_SCHEMA_VALUE];
             try {
                 $convertedMessage = $this->getConverter($direction)->convertValue($message, $messageDataType);
             } catch (LocalizedException $e) {
@@ -143,15 +148,15 @@ class MessageEncoder
         } else {
             /** Convert message according to the method signature associated with the message topic */
             $message = (array)$message;
-            $isIndexedArray = array_keys($message) == range(0, count($message) - 1);
+            $isIndexedArray = array_keys($message) === range(0, count($message) - 1);
             $convertedMessage = [];
             /** Message schema type is defined by method signature */
-            foreach ($topicSchema[QueueConfigConverter::TOPIC_SCHEMA_VALUE] as $methodParameterMeta) {
-                $paramName = $methodParameterMeta[QueueConfigConverter::SCHEMA_METHOD_PARAM_NAME];
-                $paramType = $methodParameterMeta[QueueConfigConverter::SCHEMA_METHOD_PARAM_TYPE];
+            foreach ($topicSchema[QueueConfig::TOPIC_SCHEMA_VALUE] as $methodParameterMeta) {
+                $paramName = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_NAME];
+                $paramType = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_TYPE];
                 if ($isIndexedArray) {
                     /** Encode parameters according to their positions in method signature */
-                    $paramPosition = $methodParameterMeta[QueueConfigConverter::SCHEMA_METHOD_PARAM_POSITION];
+                    $paramPosition = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_POSITION];
                     if (isset($message[$paramPosition])) {
                         $convertedMessage[$paramName] = $this->getConverter($direction)
                             ->convertValue($message[$paramPosition], $paramType);
@@ -165,17 +170,16 @@ class MessageEncoder
                 }
 
                 /** Ensure that all required params were passed */
-                if ($methodParameterMeta[QueueConfigConverter::SCHEMA_METHOD_PARAM_IS_REQUIRED]
+                if ($methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_IS_REQUIRED]
                     && !isset($convertedMessage[$paramName])
                 ) {
                     throw new LocalizedException(
                         new Phrase(
-                            'Data item corresponding to "%param" of "%method" must be specified '
+                            'Data item corresponding to "%param" must be specified '
                             . 'in the message with topic "%topic".',
                             [
                                 'topic' => $topic,
-                                'param' => $paramName,
-                                'method' => $topicSchema[QueueConfigConverter::TOPIC_SCHEMA_METHOD_NAME]
+                                'param' => $paramName
                             ]
                         )
                     );

@@ -12,7 +12,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Config;
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Config\SchemaLocator
+     * @var \Magento\Framework\MessageQueue\Config\Reader\XmlReader\SchemaLocator
      */
     protected $model;
 
@@ -22,7 +22,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->model = new \Magento\Framework\MessageQueue\Config\SchemaLocator($this->urnResolver);
+        $this->model = new \Magento\Framework\MessageQueue\Config\Reader\XmlReader\SchemaLocator($this->urnResolver);
     }
 
     public function testGetSchema()
