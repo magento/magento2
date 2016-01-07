@@ -78,29 +78,6 @@ class Phrase
     }
 
     /**
-     * Set quote type
-     *
-     * @param string $quote
-     * @return void
-     */
-    public function setQuote($quote)
-    {
-        if (in_array($quote, [self::QUOTE_SINGLE, self::QUOTE_DOUBLE])) {
-            $this->_quote = $quote;
-        }
-    }
-
-    /**
-     * Get phrase
-     *
-     * @return string
-     */
-    public function getQuote()
-    {
-        return $this->_quote;
-    }
-
-    /**
      * Set phrase
      *
      * @param string $phrase
@@ -123,6 +100,29 @@ class Phrase
     public function getPhrase()
     {
         return $this->_phrase;
+    }
+
+    /**
+     * Set quote type
+     *
+     * @param string $quote
+     * @return void
+     */
+    public function setQuote($quote)
+    {
+        if (in_array($quote, [self::QUOTE_SINGLE, self::QUOTE_DOUBLE])) {
+            $this->_quote = $quote;
+        }
+    }
+
+    /**
+     * Get quote type
+     *
+     * @return string
+     */
+    public function getQuote()
+    {
+        return $this->_quote;
     }
 
     /**
