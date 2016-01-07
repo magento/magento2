@@ -11,6 +11,20 @@ namespace Magento\Setup\Module\I18n\Dictionary;
 class Phrase
 {
     /**
+     * Single quote that enclose the phrase
+     *
+     * @var string
+     */
+    const QUOTE_SINGLE = "'";
+
+    /**
+     * Double quote that enclose the phrase
+     *
+     * @var string
+     */
+    const QUOTE_DOUBLE = '"';
+
+    /**
      * Phrase
      *
      * @var string
@@ -223,7 +237,7 @@ class Phrase
      */
     private function getCompiledString($string)
     {
-        $string = str_replace('$' , '\\$', $string);
+        $string = str_replace('$', '\\$', $string);
         $evalString = 'return "' . str_replace('"', '\\"', $string) . '";';
         $result = @eval($evalString);
         return is_string($result) ? $result :  $string;
