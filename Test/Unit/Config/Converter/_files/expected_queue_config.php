@@ -11,25 +11,26 @@ return [
             'exchange' => 'ex.01',
             'consumer' => 'cons.01',
             'consumerInstance' => '\\Magento\\Consumer\\Instance',
+            'type' => 'amqp',
             'topics' =>
                 [
                     'top.01' =>
                         [
                             'name' => 'top.01',
                             'handlerName' => 'h.01',
-                            'handler' => '',
+                            'handler' => NULL,
                         ],
                     'top.02' =>
                         [
                             'name' => 'top.02',
                             'handlerName' => 'h.02',
-                            'handler' => '',
+                            'handler' => NULL,
                         ],
                     'top.03' =>
                         [
                             'name' => 'top.03',
                             'handlerName' => 'h.03',
-                            'handler' => '',
+                            'handler' => NULL,
                         ],
                 ],
         ],
@@ -39,25 +40,26 @@ return [
             'exchange' => 'ex.01',
             'consumer' => 'cons.01',
             'consumerInstance' => '\\Magento\\Consumer\\Instance',
+            'type' => 'db',
             'topics' =>
                 [
                     'top.01' =>
                         [
                             'name' => 'top.01',
-                            'handlerName' => '',
-                            'handler' => '',
+                            'handlerName' => NULL,
+                            'handler' => NULL,
                         ],
                     'top.02' =>
                         [
                             'name' => 'top.02',
-                            'handlerName' => '',
+                            'handlerName' => NULL,
                             'handler' => '\\Magento\\Handler\\Class\\Name::methodName',
                         ],
                     'top.03' =>
                         [
                             'name' => 'top.03',
                             'handlerName' => 'h.03',
-                            'handler' => '',
+                            'handler' => NULL,
                         ],
                 ],
         ],
