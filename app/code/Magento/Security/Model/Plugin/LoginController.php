@@ -5,25 +5,15 @@
  */
 namespace Magento\Security\Model\Plugin;
 
-use Magento\Backend\Model\Auth\Session;
 use Magento\Security\Model\AdminSessionsManager;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Backend\Controller\Adminhtml\Auth\Login;
 
 /**
- * Magento\Backend\Model\Auth\Session decorator
+ * Magento\Backend\Controller\Adminhtml\Auth\Login decorator
  */
-class AuthSession
+class LoginController
 {
-    /**
-     * Cookie name
-     */
-    const LOGOUT_REASON_CODE_COOKIE_NAME = 'loggedOutReasonCode';
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
@@ -55,7 +45,6 @@ class AuthSession
     protected $cookieMetadataFactory;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
      * @param \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager
@@ -64,7 +53,6 @@ class AuthSession
      * @param \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         AdminSessionsManager $sessionsManager,
         \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager,
@@ -72,7 +60,6 @@ class AuthSession
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
     ) {
-        $this->request = $request;
         $this->messageManager = $messageManager;
         $this->sessionsManager = $sessionsManager;
         $this->phpCookieManager = $phpCookieManager;
@@ -82,76 +69,46 @@ class AuthSession
     }
 
     /**
-     * Admin Session prolong functionality
-     *
-     * @param Session $session
-     * @param \Closure $proceed
-     * @return mixed
+     * @param Login $login
+     * @return void
      */
-    public function aroundProlong(Session $session, \Closure $proceed)
+    public function beforeExecute(Login $login)
     {
-        if (!$this->isSessionCheckRequest()) {
-            if (!$this->sessionsManager->getCurrentSession()->isActive()) {
-                $session->destroy();
-                $this->addUserLogoutNotification();
-                return null;
-            }
-            $result = $proceed();
-            $this->sessionsManager->processProlong();
-            return $result;
-        }
-    }
-
-    /**
-     * @return $this
-     */
-    protected function addUserLogoutNotification()
-    {
-        if ($this->isAjaxRequest()) {
-            $this->setLogoutReasonCookie(
-                $this->sessionsManager->getCurrentSession()->getStatus()
-            );
-        } else {
+        $logoutReasonCode = $this->cookieReader->getCookie(AuthSession::LOGOUT_REASON_CODE_COOKIE_NAME, -1);
+        if ($this->isLoginForm($login) && $logoutReasonCode >= 0) {
             $this->messageManager->addError(
-                $this->sessionsManager->getLogoutReasonMessage()
+                $this->sessionsManager->getLogoutReasonMessageByStatus($logoutReasonCode)
             );
+            $this->deleteLogoutReasonCookie();
         }
-
-        return $this;
     }
 
     /**
-     * @param int $status
+     * Check if the login form action is requested directly
+     *
+     * @param Login $login
+     * @return bool
+     */
+    protected function isLoginForm(Login $login)
+    {
+        return $login->getRequest()->getUri() == $login->getUrl('*');
+    }
+
+    /**
      * @return $this
      */
-    protected function setLogoutReasonCookie($status)
+    protected function deleteLogoutReasonCookie()
     {
         /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $metaData */
         $metaData = $this->cookieMetadataFactory->create();
-        $metaData->setPath('/' . $this->backendData->getAreaFrontName());
+        $metaData->setPath('/' . $this->backendData->getAreaFrontName())->setDuration(-1);
 
         $this->phpCookieManager->setPublicCookie(
-            self::LOGOUT_REASON_CODE_COOKIE_NAME,
-            (int) $status,
+            AuthSession::LOGOUT_REASON_CODE_COOKIE_NAME,
+            "",
             $metaData
         );
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isSessionCheckRequest()
-    {
-        return $this->request->getModuleName() == 'security' && $this->request->getActionName() == 'check';
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isAjaxRequest()
-    {
-        return (bool) $this->request->getParam('isAjax');
     }
 }
