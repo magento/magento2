@@ -28,9 +28,9 @@ class SecurityManager
     protected $passwordResetRequestEventModelFactory;
 
     /**
-     * @var ResourceModel\PasswordResetRequestEvent
+     * @var ResourceModel\PasswordResetRequestEvent\CollectionFactory
      */
-    protected $passwordResetRequestEventResource;
+    protected $passwordResetRequestEventCollectionFactory;
 
     /**
      * @var array
@@ -41,19 +41,19 @@ class SecurityManager
      * SecurityManager constructor.
      * @param \Magento\Security\Helper\SecurityConfig $securityConfig
      * @param \Magento\Security\Model\PasswordResetRequestEventFactory $passwordResetRequestEventModelFactory
-     * @param ResourceModel\PasswordResetRequestEvent $passwordResetRequestEventResource
+     * @param ResourceModel\PasswordResetRequestEvent\CollectionFactory $passwordResetRequestEventCollectionFactory
      * @param array $securityCheckers
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Security\Helper\SecurityConfig $securityConfig,
         \Magento\Security\Model\PasswordResetRequestEventFactory $passwordResetRequestEventModelFactory,
-        \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent $passwordResetRequestEventResource,
+        ResourceModel\PasswordResetRequestEvent\CollectionFactory $passwordResetRequestEventCollectionFactory,
         $securityCheckers = []
     ) {
         $this->securityConfig = $securityConfig;
         $this->passwordResetRequestEventModelFactory = $passwordResetRequestEventModelFactory;
-        $this->passwordResetRequestEventResource = $passwordResetRequestEventResource;
+        $this->passwordResetRequestEventCollectionFactory = $passwordResetRequestEventCollectionFactory;
         $this->securityCheckers = $securityCheckers;
 
         foreach ($this->securityCheckers as $checker) {
@@ -87,6 +87,20 @@ class SecurityManager
     }
 
     /**
+     * Clean expired Admin Sessions
+     *
+     * @return $this
+     */
+    public function cleanExpiredRecords()
+    {
+        $this->passwordResetRequestEventCollectionFactory->create()->deleteRecordsOlderThen(
+            $this->securityConfig->getCurrentTimestamp() - self::SECURITY_CONTROL_RECORDS_LIFE_TIME
+        );
+
+        return $this;
+    }
+
+    /**
      * @param int $requestType
      * @param string|null $accountReference
      * @param int $longIp
@@ -102,19 +116,5 @@ class SecurityManager
             ->save();
 
         return $passwordResetRequestEventModel;
-    }
-
-    /**
-     * Clean expired Admin Sessions
-     *
-     * @return $this
-     */
-    public function cleanExpiredRecords()
-    {
-        $this->passwordResetRequestEventResource->deleteRecordsOlderThen(
-            $this->securityConfig->getCurrentTimestamp() - self::SECURITY_CONTROL_RECORDS_LIFE_TIME
-        );
-
-        return $this;
     }
 }

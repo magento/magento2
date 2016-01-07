@@ -11,14 +11,14 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 
 /**
- * Test class for \Magento\Security\Test\Unit\Controller\Adminhtml\Session\Activity testing
+ * Test class for \Magento\Security\Controller\Adminhtml\Session\Activity testing
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ActivityTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var  \Magento\Security\Test\Unit\Controller\Adminhtml\Session\Activity
+     * @var  \Magento\Security\Controller\Adminhtml\Session\Activity
      */
     protected $controller;
 
