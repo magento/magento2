@@ -19,11 +19,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const DEFAULT_HANDLER = 'defaultHandler';
 
     /**
-     * @var MethodsMap
-     */
-    private $methodsMap;
-
-    /**
      * @var \Magento\Framework\Communication\ConfigInterface
      */
     private $communicationConfig;
@@ -36,16 +31,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Initialize dependencies
      *
-     * @param MethodsMap $methodsMap
      * @param \Magento\Framework\Communication\ConfigInterface $communicationConfig
      * @param Validator $xmlValidator
      */
     public function __construct(
-        MethodsMap $methodsMap,
         \Magento\Framework\Communication\ConfigInterface $communicationConfig,
         Validator $xmlValidator
     ) {
-        $this->methodsMap = $methodsMap;
         $this->communicationConfig = $communicationConfig;
         $this->xmlValidator = $xmlValidator;
     }
@@ -59,25 +51,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     public function convert($source)
     {
         $brokers = $this->processBrokerConfiguration($source);
-        /** Process Publishers Configuration */
-        $publishers = $this->extractPublishers($source);
-        $brokerPublishers = $this->processPublisherConfiguration($brokers);
-        $publishers = array_merge($publishers, $brokerPublishers);
+        $publishers = $this->processPublisherConfiguration($brokers);
+        $topics = $this->processTopicsConfiguration($brokers);
+        $binds = $this->processBindsConfiguration($brokers);
+        $consumers = $this->processConsumerConfiguration($brokers);
 
-        /** Process Topics Configuration */
-        $topics = $this->extractTopics($source, $publishers);
-        $brokerTopics = $this->processTopicsConfiguration($brokers);
-        $topics = array_merge($topics, $brokerTopics);
-
-        $binds = $this->extractBinds($source, $topics);
-
-        /** Process Consumers Configuration */
-        $consumers = $this->extractConsumers($source, $binds, $topics);
-        $brokerConsumers = $this->processConsumerConfiguration($brokers);
-        $consumers = array_merge($consumers, $brokerConsumers);
-        $brokerBinds = $this->processBindsConfiguration($brokers);
-        //nested unique array
-        $binds = array_map("unserialize", array_unique(array_map("serialize", array_merge($binds, $brokerBinds))));
         return [
             QueueConfig::PUBLISHERS => $publishers,
             QueueConfig::TOPICS => $topics,
@@ -288,194 +266,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 }
             }
             unset($output[$wildcardKey]);
-        }
-        return $output;
-    }
-
-    /**
-     * Get message schema defined by service method signature.
-     *
-     * @param string $schemaId
-     * @param string $topic
-     * @return array
-     * @deprecated
-     */
-    protected function getSchemaDefinedByMethod($schemaId, $topic)
-    {
-        preg_match(self::SERVICE_METHOD_NAME_PATTERN, $schemaId, $matches);
-        $serviceClass = $matches[1];
-        $serviceMethod = $matches[2];
-        $this->xmlValidator->validateSchemaMethodType($serviceClass, $serviceMethod, $topic);
-        $result = [];
-        $paramsMeta = $this->methodsMap->getMethodParams($serviceClass, $serviceMethod);
-        foreach ($paramsMeta as $paramPosition => $paramMeta) {
-            $result[] = [
-                QueueConfig::SCHEMA_METHOD_PARAM_NAME => $paramMeta[MethodsMap::METHOD_META_NAME],
-                QueueConfig::SCHEMA_METHOD_PARAM_POSITION => $paramPosition,
-                QueueConfig::SCHEMA_METHOD_PARAM_IS_REQUIRED => !$paramMeta[MethodsMap::METHOD_META_HAS_DEFAULT_VALUE],
-                QueueConfig::SCHEMA_METHOD_PARAM_TYPE => $paramMeta[MethodsMap::METHOD_META_TYPE],
-            ];
-        }
-        return $result;
-    }
-
-    /**
-     * Identify which option is used to define message schema: data interface or service method params
-     *
-     * @param string $schemaId
-     * @return string
-     * @deprecatedQueueConfig
-     */
-    protected function identifySchemaType($schemaId)
-    {
-        return preg_match(self::SERVICE_METHOD_NAME_PATTERN, $schemaId)
-            ? QueueConfig::TOPIC_SCHEMA_TYPE_METHOD
-            : QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT;
-    }
-
-    /**
-     * Extract publishers configuration.
-     *
-     * @param \DOMDocument $config
-     * @return array
-     * @deprecated
-     */
-    protected function extractPublishers(\DOMDocument $config)
-    {
-        $output = [];
-        /** @var $publisherNode \DOMNode */
-        foreach ($config->getElementsByTagName('publisher') as $publisherNode) {
-            $publisherName = $publisherNode->attributes->getNamedItem('name')->nodeValue;
-            $output[$publisherName] = [
-                QueueConfig::PUBLISHER_NAME => $publisherName,
-                QueueConfig::PUBLISHER_CONNECTION => $publisherNode->attributes->getNamedItem('connection')->nodeValue,
-                QueueConfig::PUBLISHER_EXCHANGE => $publisherNode->attributes->getNamedItem('exchange')->nodeValue
-            ];
-        }
-        return $output;
-    }
-
-    /**
-     * Extract consumers configuration.
-     *
-     * @param \DOMDocument $config
-     * @param array $binds
-     * @param array $topics
-     * @return array
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated
-     */
-    protected function extractConsumers(\DOMDocument $config, $binds, $topics)
-    {
-        $map = [];
-        foreach ($binds as $bind) {
-            $pattern = $this->xmlValidator->buildWildcardPattern($bind['topic']);
-            $extractedTopics = preg_grep($pattern, array_keys($topics));
-            foreach ($extractedTopics as $extractedTopic) {
-                $map[$bind['queue']][] = $extractedTopic;
-            }
-        }
-        $output = [];
-        /** @var $consumerNode \DOMNode */
-        foreach ($config->documentElement->childNodes as $consumerNode) {
-            if ($consumerNode->nodeName != 'consumer' || $consumerNode->nodeType != XML_ELEMENT_NODE) {
-                continue;
-            }
-            $consumerName = $consumerNode->attributes->getNamedItem('name')->nodeValue;
-            $maxMessages = $consumerNode->attributes->getNamedItem('max_messages');
-            $connections = $consumerNode->attributes->getNamedItem('connection');
-            $consumerInstanceType = $consumerNode->attributes->getNamedItem('executor');
-            $queueName = $consumerNode->attributes->getNamedItem('queue')->nodeValue;
-            $handler = [
-                QueueConfig::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
-                QueueConfig::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
-            ];
-            $this->xmlValidator->validateHandlerType(
-                $handler[QueueConfig::CONSUMER_CLASS],
-                $handler[QueueConfig::CONSUMER_METHOD],
-                $consumerName
-            );
-            $handlers = [];
-            if (isset($map[$queueName])) {
-                foreach ($map[$queueName] as $topic) {
-                    $handlers[$topic][self::DEFAULT_HANDLER] = $handler;
-                }
-            }
-            $output[$consumerName] = [
-                QueueConfig::CONSUMER_NAME => $consumerName,
-                QueueConfig::CONSUMER_QUEUE => $queueName,
-                QueueConfig::CONSUMER_CONNECTION => $connections ? $connections->nodeValue : null,
-                QueueConfig::CONSUMER_TYPE => QueueConfig::CONSUMER_TYPE_ASYNC,
-                QueueConfig::CONSUMER_HANDLERS => $handlers,
-                QueueConfig::CONSUMER_MAX_MESSAGES => $maxMessages ? $maxMessages->nodeValue : null,
-                QueueConfig::CONSUMER_INSTANCE_TYPE => $consumerInstanceType ? $consumerInstanceType->nodeValue : null,
-            ];
-        }
-        return $output;
-    }
-
-    /**
-     * Extract topics configuration.
-     *
-     * @param \DOMDocument $config
-     * @param array $publishers
-     * @return array
-     * @deprecated
-     */
-    protected function extractTopics(\DOMDocument $config, $publishers)
-    {
-        $output = [];
-        /** @var $topicNode \DOMNode */
-        foreach ($config->getElementsByTagName('topic') as $topicNode) {
-            $topicName = $topicNode->attributes->getNamedItem('name')->nodeValue;
-            $schemaId = $topicNode->attributes->getNamedItem('schema')->nodeValue;
-            $schemaType = $this->identifySchemaType($schemaId);
-            $schemaValue = ($schemaType == QueueConfig::TOPIC_SCHEMA_TYPE_METHOD)
-                ? $this->getSchemaDefinedByMethod($schemaId, $topicName)
-                : $schemaId;
-            $publisherName = $topicNode->attributes->getNamedItem('publisher')->nodeValue;
-            $this->xmlValidator->validateTopicPublisher(array_keys($publishers), $publisherName, $topicName);
-
-            $output[$topicName] = [
-                QueueConfig::TOPIC_NAME => $topicName,
-                QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => $schemaType,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => $schemaValue
-                ],
-                QueueConfig::TOPIC_RESPONSE_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => null,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => null
-                ],
-                QueueConfig::TOPIC_PUBLISHER => $publisherName
-            ];
-        }
-        return $output;
-    }
-
-    /**
-     * Extract binds configuration.
-     *
-     * @param \DOMDocument $config
-     * @param array $topics
-     * @return array
-     * @deprecated
-     */
-    protected function extractBinds(\DOMDocument $config, $topics)
-    {
-        $output = [];
-        /** @var $bindNode \DOMNode */
-        foreach ($config->getElementsByTagName('bind') as $bindNode) {
-            $queueName = $bindNode->attributes->getNamedItem('queue')->nodeValue;
-            $exchangeName = $bindNode->attributes->getNamedItem('exchange')->nodeValue;
-            $topicName = $bindNode->attributes->getNamedItem('topic')->nodeValue;
-            $key = $this->getBindName($topicName, $exchangeName, $queueName);
-            $this->xmlValidator->validateBindTopic(array_keys($topics), $topicName);
-            $output[$key] = [
-                QueueConfig::BIND_QUEUE => $queueName,
-                QueueConfig::BIND_EXCHANGE => $exchangeName,
-                QueueConfig::BIND_TOPIC => $topicName,
-            ];
         }
         return $output;
     }
