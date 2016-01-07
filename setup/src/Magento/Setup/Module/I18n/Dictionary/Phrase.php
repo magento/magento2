@@ -53,6 +53,13 @@ class Phrase
     private $_contextValue = [];
 
     /**
+     * Quote type that enclose the phrase, single or double
+     *
+     * @var string
+     */
+    private $_quote;
+
+    /**
      * Phrase construct
      *
      * @param string $phrase
@@ -61,12 +68,36 @@ class Phrase
      * @param string|array|null $contextValue
      * @param string|null $quote
      */
-    public function __construct($phrase, $translation, $contextType = null, $contextValue = null)
+    public function __construct($phrase, $translation, $contextType = null, $contextValue = null, $quote = null)
     {
         $this->setPhrase($phrase);
         $this->setTranslation($translation);
         $this->setContextType($contextType);
         $this->setContextValue($contextValue);
+        $this->setQuote($quote);
+    }
+
+    /**
+     * Set quote type
+     *
+     * @param string $quote
+     * @return void
+     */
+    public function setQuote($quote)
+    {
+        if (in_array($quote, [self::QUOTE_SINGLE, self::QUOTE_DOUBLE])) {
+            $this->_quote = $quote;
+        }
+    }
+
+    /**
+     * Get phrase
+     *
+     * @return string
+     */
+    public function getQuote()
+    {
+        return $this->_quote;
     }
 
     /**
@@ -237,8 +268,12 @@ class Phrase
      */
     private function getCompiledString($string)
     {
-        $string = str_replace('$', '\\$', $string);
-        $evalString = 'return "' . str_replace('"', '\\"', $string) . '";';
+        $encloseQuote = $this->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
+        preg_match_all('/(?<!\\\\)[\'"]/', $string, $matches);
+        if (count($matches[0]) % 2 !== 0) {
+            $string = addslashes($string);
+        }
+        $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
         $result = @eval($evalString);
         return is_string($result) ? $result :  $string;
     }
