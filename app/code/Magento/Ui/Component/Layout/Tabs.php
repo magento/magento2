@@ -96,6 +96,7 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * @param string $componentType
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function addChildren(array &$topNode, UiComponentInterface $component, $componentType)
     {
