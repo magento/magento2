@@ -69,6 +69,6 @@ class StoreView extends Column
         if ($item['store_id'] == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
             return __('All Store Views');
         }
-        return __('%1', $this->storeManager->getStore($item['store_id'])->getName());
+        return $this->storeManager->getStore($item['store_id'])->getName();
     }
 }
