@@ -18,7 +18,7 @@ class Activate extends Link
      */
     public function getCaption()
     {
-        return $this->_row->getStatus() == Integration::STATUS_INACTIVE ? __('Activate') : __('Reauthorize');
+        return $this->_row->getStatus() != Integration::STATUS_ACTIVE ? __('Activate') : __('Reauthorize');
     }
 
     /**
