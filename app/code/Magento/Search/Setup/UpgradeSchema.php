@@ -95,62 +95,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.0.3') < 0) {
 
-            // Add 'scope_type' to 'search_synonyms'
-            $connection->addColumn(
-                $installer->getTable('search_synonyms'),
-                'scope_type',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'length' => 16,
-                    'nullable' => false,
-                    'default' => \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                    'comment' => 'Scope of synonyms. Within a store, within a website or across all stores'
-                ]
-            );
-
-            $connection->dropForeignKey(
-                $installer->getTable('search_synonyms'),
-                $installer->getFkName(
-                    'search_synonyms',
-                    'store_id',
-                    'store',
-                    'store_id'
-                )
-            );
-
-            $connection->dropIndex(
-                $installer->getTable('search_synonyms'),
-                $installer->getIdxName('search_synonyms', ['store_id'])
-            );
-
-            // Rename store_id to scope_id
-            $connection->changeColumn(
-                $installer->getTable('search_synonyms'),
-                'store_id',
-                'scope_id',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                    'unsigned' => true,
-                    'nullable' => false,
-                    'default' => 0,
-                    'comment' => 'Scope Id - id of the scope these synonyms belong to'
-                ]
-            );
-
-            $connection->addIndex(
-                $installer->getTable('search_synonyms'),
-                $installer->getIdxName(
-                    'search_synonyms',
-                    ['scope_type', 'scope_id'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
-                ),
-                ['scope_type', 'scope_id'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
-            );
-        }
-
-        if (version_compare($context->getVersion(), '2.0.4') < 0) {
-
             // Drop and recreate 'search_synonyms' table
             $connection->dropTable($installer->getTable('search_synonyms'));
 

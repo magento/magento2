@@ -66,9 +66,9 @@ class StoreView extends Column
     protected function prepareItem(array $item)
     {
 
-        if ($item['store_id'] == 0) {
+        if ($item['store_id'] == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
             return __('All Store Views');
         }
-        return __($this->storeManager->getStore($item['store_id'])->getName());
+        return __('%1', $this->storeManager->getStore($item['store_id'])->getName());
     }
 }

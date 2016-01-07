@@ -66,9 +66,9 @@ class Website extends Column
      */
     protected function prepareItem(array $item)
     {
-        if ($item['website_id'] == 0) {
+        if ($item['website_id'] == \Magento\CatalogInventory\Model\Configuration::DEFAULT_WEBSITE_ID) {
             return __('All Websites');
         }
-        return __($this->storeManager->getWebsite($item['website_id'])->getName());
+        return __('%1', $this->storeManager->getWebsite($item['website_id'])->getName());
     }
 }
