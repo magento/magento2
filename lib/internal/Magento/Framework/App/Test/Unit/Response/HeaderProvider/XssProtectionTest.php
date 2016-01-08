@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\App\Test\Unit\Response\HeaderProvider;
+
 use Magento\Framework\App\Response\HeaderProvider\XssProtection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class XssProtectionTest extends PHPUnit_Framework_TestCase
+class XssProtectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider userAgentDataProvider
