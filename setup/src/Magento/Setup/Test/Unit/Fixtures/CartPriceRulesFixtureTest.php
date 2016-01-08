@@ -73,12 +73,13 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('category_id'));
 
         $modelMock = $this->getMock('\Magento\SalesRule\Model\Rule', [], [], '', false);
-        $modelMock->expects($this->once())
-            ->method('getIdFieldName')
-            ->will($this->returnValue('Field Id Name'));
+        $modelFactoryMock = $this->getMock('\Magento\SalesRule\Model\RuleFactory', [], [], '', false);
+        $modelFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($modelMock);
 
         $objectValueMap = [
-            ['Magento\SalesRule\Model\Rule', $modelMock],
+            ['Magento\SalesRule\Model\RuleFactory', $modelFactoryMock],
             ['Magento\Catalog\Model\Category', $categoryMock]
         ];
 
@@ -92,11 +93,12 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
 
         $valueMap = [
             ['cart_price_rules', 0, 1],
-            ['cart_price_rules_floor', 3, 3]
+            ['cart_price_rules_floor', 3, 3],
+            ['cart_price_rules_advanced_type', false, false]
         ];
 
         $this->fixtureModelMock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getValue')
             ->will($this->returnValueMap($valueMap));
         $this->fixtureModelMock
@@ -130,9 +132,125 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
         $this->model->execute();
     }
 
+    /**
+     * @param int $ruleId
+     * @param array $categoriesArray
+     * @param int $ruleCount
+     * @dataProvider dataProviderGenerateAdvancedCondition
+     */
+    public function testGenerateAdvancedCondition($ruleId, $categoriesArray, $ruleCount)
+    {
+        $reflection = new \ReflectionClass($this->model);
+        $reflection_property = $reflection->getProperty('cartPriceRulesCount');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($this->model, $ruleCount);
+        $reflection_property = $reflection->getProperty('cartRulesAdvancedRatio');
+        $reflection_property->setAccessible(true);
+        $cartRulesAdvancedRatio = $reflection_property->getValue($this->model);
+
+        $result = $this->model->generateAdvancedCondition($ruleId, $categoriesArray);
+        if ($ruleId < ($cartRulesAdvancedRatio * ($ruleCount / 4))) {
+            $firstCondition = [
+                'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product',
+                'attribute' => 'category_ids',
+                'operator'  => '==',
+                'value'     => null,
+            ];
+
+            $secondCondition = [
+                'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Address',
+                'attribute' => 'base_subtotal',
+                'operator'  => '>=',
+                'value'     => 10,
+            ];
+            $expected = [
+                'conditions' => [
+                    1 => [
+                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Combine',
+                        'aggregator' => 'all',
+                        'value' => '1',
+                        'new_child' => '',
+                    ],
+                    '1--1'=> [
+                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Found',
+                        'aggregator' => 'all',
+                        'value' => '1',
+                        'new_child' => '',
+                    ],
+                    '1--1--1' => $firstCondition,
+                    '1--2' => $secondCondition
+                ],
+                'actions' => [
+                    1 => [
+                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Combine',
+                        'aggregator' => 'all',
+                        'value' => '1',
+                        'new_child' => '',
+                    ],
+                ]
+            ];
+            $this->assertSame($expected, $result);
+        } else {
+            // Shipping Region
+            $regions = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                        'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois',
+                        'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
+                        'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+                        'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+                        'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+                        'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                        'Wisconsin', 'Wyoming'];
+            $firstCondition = [
+                'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Address',
+                'attribute' => 'region',
+                'operator'  => '==',
+                'value'     => $regions[($ruleId / 4) % 50],
+            ];
+
+            $secondCondition = [
+                'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Address',
+                'attribute' => 'base_subtotal',
+                'operator'  => '>=',
+                'value'     => 5,
+            ];
+            $expected = [
+                'conditions' => [
+                    1 => [
+                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Combine',
+                        'aggregator' => 'all',
+                        'value' => '1',
+                        'new_child' => '',
+                    ],
+                    '1--1' => $firstCondition,
+                    '1--2' => $secondCondition
+                ],
+                'actions' => [
+                    1 => [
+                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Combine',
+                        'aggregator' => 'all',
+                        'value' => '1',
+                        'new_child' => '',
+                    ],
+                ]
+            ];
+            $this->assertSame($expected, $result);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderGenerateAdvancedCondition()
+    {
+        return [
+            [1, [0], 1],
+            [2, [0], 100]
+        ];
+    }
+
     public function testGetActionTitle()
     {
-        $this->assertSame('Generating Cart Price Rules', $this->model->getActionTitle());
+        $this->assertSame('Generating cart price rules', $this->model->getActionTitle());
     }
 
     public function testIntroduceParamLabels()
