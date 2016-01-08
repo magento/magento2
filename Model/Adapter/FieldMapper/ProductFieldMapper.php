@@ -94,7 +94,7 @@ class ProductFieldMapper implements FieldMapperInterface
                     array_merge($context, ['type' => FieldMapperInterface::TYPE_QUERY])
                 );
             }
-            $fieldName = $this->getRefinedFieldName($frontendInput, $fieldType, $attributeCode);
+            $fieldName = $attributeCode;
         } elseif ($context['type'] === FieldMapperInterface::TYPE_QUERY) {
             $fieldName = $this->getQueryTypeFieldName($frontendInput, $fieldType, $attributeCode);
         } else {

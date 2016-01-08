@@ -67,17 +67,24 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $product = $this->productRepository->getById($productId);
         foreach ($attributeCodes as $attributeCode) {
-            $attributeValue = $product->getCustomAttribute($attributeCode);
-            if ($attributeValue) {
-                $value = $attributeValue->getValue();
-                $attribute = $this->eavConfig->getAttribute(
-                    ProductAttributeInterface::ENTITY_TYPE_CODE,
-                    $attributeCode
-                );
-                $frontendInput = $attribute->getFrontendInput();
-                if (in_array($attribute->getAttributeId(), array_keys($indexData))) {
-                    $value = $indexData[$attribute->getAttributeId()][$productId];
+            $value = $product->getData($attributeCode);
+            $attribute = $this->eavConfig->getAttribute(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $attributeCode
+            );
+            $frontendInput = $attribute->getFrontendInput();
+            if (in_array($attribute->getAttributeId(), array_keys($indexData))) {
+                if (is_array($indexData[$attribute->getAttributeId()])) {
+                    if (isset($indexData[$attribute->getAttributeId()][$productId])) {
+                        $value = $indexData[$attribute->getAttributeId()][$productId];
+                    } else {
+                        $value = implode(' ', $indexData[$attribute->getAttributeId()]);
+                    }
+                } else {
+                    $value = $indexData[$attribute->getAttributeId()];
                 }
+            }
+            if ($value) {
                 $productAttributes[$attributeCode] = $value;
                 if ($frontendInput == 'select') {
                     foreach ($attribute->getOptions() as $option) {
