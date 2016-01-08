@@ -13,10 +13,10 @@ $registry->register('isSecureArea', true);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+    ->get('Magento\Catalog\Api\ProductRepositoryInterface');
 try {
     $product = $productRepository->get('simple');
-    $product->delete();
+    $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
 
 }
