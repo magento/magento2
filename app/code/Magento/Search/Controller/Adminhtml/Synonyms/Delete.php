@@ -25,7 +25,8 @@ class Delete extends \Magento\Backend\App\Action
             try {
                 $model = $this->_objectManager->create('Magento\Search\Model\SynonymGroup');
                 $model->load($id);
-                $model->delete();
+                $repository = $this->_objectManager->create('Magento\Search\Api\SynonymGroupRepositoryInterface');
+                $repository->delete($model);
                 $this->messageManager->addSuccess(__('The synonyms group has been deleted.'));
                 return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
