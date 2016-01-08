@@ -1,15 +1,16 @@
 <?php
-/***
+/**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\App\Response\HeaderProvider;
 
-namespace Magento\Framework\App\Response;
+use \Magento\Framework\App\Response\Http;
 
 /**
  * Adds an X-FRAME-OPTIONS header to HTTP responses to safeguard against click-jacking.
  */
-class XFrameOptPlugin
+class XFrameOptions extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeaderProvider
 {
     /** Deployment config key for frontend x-frame-options header value */
     const DEPLOYMENT_CONFIG_X_FRAME_OPT = 'x-frame-options';
@@ -18,26 +19,24 @@ class XFrameOptPlugin
     const BACKEND_X_FRAME_OPT = 'SAMEORIGIN';
 
     /**
-     *The header value
+     * x-frame-options Header name
+     *
      * @var string
      */
-    private $xFrameOpt;
+    protected $name = Http::HEADER_X_FRAME_OPT;
+
+    /**
+     * x-frame-options header value
+     *
+     * @var string
+     */
+    protected $value;
 
     /**
      * @param string $xFrameOpt
      */
-    public function __construct($xFrameOpt)
+    public function __construct($xFrameOpt = 'SAMEORIGIN')
     {
-        $this->xFrameOpt = $xFrameOpt;
-    }
-
-    /**
-     * @param \Magento\Framework\App\Response\Http $subject
-     * @return void
-     * @codeCoverageIgnore
-     */
-    public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
-    {
-        $subject->setXFrameOptions($this->xFrameOpt);
+        $this->value = $xFrameOpt;
     }
 }
