@@ -69,6 +69,6 @@ class MemoryUsageTest extends \PHPUnit_Framework_TestCase
     protected function _getAllowedMemoryUsage()
     {
         // Memory usage limits should not be further increased, corresponding memory leaks have to be fixed instead!
-        return \Magento\TestFramework\Helper\Memory::convertToBytes('1M');
+        return \Magento\TestFramework\Helper\Memory::convertToBytes('2M');
     }
 }
