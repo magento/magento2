@@ -24,7 +24,7 @@ class SynonymGroup extends AbstractDb
             ->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), 'store_id'));
         $select = $this->getConnection()
             ->select()
-            ->from($this->getMainTable(), 'synonyms')
+            ->from($this->getMainTable(), ['group_id', 'synonyms'])
             ->where($websiteIdField . '=?', $websiteId)
             ->where($storeIdField . '=?', $storeId);
         return $this->getConnection()->fetchAll($select);
