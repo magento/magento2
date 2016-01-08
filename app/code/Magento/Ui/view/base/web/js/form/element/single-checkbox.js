@@ -93,18 +93,6 @@ define([
         },
 
         /**
-         * Sets initial value.
-         *
-         * @returns {Element}
-         */
-        setInitialValue: function () {
-            this._super();
-            this.value.notifySubscribers(this.value.peek());
-
-            return this;
-        },
-
-        /**
          * Get true/false key from valueMap by value.
          *
          * @param {*} value
@@ -184,10 +172,6 @@ define([
             } else {
                 newValue = oldValue;
             }
-
-            //if (isMappedUsed && newValue !== oldValue) {
-            //    this.value(newValue);
-            //}
 
             if (!this.isMultiple && newChecked) {
                 this.exportedValue(newValue);
