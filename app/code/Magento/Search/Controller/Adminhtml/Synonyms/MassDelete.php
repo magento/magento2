@@ -11,6 +11,9 @@ use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory;
 
+/**
+ * Mass-Delete Controller
+ */
 class MassDelete extends \Magento\Backend\App\Action
 {
     /**
