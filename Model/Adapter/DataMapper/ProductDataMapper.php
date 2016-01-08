@@ -38,11 +38,6 @@ class ProductDataMapper implements DataMapperInterface
     const MEDIA_ROLE_SWATCH_IMAGE = 'swatch_image';
 
     /**
-     * Entity type for product
-     */
-    const PRODUCT_ENTITY_TYPE = 'product';
-
-    /**
      * @var Builder
      */
     private $builder;
@@ -154,7 +149,7 @@ class ProductDataMapper implements DataMapperInterface
             $this->builder->addField(
                 $this->fieldMapper->getFieldName(
                     $attributeCode,
-                    ['entityType' => self::PRODUCT_ENTITY_TYPE]
+                    $context
                 ),
                 $value
             );

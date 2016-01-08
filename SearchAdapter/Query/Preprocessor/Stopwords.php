@@ -92,7 +92,7 @@ class Stopwords implements PreprocessorInterface
     /**
      * Get stopwords list for current locale
      *
-     * return array
+     * @return array
      */
     protected function getStopwordsList()
     {
@@ -113,7 +113,7 @@ class Stopwords implements PreprocessorInterface
     /**
      * Get stopwords file for current locale
      *
-     * return string
+     * @return string
      */
     protected function getStopwordsFile()
     {

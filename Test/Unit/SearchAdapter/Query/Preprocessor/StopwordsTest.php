@@ -88,8 +88,8 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
- * Test process() method
- */
+     * Test process() method
+     */
     public function testProcess()
     {
         $this->esConfig->expects($this->once())
