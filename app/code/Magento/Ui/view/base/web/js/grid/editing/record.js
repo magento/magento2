@@ -328,7 +328,6 @@ define([
 
             this.hasChanges = !diff.equal;
             changed[this.index] = this.data;
-            debugger;
             this.editor().set('changed', [changed]);
 
             return this;

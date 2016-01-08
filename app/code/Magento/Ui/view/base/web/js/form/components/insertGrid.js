@@ -44,7 +44,7 @@ define([
          */
         initialize: function () {
             this._super();
-            _.bindAll(this, 'updateValue');
+            _.bindAll(this, 'updateValue', 'updateExternalValueByEditableData');
 
             return this;
         },
@@ -53,7 +53,8 @@ define([
         initConfig: function (config) {
             var defaults = this.constructor.defaults;
 
-            if (config.behaviourType === 'edit' && defaults.settings && defaults.settings.edit) {
+            if (config.behaviourType === 'edit') {
+                defaults.editableData = {};
                 _.map(defaults.settings.edit.imports, function (value, key) {
                     this.imports[key] = value;
                 }, defaults);
@@ -71,22 +72,18 @@ define([
         },
 
         /**
-         * Add data from edited record to externalValue
+         * Store data from edited record
          *
          * @param {Object} record
          */
         onChangeRecord: function (record) {
-            var id = utils.getKeys(record[0], true),
-                value = record[0][id],
-                idName = value['id_field_name'],
-                index;
+            this.updateEditableData(record);
 
-            index = _.findIndex(this.externalValue(), function (val) {
-                return val[idName] == id;
-            });
+            if (!this.dataLinks.imports) {
+                return;
+            }
 
-            this.externalValue()[index] = value;
-            this.externalValue.valueHasMutated();
+            this.updateExternalValueByEditableData();
         },
 
         /**
@@ -95,11 +92,44 @@ define([
          *
          */
         onSelectedChange: function () {
-            if (!this.dataLinks.imports) {
+            if (!this.dataLinks.imports || this.suppressDataLinks) {
+                this.suppressDataLinks = false;
+
                 return;
             }
 
+            this.suppressDataLinks = true;
             this.updateExternalValue();
+        },
+
+        /**
+         * Stores data from editor in editableData
+         * @param {Object} record
+         *
+         */
+        updateEditableData: function (record) {
+            var id = utils.getKeys(record[0], true),
+                value = record[0][id];
+
+            this.editableData[id] = value;
+        },
+
+        /**
+         * Updates externalValue by data from editor (already stored in editableData)
+         *
+         */
+        updateExternalValueByEditableData: function () {
+            var updatedExtValue;
+
+            if (!this.behaviourType === 'edit' || _.isEmpty(this.editableData) || _.isEmpty(this.externalValue())) {
+                return;
+            }
+
+            updatedExtValue = this.externalValue();
+            updatedExtValue.map(function (item) {
+                _.extend(item, this.editableData[item[item['id_field_name']]]);
+            }, this);
+            this.externalValue(updatedExtValue);
         },
 
         /**
@@ -128,11 +158,13 @@ define([
 
             if (canUpdateFromSelection) {
                 this.updateFromSelectionData(selections, index, rows);
+                this.updateExternalValueByEditableData();
                 result.resolve();
             } else {
                 this.updateFromServerData(selections, index, itemsType).done(function () {
+                    this.updateExternalValueByEditableData();
                     result.resolve();
-                });
+                }.bind(this));
             }
 
             return result;
@@ -213,18 +245,21 @@ define([
 
         /**
          * Updates grid selections
-         * every time, when value is updated,
-         * so grid is re-selected according to externally updated value
+         * every time, when extenalValue is updated,
+         * so grid is re-selected according to externalValue updated
          *
          */
         updateSelections: function () {
             var provider = this.selections(),
                 ids;
 
-            if (!this.externalFilterMode) { //|| !this.dataLinks.exports
+            if (!this.dataLinks.exports || this.suppressDataLinks) {
+                this.suppressDataLinks = false;
+
                 return;
             }
 
+            this.suppressDataLinks = true;
             ids = _.pluck(this.value() || [], provider.indexField);
             provider.selected(ids || []);
         },
