@@ -9,7 +9,7 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
-
+use Magento\Framework\Locale\ResolverInterface;
 /**
  * Class ConfigProvider
  */
@@ -18,6 +18,11 @@ final class ConfigProvider implements ConfigProviderInterface
     const CODE = 'braintreetwo';
 
     const PAYPAL_CODE = 'braintreetwo_paypal';
+
+    /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
 
     /**
      * @var Config
@@ -45,12 +50,18 @@ final class ConfigProvider implements ConfigProviderInterface
      * @param Config $config
      * @param PayPalConfig $payPalConfig;
      * @param BraintreeAdapter $adapter
+     * @param ResolverInterface $localeResolver
      */
-    public function __construct(Config $config, PayPalConfig $payPalConfig, BraintreeAdapter $adapter)
-    {
+    public function __construct(
+        Config $config,
+        PayPalConfig $payPalConfig,
+        BraintreeAdapter $adapter,
+        ResolverInterface $localeResolver
+    ) {
         $this->config = $config;
         $this->payPalConfig = $payPalConfig;
         $this->adapter = $adapter;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -63,7 +74,7 @@ final class ConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 self::CODE => [
-                    'isActive' => $this->config->getValue(Config::KEY_ACTIVE),
+                    'isActive' => $this->config->isActive(),
                     'clientToken' => $this->getClientToken(),
                     'ccTypesMapper' => $this->config->getCctypesMapper(),
                     'sdkUrl' => $this->config->getSdkUrl(),
@@ -81,7 +92,9 @@ final class ConfigProvider implements ConfigProviderInterface
                     'specificCountries' => $this->config->get3DSecureSpecificCountries()
                 ],
                 self::PAYPAL_CODE => [
-                    'isActive' => $this->payPalConfig->isActive()
+                    'isActive' => $this->payPalConfig->isActive(),
+                    'isAllowShippingAddressOverride' => $this->payPalConfig->isAllowToEditShippingAddress(),
+                    'locale' => $this->localeResolver->getLocale()
                 ]
             ]
         ];
