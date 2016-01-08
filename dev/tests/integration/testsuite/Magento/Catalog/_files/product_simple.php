@@ -7,11 +7,6 @@
 /** @var \Magento\TestFramework\ObjectManager $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$objectManager->removeSharedInstance('Magento\Catalog\Model\ProductRepository');
-$objectManager->removeSharedInstance('Magento\Catalog\Model\CategoryLinkRepository');
-$objectManager->removeSharedInstance('Magento\Catalog\Model\Product\Option\Repository');
-$objectManager->removeSharedInstance('Magento\Catalog\Model\Product\Option\SaveHandler');
-
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = $objectManager->create('Magento\Catalog\Api\CategoryLinkManagementInterface');
 
