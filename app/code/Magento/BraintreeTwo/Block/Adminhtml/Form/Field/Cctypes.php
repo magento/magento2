@@ -15,15 +15,15 @@ use Magento\BraintreeTwo\Helper\CcType;
 class Cctypes extends Select
 {
     /**
-     * @var \
+     * @var CcType
      */
     private $ccTypeHelper;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\BraintreeTwo\Helper\CcType $ccTypeHelper
+     * @param Context $context
+     * @param CcType $ccTypeHelper
      * @param array $data
      */
     public function __construct(

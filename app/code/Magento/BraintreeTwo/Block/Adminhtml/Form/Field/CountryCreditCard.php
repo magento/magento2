@@ -14,19 +14,19 @@ use Magento\Framework\DataObject;
 class CountryCreditCard extends AbstractFieldArray
 {
     /**
-     * @var \Magento\BraintreeTwo\Block\Adminhtml\Form\Field\Countries
+     * @var Countries
      */
     protected $countryRenderer = null;
 
     /**
-     * @var \Magento\BraintreeTwo\Block\Adminhtml\Form\Field\CcTypes
+     * @var CcTypes
      */
     protected $ccTypesRenderer = null;
     
     /**
      * Returns renderer for country element
      * 
-     * @return \Magento\BraintreeTwo\Block\Adminhtml\Form\Field\Countries
+     * @return Countries
      */
     protected function getCountryRenderer()
     {
@@ -43,7 +43,7 @@ class CountryCreditCard extends AbstractFieldArray
     /**
      * Returns renderer for country element
      * 
-     * @return \Magento\BraintreeTwo\Block\Adminhtml\Form\Field\Cctypes
+     * @return CcTypes
      */
     protected function getCcTypesRenderer()
     {
@@ -84,7 +84,7 @@ class CountryCreditCard extends AbstractFieldArray
     /**
      * Prepare existing row data object
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return void
      */
     protected function _prepareArrayRow(DataObject $row)
@@ -102,6 +102,5 @@ class CountryCreditCard extends AbstractFieldArray
             }
         }
         $row->setData('option_extra_attrs', $options);
-        return;
     }
 }
