@@ -69,7 +69,12 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      */
     public function delete(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup)
     {
-
+        try {
+            $this->resource->delete($synonymGroup);
+        } catch (\Exception $exception) {
+            throw new CouldNotDeleteException(__($exception->getMessage()));
+        }
+        return true;
     }
 
     /**
