@@ -210,11 +210,11 @@ class ProductDataMapper implements DataMapperInterface
      */
     protected function checkValue($value, $attribute, $storeId)
     {
-        if (is_array($value)) {
-            return array_shift($value);
-        } elseif ($attribute->getBackendType() === 'datetime' || $attribute->getBackendType() === 'timestamp'
+        if (in_array($attribute->getBackendType(), ['datetime', 'timestamp'])
             || $attribute->getFrontendInput() === 'date') {
             return $this->dateFieldType->formatDate($storeId, $value);
+        } elseif ($attribute->getFrontendInput() === 'multiselect') {
+            return str_replace(',', ' ', $value);
         } else {
             return $value;
         }
