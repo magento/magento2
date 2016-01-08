@@ -96,10 +96,31 @@
                 </argument>
             </filterSelect>
         </filters>
-
+        <massaction name="listing_massaction">
+            <action name="delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">delete</item>
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="url" xsi:type="url" path="search/synonyms/massDelete"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Delete items</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected items?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+        </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="search_synonyms_columns">
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">group_id</item>
+                </item>
+            </argument>
+        </selectionsColumn>
         <column name="group_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -135,5 +156,14 @@
                 </item>
             </argument>
         </column>
+        <actionsColumn name="actions" class="Magento\Search\Ui\Component\Listing\Column\SynonymActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
+                    <item name="indexField" xsi:type="string">page_id</item>
+                </item>
+            </argument>
+        </actionsColumn>
     </columns>
 </listing>
