@@ -42,7 +42,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
      * @expectedExceptionMessage (a,b,c), (d,e,f)
      */
     public function testSaveCreateMergeConflict()
@@ -55,8 +55,8 @@ class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->save($synonymGroup);
         $synonymGroup->setSynonymGroup('a,d,z');
         try {
-            $this->model->save($synonymGroup);
-        } catch (\Exception $e) {
+            $this->model->save($synonymGroup, true);
+        } catch (\Magento\Search\Model\Synonym\MergeConflictException $e) {
             /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
             $synonymGroupModel = $this->objectManager->create('Magento\Search\Model\SynonymGroup');
             $synonymGroupModel->load(2);
@@ -93,7 +93,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
      * @expectedExceptionMessage (d,e,f)
      */
     public function testSaveUpdateMergeConflict()
@@ -110,8 +110,8 @@ class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $updateSynonymGroup->setGroupId(5);
         $updateSynonymGroup->setSynonymGroup('a,b,d');
         try {
-            $this->model->save($updateSynonymGroup);
-        } catch (\Exception $e) {
+            $this->model->save($updateSynonymGroup, true);
+        } catch (\Magento\Search\Model\Synonym\MergeConflictException $e) {
             /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
             $synonymGroupModel = $this->objectManager->create('Magento\Search\Model\SynonymGroup');
             $synonymGroupModel->load(5);
