@@ -16,6 +16,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     const KEY_ALLOW_TO_EDIT_SHIPPING_ADDRESS = 'allow_shipping_address_override';
 
+    const KEY_MERCHANT_NAME_OVERRIDE = 'merchant_name_override';
+
     /**
      * Get Payment configuration status
      * @return bool
@@ -40,5 +42,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function isAllowToEditShippingAddress()
     {
         return (bool) $this->getValue(self::KEY_ALLOW_TO_EDIT_SHIPPING_ADDRESS);
+    }
+
+    /**
+     * Get overriden merchant name
+     * @return string
+     */
+    public function getMerchantName()
+    {
+        return $this->getValue(self::KEY_MERCHANT_NAME_OVERRIDE);
     }
 }
