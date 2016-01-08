@@ -45,19 +45,20 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * Saves a synonym group
      *
      * @param \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup
+     * @param bool $errorOnMergeConflict
      * @return void
      * @throws \Exception
      */
-    public function save(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup)
+    public function save(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup, $errorOnMergeConflict = false)
     {
         /** @var SynonymGroup $synonymGroupModel */
         $synonymGroupModel = $this->synonymGroupFactory->create();
         $synonymGroupModel->load($synonymGroup->getGroupId());
         $isCreate = $synonymGroupModel->getSynonymGroup() === null;
         if ($isCreate) {
-            $this->create($synonymGroup);
+            $this->create($synonymGroup, $errorOnMergeConflict);
         } else {
-            $this->update($synonymGroupModel, $synonymGroup);
+            $this->update($synonymGroupModel, $synonymGroup, $errorOnMergeConflict);
         }
     }
 
@@ -81,21 +82,29 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * Private helper to create a synonym group, throw exception on merge conflict
      *
      * @param \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup
+     * @param bool $errorOnMergeConflict
      * @return void
      * @throws \Exception
      */
-    private function create(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup)
+    private function create(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup, $errorOnMergeConflict)
     {
         $matchingSynonymGroups = $this->getMatchingSynonymGroups($synonymGroup);
         if ($matchingSynonymGroups) {
-            throw new \Exception($this->getExceptionMessage($matchingSynonymGroups));
+            if ($errorOnMergeConflict) {
+                throw new Synonym\MergeConflictException(
+                    $this->parseToArray($matchingSynonymGroups),
+                    $this->getExceptionMessage($matchingSynonymGroups)
+                );
+            }
+        } else {
+            // no merge conflict, perform simple insert
+            /** @var SynonymGroup $synonymGroupModel */
+            $synonymGroupModel = $this->synonymGroupFactory->create();
+            $synonymGroupModel->setWebsiteId($synonymGroup->getWebsiteId());
+            $synonymGroupModel->setStoreId($synonymGroup->getStoreId());
+            $synonymGroupModel->setSynonymGroup($synonymGroup->getSynonymGroup());
+            $this->resourceModel->save($synonymGroupModel);
         }
-        /** @var SynonymGroup $synonymGroupModel */
-        $synonymGroupModel = $this->synonymGroupFactory->create();
-        $synonymGroupModel->setWebsiteId($synonymGroup->getWebsiteId());
-        $synonymGroupModel->setStoreId($synonymGroup->getStoreId());
-        $synonymGroupModel->setSynonymGroup($synonymGroup->getSynonymGroup());
-        $this->resourceModel->save($synonymGroupModel);
     }
 
     /**
@@ -103,22 +112,31 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param SynonymGroup $oldSynonymGroup
      * @param \Magento\Search\Api\Data\SynonymGroupInterface $newSynonymGroup
+     * @param bool $errorOnMergeConflict
      * @return void
      * @throws \Exception
      */
     private function update(
         SynonymGroup $oldSynonymGroup,
-        \Magento\Search\Api\Data\SynonymGroupInterface $newSynonymGroup
+        \Magento\Search\Api\Data\SynonymGroupInterface $newSynonymGroup,
+        $errorOnMergeConflict
     ) {
         $matchingSynonymGroups = $this->getMatchingSynonymGroups($newSynonymGroup);
         $matchingSynonymGroups = array_diff($matchingSynonymGroups, [$oldSynonymGroup->getSynonymGroup()]);
         if ($matchingSynonymGroups) {
-            throw new \Exception($this->getExceptionMessage($matchingSynonymGroups));
+            if ($errorOnMergeConflict) {
+                throw new Synonym\MergeConflictException(
+                    $this->parseToArray($matchingSynonymGroups),
+                    $this->getExceptionMessage($matchingSynonymGroups)
+                );
+            }
+        } else {
+            // no merge conflict, perform simple update
+            $oldSynonymGroup->setWebsiteId($newSynonymGroup->getWebsiteId());
+            $oldSynonymGroup->setStoreId($newSynonymGroup->getStoreId());
+            $oldSynonymGroup->setSynonymGroup($newSynonymGroup->getSynonymGroup());
+            $this->resourceModel->save($oldSynonymGroup);
         }
-        $oldSynonymGroup->setWebsiteId($newSynonymGroup->getWebsiteId());
-        $oldSynonymGroup->setStoreId($newSynonymGroup->getStoreId());
-        $oldSynonymGroup->setSynonymGroup($newSynonymGroup->getSynonymGroup());
-        $this->resourceModel->save($oldSynonymGroup);
     }
 
     /**
@@ -134,6 +152,21 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         $displayString .= implode('), (', $matchingSynonymGroups);
         $displayString .= ')';
         return $displayString;
+    }
+
+    /**
+     * Parse the matching synonym groups into array
+     *
+     * @param string[] $matchingSynonymGroups
+     * @return array
+     */
+    private function parseToArray($matchingSynonymGroups)
+    {
+        $parsedArray = [];
+        foreach ($matchingSynonymGroups as $matchingSynonymGroup) {
+            $parsedArray[] = explode(',', $matchingSynonymGroup);
+        }
+        return $parsedArray;
     }
 
     /**
