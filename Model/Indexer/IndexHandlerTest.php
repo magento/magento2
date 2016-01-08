@@ -14,8 +14,8 @@ use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 /**
- * @magentoDbIsolation disabled
- * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
+ * @magentoDbIsolation enabled
+ * magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  */
 class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,6 +79,8 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->markTestSkipped('Skipping until Elastic search support becomes available on Bamboo.');
+
         $this->connectionManager = Bootstrap::getObjectManager()->create(
             'Magento\Elasticsearch\SearchAdapter\ConnectionManager'
         );
@@ -127,6 +129,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterEdit()
     {
+        $this->reindexAll();
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
@@ -148,6 +151,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterMassAction()
     {
+        $this->reindexAll();
         $productIds = [
             $this->productApple->getId(),
             $this->productBanana->getId(),
