@@ -23,7 +23,8 @@ define([
             valid: true,
             listens: {
                 state: 'onState'
-            }
+            },
+            modalClass: 'modal-component'
         },
 
         /**
@@ -63,8 +64,9 @@ define([
          * @returns {Object} Chainable.
          */
         initSelector: function () {
-            this.modalClass = this.name.replace(/\./g, '_');
-            this.rootSelector = '.' + this.modalClass;
+            this.contentSelector = '.' + this.modalClass;
+            this.options.modalClass = this.name.replace(/\./g, '_');
+            this.rootSelector = '.' + this.options.modalClass
 
             return this;
         },
@@ -85,7 +87,7 @@ define([
          * Initialize modal's content components
          */
         initializeContent: function () {
-            $.async(this.rootSelector, this, this.initModal);
+            $.async(this.contentSelector, this, this.initModal);
         },
 
         /**
