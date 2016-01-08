@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config>
+    <topic name="top.01" handlerName="h.01" type="amqp">
+            <queue name="q.01" exchange="ex.01" consumer="cons.01" consumerInstance="Magento\Consumer\Instance" maxMessages="512" />
+    </topic>
+    <topic name="top.02" handler="Magento\Handler\Class\Name::methodName" type="db">
+            <queue name="q.02" exchange="ex.01" consumer="cons.02" consumerInstance="Magento\Consumer\Instance" maxMessages="512" />
+    </topic>
+    <topic name="top.03">
+            <queue name="q.03" consumer="cons.03" type="db"/>
+    </topic>
+    <topic name="top.04" type="amqp">
+            <queue name="q.04" handlerName="h.04" exchange="ex.01" consumer="cons.04" consumerInstance="Magento\Consumer\Instance" maxMessages="512" />
+            <queue name="q.05" handlerName="h.05" exchange="ex.01" consumer="cons.05" consumerInstance="Magento\Consumer\Instance" maxMessages="512" type="db"/>
+            <queue name="q.06" handlerName="h.06" exchange="ex.01" consumer="cons.06" consumerInstance="Magento\Consumer\Instance" maxMessages="512" />
+    </topic>
+    <topic name="top.05" exchange="ex.01" consumerInstance="Magento\Consumer\Instance" maxMessages="512" >
+            <queue name="q.07" handlerName="h.07" consumer="cons.07" type="db"/>
+            <queue name="q.08" handler="Magento\Handler\Class\Name::methodName" consumer="cons.08" type="amqp"/>
+            <queue name="q.09" handlerName="h.09" consumer="cons.09" type="db"/>
+    </topic>
+</config>
