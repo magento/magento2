@@ -21,9 +21,9 @@ class MassDelete extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
-        $selected = $this->getRequest()->getParam(__('You haven\'t selected any items!'));
+        $selected = $this->getRequest()->getParam('selected');
         if (empty($selected)) {
-            $this->messageManager->addError('T');
+            $this->messageManager->addError(__('You haven\'t selected any items!'));
             return $resultRedirect->setPath('*/*/');
         }
         $model = $this->_objectManager->create('Magento\Search\Model\SynonymGroup');
