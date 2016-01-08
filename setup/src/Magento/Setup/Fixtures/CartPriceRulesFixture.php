@@ -332,7 +332,7 @@ class CartPriceRulesFixture extends Fixture
                 'sort_order'            => '',
                 'is_rss'                => '1',
                 'rule'                  => $this->generateAdvancedCondition($i, $categoriesArray),
-                'simple_action'             => 'by_cart',
+                'simple_action'             => 'cart_fixed',
                 'discount_amount'           => '1',
                 'discount_qty'              => '0',
                 'discount_step'             => '',
@@ -366,7 +366,7 @@ class CartPriceRulesFixture extends Fixture
                 'banner_is_enabled'         => '',
                 'related_banners'           => [],
             ];
-            if (isset($data['simple_action']) && $data['simple_action'] == 'by_fixed'
+            if (isset($data['simple_action']) && $data['simple_action'] == 'cart_fixed'
                 && isset($data['discount_amount'])
             ) {
                 $data['discount_amount'] = min(1, $data['discount_amount']);
