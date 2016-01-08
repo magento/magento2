@@ -66,7 +66,7 @@ define([
         initSelector: function () {
             this.contentSelector = '.' + this.modalClass;
             this.options.modalClass = this.name.replace(/\./g, '_');
-            this.rootSelector = '.' + this.options.modalClass
+            this.rootSelector = '.' + this.options.modalClass;
 
             return this;
         },
