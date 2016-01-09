@@ -1294,13 +1294,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!$productMediaGalleryTableName) {
             $productMediaGalleryTableName = $resource->getTable('catalog_product_entity_media_gallery');
         }
+        $linkField = $this->metadataPool
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
         $select = $this->_connection->select()->from(
             ['mg' => $resource->getTable('catalog_product_entity_media_gallery')],
             ['value' => 'mg.value']
         )->joinLeft(
             ['mgvte' => $resource->getTable('catalog_product_entity_media_gallery_value_to_entity')],
             '(mg.value_id = mgvte.value_id)',
-            ['entity_id' => 'mgvte.entity_id']
+            [$linkField => 'mgvte.' . $linkField]
         )->where(
             'mg.value IN(?)',
             $images
