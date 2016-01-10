@@ -43,6 +43,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $priceCurrency;
 
+    /** @var \Magento\Swatches\Model\SwatchAttributeData|\PHPUnit_Framework_MockObject_MockObject */
+    private $swatchAttributeData;
+
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     private $product;
 
@@ -69,6 +72,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->catalogProduct = $this->getMock('\Magento\Catalog\Helper\Product', [], [], '', false);
         $this->currentCustomer = $this->getMock('\Magento\Customer\Helper\Session\CurrentCustomer', [], [], '', false);
         $this->priceCurrency = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface', [], [], '', false);
+        $this->swatchAttributeData = $this->getMock('Magento\Swatches\Model\SwatchAttributeData', [], [], '', false);
         $this->product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->typeInstance = $this->getMock('\Magento\Catalog\Model\Product\Type\AbstractType', [], [], '', false);
         $this->scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
@@ -92,6 +96,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'catalogProduct' => $this->catalogProduct,
                 'currentCustomer' => $this->currentCustomer,
                 'priceCurrency' => $this->priceCurrency,
+                'swatchAttributeData' => $this->swatchAttributeData,
                 'data' => [],
             ]
         );
