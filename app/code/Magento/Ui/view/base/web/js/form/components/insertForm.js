@@ -109,7 +109,9 @@ define([
          * Reset external form data.
          */
         resetForm: function () {
-            this.externalSource().trigger('data.reset');
+            if (this.externalSource()) {
+                this.externalSource().trigger('data.reset');
+            }
         }
     });
 });

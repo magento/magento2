@@ -14,6 +14,7 @@ define([
             content:        '',
             showSpinner:    false,
             loading:        false,
+            visible:        true,
             template:       'ui/content/content'
         },
 
@@ -38,7 +39,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('content loading');
+                .observe('content loading visible');
 
             return this;
         },
