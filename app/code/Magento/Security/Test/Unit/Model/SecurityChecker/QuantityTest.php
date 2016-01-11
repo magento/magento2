@@ -150,8 +150,18 @@ class QuantityTest extends \PHPUnit_Framework_TestCase
             [
                 \Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST,
                 \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_EMAIL
-            ],
+            ]
         ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Security module: Unknown security event type
+     */
+    public function testCheckScopeByEventException()
+    {
+        $securityEventType = 2;
+        $this->model->check($securityEventType);
     }
 
     /**
