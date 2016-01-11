@@ -21,7 +21,7 @@
                 <button type="button" data-action="open-steps-wizard" title="Create Product Configurations"
                         class="action-secondary" data-bind="click: open">
                 <span data-role="button-label" data-edit-label="<?= /* @escapeNotVerified */  __('Edit Configurations') ?>">
-                    <?= /* @escapeNotVerified */  $block->getProduct()->getId() && $block->isConfigurableProduct()
+                    <?= /* @escapeNotVerified */  $block->isHasVariations()
                         ? __('Edit Configurations')
                         : __('Create Configurations')
                     ?>
@@ -74,7 +74,7 @@
             "Magento_ConfigurableProduct/js/configurable-type-handler": {
                 "blockId": "#<?= /* @noEscape */ $block->getId()?>",
                 "tabId": "<?= /* @noEscape */ $block->getTabId()?>",
-                "hasVariations": "<?= /* @noEscape */ $block->isConfigurableProduct() ? 'true' : 'false' ?>"
+                "hasVariations": <?= /* @noEscape */ $block->isHasVariations() ? 'true' : 'false' ?>
             }
         }
     }
