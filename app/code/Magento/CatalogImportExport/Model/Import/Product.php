@@ -573,6 +573,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $cachedImages = null;
 
+    /**
+     * @var Proxy\Product
+     */
+    protected $proxyProduct;
+
     /** @var array */
     protected $urlKeys = [];
 
@@ -2226,7 +2231,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME])) {
             $urlKey = !empty($rowData[self::URL_KEY])
                 ? $rowData[self::URL_KEY]
-                : $this->_proxyProdFactory->create()->formatUrlKey($rowData[self::COL_NAME]);
+                : $this->getProxyProduct()->formatUrlKey($rowData[self::COL_NAME]);
             $storeCodes = empty($rowData[self::COL_STORE_VIEW_CODE])
                 ? array_flip($this->storeResolver->getStoreCodeToId())
                 : explode($this->getMultipleValueSeparator(), $rowData[self::COL_STORE_VIEW_CODE]);
@@ -2397,5 +2402,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             );
         }
         return $this->productUrlSuffix[$storeId];
+    }
+
+    /**
+     * @return Proxy\Product
+     */
+    protected function getProxyProduct()
+    {
+        if (!$this->proxyProduct) {
+            $this->proxyProduct = $this->_proxyProdFactory->create();
+        }
+        return $this->proxyProduct;
     }
 }
