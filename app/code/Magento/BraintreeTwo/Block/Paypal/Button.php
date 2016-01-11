@@ -9,6 +9,7 @@ use Magento\Checkout\Model\Session;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
 
@@ -37,6 +38,11 @@ class Button extends Template implements ShortcutInterface
     private $config;
 
     /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -50,6 +56,7 @@ class Button extends Template implements ShortcutInterface
         ResolverInterface $localeResolver,
         Session $checkoutSession,
         Config $config,
+        ConfigProvider $configProvider,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -57,14 +64,7 @@ class Button extends Template implements ShortcutInterface
         $this->localeResolver = $localeResolver;
         $this->checkoutSession = $checkoutSession;
         $this->config = $config;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isActive()
-    {
-        return $this->config->isActive() && $this->config->isDisplayShoppingCart();
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -117,5 +117,37 @@ class Button extends Template implements ShortcutInterface
     public function getAmount()
     {
         return $this->checkoutSession->getQuote()->getBaseGrandTotal();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->config->isActive() && $this->config->isDisplayShoppingCart();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMerchantName()
+    {
+        return $this->config->getMerchantName();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClientToken()
+    {
+        return $this->configProvider->getClientToken();
+    }
+
+    /**
+     * @return string
+     */
+    public function getActionSuccess()
+    {
+        return $this->getUrl(ConfigProvider::CODE . '/paypal/review', ['_secure' => true]);
     }
 }
