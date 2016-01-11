@@ -181,8 +181,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_select->joinLeft(
             [$attrTableAlias => $attribute['table']],
             "e.{$linkField} = {$attrTableAlias}.{$linkField}"
-                . ' AND ' . $connection->quoteInto($attrTableAlias . '.store_id = ?', Store::DEFAULT_STORE_ID)
-                . ' AND ' . $connection->quoteInto($attrTableAlias . '.attribute_id = ?', $attribute['attribute_id']),
+            . ' AND ' . $connection->quoteInto($attrTableAlias . '.store_id = ?', Store::DEFAULT_STORE_ID)
+            . ' AND ' . $connection->quoteInto($attrTableAlias . '.attribute_id = ?', $attribute['attribute_id']),
             []
         );
 
@@ -191,8 +191,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->_select->joinLeft(
                 ['t2_' . $attributeCode => $attribute['table']],
                 "{$attrTableAlias}.{$linkField} = {$attrTableAlias2}.{$linkField}"
-                    . ' AND ' . $attrTableAlias . '.attribute_id = ' . $attrTableAlias2 . '.attribute_id'
-                    . ' AND ' . $connection->quoteInto($attrTableAlias2 . '.store_id = ?', $storeId),
+                . ' AND ' . $attrTableAlias . '.attribute_id = ' . $attrTableAlias2 . '.attribute_id'
+                . ' AND ' . $connection->quoteInto($attrTableAlias2 . '.store_id = ?', $storeId),
                 []
             );
         }

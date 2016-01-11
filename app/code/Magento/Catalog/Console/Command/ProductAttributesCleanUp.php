@@ -10,6 +10,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Class ProductAttributesCleanUp
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Command
 {
     /**
@@ -137,7 +141,11 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
         $linkField = $this->metadata->getLinkField();
         $select = $connection->select()->reset();
         $select->from(['e' => $this->attributeResource->getTable('catalog_product_entity')], 'ei.value_id');
-        $select->join(['ei' => $attributeTableName], 'ei.'.$linkField.' = e.'.$linkField.' AND ei.store_id != 0', '');
+        $select->join(
+            ['ei' => $attributeTableName],
+            'ei.' . $linkField . ' = e.' . $linkField . ' AND ei.store_id != 0',
+            ''
+        );
         $select->join(['s' => $this->attributeResource->getTable('store')], 's.store_id = ei.store_id', '');
         $select->join(['sg' => $this->attributeResource->getTable('store_group')], 'sg.group_id = s.group_id', '');
         $select->joinLeft(
