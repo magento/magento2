@@ -16,6 +16,7 @@ use Magento\Framework\Exception\SecurityViolationException;
 
 /**
  * ForgotPasswordPost controller
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
