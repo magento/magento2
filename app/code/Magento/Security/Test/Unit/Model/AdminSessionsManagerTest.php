@@ -67,7 +67,15 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->adminSessionInfoCollectionMock = $this->getMock(
             '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
-            ['filterByUser', 'filterExpiredSessions', 'loadData', 'setDataToAll', 'save', 'updateActiveSessionsStatus', 'deleteSessionsOlderThen'],
+            [
+                'filterByUser',
+                'filterExpiredSessions',
+                'loadData',
+                'setDataToAll',
+                'save',
+                'updateActiveSessionsStatus',
+                'deleteSessionsOlderThen'
+            ],
             [],
             '',
             false
@@ -347,8 +355,10 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'expectedResult' => __('Someone logged into this account from another device or browser.'
-                    . ' Your current session is terminated.'),
+                'expectedResult' => __(
+                    'Someone logged into this account from another device or browser.'
+                    . ' Your current session is terminated.'
+                ),
                 'isActiveSession' => false,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_BY_LOGIN
             ],
