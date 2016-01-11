@@ -125,10 +125,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * @param $timestamp
+     * @param int $timestamp
+     * @return $this
      */
     public function deleteSessionsOlderThen($timestamp)
     {
         $this->getResource()->deleteSessionsOlderThen((int) $timestamp);
+
+        return $this;
     }
 }
