@@ -371,6 +371,11 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
                 'expectedResult' => __('Your current session has been expired.'),
                 'isActiveSession' => false,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT
+            ],
+            [
+                'expectedResult' => __(''),
+                'isActiveSession' => true,
+                'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_IN
             ]
         ];
     }
