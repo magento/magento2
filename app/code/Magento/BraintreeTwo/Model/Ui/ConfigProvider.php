@@ -10,6 +10,7 @@ use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
 use Magento\Framework\Locale\ResolverInterface;
+
 /**
  * Class ConfigProvider
  */
@@ -71,10 +72,12 @@ final class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $isPayPalActive = $this->payPalConfig->isActive();
         return [
             'payment' => [
                 self::CODE => [
                     'isActive' => $this->config->isActive(),
+                    'isSingleUse' => !$isPayPalActive,
                     'clientToken' => $this->getClientToken(),
                     'ccTypesMapper' => $this->config->getCctypesMapper(),
                     'sdkUrl' => $this->config->getSdkUrl(),
@@ -92,10 +95,10 @@ final class ConfigProvider implements ConfigProviderInterface
                     'specificCountries' => $this->config->get3DSecureSpecificCountries()
                 ],
                 self::PAYPAL_CODE => [
-                    'isActive' => $this->payPalConfig->isActive(),
+                    'isActive' => $isPayPalActive,
                     'isAllowShippingAddressOverride' => $this->payPalConfig->isAllowToEditShippingAddress(),
                     'merchantName' => $this->payPalConfig->getMerchantName(),
-                    'locale' => $this->localeResolver->getLocale(),
+                    'locale' => strtolower($this->localeResolver->getLocale()),
                     'paymentAcceptanceMarkSrc' =>
                         'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
                 ]

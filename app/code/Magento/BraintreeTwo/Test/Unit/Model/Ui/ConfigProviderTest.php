@@ -150,6 +150,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'payment' => [
                         ConfigProvider::CODE => [
                             'isActive' => true,
+                            'isSingleUse' => false,
                             'clientToken' => self::CLIENT_TOKEN,
                             'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                             'sdkUrl' => self::SDK_URL,
@@ -173,7 +174,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'isActive' => true,
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
-                            'locale' => 'en_US',
+                            'locale' => 'en_us',
                             'paymentAcceptanceMarkSrc' =>
                                 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png'
                         ]

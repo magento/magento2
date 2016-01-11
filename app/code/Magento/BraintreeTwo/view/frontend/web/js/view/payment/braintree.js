@@ -36,7 +36,6 @@ define(
         }
 
         if (config[payPalType].isActive) {
-            components.push(path + payPalType);
             rendererList.push(
                 {
                     type: payPalType,
