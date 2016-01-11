@@ -51,7 +51,8 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
                 'getRemoteIp',
                 'getLimitPasswordResetRequestsMethod',
                 'getLimitTimeBetweenPasswordResetRequests',
-                'getCustomerServiceEmail'
+                'getCustomerServiceEmail',
+                'getCurrentTimestamp'
             ],
             [],
             '',
@@ -91,16 +92,18 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
     public function testCheck($securityEventType, $requestsMethod)
     {
         $limitTimeBetweenPasswordResetRequests = 600;
+        $timestamp = time();
 
         $this->prepareTestCheck($requestsMethod, $limitTimeBetweenPasswordResetRequests);
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getCurrentTimestamp')
+            ->willReturn($timestamp);
 
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
         $record = $this->objectManager->getObject('\Magento\Security\Model\PasswordResetRequestEvent');
         $record->setCreatedAt(
-            date(
-                "Y-m-d H:i:s",
-                $this->securityConfigMock->getCurrentTimestamp() - $limitTimeBetweenPasswordResetRequests
-            )
+            date("Y-m-d H:i:s", $timestamp - $limitTimeBetweenPasswordResetRequests)
         );
 
         $this->passwordResetRequestEventCollectionMock->expects($this->once())
@@ -120,16 +123,18 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
     public function testCheckException($securityEventType, $requestsMethod)
     {
         $limitTimeBetweenPasswordResetRequests = 600;
+        $timestamp = time();
 
         $this->prepareTestCheck($requestsMethod, $limitTimeBetweenPasswordResetRequests);
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getCurrentTimestamp')
+            ->willReturn($timestamp);
 
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
         $record = $this->objectManager->getObject('\Magento\Security\Model\PasswordResetRequestEvent');
         $record->setCreatedAt(
-            date(
-                "Y-m-d H:i:s",
-                $this->securityConfigMock->getCurrentTimestamp() - $limitTimeBetweenPasswordResetRequests + 1
-            )
+            date("Y-m-d H:i:s", $timestamp - $limitTimeBetweenPasswordResetRequests + 1)
         );
 
         $this->passwordResetRequestEventCollectionMock->expects($this->once())

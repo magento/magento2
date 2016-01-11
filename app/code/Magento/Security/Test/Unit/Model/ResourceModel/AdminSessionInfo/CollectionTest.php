@@ -20,6 +20,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Stdlib\DateTime */
     protected $dateTimeMock;
 
+    /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb */
+    protected $resourceMock;
+
     /**
      * Init mocks for tests
      * @return void
@@ -28,7 +31,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->securityConfigMock = $this->getMock(
             '\Magento\Security\Helper\SecurityConfig',
-            [],
+            ['getCurrentTimestamp'],
             [],
             '',
             false
@@ -80,26 +83,33 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $connection->expects($this->any())->method('select')->willReturn($select);
 
-        $resource = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getMainTable', 'getTable'])
+            ->setMethods(
+                ['getConnection', 'getMainTable', 'getTable', 'deleteSessionsOlderThen', 'updateStatusByUserId']
+            )
             ->getMockForAbstractClass();
-        $resource->expects($this->any())
+
+        $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($connection));
 
-        $resource->expects($this->any())->method('getMainTable')->willReturn('table_test');
-        $resource->expects($this->any())->method('getTable')->willReturn('test');
+        $this->resourceMock->expects($this->any())->method('getMainTable')->willReturn('table_test');
+        $this->resourceMock->expects($this->any())->method('getTable')->willReturn('test');
 
         $this->collectionMock = $this->getMock(
             '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
             ['addFieldToFilter'],
             [$entityFactory, $logger, $fetchStrategy, $eventManager,
                 $this->securityConfigMock, $this->dateTimeMock,
-                $connection, $resource],
+                $connection, $this->resourceMock],
             '',
             true
         );
+
+        $this->collectionMock->expects($this->any())
+            ->method('getResource')
+            ->willReturn($this->resourceMock);
 
     }
 
@@ -133,19 +143,61 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testFilterExpiredSessions()
     {
         $sessionLifeTime = '600';
+        $timestamp = time();
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getCurrentTimestamp')
+            ->willReturn($timestamp);
 
         $this->collectionMock->expects($this->once())
             ->method('addFieldToFilter')
             ->with(
                 'updated_at',
-                [
-                    'gt' => $this->dateTimeMock->formatDate(
-                        $this->securityConfigMock->getCurrentTimestamp() - $sessionLifeTime
-                    )
-                ]
+                ['gt' => $this->dateTimeMock->formatDate($timestamp - $sessionLifeTime)]
             )
             ->willReturnSelf();
 
         $this->assertEquals($this->collectionMock, $this->collectionMock->filterExpiredSessions($sessionLifeTime));
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteSessionsOlderThen()
+    {
+        $timestamp = time();
+
+        $this->resourceMock->expects($this->any())
+            ->method('deleteSessionsOlderThen')
+            ->with($timestamp);
+
+        $this->collectionMock->deleteSessionsOlderThen($timestamp);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdateActiveSessionsStatus()
+    {
+        $status = 2;
+        $userId = 10;
+        $sessionIdToExclude = '20';
+        $updateOlderThen = 12345;
+        $result = 1;
+
+        $this->resourceMock->expects($this->any())
+            ->method('updateStatusByUserId')
+            ->with(
+                $status,
+                $userId,
+                [\Magento\Security\Model\AdminSessionInfo::LOGGED_IN],
+                [$sessionIdToExclude],
+                $updateOlderThen
+            )->willReturn($result);
+
+        $this->assertEquals(
+            $result,
+            $this->collectionMock->updateActiveSessionsStatus($status, $userId, $sessionIdToExclude, $updateOlderThen)
+        );
     }
 }
