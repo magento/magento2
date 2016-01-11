@@ -81,14 +81,48 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $securityChecker = $this->getMock(
+            '\Magento\Security\Model\SecurityChecker\SecurityCheckerInterface',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->model = $this->objectManager->getObject(
             '\Magento\Security\Model\SecurityManager',
             [
                 'securityConfig' => $this->securityConfigMock,
                 'passwordResetRequestEventModelFactory' => $this->passwordResetRequestEventFactoryMock,
                 'passwordResetRequestEventCollectionFactory' => $this->passwordResetRequestEventCollectionFactoryMock,
-                'securityCheckers' => []
+                'securityCheckers' => [$securityChecker]
             ]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testConstructorException()
+    {
+        $securityChecker = $this->getMock(
+            '\Magento\Framework\Message\ManagerInterface',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->setExpectedException(
+            '\Magento\Framework\Exception\LocalizedException',
+            __('Incorrect Security Checker class. It has to implement SecurityCheckerInterface')
+        );
+
+        $this->model->__construct(
+            $this->securityConfigMock,
+            $this->passwordResetRequestEventFactoryMock,
+            $this->passwordResetRequestEventCollectionFactoryMock,
+            [$securityChecker]
         );
     }
 
@@ -101,7 +135,7 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
         $accountReference = \Magento\Security\Model\Config\Source\ResetMethod::OPTION_BY_IP_AND_EMAIL;
         $longIp = 12345;
 
-        $this->securityConfigMock->expects($this->any())
+        $this->securityConfigMock->expects($this->once())
             ->method('getRemoteIp')
             ->will($this->returnValue($longIp));
 
@@ -128,7 +162,7 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $this->model->performSecurityCheck($requestType, $accountReference, $longIp);
+        $this->model->performSecurityCheck($requestType, $accountReference);
     }
 
     /**
