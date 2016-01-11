@@ -344,6 +344,7 @@ interface MethodInterface
      *
      * @param CartInterface|null $quote
      * @return bool
+     * @api
      */
     public function isAvailable(CartInterface $quote = null);
 
@@ -352,6 +353,7 @@ interface MethodInterface
      *
      * @param int|null $storeId
      * @return bool
+     * @api
      */
     public function isActive($storeId = null);
 
@@ -365,7 +367,6 @@ interface MethodInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @api
-     * @deprecated
      */
     public function initialize($paymentAction, $stateObject);
 
