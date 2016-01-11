@@ -559,8 +559,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $select = $connection->select()->from(
                 $staticTable,
                 $staticAttributes
+            )->join(
+                ['e' => $this->getTable('catalog_product_entity')],
+                'e.' . $this->getLinkField() . ' = ' . $staticTable . '.' . $this->getLinkField()
             )->where(
-                $this->getLinkField() . ' = :entity_id'
+               'e.entity_id = :entity_id'
             );
             $attributesData = $connection->fetchRow($select, ['entity_id' => $entityId]);
         }
@@ -577,8 +580,12 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             foreach ($typedAttributes as $table => $_attributes) {
                 $select = $connection->select()
                     ->from(['default_value' => $table], ['attribute_id'])
-                    ->where('default_value.attribute_id IN (?)', array_keys($_attributes))
-                    ->where("default_value.{$this->getLinkField()} = :entity_id")
+                    ->join(
+                        ['e' => $this->getTable('catalog_product_entity')],
+                        'e.' . $this->getLinkField() . ' = ' . 'default_value.' . $this->getLinkField(),
+                        ''
+                    )->where('default_value.attribute_id IN (?)', array_keys($_attributes))
+                    ->where("e.entity_id = :entity_id")
                     ->where('default_value.store_id = ?', 0);
 
                 $bind = ['entity_id' => $entityId];
@@ -591,7 +598,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     );
                     $joinCondition = [
                         $connection->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
-                        "store_value.{$this->getLinkField()} = :entity_id",
+                        "store_value.{$this->getLinkField()} = e.{$this->getLinkField()}",
                         'store_value.store_id = :store_id',
                     ];
 
