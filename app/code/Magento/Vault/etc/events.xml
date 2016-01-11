@@ -9,4 +9,7 @@
     <event name="sales_order_payment_save_after">
         <observer name="tax" instance="\Magento\Vault\Observer\AfterPaymentSaveObserver" />
     </event>
+    <event name="payment_method_assign_data">
+        <observer name="vault_enable_assigner" instance="Magento\Vault\Observer\VaultEnableAssigner" />
+    </event>
 </config>
