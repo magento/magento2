@@ -60,17 +60,16 @@ class StoreCookie
         \Magento\Framework\App\FrontController $subject,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $defaultStore = $this->storeManager->getDefaultStoreView();
         $storeCodeFromCookie = $this->storeCookieManager->getStoreCodeFromCookie();
         if ($storeCodeFromCookie) {
             try {
                 $this->storeRepository->getActiveStoreByCode($storeCodeFromCookie);
             } catch (StoreIsInactiveException $e) {
-                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+                $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             } catch (NoSuchEntityException $e) {
-                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+                $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             } catch (InvalidArgumentException $e) {
-                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+                $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             }
         }
     }
