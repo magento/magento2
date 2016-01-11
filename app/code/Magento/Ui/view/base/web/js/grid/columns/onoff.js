@@ -46,7 +46,7 @@ define([
 
             registry.set('position_cache_valid', true);
 
-            if (this.selectedData.length === 0 || positionCacheValid) {
+            if (this.selectedData.length === 0 && positionCacheValid) {
                 return;
             }
             // Check selected data
