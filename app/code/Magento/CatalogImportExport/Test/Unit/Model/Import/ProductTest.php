@@ -162,6 +162,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject*/
     protected $scopeConfig;
 
+    /** @var \Magento\Catalog\Model\Product\Url|\PHPUnit_Framework_MockObject_MockObject*/
+    protected $productUrl;
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -335,6 +338,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->productUrl = $this->getMockBuilder('\Magento\Catalog\Model\Product\Url')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->errorAggregator = $this->getErrorAggregatorObject();
 
         $this->data = [];
@@ -382,6 +389,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->taxClassProcessor,
             $this->metadataPool,
             $this->scopeConfig,
+            $this->productUrl,
             $this->data
         );
     }
