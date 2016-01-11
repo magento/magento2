@@ -7,6 +7,10 @@
 
 namespace Magento\CatalogInventory\Model\Plugin;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Framework\Exception\LocalizedException;
+
 class AroundProductRepositorySave
 {
     /**
@@ -20,15 +24,31 @@ class AroundProductRepositorySave
     protected $storeManager;
 
     /**
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
+     */
+    private $stockItemRepository;
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
     ) {
         $this->stockRegistry = $stockRegistry;
         $this->storeManager = $storeManager;
+        $this->stockItemRepository = $stockItemRepository;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -50,7 +70,7 @@ class AroundProductRepositorySave
 
         /* @var \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem */
         $stockItem = $this->getStockItemToBeUpdated($product);
-        if ($stockItem == null) {
+        if ($stockItem === null) {
             return $result;
         }
 
@@ -69,27 +89,57 @@ class AroundProductRepositorySave
      * If the stock item does not need to be updated, return null.
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface|null
+     * @return StockItemInterface|null
+     * @throws LocalizedException
      */
     protected function getStockItemToBeUpdated($product)
     {
         // from the API, all the data we care about will exist as extension attributes of the original product
-        $extendedAttributes = $product->getExtensionAttributes();
-        if ($extendedAttributes !== null) {
-            $stockItem = $extendedAttributes->getStockItem();
-            if ($stockItem != null) {
-                return $stockItem;
+        $stockItem = $this->getStockItemFromProduct($product);
+        if ($stockItem !== null) {
+            $defaultScopeId = $this->stockConfiguration->getDefaultScopeId();
+            $defaultStockId = $this->stockRegistry->getStock($defaultScopeId)->getStockId();
+            $stockId = $stockItem->getStockId();
+            if ($stockId !== null && $stockId != $defaultStockId) {
+                throw new LocalizedException(
+                    __('Invalid stock id: %1. Only default stock with id %2 allowed', $stockId, $defaultStockId)
+                );
+            }
+            $stockItemId = $stockItem->getItemId();
+            if ($stockItemId !== null && (!is_numeric($stockItemId) || $stockItemId <= 0)) {
+                throw new LocalizedException(
+                    __('Invalid stock item id: %1. Should be null or numeric value greater than 0', $stockItemId)
+                );
+            }
+
+            $defaultStockItemId = $this->stockRegistry->getStockItem($product->getId())->getItemId();
+            if ($defaultStockItemId && $stockItemId !== null && $defaultStockItemId != $stockItemId) {
+                throw new LocalizedException(
+                    __('Invalid stock item id: %1. Assigned stock item id is %2', $stockItemId, $defaultStockItemId)
+                );
+            }
+        } else {
+            $stockItem = $this->stockRegistry->getStockItem($product->getId());
+            if ($stockItem->getItemId() != null) {
+                // we already have stock item info, so we return null since nothing more needs to be updated
+                $stockItem = null;
             }
         }
 
-        // we have no new stock item information to update, however we need to ensure that the product does have some
-        // stock item information present.  On a newly created product, it will not have any stock item info.
-        $stockItem = $this->stockRegistry->getStockItem($product->getId());
-        if ($stockItem->getItemId() != null) {
-            // we already have stock item info, so we return null since nothing more needs to be updated
-            return null;
-        }
+        return $stockItem;
+    }
 
+    /**
+     * @param ProductInterface $product
+     * @return StockItemInterface
+     */
+    private function getStockItemFromProduct(ProductInterface $product)
+    {
+        $stockItem = null;
+        $extendedAttributes = $product->getExtensionAttributes();
+        if ($extendedAttributes !== null) {
+            $stockItem = $extendedAttributes->getStockItem();
+        }
         return $stockItem;
     }
 }
