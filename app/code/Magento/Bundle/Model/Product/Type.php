@@ -247,7 +247,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         return $this->_bundleSelection->getChildrenIds($parentId, $required);
     }
 
-    /**
+  /**
      * Retrieve parent ids array by required child
      *
      * @param int|array $childId
@@ -387,86 +387,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
             }
         }
-    }
-
-    /**
-     * Save type related data
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    public function save($product)
-    {
-        parent::save($product);
-        /* @var $resource \Magento\Bundle\Model\ResourceModel\Bundle */
-        $resource = $this->_bundleFactory->create();
-
-        $options = $product->getBundleOptionsData();
-        if ($options) {
-            $product->setIsRelationsChanged(true);
-
-            foreach ($options as $key => $option) {
-                if (isset($option['option_id']) && $option['option_id'] == '') {
-                    unset($option['option_id']);
-                }
-
-                $optionModel = $this->_bundleOption->create()
-                    ->setData($option)
-                    ->setParentId($product->getId())
-                    ->setStoreId($product->getStoreId());
-
-                $optionModel->isDeleted((bool)$option['delete']);
-                $optionModel->save();
-                $options[$key]['option_id'] = $optionModel->getOptionId();
-            }
-
-            $usedProductIds = [];
-            $excludeSelectionIds = [];
-
-            $selections = $product->getBundleSelectionsData();
-            if ($selections) {
-                foreach ($selections as $index => $group) {
-                    foreach ($group as $selection) {
-                        if (isset($selection['selection_id']) && $selection['selection_id'] == '') {
-                            unset($selection['selection_id']);
-                        }
-
-                        if (!isset($selection['is_default'])) {
-                            $selection['is_default'] = 0;
-                        }
-
-                        $selectionModel = $this->_bundleModelSelection->create()
-                            ->setData($selection)
-                            ->setOptionId($options[$index]['option_id'])
-                            ->setWebsiteId(
-                                $this->_storeManager->getStore($product->getStoreId())
-                                    ->getWebsiteId()
-                            )
-                            ->setParentProductId($product->getId());
-
-                        $selectionModel->isDeleted((bool)$selection['delete']);
-                        $selectionModel->save();
-
-                        $selection['selection_id'] = $selectionModel->getSelectionId();
-
-                        if ($selectionModel->getSelectionId()) {
-                            $excludeSelectionIds[] = $selectionModel->getSelectionId();
-                            $usedProductIds[] = $selectionModel->getProductId();
-                        }
-                    }
-                }
-
-                $resource->dropAllUnneededSelections($product->getId(), $excludeSelectionIds);
-                $resource->saveProductRelations($product->getId(), array_unique($usedProductIds));
-            }
-
-            if ($product->getData('price_type') != $product->getOrigData('price_type')) {
-                $resource->dropAllQuoteChildItems($product->getId());
-            }
-        }
-
-        return $this;
     }
 
     /**

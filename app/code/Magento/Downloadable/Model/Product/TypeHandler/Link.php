@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Model\Product\TypeHandler;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\ComponentInterface;
 
@@ -31,16 +32,18 @@ class Link extends AbstractTypeHandler
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
-     * @param \Magento\Downloadable\Model\ComponentInterfaceFactory $linkFactory
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link $linkResource
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Downloadable\Helper\File $downloadableFile,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\ResourceModel\Link $linkResource
     ) {
-        parent::__construct($jsonHelper, $downloadableFile);
+        parent::__construct($jsonHelper, $downloadableFile, $metadataPool);
         $this->linkFactory = $linkFactory;
         $this->linkResource = $linkResource;
     }
@@ -102,7 +105,9 @@ class Link extends AbstractTypeHandler
         )->setLinkType(
             $data['type']
         )->setProductId(
-            $product->getId()
+            $product->getData(
+                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+            )
         )->setStoreId(
             $product->getStoreId()
         )->setWebsiteId(
