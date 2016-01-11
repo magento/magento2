@@ -71,7 +71,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $userId
      * @param string $excludedSessionId
      * @param int $updateOlderThen
-     * @return $this
+     * @return int The number of affected rows.
      */
     public function updateActiveSessionsStatus(
         $status,
@@ -79,15 +79,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $excludedSessionId,
         $updateOlderThen = null
     ) {
-        $this->getResource()->updateStatusByUserId(
+        return $this->getResource()->updateStatusByUserId(
             $status,
             $userId,
             [\Magento\Security\Model\AdminSessionInfo::LOGGED_IN],
             [$excludedSessionId],
             $updateOlderThen
         );
-
-        return $this;
     }
 
     /**

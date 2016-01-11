@@ -28,7 +28,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->securityConfigMock = $this->getMock(
             '\Magento\Security\Helper\SecurityConfig',
-            [],
+            ['getCurrentTimestamp'],
             [],
             '',
             false
@@ -133,16 +133,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testFilterExpiredSessions()
     {
         $sessionLifeTime = '600';
+        $timestamp = time();
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getCurrentTimestamp')
+            ->willReturn($timestamp);
 
         $this->collectionMock->expects($this->once())
             ->method('addFieldToFilter')
             ->with(
                 'updated_at',
-                [
-                    'gt' => $this->dateTimeMock->formatDate(
-                        $this->securityConfigMock->getCurrentTimestamp() - $sessionLifeTime
-                    )
-                ]
+                ['gt' => $this->dateTimeMock->formatDate($timestamp - $sessionLifeTime)]
             )
             ->willReturnSelf();
 

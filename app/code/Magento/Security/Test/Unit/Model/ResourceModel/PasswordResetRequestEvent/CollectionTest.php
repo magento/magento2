@@ -60,7 +60,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->securityConfigMock = $this->getMock(
             '\Magento\Security\Helper\SecurityConfig',
-            [],
+            ['getCurrentTimestamp'],
             [],
             '',
             false
@@ -173,12 +173,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testFilterByLifetime()
     {
         $lifetime = 600;
+        $timestamp = time();
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getCurrentTimestamp')
+            ->willReturn($timestamp);
 
         $this->collectionMock->expects($this->once())
             ->method('addFieldToFilter')
             ->with(
                 'created_at',
-                ['gt' => $this->dateTimeMock->formatDate($this->securityConfigMock->getCurrentTimestamp() - $lifetime)]
+                ['gt' => $this->dateTimeMock->formatDate($timestamp - $lifetime)]
             )
             ->willReturnSelf();
 
