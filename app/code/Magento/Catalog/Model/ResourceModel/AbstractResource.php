@@ -233,7 +233,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 $table,
                 [
                     'attribute_id = ?' => $attribute->getAttributeId(),
-                    $this->getLinkField() . ' = ?' => $object->getData($this->getLinkField()),
+                    $this->getLinkField() . ' = ?' => $object->getId(),
                     'store_id <> ?' => $storeId
                 ]
             );
