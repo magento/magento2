@@ -35,7 +35,7 @@ interface SynonymGroupInterface
     /**
      * Sets synonym group
      *
-     * @param $synonymGroup
+     * @param string $synonymGroup
      * @return $this
      */
     public function setSynonymGroup($synonymGroup);
