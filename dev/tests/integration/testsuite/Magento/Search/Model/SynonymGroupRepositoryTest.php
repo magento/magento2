@@ -5,9 +5,6 @@
  */
 namespace Magento\Search\Model;
 
-/**
- * @magentoDbIsolation disabled
- */
 class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**

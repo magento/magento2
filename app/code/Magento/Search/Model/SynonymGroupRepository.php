@@ -86,7 +86,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroupInterface $synonymGroup
      * @param bool $errorOnMergeConflict
      * @return void
-     * @throws \Exception
+     * @throws Synonym\MergeConflictException
      */
     private function create(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict)
     {
@@ -100,7 +100,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             }
             // merge matching synonyms before creating a new row
             $mergedSynonyms = [];
-            foreach ($matchingSynonymGroups as $groupId => $matchingSynonymGroup) {
+            foreach (array_keys($matchingSynonymGroups) as $groupId) {
                 /** @var SynonymGroup $synonymGroupModel */
                 $synonymGroupModel = $this->synonymGroupFactory->create();
                 $synonymGroupModel->load($groupId);
@@ -144,7 +144,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroupInterface $newSynonymGroup
      * @param bool $errorOnMergeConflict
      * @return void
-     * @throws \Exception
+     * @throws Synonym\MergeConflictException
      */
     private function update(
         SynonymGroup $oldSynonymGroup,
@@ -165,7 +165,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             }
             // merge matching synonyms before updating a row
             $mergedSynonyms = [];
-            foreach ($matchingSynonymGroups as $groupId => $matchingSynonymGroup) {
+            foreach (array_keys($matchingSynonymGroups) as $groupId) {
                 /** @var SynonymGroup $synonymGroupModel */
                 $synonymGroupModel = $this->synonymGroupFactory->create();
                 $synonymGroupModel->load($groupId);
@@ -190,15 +190,14 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * Gets merge conflict exception message
      *
      * @param string[] $matchingSynonymGroups
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     private function getExceptionMessage($matchingSynonymGroups)
     {
-        $displayString = 'Merge conflict with current synonym groups: ';
-        $displayString .= '(';
+        $displayString = '(';
         $displayString .= implode('), (', $matchingSynonymGroups);
         $displayString .= ')';
-        return $displayString;
+        return __('Merge conflict with current synonym groups: %1', $displayString);
     }
 
     /**
@@ -232,8 +231,8 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         foreach ($synonymGroupsInScope as $synonymGroupInScope) {
             if (array_intersect(
                 explode(',', $synonymGroup->getSynonymGroup()),
-                explode(',', $synonymGroupInScope['synonyms']))
-            ) {
+                explode(',', $synonymGroupInScope['synonyms'])
+            )) {
                 $matchingSynonymGroups[$synonymGroupInScope['group_id']] = $synonymGroupInScope['synonyms'];
             }
         }
