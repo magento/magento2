@@ -511,6 +511,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     protected $scopeConfig;
 
+    /** @var \Magento\Catalog\Model\Product\Url */
+    protected $productUrl;
+
     /** @var array */
     protected $websitesCache = [];
 
@@ -572,11 +575,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @var null
      */
     protected $cachedImages = null;
-
-    /**
-     * @var Proxy\Product
-     */
-    protected $proxyProduct;
 
     /** @var array */
     protected $urlKeys = [];
@@ -668,6 +666,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product\TaxClassProcessor $taxClassProcessor,
         \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Catalog\Model\Product\Url $productUrl,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -697,6 +696,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->taxClassProcessor = $taxClassProcessor;
         $this->metadataPool = $metadataPool;
         $this->scopeConfig = $scopeConfig;
+        $this->productUrl = $productUrl;
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -2231,7 +2231,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME])) {
             $urlKey = !empty($rowData[self::URL_KEY])
                 ? $rowData[self::URL_KEY]
-                : $this->getProxyProduct()->formatUrlKey($rowData[self::COL_NAME]);
+                : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
             $storeCodes = empty($rowData[self::COL_STORE_VIEW_CODE])
                 ? array_flip($this->storeResolver->getStoreCodeToId())
                 : explode($this->getMultipleValueSeparator(), $rowData[self::COL_STORE_VIEW_CODE]);
@@ -2402,16 +2402,5 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             );
         }
         return $this->productUrlSuffix[$storeId];
-    }
-
-    /**
-     * @return Proxy\Product
-     */
-    protected function getProxyProduct()
-    {
-        if (!$this->proxyProduct) {
-            $this->proxyProduct = $this->_proxyProdFactory->create();
-        }
-        return $this->proxyProduct;
     }
 }
