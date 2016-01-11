@@ -841,6 +841,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($optionMock2, $this->model->getOptionByCode($optionCode2));
     }
 
+    public function testSetOptionsWithNull()
+    {
+        $this->assertEquals($this->model, $this->model->setOptions(null));
+    }
+
     private function createOptionMock($optionCode, $optionData = [])
     {
         $optionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
