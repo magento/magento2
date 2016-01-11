@@ -14,7 +14,7 @@ define(
         'mage/translate',
         'Magento_BraintreeTwo/js/validator',
         'Magento_BraintreeTwo/js/view/payment/validator-handler',
-        'Magento_Ui/js/lib/view/utils/dom-observer'
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
     function (
         _,
@@ -25,7 +25,7 @@ define(
         $t,
         validator,
         validatorManager,
-        domObserver
+        fullScreenLoader
     ) {
         'use strict';
 
@@ -74,26 +74,23 @@ define(
                     onCancelled: function () {
                         this.paymentMethodNonce = null;
                     }
+                },
+                imports: {
+                    onActiveChange: 'active'
                 }
             },
+
             /**
              * Set list of observable attributes
              *
              * @returns {exports.initObservable}
              */
             initObservable: function () {
-                var self = this;
-
                 validator.setConfig(window.checkoutConfig.payment[this.getCode()]);
                 this._super()
                     .observe(['active']);
                 this.validatorManager.initialize();
                 this.initBraintree();
-
-                domObserver.remove('.bt-overlay', function () {
-                    braintree.setConfig(self.clientConfig);
-                    braintree.setup();
-                });
 
                 return this;
             },
@@ -121,6 +118,18 @@ define(
             },
 
             /**
+             * Triggers when payment method change
+             * @param {Boolean} isActive
+             */
+            onActiveChange: function (isActive) {
+                if (!isActive || this.isSingleUse()) {
+                    return;
+                }
+
+                this.reInitBraintree();
+            },
+
+            /**
              * Init config
              */
             initClientConfig: function () {
@@ -142,6 +151,23 @@ define(
             initBraintree: function () {
                 this.initClientConfig();
                 braintree.config = _.extend(braintree.config, this.clientConfig);
+            },
+
+            /**
+             * Re-init Braintree configuration
+             */
+            reInitBraintree: function () {
+                var intervalId = setInterval(function () {
+                    // stop loader when frame will be loaded
+                    if ($('#braintree-hosted-field-number').length) {
+                        clearInterval(intervalId);
+                        fullScreenLoader.stopLoader();
+                    }
+                }, 500);
+
+                fullScreenLoader.startLoader();
+                braintree.setConfig(this.clientConfig);
+                braintree.setup();
             },
 
             /**
@@ -262,9 +288,6 @@ define(
              * @param {Object} data
              */
             beforePlaceOrder: function (data) {
-                if (data.type !== 'CreditCard') {
-                    return;
-                }
                 this.setPaymentMethodNonce(data.nonce);
                 this.placeOrder();
             },
@@ -285,6 +308,14 @@ define(
                 });
 
                 return false;
+            },
+
+            /**
+             * Check if Braintree configured without PayPal
+             * @returns {Boolean}
+             */
+            isSingleUse: function () {
+                return window.checkoutConfig.payment[this.getCode()].isSingleUse;
             }
         });
     }

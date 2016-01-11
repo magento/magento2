@@ -32,7 +32,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isDisplayShoppingCart()
     {
-        return (bool)$this->getValue(self::KEY_DISPLAY_ON_SHOPPING_CART);
+        return (bool) $this->getValue(self::KEY_DISPLAY_ON_SHOPPING_CART);
     }
 
     /**

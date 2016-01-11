@@ -45,6 +45,8 @@
                 <allow_shipping_address_override>1</allow_shipping_address_override>
                 <display_on_shopping_cart>1</display_on_shopping_cart>
                 <order_status>processing</order_status>
+                <is_gateway>1</is_gateway>
+                <can_use_checkout>1</can_use_checkout>
             </braintreetwo_paypal>
         </payment>
     </default>

@@ -5,11 +5,12 @@
 /*browser:true*/
 /*global define*/
 define([
+    'jquery',
     'underscore',
     'Magento_Checkout/js/view/payment/default',
     'Magento_BraintreeTwo/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote'
-], function (_, Component, Braintree, quote) {
+], function ($, _, Component, Braintree, quote) {
     'use strict';
 
     var checkout;
@@ -20,6 +21,7 @@ define([
             code: 'braintreetwo_paypal',
             active: false,
             paymentMethodNonce: null,
+            grandTotalAmount: null,
 
             /**
              * PayPal client configuration
@@ -42,6 +44,9 @@ define([
                 onPaymentMethodReceived: function (response) {
                     this.beforePlaceOrder(response);
                 }
+            },
+            imports: {
+                onActiveChange: 'active'
             }
         },
 
@@ -50,8 +55,19 @@ define([
          * @returns {exports.initObservable}
          */
         initObservable: function () {
+            var self = this;
+
             this._super()
                 .observe(['active']);
+
+            this.grandTotalAmount = quote.totals()['base_grand_total'];
+
+            quote.totals.subscribe(function () {
+                if (self.grandTotalAmount !== quote.totals()['base_grand_total']) {
+                    self.grandTotalAmount = quote.totals()['base_grand_total'];
+                    self.reInitPayPal();
+                }
+            });
 
             this.initClientConfig();
 
@@ -78,6 +94,19 @@ define([
             this.active(active);
 
             return active;
+        },
+
+        /**
+         * Triggers when payment method change
+         * @param {Boolean} isActive
+         */
+        onActiveChange: function (isActive) {
+            if (!isActive) {
+                return;
+            }
+
+            // need always re-init Braintree with PayPal configuration
+            this.reInitPayPal();
         },
 
         /**
@@ -108,37 +137,31 @@ define([
          * @param {Object} data
          */
         beforePlaceOrder: function (data) {
-            console.log(data);
-
-            if (data.type !== 'PayPalAccount') {
-                return;
-            }
             this.setPaymentMethodNonce(data.nonce);
             this.placeOrder();
         },
 
         /**
-         * Triggers when customer click "Place Order" button
+         * Re-init PayPal Auth Flow
          */
-        initFlow: function () {
-
+        reInitPayPal: function () {
+            if (!checkout) {
+                return;
+            }
             checkout.teardown(function () {
                 checkout = null;
             });
+            this.clientConfig.paypal.amount = this.grandTotalAmount;
 
-            /**
-             * Re-init on ready event
-             * @param {Object} integration
-             */
-            this.clientConfig.onReady = function (integration) {
-                checkout = integration;
-                checkout.paypal.initAuthFlow();
-            };
-            this.clientConfig.paypal.amount = quote.totals()['base_grand_total'];
-
-            // re-init Braintree
             Braintree.setConfig(this.clientConfig);
             Braintree.setup();
+        },
+
+        /**
+         * Triggers when customer click "Continue to PayPal" button
+         */
+        initAuthFlow: function () {
+            checkout.paypal.initAuthFlow();
         },
 
         /**
@@ -170,7 +193,7 @@ define([
                 container: 'paypal-container',
                 singleUse: true,
                 headless: true,
-                amount: totals['base_grand_total'],
+                amount: this.amount,
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
                 enableShippingAddress: true,
