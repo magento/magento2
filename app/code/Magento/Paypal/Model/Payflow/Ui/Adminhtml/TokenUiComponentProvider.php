@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Model\Adminhtml\Ui;
+namespace Magento\Paypal\Model\Payflow\Ui\Adminhtml;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -40,7 +40,8 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
             [
                 'config' => [
                     TokenUiComponentProviderInterface::COMPONENT_DETAILS => $data,
-                    TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash()
+                    TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash(),
+                    'template' => 'Magento_Paypal::payflowpro/vault.phtml'
                 ],
                 'name' => Template::class
             ]
