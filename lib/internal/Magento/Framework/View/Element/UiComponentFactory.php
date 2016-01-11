@@ -148,6 +148,9 @@ class UiComponentFactory extends DataObject
                 $bundleComponents[$identifier]
             );
             $componentArguments = array_replace_recursive($componentArguments, $arguments);
+            if (isset($componentArguments['config']['class'])) {
+                $className = $componentArguments['config']['class'];
+            }
             if (!isset($componentArguments['context'])) {
                 $componentArguments['context'] = $this->contextFactory->create([
                     'namespace' => $identifier
@@ -178,7 +181,9 @@ class UiComponentFactory extends DataObject
             $rawComponentData = $this->componentManager->createRawComponentData($name);
             list($className, $componentArguments) = $this->argumentsResolver($identifier, $rawComponentData);
             $processedArguments = array_replace_recursive($componentArguments, $arguments);
-
+            if (isset($processedArguments['config']['class'])) {
+                $className = $processedArguments['config']['class'];
+            }
             if (isset($processedArguments['data']['config']['children'])) {
                 $components = [];
                 $bundleChildren = $this->getBundleChildren($processedArguments['data']['config']['children']);
