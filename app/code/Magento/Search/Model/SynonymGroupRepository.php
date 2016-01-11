@@ -99,15 +99,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
                 );
             }
             // merge matching synonyms before creating a new row
-            $mergedSynonyms = [];
-            foreach (array_keys($matchingSynonymGroups) as $groupId) {
-                /** @var SynonymGroup $synonymGroupModel */
-                $synonymGroupModel = $this->synonymGroupFactory->create();
-                $synonymGroupModel->load($groupId);
-                $mergedSynonyms = array_merge($mergedSynonyms, explode(',', $synonymGroupModel->getSynonymGroup()));
-                $synonymGroupModel->delete();
-            }
-            $mergedSynonyms = array_unique($mergedSynonyms);
+            $mergedSynonyms = $this->merge($synonymGroup, array_keys($matchingSynonymGroups));
             /** @var SynonymGroup $newSynonymGroupModel */
             $newSynonymGroupModel = $this->synonymGroupFactory->create();
             $newSynonymGroupModel->setSynonymGroup(implode(',', $mergedSynonyms));
@@ -121,6 +113,28 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             $this->populateSynonymGroupModel($synonymGroupModel, $synonymGroup);
             $this->resourceModel->save($synonymGroupModel);
         }
+    }
+
+    /**
+     * Perform synonyms merge
+     *
+     * @param SynonymGroupInterface $synonymGroupToMerge
+     * @param array $matchingGroupIds
+     * @return array
+     */
+    private function merge(SynonymGroupInterface $synonymGroupToMerge, array $matchingGroupIds)
+    {
+        $mergedSynonyms = [];
+        foreach ($matchingGroupIds as $groupId) {
+            /** @var SynonymGroup $synonymGroupModel */
+            $synonymGroupModel = $this->synonymGroupFactory->create();
+            $synonymGroupModel->load($groupId);
+            $mergedSynonyms = array_merge($mergedSynonyms, explode(',', $synonymGroupModel->getSynonymGroup()));
+            $synonymGroupModel->delete();
+        }
+        $mergedSynonyms = array_merge($mergedSynonyms, explode(',', $synonymGroupToMerge->getSynonymGroup()));
+        $mergedSynonyms = array_unique($mergedSynonyms);
+        return $mergedSynonyms;
     }
 
     /**
@@ -152,6 +166,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         $errorOnMergeConflict
     ) {
         $matchingSynonymGroups = $this->getMatchingSynonymGroups($newSynonymGroup);
+        // ignore existing synonym group as it's value will be discarded
         $matchingSynonymGroups = array_diff_key(
             $matchingSynonymGroups,
             [$oldSynonymGroup->getGroupId() => $oldSynonymGroup->getSynonymGroup()]
@@ -164,21 +179,11 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
                 );
             }
             // merge matching synonyms before updating a row
-            $mergedSynonyms = [];
-            foreach (array_keys($matchingSynonymGroups) as $groupId) {
-                /** @var SynonymGroup $synonymGroupModel */
-                $synonymGroupModel = $this->synonymGroupFactory->create();
-                $synonymGroupModel->load($groupId);
-                $mergedSynonyms = array_merge($mergedSynonyms, explode(',', $synonymGroupModel->getSynonymGroup()));
-                $synonymGroupModel->delete();
-            }
-            $mergedSynonyms = array_unique($mergedSynonyms);
-            /** @var SynonymGroup $newSynonymGroupModel */
-            $newSynonymGroupModel = $this->synonymGroupFactory->create();
-            $newSynonymGroupModel->setSynonymGroup(implode(',', $mergedSynonyms));
-            $newSynonymGroupModel->setWebsiteId($newSynonymGroup->getWebsiteId());
-            $newSynonymGroupModel->setStoreId($newSynonymGroup->getStoreId());
-            $this->resourceModel->save($newSynonymGroupModel);
+            $mergedSynonyms = $this->merge($newSynonymGroup, array_keys($matchingSynonymGroups));
+            $oldSynonymGroup->setSynonymGroup(implode(',', $mergedSynonyms));
+            $oldSynonymGroup->setWebsiteId($newSynonymGroup->getWebsiteId());
+            $oldSynonymGroup->setStoreId($newSynonymGroup->getStoreId());
+            $this->resourceModel->save($oldSynonymGroup);
         } else {
             // no merge conflict, perform simple update
             $this->populateSynonymGroupModel($oldSynonymGroup, $newSynonymGroup);
