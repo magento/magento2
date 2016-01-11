@@ -105,7 +105,7 @@ class LoginController
 
         $this->phpCookieManager->setPublicCookie(
             AuthSession::LOGOUT_REASON_CODE_COOKIE_NAME,
-            "",
+            '',
             $metaData
         );
 
