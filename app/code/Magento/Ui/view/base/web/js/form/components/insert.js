@@ -35,6 +35,7 @@ define([
                 url: '${ $.update_url }',
                 dataType: 'json'
             },
+            visible: true,
             imports: {},
             exports: {},
             listens: {},
@@ -67,6 +68,7 @@ define([
         initObservable: function () {
             return this._super()
                 .observe([
+                    'visible',
                     'content',
                     'value',
                     'loading'
