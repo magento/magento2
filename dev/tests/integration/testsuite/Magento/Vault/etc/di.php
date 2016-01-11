@@ -5,5 +5,7 @@
  */
 
 return [
-    'VaultPaymentConfig' => ['type' => 'Magento\Vault\Model\VaultConfigMock'],
+    'preferences' => [
+        'Magento\Vault\Model\VaultPaymentInterface' => 'Magento\Vault\Model\VaultPaymentMock',
+    ],
 ];
