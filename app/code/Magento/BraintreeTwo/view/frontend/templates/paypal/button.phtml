@@ -12,7 +12,10 @@ $id = $block->getContainerId() . mt_rand();
 
 $config = [
     'Magento_BraintreeTwo/js/paypal/button' => [
-        'id' => $id
+        'id' => $id,
+        'clientToken' => $block->getClientToken(),
+        'displayName' => $block->getMerchantName(),
+        'actionSuccess' => $block->getActionSuccess()
     ]
 ];
 
