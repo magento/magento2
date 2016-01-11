@@ -297,7 +297,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     ->from($table)
                     ->where('attribute_id = ?', $attribute->getAttributeId())
                     ->where('store_id = ?', $this->getDefaultStoreId())
-                    ->where('entity_id = ?', $object->getId());
+                    ->where($this->getLinkField() . ' = ?', $object->getId());
                 $row = $this->getConnection()->fetchOne($select);
 
                 if (!$row) {
@@ -305,7 +305,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                         [
                             'attribute_id' => $attribute->getAttributeId(),
                             'store_id' => $this->getDefaultStoreId(),
-                            'entity_id' => $object->getId(),
+                            $this->getLinkField() => $object->getId(),
                             'value' => $this->_prepareValueForSave($value, $attribute),
                         ]
                     );
