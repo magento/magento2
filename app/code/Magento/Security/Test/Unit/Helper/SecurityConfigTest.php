@@ -252,7 +252,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrentTimestamp()
     {
-        $time = time();
-        $this->assertEquals($time, $this->securityConfig->getCurrentTimestamp());
+        $timestamp = time();
+        $this->assertEquals($timestamp, $this->securityConfig->getCurrentTimestamp());
     }
 }

@@ -12,34 +12,25 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class SecurityManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var  \Magento\Security\Model\SecurityManager
-     */
+    /** @var  \Magento\Security\Model\SecurityManager */
     protected $model;
 
-    /**
-     * @var \Magento\Security\Helper\SecurityConfig
-     */
+    /** @var \Magento\Security\Helper\SecurityConfig */
     protected $securityConfigMock;
 
-    /**
-     * @var \Magento\Security\Model\PasswordResetRequestEventFactory
-     */
+    /** @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory */
+    protected $passwordResetRequestEventCollectionFactoryMock;
+
+    /** @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection */
+    protected $passwordResetRequestEventCollectionMock;
+
+    /** @var \Magento\Security\Model\PasswordResetRequestEventFactory */
     protected $passwordResetRequestEventFactoryMock;
 
-    /**
-     * @var \Magento\Security\Model\PasswordResetRequestEvent
-     */
+    /** @var \Magento\Security\Model\PasswordResetRequestEvent */
     protected $passwordResetRequestEventMock;
 
-    /**
-     * @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent
-     */
-    protected $passwordResetRequestEventResourceMock;
-
-    /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
+    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
     /**
@@ -52,7 +43,23 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->securityConfigMock = $this->getMock(
             'Magento\Security\Helper\SecurityConfig',
-            ['getRemoteIp'],
+            ['getRemoteIp', 'getCurrentTimestamp'],
+            [],
+            '',
+            false
+        );
+
+        $this->passwordResetRequestEventCollectionFactoryMock = $this->getMock(
+            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
+        $this->passwordResetRequestEventCollectionMock = $this->getMock(
+            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection',
+            ['deleteRecordsOlderThen'],
             [],
             '',
             false
@@ -74,20 +81,12 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->passwordResetRequestEventResourceMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent',
-            ['deleteRecordsOlderThen'],
-            [],
-            '',
-            false
-        );
-
         $this->model = $this->objectManager->getObject(
             '\Magento\Security\Model\SecurityManager',
             [
                 'securityConfig' => $this->securityConfigMock,
                 'passwordResetRequestEventModelFactory' => $this->passwordResetRequestEventFactoryMock,
-                'passwordResetRequestEventResource' => $this->passwordResetRequestEventResourceMock,
+                'passwordResetRequestEventCollectionFactory' => $this->passwordResetRequestEventCollectionFactoryMock,
                 'securityCheckers' => []
             ]
         );
@@ -137,11 +136,20 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanExpiredRecords()
     {
-        $this->passwordResetRequestEventResourceMock->expects($this->once())
+        $timestamp = time();
+
+        $this->passwordResetRequestEventCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->passwordResetRequestEventCollectionMock);
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getCurrentTimestamp')
+            ->willReturn($timestamp);
+
+        $this->passwordResetRequestEventCollectionMock->expects($this->once())
             ->method('deleteRecordsOlderThen')
             ->with(
-                $this->securityConfigMock->getCurrentTimestamp()
-                - \Magento\Security\Model\SecurityManager::SECURITY_CONTROL_RECORDS_LIFE_TIME
+                $timestamp - \Magento\Security\Model\SecurityManager::SECURITY_CONTROL_RECORDS_LIFE_TIME
             )
             ->willReturnSelf();
 
