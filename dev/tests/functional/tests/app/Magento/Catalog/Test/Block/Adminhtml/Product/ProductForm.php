@@ -112,7 +112,7 @@ class ProductForm extends FormTabs
             ];
             $this->callRender($typeId, 'fill', $renderArguments);
         } else {
-            $tabs = $this->getFieldsByTabs($product);
+            $tabs = $this->getFixtureFieldsByContainers($product);
 
             if ($category) {
                 $tabs['product-details']['category_ids']['value'] = $category->getName();
@@ -306,7 +306,7 @@ class ProductForm extends FormTabs
     public function getRequireNoticeAttributes(InjectableFixture $product)
     {
         $data = [];
-        $tabs = $this->getFieldsByTabs($product);
+        $tabs = $this->getFixtureFieldsByContainers($product);
         foreach ($tabs as $tabName => $fields) {
             $tab = $this->getTab($tabName);
             $this->openTab($tabName);
