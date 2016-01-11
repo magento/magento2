@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\MessageQueue\Test\Unit\Config;
+namespace Magento\Framework\MessageQueue\Test\Unit\Config\Reader\XmlReader;
 
 /**
  * @codingStandardsIgnoreFile
