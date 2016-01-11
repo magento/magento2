@@ -23,6 +23,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\DB\Select */
     protected $selectMock;
 
+    /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb */
+    protected $resourceMock;
+
     /**
      * Init mocks for tests
      * @return void
@@ -60,7 +63,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->securityConfigMock = $this->getMock(
             '\Magento\Security\Helper\SecurityConfig',
-            [],
+            ['getCurrentTimestamp'],
             [],
             '',
             false
@@ -87,23 +90,24 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $connection->expects($this->any())->method('select')->willReturn($this->selectMock);
 
-        $resource = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getMainTable', 'getTable'])
+            ->setMethods(['getConnection', 'getMainTable', 'getTable', 'deleteRecordsOlderThen'])
             ->getMockForAbstractClass();
-        $resource->expects($this->any())
+
+        $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($connection));
 
-        $resource->expects($this->any())->method('getMainTable')->willReturn('table_test');
-        $resource->expects($this->any())->method('getTable')->willReturn('test');
+        $this->resourceMock->expects($this->any())->method('getMainTable')->willReturn('table_test');
+        $this->resourceMock->expects($this->any())->method('getTable')->willReturn('test');
 
         $this->collectionMock = $this->getMock(
             '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection',
-            ['addFieldToFilter', 'addOrder'], //
+            ['addFieldToFilter', 'addOrder'],
             [$entityFactory, $logger, $fetchStrategy, $eventManager,
                 $this->securityConfigMock, $this->dateTimeMock,
-                $connection, $resource],
+                $connection, $this->resourceMock],
             '',
             true
         );
@@ -111,6 +115,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->collectionMock->expects($this->any())
             ->method('getSelect')
             ->willReturn($this->selectMock);
+
+        $this->collectionMock->expects($this->any())
+            ->method('getResource')
+            ->willReturn($this->resourceMock);
     }
 
     /**
@@ -173,12 +181,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testFilterByLifetime()
     {
         $lifetime = 600;
+        $timestamp = time();
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getCurrentTimestamp')
+            ->willReturn($timestamp);
 
         $this->collectionMock->expects($this->once())
             ->method('addFieldToFilter')
             ->with(
                 'created_at',
-                ['gt' => $this->dateTimeMock->formatDate($this->securityConfigMock->getCurrentTimestamp() - $lifetime)]
+                ['gt' => $this->dateTimeMock->formatDate($timestamp - $lifetime)]
             )
             ->willReturnSelf();
 
@@ -231,5 +244,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->collectionMock,
             $this->collectionMock->filterByIpOrAccountReference($ip, $accountReference)
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteRecordsOlderThen()
+    {
+        $timestamp = time();
+
+        $this->resourceMock->expects($this->any())
+            ->method('deleteRecordsOlderThen')
+            ->with($timestamp);
+
+        $this->collectionMock->deleteRecordsOlderThen($timestamp);
     }
 }

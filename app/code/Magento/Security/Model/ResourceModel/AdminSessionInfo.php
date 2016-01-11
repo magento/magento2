@@ -63,7 +63,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
      * @param array $withStatuses
      * @param array $excludedSessionIds
      * @param int|null $updateOlderThen
-     * @return int  The number of affected rows.
+     * @return int The number of affected rows.
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function updateStatusByUserId(
