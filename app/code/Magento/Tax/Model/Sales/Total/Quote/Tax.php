@@ -299,6 +299,9 @@ class Tax extends CommonTaxCollector
         $totals = [];
         $store = $quote->getStore();
         $applied = $total->getAppliedTaxes();
+        if (is_string($applied)) {
+            $applied = unserialize($applied);
+        }
         $amount = $total->getTaxAmount();
         if ($amount == null) {
             $this->enhanceTotalData($quote, $total);
