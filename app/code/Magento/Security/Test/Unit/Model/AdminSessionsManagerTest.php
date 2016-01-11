@@ -347,18 +347,18 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'expectedResult' => _('Someone logged into this account from another device or browser.'
+                'expectedResult' => __('Someone logged into this account from another device or browser.'
                     . ' Your current session is terminated.'),
                 'isActiveSession' => false,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_BY_LOGIN
             ],
             [
-                'expectedResult' => _('Your current session is terminated by another user of this account.'),
+                'expectedResult' => __('Your current session is terminated by another user of this account.'),
                 'isActiveSession' => false,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY
             ],
             [
-                'expectedResult' => _('Your current session has been expired.'),
+                'expectedResult' => __('Your current session has been expired.'),
                 'isActiveSession' => false,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT
             ]

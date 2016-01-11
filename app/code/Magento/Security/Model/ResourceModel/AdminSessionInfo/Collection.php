@@ -69,21 +69,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $status
      * @param int $userId
-     * @param string $excludedSessionId
+     * @param string $sessionIdToExclude
      * @param int $updateOlderThen
      * @return int The number of affected rows.
      */
     public function updateActiveSessionsStatus(
         $status,
         $userId,
-        $excludedSessionId,
+        $sessionIdToExclude,
         $updateOlderThen = null
     ) {
         return $this->getResource()->updateStatusByUserId(
             $status,
             $userId,
             [\Magento\Security\Model\AdminSessionInfo::LOGGED_IN],
-            [$excludedSessionId],
+            [$sessionIdToExclude],
             $updateOlderThen
         );
     }
