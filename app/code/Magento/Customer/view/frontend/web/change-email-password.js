@@ -4,11 +4,11 @@
  */
 /*jshint browser:true jquery:true expr:true*/
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
-    
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
+
     $.widget('mage.changeEmailPassword', {
         options: {
             changeEmailSelector: '[data-role=change-email]',
@@ -24,8 +24,12 @@ define([
             confirmPasswordSelector: '[data-input=confirm-password]'
         },
 
-        _create: function() {
-            this.element.on('change', $.proxy(function(event) {
+        /**
+         * Create widget
+         * @private
+         */
+        _create: function () {
+            this.element.on('change', $.proxy(function (event) {
                 this._checkChoice();
             }, this));
 
@@ -36,9 +40,9 @@ define([
          * Check choice
          * @private
          */
-        _checkChoice: function() {
-            if ($(this.options.changeEmailSelector).is(':checked')
-                && $(this.options.changePasswordSelector).is(':checked')) {
+        _checkChoice: function () {
+            if ($(this.options.changeEmailSelector).is(':checked') &&
+                $(this.options.changePasswordSelector).is(':checked')) {
                 this._showAll();
             } else if ($(this.options.changeEmailSelector).is(':checked')) {
                 this._showEmail();
@@ -53,7 +57,7 @@ define([
          * Show email and password input fields
          * @private
          */
-        _showAll: function() {
+        _showAll: function () {
             $(this.options.titleSelector).html(this.options.titleChangeEmailAndPassword);
 
             $(this.options.mainContainerSelector).show();
@@ -63,7 +67,7 @@ define([
 
             $(this.options.currentPasswordSelector).attr('data-validate', '{required:true}');
             $(this.options.emailSelector).attr('data-validate', '{required:true}');
-            $(this.options.newPasswordSelector).attr('data-validate', "{required:true, 'validate-password':true}");
+            $(this.options.newPasswordSelector).attr('data-validate', '{required:true, \'validate-password\':true}');
             $(this.options.confirmPasswordSelector).attr(
                 'data-validate',
                 '{required:true, equalTo:"' + this.options.newPasswordSelector + '"}'
@@ -74,7 +78,7 @@ define([
          * Hide email and password input fields
          * @private
          */
-        _hideAll: function() {
+        _hideAll: function () {
             $(this.options.mainContainerSelector).hide();
             $(this.options.emailContainerSelector).hide();
             $(this.options.newPasswordContainerSelector).hide();
@@ -90,7 +94,7 @@ define([
          * Show email input fields
          * @private
          */
-        _showEmail: function() {
+        _showEmail: function () {
             this._showAll();
             $(this.options.titleSelector).html(this.options.titleChangeEmail);
 
@@ -105,7 +109,7 @@ define([
          * Show password input fields
          * @private
          */
-        _showPassword: function() {
+        _showPassword: function () {
             this._showAll();
             $(this.options.titleSelector).html(this.options.titleChangePassword);
 
@@ -114,6 +118,6 @@ define([
             $(this.options.emailSelector).removeAttr('data-validate');
         }
     });
-    
+
     return $.mage.changeEmailPassword;
 });
