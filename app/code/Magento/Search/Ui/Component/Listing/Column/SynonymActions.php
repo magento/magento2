@@ -9,7 +9,6 @@ namespace Magento\Search\Ui\Component\Listing\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -21,38 +20,24 @@ class SynonymActions extends Column
     const SYNONYM_URL_PATH_DELETE = 'search/synonyms/delete';
     const SYNONYM_URL_PATH_EDIT = 'search/synonyms/edit';
 
-    /** @var UrlBuilder */
-    protected $actionUrlBuilder;
-
     /** @var UrlInterface */
     protected $urlBuilder;
 
     /**
-     * @var string
-     */
-    private $editUrl;
-
-    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param UrlBuilder $actionUrlBuilder
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
-     * @param string $editUrl
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        UrlBuilder $actionUrlBuilder,
         UrlInterface $urlBuilder,
         array $components = [],
-        array $data = [],
-        $editUrl = self::SYNONYM_URL_PATH_EDIT
+        array $data = []
     ) {
         $this->urlBuilder = $urlBuilder;
-        $this->actionUrlBuilder = $actionUrlBuilder;
-        $this->editUrl = $editUrl;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -69,13 +54,13 @@ class SynonymActions extends Column
                 $name = $this->getData('name');
                 $item[$name]['delete'] = [
                     'href' => $this->urlBuilder->getUrl(
-                            self::SYNONYM_URL_PATH_DELETE,
-                            ['group_id' => $item['group_id']]
-                        ),
+                        self::SYNONYM_URL_PATH_DELETE,
+                        ['group_id' => $item['group_id']]
+                    ),
                     'label' => __('Delete'),
                     'confirm' => [
                         'title' => __('Delete'),
-                        'message' => __('Are you sure you wan\'t to delete this record?')
+                        'message' => __('Are you sure you want to delete this synonym group?')
                     ]
                 ];
                 $item[$name]['edit'] = [

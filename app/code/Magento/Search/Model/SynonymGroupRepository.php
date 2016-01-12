@@ -8,6 +8,7 @@ namespace Magento\Search\Model;
 use Magento\Search\Api\Data\SynonymGroupInterface;
 use Magento\Search\Api\SynonymGroupRepositoryInterface;
 use Magento\Search\Model\ResourceModel\SynonymGroup as SynonymGroupResourceModel;
+use Magento\Framework\Exception\CouldNotDeleteException;
 
 /**
  * Synonym Group repository, provides implementation of saving and deleting synonym groups
@@ -75,9 +76,14 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         try {
             $this->resourceModel->delete($synonymGroup);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
+            throw new CouldNotDeleteException(
+                __(
+                    'Synonym Group with id %1 cannot be deleted. %2',
+                    $synonymGroup->getGroupId(),
+                    $exception->getMessage()
+                )
+            );
         }
-        return true;
     }
 
     /**

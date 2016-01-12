@@ -27,14 +27,14 @@ class Delete extends \Magento\Backend\App\Action
                 $model->load($id);
                 $repository = $this->_objectManager->create('Magento\Search\Api\SynonymGroupRepositoryInterface');
                 $repository->delete($model);
-                $this->messageManager->addSuccess(__('The synonyms group has been deleted.'));
-                return $resultRedirect->setPath('*/*/');
+                $this->messageManager->addSuccess(__('The synonym group has been deleted.'));
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                return $resultRedirect->setPath('*/*/');
             }
+        } else {
+            $this->messageManager->addError(__('We can\'t find a synonym group to delete.'));
         }
-        $this->messageManager->addError(__('We can\'t find a synonum group to delete.'));
+
         return $resultRedirect->setPath('*/*/');
     }
 }
