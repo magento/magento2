@@ -523,6 +523,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /** @var array */
     protected $productUrlSuffix = [];
 
+    /** @var array */
+    protected $productUrlKeys = [];
+
     /**
      * Instance of product tax class processor.
      *
@@ -2229,9 +2232,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // validate custom options
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
         if (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME])) {
-            $urlKey = !empty($rowData[self::URL_KEY])
-                ? $rowData[self::URL_KEY]
-                : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
+            $urlKey = $this->getUrlKey($rowData);
             $storeCodes = empty($rowData[self::COL_STORE_VIEW_CODE])
                 ? array_flip($this->storeResolver->getStoreCodeToId())
                 : explode($this->getMultipleValueSeparator(), $rowData[self::COL_STORE_VIEW_CODE]);
@@ -2402,5 +2403,20 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             );
         }
         return $this->productUrlSuffix[$storeId];
+    }
+
+    /**
+     * @param array $rowData
+     * @return string
+     */
+    protected function getUrlKey($rowData)
+    {
+        if (!empty($rowData[self::URL_KEY])) {
+            $this->productUrlKeys[$rowData[self::COL_SKU]] = $rowData[self::URL_KEY];
+        }
+        $urlKey = !empty($this->productUrlKeys[$rowData[self::COL_SKU]])
+            ? $this->productUrlKeys[$rowData[self::COL_SKU]]
+            : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
+        return $urlKey;
     }
 }
