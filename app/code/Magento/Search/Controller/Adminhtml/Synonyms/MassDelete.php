@@ -52,7 +52,12 @@ class MassDelete extends \Magento\Backend\App\Action
         $synonymGroupRepository = $this->_objectManager->create('Magento\Search\Api\SynonymGroupRepositoryInterface');
 
         foreach ($collection as $synonymGroup) {
-            $synonymGroupRepository->delete($synonymGroup);
+            try {
+                $synonymGroupRepository->delete($synonymGroup);
+            } catch (\Exception $e) {
+                $this->messageManager->addError($e->getMessage());
+            }
+
         }
 
         $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $collectionSize));
