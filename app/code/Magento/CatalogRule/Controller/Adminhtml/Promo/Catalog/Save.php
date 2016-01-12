@@ -16,7 +16,8 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
      */
     public function execute()
     {
-        if ($this->getRequest()->getPostValue()) {
+        $data = $this->getRequest()->getPostValue();
+        if ($data) {
 
             /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
             $ruleRepository = $this->_objectManager->create(
@@ -31,13 +32,6 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     'adminhtml_controller_catalogrule_prepare_save',
                     ['request' => $this->getRequest()]
                 );
-                $data = $this->getRequest()->getPostValue();
-                $inputFilter = new \Zend_Filter_Input(
-                    ['from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter],
-                    [],
-                    $data
-                );
-                $data = $inputFilter->getUnescaped();
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model = $ruleRepository->get($id);
@@ -53,8 +47,10 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     return;
                 }
 
-                $data['conditions'] = $data['rule']['conditions'];
-                unset($data['rule']);
+                if (isset($data['rule'])) {
+                    $data['conditions'] = $data['rule']['conditions'];
+                    unset($data['rule']);
+                }
 
                 $model->loadPost($data);
 
