@@ -213,7 +213,6 @@ define([
          *          params: ['${ $.$data.rowIndex }', true]
          *      }
          */
-
         applyFieldAction: function (rowIndex) {
             if (!this.hasFieldAction() || this.disableAction) {
                 return this;
@@ -236,9 +235,9 @@ define([
          *
          */
         applySingleAction: function (rowIndex, action) {
-            var callback,
-                action = action || this.fieldAction;
+            var callback;
 
+            action = action || this.fieldAction;
             action = utils.template(action, {
                 column: this,
                 rowIndex: rowIndex
