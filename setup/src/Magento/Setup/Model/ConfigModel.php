@@ -91,14 +91,13 @@ class ConfigModel
     {
         $this->checkInstallationFilePermissions();
 
-        $fileConfigStorage = [];
         $options = $this->collector->collectOptionsLists();
 
         foreach ($options as $moduleName => $option) {
-
             $configData = $option->createConfig($inputOptions, $this->deploymentConfig);
 
             foreach ($configData as $config) {
+                $fileConfigStorage = [];
                 if (!$config instanceof ConfigData) {
                     throw new \Exception(
                         'In module : '
@@ -115,11 +114,9 @@ class ConfigModel
                 } else {
                     $fileConfigStorage[$config->getFileKey()] = $config->getData();
                 }
+                $this->writer->saveConfig($fileConfigStorage, $config->isOverrideWhenSave());
             }
-
         }
-
-        $this->writer->saveConfig($fileConfigStorage, true);
     }
 
     /**
