@@ -30,22 +30,23 @@
             <!-- ko if: $data.optgroup && $parent.root.showOpenLevelsActionIcon-->
             <div class="admin__action-multiselect-dropdown"
                  data-bind="
-                        click: function(data, event){
-                            $parent.root.openChildLevel($data, $element, event);
-                        },
-                        clickBubble: false
-                     "></div>
+                    click: function(data, event){
+                        $parent.root.openChildLevel($data, $element, event);
+                    },
+                    clickBubble: false
+            ">
+            </div>
             <!-- /ko-->
             <!--ko if: $parent.root.showCheckbox-->
             <input
-                    class="admin__control-checkbox"
-                    type="checkbox"
-                    tabindex="-1"
-                    data-bind="attr: { 'checked': $parent.root.isSelected(option.value) }">
+                class="admin__control-checkbox"
+                type="checkbox"
+                tabindex="-1"
+                data-bind="attr: { 'checked': $parent.root.isSelected(option.value) }">
             <!--/ko-->
             <label
-                    class="admin__action-multiselect-label"
-                    data-bind="text: option.label">
+                class="admin__action-multiselect-label"
+                data-bind="text: option.label">
             </label>
         </div>
         <!-- ko if: $data.optgroup -->

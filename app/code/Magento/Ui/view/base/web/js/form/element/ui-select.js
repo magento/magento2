@@ -14,7 +14,68 @@ define([
     'use strict';
 
     /**
+     * Processing options list
+     *
+     * @param {Array} array - Property array
+     * @param {String} separator - Level separator
+     * @param {Array} created - list to add new options
+     *
+     * @return {Array} Plain options list
+     */
+    function flattenCollection(array, separator, created) {
+        var i = 0,
+            length = array.length,
+            childCollection;
+
+        created = created || [];
+
+        for (i; i < length; i++) {
+            created.push(array[i]);
+
+            if (array[i].hasOwnProperty(separator)) {
+                childCollection = array[i][separator];
+                delete array[i][separator];
+                flattenCollection.call(this, childCollection, separator, created);
+            }
+        }
+
+        return created;
+    }
+
+    /**
+     * Set levels to options list
+     *
+     * @param {Array} array - Property array
+     * @param {String} separator - Level separator
+     * @param {Number} level - Starting level
+     *
+     * @returns {Array} Array with levels
+     */
+    function setLevelsProperty(array, separator, level) {
+        var i = 0,
+            length = array.length;
+
+        level = level || 0;
+
+        for (i; i < length; i++) {
+            array[i].level = level;
+
+            if (array[i].hasOwnProperty(separator)) {
+                level++;
+                setLevelsProperty.call(this, array[i][separator], separator, level);
+            }
+        }
+
+        return array;
+    }
+
+    /**
      * Preprocessing options list
+     *
+     * @param {Array} nodes - Options list
+     *
+     * @return {Object} Object with property - options(options list)
+     *      and cache options with plain and tree list
      */
     function parseOptions(nodes) {
         var caption,
@@ -45,44 +106,6 @@ define([
                 tree: _.compact(nodes)
             }
         };
-    }
-
-    function setLevelsProperty (array, separator, level) {
-        var i = 0,
-            length = array.length;
-
-        level = level || 0;
-
-        for (i; i<length; i++) {
-            array[i].level = level;
-
-            if (array[i].hasOwnProperty(separator)) {
-                level++;
-                setLevelsProperty.call(this, array[i][separator], separator, level);
-            }
-        }
-
-        return array;
-    }
-
-    function flattenCollection (array, separator, created) {
-        var i = 0,
-            length = array.length,
-            childCollection;
-
-        created = created || [];
-
-        for (i; i<length; i++) {
-            created.push(array[i]);
-
-            if (array[i].hasOwnProperty(separator)) {
-                childCollection = array[i][separator];
-                delete array[i][separator];
-                flattenCollection.call(this, childCollection, separator, created);
-            }
-        }
-
-        return created;
     }
 
     return Abstract.extend({
@@ -121,6 +144,9 @@ define([
             }
         },
 
+        /**
+         * Initialize conponent
+         */
         initialize: function () {
             this._super()
                 .preprocessingConfig();
@@ -144,16 +170,25 @@ define([
             return this;
         },
 
+        /**
+         * Check child optgroup
+         */
         hasChildList: function () {
-            return _.find(this.options(), function(option){
+            return _.find(this.options(), function (option) {
                 return !!option[this.separator];
             }, this);
         },
 
+        /**
+         * Check tree mode
+         */
         isTree: function () {
             return this.hasChildList() && !this.optgroupMode;
         },
 
+        /**
+         * Check label decoration
+         */
         isLabelDecoration: function (data) {
             return data.hasOwnProperty(this.separator) && this.labelsDecoration;
         },
@@ -178,6 +213,9 @@ define([
             return this;
         },
 
+        /**
+         * Change configuration for different mods
+         */
         preprocessingConfig: function () {
             if (this.simpleMode) {
                 this.showCheckbox = false;
@@ -220,19 +258,34 @@ define([
             };
         },
 
+        /**
+         * Processing level visibility for levels
+         *
+         * @param {Object} data - element data
+         *
+         * @returns {Boolean} level visibility.
+         */
         showLevels: function (data) {
-            var curLevel = data.level+1;
+            var curLevel = ++data.level;
 
             if (!data.visible) {
-                data.visible = ko.observable(!!data.hasOwnProperty(this.separator) && _.isBoolean(this.levelsVisibility) &&
+                data.visible = ko.observable(!!data.hasOwnProperty(this.separator) &&
+                    _.isBoolean(this.levelsVisibility) &&
                     this.levelsVisibility ||
-                    data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility) >= curLevel);
+                    data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility, 10) >= curLevel);
 
             }
 
             return data.visible();
         },
 
+        /**
+         * Processing level visibility for levels
+         *
+         * @param {Object} data - element data
+         *
+         * @returns {Boolean} level visibility.
+         */
         getLevelVisibility: function (data) {
             if (data.visible) {
                 return data.visible();
@@ -253,12 +306,11 @@ define([
             options = options || this.cacheOptions.tree;
 
             _.each(options, function (opt) {
-                if (opt.value == option.parent) {
+                if (opt.value == option.parent) { /* eslint eqeqeq:0 */
                     delete  option.parent;
                     opt[this.separator] ? opt[this.separator].push(option) : opt[this.separator] = [option];
                     copyOptionsTree = JSON.parse(JSON.stringify(this.cacheOptions.tree));
                     this.cacheOptions.plain = flattenCollection(copyOptionsTree, this.separator);
-                    debugger;
                     this.options(this.cacheOptions.tree);
                 } else if (opt[this.separator]) {
                     this.setOption(option, opt[this.separator]);
@@ -315,7 +367,7 @@ define([
                     curOption = this.options()[i].label.toLowerCase();
 
                     if (curOption.indexOf(value) > -1) {
-                        array.push(this.options()[i]);
+                        array.push(this.options()[i]); /*eslint max-depth: [2, 4]*/
                     }
                 }
 
@@ -361,13 +413,19 @@ define([
         /**
          * Check selected option
          *
-         * @param {String} label - option label
+         * @param {String} value - option value
          * @return {Boolean}
          */
         isSelected: function (value) {
             return _.contains(this.value(), value);
         },
 
+        /**
+         * Check optgroup label
+         *
+         * @param {Object} data - element data
+         * @return {Boolean}
+         */
         isOptgroupLabels: function (data) {
             return data.hasOwnProperty(this.separator) && this.optgroupLabels;
         },
@@ -375,7 +433,8 @@ define([
         /**
          * Check hovered option
          *
-         * @param {String} index - element index
+         * @param {Object} data - element data
+         * @param {String} elem - element
          * @return {Boolean}
          */
         isHovered: function (data, elem) {
@@ -444,7 +503,7 @@ define([
          * @param {Object} data - selected option data
          * @returns {Object} Chainable
          */
-        toggleOptionSelected: function (data, index, event) {
+        toggleOptionSelected: function (data) {
             var isSelected = this.isSelected(data.value);
 
             if (this.lastSelectable && data.hasOwnProperty(this.separator)) {
@@ -463,6 +522,12 @@ define([
             return this;
         },
 
+        /**
+         * Change visibility to child level
+         *
+         * @param {Object} data - element data
+         * @param {Object} elem - element
+         */
         openChildLevel: function (data, elem) {
             var contextElement;
 
@@ -470,7 +535,7 @@ define([
                 this.openLevelsAction &&
                 data.hasOwnProperty(this.separator) && _.isBoolean(this.levelsVisibility) ||
                 this.openLevelsAction &&
-                data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility) <= data.level
+                data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility, 10) <= data.level
             ) {
                 contextElement = ko.contextFor($(elem).parents('li').children('ul')[0]).$data.current;
                 contextElement.visible(!contextElement.visible());
@@ -480,7 +545,7 @@ define([
         /**
          * Check selected elements
          *
-         * @returns {Bollean}
+         * @returns {Boolean}
          */
         hasData: function () {
             if (!this.value()) {
@@ -499,8 +564,7 @@ define([
          */
 
         onMousemove: function (data, index, event) {
-            var target = $(event.target),
-                id,
+            var id,
                 context = ko.contextFor(event.target);
 
             if (this.isCursorPositionChange(event)) {
@@ -511,21 +575,22 @@ define([
                 id = this.getOptionIndex(context.$data);
             }
 
-            //action-menu-item
-            //if (target.hasClass('action-menu-item'))
-
-            //target.is('.action-menu-item') ? id = target.index() : id = target.parent('li').index();
-
-            //target.is('li') ? id = target.index() : id = target.parent('li').index();
             id !== this.hoverElIndex() ? this.hoverElIndex(id) : false;
 
             this.setCursorPosition(event);
         },
 
+        /**
+         * Get option index
+         *
+         * @param {Object} data - object with data about this element
+         *
+         * @returns {Number}
+         */
         getOptionIndex: function (data) {
             var index;
 
-            _.each(this.cacheOptions.plain, function(opt, id){
+            _.each(this.cacheOptions.plain, function (opt, id) {
                 if (data.value === opt.value) {
                     index = id;
                 }
