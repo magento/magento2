@@ -62,4 +62,31 @@
             <argument name="reservedAttributeList" xsi:type="object">Magento\Catalog\Model\Product\ReservedAttributeList\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="eav" xsi:type="array">
+                    <item name="default" xsi:type="array">
+                        <item name="read" xsi:type="string">Magento\Eav\Model\ResourceModel\ReadHandler</item>
+                        <item name="create" xsi:type="string">Magento\Eav\Model\ResourceModel\CreateHandler</item>
+                        <item name="update" xsi:type="string">Magento\Eav\Model\ResourceModel\UpdateHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\EntitySnapshot\AttributeProvider">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="array">
+                    <item name="eav" xsi:type="string">\Magento\Eav\Model\AttributeProvider</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\ResourceModel\ReadHandler">
+        <arguments>
+            <argument name="contextHandler" xsi:type="object">Magento\Eav\Model\ResourceModel\ContextHandler</argument>
+        </arguments>
+    </type>
 </config>

@@ -71,7 +71,8 @@ class Field extends AbstractComponent
         $formElement = $this->getData('config/formElement');
         if (null === $formElement) {
             throw new LocalizedException(__(
-                'The configuration parameter "formElement" is a required for "' . $this->getName() . '" field.'
+                'The configuration parameter "formElement" is a required for "%1" field.',
+                $this->getName()
             ));
         }
         // Create of wrapped component
@@ -87,7 +88,12 @@ class Field extends AbstractComponent
                 (array) $this->getData('config')
             )
         );
-        $this->wrappedComponent->prepare();
+
+        foreach ($this->components as $nameComponent => $component) {
+            $this->wrappedComponent->addComponent($nameComponent, $component);
+        }
+        $this->prepareChildComponent($this->wrappedComponent);
+
         $this->components = $this->wrappedComponent->getChildComponents();
         // Merge JS configuration with wrapped component configuration
         $wrappedComponentConfig = $this->getJsConfig($this->wrappedComponent);

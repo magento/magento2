@@ -7,6 +7,7 @@
     display: inline-block;
     position: relative;
     text-decoration: none;
+
     &:before {
         background: url(../Magento_ProductVideo/images/gallery-sprite.png) no-repeat left bottom;
         content: '';
@@ -19,6 +20,7 @@
         width: 49px;
         z-index: 1;
     }
+
     .image-placeholder-text {
         font-weight: 400;
     }
@@ -36,40 +38,50 @@
             float: left;
             margin-left: 80px;
             position: relative;
+
             input {
                 float: right;
             }
         }
+
         .admin__field-label {
             left: 0;
             margin-left: 35%;
             padding-left: 45px;
             position: absolute;
             width: 250px;
+
             &:before {
                 content: none;
             }
+
             span {
                 float: left;
             }
         }
     }
+
     &.field-new_video_disabled {
         margin-top: 32px;
     }
+
     &.field.field-new_video_screenshot {
         margin-bottom: 5px;
     }
+
     &.field.field-new_video_screenshot_preview {
         margin-bottom: 50px;
     }
+
     &.field-roleLabel {
         height: 0;
+
         .admin__field-control {
             #mix-grid .column(3, @field-grid__columns);
             float: left;
             margin-left: 80px;
             position: relative;
+
             .control-value {
                 color: @color-black;
                 font-family: 'Open Sans', @font-family__sans-serif;
@@ -93,6 +105,7 @@
             margin-bottom: 20px;
         }
     }
+
     .gallery .image .action-make-base,
     .images .image .action-make-base {
         .lib-button(
@@ -117,12 +130,14 @@
         position: absolute;
         right: 9px;
         width: 0 !important;
+
         &:before {
             left: 16px;
             position: absolute;
             top: -2px;
         }
     }
+
     .base-image .image-label {
         display: block;
     }
@@ -134,6 +149,7 @@
 
 .video-item {
     position: relative;
+
     &:after {
         background: url(../Magento_ProductVideo/images/gallery-sprite.png) bottom left;
         bottom: 0;
@@ -155,16 +171,19 @@
         float: left;
         width: 65%;
     }
+
     .video-player-sidebar {
         width: 34.99999%;
         float: left;
     }
+
     .video-player-container {
         width: 100%;
         height: 20vw;
         margin-bottom: 30px;
         border: 1px solid #e3e3e3;
         position: relative;
+
         &:after {
             content: '';
             position: absolute;
@@ -179,9 +198,11 @@
             z-index: 1;
         }
     }
+
     .video-information {
         margin-bottom: 7px;
         display: none;
+
         &:after {
             content: "";
             visibility: hidden;
@@ -189,6 +210,7 @@
             height: 0;
             clear: both;
         }
+
         label {
             font-family: 'Open Sans', @font-family__sans-serif;
             font-size: @font-size__s + 0.2;
@@ -198,6 +220,7 @@
             float: left;
             text-align: right;
         }
+
         span {
             font-family: 'Open Sans', @font-family__sans-serif;
             font-size: @font-size__s + 0.2;
@@ -208,6 +231,7 @@
             padding-left: 20px;
         }
     }
+
     .product-video {
         width: 100%;
         z-index: 20;
@@ -242,12 +266,14 @@
     font-weight: 400;
     padding: 7px 7px 7px 35px;
     position: relative;
+
     .image-upload-error-cross {
         position: absolute;
         left: 8px;
         top: 9px;
         width: 20px;
         height: 20px;
+
         &:before,
         &:after {
             position: absolute;
@@ -257,9 +283,11 @@
             width: 4px;
             background-color: @color-red9;
         }
+
         &:before {
             transform: rotate(45deg);
         }
+
         &:after {
             transform: rotate(-45deg);
         }

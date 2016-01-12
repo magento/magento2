@@ -140,7 +140,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $currentPage = '#pageCurrent';
+    protected $currentPage = '[data-ui-id="current-page-input"]';
 
     /**
      * Clear all applied Filters.
