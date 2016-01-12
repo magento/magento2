@@ -108,10 +108,9 @@ define([
          *
          */
         updateEditableData: function (record) {
-            var id = utils.getKeys(record[0], true),
-                value = record[0][id];
+            var id = _.keys(record[0])[0];
 
-            this.editableData[id] = value;
+            this.editableData[id] = record[0][id];
         },
 
         /**

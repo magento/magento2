@@ -61,7 +61,7 @@
             <xs:element name="actionsColumn" type="actionsColumn" />
             <xs:element name="selectionsColumn" type="selectionsColumn" />
             <xs:element type="insertForm" name="insertForm"/>
-            <xs:element type="insertGrid" name="insertGrid"/>
+            <xs:element type="insertListing" name="insertListing"/>
         </xs:all>
     </xs:complexType>
     <!-- Custom configuration -->
@@ -86,7 +86,7 @@
                     <xs:element type="fieldset" name="fieldset"/>
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="insertForm" name="insertForm"/>
-                    <xs:element type="insertGrid" name="insertGrid"/>
+                    <xs:element type="insertListing" name="insertListing"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

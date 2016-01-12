@@ -404,7 +404,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="insertGrid">
+    <xs:complexType name="insertListing">
         <xs:complexContent>
             <xs:extension base="ui_element">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
