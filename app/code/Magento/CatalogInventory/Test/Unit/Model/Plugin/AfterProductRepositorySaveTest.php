@@ -18,6 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Unit test for Magento\CatalogInventory\Model\Plugin\AfterProductRepositorySave
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AfterProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 {
@@ -250,36 +251,6 @@ class AfterProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->willReturn($this->stockItem);
 
-//        $storedStockItem = $this->getMockBuilder(StockItemInterface::class)
-//            ->setMethods(['getItemId'])
-//            ->getMockForAbstractClass();
-//        $storedStockItem->expects($this->once())
-//            ->method('getItemId')
-//            ->willReturn(500);
-
-//        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
-//            ->disableOriginalConstructor()->getMock();
-//        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
-//        $this->storeManager->expects($this->once())->method('getStore')->with($storeId)->willReturn($storeMock);
-//
-//        $this->product->expects(($this->exactly(2)))->method('getId')->willReturn($productId);
-//        $this->product->expects(($this->atLeastOnce()))->method('getStoreId')->willReturn($storeId);
-//        $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($sku);
-//
-//        $this->stockItem->expects($this->once())->method('setProductId')->with($productId);
-//        $this->stockItem->expects($this->once())->method('setWebsiteId')->with($websiteId);
-//
-//        $this->stockRegistry->expects($this->once())
-//            ->method('updateStockItemBySku')
-//            ->with($sku, $this->stockItem);
-//
-//        $newProductMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
-//            ->disableOriginalConstructor()->getMock();
-//        $this->productRepository->expects($this->once())
-//            ->method('get')
-//            ->with($sku, false, $storeId, true)
-//            ->willReturn($newProductMock);
-
         $this->plugin->afterSave($this->productRepository, $this->product);
     }
 
@@ -371,5 +342,4 @@ class AfterProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->plugin->afterSave($this->productRepository, $this->product);
     }
-
 }
