@@ -146,7 +146,7 @@ define([
             var query = utils.copy(params);
 
             ajaxSettings = _.extend({
-                url: this.updateUrl,
+                url: this['update_url'],
                 method: 'GET',
                 data: query,
                 dataType: 'json'

@@ -25,7 +25,7 @@ define([
             },
             imports: {
                 onSelectedChange: '${ $.selectionsProvider }:selected',
-                updateUrl: '${ $.externalProvider }:update_url'
+                'update_url': '${ $.externalProvider }:update_url'
             },
             exports: {
                 externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
