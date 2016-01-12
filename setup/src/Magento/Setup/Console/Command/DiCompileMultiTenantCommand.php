@@ -374,7 +374,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 $directoryInstancesNamesList->getList($path);
             }
         }
-        $inheritanceScanner = new Scanner\InheritanceInterceptorScanner();
+        $inheritanceScanner = new Scanner\InheritanceInterceptorScanner(
+            new \Magento\Framework\ObjectManager\InterceptableValidator()
+        );
         $this->entities['interceptors'] = $inheritanceScanner->collectEntities(
             get_declared_classes(),
             $this->entities['interceptors']

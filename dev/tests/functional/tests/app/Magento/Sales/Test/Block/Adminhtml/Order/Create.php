@@ -287,7 +287,7 @@ class Create extends Block
         $this->getBillingAddressBlock()->saveInAddressBookBillingAddress($saveAddress);
         $this->getTemplateBlock()->waitLoader();
         if ($setShippingAddress) {
-            $this->browser->find($this->header)->hover();
+            $this->browser->find($this->accountInformationBlock)->hover();
             $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
             $this->getTemplateBlock()->waitLoader();
         }
