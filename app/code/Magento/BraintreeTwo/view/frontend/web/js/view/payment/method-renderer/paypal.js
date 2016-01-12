@@ -197,7 +197,6 @@ define([
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
                 enableShippingAddress: true,
-                displayName: this.getMerchantName(),
                 shippingAddressOverride: {
                     recipientName: address.firstname + ' ' + address.lastname,
                     streetAddress: address.street[0],
@@ -223,6 +222,10 @@ define([
                     this.paymentMethodNonce = null;
                 }
             };
+
+            if (this.getMerchantName()) {
+                config.paypal.displayName = this.getMerchantName();
+            }
 
             return config;
         },
