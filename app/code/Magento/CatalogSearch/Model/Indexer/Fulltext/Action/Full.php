@@ -248,10 +248,11 @@ class Full
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => self::SCOPE_FIELD_NAME, 'value' => $storeId]);
             $this->indexHandler->deleteIndex([$dimension], $this->getIterator($productIds));
-            $this->indexHandler->saveIndex(
-                [$dimension],
-                $this->rebuildStoreIndex($storeId, $productIds)
-            );
+            $products = $this->rebuildStoreIndex($storeId, $productIds);
+            foreach ($products as $product) {
+                $this->indexHandler->saveIndex([$dimension], $product);
+            }
+
         }
         $this->fulltextResource->resetSearchResults();
         $this->searchRequestConfig->reset();
@@ -287,6 +288,7 @@ class Full
      */
     public function rebuildStoreIndex($storeId, $productIds = null)
     {
+        $output = [];
         if ($productIds !== null) {
             $productIds = array_unique(array_merge($productIds, $this->getProductIdsFromParents($productIds)));
         }
@@ -373,9 +375,10 @@ class Full
 
                 $index = $this->prepareProductIndex($productIndex, $productData, $storeId);
 
-                yield $productData['entity_id'] => $index;
+                $output[] = new \ArrayObject([$productData['entity_id'] => $index]);
             }
         }
+        return $output;
     }
 
     /**
