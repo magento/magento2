@@ -2380,7 +2380,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
-            foreach ($urlKeyDuplicates as $urlKey => $entityData) {
+            foreach ($urlKeyDuplicates as $entityData) {
                 $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];
                 $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum);
             }

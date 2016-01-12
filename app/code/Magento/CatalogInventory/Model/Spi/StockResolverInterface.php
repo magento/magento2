@@ -16,5 +16,4 @@ interface StockResolverInterface
      * @return int
      */
     public function getStockId($productId, $websiteId);
-
 }
