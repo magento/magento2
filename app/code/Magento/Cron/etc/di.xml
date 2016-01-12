@@ -36,4 +36,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\AreaList">
+        <arguments>
+            <argument name="areas" xsi:type="array">
+                <item name="crontab" xsi:type="array">
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
