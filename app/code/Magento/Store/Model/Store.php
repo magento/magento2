@@ -69,6 +69,10 @@ class Store extends AbstractExtensibleModel implements
 
     const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
 
+    const XML_PATH_ENABLE_HSTS = 'web/secure/enable_hsts';
+
+    const XML_PATH_ENABLE_UPGRADE_INSECURE = 'web/secure/enable_upgrade_insecure';
+
     const XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
 
     const XML_PATH_UNSECURE_BASE_LINK_URL = 'web/unsecure/base_link_url';
