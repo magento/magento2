@@ -592,4 +592,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction">
+        <arguments>
+            <argument name="skipStaticColumns" xsi:type="array">
+                <item name="entity_type_id" xsi:type="string">entity_type_id</item>
+                <item name="attribute_set_id" xsi:type="string">attribute_set_id</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

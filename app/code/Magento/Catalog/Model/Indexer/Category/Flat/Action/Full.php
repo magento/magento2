@@ -59,7 +59,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
                 $categories[$store->getRootCategoryId()] = $this->connection->fetchAll($select);
                 $categoriesIds[$store->getRootCategoryId()] = [];
                 foreach ($categories[$store->getRootCategoryId()] as $category) {
-                    $categoriesIds[$store->getRootCategoryId()][] = $category['entity_id'];
+                    $categoriesIds[$store->getRootCategoryId()][] = $category[$this->categoryMetadata->getLinkField()];
                 }
             }
             /** @TODO Do something with chunks */
@@ -68,12 +68,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
                 $attributesData = $this->getAttributeValues($categoriesIdsChunk, $store->getId());
                 $data = [];
                 foreach ($categories[$store->getRootCategoryId()] as $category) {
-                    if (!isset($attributesData[$category['entity_id']])) {
+                    if (!isset($attributesData[$category[$this->categoryMetadata->getLinkField()]])) {
                         continue;
                     }
                     $category['store_id'] = $store->getId();
                     $data[] = $this->prepareValuesToInsert(
-                        array_merge($category, $attributesData[$category['entity_id']])
+                        array_merge($category, $attributesData[$category[$this->categoryMetadata->getLinkField()]])
                     );
                 }
                 $this->connection->insertMultiple(
