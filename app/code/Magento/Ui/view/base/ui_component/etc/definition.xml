@@ -186,6 +186,17 @@
             </item>
         </argument>
     </wysiwyg>
+    <action_delete class="Magento\Ui\Component\Form\Element\ActionDelete">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                <item name="config" xsi:type="array">
+                    <item name="elementTmpl" xsi:type="string">ui/dynamicRows/cells/action-delete</item>
+                    <item name="template" xsi:type="string">ui/dynamicRows/cells/action-delete</item>
+                </item>
+            </item>
+        </argument>
+    </action_delete>
     <input class="Magento\Ui\Component\Form\Element\Input">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -356,6 +367,14 @@
             </item>
         </argument>
     </columnsControls>
+    <dynamicRows class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/dynamicRows/dynamic-rows</item>
+                <item name="template" xsi:type="string">ui/dynamicRows/templates/default</item>
+            </item>
+        </argument>
+    </dynamicRows>
     <listingToolbar class="Magento\Ui\Component\Container">
          <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
