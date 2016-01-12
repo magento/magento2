@@ -12,7 +12,6 @@ use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 
 /**
  * Class TokenProvider
- * @api
  */
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
