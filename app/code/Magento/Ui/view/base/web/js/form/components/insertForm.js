@@ -56,15 +56,18 @@ define([
                     exports: {
                         ajaxSave: '${ $.externalForm }:ajaxSave'
                     },
-                    imports: {
-                        _responseStatus: '${ $.externalForm }:responseStatus',
+                    links: {
+                        responseStatus: '${ $.externalForm }:responseStatus',
                         responseData: '${ $.externalForm }:responseData'
-                    },
-                    listens: {
-                        _responseStatus: 'onResponseStatus'
                     }
                 }
             }
+        },
+
+        /** @inheritdoc */
+        initObservable: function () {
+            return this._super()
+                .observe('responseStatus');
         },
 
         /** @inheritdoc */
@@ -98,19 +101,12 @@ define([
         },
 
         /**
-         * Convert status to boolean.
-         * @param {String} status
-         */
-        onResponseStatus: function (status) {
-            this.set('responseStatus', status === 'success');
-        },
-
-        /**
-         * Reset external form data.
+         * Reset external form data and response status.
          */
         resetForm: function () {
             if (this.externalSource()) {
                 this.externalSource().trigger('data.reset');
+                this.responseStatus(undefined);
             }
         }
     });
