@@ -66,6 +66,7 @@ class ConvertToCsv
         $stream->lock();
         $stream->writeCsv($this->metadataProvider->getHeaders($component));
         foreach ($searchResult->getItems() as $document) {
+            $this->metadataProvider->convertDate($document, $component->getName());
             $stream->writeCsv($this->metadataProvider->getRowData($document, $fields, $options));
         }
         $stream->unlock();

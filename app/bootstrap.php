@@ -41,6 +41,5 @@ if (!empty($_SERVER['MAGE_PROFILER'])
         !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
     );
 }
-if (ini_get('date.timezone') == '') {
-    date_default_timezone_set('UTC');
-}
+
+date_default_timezone_set('UTC');

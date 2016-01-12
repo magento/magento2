@@ -61,7 +61,7 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
             );
             $category->setData('save_rewrites_history', $saveRewritesHistory);
             $urlRewrites = array_merge(
-                $this->categoryUrlRewriteGenerator->generate($category),
+                $this->categoryUrlRewriteGenerator->generate($category, true),
                 $this->urlRewriteHandler->generateProductUrlRewrites($category)
             );
             $this->urlRewriteHandler->deleteCategoryRewritesForChildren($category);

@@ -71,11 +71,13 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->productRepositoryMock = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
         $this->productMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
-        $this->savedProductMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
+        $this->savedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->closureMock = function () {
             return $this->savedProductMock;
         };
-        $this->stockItemMock = $this->getMock('\Magento\CatalogInventory\Api\Data\StockItemInterface');
+        $this->stockItemMock = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockItemInterface')
+            ->setMethods(['setWebsiteId', 'getWebsiteId'])
+            ->getMockForAbstractClass();
     }
 
     public function testAroundSaveWhenProductHasNoStockItemNeedingToBeUpdated()

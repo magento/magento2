@@ -1,62 +1,103 @@
-/**
+/*
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
-   './rules'
-], function (rules) {
-    'use strict';    
+    'underscore',
+    './rules'
+], function (_, rulesList) {
+    'use strict';
 
-    function validate(rule, value, params){
-        var isValid   = true,
-            rule      = rules[rule],
-            message   = true,
-            validator;
+    /**
+     * Validates provided value be the specified rule.
+     *
+     * @param {String} id - Rule identifier.
+     * @param {*} value - Value to be checked.
+     * @param {*} [params]
+     * @returns {Object}
+     */
+    function validate(id, value, params) {
+        var rule    = rulesList[id],
+            message = rule.message,
+            valid   = rule.handler(value, params),
+            result;
 
-        if (rule) {
-            validator = rule[0];
-            isValid   = validator(value, params);
-            params    = Array.isArray(params) ? params : [params];
-            message   = params.reduce(function (message, param, idx) {
-                return message.replace(new RegExp('\\{' + idx + '\\}', 'g'), param);
-            }, rule[1]);
+        result = {
+            rule: id,
+            passed: true,
+            message: ''
+        };
+
+        if (!valid) {
+            params = Array.isArray(params) ?
+                params :
+                [params];
+
+            message = params.reduce(function (msg, param, idx) {
+                return msg.replace(new RegExp('\\{' + idx + '\\}', 'g'), param);
+            }, message);
+
+            result.passed = false;
+            result.message = message;
         }
 
-        return !isValid ? message : '';
+        return result;
     }
 
     /**
-     * Validates value by rule and it's params.
-     * @param {(String|Object)} rule - One or many validation rules.
-     * @param {*} value - Value to validate.
-     * @param {*} [params] - Rule configuration
-     * @return {String} Resulting error message if value is invalid.
+     * Validates provied value by a specfied set of rules.
+     *
+     * @param {(String|Object)} rules - One or many validation rules.
+     * @param {*} value - Value to be checked.
+     * @returns {Object}
      */
-    function validator(rule, value, params){
-        var msg = '';
+    function validator(rules, value) {
+        var result;
 
-        if(_.isObject(rule)){
-            _.some(rule, function(params, rule){
-                return !!(msg = validate(rule, value, params));
+        if (typeof rules === 'object') {
+            result = {
+                passed: true
+            };
+
+            _.every(rules, function (params, id) {
+                if (params !== false) {
+                    result = validate(id, value, params);
+
+                    return result.passed;
+                }
+
+                return true;
             });
-        }
-        else{
-            msg = validate.apply(null, arguments);
+
+            return result;
         }
 
-        return msg;
+        return validate.apply(null, arguments);
     }
 
     /**
      * Adds new validation rule.
-     * 
-     * @param {String} rule - rule name
-     * @param {Function} validator - validation function
-     * @param {String} message - validation message
+     *
+     * @param {String} id - Rule identifier.
+     * @param {Function} handler - Validation function.
+     * @param {String} message - Error message.
      */
-    validator.addRule = function(rule, validator, message){
-        rules[rule] = [validator, message];
-    }
+    validator.addRule = function (id, handler, message) {
+        rulesList[id] = {
+            handler: handler,
+            message: message
+        };
+    };
+
+    /**
+     * Returns rule object found by provided identifier.
+     *
+     * @param {String} id - Rule identifier.
+     * @returns {Object}
+     */
+    validator.getRule = function (id) {
+        return rulesList[id];
+    };
 
     return validator;
 });

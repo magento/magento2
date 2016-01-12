@@ -11,6 +11,7 @@ use Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 class CategoryUrlRewriteGenerator
 {
@@ -33,29 +34,38 @@ class CategoryUrlRewriteGenerator
     protected $childrenUrlRewriteGenerator;
 
     /**
+     * @var bool
+     */
+    protected $overrideStoreUrls;
+
+    /**
      * @param \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator $childrenUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
+     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator,
         CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator,
         ChildrenUrlRewriteGenerator $childrenUrlRewriteGenerator,
-        StoreViewService $storeViewService
+        StoreViewService $storeViewService,
+        CategoryRepositoryInterface $categoryRepository
     ) {
         $this->storeViewService = $storeViewService;
         $this->canonicalUrlRewriteGenerator = $canonicalUrlRewriteGenerator;
         $this->childrenUrlRewriteGenerator = $childrenUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generate($category)
+    public function generate($category, $overrideStoreUrls = false)
     {
         $this->category = $category;
+        $this->overrideStoreUrls = $overrideStoreUrls;
 
         $storeId = $this->category->getStoreId();
         $urls = $this->isGlobalScope($storeId)
@@ -75,14 +85,41 @@ class CategoryUrlRewriteGenerator
     {
         $urls = [];
         $categoryId = $this->category->getId();
-        foreach ($this->category->getStoreIds() as $id) {
-            if (!$this->isGlobalScope($id)
-                && !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore($id, $categoryId, Category::ENTITY)
+        foreach ($this->category->getStoreIds() as $storeId) {
+            if (!$this->isGlobalScope($storeId)
+                && $this->isOverrideUrlsForStore($storeId, $categoryId)
             ) {
-                $urls = array_merge($urls, $this->generateForSpecificStoreView($id));
+                $this->updateCategoryUrlForStore($storeId);
+                $urls = array_merge($urls, $this->generateForSpecificStoreView($storeId));
             }
         }
         return $urls;
+    }
+
+    /**
+     * @param int $storeId
+     * @param int $categoryId
+     * @return bool
+     */
+    protected function isOverrideUrlsForStore($storeId, $categoryId)
+    {
+        return $this->overrideStoreUrls || !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+            $storeId,
+            $categoryId,
+            Category::ENTITY
+        );
+    }
+
+    /**
+     * Override url key and url path for category in specific Store
+     *
+     * @param int $storeId
+     * @return void
+     */
+    protected function updateCategoryUrlForStore($storeId)
+    {
+        $category = $this->categoryRepository->get($this->category->getId(), $storeId);
+        $this->category->addData(['url_key' => $category->getUrlKey(), 'url_path' => $category->getUrlPath()]);
     }
 
     /**

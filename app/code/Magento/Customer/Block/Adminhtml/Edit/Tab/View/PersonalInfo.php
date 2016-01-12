@@ -195,8 +195,12 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         $createdAt = $this->getCustomer()->getCreatedAt();
         try {
-            $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $createdAt, true);
-            return $this->formatDate($date, \IntlDateFormatter::MEDIUM, true);
+            return $this->formatDate(
+                $createdAt,
+                \IntlDateFormatter::MEDIUM,
+                true,
+                $this->getStoreCreateDateTimezone()
+            );
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             return '';

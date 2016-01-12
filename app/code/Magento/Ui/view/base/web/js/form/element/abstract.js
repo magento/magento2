@@ -18,6 +18,7 @@ define([
             focused: false,
             required: false,
             disabled: false,
+            elementTmpl: 'ui/form/element/input',
             tooltipTpl: 'ui/form/element/helper/tooltip',
             'input_type': 'input',
             placeholder: '',
@@ -191,7 +192,7 @@ define([
          * @returns {Boolean}
          */
         hasChanged: function () {
-            var notEqual = this.value() != this.initialValue;
+            var notEqual = this.value() !== this.initialValue;
 
             return !this.visible() ? false : notEqual;
         },
@@ -241,11 +242,12 @@ define([
          * @returns {Object} Validate information.
          */
         validate: function () {
-            var value = this.value(),
-                msg = validator(this.validation, value),
-                isValid = !this.visible() || !msg;
+            var value   = this.value(),
+                result  = validator(this.validation, value),
+                message = result.message,
+                isValid = !this.visible() || result.passed;
 
-            this.error(msg);
+            this.error(message);
 
             //TODO: Implement proper result propagation for form
             if (!isValid) {

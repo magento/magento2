@@ -311,7 +311,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     {
         $specialTags = $tagHtml . '<span class="translate-inline-' . $tagName . '" ' . $this->_getHtmlAttribute(
             self::DATA_TRANSLATE,
-            htmlspecialchars('[' . join(',', $trArr) . ']')
+            '[' . join(',', $trArr) . ']'
         );
         $additionalAttr = $this->_getAdditionalHtmlAttribute($tagName);
         if ($additionalAttr !== null) {
@@ -365,10 +365,10 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         while (preg_match($regexp, $text, $matches, PREG_OFFSET_CAPTURE, $next)) {
             $trArr[] = json_encode(
                 [
-                    'shown' => $matches[1][0],
-                    'translated' => $matches[2][0],
-                    'original' => $matches[3][0],
-                    'location' => call_user_func($locationCallback, $matches, $options),
+                    'shown' => htmlspecialchars_decode($matches[1][0]),
+                    'translated' => htmlspecialchars_decode($matches[2][0]),
+                    'original' => htmlspecialchars_decode($matches[3][0]),
+                    'location' => htmlspecialchars_decode(call_user_func($locationCallback, $matches, $options)),
                 ]
             );
             $text = substr_replace($text, $matches[1][0], $matches[0][1], strlen($matches[0][0]));
@@ -411,15 +411,14 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                 ) . '#i';
                 if (preg_match($transRegExp, $tagHtml, $matches)) {
                     $tagHtml = str_replace($matches[0], '', $tagHtml);
-                    //remove tra
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        htmlspecialchars('[' . $matches[1] . ',' . join(',', $trArr) . ']')
+                        '[' . htmlspecialchars($matches[1]) . ',' . join(',', $trArr) . ']'
                     );
                 } else {
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        htmlspecialchars('[' . join(',', $trArr) . ']')
+                        '[' . join(',', $trArr) . ']'
                     );
                 }
                 $trAttr = $this->_addTranslateAttribute($trAttr);
@@ -581,16 +580,16 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         while (preg_match('#' . self::REGEXP_TOKEN . '#', $this->_content, $matches, PREG_OFFSET_CAPTURE, $next)) {
             $translateProperties = json_encode(
                 [
-                    'shown' => $matches[1][0],
-                    'translated' => $matches[2][0],
+                    'shown' => htmlspecialchars($matches[1][0]),
+                    'translated' => htmlspecialchars($matches[2][0]),
                     'original' => $matches[3][0],
                     'location' => 'Text',
-                    'scope' => $matches[4][0],
+                    'scope' => htmlspecialchars($matches[4][0]),
                 ]
             );
 
             $spanHtml = $this->_getDataTranslateSpan(
-                htmlspecialchars('[' . $translateProperties . ']'),
+                '[' . htmlspecialchars($translateProperties) . ']',
                 $matches[1][0]
             );
             $this->_content = substr_replace($this->_content, $spanHtml, $matches[0][1], strlen($matches[0][0]));

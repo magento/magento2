@@ -26,12 +26,14 @@
         .step-title {
             margin-bottom: 0;
         }
+
         .payment-method {
             &:first-child {
                 .payment-method-title {
                     border-top: 0;
                 }
             }
+
             &._active {
                 .payment-method-content {
                     display: block;
@@ -121,14 +123,17 @@
                 &:extend(.abs-visually-hidden all);
             }
         }
+
         .payment-method-iframe {
             background-color: transparent;
             display: none;
             width: 100%;
         }
+
         .no-payments-block {
             margin: @indent__base 0;
         }
+
         .payments {
             .legend {
                 &:extend(.abs-visually-hidden all);
@@ -177,6 +182,7 @@
                 }
             }
         }
+
         .fieldset {
             > .field-select-billing {
                 > .control {
@@ -186,10 +192,12 @@
             }
         }
     }
+
     .payment-method-billing-address {
         .action-update {
             float: right;
         }
+
         .actions-toolbar {
             .action-cancel {
                 margin: 6px @indent__base 0 0;

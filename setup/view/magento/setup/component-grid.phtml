@@ -38,7 +38,7 @@
                 <li class="item col-m-4">
                     <div ng-hide="isOutOfSync" class="item-title">Last Sync</div>
                     <div ng-hide="isOutOfSync" class="item-date">
-                        at {{lastSyncDate|date:"h:mm:ssa"}} on {{lastSyncDate|date:"d MMM yyyy"}}
+                        at {{lastSyncTime}} on {{lastSyncDate}}
                     </div>
                     <span ng-show="isOutOfSync">No sync history</span>
                     <button type="button" ng-click="sync()" class="btn">Sync</button>

@@ -88,9 +88,13 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTimezone()
+    public function getConfigTimezone($scopeType = null, $scopeCode = null)
     {
-        return $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType);
+        return $this->_scopeConfig->getValue(
+            $this->getDefaultTimezonePath(),
+            $scopeType ?: $this->_scopeType,
+            $scopeCode
+        );
     }
 
     /**
@@ -145,7 +149,7 @@ class Timezone implements TimezoneInterface
     {
         $locale = $locale ?: $this->_localeResolver->getLocale();
         $timezone = $useTimezone
-            ? $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType)
+            ? $this->getConfigTimezone()
             : date_default_timezone_get();
 
         if (empty($date)) {
@@ -231,7 +235,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
      * @param null $locale
@@ -240,16 +244,22 @@ class Timezone implements TimezoneInterface
      * @return string
      */
     public function formatDateTime(
-        \DateTimeInterface $date,
+        $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
         $timezone = null,
         $pattern = null
     ) {
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime($date);
+        }
+
         if ($timezone === null) {
-            if ($date->getTimezone() === null || $date->getTimezone()->getName() === '+00:00') {
-                $timezone = new \DateTimeZone('UTC');
+            if ($date->getTimezone() == null || $date->getTimezone()->getName() == 'UTC'
+                || $date->getTimezone()->getName() == '+00:00'
+            ) {
+                $timezone = $this->getConfigTimezone();
             } else {
                 $timezone = $date->getTimezone();
             }

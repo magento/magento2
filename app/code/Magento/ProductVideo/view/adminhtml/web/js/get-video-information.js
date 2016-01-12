@@ -326,19 +326,31 @@ require([
                 eventSource: '' //where is data going from - focus out or click on button
             },
 
-            _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
+            _REQUEST_VIDEO_INFORMATION_TRIGGER: 'request_video_information',
 
             _UPDATE_VIDEO_INFORMATION_TRIGGER: 'updated_video_information',
 
+            _START_UPDATE_INFORMATION_TRIGGER: 'update_video_information',
+
             _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_updated_information',
 
+            _FINISH_UPDATE_INFORMATION_TRIGGER: 'finish_update_information',
+
             _videoInformation: null,
+
+            _currentVideoUrl: null,
 
             /**
              * @private
              */
             _init: function () {
-                this._onRequestHandler();
+                this.element.on(this._START_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onRequestHandler, this));
+                this.element.on(this._ERROR_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onVideoInvalid, this));
+                this.element.on(this._FINISH_UPDATE_INFORMATION_TRIGGER, $.proxy(
+                    function () {
+                        this._currentVideoUrl = null;
+                    }, this
+                ));
             },
 
             /**
@@ -352,8 +364,17 @@ require([
                     id,
                     googleapisUrl;
 
+                if (this._currentVideoUrl === url) {
+                    return;
+                }
+
+                this._currentVideoUrl = url;
+
+                this.element.trigger(this._REQUEST_VIDEO_INFORMATION_TRIGGER, {
+                    url: url
+                });
+
                 if (!url) {
-                    //this._onRequestError("Video url is undefined");
                     return;
                 }
 
@@ -434,6 +455,7 @@ require([
                     };
                     this._videoInformation = respData;
                     this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
+                    this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
                 }
 
                 /**
@@ -462,6 +484,7 @@ require([
                     };
                     this._videoInformation = respData;
                     this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
+                    this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
                 }
 
                 type = videoInfo.type;
@@ -483,29 +506,43 @@ require([
                         }
                     );
                 } else if (type === 'vimeo') {
-                    $.getJSON(window.location.protocol + '//www.vimeo.com/api/v2/video/' + id + '.json?callback=?',
-                        {
+                    $.ajax({
+                        url: window.location.protocol + '//www.vimeo.com/api/v2/video/' + id + '.json',
+                        dataType: 'jsonp',
+                        data: {
                             format: 'json'
                         },
-                        $.proxy(_onVimeoLoaded, self)
-                    ).fail(
-                        function () {
-                            self._onRequestError('Video not found');
+                        timeout: 5000,
+                        success:  $.proxy(_onVimeoLoaded, self),
+
+                        /**
+                         * @private
+                         */
+                        error: function () {
+                            self._onRequestError($.mage.__('Video not found'));
                         }
-                    );
+                    });
                 }
             },
 
             /**
              * @private
              */
-            _onRequestError: function (error) {
+            _onVideoInvalid: function (event, data) {
                 this._videoInformation = null;
-                this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, error);
                 this.element.val('');
                 alert({
-                    content: 'Error: "' + error + '"'
+                    content: 'Error: "' + data + '"'
                 });
+            },
+
+            /**
+             * @private
+             */
+            _onRequestError: function (error) {
+                this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, error);
+                this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, false);
+                this._currentVideoUrl = null;
             },
 
             /**
@@ -573,7 +610,10 @@ require([
                     vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
                         '?|groups\\/([^\\/]*)\\/videos\\/|album\\/(\\d+)\\/video\\/|video\\/|)(\\d+)(?:$|\\/|\\?)'
                     ].join(''));
-                    id = href.href.match(vimeoRegex)[3];
+
+                    if (href.href.match(vimeoRegex) != null) {
+                        id = href.href.match(vimeoRegex)[3];
+                    }
                 }
 
                 if ((!id || !type) && forceVideo) {
