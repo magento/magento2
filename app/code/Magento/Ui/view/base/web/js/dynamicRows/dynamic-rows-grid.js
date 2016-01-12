@@ -4,20 +4,17 @@
  */
 
 define([
-    'ko',
     'mageUtils',
     'underscore',
-    'uiLayout',
     './dynamic-rows'
-], function (ko, utils, _, layout, dynamicRows) {
+], function (utils, _, dynamicRows) {
     'use strict';
 
     return dynamicRows.extend({
         defaults: {
             dataProvider: '',
-            insertData: null,
-            map: null,
-            temporaryData: null,
+            insertData: [],
+            map: {},
             cacheGridData: [],
             listens: {
                 'insertData': 'processingInsertData',
@@ -66,8 +63,8 @@ define([
         deleteRecord: function (index) {
             var dataObj,
                 rowInstance = _.find(this.elems(), function (elem) {
-                return elem.index === index;
-            });
+                    return elem.index === index;
+                });
 
             this.notTriggered = true;
             this._super();

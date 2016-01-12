@@ -2,13 +2,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'ko',
-    'Magento_Ui/js/lib/view/utils/async',
+    'jquery',
     'underscore',
-    'uiRegistry',
-    'uiElement'
-], function (ko, $, _, registry, Element) {
+    'uiElement',
+    'Magento_Ui/js/lib/view/utils/async'
+], function (ko, $, _, Element) {
     'use strict';
 
     /**
@@ -17,6 +18,32 @@ define([
     function getContext(elem) {
         return ko.contextFor(elem);
     }
+
+    /**
+     * Defines supported css 'transform' property.
+     *
+     * @returns {String|Undefined}
+     */
+
+    var transformProp = (function () {
+        var style = document.body.style,
+            base = 'Transform',
+            vendors = ['webkit', 'moz', 'ms', 'o'],
+            vi = vendors.length,
+            property;
+
+        if (typeof style.transform != 'undefined') {
+            return 'transform';
+        }
+
+        while (vi--) {
+            property = vendors[vi] + base;
+
+            if (typeof style[property] != 'undefined') {
+                return property;
+            }
+        }
+    })();
 
     return Element.extend({
         defaults: {
@@ -45,7 +72,6 @@ define([
             );
 
             this._super();
-
             $.async(this.tableSelector, this.initTable);
 
             return this;
@@ -120,20 +146,11 @@ define([
                 processingMinYpos = this.draggableElement.minYpos + 'px';
 
             if (positionY > this.draggableElement.minYpos && positionY < this.draggableElement.maxYpos) {
-                $(this.draggableElement.instance).css(
-                    'transform',
-                    'translateY(' + processingPositionY + ')'
-                );
+                $(this.draggableElement.instance)[0].style[transformProp] = 'translateY(' + processingPositionY + ')';
             } else if (positionY < this.draggableElement.minYpos) {
-                $(this.draggableElement.instance).css(
-                    'transform',
-                    'translateY(' + processingMinYpos + ')'
-                );
+                $(this.draggableElement.instance)[0].style[transformProp] = 'translateY(' + processingMinYpos + ')';
             } else if (positionY >= this.draggableElement.maxYpos) {
-                $(this.draggableElement.instance).css(
-                    'transform',
-                    'translateY(' + processingMaxYpos + ')'
-                );
+                $(this.draggableElement.instance)[0].style[transformProp] = 'translateY(' + processingMaxYpos + ')';
             }
         },
 
@@ -176,7 +193,6 @@ define([
                 rangeEnd = rangeStart + recordsCollection.eq(i).height();
 
                 if (curInstancePosition > rangeStart && curInstancePosition < rangeEnd) {
-
                     result = recordsCollection.eq(i);
                 }
             }
@@ -194,9 +210,7 @@ define([
             var originRecord = $(elem).parents('tr'),
                 position = originRecord.position();
 
-            position.position = 'absolute';
-            position.top += 1;
-            position['z-index'] = '999';
+            ++position.top;
             $(data).css(position);
         },
 
