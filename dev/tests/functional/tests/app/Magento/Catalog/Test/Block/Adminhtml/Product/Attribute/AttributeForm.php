@@ -45,19 +45,19 @@ class AttributeForm extends FormTabs
     /**
      * @constructor
      * @param SimpleElement $element
-     * @param Mapper $mapper
      * @param BlockFactory $blockFactory
+     * @param Mapper $mapper
      * @param BrowserInterface $browser
      * @param array $config
      */
     public function __construct(
         SimpleElement $element,
-        Mapper $mapper,
         BlockFactory $blockFactory,
+        Mapper $mapper,
         BrowserInterface $browser,
         array $config = []
     ) {
-        parent::__construct($element, $mapper, $blockFactory, $browser, $config);
+        parent::__construct($element, $blockFactory, $mapper, $browser, $config);
         $this->browser->switchToFrame(new Locator($this->iFrame));
     }
 
@@ -89,9 +89,9 @@ class AttributeForm extends FormTabs
      */
     public function openTab($tabName)
     {
-        $selector = $this->tabs[$tabName]['selector'];
-        $strategy = isset($this->tabs[$tabName]['strategy'])
-            ? $this->tabs[$tabName]['strategy']
+        $selector = $this->getTabs()[$tabName]['selector'];
+        $strategy = isset($this->getTabs()[$tabName]['strategy'])
+            ? $this->getTabs()[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
 
         $isTabOpened = $this->_rootElement->find($this->isTabOpened . $selector, $strategy);
