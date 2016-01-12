@@ -21,6 +21,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class StockRegistryProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class StockRegistryProvider implements StockRegistryProviderInterface
 {
