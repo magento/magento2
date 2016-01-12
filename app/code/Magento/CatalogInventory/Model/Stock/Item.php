@@ -34,6 +34,8 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     protected $eventPrefix = 'cataloginventory_stock_item';
 
+    const WEBSITE_ID = 'website_id';
+
     /**
      * Parameter name in event
      *
@@ -161,7 +163,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     {
         $websiteId = $this->getData(static::WEBSITE_ID);
         if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
+            $websiteId = $this->stockConfiguration->getDefaultScopeId();
         }
         return (int) $websiteId;
     }

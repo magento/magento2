@@ -21,7 +21,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     const CHANGE_PASSWORD_URL = 'http://localhost/index.php/account/edit/changepass/1';
 
-    const EMAIL_ADDRESS = 'john.doe@ebay.com';
+    const EMAIL_ADDRESS = 'john.doe@example.com';
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\View\Element\Template\Context */
     private $_context;

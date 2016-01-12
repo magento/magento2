@@ -129,6 +129,7 @@
     <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Framework\Locale\Resolver" />
     <preference for="Magento\Framework\Stdlib\DateTime\TimezoneInterface" type="Magento\Framework\Stdlib\DateTime\Timezone" />
 
+    <preference for="Magento\Framework\Communication\ConfigInterface" type="Magento\Framework\Communication\Config" />
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\ModuleResource" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
@@ -140,6 +141,7 @@
     <preference for="Magento\Framework\Code\Reader\ClassReaderInterface" type="Magento\Framework\Code\Reader\ClassReader" />
     <preference for="Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface" type="Magento\Framework\Stdlib\DateTime\DateTimeFormatter"/>
     <preference for="Magento\Framework\Api\Search\SearchInterface" type="Magento\Framework\Search\Search"/>
+    <preference for="Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -1069,6 +1071,57 @@
             <argument name="converter" xsi:type="object">Magento\Framework\Config\Converter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Framework\Config\SchemaLocator</argument>
             <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\SelectFactory">
+        <arguments>
+            <argument name="selectRenderer" xsi:type="object">Magento\Framework\DB\Select\RendererProxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\Select\SelectRenderer">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="distinct" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\DistinctRenderer</item>
+                    <item name="sort" xsi:type="string">100</item>
+                </item>
+                <item name="columns" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\ColumnsRenderer</item>
+                    <item name="sort" xsi:type="string">200</item>
+                </item>
+                <item name="union" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\UnionRenderer</item>
+                    <item name="sort" xsi:type="string">300</item>
+                </item>
+                <item name="from" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\FromRenderer</item>
+                    <item name="sort" xsi:type="string">400</item>
+                </item>
+                <item name="where" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\WhereRenderer</item>
+                    <item name="sort" xsi:type="string">500</item>
+                </item>
+                <item name="group" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\GroupRenderer</item>
+                    <item name="sort" xsi:type="string">600</item>
+                </item>
+                <item name="having" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\HavingRenderer</item>
+                    <item name="sort" xsi:type="string">700</item>
+                </item>
+                <item name="order" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\OrderRenderer</item>
+                    <item name="sort" xsi:type="string">800</item>
+                </item>
+                <item name="limit" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\LimitRenderer</item>
+                    <item name="sort" xsi:type="string">900</item>
+                </item>
+                <item name="for_update" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\ForUpdateRenderer</item>
+                    <item name="sort" xsi:type="string">1000</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

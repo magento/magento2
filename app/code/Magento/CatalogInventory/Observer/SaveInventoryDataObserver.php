@@ -123,7 +123,7 @@ class SaveInventoryDataObserver implements ObserverInterface
         $stockItemData['product_id'] = $product->getId();
 
         if (!isset($stockItemData['website_id'])) {
-            $stockItemData['website_id'] = $this->stockConfiguration->getDefaultWebsiteId();
+            $stockItemData['website_id'] = $this->stockConfiguration->getDefaultScopeId();
         }
         $stockItemData['stock_id'] = $this->stockRegistry->getStock($stockItemData['website_id'])->getStockId();
 

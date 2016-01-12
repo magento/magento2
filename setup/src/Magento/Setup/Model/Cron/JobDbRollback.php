@@ -54,6 +54,7 @@ class JobDbRollback extends AbstractJob
             $rollbackHandler = $this->backupRollbackFactory->create($this->output);
             $dbBackupFile = $this->params['backup_file_name'];
             if (!empty($dbBackupFile)) {
+                $this->setAreaCode();
                 $rollbackHandler->dbRollback(basename($dbBackupFile));
             } else {
                 $this->status->add(
@@ -69,5 +70,21 @@ class JobDbRollback extends AbstractJob
                 $e
             );
         }
+    }
+
+    /**
+     * Sets area code to start a session for database backup and rollback
+     *
+     * @return void
+     */
+    private function setAreaCode()
+    {
+        $areaCode = 'adminhtml';
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

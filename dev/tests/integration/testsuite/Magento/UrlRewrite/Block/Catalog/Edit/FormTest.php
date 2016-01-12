@@ -196,7 +196,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 null,
-                ['entity_id' => 3, 'level' => 2, 'url_key' => 'category', 'store_id' => 1],
+                ['entity_id' => 3, 'level' => 2, 'parent_id' => 2, 'url_key' => 'category', 'store_id' => 1],
                 'category/3',
                 'category.html',
                 'catalog/category/view/id/3',
@@ -210,7 +210,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 ['entity_id' => 2, 'name' => 'product', 'store_id' => 1],
-                ['entity_id' => 3, 'level' => 2, 'url_key' => 'category', 'store_id' => 1],
+                ['entity_id' => 3, 'parent_id' => 2, 'level' => 2, 'url_key' => 'category', 'store_id' => 1],
                 'product/2/category/3',
                 'category/product.html',
                 'catalog/product/view/id/2/category/3'

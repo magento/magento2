@@ -8,21 +8,13 @@ namespace Magento\Integration\Model\ResourceModel\Oauth;
 class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $_dateTime;
-
-    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
     ) {
-        $this->_dateTime = $dateTime;
         parent::__construct($context, $connectionName);
     }
 
@@ -34,18 +26,6 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('oauth_consumer', 'entity_id');
-    }
-
-    /**
-     * Set updated_at automatically before saving
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $object->setUpdatedAt($this->_dateTime->formatDate(time()));
-        return parent::_beforeSave($object);
     }
 
     /**

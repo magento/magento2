@@ -31,6 +31,9 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
     protected $category;
 
+    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $categoryRepository;
+
     /**
      * Test method
      */
@@ -48,6 +51,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->storeViewService = $this->getMockBuilder('Magento\CatalogUrlRewrite\Service\V1\StoreViewService')
             ->disableOriginalConstructor()->getMock();
         $this->category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
 
         $this->categoryUrlRewriteGenerator = (new ObjectManager($this))->getObject(
             'Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator',
@@ -56,6 +60,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'childrenUrlRewriteGenerator' => $this->childrenUrlRewriteGenerator,
                 'currentUrlRewritesRegenerator' => $this->currentUrlRewritesRegenerator,
                 'storeViewService' => $this->storeViewService,
+                'categoryRepository' => $this->categoryRepository,
             ]
         );
     }
@@ -84,6 +89,14 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->setStoreId(3);
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$current]));
+        $categoryForSpecificStore = $this->getMock(
+            'Magento\Catalog\Model\Category',
+            ['getUrlKey', 'getUrlPath'],
+            [],
+            '',
+            false
+        );
+        $this->categoryRepository->expects($this->once())->method('get')->willReturn($categoryForSpecificStore);
 
         $this->assertEquals(
             [$canonical, $children, $current],

@@ -65,17 +65,10 @@ class CustomerExtractor
     public function extract($formCode, RequestInterface $request)
     {
         $customerForm = $this->formFactory->create('customer', $formCode);
-
+        $customerData = $customerForm->extractData($request);
         $allowedAttributes = $customerForm->getAllowedAttributes();
-        $isGroupIdEmpty = true;
-        $customerData = [];
-        foreach ($allowedAttributes as $attribute) {
-            $attributeCode = $attribute->getAttributeCode();
-            if ($attributeCode == 'group_id') {
-                $isGroupIdEmpty = false;
-            }
-            $customerData[$attributeCode] = $request->getParam($attributeCode);
-        }
+        $isGroupIdEmpty = isset($allowedAttributes['group_id']);
+
         $customerDataObject = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,

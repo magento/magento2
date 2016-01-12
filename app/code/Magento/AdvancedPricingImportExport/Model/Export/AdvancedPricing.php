@@ -95,8 +95,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param ImportProduct\StoreResolver $storeResolver
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -117,6 +119,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
     ) {
@@ -139,7 +142,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $attributeColFactory,
             $_typeFactory,
             $linkTypeProvider,
-            $rowCustomizer
+            $rowCustomizer,
+            $metadataPool
         );
     }
 
@@ -345,10 +349,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             if (isset($exportFilter) && !empty($exportFilter)) {
                 $date = $exportFilter[\Magento\Catalog\Model\Category::KEY_UPDATED_AT];
                 if (isset($date[0]) && !empty($date[0])) {
-                    $updatedAtFrom = date('Y-m-d H:i:s', strtotime($date[0]));
+                    $updatedAtFrom = $this->_localeDate->date($date[0], null, false)->format('Y-m-d H:i:s');
                 }
                 if (isset($date[1]) && !empty($date[1])) {
-                    $updatedAtTo = date('Y-m-d H:i:s', strtotime($date[1]));
+                    $updatedAtTo = $this->_localeDate->date($date[1], null, false)->format('Y-m-d H:i:s');
                 }
             }
             try {

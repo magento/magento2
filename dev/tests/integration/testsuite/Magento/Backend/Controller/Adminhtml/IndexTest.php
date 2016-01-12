@@ -18,11 +18,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $this->_auth->logout();
         $this->dispatch('backend/admin/index/index');
-        $this->assertFalse($this->getResponse()->isRedirect());
-
-        $body = $this->getResponse()->getBody();
-        $this->assertSelectCount('form#login-form input#username[type=text]', true, $body);
-        $this->assertSelectCount('form#login-form input#login[type=password]', true, $body);
+        /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
+        $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\UrlInterface'
+        );
+        $backendUrlModel->turnOffSecretKey();
+        $url = $backendUrlModel->getUrl('admin');
+        $this->assertRedirect($this->stringStartsWith($url));
     }
 
     /**

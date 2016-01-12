@@ -79,7 +79,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $localeDate;
+    protected $dateTime;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
@@ -249,14 +249,14 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             false
         );
         $this->errorAggregator = $this->getErrorAggregatorObject();
-        $this->localeDate = $this->getMock(
-            '\Magento\Framework\Stdlib\DateTime\Timezone',
+        $this->dateTime = $this->getMock(
+            '\Magento\Framework\Stdlib\DateTime\DateTime',
             ['date', 'format'],
             [],
             '',
             false
         );
-        $this->localeDate->expects($this->any())->method('date')->willReturnSelf();
+        $this->dateTime->expects($this->any())->method('date')->willReturnSelf();
 
         $this->advancedPricing = $this->getAdvancedPricingMock([
             'retrieveOldSkus',
@@ -783,7 +783,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 $this->resourceHelper,
                 $this->stringObject,
                 $this->errorAggregator,
-                $this->localeDate,
+                $this->dateTime,
                 $this->resourceFactory,
                 $this->productModel,
                 $this->catalogData,

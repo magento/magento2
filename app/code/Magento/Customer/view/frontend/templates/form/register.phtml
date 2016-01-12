@@ -140,13 +140,13 @@
         <div class="field password required">
             <label for="password" class="label"><span><?php /* @escapeNotVerified */ echo __('Password') ?></span></label>
             <div class="control">
-                <input type="password" name="password" id="password" title="<?php /* @escapeNotVerified */ echo __('Password') ?>" class="input-text" data-validate="{required:true, 'validate-password':true}">
+                <input type="password" name="password" id="password" title="<?php /* @escapeNotVerified */ echo __('Password') ?>" class="input-text" data-validate="{required:true, 'validate-password':true}" autocomplete="off">
             </div>
         </div>
         <div class="field confirmation required">
             <label for="password-confirmation" class="label"><span><?php /* @escapeNotVerified */ echo __('Confirm Password') ?></span></label>
             <div class="control">
-                <input type="password" name="password_confirmation" title="<?php /* @escapeNotVerified */ echo __('Confirm Password') ?>" id="password-confirmation" class="input-text" data-validate="{required:true, equalTo:'#password'}">
+                <input type="password" name="password_confirmation" title="<?php /* @escapeNotVerified */ echo __('Confirm Password') ?>" id="password-confirmation" class="input-text" data-validate="{required:true, equalTo:'#password'}" autocomplete="off">
             </div>
         </div>
         <?php echo $block->getChildHtml('form_additional_info'); ?>

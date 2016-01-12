@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Cron;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Cache;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Abstract class for jobs run by setup:cron:run command
@@ -48,6 +49,11 @@ abstract class AbstractJob
      */
     protected $status;
 
+    /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
+
 
     /**
      * Constructor
@@ -70,9 +76,9 @@ abstract class AbstractJob
         $this->name = $name;
         $this->params = $params;
 
-        $objectManager = $objectManagerProvider->get();
-        $this->cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
-        $this->cache = $objectManager->get('Magento\Framework\App\Cache');
+        $this->objectManager = $objectManagerProvider->get();
+        $this->cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
+        $this->cache = $this->objectManager->get('Magento\Framework\App\Cache');
     }
 
     /**

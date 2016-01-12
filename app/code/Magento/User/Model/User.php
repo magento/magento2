@@ -94,11 +94,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
@@ -122,7 +117,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param UserValidationRules $validationRules
@@ -139,7 +133,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UserValidationRules $validationRules,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -147,7 +140,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         array $data = []
     ) {
         $this->_encryptor = $encryptor;
-        $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_userData = $userData;
         $this->_config = $config;
@@ -216,7 +208,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function beforeSave()
     {
         $data = [
-            'modified' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             'extra' => serialize($this->getExtra()),
         ];
 

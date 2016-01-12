@@ -43,13 +43,8 @@ class ReportConcurrentAdminsTest extends \PHPUnit_Framework_TestCase
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTime;
-
-    /**
      * Setup
-     * 
+     *
      * @return void
      */
     public function setUp()
@@ -71,10 +66,6 @@ class ReportConcurrentAdminsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->jsonEncoder = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
             ->getMock();
-        $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
-            ->disableOriginalConstructor()
-            ->setMethods(['formatDate'])
-            ->getMock();
 
         $this->usersFactory->expects($this->any())
             ->method('create')
@@ -84,8 +75,7 @@ class ReportConcurrentAdminsTest extends \PHPUnit_Framework_TestCase
             $this->config,
             $this->backendAuthSession,
             $this->usersFactory,
-            $this->jsonEncoder,
-            $this->dateTime
+            $this->jsonEncoder
         );
     }
 
@@ -131,14 +121,13 @@ class ReportConcurrentAdminsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test case when module is enabled and user is logged in 
+     * Test case when module is enabled and user is logged in
      *
      * @return void
      */
     public function testReportConcurrentAdmins()
     {
         $testAction = 'JSON string';
-        $testUpdated = '1970-01-01 00:00:00';
 
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
         $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
@@ -158,12 +147,9 @@ class ReportConcurrentAdminsTest extends \PHPUnit_Framework_TestCase
         $this->jsonEncoder->expects($this->once())
             ->method('encode')
             ->willReturn($testAction);
-        $this->dateTime->expects($this->once())
-            ->method('formatDate')
-            ->willReturn($testUpdated);
         $this->usersModel->expects($this->once())
             ->method('setData')
-            ->with(['type' => 'admin_activity', 'action' => $testAction, 'updated_at' => $testUpdated])
+            ->with(['type' => 'admin_activity', 'action' => $testAction])
             ->willReturnSelf();
         $this->usersModel->expects($this->once())
             ->method('save');

@@ -798,15 +798,13 @@ class CategorySetup extends EavSetup
                     ],
                     'created_at' => [
                         'type' => 'static',
-                        'input' => 'text',
-                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Time\Created',
+                        'input' => 'date',
                         'sort_order' => 19,
                         'visible' => false,
                     ],
                     'updated_at' => [
                         'type' => 'static',
-                        'input' => 'text',
-                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Time\Updated',
+                        'input' => 'date',
                         'sort_order' => 20,
                         'visible' => false,
                     ],

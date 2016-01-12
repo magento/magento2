@@ -76,14 +76,14 @@ class InstallSchema implements InstallSchemaInterface
                 'created_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                [],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Creation Time'
             )
             ->addColumn(
                 'updated_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                [],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
                 'Update Time'
             )
             ->addIndex(
@@ -686,14 +686,14 @@ class InstallSchema implements InstallSchemaInterface
                 'created_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                [],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Creation Time'
             )
             ->addColumn(
                 'updated_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                [],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
                 'Update Time'
             )
             ->addColumn(
@@ -1201,6 +1201,13 @@ class InstallSchema implements InstallSchemaInterface
          */
         $table = $installer->getConnection()
             ->newTable($installer->getTable('catalog_category_product'))
+            ->addColumn(
+                'entity_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'nullable' => false, 'primary' => true],
+                'Entity ID'
+            )
             ->addColumn(
                 'category_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,

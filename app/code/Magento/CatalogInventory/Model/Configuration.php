@@ -144,11 +144,9 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
-     * Retrieve Default Website ID
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function getDefaultWebsiteId()
+    public function getDefaultScopeId()
     {
         return (int) $this->storeManager->getWebsite()->getId();
     }
