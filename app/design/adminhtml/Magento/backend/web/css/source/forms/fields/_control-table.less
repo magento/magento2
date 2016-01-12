@@ -21,14 +21,17 @@
 
 .admin__control-table {
     width: 100%;
+
     thead {
         background-color: transparent;
     }
+
     tbody {
         td {
             vertical-align: top;
         }
     }
+
     tfoot {
         th {
             padding-bottom: @control-table-cell__padding-vertical;
@@ -38,6 +41,7 @@
             }
         }
     }
+
     tr {
         &:last-child {
             th,
@@ -46,6 +50,7 @@
             }
         }
     }
+
     td,
     th {
         background-color: @control-table-cell__background-color;
@@ -54,14 +59,17 @@
         padding: @control-table-cell__padding-vertical 2.5rem @control-table-cell__padding-vertical 0;
         text-align: left;
         vertical-align: top;
+
         &:first-child {
             padding-left: 1.5rem;
         }
+
         > .admin__control-select,
         > .admin__control-text {
             width: 100%;
         }
     }
+
     th {
         border: 0;
         vertical-align: bottom;
@@ -69,6 +77,7 @@
         font-size: @font-size__base;
         font-weight: @font-weight__semibold;
         padding-bottom: 0;
+
         &._required {
             span {
                 &:after {
@@ -78,27 +87,33 @@
             }
         }
     }
+
     //  Actions column
     .control-table-actions-th {
         white-space: nowrap;
     }
+
     .control-table-actions-cell {
         padding-top: 1.8rem;
         text-align: center;
         width: 1%;
     }
+
     //  Draggable column
     .col-draggable {
         padding-top: 2.2rem;
         width: 1%;
     }
+
     //  Actions
     .action-delete {
         .action-icon();
+
         &:before {
             &:extend(.abs-icon all);
             content: @icon-delete__content;
         }
+
         > span {
             display: none;
         }

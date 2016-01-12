@@ -53,7 +53,7 @@
         <field name="old_id" is_required="0" />
         <field name="options_container" is_required="0" />
         <field name="page_layout" is_required="0" />
-        <field name="price" is_required="1" group="product-details" source="Magento\Catalog\Test\Fixture\Product\Price" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\Price"/>
+        <field name="price" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\Product\Price" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\Price"/>
         <field name="quantity_and_stock_status" is_required="0" group="product-details" />
         <field name="required_options" is_required="0" />
         <field name="short_description" is_required="0" group="autosettings" />

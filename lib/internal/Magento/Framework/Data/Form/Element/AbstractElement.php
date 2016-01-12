@@ -443,10 +443,10 @@ abstract class AbstractElement extends AbstractForm
     {
         $html = $this->getData('default_html');
         if ($html === null) {
-            $html = $this->getNoSpan() === true ? '' : '<span class="field-row">' . "\n";
+            $html = $this->getNoSpan() === true ? '' : '<div class="admin__field">' . "\n";
             $html .= $this->getLabelHtml();
             $html .= $this->getElementHtml();
-            $html .= $this->getNoSpan() === true ? '' : '</span>' . "\n";
+            $html .= $this->getNoSpan() === true ? '' : '</div>' . "\n";
         }
         return $html;
     }

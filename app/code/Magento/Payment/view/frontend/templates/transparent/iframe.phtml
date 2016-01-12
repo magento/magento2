@@ -29,11 +29,19 @@ $params = $block->getParams();
             var require = window.top.require;
             require(
                 [
+                    'jquery',
                     'Magento_Checkout/js/model/quote',
-                    'Magento_Checkout/js/action/place-order'
+                    'Magento_Checkout/js/action/place-order',
+                    'Magento_Checkout/js/action/redirect-on-success'
                 ],
-                function(quote, placeOrderAction) {
-                    placeOrderAction({"method": quote.paymentMethod().method}, true);
+                function($, quote, placeOrderAction, redirectOnSuccessAction) {
+                    $.when(
+                        placeOrderAction({'method': quote.paymentMethod().method})
+                    ).done(
+                        function () {
+                            redirectOnSuccessAction.execute();
+                        }
+                    );
                 }
             );
         <?php endif; ?>

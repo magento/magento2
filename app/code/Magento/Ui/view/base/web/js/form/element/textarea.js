@@ -12,7 +12,7 @@ define([
         defaults: {
             cols: 15,
             rows: 2,
-            template: 'ui/form/element/textarea'
+            elementTmpl: 'ui/form/element/textarea'
         }
     });
 });
