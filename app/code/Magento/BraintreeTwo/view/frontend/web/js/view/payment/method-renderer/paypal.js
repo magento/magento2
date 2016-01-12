@@ -160,7 +160,7 @@ define([
         /**
          * Triggers when customer click "Continue to PayPal" button
          */
-        initAuthFlow: function () {
+        payWithPayPal: function () {
             checkout.paypal.initAuthFlow();
         },
 
