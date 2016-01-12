@@ -146,6 +146,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     // @codingStandardsIgnoreEnd
     protected $taxClassProcessor;
 
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
+
     /** @var  \Magento\CatalogImportExport\Model\Import\Product */
     protected $importProduct;
 
@@ -315,6 +320,14 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->disableOriginalConstructor()
                 ->getMock();
 
+        $this->metadataPool = $this->getMock(
+            'Magento\Framework\Model\Entity\MetadataPool',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->errorAggregator = $this->getErrorAggregatorObject();
 
         $this->data = [];
@@ -360,6 +373,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->objectRelationProcessor,
             $this->transactionManager,
             $this->taxClassProcessor,
+            $this->metadataPool,
             $this->data
         );
     }

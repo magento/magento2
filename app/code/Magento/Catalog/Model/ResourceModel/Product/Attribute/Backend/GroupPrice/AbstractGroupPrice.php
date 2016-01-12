@@ -34,7 +34,10 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
 
         $columns = $this->_loadPriceDataColumns($columns);
 
-        $select = $connection->select()->from($this->getMainTable(), $columns)->where('entity_id=?', $productId);
+        $productIdFieldName = $this->getProductIdFieldName();
+        $select = $connection->select()
+            ->from($this->getMainTable(), $columns)
+            ->where("{$productIdFieldName} = ?", $productId);
 
         $this->_loadPriceDataSelect($select);
 
@@ -47,6 +50,16 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
         }
 
         return $connection->fetchAll($select);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProductIdFieldName()
+    {
+        $table = $this->getTable('catalog_product_entity');
+        $indexList = $this->getConnection()->getIndexList($table);
+        return $indexList[$this->getConnection()->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 
     /**
@@ -83,7 +96,7 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
     {
         $connection = $this->getConnection();
 
-        $conds = [$connection->quoteInto('entity_id = ?', $productId)];
+        $conds = [$connection->quoteInto($this->getProductIdFieldName() . ' = ?', $productId)];
 
         if ($websiteId !== null) {
             $conds[] = $connection->quoteInto('website_id = ?', $websiteId);

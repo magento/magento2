@@ -44,6 +44,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected $_eventManager = null;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -51,6 +56,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -59,10 +65,12 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
+        $this->metadataPool = $metadataPool;
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
     }
 
@@ -240,7 +248,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected function prepareFinalPriceDataForType($entityIds, $type)
     {
         $this->_prepareDefaultFinalPriceTable();
-
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -285,18 +293,50 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             '=?',
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         );
-        $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $statusCond, true);
+        $this->_addAttributeToSelect(
+            $select,
+            'status',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id',
+            $statusCond,
+            true
+        );
         if ($this->moduleManager->isEnabled('Magento_Tax')) {
-            $taxClassId = $this->_addAttributeToSelect($select, 'tax_class_id', 'e.entity_id', 'cs.store_id');
+            $taxClassId = $this->_addAttributeToSelect(
+                $select,
+                'tax_class_id',
+                'e.' . $metadata->getLinkField(),
+                'cs.store_id'
+            );
         } else {
             $taxClassId = new \Zend_Db_Expr('0');
         }
         $select->columns(['tax_class_id' => $taxClassId]);
 
-        $price = $this->_addAttributeToSelect($select, 'price', 'e.entity_id', 'cs.store_id');
-        $specialPrice = $this->_addAttributeToSelect($select, 'special_price', 'e.entity_id', 'cs.store_id');
-        $specialFrom = $this->_addAttributeToSelect($select, 'special_from_date', 'e.entity_id', 'cs.store_id');
-        $specialTo = $this->_addAttributeToSelect($select, 'special_to_date', 'e.entity_id', 'cs.store_id');
+        $price = $this->_addAttributeToSelect(
+            $select,
+            'price',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id'
+        );
+        $specialPrice = $this->_addAttributeToSelect(
+            $select,
+            'special_price',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id'
+        );
+        $specialFrom = $this->_addAttributeToSelect(
+            $select,
+            'special_from_date',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id'
+        );
+        $specialTo = $this->_addAttributeToSelect(
+            $select,
+            'special_to_date',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id'
+        );
         $currentDate = $connection->getDatePartSql('cwd.website_date');
 
         $specialFromDate = $connection->getDatePartSql($specialFrom);
