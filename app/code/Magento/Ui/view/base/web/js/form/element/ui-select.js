@@ -8,8 +8,9 @@ define([
     './abstract',
     'Magento_Ui/js/lib/key-codes',
     'mage/translate',
+    'ko',
     'jquery'
-], function (_, Abstract, keyCodes, $t, $) {
+], function (_, Abstract, keyCodes, $t, ko, $) {
     'use strict';
 
     /**
@@ -17,7 +18,13 @@ define([
      */
     function parseOptions(nodes) {
         var caption,
-            value;
+            value,
+            cacheNodes,
+            copyNodes;
+
+        nodes = setLevelsProperty(nodes, 'optgroup');
+        copyNodes = JSON.parse(JSON.stringify(nodes));
+        cacheNodes = flattenCollection(copyNodes, 'optgroup');
 
         nodes = _.map(nodes, function (node) {
             value = node.value;
@@ -33,8 +40,49 @@ define([
 
         return {
             options: _.compact(nodes),
-            cacheOptions: _.compact(nodes)
+            cacheOptions: {
+                plain: _.compact(cacheNodes),
+                tree: _.compact(nodes)
+            }
         };
+    }
+
+    function setLevelsProperty (array, separator, level) {
+        var i = 0,
+            length = array.length;
+
+        level = level || 0;
+
+        for (i; i<length; i++) {
+            array[i].level = level;
+
+            if (array[i].hasOwnProperty(separator)) {
+                level++;
+                setLevelsProperty.call(this, array[i][separator], separator, level);
+            }
+        }
+
+        return array;
+    }
+
+    function flattenCollection (array, separator, created) {
+        var i = 0,
+            length = array.length,
+            childCollection;
+
+        created = created || [];
+
+        for (i; i<length; i++) {
+            created.push(array[i]);
+
+            if (array[i].hasOwnProperty(separator)) {
+                childCollection = array[i][separator];
+                delete array[i][separator];
+                flattenCollection.call(this, childCollection, separator, created);
+            }
+        }
+
+        return created;
     }
 
     return Abstract.extend({
@@ -43,19 +91,41 @@ define([
             listVisible: false,
             value: [],
             filterOptions: false,
-            chipsEnabled: false,
+            chipsEnabled: true,
             filterInputValue: '',
             filterOptionsFocus: false,
             multiselectFocus: false,
+            simpleMode: false,
+            optgroupMode: false,
+            lastSelectable: false,
+            showCheckbox: true,
+            levelsVisibility: true,
+            openLevelsAction: true,
+            showOpenLevelsActionIcon: true,
+            optgroupLabels: false,
+            disableLabel: false,
+            closeBtn: true,
+            showTree: false,
+            labelsDecoration: false,
+            closeBtnLabel: $t('Done'),
+            optgroupTmpl: 'ui/grid/filters/elements/ui-select-optgroup',
             selectedPlaceholders: {
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
             },
             hoverElIndex: null,
+            separator: 'optgroup',
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList'
             }
+        },
+
+        initialize: function () {
+            this._super()
+                .preprocessingConfig();
+
+            return this;
         },
 
         /**
@@ -70,6 +140,66 @@ define([
             _.extend(config, result);
 
             this._super();
+
+            return this;
+        },
+
+        hasChildList: function () {
+            return _.find(this.options(), function(option){
+                return !!option[this.separator];
+            }, this);
+        },
+
+        isTree: function () {
+            return this.hasChildList() && !this.optgroupMode;
+        },
+
+        isLabelDecoration: function (data) {
+            return data.hasOwnProperty(this.separator) && this.labelsDecoration;
+        },
+
+        /**
+         * Calls 'initObservable' of parent, initializes 'options' and 'initialOptions'
+         *     properties, calls 'setOptions' passing options to it
+         *
+         * @returns {Object} Chainable.
+         */
+        initObservable: function () {
+            this._super();
+            this.observe(['listVisible',
+                'hoverElIndex',
+                'placeholder',
+                'multiselectFocus',
+                'options',
+                'filterInputValue',
+                'filterOptionsFocus'
+            ]);
+
+            return this;
+        },
+
+        preprocessingConfig: function () {
+            if (this.simpleMode) {
+                this.showCheckbox = false;
+                this.chipsEnabled = false;
+                this.closeBtn = false;
+            }
+
+            if (this.optgroupMode) {
+                this.showCheckbox = false;
+                this.lastSelectable = true;
+                this.optgroupLabels = true;
+                this.openLevelsAction = false;
+                this.labelsDecoration = true;
+            }
+
+            if (this.lastSelectable) {
+                this.levelsVisibility = true;
+            }
+
+            if (!this.openLevelsAction) {
+                this.showOpenLevelsActionIcon = false;
+            }
 
             return this;
         },
@@ -90,24 +220,50 @@ define([
             };
         },
 
-        /**
-         * Calls 'initObservable' of parent, initializes 'options' and 'initialOptions'
-         *     properties, calls 'setOptions' passing options to it
-         *
-         * @returns {Object} Chainable.
-         */
-        initObservable: function () {
-            this._super();
-            this.observe(['listVisible',
-                          'hoverElIndex',
-                          'placeholder',
-                          'multiselectFocus',
-                          'options',
-                          'filterInputValue',
-                          'filterOptionsFocus'
-            ]);
+        showLevels: function (data) {
+            var curLevel = data.level+1;
 
-            return this;
+            if (!data.visible) {
+                data.visible = ko.observable(!!data.hasOwnProperty(this.separator) && _.isBoolean(this.levelsVisibility) &&
+                    this.levelsVisibility ||
+                    data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility) >= curLevel);
+
+            }
+
+            return data.visible();
+        },
+
+        getLevelVisibility: function (data) {
+            if (data.visible) {
+                return data.visible();
+            }
+
+            return this.showLevels(data);
+        },
+
+        /**
+         * Set option to options array.
+         *
+         * @param {Object} option
+         * @param {Array} options
+         */
+        setOption: function (option, options) {
+            var copyOptionsTree;
+
+            options = options || this.cacheOptions.tree;
+
+            _.each(options, function (opt) {
+                if (opt.value == option.parent) {
+                    delete  option.parent;
+                    opt[this.separator] ? opt[this.separator].push(option) : opt[this.separator] = [option];
+                    copyOptionsTree = JSON.parse(JSON.stringify(this.cacheOptions.tree));
+                    this.cacheOptions.plain = flattenCollection(copyOptionsTree, this.separator);
+                    debugger;
+                    this.options(this.cacheOptions.tree);
+                } else if (opt[this.separator]) {
+                    this.setOption(option, opt[this.separator]);
+                }
+            }, this);
         },
 
         /**
@@ -144,14 +300,19 @@ define([
             var i = 0,
                 array = [],
                 curOption,
-                value;
+                value = this.filterInputValue().trim().toLowerCase();
 
-            this.options(this.cacheOptions);
+            if (value === '') {
+                this.options(this.cacheOptions.tree);
+
+                return false;
+            }
+
+            this.options(this.cacheOptions.plain);
 
             if (this.filterInputValue()) {
                 for (i; i < this.options().length; i++) {
                     curOption = this.options()[i].label.toLowerCase();
-                    value = this.filterInputValue().trim().toLowerCase();
 
                     if (curOption.indexOf(value) > -1) {
                         array.push(this.options()[i]);
@@ -159,7 +320,7 @@ define([
                 }
 
                 if (!value.length) {
-                    this.options(this.cacheOptions);
+                    this.options(this.cacheOptions.plain);
                 } else {
                     this.options(array);
                 }
@@ -203,8 +364,12 @@ define([
          * @param {String} label - option label
          * @return {Boolean}
          */
-        isSelected: function (label) {
-            return _.contains(this.value(), label);
+        isSelected: function (value) {
+            return _.contains(this.value(), value);
+        },
+
+        isOptgroupLabels: function (data) {
+            return data.hasOwnProperty(this.separator) && this.optgroupLabels;
         },
 
         /**
@@ -213,8 +378,13 @@ define([
          * @param {String} index - element index
          * @return {Boolean}
          */
-        isHovered: function (index, elem) {
-            var status = this.hoverElIndex() === index;
+        isHovered: function (data, elem) {
+            var index = this.getOptionIndex(data),
+                status = this.hoverElIndex() === index;
+
+            if (this.optgroupMode && data.hasOwnProperty(this.separator)) {
+                return false;
+            }
 
             if (
                 status &&
@@ -261,8 +431,10 @@ define([
         getSelected: function () {
             var selected = this.value();
 
-            return this.cacheOptions.filter(function (opt) {
-                return _.contains(selected, opt.value);
+            return this.cacheOptions.plain.filter(function (opt) {
+                return _.isArray(selected) ?
+                    _.contains(selected, opt.value) :
+                selected == opt.value;
             });
         },
 
@@ -272,14 +444,37 @@ define([
          * @param {Object} data - selected option data
          * @returns {Object} Chainable
          */
-        toggleOptionSelected: function (data) {
-            if (!_.contains(this.value(), data.value)) {
+        toggleOptionSelected: function (data, index, event) {
+            var isSelected = this.isSelected(data.value);
+
+            if (this.lastSelectable && data.hasOwnProperty(this.separator)) {
+                return this;
+            }
+
+            if (this.simpleMode && !isSelected) {
+                this.value(data.value);
+                this.listVisible(false);
+            } else if (!isSelected) {
                 this.value.push(data.value);
             } else {
                 this.value(_.without(this.value(), data.value));
             }
 
             return this;
+        },
+
+        openChildLevel: function (data, elem) {
+            var contextElement;
+
+            if (
+                this.openLevelsAction &&
+                data.hasOwnProperty(this.separator) && _.isBoolean(this.levelsVisibility) ||
+                this.openLevelsAction &&
+                data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility) <= data.level
+            ) {
+                contextElement = ko.contextFor($(elem).parents('li').children('ul')[0]).$data.current;
+                contextElement.visible(!contextElement.visible());
+            }
         },
 
         /**
@@ -305,16 +500,38 @@ define([
 
         onMousemove: function (data, index, event) {
             var target = $(event.target),
-                id;
+                id,
+                context = ko.contextFor(event.target);
 
             if (this.isCursorPositionChange(event)) {
                 return false;
             }
 
-            target.is('li') ? id = target.index() : id = target.parent('li').index();
+            if (typeof context.$data === 'object') {
+                id = this.getOptionIndex(context.$data);
+            }
+
+            //action-menu-item
+            //if (target.hasClass('action-menu-item'))
+
+            //target.is('.action-menu-item') ? id = target.index() : id = target.parent('li').index();
+
+            //target.is('li') ? id = target.index() : id = target.parent('li').index();
             id !== this.hoverElIndex() ? this.hoverElIndex(id) : false;
 
             this.setCursorPosition(event);
+        },
+
+        getOptionIndex: function (data) {
+            var index;
+
+            _.each(this.cacheOptions.plain, function(opt, id){
+                if (data.value === opt.value) {
+                    index = id;
+                }
+            });
+
+            return index;
         },
 
         /**
@@ -337,8 +554,8 @@ define([
          */
         isCursorPositionChange: function (event) {
             return this.cursorPosition &&
-                   this.cursorPosition.x === event.pageX &&
-                   this.cursorPosition.y === event.pageY;
+                this.cursorPosition.x === event.pageX &&
+                this.cursorPosition.y === event.pageY;
         },
 
         /**
@@ -447,7 +664,9 @@ define([
         setCaption: function () {
             var length;
 
-            if (this.value()) {
+            if (!_.isArray(this.value())) {
+                length = 1;
+            } else if (this.value()) {
                 length = this.value().length;
             } else {
                 this.value([]);
