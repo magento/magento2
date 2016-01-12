@@ -17,7 +17,7 @@
                 <item name="name" xsi:type="string">add</item>
                 <item name="label" xsi:type="string" translate="true">New Synonyms Group</item>
                 <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">search/synonyms_create/start</item>
+                <item name="url" xsi:type="string">*/*/new</item>
             </item>
         </item>
     </argument>
@@ -161,7 +161,7 @@
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="string">107</item>
-                    <item name="indexField" xsi:type="string">page_id</item>
+                    <item name="indexField" xsi:type="string">group_id</item>
                 </item>
             </argument>
         </actionsColumn>

@@ -77,7 +77,7 @@ class SynonymActions extends Column
                 ];
                 $item[$name]['edit'] = [
                     'href' => $this->urlBuilder->getUrl(self::SYNONYM_URL_PATH_EDIT, ['group_id' => $item['group_id']]),
-                    'label' => __('Edit'),
+                    'label' => __('View/Edit'),
                 ];
             }
         }
