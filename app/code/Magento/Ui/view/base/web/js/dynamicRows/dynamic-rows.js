@@ -9,12 +9,11 @@ define([
     'underscore',
     'uiLayout',
     'uiCollection',
-    'mage/utils/arrays',
     'mage/translate'
-], function (ko, utils, _, layout, uiCollection, arrayUtils, $t) {
+], function (ko, utils, _, layout, Collection, $t) {
     'use strict';
 
-    return uiCollection.extend({
+    return Collection.extend({
         defaults: {
             visible: true,
             disabled: false,
@@ -28,14 +27,13 @@ define([
             defaultRowsIndex: [],
             labels: [],
             sorted: 0,
-            draggable: true,
             childTemplate: '',
             updateTemplateValue: null,
             cacheElems: [],
             additionalClasses: {},
             columnVisibility: 'columnVisibility',
             rowsIterator: 0,
-            previousRecordName: null,
+            previousRecordName: '',
             recordData: [],
             dndConfig: {
                 name: '${ $.name }_dnd',
@@ -88,6 +86,7 @@ define([
             var max = 0,
                 value;
 
+            //TODO: Change to elem sort order
             this.elems.each(function (elem) {
                 value = parseInt(elem[this.curSortOrderProperty], 10);
                 value > max ? max = value : false;
@@ -206,17 +205,11 @@ define([
          * @param {Boolean} state - enabled or disabled
          */
         setColumnDisabled: function (index, state) {
-            if (_.isNumber(parseFloat(index))) {
-                this.elems.each(function (row) {
-                    row.elems()[parseFloat(index)].disabled(state);
-                });
-            } else {
-                this.elems.each(function (elem) {
-                    _.find(elem.elems(), function (row) {
-                        return row.index === index;
-                    }).disabled(state);
-                });
-            }
+            index = parseFloat(index);
+
+            this.elems.each(function (row) {
+                row.elems()[index].disabled(state);
+            });
         },
 
         /**
@@ -226,19 +219,12 @@ define([
          * @param {Boolean} state - show or hide
          */
         setColumnVisibility: function (index, state) {
-            if (_.isNumber(parseFloat(index))) {
-                this.labels()[parseFloat(index)].config.visible(state);
-                this.elems.each(function (row) {
-                    row.elems()[parseFloat(index)].visible(state);
-                });
-            } else {
-                this.labels()[index].config.visible(state);
-                this.elems.each(function (elem) {
-                    _.find(elem.elems(), function (row) {
-                        return row.index === index;
-                    }).visible(state);
-                });
-            }
+            index = parseFloat(index);
+
+            this.labels()[index].config.visible(state);
+            this.elems.each(function (row) {
+                row.elems()[index].visible(state);
+            });
         },
 
         /**
@@ -328,6 +314,8 @@ define([
          * Check need or not render default record element
          *
          * @param {Array} data - array with records data
+         *
+         * @returns {Boolean}
          */
         isRenderDefault: function (data) {
             return !data && this.renderDefaultRecord ||
@@ -367,7 +355,7 @@ define([
 
             this.previousRecordName = this.itemTemplate;
 
-            index = !index && parseFloat(index) !== 0 ? this.rowsIterator : index;
+            index = _.isUndefined(index) ? this.rowsIterator : index;
 
             child = utils.template(template, {
                 collection: this,
