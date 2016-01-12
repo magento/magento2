@@ -68,7 +68,10 @@ class SynonymActions extends Column
             foreach ($dataSource['data']['items'] as & $item) {
                 $name = $this->getData('name');
                 $item[$name]['delete'] = [
-                    'href' => $this->urlBuilder->getUrl(self::SYNONYM_URL_PATH_DELETE, ['group_id' => $item['group_id']]),
+                    'href' => $this->urlBuilder->getUrl(
+                            self::SYNONYM_URL_PATH_DELETE,
+                            ['group_id' => $item['group_id']]
+                        ),
                     'label' => __('Delete'),
                     'confirm' => [
                         'title' => __('Delete'),
