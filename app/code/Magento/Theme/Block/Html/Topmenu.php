@@ -346,5 +346,4 @@ class Topmenu extends Template implements IdentityInterface
         $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true]);
         return $keyInfo;
     }
-
 }
