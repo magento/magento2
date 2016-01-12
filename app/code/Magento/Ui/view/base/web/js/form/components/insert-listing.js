@@ -14,7 +14,7 @@ define([
     return Insert.extend({
         defaults: {
             behaviourType: 'simple',
-            externalFilterMode: false,//excludeselectedItems
+            externalFilterMode: false,
             externalCondition: 'nin',
             settings: {
                 edit: {
@@ -229,7 +229,7 @@ define([
                 index,
                 filter = {};
 
-            if (!this.externalFilterMode) {//|| !items || !items.length
+            if (!this.externalFilterMode) {
                 return;
             }
 
