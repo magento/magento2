@@ -5,17 +5,18 @@
  * See COPYING.txt for license details.
  */
 -->
-<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">catalog_rule_form.catalog_rule_form_data_source</item>
             <item name="deps" xsi:type="string">catalog_rule_form.catalog_rule_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Catalog Price Rule</item>
-        <item name="layout" xsi:type="array">
-            <item name="type" xsi:type="string">tabs</item>
-            <item name="navContainerName" xsi:type="string">left</item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">catalog_rule_form</item>
         </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="buttons" xsi:type="array">
             <item name="back" xsi:type="array">
                 <item name="name" xsi:type="string">back</item>
@@ -26,8 +27,16 @@
             <item name="save" xsi:type="array">
                 <item name="name" xsi:type="string">save</item>
                 <item name="label" xsi:type="string" translate="true">Save</item>
-                <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/*/save</item>
+                <item name="class" xsi:type="string">save primary</item>
+                <item name="url" xsi:type="string">catalog_rule/promo_catalog/save</item>
+                <item name="data_attribute" xsi:type="array">
+                    <item name="mage-init" xsi:type="array">
+                        <item name="button" xsi:type="array">
+                            <item name="event" xsi:type="string">save</item>
+                        </item>
+                    </item>
+                    <item name="form-role" xsi:type="string">save</item>
+                </item>
             </item>
             <item name="reset" xsi:type="array">
                 <item name="name" xsi:type="string">reset</item>
@@ -51,12 +60,15 @@
             </item>
             <item name="save_and_apply" xsi:type="array">
                 <item name="name" xsi:type="string">save_and_apply</item>
-                <item name="label" xsi:type="string" translate="true">Save and Apply Rule</item>
+                <item name="label" xsi:type="string" translate="true">Save and Apply</item>
                 <item name="class" xsi:type="string">save</item>
                 <item name="data_attribute" xsi:type="array">
                     <item name="mage-init" xsi:type="array">
                         <item name="button" xsi:type="array">
-                            <item name="event" xsi:type="string">saveAndApply</item>
+                            <item name="event" xsi:type="string">save</item>
+                            <item name="args" xsi:type="array">
+                                <item name="auto_apply" xsi:type="string">1</item>
+                            </item>
                         </item>
                     </item>
                 </item>
@@ -86,8 +98,9 @@
     <fieldset name="rule_information">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="dataScope" xsi:type="string">data</item>
+                <!--<item name="dataScope" xsi:type="string">data</item>-->
                 <item name="label" xsi:type="string" translate="true">Rule Information</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sort_order" xsi:type="string">10</item>
             </item>
         </argument>
@@ -97,6 +110,8 @@
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">rule_id</item>
                 </item>
             </argument>
         </field>
@@ -107,6 +122,8 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">name</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
@@ -120,6 +137,8 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">description</item>
                 </item>
             </argument>
         </field>
@@ -130,6 +149,8 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">is_active</item>
                 </item>
             </argument>
         </field>
@@ -142,9 +163,11 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">website_ids</item>
                     <item name="tooltip" xsi:type="array">
                         <item name="link" xsi:type="string">http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes</item>
-                        <item name="description" xsi:type="string">If your Magento site has multiple views, you can set the scope to apply to a specific view.</item>
+                        <item name="description" xsi:type="string">What is this?</item>
                     </item>
                 </item>
             </argument>
@@ -158,6 +181,8 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">customer_group_ids</item>
                 </item>
             </argument>
         </field>
@@ -171,6 +196,8 @@
                     <item name="validation" xsi:type="array">
                         <item name="validate-date" xsi:type="boolean">true</item>
                     </item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">from_date</item>
                 </item>
             </argument>
         </field>
@@ -181,6 +208,8 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">date</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">to_date</item>
                     <item name="validation" xsi:type="array">
                         <item name="validate-date" xsi:type="boolean">true</item>
                     </item>
@@ -193,6 +222,8 @@
                     <item name="label" xsi:type="string">Priority</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">sort_order</item>
                 </item>
             </argument>
         </field>
@@ -200,8 +231,9 @@
     <fieldset name="actions">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="dataScope" xsi:type="string">data</item>
-                <item name="label" xsi:type="string" translate="true">Pricing Structure Rules</item>
+                <!--<item name="dataScope" xsi:type="string">data</item>-->
+                <item name="label" xsi:type="string" translate="true">Actions</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sort_order" xsi:type="string">30</item>
             </item>
         </argument>
@@ -211,6 +243,8 @@
                     <item name="label" xsi:type="string">Apply</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">simple_action</item>
                     <item name="switcherConfig" xsi:type="array">
                         <item name="enabled" xsi:type="boolean">true</item>
                         <item name="rules" xsi:type="array">
@@ -277,6 +311,8 @@
                     <item name="label" xsi:type="string">Discount Amount</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">discount_amount</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
@@ -290,6 +326,8 @@
                     <item name="fieldGroup" xsi:type="string">bool</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">sub_is_enable</item>
                     <item name="switcherConfig" xsi:type="array">
                         <item name="enabled" xsi:type="boolean">true</item>
                         <item name="rules" xsi:type="array">
@@ -331,6 +369,8 @@
                     <item name="fieldGroup" xsi:type="string">apply</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">sub_simple_action</item>
                     <item name="switcherConfig" xsi:type="array">
                         <item name="enabled" xsi:type="boolean">true</item>
                         <item name="rules" xsi:type="array">
@@ -397,6 +437,8 @@
                     <item name="label" xsi:type="string">Discount Amount</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">sub_discount_amount</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
@@ -410,6 +452,9 @@
                     <item name="fieldGroup" xsi:type="string">bool</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="value" xsi:type="string">0</item>
+                    <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="dataScope" xsi:type="string">stop_rules_processing</item>
                 </item>
             </argument>
         </field>

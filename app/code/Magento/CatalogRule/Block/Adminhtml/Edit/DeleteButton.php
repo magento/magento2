@@ -51,7 +51,8 @@ class DeleteButton implements ButtonProviderInterface
     public function getButtonData()
     {
         $data = [];
-        $ruleId = $this->register->registry(static::CURRENT_CATALOG_RULE_ID);
+        $rule = $this->register->registry(static::CURRENT_CATALOG_RULE_ID);
+        $ruleId = $rule ? $rule->getId() : null;
         if ($ruleId) {
             $data = [
                 'label' => __('Delete Rule'),
