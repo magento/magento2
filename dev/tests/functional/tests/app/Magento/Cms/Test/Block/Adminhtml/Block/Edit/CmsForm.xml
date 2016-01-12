@@ -8,11 +8,11 @@
 <mapping strict="0">
     <fields>
         <stores>
-            <selector>[name="stores[]"]</selector>
+            <selector>[name="store_id"]</selector>
             <input>multiselectgrouplist</input>
         </stores>
         <is_active>
-            <input>select</input>
+            <input>checkbox</input>
         </is_active>
     </fields>
 </mapping>

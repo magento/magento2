@@ -15,8 +15,7 @@ define(
 
         return Component.extend({
             defaults: {
-                template: 'Magento_Vault/payment/form',
-                transactionResult: ''
+                template: 'Magento_Vault/payment/form'
             },
 
             /**
