@@ -118,8 +118,9 @@ class AfterProductRepositorySave
 
     /**
      * @param ProductInterface $product
-     * @param $stockItem
+     * @param StockItemInterface $stockItem
      * @throws LocalizedException
+     * @return void
      */
     private function validateStockItem(ProductInterface $product, StockItemInterface $stockItem)
     {
