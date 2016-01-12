@@ -15,11 +15,8 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     {
         $id = $this->getRequest()->getParam('id');
 
-        /** @var \Magento\CatalogRule\Model\Rule $model */
-        $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
-
         /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
-        $ruleRepository = $this->_objectManager->create(
+        $ruleRepository = $this->_objectManager->get(
             'Magento\CatalogRule\Api\CatalogRuleRepositoryInterface'
         );
 
@@ -31,6 +28,9 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $this->_redirect('catalog_rule/*');
                 return;
             }
+        } else {
+            /** @var \Magento\CatalogRule\Model\Rule $model */
+            $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
         }
 
         // set entered data if was error when we do save
