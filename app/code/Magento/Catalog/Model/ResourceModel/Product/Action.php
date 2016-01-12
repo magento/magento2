@@ -160,13 +160,10 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
                 ['cpe' => $this->getTable('catalog_product_entity')],
                 'cpe.' . $this->getLinkField() . ' = ' . $table . '.' . $this->getLinkField(),
                 []
-            )->where(
-                $table . '.attribute_id = ?', $attribute->getAttributeId()
-            )->where(
-                $table . '.store_id <> ?', $storeId
-            )->where(
-                'cpe.entity_id = ?', $entityId
-            );
+            )
+            ->where($table . '.attribute_id = ?', $attribute->getAttributeId())
+            ->where($table . '.store_id <> ?', $storeId)
+            ->where('cpe.entity_id = ?', $entityId);
         return $this->getConnection()->fetchOne($select);
     }
 }
