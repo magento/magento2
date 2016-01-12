@@ -62,6 +62,7 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
      */
     public function configureObjectManager(ConfigInterface $diConfig, &$sharedInstances)
     {
+        $originalSharedInstances = $sharedInstances;
         $objectManager = ObjectManager::getInstance();
         $sharedInstances['Magento\Framework\ObjectManager\ConfigLoaderInterface'] = $objectManager
             ->get('Magento\Framework\App\ObjectManager\ConfigLoader');
@@ -80,5 +81,9 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
         $diConfig->setInterceptionConfig(
             $objectManager->get('Magento\Framework\Interception\Config\Config')
         );
+        /** Reset the shared instances once interception config is set so classes can be intercepted if necessary */
+        $sharedInstances = $originalSharedInstances;
+        $sharedInstances['Magento\Framework\ObjectManager\ConfigLoaderInterface'] = $objectManager
+            ->get('Magento\Framework\App\ObjectManager\ConfigLoader');
     }
 }
