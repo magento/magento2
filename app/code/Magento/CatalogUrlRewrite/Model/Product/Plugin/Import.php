@@ -183,7 +183,8 @@ class Import
     {
         $groups =[];
         foreach ($urls as $url) {
-            $key = sprintf('%s-%s',
+            $key = sprintf(
+                '%s-%s',
                 $url->getEntityId(),
                 $url->getStoreId()
             );
@@ -222,13 +223,13 @@ class Import
     /**
      * Add increment to every URL in array
      *
-     * @param $productUrls
-     * @param $increment
+     * @param array $productUrls
+     * @param int $increment
      * @return $this
      */
     protected function addIncrementToUrls(array & $productUrls, $increment)
     {
-        foreach($productUrls as $productUrl) {
+        foreach ($productUrls as $productUrl) {
             $requestPath = substr($productUrl->getRequestPath(), 0, -strlen($productUrl->getUrlSuffix()));
             $requestPath = sprintf('%s-%s%s', $requestPath, $increment, $productUrl->getUrlSuffix());
             $productUrl->setRequestPath($requestPath);
