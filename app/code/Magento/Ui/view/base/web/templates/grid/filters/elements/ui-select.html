@@ -5,16 +5,23 @@
  */
 -->
 
+<!-- ko ifnot: disableLabel -->
 <label
-    class="admin__form-field-label"
-    data-bind="attr: {for: uid}">
+        class="admin__form-field-label"
+        data-bind="attr: {for: uid}">
     <span data-bind="text: label"></span>
 </label>
+<!-- /ko -->
 
 <div
-    class="admin__action-multiselect-wrap action-select-wrap"
-    tabindex="0"
-    data-bind="css: {_active: listVisible},
+        class="admin__action-multiselect-wrap action-select-wrap"
+        tabindex="0"
+        data-bind=" attr: {
+                    id: uid
+                },
+                css: {
+                    _active: listVisible,
+                    'admin__action-multiselect-tree': isTree()},
                 event: {
                     focusin: function() { onFocusIn($element) },
                     focusout: onFocusOut,
@@ -23,28 +30,30 @@
                 outerClick: outerClick.bind($data)">
     <!-- ko ifnot: chipsEnabled -->
     <div
-        class="action-select admin__action-multiselect"
-        data-bind="
+            class="action-select admin__action-multiselect"
+            data-bind="
                     css: {_active: multiselectFocus},
-                    text: setCaption(),
                     click: function(data, event) {
                         toggleListVisible(data, event)
                     }">
+        <div class="admin__action-multiselect-text"
+             data-bind="text: setCaption()"></div>
     </div>
     <!-- /ko -->
     <!-- ko if: chipsEnabled -->
     <div
-        class="action-select admin__action-multiselect"
-        data-bind="
+            class="action-select admin__action-multiselect"
+            data-bind="
                     css: {_active: multiselectFocus},
                     click: function(data, event) {
                         toggleListVisible(data, event)
                     }">
-            <span data-bind="
-                visible: !hasData(),
-                text: selectedPlaceholders.defaultPlaceholder">
-            </span>
-            <!-- ko foreach: { data: getSelected(), as: 'option'}  -->
+        <div class="admin__action-multiselect-text"
+             data-bind="
+                    visible: !hasData(),
+                    text: selectedPlaceholders.defaultPlaceholder">
+        </div>
+        <!-- ko foreach: { data: getSelected(), as: 'option'}  -->
                 <span class="admin__action-multiselect-crumb">
                     <span data-bind="text: label">
                     </span>
@@ -59,14 +68,13 @@
                         </span>
                     </button>
                 </span>
-            <!-- /ko -->
+        <!-- /ko -->
     </div>
     <!-- /ko -->
-    <div
-        class="action-menu"
-        data-bind="css: {
-                _active: listVisible
-            }">
+    <div class="action-menu"
+         data-bind="css: {
+                    _active: listVisible
+                }">
         <!-- ko if: filterOptions -->
         <div class="admin__action-multiselect-search-wrap">
             <input
@@ -88,33 +96,68 @@
             </label>
         </div>
         <!-- /ko -->
-        <ul class="admin__action-multiselect-menu-inner"
+        <ul class="admin__action-multiselect-menu-inner admin__action-multiselect-menu-inner-root"
             data-bind="
                 event: {
-                    mousemove: function(){onMousemove($data, $index(), event)}
+                    mousemove: function(data, event){onMousemove($data, $index(), event)}
                 }
             ">
             <!-- ko foreach: { data: options, as: 'option'}  -->
-            <li
-                class="action-menu-item"
-                data-bind="
+            <li class="admin__action-multiselect-menu-inner-item"
+                data-bind="css: { _parent: $data.optgroup }">
+                <div class="action-menu-item"
+                     data-bind="
                             css: {
                                 _selected: $parent.isSelected(option.value),
-                                _hover: $parent.isHovered($index(), $element)
+                                _hover: $parent.isHovered(option, $element),
+                                _expended: $parent.getLevelVisibility($data),
+                                _unclickable: $parent.isLabelDecoration($data)
                             },
-                            click: $parent.toggleOptionSelected.bind($parent, $data, $index())">
-                <input
-                    class="admin__control-checkbox"
-                    type="checkbox"
-                    tabindex="-1"
-                    data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
-                <label
-                    class="admin__action-multiselect-label"
-                    data-bind="text: option.label">
-                </label>
+                            click: function(data, event){
+                                $parent.toggleOptionSelected($data, $index(), event);
+                            },
+                            clickBubble: false
+                ">
+                    <!-- ko if: $data.optgroup && $parent.showOpenLevelsActionIcon-->
+                    <div class="admin__action-multiselect-dropdown"
+                         data-bind="
+                            click: function(event){
+                                $parent.openChildLevel($data, $element, event);
+                            },
+                            clickBubble: false
+                         "></div>
+                    <!-- /ko-->
+                    <!--ko if: $parent.showCheckbox-->
+                    <input
+                            class="admin__control-checkbox"
+                            type="checkbox"
+                            tabindex="-1"
+                            data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
+                    <!-- /ko-->
+                    <label
+                            class="admin__action-multiselect-label"
+                            data-bind="text: option.label">
+                    </label>
+                </div>
+                <!-- ko if: $data.optgroup -->
+                <!-- ko template: {name: $parent.optgroupTmpl, data: {root: $parent, current: $data}} -->
+                <!-- /ko -->
+                <!-- /ko-->
             </li>
             <!-- /ko -->
         </ul>
+        <!-- ko if: $data.closeBtn -->
+        <div class="admin__action-multiselect-actions-wrap">
+            <button class="action-default"
+                    type="button"
+                    data-bind="
+                            click: function(){
+                                outerClick();
+                            }
+                        ">
+                <span data-bind="text: closeBtnLabel"></span>
+            </button>
+        </div>
+        <!-- /ko -->
     </div>
 </div>
-
