@@ -66,9 +66,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $items = $this->collection->getItems();
         /** @var \Magento\Search\Model\SynonymGroup $synGroup */
         foreach ($items as $synGroup) {
+            // Set the virtual 'scope_id' column to appropriate value.
+            // This is necessary to display the correct selection set
+            // in 'scope' field on the GUI.
+            $synGroup->setScope();
             $this->loadedData[$synGroup->getId()] = $synGroup->getData();
         }
-
         return $this->loadedData;
     }
 }

@@ -87,4 +87,12 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
         $this->setData('synonyms', $synonymGroup);
         return $this;
     }
+
+    /**
+     *  sets the 'scope_id' to website:storeviewid
+     */
+    public function setScope()
+    {
+        $this->setData('scope_id', $this->getWebsiteId() . ':' . $this->getStoreId());
+    }
 }
