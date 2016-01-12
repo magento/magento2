@@ -892,6 +892,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @magentoAppIsolation enabled
      * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
      * @param $errorsCount int
@@ -935,5 +936,34 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ['products_to_check_duplicated_url_keys.csv', 2],
             ['products_to_check_duplicated_names.csv' , 1]
         ];
+    }
+
+    /**
+     * @magentoDataFixture Magento/Store/_files/website.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @magentoAppIsolation enabled
+     */
+    public function testValidateUrlKeysMultipleStores()
+    {
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Filesystem'
+        );
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => __DIR__ . '/_files/products_to_check_valid_url_keys_multiple_stores.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
     }
 }
