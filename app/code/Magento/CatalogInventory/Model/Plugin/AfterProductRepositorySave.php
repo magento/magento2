@@ -8,10 +8,11 @@
 namespace Magento\CatalogInventory\Model\Plugin;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class AroundProductRepositorySave
+class AfterProductRepositorySave
 {
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
@@ -36,59 +37,49 @@ class AroundProductRepositorySave
     /**
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
     ) {
         $this->stockRegistry = $stockRegistry;
         $this->storeManager = $storeManager;
-        $this->stockItemRepository = $stockItemRepository;
         $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $subject
-     * @param callable $proceed
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param bool $saveOptions
-     * @return \Magento\Catalog\Api\Data\ProductInterface
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @param ProductRepositoryInterface $subject
+     * @param ProductInterface $product
+     * @return ProductInterface
+     * @throws LocalizedException
      */
-    public function aroundSave(
-        \Magento\Catalog\Api\ProductRepositoryInterface $subject,
-        \Closure $proceed,
-        \Magento\Catalog\Api\Data\ProductInterface $product,
-        $saveOptions = false
+    public function afterSave(
+        ProductRepositoryInterface $subject,
+        ProductInterface $product
     ) {
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $result */
-        $result = $proceed($product, $saveOptions);
-
         /* @var \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem */
         $stockItem = $this->getStockItemToBeUpdated($product);
         if ($stockItem === null) {
-            return $result;
+            return $product;
         }
 
         // set fields that the customer should not care about
-        $stockItem->setProductId($result->getId());
-        $stockItem->setWebsiteId($this->storeManager->getStore($result->getStoreId())->getWebsiteId());
+        $stockItem->setProductId($product->getId());
+        $stockItem->setWebsiteId($this->storeManager->getStore($product->getStoreId())->getWebsiteId());
 
-        $this->stockRegistry->updateStockItemBySku($result->getSku(), $stockItem);
+        $this->stockRegistry->updateStockItemBySku($product->getSku(), $stockItem);
 
         // since we just saved a portion of the product, force a reload of it before returning it
-        return $subject->get($result->getSku(), false, $result->getStoreId(), true);
+        return $subject->get($product->getSku(), false, $product->getStoreId(), true);
     }
 
     /**
      * Return the stock item that needs to be updated.
      * If the stock item does not need to be updated, return null.
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param ProductInterface $product
      * @return StockItemInterface|null
      * @throws LocalizedException
      */
