@@ -250,13 +250,15 @@ define([
                 switch (section.type()) {
                     case 'each':
                         if (!section.attribute()) {
-                            throw new Error($.mage.__('Please, select attribute for the section ' + section.label));
+                            throw new Error($.mage.__('Please select attribute for {section} section.')
+                                .replace('{section}', section.label));
                         }
                         break;
 
                     case 'single':
                         if (!section.value()) {
-                            throw new Error($.mage.__('Please fill in the values for the section ' + section.label));
+                            throw new Error($.mage.__('Please fill in the values for {section} section.')
+                                .replace('{section}', section.label));
                         }
                         break;
                 }
@@ -267,7 +269,7 @@ define([
             });
 
             if (!formValid) {
-                throw new Error($.mage.__('Please, fill correct values'));
+                throw new Error($.mage.__('Please fill-in correct values.'));
             }
         },
         validateImage: function () {
@@ -275,14 +277,14 @@ define([
                 case 'each':
                     _.each(this.sections()['images'].attribute().chosen, function (option) {
                         if (!option.sections().images.images.length) {
-                            throw new Error($.mage.__('Please, select image(s) for your attribute'));
+                            throw new Error($.mage.__('Please select image(s) for your attribute.'));
                         }
                     });
                     break;
 
                 case 'single':
                     if (this.sections().images.value().file == null) {
-                        throw new Error($.mage.__('Please choose image(s)'));
+                        throw new Error($.mage.__('Please choose image(s).'));
                     }
                     break;
             }
