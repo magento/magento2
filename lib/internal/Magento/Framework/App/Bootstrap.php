@@ -298,6 +298,11 @@ class Bootstrap
         try {
             try {
                 \Magento\Framework\Profiler::start('magento_prelaunch');
+                /**
+                 * It is necessary to initialize error handler even when in developer mode as certain methods require
+                 * errors to be converted into catchable exceptions.
+                 * For example @see \Magento\Framework\View\Model\Layout\Update\Validator::isValid
+                 */
                 $this->initErrorHandler();
                 $this->initObjectManager();
                 $this->assertMaintenance();
