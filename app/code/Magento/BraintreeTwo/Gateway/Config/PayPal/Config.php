@@ -18,8 +18,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     const KEY_MERCHANT_NAME_OVERRIDE = 'merchant_name_override';
 
+    const KEY_REQUIRE_BILLING_ADDRESS = 'require_billing_address';
+
     /**
      * Get Payment configuration status
+     *
      * @return bool
      */
     public function isActive()
@@ -37,6 +40,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Is shipping address can be editable on PayPal side
+     *
      * @return bool
      */
     public function isAllowToEditShippingAddress()
@@ -46,10 +50,21 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Get overriden merchant name
+     *
      * @return string
      */
     public function getMerchantName()
     {
         return $this->getValue(self::KEY_MERCHANT_NAME_OVERRIDE);
+    }
+
+    /**
+     * Get overriden merchant name
+     *
+     * @return string
+     */
+    public function isRequireBillingAddress()
+    {
+        return $this->getValue(self::KEY_REQUIRE_BILLING_ADDRESS);
     }
 }

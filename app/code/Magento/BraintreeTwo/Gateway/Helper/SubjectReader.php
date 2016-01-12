@@ -5,10 +5,11 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Helper;
 
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Braintree\Transaction;
+use Magento\Quote\Model\Quote;
 use Magento\Payment\Gateway\Helper;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Braintree\Transaction;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * Class SubjectReader
@@ -76,6 +77,7 @@ class SubjectReader
 
     /**
      * Reads customer id from subject
+     *
      * @param array $subject
      * @return int
      */
@@ -85,7 +87,7 @@ class SubjectReader
             throw new \InvalidArgumentException('The "customerId" field does not exists');
         }
 
-        return (int)$subject['customer_id'];
+        return (int) $subject['customer_id'];
     }
 
     /**
@@ -105,6 +107,7 @@ class SubjectReader
 
     /**
      * Reads PayPal details from transaction object
+     *
      * @param Transaction $transaction
      * @return array
      */
@@ -113,6 +116,7 @@ class SubjectReader
         if (!isset($transaction->paypal)) {
             throw new \InvalidArgumentException('Transaction has\'t paypal attribute');
         }
+
         return $transaction->paypal;
     }
 }
