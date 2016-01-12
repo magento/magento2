@@ -538,18 +538,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\OrchestratorPool">
-        <arguments>
-            <argument name="operations" xsi:type="array">
-                <item name="default" xsi:type="array">
-                    <item name="read" xsi:type="object">Magento\Framework\Model\Operation\Read</item>
-                    <item name="create" xsi:type="object">Magento\Framework\Model\Operation\Write\Create</item>
-                    <item name="update" xsi:type="object">Magento\Framework\Model\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="object">Magento\Framework\Model\Operation\Write\Delete</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Model\Entity\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">

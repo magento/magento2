@@ -20,7 +20,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         if ($data) {
 
             /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
-            $ruleRepository = $this->_objectManager->create(
+            $ruleRepository = $this->_objectManager->get(
                 'Magento\CatalogRule\Api\CatalogRuleRepositoryInterface'
             );
 
