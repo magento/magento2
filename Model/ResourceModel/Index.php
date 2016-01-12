@@ -8,6 +8,8 @@ namespace Magento\AdvancedSearch\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
 class Index extends AbstractDb
 {
@@ -17,16 +19,25 @@ class Index extends AbstractDb
     protected $storeManager;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * Index constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
-     * @param string $connectionName
+     * @param MetadataPool $metadataPool
+     * @param null $connectionName
      */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
+        MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->storeManager = $storeManager;
+        $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
 
@@ -125,12 +136,14 @@ class Index extends AbstractDb
     {
         $connection = $this->getConnection();
 
+        $identifierField = $this->metadataPool->getMetadata(CategoryInterface::class)->getIdentifierField();
+
         $select = $connection->select()->distinct()->from(
             ['c_p' => $this->getTable('catalog_category_product')],
             ['product_id']
         )->join(
             ['c_e' => $this->getTable('catalog_category_entity')],
-            'c_p.category_id = c_e.entity_id',
+            'c_p.category_id = c_e.' . $identifierField,
             []
         )->where(
             $connection->quoteInto('c_e.path LIKE ?', '%/' . $categoryId . '/%')
