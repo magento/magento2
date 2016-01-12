@@ -40,6 +40,9 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
             }
 
             // init model and set data
+            $tokens = explode(':', $data['scope_id']);
+            $data['website_id'] = $tokens[0];
+            $data['store_id'] = $tokens[1];
             $synGroupModel->setData($data);
 
             // save the data

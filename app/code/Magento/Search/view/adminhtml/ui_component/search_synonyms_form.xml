@@ -60,31 +60,15 @@
                 </item>
             </argument>
         </field>
-        <field name="website">
+        <field name="scope">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Search\Ui\Component\Listing\Column\Website\Options</item>
+                <item name="options" xsi:type="object">Magento\Search\Ui\Component\Listing\Column\Scope\Options</item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">int</item>
-                    <item name="label" xsi:type="string" translate="true">Website</item>
+                    <item name="label" xsi:type="string" translate="true">Scope</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">block</item>
-                    <item name="dataScope" xsi:type="string">website_id</item>
-                    <item name="default" xsi:type="string">0</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
-                </item>
-            </argument>
-        </field>
-        <field name="storeview">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Search\Ui\Component\Listing\Column\Store\Options</item>
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">int</item>
-                    <item name="label" xsi:type="string" translate="true">Store View</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="source" xsi:type="string">block</item>
-                    <item name="dataScope" xsi:type="string">store_id</item>
+                    <item name="dataScope" xsi:type="string">scope_id</item>
                     <item name="default" xsi:type="string">0</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
