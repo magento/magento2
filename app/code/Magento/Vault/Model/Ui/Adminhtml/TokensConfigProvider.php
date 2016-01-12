@@ -7,6 +7,7 @@ namespace Magento\Vault\Model\Ui\Adminhtml;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -16,6 +17,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class ConfigProvider
+ * @api
  */
 final class TokensConfigProvider
 {
@@ -60,6 +62,11 @@ final class TokensConfigProvider
     private $providerCode;
 
     /**
+     * @var DateTimeFactory
+     */
+    private $dateTimeFactory;
+
+    /**
      * Constructor
      *
      * @param SessionManagerInterface $session
@@ -68,6 +75,7 @@ final class TokensConfigProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StoreManagerInterface $storeManager
      * @param VaultPaymentInterface $vaultPayment
+     * @param DateTimeFactory $dateTimeFactory
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
      */
     public function __construct(
@@ -77,6 +85,7 @@ final class TokensConfigProvider
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StoreManagerInterface $storeManager,
         VaultPaymentInterface $vaultPayment,
+        DateTimeFactory $dateTimeFactory,
         array $tokenUiComponentProviders = []
     ) {
         $this->paymentTokenRepository = $paymentTokenRepository;
@@ -86,6 +95,7 @@ final class TokensConfigProvider
         $this->vaultPayment = $vaultPayment;
         $this->storeManager = $storeManager;
         $this->tokenUiComponentProviders = $tokenUiComponentProviders;
+        $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
@@ -114,6 +124,15 @@ final class TokensConfigProvider
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
             ->setValue($vaultProviderCode)
             ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
+            ->setConditionType('gt')
+            ->setValue(
+                $this->dateTimeFactory->create(
+                    'now',
+                    new \DateTimeZone('UTC')
+                )->format('Y-m-d 00:00:00')
+            )
+            ->create();
         $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
             ->create();
 
@@ -132,7 +151,7 @@ final class TokensConfigProvider
      * Get code of payment method provider
      * @return null|string
      */
-    public function getProviderMethodCode()
+    private function getProviderMethodCode()
     {
         if (!$this->providerCode) {
             $storeId = $this->getStoreId();

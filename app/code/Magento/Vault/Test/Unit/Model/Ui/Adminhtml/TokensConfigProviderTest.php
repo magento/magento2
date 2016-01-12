@@ -10,6 +10,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -63,6 +64,11 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $store;
 
+    /**
+     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFactory;
+
     protected function setUp()
     {
         $this->paymentTokenRepository = $this->getMockBuilder(PaymentTokenRepositoryInterface::class)
@@ -77,64 +83,10 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerId'])
             ->getMock();
+        $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->vaultPayment = $this->getMock(VaultPaymentInterface::class);
-    }
-
-    /**
-     * @covers \Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider::getProviderMethodCode
-     */
-    public function testGetProviderMethodCode()
-    {
-        $storeId = 1;
-        $paymentCode = 'vault_payment';
-
-        $this->initStoreMock();
-
-        $this->vaultPayment->expects(static::once())
-            ->method('isActive')
-            ->with($storeId)
-            ->willReturn(true);
-
-        $this->vaultPayment->expects(static::once())
-            ->method('getProviderCode')
-            ->willReturn($paymentCode);
-
-        $configProvider = new TokensConfigProvider(
-            $this->session,
-            $this->paymentTokenRepository,
-            $this->filterBuilder,
-            $this->searchCriteriaBuilder,
-            $this->storeManager,
-            $this->vaultPayment
-        );
-
-        static::assertEquals($paymentCode, $configProvider->getProviderMethodCode());
-    }
-
-    /**
-     * @covers \Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider::getProviderMethodCode
-     */
-    public function testEmptyGetProviderMethodCode()
-    {
-        $storeId = 1;
-
-        $this->initStoreMock();
-
-        $this->vaultPayment->expects(static::once())
-            ->method('isActive')
-            ->with($storeId)
-            ->willReturn(false);
-
-        $configProvider = new TokensConfigProvider(
-            $this->session,
-            $this->paymentTokenRepository,
-            $this->filterBuilder,
-            $this->searchCriteriaBuilder,
-            $this->storeManager,
-            $this->vaultPayment
-        );
-
-        static::assertEmpty($configProvider->getProviderMethodCode());
     }
 
     /**
@@ -179,6 +131,18 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $searchCriteria = $this->getSearchCriteria($customerId, $paymentCode);
 
+        $date = $this->getMockBuilder('DateTime')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dateTimeFactory->expects(static::once())
+            ->method('create')
+            ->with("now", new \DateTimeZone('UTC'))
+            ->willReturn($date);
+        $date->expects(static::once())
+            ->method('format')
+            ->with('Y-m-d 00:00:00')
+            ->willReturn('2015-01-01 00:00:00');
+
         $searchResult = $this->getMockBuilder(PaymentTokenSearchResultsInterface::class)
             ->getMockForAbstractClass();
         $this->paymentTokenRepository->expects(self::once())
@@ -197,6 +161,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->searchCriteriaBuilder,
             $this->storeManager,
             $this->vaultPayment,
+            $this->dateTimeFactory,
             [
                 $paymentCode => $tokenUiComponentProvider
             ]
@@ -226,7 +191,8 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->filterBuilder,
             $this->searchCriteriaBuilder,
             $this->storeManager,
-            $this->vaultPayment
+            $this->vaultPayment,
+            $this->dateTimeFactory
         );
 
         static::assertEmpty($configProvider->getConfig());
@@ -266,7 +232,8 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->filterBuilder,
             $this->searchCriteriaBuilder,
             $this->storeManager,
-            $this->vaultPayment
+            $this->vaultPayment,
+            $this->dateTimeFactory
         );
 
         static::assertEmpty($configProvider->getConfig());
@@ -364,9 +331,20 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             1
         );
 
+        // express at expectations
+        $expiresAtFilter = $this->createExpectedFilter(
+            PaymentTokenInterface::EXPIRES_AT,
+            '2015-01-01 00:00:00',
+            2
+        );
+        $this->filterBuilder->expects(static::once())
+            ->method('setConditionType')
+            ->with('gt')
+            ->willReturnSelf();
+
         $this->searchCriteriaBuilder->expects(self::once())
             ->method('addFilters')
-            ->with([$customerFilter, $codeFilter])
+            ->with([$customerFilter, $codeFilter, $expiresAtFilter])
             ->willReturnSelf();
 
         $this->searchCriteriaBuilder->expects(self::once())
