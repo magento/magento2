@@ -90,7 +90,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/GiftMessage/_files/virtual_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
      * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift Messages is not applicable for virtual products
+     * @expectedExceptionMessage Gift Messages are not applicable for virtual products
      */
     public function testSaveMessageIsVirtual()
     {
@@ -105,7 +105,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/GiftMessage/_files/empty_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Gift Messages is not applicable for empty order
+     * @expectedExceptionMessage Gift Messages are not applicable for empty order
      */
     public function testSaveMessageIsEmpty()
     {
