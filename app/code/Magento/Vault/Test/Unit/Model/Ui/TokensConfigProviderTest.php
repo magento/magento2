@@ -9,6 +9,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -65,6 +66,11 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $store;
 
+    /**
+     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFactory;
+
     protected function setUp()
     {
         $this->paymentTokenRepositoryMock = $this->getMockBuilder(PaymentTokenRepositoryInterface::class)
@@ -80,6 +86,9 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->vaultPayment = $this->getMock(VaultPaymentInterface::class);
         $this->storeManager = $this->getMock(StoreManagerInterface::class);
+        $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->store = $this->getMock(StoreInterface::class);
     }
 
@@ -141,9 +150,32 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             2
         );
 
+        // express at expectations
+        $expiresAtFilter = $this->createExpectedFilter(
+            PaymentTokenInterface::EXPIRES_AT,
+            '2015-01-01 00:00:00',
+            3
+        );
+        $this->filterBuilderMock->expects(static::once())
+            ->method('setConditionType')
+            ->with('gt')
+            ->willReturnSelf();
+
+        $date = $this->getMockBuilder('DateTime')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dateTimeFactory->expects(static::once())
+            ->method('create')
+            ->with("now", new \DateTimeZone('UTC'))
+            ->willReturn($date);
+        $date->expects(static::once())
+            ->method('format')
+            ->with('Y-m-d 00:00:00')
+            ->willReturn('2015-01-01 00:00:00');
+
         $this->searchCriteriaBuilderMock->expects(self::once())
             ->method('addFilters')
-            ->with([$customerFilterMock, $visibilityFilterMock, $codeFilterMock])
+            ->with([$customerFilterMock, $visibilityFilterMock, $codeFilterMock, $expiresAtFilter])
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects(self::once())
             ->method('create')
@@ -176,6 +208,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->searchCriteriaBuilderMock,
             $this->storeManager,
             $this->vaultPayment,
+            $this->dateTimeFactory,
             [
                 $vaultProviderCode => $tokenUiComponentProvider
             ]
@@ -229,7 +262,8 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->filterBuilderMock,
             $this->searchCriteriaBuilderMock,
             $this->storeManager,
-            $this->vaultPayment
+            $this->vaultPayment,
+            $this->dateTimeFactory
         );
         $config = $configProvider->getConfig();
 
@@ -265,7 +299,8 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->filterBuilderMock,
             $this->searchCriteriaBuilderMock,
             $this->storeManager,
-            $this->vaultPayment
+            $this->vaultPayment,
+            $this->dateTimeFactory
         );
         $config = $configProvider->getConfig();
 
