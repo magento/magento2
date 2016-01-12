@@ -4120,6 +4120,10 @@ return [
     ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Meta'],
     ['Magento\Cms\Block\Adminhtml\Block\Edit'],
     ['Magento\Cms\Block\Adminhtml\Block\Edit\Form'],
+    ['Magento\Backend\Block\Catalog\Category\Tabs'],
+    ['Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes'],
+    ['Magento\Catalog\Block\Adminhtml\Category\Tab\Design'],
+    ['Magento\Catalog\Block\Adminhtml\Category\Edit\Form'],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
         'Magento\Catalog\Model\ResourceModel\Product\Gallery'
