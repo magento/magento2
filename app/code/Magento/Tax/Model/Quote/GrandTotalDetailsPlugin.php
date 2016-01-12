@@ -75,6 +75,7 @@ class GrandTotalDetailsPlugin
      * @param \Magento\Quote\Model\Quote\Address\Total[] $addressTotals
      * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function aroundProcess(
         \Magento\Quote\Model\Cart\TotalsConverter $subject,

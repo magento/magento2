@@ -179,7 +179,12 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
 
         $extensionAttributeMock = $this->getMockBuilder(
             '\Magento\Quote\Api\Data\TotalSegmentExtensionInterface'
-        )->getMock();
+        )->setMethods(
+            [
+                'setTaxGrandtotalDetails',
+
+            ]
+        )->getMockForAbstractClass();
         $extensionAttributeMock->expects($this->once())
             ->method('setTaxGrandtotalDetails')
             ->with([$taxDetailsMock])
