@@ -8,6 +8,7 @@ namespace Magento\BraintreeTwo\Gateway\Helper;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Braintree\Transaction;
 
 /**
  * Class SubjectReader
@@ -54,7 +55,7 @@ class SubjectReader
         }
 
         if (!isset($subject['object']->transaction)
-            && !$subject['object']->transaction instanceof \Braintree\Transaction
+            && !$subject['object']->transaction instanceof Transaction
         ) {
             throw new \InvalidArgumentException('The object is not a class \Braintree\Transaction.');
         }
@@ -100,5 +101,18 @@ class SubjectReader
         }
 
         return $subject[PaymentTokenInterface::PUBLIC_HASH];
+    }
+
+    /**
+     * Reads PayPal details from transaction object
+     * @param Transaction $transaction
+     * @return array
+     */
+    public function readPayPal(Transaction $transaction)
+    {
+        if (!isset($transaction->paypal)) {
+            throw new \InvalidArgumentException('Transaction has\'t paypal attribute');
+        }
+        return $transaction->paypal;
     }
 }

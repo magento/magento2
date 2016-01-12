@@ -6,7 +6,7 @@
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
-use Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler;
+use Magento\BraintreeTwo\Gateway\Response\PayPalDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
@@ -14,19 +14,17 @@ use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class PaymentDetailsHandlerTest
+ * Class PayPalDetailsHandlerTest
  */
-class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class PayPalDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    const TRANSACTION_ID = '432erwwe';
-
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler
+     * @var PayPalDetailsHandler|MockObject
      */
-    private $paymentHandler;
+    private $payPalHandler;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment|MockObject
+     * @var Payment|MockObject
      */
     private $payment;
 
@@ -40,33 +38,18 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                'setTransactionId',
-                'setCcTransId',
-                'setLastTransId',
                 'setAdditionalInformation',
-                'setIsTransactionClosed'
             ])
             ->getMock();
         $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->payment->expects(static::once())
-            ->method('setTransactionId');
-        $this->payment->expects(static::once())
-            ->method('setCcTransId');
-        $this->payment->expects(static::once())
-            ->method('setLastTransId');
-        $this->payment->expects(static::once())
-            ->method('setIsTransactionClosed');
-        $this->payment->expects(static::any())
-            ->method('setAdditionalInformation');
-
-        $this->paymentHandler = new PaymentDetailsHandler($this->subjectReader);
+        $this->payPalHandler = new PayPalDetailsHandler($this->subjectReader);
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::handle
+     * @covers \Magento\BraintreeTwo\Gateway\Response\PayPalDetailsHandler::handle
      */
     public function testHandle()
     {
@@ -84,8 +67,15 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
+        $this->subjectReader->expects(static::once())
+            ->method('readPayPal')
+            ->with($transaction)
+            ->willReturn($transaction->paypal);
 
-        $this->paymentHandler->handle($subject, $response);
+        $this->payment->expects(static::exactly(2))
+            ->method('setAdditionalInformation');
+
+        $this->payPalHandler->handle($subject, $response);
     }
 
     /**
@@ -106,6 +96,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         return $mock;
     }
 
+
     /**
      * Create Braintree transaction
      * @return Transaction
@@ -113,13 +104,11 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     private function getBraintreeTransaction()
     {
         $attributes = [
-            'id' => self::TRANSACTION_ID,
-            'avsPostalCodeResponseCode' => 'M',
-            'avsStreetAddressResponseCode' => 'M',
-            'cvvResponseCode' => 'M',
-            'processorAuthorizationCode' => 'W1V8XK',
-            'processorResponseCode' => '1000',
-            'processorResponseText' => 'Approved'
+            'id' => '23ui8be',
+            'paypal' => [
+                'paymentId' => 'u239dkv6n2lds',
+                'payerEmail' => 'example@test.com'
+            ]
         ];
 
         $transaction = Transaction::factory($attributes);

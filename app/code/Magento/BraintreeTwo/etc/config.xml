@@ -20,10 +20,10 @@
                 <can_capture_partial>1</can_capture_partial>
                 <can_authorize_vault>1</can_authorize_vault>
                 <can_capture_vault>1</can_capture_vault>
+                <can_use_internal>1</can_use_internal>
                 <cctypes>AE,VI,MC,DI,JCB,CUP,DN,MI</cctypes>
                 <useccv>1</useccv>
                 <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP"}]]></cctypes_braintree_mapper>
-                <useccv>1</useccv>
                 <order_status>processing</order_status>
                 <environment>sandbox</environment>
                 <allowspecific>0</allowspecific>
@@ -33,7 +33,6 @@
                 <masked_fields>cvv,number</masked_fields>
                 <privateInfoKeys>avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</privateInfoKeys>
                 <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</paymentInfoKeys>
-                <can_use_internal>1</can_use_internal>
             </braintreetwo>
             <braintreetwo_paypal>
                 <model>BraintreeTwoPayPalFacade</model>
@@ -47,6 +46,10 @@
                 <order_status>processing</order_status>
                 <is_gateway>1</is_gateway>
                 <can_use_checkout>1</can_use_checkout>
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <privateInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</privateInfoKeys>
+                <paymentInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</paymentInfoKeys>
             </braintreetwo_paypal>
         </payment>
     </default>
