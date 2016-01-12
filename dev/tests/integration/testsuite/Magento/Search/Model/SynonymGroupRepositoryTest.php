@@ -203,4 +203,22 @@ class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $synonymGroupModel->load(15);
         $this->assertNull($synonymGroupModel->getSynonymGroup());
     }
+
+    public function testDelete()
+    {
+        /** @var \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup */
+        $synonymGroup = $this->objectManager->create('Magento\Search\Api\Data\SynonymGroupInterface');
+        $synonymGroup->setSynonymGroup('test1,test1,test3');
+        $this->model->save($synonymGroup);
+
+        /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
+        $synonymGroupModel = $this->objectManager->create('Magento\Search\Model\SynonymGroup');
+        $synonymGroupModel->load(15);
+
+        $this->model->delete($synonymGroupModel);
+
+        $synonymGroupModel = $this->objectManager->create('Magento\Search\Model\SynonymGroup');
+        $synonymGroupModel->load(15);
+        $this->assertNull($synonymGroupModel->getSynonymGroup());
+    }
 }
