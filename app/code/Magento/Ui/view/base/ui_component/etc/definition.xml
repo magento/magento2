@@ -298,7 +298,7 @@
     <insertForm class="Magento\Ui\Component\Container">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insertForm</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insert-form</item>
                 <item name="update_url" xsi:type="url" path="mui/index/render"/>
                 <item name="render_url" xsi:type="url" path="mui/index/render"/>
                 <item name="autoRender" xsi:type="boolean">false</item>
@@ -310,10 +310,10 @@
             </item>
         </argument>
     </insertForm>
-    <insertGrid class="Magento\Ui\Component\Container">
+    <insertListing class="Magento\Ui\Component\Container">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insertGrid</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insert-listing</item>
                 <item name="update_url" xsi:type="url" path="mui/index/render"/>
                 <item name="render_url" xsi:type="url" path="mui/index/render"/>
                 <item name="autoRender" xsi:type="boolean">false</item>
@@ -324,7 +324,7 @@
                 <item name="realTimeLink" xsi:type="boolean">true</item>
             </item>
         </argument>
-    </insertGrid>
+    </insertListing>
     <!-- Form element data types -->
 
 

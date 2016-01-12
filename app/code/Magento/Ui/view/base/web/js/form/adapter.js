@@ -13,7 +13,7 @@ define([
             'save':             '#save',
             'saveAndContinue':  '#save_and_continue'
         },
-        selectorPrefix = false,
+        selectorPrefix = '',
         eventPrefix;
 
     /**
@@ -70,7 +70,7 @@ define([
             selectorPrefix = selectorPrefix || selectorPref;
             eventPrefix = eventPref;
             _.each(handlers, initListener);
-            selectorPrefix = false;
+            selectorPrefix = '';
         },
 
         /**
