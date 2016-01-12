@@ -3,29 +3,34 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
+namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Customer\Model\Session;
 
-class FieldMapperTest extends \PHPUnit_Framework_TestCase
+class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper
+     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper
      */
     protected $mapper;
 
     /**
-     * @var \Magento\Eav\Model\Config|MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\Registry|MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreRegistry;
+
+    /**
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSession;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -43,7 +48,12 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
     protected $fieldType;
 
     /**
-     * Set up test environment.
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $store;
+
+    /**
+     * Set up test environment
      *
      * @return void
      */
@@ -59,7 +69,29 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getFieldType'])
             ->getMock();
 
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->customerSession = $this->getMockBuilder('\Magento\Customer\Model\Session')
+            ->disableOriginalConstructor()
+            ->setMethods(['getCustomerGroupId'])
+            ->getMock();
+
+        $this->storeManager = $this->storeManager = $this->getMockForAbstractClass(
+            'Magento\Store\Model\StoreManagerInterface',
+            [],
+            '',
+            false
+        );
+
+        $this->store = $this->getMockForAbstractClass(
+            'Magento\Store\Api\Data\StoreInterface',
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getWebsiteId', 'getRootCategoryId']
+        );
+
+        $this->coreRegistry = $this->getMock('\Magento\Framework\Registry');
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -76,12 +108,13 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mapper = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\FieldMapper',
+            '\Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper',
             [
                 'eavConfig' => $this->eavConfig,
-                'coreRegistry' => $this->coreRegistry,
                 'storeManager' => $this->storeManager,
-                'fieldType' => $this->fieldType
+                'fieldType' => $this->fieldType,
+                'customerSession' => $this->customerSession,
+                'coreRegistry' => $this->coreRegistry
             ]
         );
     }
@@ -93,7 +126,7 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
      * @param string $fieldType
      * @param array $context
      *
-     * @return string
+     * @return void
      */
     public function testGetFieldName($attributeCode, $fieldName, $fieldType, $context = [])
     {
@@ -101,6 +134,20 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getBackendType', 'getFrontendInput', 'getAttribute'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->customerSession->expects($this->any())
+            ->method('getCustomerGroupId')
+            ->willReturn('0');
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn('1');
+        $this->store->expects($this->any())
+            ->method('getRootCategoryId')
+            ->willReturn('1');
 
         $this->eavConfig->expects($this->any())->method('getAttribute')
             ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
@@ -120,7 +167,7 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return string
+     * @return void
      */
     public function testGetFieldNameWithoutAttribute()
     {
@@ -138,7 +185,7 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
      * @dataProvider attributeProvider
      * @param string $attributeCode
      *
-     * @return array
+     * @return void
      */
     public function testGetAllAttributesTypes($attributeCode)
     {
@@ -196,10 +243,15 @@ class FieldMapperTest extends \PHPUnit_Framework_TestCase
         return [
             ['id', 'id', 'string'],
             ['status', 'status', 'string'],
-            ['price', 'price_value', 'string', ['type'=>'default']],
-            ['color', 'color_value', 'select', ['type'=>'default']],
+            ['status', 'status', 'string', ['type'=>'default']],
+            ['price', 'price_0_1', 'string', ['type'=>'default']],
+            ['position', 'position_category_1', 'string', ['type'=>'default']],
+            ['price', 'price_2_3', 'string', ['type'=>'default', 'customerGroupId'=>'2', 'websiteId'=>'3']],
+            ['position', 'position_category_3', 'string', ['type'=>'default', 'categoryId'=>'3']],
+            ['color', 'color', 'select', ['type'=>'default']],
             ['description', 'sort_description', 'string', ['type'=>'some']],
             ['*', '_all', 'string', ['type'=>'text']],
+            ['description', 'description', 'string', ['type'=>'text']],
         ];
     }
 

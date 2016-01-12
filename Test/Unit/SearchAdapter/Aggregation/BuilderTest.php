@@ -7,6 +7,8 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Aggregation;
 
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Search\Dynamic\DataProviderInterface;
+use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,14 +28,38 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected $requestBuckedInterface;
 
     /**
+     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataProviderContainer;
+
+    /**
+     * @var BucketBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $aggregationContainer;
+
+    /**
      * Set up test environment.
      *
      * @return void
      */
     protected function setUp()
     {
+        $this->dataProviderContainer = $this->getMockBuilder('Magento\Framework\Search\Dynamic\DataProviderInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->aggregationContainer = $this
+            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $objectManagerHelper->getObject('\Magento\Elasticsearch\SearchAdapter\Aggregation\Builder');
+        $this->model = $objectManagerHelper->getObject(
+            '\Magento\Elasticsearch\SearchAdapter\Aggregation\Builder',
+            [
+                'dataProviderContainer' => ['indexName' => $this->dataProviderContainer],
+                'aggregationContainer' => ['bucketType' => $this->aggregationContainer],
+            ]
+        );
     }
 
     /**
@@ -50,12 +76,32 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->requestInterface->expects($this->once())
+            ->method('getIndex')
+            ->willReturn('indexName');
+
+        $dimensionMock = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
+            ->disableOriginalConstructor()
+            ->getMock();
+            
+        $this->requestInterface->expects($this->once())
+            ->method('getDimensions')
+            ->willReturn([$dimensionMock]);
+
+        $this->requestInterface->expects($this->once())
             ->method('getAggregation')
             ->willReturn([$this->requestBuckedInterface]);
 
         $this->requestBuckedInterface->expects($this->any())
             ->method('getName')
             ->willReturn('price_bucket');
+
+        $this->requestBuckedInterface->expects($this->any())
+            ->method('getType')
+            ->willReturn('bucketType');
+
+        $this->aggregationContainer->expects($this->any())
+            ->method('build')
+            ->willReturn([]);
 
         $this->assertEquals(
             [

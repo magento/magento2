@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\SearchAdapter;
+namespace Magento\Elasticsearch\Model\Adapter;
 
 interface FieldMapperInterface
 {
@@ -20,7 +20,15 @@ interface FieldMapperInterface
      *
      * @param string $attributeCode
      * @param array $context
-     * @return mixed
+     * @return string
      */
     public function getFieldName($attributeCode, $context = []);
+
+    /**
+     * Get all entity attribute types
+     *
+     * @param array $context
+     * @return array
+     */
+    public function getAllAttributesTypes($context = []);
 }

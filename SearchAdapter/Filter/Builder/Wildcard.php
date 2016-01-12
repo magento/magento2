@@ -7,7 +7,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Filter\Builder;
 
 use Magento\Framework\Search\Request\Filter\Wildcard as WildcardFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 class Wildcard implements FilterInterface
 {
@@ -32,9 +32,11 @@ class Wildcard implements FilterInterface
     {
         $fieldName = $this->fieldMapper->getFieldName($filter->getField());
         return [
-            'wildcard' => [
-                $fieldName => $filter->getValue() . '*',
-            ],
+            [
+                'wildcard' => [
+                    $fieldName => $filter->getValue() . '*',
+                ],
+            ]
         ];
     }
 }

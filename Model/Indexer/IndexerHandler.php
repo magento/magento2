@@ -10,7 +10,6 @@ use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
-use Magento\Store\Model\Store;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -18,11 +17,6 @@ class IndexerHandler implements IndexerInterface
      * Default batch size
      */
     const DEFAULT_BATCH_SIZE = 500;
-
-    /**
-     * Scope identifier
-     */
-    const SCOPE_FIELD_NAME = 'scope';
 
     /**
      * @var IndexStructureInterface
@@ -95,15 +89,14 @@ class IndexerHandler implements IndexerInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deleteIndex($dimensions, \Traversable $documents)
     {
         $dimension = current($dimensions);
         $storeId = $dimension->getValue();
         $documentIds = [];
-        foreach ($documents as $entityId => $document) {
-            $documentIds[$entityId] = $entityId;
+        foreach ($documents as $document) {
+            $documentIds[$document] = $document;
         }
         $this->adapter->deleteDocs($documentIds, $storeId, $this->getIndexerId());
         return $this;

@@ -20,7 +20,7 @@ class WildcardTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fieldMapper;
 
@@ -36,7 +36,7 @@ class WildcardTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\FieldMapperInterface')
+        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

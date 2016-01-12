@@ -44,6 +44,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                 'bulk',
                 'search',
                 'scroll',
+                'suggest',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -158,64 +159,6 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->method('bulk')
             ->with([]);
         $this->model->bulkQuery([]);
-    }
-
-    /**
-     * Test getAllIds() method
-     */
-    public function testGetAllIds()
-    {
-        $index = 'indexName';
-        $entityType = 'product';
-
-        $this->elasticsearchClientMock->expects($this->once())
-            ->method('search')
-            ->with([
-                'search_type' => 'scan',
-                'scroll' => '1m',
-                'index' => $index,
-                'type' => $entityType,
-                'body' => [
-                    'query' => [
-                        'match_all' => [],
-                    ],
-                    'fields' => [ '_id' ]
-                ]
-            ])
-            ->willReturn(['_scroll_id' => 'scrollId1']);
-        $this->elasticsearchClientMock->expects($this->at(1))
-            ->method('scroll')
-            ->with([
-                'scroll_id' => 'scrollId1',
-                'scroll' => '1m',
-            ])
-            ->willReturn([
-                '_scroll_id' => 'scrollId2',
-                'hits' => [
-                    'hits' => [
-                        0 => [
-                            '_id' => '123',
-                        ],
-                        1 => [
-                            '_id' => '234',
-                        ]
-                    ],
-                ],
-            ]);
-        $this->elasticsearchClientMock->expects($this->at(2))
-            ->method('scroll')
-            ->with([
-                'scroll_id' => 'scrollId2',
-                'scroll' => '1m',
-            ])
-            ->willReturn([
-                '_scroll_id' => 'scrollId3',
-                'hits' => [
-                    'hits' => [],
-                ],
-            ]);
-        $result = $this->model->getAllIds($index, $entityType);
-        $this->assertEquals(['123' => '123', '234' => '234'], $result);
     }
 
     /**
@@ -402,6 +345,36 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                                 'type' => 'string',
                             ],
                         ],
+                        'dynamic_templates' => [
+                            [
+                                'price_mapping' => [
+                                    'match' => 'price_*',
+                                    'match_mapping' => 'string',
+                                    'mapping' => [
+                                        'type' => 'float'
+                                    ],
+                                ],
+                            ],
+                            [
+                                'string_mapping' => [
+                                    'match' => '*',
+                                    'match_mapping' => 'string',
+                                    'mapping' => [
+                                        'type' => 'string',
+                                        'index' => 'no'
+                                    ],
+                                ],
+                            ],
+                            [
+                                'position_mapping' => [
+                                    'match' => 'position_*',
+                                    'match_mapping' => 'string',
+                                    'mapping' => [
+                                        'type' => 'int'
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ]);
@@ -436,6 +409,36 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
                         'properties' => [
                             'name' => [
                                 'type' => 'string',
+                            ],
+                        ],
+                        'dynamic_templates' => [
+                            [
+                                'price_mapping' => [
+                                    'match' => 'price_*',
+                                    'match_mapping' => 'string',
+                                    'mapping' => [
+                                        'type' => 'float'
+                                    ],
+                                ],
+                            ],
+                            [
+                                'string_mapping' => [
+                                    'match' => '*',
+                                    'match_mapping' => 'string',
+                                    'mapping' => [
+                                        'type' => 'string',
+                                        'index' => 'no'
+                                    ],
+                                ],
+                            ],
+                            [
+                                'position_mapping' => [
+                                    'match' => 'position_*',
+                                    'match_mapping' => 'string',
+                                    'mapping' => [
+                                        'type' => 'int'
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -501,6 +504,19 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->with($query)
             ->willReturn([]);
         $this->assertEquals([], $this->model->query($query));
+    }
+
+    /**
+     * Test suggest() method
+     * @return void
+     */
+    public function testSuggest()
+    {
+        $query = 'query';
+        $this->elasticsearchClientMock->expects($this->once())
+            ->method('suggest')
+            ->willReturn([]);
+        $this->assertEquals([], $this->model->suggest($query));
     }
 
     /**

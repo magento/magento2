@@ -57,29 +57,31 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
     /**
      * Retrieve all attributes for given product ids
      *
-     * @param array $productIds
+     * @param int $productId
+     * @param array $indexData
      * @return array
      */
-    public function getFullProductIndexData(array $productIds)
+    public function getFullProductIndexData($productId, $indexData)
     {
         $productAttributes = [];
         $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
-        foreach ($productIds as $productId) {
-            $product = $this->productRepository->getById($productId);
-            $productAttributesWithValues = $product->getData();
-            foreach ($productAttributesWithValues as $attributeCode => $value) {
-                $attribute = $this->eavConfig->getAttribute(
-                    ProductAttributeInterface::ENTITY_TYPE_CODE,
-                    $attributeCode
-                );
-                $frontendInput = $attribute->getFrontendInput();
-                if (in_array($attributeCode, $attributeCodes)) {
-                    $productAttributes[$productId][$attributeCode] = $value;
-                    if ($frontendInput == 'select') {
-                        foreach ($attribute->getOptions() as $option) {
-                            if ($option->getValue() == $value) {
-                                $productAttributes[$productId][$attributeCode . '_value'] = $option->getLabel();
-                            }
+        $product = $this->productRepository->getById($productId);
+        $productAttributesWithValues = $product->getData();
+        foreach ($productAttributesWithValues as $attributeCode => $value) {
+            $attribute = $this->eavConfig->getAttribute(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $attributeCode
+            );
+            $frontendInput = $attribute->getFrontendInput();
+            if (in_array($attribute->getAttributeId(), array_keys($indexData))) {
+                $value = $indexData[$attribute->getAttributeId()];
+            }
+            if (in_array($attributeCode, $attributeCodes)) {
+                $productAttributes[$attributeCode] = $value;
+                if ($frontendInput == 'select') {
+                    foreach ($attribute->getOptions() as $option) {
+                        if ($option->getValue() == $value) {
+                            $productAttributes[$attributeCode . '_value'] = $option->getLabel();
                         }
                     }
                 }

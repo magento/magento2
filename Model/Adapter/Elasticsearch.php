@@ -5,14 +5,6 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter;
 
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
-use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Psr\Log\LoggerInterface;
-use Magento\Elasticsearch\Model\Config;
-use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
-use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
-use Magento\Framework\Exception\LocalizedException;
-
 /**
  * Elasticsearch adapter
  */
@@ -28,42 +20,42 @@ class Elasticsearch
     /**#@-*/
 
     /**
-     * @var ConnectionManager
+     * @var \Magento\Elasticsearch\SearchAdapter\ConnectionManager
      */
     protected $connectionManager;
 
     /**
-     * @var DocumentDataMapper
+     * @var DataMapperInterface
      */
     protected $documentDataMapper;
 
     /**
-     * @var IndexNameResolver
+     * @var \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver
      */
     protected $indexNameResolver;
 
     /**
-     * @var FieldMapper
+     * @var FieldMapperInterface
      */
     protected $fieldMapper;
 
     /**
-     * @var Config
+     * @var \Magento\Elasticsearch\Model\Config
      */
     protected $clientConfig;
 
     /**
-     * @var ElasticsearchClient
+     * @var \Magento\Elasticsearch\Model\Client\Elasticsearch
      */
     protected $client;
 
     /**
-     * @var BuilderInterface
+     * @var \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface
      */
     protected $indexBuilder;
 
     /**
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -75,25 +67,25 @@ class Elasticsearch
     /**
      * Constructor for Elasticsearch adapter.
      *
-     * @param ConnectionManager $connectionManager
-     * @param DocumentDataMapper $documentDataMapper
-     * @param FieldMapper $fieldMapper
-     * @param Config $clientConfig
-     * @param BuilderInterface $indexBuilder
-     * @param LoggerInterface $logger
-     * @param IndexNameResolver $indexNameResolver
+     * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
+     * @param DataMapperInterface $documentDataMapper
+     * @param FieldMapperInterface $fieldMapper
+     * @param \Magento\Elasticsearch\Model\Config $clientConfig
+     * @param \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver
      * @param array $options
      *
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
-        ConnectionManager $connectionManager,
-        DocumentDataMapper $documentDataMapper,
-        FieldMapper $fieldMapper,
-        Config $clientConfig,
-        BuilderInterface $indexBuilder,
-        LoggerInterface $logger,
-        IndexNameResolver $indexNameResolver,
+        \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,
+        DataMapperInterface $documentDataMapper,
+        FieldMapperInterface $fieldMapper,
+        \Magento\Elasticsearch\Model\Config $clientConfig,
+        \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver,
         $options = []
     ) {
         $this->connectionManager = $connectionManager;
@@ -108,7 +100,7 @@ class Elasticsearch
             $this->client = $this->connectionManager->getConnection($options);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new LocalizedException(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('We were unable to perform the search because of a search engine misconfiguration.')
             );
         }
@@ -118,14 +110,14 @@ class Elasticsearch
      * Retrieve Elasticsearch server status
      *
      * @return bool
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function ping()
     {
         try {
             $response = $this->client->ping();
         } catch (\Exception $e) {
-            throw new LocalizedException(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Could not ping search engine: %1', $e->getMessage())
             );
         }
@@ -207,7 +199,7 @@ class Elasticsearch
         }
 
         // prepare new index
-        $this->prepareIndex($storeId, $newIndexName);
+        $this->prepareIndex($storeId, $newIndexName, $mappedIndexerId);
 
         return $this;
     }
@@ -257,6 +249,7 @@ class Elasticsearch
             'index' => $indexName,
             'type' => $this->clientConfig->getEntityType(),
             'body' => [],
+            'refresh' => true,
         ];
 
         foreach ($documents as $id => $document) {
@@ -291,7 +284,7 @@ class Elasticsearch
         // create new index for store
         $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
         if (!$this->client->indexExists($indexName)) {
-            $this->prepareIndex($storeId, $indexName);
+            $this->prepareIndex($storeId, $indexName, $mappedIndexerId);
         }
 
         // add index to alias
@@ -341,14 +334,15 @@ class Elasticsearch
      *
      * @param int $storeId
      * @param string $indexName
+     * @param string $mappedIndexerId
      * @return $this
      */
-    protected function prepareIndex($storeId, $indexName)
+    protected function prepareIndex($storeId, $indexName, $mappedIndexerId)
     {
         $this->indexBuilder->setStoreId($storeId);
         $this->client->createIndex($indexName, ['settings' => $this->indexBuilder->build()]);
         $this->client->addFieldsMapping(
-            $this->fieldMapper->getAllAttributesTypes(),
+            $this->fieldMapper->getAllAttributesTypes(['entityType' => $mappedIndexerId]),
             $indexName,
             $this->clientConfig->getEntityType()
         );

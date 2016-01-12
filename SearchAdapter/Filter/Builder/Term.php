@@ -7,7 +7,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Filter\Builder;
 
 use Magento\Framework\Search\Request\Filter\Term as TermFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
-use Magento\Elasticsearch\SearchAdapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 class Term implements FilterInterface
 {
@@ -34,7 +34,7 @@ class Term implements FilterInterface
         if ($filter->getValue()) {
             $filterValues =  is_array($filter->getValue()) ? $filter->getValue() : [$filter->getValue()];
             foreach ($filterValues as $value) {
-                $filterQuery['or']['filters'][] = [
+                $filterQuery[] = [
                     'term' => [
                         $this->fieldMapper->getFieldName($filter->getField()) => $value,
                     ],
