@@ -30,7 +30,7 @@ abstract class AbstractRelated extends Tab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $data, SimpleElement $element = null)
+    public function setFieldsData(array $data, SimpleElement $element = null)
     {
         if (isset($data[$this->relatedType]['value'])) {
             $context = $element ? $element : $this->_rootElement;
@@ -51,7 +51,7 @@ abstract class AbstractRelated extends Tab
      * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $relatedBlock = $this->getRelatedGrid($element);
         $columns = [

@@ -4,33 +4,20 @@
  * See COPYING.txt for license details.
  */
 -->
-<fieldset class="admin__field" data-bind="css: {'_required': element.required}">
+<fieldset class="admin__field" css="_required: required">
     <legend class="admin__field-label">
-        <span data-bind="text: element.label"></span>
+        <span text="label"/>
     </legend><br />
-    <div class="admin__field-control" data-bind="css: {'admin__control-fields': element.breakLine, 'admin__control-grouped': !element.breakLine}">
-        <!-- ko foreach: { data: elems, as: 'element' } -->
+    <div class="admin__field-control" css="'admin__control-fields': $data.breakLine, 'admin__control-grouped': !$data.breakLine">
+        <each args="elems">
+            <if args="visible">
+                <render args="$parent.fieldTemplate" if="element.input_type != 'checkbox' || element.input_type != 'radio'"/>
+                <render args="elementTmpl" if="element.input_type == 'checkbox' || element.input_type == 'radio'"/>
+            </if>
+        </each>
 
-            <!-- ko if: element.visible() -->
-
-                <!-- ko ifnot: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
-                    <!-- ko template: $parent.fieldTemplate --><!-- /ko -->
-                <!-- /ko -->
-
-                <!-- ko if: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
-                    <!-- ko template: element.elementTmpl --><!-- /ko -->
-                <!-- /ko -->
-
-            <!-- /ko -->
-
-        <!-- /ko -->
-
-        <!-- ko if: validateWholeGroup -->
-        <!-- ko foreach: { data: elems, as: 'element' } -->
-            <!-- ko if: element.error() && element.visible() -->
-                <label class="admin__field-error" data-bind="attr: { for: uid }, text: element.error"></label>
-            <!-- /ko -->
-        <!-- /ko -->
-        <!-- /ko -->
+        <each args="elems" if="validateWholeGroup">
+            <label class="admin__field-error" if="error() && visible()" attr="for: uid" text="error"/>
+        </each>
     </div>
 </fieldset>

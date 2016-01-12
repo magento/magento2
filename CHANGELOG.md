@@ -1,3 +1,24 @@
+2.0.0
+=============
+* Fixed bugs:
+    * Fixed an issue where discount to the shipping amount was not applied during invoice creation
+    * Fixed an issue where inline translations did not work correctly for phrases with special characters
+    * Eliminated multiple escaping in the inline translation pop-up
+    * Fixed an issue where searching in Billing Agreements grid in Admin resulted in an SQL
+    * Fixed the Refresh Lifetime Statistics functionality in Reports
+    * Increased the limit of cookies per domain, according to following recommendations https://tools.ietf.org/html/rfc6265#section-6.1
+    * Fixed filtering by date in grids
+    * Fixed an issue where Totals were not calculated correctly if discount was applied when placing an order from Admin
+    * Fixed filtering of online customers by session Start Time
+    * Fixed an issue where it was impossible to register a customer on the storefront if an attribute with file type was required
+    * Fixed the issues in the Custom Admin URL with https functionality
+    * Fixed an issue where the category storefront URL did not include its parents
+    * Fixed an issue where Product API did not work properly for not default store code
+    * Fixed issues with adding images for a first product in a new attribute set
+    * Fixed an issue where it was impossible to create a credit memo for the order with downloadable product and sales rule applied
+    * Fixed an issue where it was impossible to manually add products to a configurable product
+    * Fixed an issue with custom timezone
+
 2.0.0-rc2
 =============
 * Fixed bugs:

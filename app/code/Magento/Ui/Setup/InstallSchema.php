@@ -80,7 +80,7 @@ class InstallSchema implements InstallSchemaInterface
             ->addForeignKey(
                 $setup->getFkName('ui_bookmark', 'user_id', 'admin_user', 'user_id'),
                 'user_id',
-                'admin_user',
+                $setup->getTable('admin_user'),
                 'user_id',
                 Table::ACTION_CASCADE
             )

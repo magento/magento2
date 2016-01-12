@@ -144,16 +144,4 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->target->beforeSave($this->product);
     }
-
-    public function testSave()
-    {
-        $data = ['sample' => ['sampleData', 'link' => ['linkData']]];
-        $this->product->expects($this->once())
-            ->method('getDownloadableData')
-            ->will($this->returnValue($data));
-        $this->typeHandler->expects($this->once())
-            ->method('save')
-            ->with($this->product, $data);
-        $this->target->save($this->product);
-    }
 }

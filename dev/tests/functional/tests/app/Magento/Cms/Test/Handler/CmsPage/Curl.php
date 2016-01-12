@@ -25,8 +25,8 @@ class Curl extends Conditions implements CmsPageInterface
      */
     protected $mappingData = [
         'is_active' => [
-            'Enabled' => 1,
-            'Disabled' => 0,
+            'Yes' => 1,
+            'No' => 0,
         ],
         'store_id' => [
             'All Store Views' => 0,

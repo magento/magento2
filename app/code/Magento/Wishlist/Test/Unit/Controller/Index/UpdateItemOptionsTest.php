@@ -68,6 +68,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
     protected $resultRedirectMock;
 
     /**
+     * @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $formKeyValidator;
+
+    /**
      * SetUp method
      *
      * @return void
@@ -94,6 +99,10 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
+
+        $this->formKeyValidator = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -161,12 +170,42 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
     protected function getController()
     {
         $this->prepareContext();
+
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
+
         return new \Magento\Wishlist\Controller\Index\UpdateItemOptions(
             $this->context,
             $this->customerSession,
             $this->wishlistProvider,
-            $this->productRepository
+            $this->productRepository,
+            $this->formKeyValidator
         );
+    }
+
+    public function testExecuteWithInvalidFormKey()
+    {
+        $this->prepareContext();
+
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(false);
+
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/')
+            ->willReturnSelf();
+
+        $controller = new \Magento\Wishlist\Controller\Index\Remove(
+            $this->context,
+            $this->wishlistProvider,
+            $this->formKeyValidator
+        );
+
+        $this->assertSame($this->resultRedirectMock, $controller->execute());
     }
 
     /**
