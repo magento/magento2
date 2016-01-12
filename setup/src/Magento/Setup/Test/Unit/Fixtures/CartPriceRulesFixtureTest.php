@@ -141,15 +141,12 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
     public function testGenerateAdvancedCondition($ruleId, $categoriesArray, $ruleCount)
     {
         $reflection = new \ReflectionClass($this->model);
-        $reflection_property = $reflection->getProperty('cartPriceRulesCount');
-        $reflection_property->setAccessible(true);
-        $reflection_property->setValue($this->model, $ruleCount);
-        $reflection_property = $reflection->getProperty('cartRulesAdvancedRatio');
-        $reflection_property->setAccessible(true);
-        $cartRulesAdvancedRatio = $reflection_property->getValue($this->model);
+        $reflectionProperty = $reflection->getProperty('cartPriceRulesCount');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->model, $ruleCount);
 
         $result = $this->model->generateAdvancedCondition($ruleId, $categoriesArray);
-        if ($ruleId < ($cartRulesAdvancedRatio * ($ruleCount / 4))) {
+        if ($ruleId < ($ruleCount - 200)) {
             $firstCondition = [
                 'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product',
                 'attribute' => 'category_ids',
@@ -161,7 +158,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
                 'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Address',
                 'attribute' => 'base_subtotal',
                 'operator'  => '>=',
-                'value'     => 10,
+                'value'     => 5,
             ];
             $expected = [
                 'conditions' => [
@@ -189,7 +186,6 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             ];
-            $this->assertSame($expected, $result);
         } else {
             // Shipping Region
             $regions = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
@@ -233,8 +229,8 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             ];
-            $this->assertSame($expected, $result);
         }
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -244,7 +240,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [1, [0], 1],
-            [2, [0], 100]
+            [1, [0], 300]
         ];
     }
 
