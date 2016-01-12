@@ -48,7 +48,7 @@
                 <can_use_checkout>1</can_use_checkout>
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>
-                <privateInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</privateInfoKeys>
+                <privateInfoKeys>processorResponseCode,processorResponseText,paymentId</privateInfoKeys>
                 <paymentInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</paymentInfoKeys>
             </braintreetwo_paypal>
         </payment>
