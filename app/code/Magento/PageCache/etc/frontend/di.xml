@@ -9,7 +9,6 @@
     <type name="Magento\Framework\App\FrontControllerInterface">
         <plugin name="front-controller-builtin-cache" type="Magento\PageCache\Model\App\FrontController\BuiltinPlugin"/>
         <plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>
-        <plugin name="front-controller-message-box" type="Magento\PageCache\Model\App\FrontController\MessageBox" sortOrder="0"/>
     </type>
     <type name="Magento\Framework\Controller\ResultInterface">
         <plugin name="result-builtin-cache" type="Magento\PageCache\Model\Controller\Result\BuiltinPlugin"/>

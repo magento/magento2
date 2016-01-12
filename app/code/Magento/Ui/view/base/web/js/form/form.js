@@ -18,7 +18,20 @@ define([
         items = Array.prototype.slice.call(items);
 
         items.forEach(function (item) {
-            result[item.name] = item.type === 'checkbox' ? +!!item.checked : item.value;
+            switch (item.type) {
+                case 'checkbox':
+                    result[item.name] = +!!item.checked;
+                    break;
+
+                case 'radio':
+                    if (item.checked) {
+                        result[item.name] = item.value;
+                    }
+                    break;
+
+                default:
+                    result[item.name] = item.value;
+            }
         });
 
         return result;
