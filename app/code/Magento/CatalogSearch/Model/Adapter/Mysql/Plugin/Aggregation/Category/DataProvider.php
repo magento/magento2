@@ -13,6 +13,8 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
 class DataProvider
 {
@@ -34,18 +36,27 @@ class DataProvider
     protected $categoryFactory;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * DataProvider constructor.
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Resolver $layerResolver
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        Resolver $layerResolver
+        Resolver $layerResolver,
+        MetadataPool $metadataPool
     ) {
         $this->resource = $resource;
         $this->scopeResolver = $scopeResolver;
         $this->layer = $layerResolver->get();
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -85,9 +96,10 @@ class DataProvider
             );
 
             if (!empty($currentCategory)) {
+                $identifierField = $this->metadataPool->getMetadata(CategoryInterface::class)->getIdentifierField();
                 $derivedTable->join(
                     ['category' => $this->resource->getTableName('catalog_category_entity')],
-                    'main_table.category_id = category.entity_id',
+                    'main_table.category_id = category.' . $identifierField,
                     []
                 )->where('`category`.`path` LIKE ?', $currentCategory->getPath() . '%')
                     ->where('`category`.`level` > ?', $currentCategory->getLevel());
