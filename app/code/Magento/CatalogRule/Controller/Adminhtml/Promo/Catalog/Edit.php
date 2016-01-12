@@ -48,9 +48,6 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         $this->_view->getPage()->getConfig()->getTitle()->prepend(
             $model->getRuleId() ? $model->getName() : __('New Catalog Price Rule')
         );
-        $this->_view->getLayout()
-            ->getBlock('promo_catalog_edit')
-            ->setData('action', $this->getUrl('catalog_rule/promo_catalog/save'));
 
         $breadcrumb = $id ? __('Edit Rule') : __('New Rule');
         $this->_addBreadcrumb($breadcrumb, $breadcrumb);
