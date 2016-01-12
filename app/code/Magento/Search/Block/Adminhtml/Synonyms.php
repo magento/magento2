@@ -9,7 +9,7 @@ namespace Magento\Search\Block\Adminhtml;
 /**
  * Adminhtml synonym group content block
  */
-class Block extends \Magento\Backend\Block\Widget\Grid\Container
+class Synonyms extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @return void
