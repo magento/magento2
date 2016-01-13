@@ -14,13 +14,12 @@ class Batch
      */
     public function getItems(\Traversable $documents, $size)
     {
+        if (count($documents) == 0) {
+            return [];
+        }
+        
         $i = 0;
         $batch = [];
-
-        if (iterator_count($documents) == 0) {
-            return [$batch];
-        }
-
         foreach ($documents as $documentName => $documentValue) {
             $batch[$documentName] = $documentValue;
             if ($i++ >= $size) {
