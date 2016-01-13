@@ -279,7 +279,6 @@
 [class*='admin__control-grouped'] {
     box-sizing: border-box;
     display: table;
-    table-layout: fixed;
     width: 100%;
 
     & > .admin__field {
@@ -295,7 +294,7 @@
         &:nth-child(n+2) {
             padding-left: 20px;
 
-            &:not(.admin__field-option) .admin__field-label {
+            &:not(.admin__field-option):not(.admin__field-date) .admin__field-label {
                 .lib-visually-hidden();
             }
         }
