@@ -26,6 +26,23 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     protected $layoutFactory;
 
     /**
+     * The list of inputs that need to convert from string to boolean
+     * @var array
+     */
+    protected $stringToBoolInputs = [
+        'general' => [
+            'custom_use_parent_settings',
+            'custom_apply_to_products',
+            'is_active',
+            'include_in_menu',
+            'is_anchor',
+            'use_default' => ['url_key'],
+            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by'],
+            'savedImage' => ['delete']
+        ]
+    ];
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -81,13 +98,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $storeId = $this->getRequest()->getParam('store');
         $refreshTree = false;
-        $data = $this->getRequest()->getPostValue();
+        $data['general'] = $this->getRequest()->getPostValue();
+        $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
+        $data = $this->imagePreprocessing($data);
+        $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
             if (!$category->getId()) {
-                $parentId = $this->getRequest()->getParam('parent');
+                $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
                 if (!$parentId) {
                     if ($storeId) {
                         $parentId = $this->_objectManager->get(
@@ -107,8 +126,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Process "Use Config Settings" checkboxes
              */
-            $useConfig = $this->getRequest()->getPost('use_config');
-            if ($useConfig) {
+            $generalPost = $data['general'];
+            $useConfig = [];
+            if (isset($generalPost['use_config']) && !empty($generalPost['use_config'])) {
+                foreach ($generalPost['use_config'] as $attributeCode => $attributeValue) {
+                    if ($attributeValue) {
+                        $useConfig[] = $attributeCode;
+                    }
+                }
                 foreach ($useConfig as $attributeCode) {
                     $category->setData($attributeCode, null);
                 }
@@ -116,11 +141,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
             $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
-            if (isset($data['category_products'])
-                && is_string($data['category_products'])
+            if (isset($data['general']['category_products'])
+                && is_string($data['general']['category_products'])
                 && !$category->getProductsReadonly()
             ) {
-                $products = json_decode($data['category_products'], true);
+                $products = json_decode($data['general']['category_products'], true);
                 $category->setPostedProducts($products);
             }
             $this->_eventManager->dispatch(
@@ -131,10 +156,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Check "Use Default Value" checkboxes values
              */
-            $useDefaults = $this->getRequest()->getPost('use_default');
-            if ($useDefaults) {
-                foreach ($useDefaults as $attributeCode) {
-                    $category->setData($attributeCode, false);
+            if (isset($generalPost['use_default']) && !empty($generalPost['use_default'])) {
+                foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
+                    if ($attributeValue) {
+                        $category->setData($attributeCode, false);
+                    }
                 }
             }
 
@@ -142,7 +168,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
              * Proceed with $_POST['use_config']
              * set into category model for processing through validation
              */
-            $category->setData('use_post_data_config', $this->getRequest()->getPost('use_config'));
+            $category->setData('use_post_data_config', $useConfig);
 
             try {
                 $categoryResource = $category->getResource();
@@ -164,17 +190,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 }
 
                 $category->unsetData('use_post_data_config');
-                if (isset($data['general']['entity_id'])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Something went wrong while saving the category.')
-                    );
-                }
 
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
                 $refreshTree = true;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addError(__('Something went wrong while saving the category.'));
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($data);
                 $refreshTree = false;
             }
@@ -210,5 +232,55 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             'catalog/*/edit',
             $redirectParams
         );
+    }
+
+    /**
+     * Image data preprocessing
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function imagePreprocessing($data)
+    {
+        if (!isset($_FILES) || (isset($_FILES['image']) && $_FILES['image']['name'] === '' )) {
+            unset($data['general']['image']);
+            if (
+                isset($data['general']['savedImage']['delete']) &&
+                $data['general']['savedImage']['delete']
+            ) {
+                $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Converting inputs from string to boolean
+     *
+     * @param array $stringToBoolInputs
+     * @param array $data
+     *
+     * @return array
+     */
+    public function stringToBoolConverting($stringToBoolInputs, $data)
+    {
+        foreach ($stringToBoolInputs as $key => $value) {
+            if (is_array($value)) {
+                if (isset($data[$key])) {
+                    $data[$key] = $this->stringToBoolConverting($value, $data[$key]);
+                }
+            } else {
+                if (isset($data[$value])) {
+                    if ($data[$value] === 'true') {
+                        $data[$value] = true;
+                    }
+                    if ($data[$value] === 'false') {
+                        $data[$value] = false;
+                    }
+                }
+            }
+        }
+        return $data;
     }
 }
