@@ -19,14 +19,14 @@ abstract class Synonyms extends Action
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
      */
-    protected $resultForwardFactory;
+    protected $forwardFactory;
 
     /**
-     * @var \Magento\Framework\Registry $coreRegistry
+     * @var \Magento\Framework\Registry $registry
      */
-    protected $coreRegistry;
+    protected $registry;
 
 
     /**
@@ -34,18 +34,18 @@ abstract class Synonyms extends Action
      *
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
+     * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Registry $coreRegistry
+        \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory,
+        \Magento\Framework\Registry $registry
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        $this->resultForwardFactory = $resultForwardFactory;
-        $this->coreRegistry = $coreRegistry;
+        $this->forwardFactory = $forwardFactory;
+        $this->registry = $registry;
         parent::__construct($context);
     }
 
@@ -58,7 +58,7 @@ abstract class Synonyms extends Action
     {
         /** @var \Magento\Backend\Model\View\Result\Page  $resultPage **/
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Magento_Search::synonyms');
+        $resultPage->setActiveMenu('Magento_Search::search_synonyms');
         $resultPage->addBreadcrumb(__('Marketing'), __('Marketing'));
         $resultPage->addBreadcrumb(__('Search Synonyms'), __('Search Synonyms'));
         return $resultPage;

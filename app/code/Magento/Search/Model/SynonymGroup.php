@@ -90,6 +90,8 @@ class SynonymGroup extends AbstractModel implements SynonymGroupInterface
 
     /**
      *  sets the 'scope_id' to website:storeviewid
+     *
+     * @return void
      */
     public function setScope()
     {

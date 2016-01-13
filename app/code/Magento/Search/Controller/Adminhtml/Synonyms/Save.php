@@ -40,10 +40,18 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
                 return $resultRedirect->setPath('*/*/');
             }
 
-            // init model and set data
+            // Pre-process data and save it to model
+            // Extract website_id and store_id out of scope_id
+            // scope_id = website_id:store_id
             $tokens = explode(':', $data['scope_id']);
             $data['website_id'] = $tokens[0];
             $data['store_id'] = $tokens[1];
+
+            // Remove unnecessary white spaces and convert synonyms to lower case
+            $words = explode(',', $data['synonyms']);
+            $words = array_map('trim', $words);
+            $data['synonyms'] = strtolower(implode(',',$words));
+
             $synGroupModel->setData($data);
 
             // save the data

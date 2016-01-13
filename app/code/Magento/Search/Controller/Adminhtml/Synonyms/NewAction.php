@@ -14,8 +14,8 @@ class NewAction extends \Magento\Search\Controller\Adminhtml\Synonyms
      */
     public function execute()
     {
-        $resultForward = $this->resultForwardFactory->create();
-        $resultForward->forward('edit');
-        return $resultForward;
+        $forward = $this->forwardFactory->create();
+        $forward->forward('edit');
+        return $forward;
     }
 }

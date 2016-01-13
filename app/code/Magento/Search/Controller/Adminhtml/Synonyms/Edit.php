@@ -9,7 +9,7 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 class Edit extends \Magento\Search\Controller\Adminhtml\Synonyms
 {
     /**
-     * Edit Synonyms Group
+     * Edit Synonym Group
      *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -37,17 +37,17 @@ class Edit extends \Magento\Search\Controller\Adminhtml\Synonyms
         }
 
         // 4. Register model to use later in save
-        $this->coreRegistry->register('search_synonyms', $synGroupModel);
+        $this->registry->register(\Magento\Search\Controller\RegistryConstants::SEARCH_SYNONYMS, $synGroupModel);
 
         // 5. Build edit synonyms group form
         $resultPage = $this->_initAction();
         $resultPage->addBreadcrumb(
-            $groupId ? __('Edit Synonyms Group') : __('New Synonyms Group'),
-            $groupId ? __('Edit Synonyms Group') : __('New Synonyms Group')
+            $groupId ? __('Edit Synonym Group') : __('New Synonym Group'),
+            $groupId ? __('Edit Synonym Group') : __('New Synonym Group')
         );
-        $resultPage->getConfig()->getTitle()->prepend(__('Synonyms Group'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Synonym Group'));
         $resultPage->getConfig()->getTitle()
-            ->prepend($synGroupModel->getId() ? $synGroupModel->getSynonymGroup() : __('New Synonyms Group'));
+            ->prepend($synGroupModel->getId() ? $synGroupModel->getSynonymGroup() : __('New Synonym Group'));
         return $resultPage;
     }
 }
