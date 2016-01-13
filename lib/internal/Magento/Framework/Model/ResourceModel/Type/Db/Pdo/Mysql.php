@@ -10,6 +10,7 @@ namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
+use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\Stdlib;
 
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
@@ -30,17 +31,25 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     protected $connectionConfig;
 
     /**
+     * @var
+     */
+    protected $selectFactory;
+
+    /**
      * @param Stdlib\StringUtils $string
      * @param Stdlib\DateTime $dateTime
+     * @param SelectFactory $selectFactory
      * @param array $config
      */
     public function __construct(
         Stdlib\StringUtils $string,
         Stdlib\DateTime $dateTime,
+        SelectFactory $selectFactory,
         array $config
     ) {
         $this->string = $string;
         $this->dateTime = $dateTime;
+        $this->selectFactory = $selectFactory;
         $this->connectionConfig = $this->getValidConfig($config);
 
         parent::__construct();
@@ -71,7 +80,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     protected function getDbConnectionInstance(DB\LoggerInterface $logger)
     {
         $className = $this->getDbConnectionClassName();
-        return new $className($this->string, $this->dateTime, $logger, $this->connectionConfig);
+        return new $className($this->string, $this->dateTime, $logger, $this->selectFactory, $this->connectionConfig);
     }
 
     /**

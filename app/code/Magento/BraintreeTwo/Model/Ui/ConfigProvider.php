@@ -7,6 +7,7 @@ namespace Magento\BraintreeTwo\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
 
 /**
  * Class ConfigProvider
@@ -21,13 +22,25 @@ final class ConfigProvider implements ConfigProviderInterface
     private $config;
 
     /**
+     * @var BraintreeAdapter
+     */
+    private $adapter;
+
+    /**
+     * @var string
+     */
+    private $clientToken = '';
+
+    /**
      * Constructor
      *
      * @param Config $config
+     * @param BraintreeAdapter $adapter
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, BraintreeAdapter $adapter)
     {
         $this->config = $config;
+        $this->adapter = $adapter;
     }
 
     /**
@@ -40,14 +53,36 @@ final class ConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 self::CODE => [
-                    'clientToken' => $this->config->getClientToken(),
+                    'clientToken' => $this->getClientToken(),
                     'ccTypesMapper' => $this->config->getCctypesMapper(),
-                    'sdkUrl' => $this->config->getValue(Config::KEY_SDK_URL),
+                    'sdkUrl' => $this->config->getSdkUrl(),
                     'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig(),
                     'availableCardTypes' => $this->config->getAvailableCardTypes(),
-                    'useCvv' => $this->config->isCvvEnabled()
+                    'useCvv' => $this->config->isCvvEnabled(),
+                    'environment' => $this->config->getEnvironment(),
+                    'kountMerchantId' => $this->config->getKountMerchantId(),
+                    'hasFraudProtection' => $this->config->hasFraudProtection(),
+                    'merchantId' => $this->config->getMerchantId(),
                 ],
+                Config::CODE_3DSECURE => [
+                    'enabled' => $this->config->isVerify3DSecure(),
+                    'thresholdAmount' => $this->config->getThresholdAmount(),
+                    'specificCountries' => $this->config->get3DSecureSpecificCountries()
+                ]
             ]
         ];
+    }
+
+    /**
+     * Generate a new client token if necessary
+     * @return string
+     */
+    public function getClientToken()
+    {
+        if (empty($this->clientToken)) {
+            $this->clientToken = $this->adapter->generate();
+        }
+
+        return $this->clientToken;
     }
 }
