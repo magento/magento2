@@ -60,11 +60,8 @@ class Options implements OptionSourceInterface
         if ($this->options !== null) {
             return $this->options;
         }
-
         $this->generateCurrentOptions();
-
         $this->options = array_values($this->currentOptions);
-
         return $this->options;
     }
 
@@ -86,7 +83,6 @@ class Options implements OptionSourceInterface
             . ':'
             . \Magento\Store\Model\Store::DEFAULT_STORE_ID;
 
-        /** @var \Magento\Store\Model\Website $website */
         foreach ($websiteCollection as $website) {
             $groups = [];
             /** @var \Magento\Store\Model\Group $group */
@@ -102,6 +98,7 @@ class Options implements OptionSourceInterface
                         . ':'
                         . \Magento\Store\Model\Store::DEFAULT_STORE_ID;
 
+                    /** @var \Magento\Store\Model\Website $website */
                     foreach ($storeCollection as $store) {
                         if ($store->getGroupId() == $group->getId()) {
                             $name = $this->escaper->escapeHtml($store->getName());

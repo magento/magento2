@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
  */
 class DeleteButton extends GenericButton implements ButtonProviderInterface
 {
-
     /**
      * @return array
      */
@@ -21,11 +20,11 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
         $data = [];
         if ($this->getGroupId()) {
             $data = [
-                'label' => __('Delete Synonyms Group'),
+                'label' => __('Delete Synonym Group'),
                 'class' => 'delete',
-                'on_click' => 'deleteConfirm(\'' . __(
-                    'Are you sure you want to do this?'
-                ) . '\', \'' . $this->getDeleteUrl() . '\')',
+                'on_click' => 'deleteConfirm(\''
+                    . __('Are you sure you want to delete this synonym group?')
+                    . '\', \'' . $this->getDeleteUrl() . '\')',
                 'sort_order' => 20,
             ];
         }
