@@ -208,7 +208,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup */
         $synonymGroup = $this->objectManager->create('Magento\Search\Api\Data\SynonymGroupInterface');
-        $synonymGroup->setSynonymGroup('test1,test1,test3');
+        $synonymGroup->setSynonymGroup('test1,test2,test3');
         $this->model->save($synonymGroup);
 
         /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
