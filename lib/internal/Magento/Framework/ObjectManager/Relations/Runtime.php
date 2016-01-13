@@ -8,7 +8,7 @@ namespace Magento\Framework\ObjectManager\Relations;
 class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
 {
     /**
-     * @var \Magento\Framework\Code\Reader\ClassReader
+     * @var \Magento\Framework\Code\Reader\ClassReaderInterface
      */
     protected $_classReader;
 
@@ -20,9 +20,9 @@ class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
     protected $_default = [];
 
     /**
-     * @param \Magento\Framework\Code\Reader\ClassReader $classReader
+     * @param \Magento\Framework\Code\Reader\ClassReaderInterface $classReader
      */
-    public function __construct(\Magento\Framework\Code\Reader\ClassReader $classReader = null)
+    public function __construct(\Magento\Framework\Code\Reader\ClassReaderInterface $classReader = null)
     {
         $this->_classReader = $classReader ?: new \Magento\Framework\Code\Reader\ClassReader();
     }
