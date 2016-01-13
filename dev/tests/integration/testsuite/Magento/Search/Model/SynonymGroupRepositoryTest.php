@@ -32,7 +32,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Search\Model\SynonymGroup $synonymGroupModel */
         $synonymGroupModel = $this->objectManager->create('Magento\Search\Model\SynonymGroup');
         $synonymGroupModel->load(1);
-        $this->assertEquals('a,b,c', $synonymGroupModel->getSynonyms());
+        $this->assertEquals('a,b,c', $synonymGroupModel->getSynonymGroup());
         $this->assertEquals(0, $synonymGroupModel->getStoreId());
         $this->assertEquals(0, $synonymGroupModel->getWebsiteId());
         $synonymGroupModel->delete();
@@ -48,8 +48,10 @@ class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $synonymGroup = $this->objectManager->create('Magento\Search\Api\Data\SynonymGroupInterface');
         $synonymGroup->setSynonymGroup('a,b,c');
         $this->model->save($synonymGroup);
+        $synonymGroup = $this->objectManager->create('Magento\Search\Api\Data\SynonymGroupInterface');
         $synonymGroup->setSynonymGroup('d,e,f');
         $this->model->save($synonymGroup);
+        $synonymGroup = $this->objectManager->create('Magento\Search\Api\Data\SynonymGroupInterface');
         $synonymGroup->setSynonymGroup('a,d,z');
         try {
             $this->model->save($synonymGroup, true);
@@ -99,6 +101,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $synonymGroup = $this->objectManager->create('Magento\Search\Api\Data\SynonymGroupInterface');
         $synonymGroup->setSynonymGroup('a,b,c');
         $this->model->save($synonymGroup);
+        $synonymGroup = $this->objectManager->create('Magento\Search\Api\Data\SynonymGroupInterface');
         $synonymGroup->setSynonymGroup('d,e,f');
         $this->model->save($synonymGroup);
 
