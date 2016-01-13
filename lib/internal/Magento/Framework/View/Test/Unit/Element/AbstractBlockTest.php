@@ -9,6 +9,9 @@
 namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\Config\View;
+use Magento\Framework\View\ConfigInterface;
 
 class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,9 +25,9 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $contextMock = $this->getMock('Magento\Framework\View\Element\Context', [], [], '', false);
+        $contextMock = $this->getMock(Context::class, [], [], '', false);
         $this->block = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\AbstractBlock',
+            AbstractBlock::class,
             ['context' => $contextMock]
         );
     }
@@ -78,26 +81,27 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVar()
     {
-        $this->markTestIncomplete('MAGETWO-11727');
-        $config = $this->getMock('Magento\Framework\Config\View', ['getVarValue'], [], '', false);
+        $config = $this->getMock(View::class, ['getVarValue'], [], '', false);
         $module = uniqid();
-        $config->expects($this->at(0))
-            ->method('getVarValue')
-            ->with('Magento_Theme', 'v1')
-            ->willReturn('one');
-        $config->expects($this->at(1))->method('getVarValue')->with($module, 'v2')->will($this->returnValue('two'));
 
-        $configManager = $this->getMock('Magento\Framework\View\ConfigInterface', [], [], '', false);
+        $config->expects($this->any())
+            ->method('getVarValue')
+            ->willReturnMap([
+                ['Magento_Theme', 'v1', 'one'],
+                [$module, 'v2', 'two']
+            ]);
+
+        $configManager = $this->getMock(ConfigInterface::class, [], [], '', false);
         $configManager->expects($this->exactly(2))->method('getViewConfig')->willReturn($config);
 
-        /** @var $block \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $block AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
         $params = ['viewConfig' => $configManager];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $block = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\AbstractBlock',
-            $helper->getConstructArguments('Magento\Framework\View\Element\AbstractBlock', $params),
-            uniqid('Magento\\Theme\\Block\\AbstractBlock\\')
+            AbstractBlock::class,
+            $helper->getConstructArguments(AbstractBlock::class, $params)
         );
+        $block->setData('module_name', 'Magento_Theme');
 
         $this->assertEquals('one', $block->getVar('v1'));
         $this->assertEquals('two', $block->getVar('v2', $module));
