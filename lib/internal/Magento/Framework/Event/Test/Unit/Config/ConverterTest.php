@@ -5,12 +5,13 @@
  */
 namespace Magento\Framework\Event\Test\Unit\Config;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Event\Config\Converter;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Config\Converter
+     * @var Converter
      */
     protected $model;
 
@@ -34,7 +35,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->filePath = __DIR__ . '/_files/';
         $this->source = new \DOMDocument();
-        $this->model = $this->objectManagerHelper->getObject('Magento\Framework\Event\Config\Converter');
+        $this->model = $this->objectManagerHelper->getObject(Converter::class);
     }
 
     public function testConvert()

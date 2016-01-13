@@ -5,7 +5,10 @@
  */
 namespace Magento\Framework\Event\Test\Unit;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Event\InvokerInterface;
+use Magento\Framework\Event\ConfigInterface;
+use Magento\Framework\Event\Manager as EventManager;
 
 /**
  * Class ManagerTest
@@ -57,11 +60,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->invokerMock = $this->getMock('Magento\Framework\Event\InvokerInterface');
-        $this->eventConfigMock = $this->getMock('Magento\Framework\Event\ConfigInterface');
+        $this->invokerMock = $this->getMock(InvokerInterface::class);
+        $this->eventConfigMock = $this->getMock(ConfigInterface::class);
 
         $this->eventManager = $this->objectManagerHelper->getObject(
-            'Magento\Framework\Event\Manager',
+            EventManager::class,
             [
                 'invoker' => $this->invokerMock,
                 'eventConfig' => $this->eventConfigMock
