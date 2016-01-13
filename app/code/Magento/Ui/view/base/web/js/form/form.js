@@ -4,10 +4,11 @@
  */
 define([
     'underscore',
-    'uiCollection',
     'Magento_Ui/js/lib/spinner',
-    './adapter'
-], function (_, Collection, loader, adapter) {
+    'rjsResolver',
+    './adapter',
+    'uiCollection'
+], function (_, loader, resolver, adapter, Collection) {
     'use strict';
 
     function collectData(selector) {
@@ -17,7 +18,20 @@ define([
         items = Array.prototype.slice.call(items);
 
         items.forEach(function (item) {
-            result[item.name] = item.value;
+            switch (item.type) {
+                case 'checkbox':
+                    result[item.name] = +!!item.checked;
+                    break;
+
+                case 'radio':
+                    if (item.checked) {
+                        result[item.name] = item.value;
+                    }
+                    break;
+
+                default:
+                    result[item.name] = item.value;
+            }
         });
 
         return result;
@@ -26,8 +40,9 @@ define([
     return Collection.extend({
         initialize: function () {
             this._super()
-                .initAdapter()
-                .hideLoader();
+                .initAdapter();
+
+            resolver(this.hideLoader, this);
 
             return this;
         },

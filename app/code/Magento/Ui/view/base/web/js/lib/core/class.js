@@ -136,7 +136,6 @@ define([
                 __super__:  parentProto,
                 extend:     parent.extend
             });
-
         }
     });
 

@@ -611,7 +611,9 @@ define([
             };
 
             this.addMessage(msg)
-                .source('reload');
+                .source('reload', {
+                    refresh: true
+                });
         },
 
         /**

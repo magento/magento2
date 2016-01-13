@@ -8,6 +8,7 @@
 
 namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 use Magento\Customer\Api\GroupManagementInterface;
 
@@ -18,6 +19,11 @@ use Magento\Customer\Api\GroupManagementInterface;
  */
 abstract class AbstractGroupPrice extends Price
 {
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
     /**
      * Website currency codes and rates
      *
@@ -53,6 +59,7 @@ abstract class AbstractGroupPrice extends Price
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -61,10 +68,12 @@ abstract class AbstractGroupPrice extends Price
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->_catalogProductType = $catalogProductType;
         $this->_groupManagement = $groupManagement;
+        $this->metadataPool = $metadataPool;
         parent::__construct($currencyFactory, $storeManager, $catalogData, $config, $localeFormat);
     }
 
@@ -267,7 +276,10 @@ abstract class AbstractGroupPrice extends Price
             $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
         }
 
-        $data = $this->_getResource()->loadPriceData($object->getId(), $websiteId);
+        $data = $this->_getResource()->loadPriceData(
+            $object->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()),
+            $websiteId
+        );
         foreach ($data as $k => $v) {
             $data[$k]['website_price'] = $v['price'];
             if ($v['all_groups']) {
@@ -373,7 +385,7 @@ abstract class AbstractGroupPrice extends Price
         $update = array_intersect_key($new, $old);
 
         $isChanged = false;
-        $productId = $object->getId();
+        $productId = $object->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField());
 
         if (!empty($delete)) {
             foreach ($delete as $data) {
@@ -385,7 +397,10 @@ abstract class AbstractGroupPrice extends Price
         if (!empty($insert)) {
             foreach ($insert as $data) {
                 $price = new \Magento\Framework\DataObject($data);
-                $price->setEntityId($productId);
+                $price->setData(
+                    $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField(),
+                    $productId
+                );
                 $this->_getResource()->savePriceData($price);
 
                 $isChanged = true;

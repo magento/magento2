@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Adminhtml sales order create block.
@@ -286,7 +287,7 @@ class Create extends Block
         $this->getBillingAddressBlock()->saveInAddressBookBillingAddress($saveAddress);
         $this->getTemplateBlock()->waitLoader();
         if ($setShippingAddress) {
-            $this->browser->find($this->header)->hover();
+            $this->browser->find($this->accountInformationBlock)->hover();
             $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
             $this->getTemplateBlock()->waitLoader();
         }
@@ -309,13 +310,13 @@ class Create extends Block
      * Select payment method.
      *
      * @param array $paymentCode
-     * @return void
+     * @param InjectableFixture|null $creditCard
      */
-    public function selectPaymentMethod(array $paymentCode)
+    public function selectPaymentMethod(array $paymentCode, InjectableFixture $creditCard = null)
     {
         $this->getTemplateBlock()->waitLoader();
         $this->_rootElement->find($this->orderMethodsSelector)->click();
-        $this->getBillingMethodBlock()->selectPaymentMethod($paymentCode);
+        $this->getBillingMethodBlock()->selectPaymentMethod($paymentCode, $creditCard);
         $this->getTemplateBlock()->waitLoader();
     }
 

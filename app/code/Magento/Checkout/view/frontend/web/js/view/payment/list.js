@@ -54,6 +54,7 @@ define([
          */
         initChildren: function () {
             var self = this;
+
             _.each(paymentMethods(), function (paymentMethodData) {
                 self.createRenderer(paymentMethodData);
             });
@@ -62,50 +63,55 @@ define([
         },
 
         /**
+         * @returns
+         */
+        createComponent: function (payment) {
+            var rendererTemplate,
+                rendererComponent,
+                templateData;
+
+            templateData = {
+                parentName: this.name,
+                name: payment.name
+            };
+            rendererTemplate = {
+                parent: '${ $.$data.parentName }',
+                name: '${ $.$data.name }',
+                displayArea: 'payment-method-items',
+                component: payment.component
+            };
+            rendererComponent = utils.template(rendererTemplate, templateData);
+            utils.extend(rendererComponent, {
+                item: payment.item,
+                config: payment.config
+            });
+
+            return rendererComponent;
+        },
+
+        /**
          * Create renderer.
          *
          * @param {Object} paymentMethodData
          */
         createRenderer: function (paymentMethodData) {
-            var renderer = this.getRendererByType(paymentMethodData.method),
-                rendererTemplate,
-                rendererComponent,
-                templateData;
-
-            if (renderer) {
-                templateData = {
-                    parentName: this.name,
-                    name: paymentMethodData.method
-                };
-                rendererTemplate = {
-                    parent: '${ $.$data.parentName }',
-                    name: '${ $.$data.name }',
-                    displayArea: 'payment-method-items',
-                    component: renderer.component
-                };
-                rendererComponent = utils.template(rendererTemplate, templateData);
-                utils.extend(rendererComponent, {
-                    item: paymentMethodData
-                });
-                layout([rendererComponent]);
-            }
-        },
-
-        /**
-         * Get renderer for payment method type.
-         *
-         * @param {String} paymentMethodCode
-         * @returns {Object}
-         */
-        getRendererByType: function (paymentMethodCode) {
-            var compatibleRenderer;
             _.find(rendererList(), function (renderer) {
-                if (renderer.type === paymentMethodCode) {
-                    compatibleRenderer = renderer;
+                if (renderer.type.indexOf(paymentMethodData.method) === 0) {
+                    layout(
+                        [
+                            this.createComponent(
+                                {
+                                    config: renderer.config,
+                                    component: renderer.component,
+                                    name: renderer.type,
+                                    method: paymentMethodData.method,
+                                    item: paymentMethodData
+                                }
+                            )
+                        ]
+                    );
                 }
-            });
-
-            return compatibleRenderer;
+            }.bind(this));
         },
 
         /**
@@ -115,8 +121,9 @@ define([
          */
         removeRenderer: function (paymentMethodCode) {
             var items = this.getRegion('payment-method-items');
+
             _.find(items(), function (value) {
-                if (value.item.method === paymentMethodCode) {
+                if (value.item.method.indexOf(paymentMethodCode) === 0) {
                     value.disposeSubscriptions();
                     this.removeChild(value);
                 }
