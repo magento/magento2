@@ -67,6 +67,16 @@ class AccountManagementTest extends WebapiAbstract
     private $dataObjectProcessor;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var int
+     */
+    private $configValue;
+
+    /**
      * Execute per test initialization.
      */
     public function setUp()
@@ -88,6 +98,16 @@ class AccountManagementTest extends WebapiAbstract
         $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
             'Magento\Framework\Reflection\DataObjectProcessor'
         );
+        $this->config = Bootstrap::getObjectManager()->create(
+            'Magento\Config\Model\Config'
+        );
+
+        if($this->config->getConfigDataValue('customer/password/limit_password_reset_requests_method') != 0) {
+            $this->configValue = $this->config
+                ->getConfigDataValue('customer/password/limit_password_reset_requests_method');
+            $this->config->setDataByPath('customer/password/limit_password_reset_requests_method', 0);
+            $this->config->save();
+        }
     }
 
     public function tearDown()
@@ -111,6 +131,11 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertTrue($response);
             }
         }
+        $this->config->setDataByPath(
+            'customer/password/limit_password_reset_requests_method',
+            $this->configValue
+        );
+        $this->config->save();
         unset($this->accountManagement);
     }
 
@@ -399,6 +424,7 @@ class AccountManagementTest extends WebapiAbstract
                     'field2Name' => 'websiteId',
                     'field2Value' => 0,
                 ];
+
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
