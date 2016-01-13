@@ -60,7 +60,7 @@ class SynonymActions extends Column
                     'label' => __('Delete'),
                     'confirm' => [
                         'title' => __('Delete'),
-                        'message' => __('Are you sure you want to delete this synonym group?')
+                        'message' => __('Are you sure you want to delete synonym group with id: %1?', $item['group_id'])
                     ]
                 ];
                 $item[$name]['edit'] = [

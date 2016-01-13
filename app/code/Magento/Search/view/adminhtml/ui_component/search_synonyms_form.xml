@@ -73,6 +73,9 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string" translate="true">If your Magento site has multiple views, you can adjust the scope of this synonym group(i.e. global, website level or store view level)</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -86,6 +89,9 @@
                     <item name="dataScope" xsi:type="string">synonyms</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string" translate="true">Comma separated list of synonyms</item>
                     </item>
                 </item>
             </argument>
