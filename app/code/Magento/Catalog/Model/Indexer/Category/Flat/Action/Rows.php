@@ -129,7 +129,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         )->where(
             "cf.path = {$rootIdExpr} OR cf.path = {$rootCatIdExpr} OR cf.path like {$catIdExpr}"
         )->where(
-            'ce.entity_id IS NULL'
+            "ce.{$this->categoryMetadata->getLinkField()} IS NULL"
         );
 
         $sql = $select->deleteFromSelect('cf');
@@ -153,17 +153,17 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
         $select = $this->connection->select()->from(
             $this->getTableName('catalog_category_entity'),
-            ['entity_id']
+            [$this->categoryMetadata->getLinkField()]
         )->where(
             "path = {$rootIdExpr} OR path = {$rootCatIdExpr} OR path like {$catIdExpr}"
         )->where(
-            'entity_id IN (?)',
+            "{$this->categoryMetadata->getLinkField()} IN (?)",
             $ids
         );
 
         $resultIds = [];
         foreach ($this->connection->fetchAll($select) as $category) {
-            $resultIds[] = $category['entity_id'];
+            $resultIds[] = $category[$this->categoryMetadata->getLinkField()];
         }
         return $resultIds;
     }
