@@ -71,7 +71,8 @@ class Field extends AbstractComponent
         $formElement = $this->getData('config/formElement');
         if (null === $formElement) {
             throw new LocalizedException(__(
-                'The configuration parameter "formElement" is a required for "' . $this->getName() . '" field.'
+                'The configuration parameter "formElement" is a required for "%1" field.',
+                $this->getName()
             ));
         }
         // Create of wrapped component
