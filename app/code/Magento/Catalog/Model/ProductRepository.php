@@ -178,7 +178,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
-        $cacheKey = $this->getCacheKey(func_get_args());
+        $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         if (!isset($this->instances[$sku][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
 
@@ -204,7 +204,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
-        $cacheKey = $this->getCacheKey(func_get_args());
+        $cacheKey = $this->getCacheKey($editMode, $storeId);
         if (!isset($this->instancesById[$productId][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
             if ($editMode) {
@@ -231,9 +231,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     protected function getCacheKey($data)
     {
-        unset($data[0]);
-        end($data);
-        unset($data[key($data)]);
         $serializeData = [];
         foreach ($data as $key => $value) {
             if (is_object($value)) {
