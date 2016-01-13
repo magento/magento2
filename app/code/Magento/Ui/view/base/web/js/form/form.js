@@ -48,6 +48,7 @@ define([
             selectorPrefix: false,
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
+            ajaxSaveType: 'default',
             listens: {
                 selectorPrefix: 'destroyAdapter initAdapter'
             }
@@ -153,6 +154,7 @@ define([
             source.save({
                 redirect: redirect,
                 ajaxSave: this.ajaxSave,
+                ajaxSaveType: this.ajaxSaveType,
                 response: {
                     data: this.responseData,
                     status: this.responseStatus

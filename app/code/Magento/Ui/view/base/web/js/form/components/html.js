@@ -14,7 +14,9 @@ define([
             content:        '',
             showSpinner:    false,
             loading:        false,
-            template:       'ui/content/content'
+            visible:        true,
+            template:       'ui/content/content',
+            additionalClasses: {}
         },
 
         /**
@@ -25,6 +27,7 @@ define([
             _.bindAll(this, 'onContainerToggle', 'onDataLoaded');
 
             this._super()
+                ._setClasses()
                 .initAjaxConfig();
 
             return this;
@@ -38,7 +41,32 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('content loading');
+                .observe('content loading visible');
+
+            return this;
+        },
+
+        /**
+         * Extends 'additionalClasses' object.
+         *
+         * @returns {Group} Chainable.
+         */
+        _setClasses: function () {
+            var additional = this.additionalClasses,
+                classes;
+
+            if (_.isString(additional)) {
+                additional = this.additionalClasses.split(' ');
+                classes = this.additionalClasses = {};
+
+                additional.forEach(function (name) {
+                    classes[name] = true;
+                }, this);
+            }
+
+            _.extend(this.additionalClasses, {
+                'admin__scope-old': !!additional
+            });
 
             return this;
         },

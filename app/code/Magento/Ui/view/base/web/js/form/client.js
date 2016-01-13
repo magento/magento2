@@ -24,8 +24,8 @@ define([
 
         data['form_key'] = window.FORM_KEY;
 
-        if (!url) {
-            save.resolve();
+        if (!url || url === 'undefined') {
+            return save.resolve();
         }
 
         $('body').trigger('processStart');
@@ -110,7 +110,7 @@ define([
                 utils.ajaxSubmit({
                     url: url,
                     data: data
-                }, options.response);
+                }, options);
 
                 return this;
             }

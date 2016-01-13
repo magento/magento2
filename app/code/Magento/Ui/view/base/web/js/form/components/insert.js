@@ -120,7 +120,7 @@ define([
          *
          * @returns {Object|Boolean}
          */
-        render: function () {
+        render: function (params) {
             var request;
 
             if (this.isRendered) {
@@ -128,7 +128,8 @@ define([
             }
 
             this.startRender = true;
-            request = this.requestData(this.params, this.renderSettings);
+            params = _.extend(params || {}, this.params);
+            request = this.requestData(params, this.renderSettings);
             request
                 .done(this.onRender)
                 .fail(this.onError);
@@ -147,7 +148,7 @@ define([
             var query = utils.copy(params);
 
             ajaxSettings = _.extend({
-                url: this.updateUrl,
+                url: this['update_url'],
                 method: 'GET',
                 data: query,
                 dataType: 'json'
@@ -210,13 +211,13 @@ define([
         updateData: function (params) {
             var request;
 
-            _.extend(this.params, params);
+            params = _.extend(params || {}, this.params);
 
             if (!this.startRender && !this.isRendered) {
-                return this.render();
+                return this.render(params);
             }
 
-            request = this.requestData(this.params, this.updateSettings);
+            request = this.requestData(params, this.updateSettings);
             request
                 .done(this.onUpdate)
                 .fail(this.onError);
