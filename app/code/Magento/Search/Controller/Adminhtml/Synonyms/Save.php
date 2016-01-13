@@ -6,6 +6,7 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
+use Magento\Search\Model\Synonym\MergeConflictException;
 use Magento\Search\Model\SynonymGroup;
 use Magento\Search\Model\SynonymGroupRepository;
 
@@ -48,8 +49,17 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
             // save the data
             /** @var \Magento\Search\Model\SynonymGroupRepository $synGroupRepository */
             $synGroupRepository = $this->_objectManager->create('Magento\Search\Model\SynonymGroupRepository');
-            $synGroupRepository->save($synGroupModel);
-
+            if (isset($data['mergeOnConflict']) && $data['mergeOnConflict'] === 'true') {
+                $this->getMessageManager()->addSuccessMessage($synGroupRepository->save($synGroupModel));
+            } else {
+                try {
+                    $this->getMessageManager()->addSuccessMessage($synGroupRepository->save($synGroupModel, true));
+                } catch (MergeConflictException $exception) {
+                    $this->getMessageManager()->addErrorMessage($exception->getMessage());
+                    $this->_getSession()->setFormData($data);
+                    return $resultRedirect->setPath('*/*/edit', ['group_id' => $synGroupModel->getId()]);
+                }
+            }
 
             // check if 'Save and Continue'
             if ($this->getRequest()->getParam('back')) {

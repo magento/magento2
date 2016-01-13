@@ -90,5 +90,17 @@
                 </item>
             </argument>
         </field>
+        <field name="mergeOnConflict">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Merge on conflict</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="default" xsi:type="boolean">true</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="dataScope" xsi:type="string">mergeOnConflict</item>
+                    <item name="source" xsi:type="string">block</item>
+                </item>
+            </argument>
+        </field>
     </fieldset>
 </form>
