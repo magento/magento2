@@ -26,6 +26,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped("Skipping until ES is configured on builds - MAGETWO-44489");
+
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
