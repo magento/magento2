@@ -79,7 +79,8 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->markTestSkipped('Skipping until Elastic search support becomes available on Bamboo.');
+        //remember to add @ on line 18 when MAGETWO-44489 is done
+        $this->markTestSkipped('MAGETWO-44489 - Skipping until Elastic search support becomes available on Bamboo.');
 
         $this->connectionManager = Bootstrap::getObjectManager()->create(
             'Magento\Elasticsearch\SearchAdapter\ConnectionManager'
