@@ -410,6 +410,11 @@ class AbstractAction
             [$linkField, 'attribute_id']
         )->joinLeft(
             [
+                'e' => $this->connection->getTableName('catalog_category_entity')
+            ],
+            "def.{$linkField} = e.{$linkField}"
+        )->joinLeft(
+            [
                 'store' => $this->connection->getTableName(
                     $this->getTableName('catalog_category_entity_' . $type)
                 ),
@@ -425,7 +430,7 @@ class AbstractAction
                 )
             ]
         )->where(
-            "def.{$linkField} IN (?)",
+            "e.entity_id IN (?)",
             $entityIds
         )->where(
             'def.store_id IN (?)',
