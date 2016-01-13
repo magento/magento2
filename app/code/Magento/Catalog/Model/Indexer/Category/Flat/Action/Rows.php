@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {
@@ -19,16 +20,20 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+     * @param MetadataPool $metadataPool
+     * @param array $skipStaticColumns
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
+        MetadataPool $metadataPool,
+        $skipStaticColumns = [],
         CategoryRepositoryInterface $categoryRepository
     ) {
         $this->categoryRepository = $categoryRepository;
-        parent::__construct($resource, $storeManager, $resourceHelper);
+        parent::__construct($resource, $storeManager, $resourceHelper, $metadataPool, $skipStaticColumns);
     }
 
     /**
@@ -129,7 +134,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         )->where(
             "cf.path = {$rootIdExpr} OR cf.path = {$rootCatIdExpr} OR cf.path like {$catIdExpr}"
         )->where(
-            "ce.{$this->categoryMetadata->getLinkField()} IS NULL"
+            "ce.entity_id IS NULL"
         );
 
         $sql = $select->deleteFromSelect('cf');
@@ -153,17 +158,17 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
         $select = $this->connection->select()->from(
             $this->getTableName('catalog_category_entity'),
-            [$this->categoryMetadata->getLinkField()]
+            ['entity_id']
         )->where(
             "path = {$rootIdExpr} OR path = {$rootCatIdExpr} OR path like {$catIdExpr}"
         )->where(
-            "{$this->categoryMetadata->getLinkField()} IN (?)",
+            "entity_id IN (?)",
             $ids
         );
 
         $resultIds = [];
         foreach ($this->connection->fetchAll($select) as $category) {
-            $resultIds[] = $category[$this->categoryMetadata->getLinkField()];
+            $resultIds[] = $category['entity_id'];
         }
         return $resultIds;
     }

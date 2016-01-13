@@ -59,7 +59,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
                 $categories[$store->getRootCategoryId()] = $this->connection->fetchAll($select);
                 $categoriesIds[$store->getRootCategoryId()] = [];
                 foreach ($categories[$store->getRootCategoryId()] as $category) {
-                    $categoriesIds[$store->getRootCategoryId()][] = $category[$this->categoryMetadata->getLinkField()];
+                    $categoriesIds[$store->getRootCategoryId()][] = $category['entity_id'];
                 }
             }
             /** @TODO Do something with chunks */
