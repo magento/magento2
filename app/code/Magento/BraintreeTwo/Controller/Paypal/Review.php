@@ -6,7 +6,6 @@
 namespace Magento\BraintreeTwo\Controller\Paypal;
 
 use Magento\Checkout\Model\Session;
-use Magento\Braintree\Controller\PayPal;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
@@ -64,7 +63,7 @@ class Review extends AbstractAction
             /** @var \Magento\Framework\View\Result\Page $resultPage */
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
-            /** @var \Magento\Braintree\Block\Checkout\Review $reviewBlock */
+            /** @var \Magento\BraintreeTwo\Block\Paypal\Checkout\Review $reviewBlock */
             $reviewBlock = $resultPage->getLayout()->getBlock('braintreetwo.paypal.review');
 
             $reviewBlock->setQuote($quote);
