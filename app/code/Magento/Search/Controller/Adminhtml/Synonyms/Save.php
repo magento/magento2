@@ -50,7 +50,7 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
             // Remove unnecessary white spaces and convert synonyms to lower case
             $words = explode(',', $data['synonyms']);
             $words = array_map('trim', $words);
-            $data['synonyms'] = strtolower(implode(',',$words));
+            $data['synonyms'] = strtolower(implode(',', $words));
 
             $synGroupModel->setData($data);
 
