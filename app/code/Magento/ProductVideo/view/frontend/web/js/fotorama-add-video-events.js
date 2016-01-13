@@ -97,13 +97,14 @@ define([
         },
 
         PV: 'product-video', // [CONST]
+        VU: 'video-unplayed',
         PVLOADED: 'fotorama__product-video--loaded', // [CONST]
         VID: 'video', // [CONST]
         VI: 'vimeo', // [CONST]
         FTVC: 'fotorama__video-close',
         FTAR: 'fotorama__arr',
-        isFullscreen: 0,
-        inFullscreen: false,
+        TI: 'video-thumb-icon',
+        isFullscreen: false,
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
@@ -139,8 +140,8 @@ define([
 
             if (options.videoData.length) {
                 this.options.videoData = options.videoData;
+                this._initialize();
             }
-            this._initialize();
         },
 
         /**
@@ -380,8 +381,7 @@ define([
                 thumbs,
                 t,
                 tmpVideoData,
-                currentItem,
-                iconClass = 'video-thumb-icon';
+                currentItem;
 
             if (!fotorama.activeFrame.$navThumbFrame) {
                 this.fotoramaItem.on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
@@ -396,6 +396,7 @@ define([
             thumbsParent = fotorama.activeFrame.$navThumbFrame.parent();
             thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
 
+            //temporary solution for configurable product
             fotorama.data.map($.proxy(function (item, i) {
                 !item.type && (item.type = this.options.videoData[i].mediaType);
             }, this));
@@ -404,13 +405,13 @@ define([
                 tmpVideoData = this.options.videoData[t];
                 currentItem = thumbs.eq(t);
 
-                if (fotorama.options.nav === 'dots' && currentItem.hasClass(iconClass)) {
-                    currentItem.removeClass(iconClass);
+                if (fotorama.options.nav === 'dots' && currentItem.hasClass(this.TI)) {
+                    currentItem.removeClass(this.TI);
                 }
 
                 if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs' &&
                     fotorama.data[t].type ===  this.VID) {
-                    currentItem.addClass(iconClass);
+                    currentItem.addClass(this.TI);
                 }
                 this._checkForVideo(e, fotorama, t);
             }
@@ -471,14 +472,13 @@ define([
                 $image = $image.$stageFrame;
 
                 if ($image) {
-                    videoEventIsSet = $image.hasClass('video-unplayed');
+                    videoEventIsSet = $image.hasClass(this.VU);
                 }
             }
 
             if ($image && videoData && videoData.mediaType === this.VID && !videoEventIsSet) {
                 $(fotorama.activeFrame.$stageFrame).removeAttr('href');
                 this._prepareForVideoContainer($image, videoData, fotorama, number);
-                $('.fotorama-video-container').addClass('video-unplayed');
             }
 
             if (this.isFullscreen && this.fotoramaItem.data('fotorama').activeFrame.i === number) {
@@ -496,10 +496,7 @@ define([
          * @private
          */
         _prepareForVideoContainer: function ($image, videoData, fotorama, number) {
-            if (!$image.hasClass('fotorama-video-container')) {
-                $image.addClass('fotorama-video-container').addClass('video-unplayed');
-            }
-
+            $image.addClass('fotorama-video-container').addClass(this.VU);
             this._createVideoContainer(videoData, $image);
             this._setVideoEvent($image, this.PV, fotorama, number);
         },
@@ -551,9 +548,9 @@ define([
         },
 
         _clickHandler: function (event) {
-            if ($(event.target).hasClass('video-unplayed') && $(event.target).find('iframe').length === 0) {
+            if ($(event.target).hasClass(this.VU) && $(event.target).find('iframe').length === 0) {
 
-                $(event.target).removeClass('video-unplayed');
+                $(event.target).removeClass(this.VU);
                 $(event.target).find('.' + this.PV).productVideoLoader();
 
                 if (this.isFullscreen) {
@@ -638,7 +635,7 @@ define([
                 cloneVideoDiv = $(this).clone();
                 $(this).remove();
                 $item.append(cloneVideoDiv);
-                $item.addClass('video-unplayed');
+                $item.addClass(self.VU);
 
                 self._hideCloseVideo();
 
