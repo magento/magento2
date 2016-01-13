@@ -26,7 +26,7 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
      */
     public function fill(FixtureInterface $product, SimpleElement $element = null, FixtureInterface $category = null)
     {
-        $tabs = $this->getFieldsByTabs($product);
+        $tabs = $this->getFixtureFieldsByContainers($product);
         ksort($tabs);
 
         if ($category) {
@@ -36,5 +36,22 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
         $this->showAdvancedSettings();
         $this->getTab('variations')->showContent();
         return $this->fillTabs($tabs, $element);
+    }
+
+
+    /**
+     * Create data array for filling tabs.
+     * Skip Advanced Price tab
+     *
+     * @param InjectableFixture $fixture
+     * @return array
+     */
+    protected function getFixtureFieldsByContainers(InjectableFixture $fixture)
+    {
+        $tabs = parent::getFixtureFieldsByContainers($fixture);
+        if (isset($tabs['advanced-pricing'])) {
+            unset($tabs['advanced-pricing']);
+        }
+        return $tabs;
     }
 }

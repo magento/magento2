@@ -41,13 +41,13 @@
             <constraint name="Magento\Store\Test\Constraint\AssertStoreFrontend" />
         </variation>
         <variation name="CreateStoreEntityTestVariation4" summary="Create New Localized Store View" ticketId="MAGETWO-12405">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="store/data/group_id/dataset" xsi:type="string">default</data>
             <data name="store/data/name" xsi:type="string">DE_%isolation%</data>
             <data name="store/data/code" xsi:type="string">de_%isolation%</data>
             <data name="store/data/is_active" xsi:type="string">Enabled</data>
             <data name="locale" xsi:type="string">German (Germany)</data>
             <data name="welcomeText" xsi:type="string">Den gesamten Shop durchsuchen</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid" />
         </variation>
