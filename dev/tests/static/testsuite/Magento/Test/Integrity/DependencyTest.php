@@ -143,7 +143,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        $root = Files::init()->getPathToSource();
+        $root = BP;
         $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
         if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
 
@@ -274,21 +274,22 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
              */
             function ($fileType, $file) {
                 // Validates file when it is belonged to default themes
-                $filename = self::_getRelativeFilename($file);
-                $isThemeFile = (bool)preg_match(self::$_defaultThemes, $filename);
-
                 $componentRegistrar = new ComponentRegistrar();
-                $foundModuleName = '';
-                if (!$isThemeFile) {
-                    foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
-                        if (strpos($file, $moduleDir . '/') !== false) {
-                            $foundModuleName = str_replace('_', '\\', $moduleName);
-                            break;
-                        }
-                    }
-                    if (empty($foundModuleName)) {
+                foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+                    if (strpos($file, $themeDir . '/') !== false) {
                         return;
                     }
+                }
+
+                $foundModuleName = '';
+                foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+                    if (strpos($file, $moduleDir . '/') !== false) {
+                        $foundModuleName = str_replace('_', '\\', $moduleName);
+                        break;
+                    }
+                }
+                if (empty($foundModuleName)) {
+                    return;
                 }
 
                 $module = $foundModuleName;
@@ -433,19 +434,6 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         if (count($output)) {
             $this->fail("Redundant dependencies found!\r\n" . implode(' ', $output));
         }
-    }
-
-    /**
-     * Extract Magento relative filename from absolute filename
-     *
-     * @param string $absoluteFilename
-     * @return string
-     */
-    protected static function _getRelativeFilename($absoluteFilename)
-    {
-        $pathToSource = Files::init()->getPathToSource();
-        $relativeFileName = str_replace($pathToSource, '', $absoluteFilename);
-        return trim(str_replace('\\', '/', $relativeFileName), '/');
     }
 
     /**

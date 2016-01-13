@@ -114,6 +114,9 @@
                 <is_in_stock>
                     <input>select</input>
                 </is_in_stock>
+                <use_config_enable_qty_increments>
+                    <input>checkbox</input>
+                </use_config_enable_qty_increments>
             </stock_data>
         </fields>
     </advanced-inventory>
