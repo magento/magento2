@@ -7,6 +7,5 @@ define([], function () {
 
     return function ($target, $owner, data) {
         $target.find('label[for="' + $target.find(data.enableInContextPayPal).attr('id') + '"]').addClass('enabled');
-        $target.find(data.enableMerchantId).closest('tr').show();
     };
 });

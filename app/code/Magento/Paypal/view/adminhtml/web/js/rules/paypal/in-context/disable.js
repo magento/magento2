@@ -9,6 +9,5 @@ define([], function () {
         $target.find('label[for="' + $target.find(data.enableInContextPayPal).attr('id') + '"]').removeClass('enabled');
         $target.find(data.enableInContextPayPal + ' option[value="0"]').prop('selected', true);
         $target.find(data.enableInContextPayPal).prop('disabled', true);
-        $target.find(data.enableMerchantId).closest('tr').hide();
     };
 });

@@ -10,7 +10,6 @@ define([
     return function ($target, $owner, data) {
         if ($target.find(data.enableButton).val() === '0') {
             disable($target, $owner, data);
-            $target.find(data.enableMerchantId).closest('tr').hide();
         }
     };
 });
