@@ -157,11 +157,17 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
         $select = $connection->select()->from($idxTable, null);
 
+        $select->joinLeft(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.entity_id = {$idxTable}.entity_id",
+            []
+        );
+
         $condition = $connection->quoteInto('=?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
         $this->_addAttributeToSelect(
             $select,
             'visibility',
-            $idxTable . '.entity_id',
+            "cpe.{$this->getProductIdFieldName()}",
             $idxTable . '.store_id',
             $condition
         );
