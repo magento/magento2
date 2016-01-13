@@ -43,22 +43,6 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * Retrieve backend model of product media gallery attribute
-     *
-     * @param Product $product
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-     * @throws StateException
-     */
-    protected function getGalleryAttributeBackend(Product $product)
-    {
-        $galleryAttributeBackend = $product->getGalleryAttributeBackend();
-        if ($galleryAttributeBackend == null) {
-            throw new StateException(__('Requested product does not support images.'));
-        }
-        return $galleryAttributeBackend;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry)
