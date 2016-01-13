@@ -89,11 +89,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
             $saveHandler->deleteIndex([$dimension], new \ArrayObject($ids));
-            $products = $this->fullAction->rebuildStoreIndex($storeId, $ids);
-            foreach ($products as $product) {
-                $saveHandler->saveIndex([$dimension], $product);
-            }
-
+            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId, $ids));
         }
     }
 
@@ -112,10 +108,8 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
             $saveHandler->cleanIndex([$dimension]);
-            $products = $this->fullAction->rebuildStoreIndex($storeId);
-            foreach ($products as $product) {
-                $saveHandler->saveIndex([$dimension], $product);
-            }
+            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId));
+
         }
         $this->fulltextResource->resetSearchResults();
         $this->searchRequestConfig->reset();
