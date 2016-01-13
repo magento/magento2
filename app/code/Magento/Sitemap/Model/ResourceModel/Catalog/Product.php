@@ -6,7 +6,7 @@
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use \Magento\Store\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * Sitemap resource product collection model
