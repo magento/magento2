@@ -10,7 +10,7 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
-use Magento\BraintreeTwo\Model\Paypal\Helper\UpdateShippingMethod;
+use Magento\BraintreeTwo\Model\Paypal\Helper\ShippingMethodUpdater;
 
 /**
  * Class SaveShippingMethod
@@ -18,9 +18,9 @@ use Magento\BraintreeTwo\Model\Paypal\Helper\UpdateShippingMethod;
 class SaveShippingMethod extends AbstractAction
 {
     /**
-     * @var UpdateShippingMethod
+     * @var ShippingMethodUpdater
      */
-    private $updateShippingMethod;
+    private $shippingMethodUpdater;
 
     /**
      * Constructor
@@ -28,16 +28,16 @@ class SaveShippingMethod extends AbstractAction
      * @param Context $context
      * @param Config $config
      * @param Session $checkoutSession
-     * @param UpdateShippingMethod $updateShippingMethod
+     * @param ShippingMethodUpdater $shippingMethodUpdater
      */
     public function __construct(
         Context $context,
         Config $config,
         Session $checkoutSession,
-        UpdateShippingMethod $updateShippingMethod
+        ShippingMethodUpdater $shippingMethodUpdater
     ) {
         parent::__construct($context, $config, $checkoutSession);
-        $this->updateShippingMethod = $updateShippingMethod;
+        $this->shippingMethodUpdater = $shippingMethodUpdater;
     }
 
     /**
@@ -51,7 +51,7 @@ class SaveShippingMethod extends AbstractAction
         try {
             $this->validateQuote($quote);
 
-            $this->updateShippingMethod->execute(
+            $this->shippingMethodUpdater->execute(
                 $this->getRequest()->getParam('shipping_method'),
                 $quote
             );

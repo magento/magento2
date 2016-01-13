@@ -75,15 +75,4 @@ abstract class AbstractAction extends Action
             throw new \InvalidArgumentException(__('We can\'t initialize checkout.'));
         }
     }
-
-    /**
-     * @param array $requestData
-     * @throws \InvalidArgumentException
-     */
-    protected function validateRequestData(array $requestData)
-    {
-        if (empty($requestData['nonce']) || empty($requestData['details'])) {
-            throw new \InvalidArgumentException('Data of request cannot be empty.');
-        }
-    }
 }

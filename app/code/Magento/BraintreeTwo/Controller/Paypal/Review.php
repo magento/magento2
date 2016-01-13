@@ -9,7 +9,7 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
-use Magento\BraintreeTwo\Model\Paypal\Helper\UpdateQuote;
+use Magento\BraintreeTwo\Model\Paypal\Helper\QuoteUpdater;
 
 /**
  * Class Review
@@ -17,9 +17,9 @@ use Magento\BraintreeTwo\Model\Paypal\Helper\UpdateQuote;
 class Review extends AbstractAction
 {
     /**
-     * @var UpdateQuote
+     * @var QuoteUpdater
      */
-    private $updateQuote;
+    private $quoteUpdater;
 
     /**
      * Constructor
@@ -27,16 +27,16 @@ class Review extends AbstractAction
      * @param Context $context
      * @param Config $config
      * @param Session $checkoutSession
-     * @param UpdateQuote $updateQuote
+     * @param QuoteUpdater $quoteUpdater
      */
     public function __construct(
         Context $context,
         Config $config,
         Session $checkoutSession,
-        UpdateQuote $updateQuote
+        QuoteUpdater $quoteUpdater
     ) {
         parent::__construct($context, $config, $checkoutSession);
-        $this->updateQuote = $updateQuote;
+        $this->quoteUpdater = $quoteUpdater;
     }
 
     /**
@@ -54,7 +54,7 @@ class Review extends AbstractAction
             $this->validateQuote($quote);
             $this->validateRequestData($requestData);
 
-            $this->updateQuote->execute(
+            $this->quoteUpdater->execute(
                 $requestData['nonce'],
                 $requestData['details'],
                 $quote
@@ -78,5 +78,16 @@ class Review extends AbstractAction
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         return $resultRedirect->setPath('checkout/cart');
+    }
+
+    /**
+     * @param array $requestData
+     * @throws \InvalidArgumentException
+     */
+    private function validateRequestData(array $requestData)
+    {
+        if (empty($requestData['nonce']) || empty($requestData['details'])) {
+            throw new \InvalidArgumentException('Data of request cannot be empty.');
+        }
     }
 }

@@ -10,9 +10,9 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
 
 /**
- * Class UpdateShippingMethod
+ * Class ShippingMethodUpdater
  */
-class UpdateShippingMethod extends AbstractHelper
+class ShippingMethodUpdater extends AbstractHelper
 {
     /**
      * @var Config

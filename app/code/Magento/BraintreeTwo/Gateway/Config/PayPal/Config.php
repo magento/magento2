@@ -59,11 +59,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * Get overriden merchant name
+     * Is billing address can be required
      *
      * @return string
      */
-    public function isRequireBillingAddress()
+    public function isRequiredBillingAddress()
     {
         return $this->getValue(self::KEY_REQUIRE_BILLING_ADDRESS);
     }

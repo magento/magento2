@@ -15,9 +15,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Checkout\Api\AgreementsValidatorInterface;
 
 /**
- * Class PlaceOrder
+ * Class OrderPlace
  */
-class PlaceOrder extends AbstractHelper
+class OrderPlace extends AbstractHelper
 {
     /**
      * @var CartManagementInterface
