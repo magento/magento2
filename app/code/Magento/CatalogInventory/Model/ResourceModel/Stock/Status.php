@@ -250,12 +250,13 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status');
         $attributeTable = $attribute->getBackend()->getTable();
+        $linkField = $attribute->getEntity()->getLinkField();
 
         $connection = $this->getConnection();
 
         if ($storeId === null || $storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
-            $select = $connection->select()->from($attributeTable, ['entity_id', 'value'])
-                ->where('entity_id IN (?)', $productIds)
+            $select = $connection->select()->from($attributeTable, [$linkField, 'value'])
+                ->where("{$linkField} IN (?)", $productIds)
                 ->where('attribute_id = ?', $attribute->getAttributeId())
                 ->where('store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
 
@@ -263,10 +264,10 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         } else {
             $select = $connection->select()->from(
                 ['t1' => $attributeTable],
-                ['entity_id' => 't1.entity_id', 'value' => $connection->getIfNullSql('t2.value', 't1.value')]
+                [$linkField => "t1.{$linkField}", 'value' => $connection->getIfNullSql('t2.value', 't1.value')]
             )->joinLeft(
                 ['t2' => $attributeTable],
-                't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id AND t2.store_id = ' . (int)$storeId
+                "t1.{$linkField} = t2.{$linkField} AND t1.attribute_id = t2.attribute_id AND t2.store_id = {$storeId}"
             )->where(
                 't1.store_id = ?',
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
@@ -274,7 +275,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 't1.attribute_id = ?',
                 $attribute->getAttributeId()
             )->where(
-                't1.entity_id IN(?)',
+                "t1.{$linkField} IN(?)",
                 $productIds
             );
 
