@@ -17,16 +17,20 @@ class Batch
         $i = 0;
         $batch = [];
 
+        if (iterator_count($documents) == 0) {
+            return [$batch];
+        }
+
         foreach ($documents as $documentName => $documentValue) {
             $batch[$documentName] = $documentValue;
             if ($i++ >= $size) {
-                yield $batch;
+                return [$batch];
                 $i = 0;
                 $batch = [];
             }
         }
         if (count($batch) > 0) {
-            yield $batch;
+            return [$batch];
         }
     }
 }
