@@ -45,6 +45,7 @@ class Shipping extends Form
 
     /**
      * Fields that are used in estimation shipping form.
+     * Indexes of this array should be numeric, they are used in compare() method.
      *
      * @var array
      */
@@ -102,6 +103,21 @@ class Shipping extends Form
         $this->openEstimateShippingAndTax();
         $data = $address->getData();
         $mapping = $this->dataMapping(array_intersect_key($data, array_flip($this->estimationFields)));
+        // sort array according to $this->estimationFields elements order
+        uksort($mapping, function ($a, $b) {
+            $a = array_search($a, $this->estimationFields);
+            $b = array_search($b, $this->estimationFields);
+            switch (true) {
+                case false !== $a && false !== $b:
+                    return $a - $b;
+                case false !== $a:
+                    return -1;
+                case false !== $b:
+                    return 1;
+                default:
+                    return 0;
+            }
+        });
 
         // Test environment may become unstable when form fields are filled in a default manner.
         // Imitating behavior closer to the real user.

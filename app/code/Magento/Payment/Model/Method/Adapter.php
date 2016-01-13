@@ -6,23 +6,26 @@
 namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\DataObject;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NotFoundException;
-use Magento\Payment\Gateway\Command\CommandPoolInterface;
-use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
-use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
-use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Magento\Payment\Model\InfoInterface;
-use Magento\Payment\Model\MethodInterface;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Gateway\CommandExecutorInterface;
+use Magento\Payment\Gateway\Command\CommandPoolInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
+use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
+use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 
 /**
  * Payment method facade. Abstract method adapter
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Adapter implements MethodInterface
+final class Adapter implements MethodInterface, CommandExecutorInterface
 {
     /**
      * @var ValueHandlerPoolInterface
@@ -119,7 +122,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canOrder()
     {
@@ -127,7 +130,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canAuthorize()
     {
@@ -135,7 +138,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canCapture()
     {
@@ -143,7 +146,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canCapturePartial()
     {
@@ -151,7 +154,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canCaptureOnce()
     {
@@ -159,7 +162,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canRefund()
     {
@@ -167,7 +170,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canRefundPartialPerInvoice()
     {
@@ -175,7 +178,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canVoid()
     {
@@ -183,7 +186,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canUseInternal()
     {
@@ -191,7 +194,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canUseCheckout()
     {
@@ -199,7 +202,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canEdit()
     {
@@ -207,7 +210,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canFetchTransactionInfo()
     {
@@ -215,7 +218,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canReviewPayment()
     {
@@ -223,7 +226,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function isGateway()
     {
@@ -231,7 +234,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function isOffline()
     {
@@ -239,7 +242,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function isInitializeNeeded()
     {
@@ -247,7 +250,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function isAvailable(CartInterface $quote = null)
     {
@@ -284,7 +287,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function isActive($storeId = null)
     {
@@ -292,7 +295,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canUseForCountry($country)
     {
@@ -307,7 +310,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -354,7 +357,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function getConfigData($field, $storeId = null)
     {
@@ -362,7 +365,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function validate()
     {
@@ -386,137 +389,112 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
         $this->executeCommand(
             'fetch_transaction_information',
-            $payment,
-            ['transactionId' => $transactionId]
+            ['payment' => $payment, 'transactionId' => $transactionId]
         );
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function order(InfoInterface $payment, $amount)
     {
         $this->executeCommand(
             'order',
-            $payment,
-            ['amount' => $amount]
+            ['payment' => $payment, 'amount' => $amount]
         );
 
         return $this;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function authorize(InfoInterface $payment, $amount)
     {
         $this->executeCommand(
             'authorize',
-            $payment,
-            ['amount' => $amount]
+            ['payment' => $payment, 'amount' => $amount]
         );
 
         return $this;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function capture(InfoInterface $payment, $amount)
     {
         $this->executeCommand(
             'capture',
-            $payment,
-            ['amount' => $amount]
+            ['payment' => $payment, 'amount' => $amount]
         );
 
         return $this;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function refund(InfoInterface $payment, $amount)
     {
         $this->executeCommand(
             'refund',
-            $payment,
-            ['amount' => $amount]
+            ['payment' => $payment, 'amount' => $amount]
         );
 
         return $this;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function cancel(InfoInterface $payment)
     {
-        $this->executeCommand(
-            'cancel',
-            $payment
-        );
+        $this->executeCommand('cancel', ['payment' => $payment]);
 
         return $this;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function void(InfoInterface $payment)
     {
-        $this->executeCommand(
-            'void',
-            $payment
-        );
+        $this->executeCommand('void', ['payment' => $payment]);
 
         return $this;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function acceptPayment(InfoInterface $payment)
     {
-        $this->executeCommand(
-            'accept_payment',
-            $payment
-        );
+        $this->executeCommand('accept_payment', ['payment' => $payment]);
 
         return $this;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function denyPayment(InfoInterface $payment)
     {
-        $this->executeCommand(
-            'deny_payment',
-            $payment
-        );
+        $this->executeCommand('deny_payment', ['payment' => $payment]);
 
         return $this;
     }
 
     /**
-     * Performs command
-     *
-     * @param string $commandCode
-     * @param InfoInterface $payment
-     * @param array $arguments
-     * @return void
-     * @throws NotFoundException
-     * @throws \Exception
-     * @throws \DomainException
+     * @inheritdoc
      */
-    private function executeCommand($commandCode, InfoInterface $payment, array $arguments = [])
+    public function executeCommand($commandCode, array $arguments = [])
     {
         if ($this->canPerformCommand($commandCode)) {
             if ($this->commandPool === null) {
@@ -524,17 +502,25 @@ class Adapter implements MethodInterface
             }
 
             try {
+
                 $command = $this->commandPool->get($commandCode);
-                $arguments['payment'] = $this->paymentDataObjectFactory->create($payment);
-                $command->execute($arguments);
+
+                if (isset($arguments['payment'])) {
+                    $arguments['payment'] = $this->paymentDataObjectFactory->create($arguments['payment']);
+                }
+
+                return $command->execute($arguments);
+
             } catch (NotFoundException $e) {
                 throw $e;
             }
         }
+
+        return null;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function getCode()
     {
@@ -542,7 +528,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function getTitle()
     {
@@ -550,7 +536,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function setStore($storeId)
     {
@@ -558,7 +544,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function getStore()
     {
@@ -566,7 +552,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function getFormBlockType()
     {
@@ -574,7 +560,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function getInfoBlockType()
     {
@@ -582,7 +568,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function getInfoInstance()
     {
@@ -590,7 +576,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function setInfoInstance(InfoInterface $info)
     {
@@ -598,7 +584,7 @@ class Adapter implements MethodInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      * @param DataObject $data
      * @return $this
      */
@@ -607,31 +593,43 @@ class Adapter implements MethodInterface
         $this->eventManager->dispatch(
             'payment_method_assign_data_' . $this->getCode(),
             [
-                'method' => $this,
-                'data' => $data
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
             ]
         );
 
-        $this->getInfoInstance()->addData($data->getData());
+        $this->eventManager->dispatch(
+            'payment_method_assign_data',
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
         return $this;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function initialize($paymentAction, $stateObject)
     {
         $this->executeCommand(
             'initialize',
-            $this->getInfoInstance(),
-            ['paymentAction' => $paymentAction, 'stateObject' => $stateObject]
+            [
+                'payment' => $this->getInfoInstance(),
+                'paymentAction' => $paymentAction,
+                'stateObject' => $stateObject
+            ]
         );
         return $this;
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function getConfigPaymentAction()
     {

@@ -6,10 +6,12 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -18,6 +20,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class IndexBuilder
 {
     const SECONDS_IN_DAY = 86400;
+
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * CatalogRuleGroupWebsite columns list
@@ -99,6 +106,7 @@ class IndexBuilder
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param int $batchCount
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -111,6 +119,7 @@ class IndexBuilder
         \Magento\Framework\Stdlib\DateTime $dateFormat,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ProductFactory $productFactory,
+        MetadataPool $metadataPool,
         $batchCount = 1000
     ) {
         $this->resource = $resource;
@@ -124,6 +133,7 @@ class IndexBuilder
         $this->dateTime = $dateTime;
         $this->productFactory = $productFactory;
         $this->batchCount = $batchCount;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -211,7 +221,7 @@ class IndexBuilder
      */
     protected function cleanByIds($productIds)
     {
-        $this->connection->deleteFromSelect(
+        $query = $this->connection->deleteFromSelect(
             $this->connection
                 ->select()
                 ->from($this->resource->getTableName('catalogrule_product'), 'product_id')
@@ -219,14 +229,16 @@ class IndexBuilder
                 ->where('product_id IN (?)', $productIds),
             $this->resource->getTableName('catalogrule_product')
         );
+        $this->connection->query($query);
 
-        $this->connection->deleteFromSelect(
+        $query = $this->connection->deleteFromSelect(
             $this->connection->select()
                 ->from($this->resource->getTableName('catalogrule_product_price'), 'product_id')
                 ->distinct()
                 ->where('product_id IN (?)', $productIds),
             $this->resource->getTableName('catalogrule_product_price')
         );
+        $this->connection->query($query);
     }
 
     /**
@@ -239,7 +251,7 @@ class IndexBuilder
     protected function applyRule(Rule $rule, $product)
     {
         $ruleId = $rule->getId();
-        $productId = $product->getId();
+        $productEntityId = $product->getId();
         $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
 
         if (!$rule->validate($product)) {
@@ -250,7 +262,7 @@ class IndexBuilder
             $this->resource->getTableName('catalogrule_product'),
             [
                 $this->connection->quoteInto('rule_id = ?', $ruleId),
-                $this->connection->quoteInto('product_id = ?', $productId)
+                $this->connection->quoteInto('product_id = ?', $productEntityId)
             ]
         );
 
@@ -275,7 +287,7 @@ class IndexBuilder
                         'to_time' => $toTime,
                         'website_id' => $websiteId,
                         'customer_group_id' => $customerGroupId,
-                        'product_id' => $productId,
+                        'product_id' => $productEntityId,
                         'action_operator' => $actionOperator,
                         'action_amount' => $actionAmount,
                         'action_stop' => $actionStop,
@@ -410,14 +422,12 @@ class IndexBuilder
         $fromDate = mktime(0, 0, 0, date('m'), date('d') - 1);
         $toDate = mktime(0, 0, 0, date('m'), date('d') + 1);
 
-        $productId = $product ? $product->getId() : null;
-
         /**
          * Update products rules prices per each website separately
          * because of max join limit in mysql
          */
         foreach ($this->storeManager->getWebsites() as $website) {
-            $productsStmt = $this->getRuleProductsStmt($website->getId(), $productId);
+            $productsStmt = $this->getRuleProductsStmt($website->getId(), $product);
 
             $dayPrices = [];
             $stopFlags = [];
@@ -567,11 +577,11 @@ class IndexBuilder
 
     /**
      * @param int $websiteId
-     * @param int|null $productId
+     * @param Product|null $product
      * @return \Zend_Db_Statement_Interface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getRuleProductsStmt($websiteId, $productId = null)
+    protected function getRuleProductsStmt($websiteId, Product $product = null)
     {
         /**
          * Sort order is important
@@ -589,8 +599,8 @@ class IndexBuilder
             ['rp.website_id', 'rp.customer_group_id', 'rp.product_id', 'rp.sort_order', 'rp.rule_id']
         );
 
-        if ($productId !== null) {
-            $select->where('rp.product_id=?', $productId);
+        if ($product && $product->getEntityId()) {
+            $select->where('rp.product_id=?', $product->getEntityId());
         }
 
         /**
@@ -600,7 +610,13 @@ class IndexBuilder
         $priceTable = $priceAttr->getBackend()->getTable();
         $attributeId = $priceAttr->getId();
 
-        $joinCondition = '%1$s.entity_id=rp.product_id AND (%1$s.attribute_id='
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $select->join(
+            ['e' => $this->getTable('catalog_product_entity')],
+            sprintf('e.entity_id = rp.product_id'),
+            []
+        );
+        $joinCondition = '%1$s.' . $linkField . '=e.' . $linkField . ' AND (%1$s.attribute_id='
             . $attributeId
             . ') and %1$s.store_id=%2$s';
 

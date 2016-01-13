@@ -176,8 +176,11 @@
     top: 0;
 
     &.active {
-        opacity: @_overlay-opacity;
-        filter: alpha(opacity=@_overlay-opacity-old);
+        .lib-css(opacity, @_overlay-opacity);
+
+        & when not (@_overlay-opacity-old = false) {
+            filter: alpha(opacity=@_overlay-opacity-old);
+        }
     }
 }
 

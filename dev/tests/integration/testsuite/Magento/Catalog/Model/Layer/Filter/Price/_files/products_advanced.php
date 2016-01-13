@@ -68,8 +68,6 @@ foreach ($prices as $price) {
     $productId = $lastProductId + 1;
     $product->setTypeId(
         \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-    )->setId(
-        $productId
     )->setAttributeSetId(
         $installer->getAttributeSetId('catalog_product', 'Default')
     )->setStoreId(

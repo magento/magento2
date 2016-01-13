@@ -175,14 +175,13 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @var array
      */
     protected $_exportToRequestFilters = [
-        'AMT' => '_filterAmount',
-        'ITEMAMT' => '_filterAmount',
-        'TRIALAMT' => '_filterAmount',
-        'SHIPPINGAMT' => '_filterAmount',
-        'TAXAMT' => '_filterAmount',
-        'INITAMT' => '_filterAmount',
+        'AMT' => 'formatPrice',
+        'ITEMAMT' => 'formatPrice',
+        'TRIALAMT' => 'formatPrice',
+        'SHIPPINGAMT' => 'formatPrice',
+        'TAXAMT' => 'formatPrice',
+        'INITAMT' => 'formatPrice',
         'CREDITCARDTYPE' => '_filterCcType',
-        //        'PROFILESTARTDATE' => '_filterToPaypalDate',
         'AUTOBILLAMT' => '_filterBillFailedLater',
         'BILLINGPERIOD' => '_filterPeriodUnit',
         'TRIALBILLINGPERIOD' => '_filterPeriodUnit',
@@ -1218,7 +1217,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             );
             $http->close();
 
-            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t contact the PayPal gateway.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment Gateway is unreachable at the moment. Please use another payment option.')
+            );
         }
 
         // cUrl resource must be closed after checking it for errors

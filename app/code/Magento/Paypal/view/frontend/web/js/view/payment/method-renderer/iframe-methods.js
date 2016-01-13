@@ -56,6 +56,17 @@ define(
                 }
             },
 
+            getPlaceOrderDeferredObject: function () {
+                var self = this;
+                return this._super()
+                    .fail(
+                        function () {
+                            self.isInAction(false);
+                            document.removeEventListener('click', iframe.stopEventPropagation, true);
+                        }
+                    );
+            },
+
             /**
              * After place order callback
              */

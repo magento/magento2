@@ -112,7 +112,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     public function getMinRegularAmount()
     {
         if (null === $this->minRegularAmount) {
-            $this->minRegularAmount = $this->doGetMinRegularAmount() ?: false;
+            $this->minRegularAmount = $this->doGetMinRegularAmount() ?: parent::getAmount();
         }
         return $this->minRegularAmount;
     }

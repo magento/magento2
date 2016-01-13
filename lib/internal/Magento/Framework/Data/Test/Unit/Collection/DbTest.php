@@ -10,6 +10,8 @@ namespace Magento\Framework\Data\Test\Unit\Collection;
 
 class DbTest extends \PHPUnit_Framework_TestCase
 {
+    use \Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
+
     /**
      * @var \Magento\Framework\Data\Collection\AbstractDb
      */
@@ -30,8 +32,14 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     protected $fetchStrategyMock;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->fetchStrategyMock = $this->getMock(
             'Magento\Framework\Data\Collection\Db\FetchStrategy\Query', ['fetchAll'], [], '', false
         );
@@ -56,7 +64,19 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddOrder()
     {
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['fetchAll'], [], '', false);
+        $adapter = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            ['fetchAll', 'select'],
+            [],
+            '',
+            false
+        );
+        $renderer = $this->getSelectRenderer($this->objectManager);
+        $select = new \Magento\Framework\DB\Select($adapter, $renderer);
+        $adapter
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($select);
         $this->collection->setConnection($adapter);
 
         $select = $this->collection->getSelect();
@@ -84,6 +104,12 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnshiftOrder($adapter)
     {
+        $renderer = $this->getSelectRenderer($this->objectManager);
+        $select = new \Magento\Framework\DB\Select($adapter, $renderer);
+        $adapter
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($select);
         $this->collection->setConnection($adapter);
         $this->collection->addOrder('some_field', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
         $this->collection->unshiftOrder('other_field', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
@@ -100,7 +126,13 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFieldToFilter()
     {
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['prepareSqlCondition'], [], '', false);
+        $adapter = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            ['prepareSqlCondition', 'select'],
+            [],
+            '',
+            false
+        );
         $adapter->expects(
             $this->any()
         )->method(
@@ -111,6 +143,12 @@ class DbTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('is_imported = 1')
         );
+        $renderer = $this->getSelectRenderer($this->objectManager);
+        $select = new \Magento\Framework\DB\Select($adapter, $renderer);
+        $adapter
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($select);
         $this->collection->setConnection($adapter);
         $select = $this->collection->getSelect()->from('test');
 
@@ -124,27 +162,32 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFieldToFilterWithMultipleParams()
     {
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['prepareSqlCondition'], [], '', false);
-        $adapter->expects(
-            $this->at(0)
-        )->method(
-            'prepareSqlCondition'
-        )->with(
-            '`weight`',
-            ['in' => [1, 3]]
-        )->will(
-            $this->returnValue('weight in (1, 3)')
+        $adapter = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            ['prepareSqlCondition', 'select'],
+            [],
+            '',
+            false
         );
         $adapter->expects(
-            $this->at(1)
+            $this->exactly(3)
         )->method(
             'prepareSqlCondition'
-        )->with(
-            '`name`',
-            ['like' => 'M%']
-        )->will(
-            $this->returnValue("name like 'M%'")
+        )->withConsecutive(
+            ["`weight`", ['in' => [1, 3]]],
+            ['`name`', ['like' => 'M%']],
+            ['`is_imported`', $this->anything()]
+        )->willReturnOnConsecutiveCalls(
+            'weight in (1, 3)',
+            "name like 'M%'",
+            'is_imported = 1'
         );
+        $renderer = $this->getSelectRenderer($this->objectManager);
+        $select = new \Magento\Framework\DB\Select($adapter, $renderer);
+        $adapter
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($select);
         $this->collection->setConnection($adapter);
         $select = $this->collection->getSelect()->from("test");
 
@@ -157,18 +200,6 @@ class DbTest extends \PHPUnit_Framework_TestCase
             "SELECT `test`.* FROM `test` WHERE ((weight in (1, 3)) OR (name like 'M%'))",
             $select->assemble()
         );
-
-        $adapter->expects(
-            $this->at(0)
-        )->method(
-            'prepareSqlCondition'
-        )->with(
-            '`is_imported`',
-            $this->anything()
-        )->will(
-            $this->returnValue('is_imported = 1')
-        );
-
         $this->collection->addFieldToFilter('is_imported', ['eq' => '1']);
         $this->assertEquals(
             "SELECT `test`.* FROM `test` WHERE ((weight in (1, 3)) OR (name like 'M%')) AND (is_imported = 1)",
@@ -198,9 +229,12 @@ class DbTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('email LIKE \'%value?%\'')
         );
-        $adapter->expects($this->once())
+        $renderer = $this->getSelectRenderer($this->objectManager);
+        $select = new \Magento\Framework\DB\Select($adapter, $renderer);
+        $adapter
+            ->expects($this->any())
             ->method('select')
-            ->will($this->returnValue(new \Magento\Framework\DB\Select($adapter)));
+            ->willReturn($select);
         $this->collection->setConnection($adapter);
 
         $select = $this->collection->getSelect()->from('test');
@@ -215,7 +249,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['quoteIdentifier', 'prepareSqlCondition'],
+            ['quoteIdentifier', 'prepareSqlCondition', 'select'],
             [],
             '',
             false
@@ -239,6 +273,12 @@ class DbTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('`email` = "foo@example.com"')
         );
+        $renderer = $this->getSelectRenderer($this->objectManager);
+        $select = new \Magento\Framework\DB\Select($adapter, $renderer);
+        $adapter
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($select);
         $this->collection->setConnection($adapter);
         $select = $this->collection->getSelect()->from('test');
 
@@ -333,7 +373,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'query'], [], '', false);
         $selectMock = $this->getMock(
-            'Magento\Framework\DB\Select', [], ['adapter' => $adapterMock]
+            'Magento\Framework\DB\Select',
+            [],
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $adapterMock->expects($this->once())
             ->method('query')
@@ -371,7 +413,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['orWhere', 'where', 'reset', 'columns'],
-            ['adapter' => $adapterMock]
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $selectMock->expects($this->exactly(4))
             ->method('reset');
@@ -424,7 +466,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['select'], [], '', false);
         $selectMock = $this->getMock(
-            'Magento\Framework\DB\Select', ['__toString'], ['adapter' => $adapterMock]
+            'Magento\Framework\DB\Select',
+            ['__toString'],
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $adapterMock->expects($this->once())
             ->method('select')
@@ -452,7 +496,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['orWhere', 'where', 'reset', 'columns'],
-            ['adapter' => $adapterMock]
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $selectMock->expects($this->once())
             ->method('where')
@@ -484,7 +528,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['distinct'],
-            ['adapter' => $adapterMock]
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $adapterMock->expects($this->once())
             ->method('select')
@@ -511,7 +555,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'query'], [], '', false);
         $selectMock = $this->getMock(
-            'Magento\Framework\DB\Select', [], ['adapter' => $adapterMock]
+            'Magento\Framework\DB\Select',
+            [],
+            ['adapter' => $adapterMock, 'selectRenderer' => $this->getSelectRenderer($this->objectManager)]
         );
         $adapterMock->expects($this->once())
             ->method('select')

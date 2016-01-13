@@ -116,32 +116,30 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 [
-                    'TestIntegration1' => ['resources' => $testIntegration1Resource],
-                    'TestIntegration2' => ['resources' => $testIntegration2Resource],
+                    'TestIntegration1' => ['resource' => $testIntegration1Resource],
+                    'TestIntegration2' => ['resource' => $testIntegration2Resource],
                 ]
             )
         );
-        $firstInegrationId = 1;
 
-        $integrationsData1 = new \Magento\Framework\DataObject(
-            [
-                'id' => $firstInegrationId,
-                Integration::NAME => 'TestIntegration1',
-                Integration::EMAIL => 'test-integration1@magento.com',
-                Integration::ENDPOINT => 'http://endpoint.com',
-                Integration::SETUP_TYPE => 1,
-            ]
-        );
+        $firstInegrationId = 1;
+        $integrationsData1 = [
+            'id' => $firstInegrationId,
+            Integration::NAME => 'TestIntegration1',
+            Integration::EMAIL => 'test-integration1@magento.com',
+            Integration::ENDPOINT => 'http://endpoint.com',
+            Integration::SETUP_TYPE => 1
+        ];
+        $integrationsData1Object = new \Magento\Framework\DataObject($integrationsData1);
 
         $secondIntegrationId = 2;
-        $integrationsData2 = new \Magento\Framework\DataObject(
-            [
-                'id' => $secondIntegrationId,
-                Integration::NAME => 'TestIntegration2',
-                Integration::EMAIL => 'test-integration2@magento.com',
-                Integration::SETUP_TYPE => 1,
-            ]
-        );
+        $integrationsData2 = [
+            'id' => $secondIntegrationId,
+            Integration::NAME => 'TestIntegration2',
+            Integration::EMAIL => 'test-integration2@magento.com',
+            Integration::SETUP_TYPE => 1
+        ];
+        $integrationsData2Object = new \Magento\Framework\DataObject($integrationsData2);
 
         $this->integrationServiceMock->expects(
             $this->at(0)
@@ -150,7 +148,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->with(
             'TestIntegration1'
         )->will(
-            $this->returnValue($integrationsData1)
+            $this->returnValue($integrationsData1Object)
         );
 
         $this->integrationServiceMock->expects(
@@ -160,12 +158,12 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->with(
             'TestIntegration2'
         )->will(
-            $this->returnValue($integrationsData2)
+            $this->returnValue($integrationsData2Object)
         );
 
         $this->apiSetupPlugin->afterProcessIntegrationConfig(
             $this->subjectMock,
-            ['TestIntegration1', 'TestIntegration2']
+            ['TestIntegration1' => $integrationsData1, 'TestIntegration2' => $integrationsData2]
         );
     }
 }
