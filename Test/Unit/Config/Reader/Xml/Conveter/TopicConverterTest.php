@@ -32,8 +32,8 @@ class TopicConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert()
     {
-        $xmlFile = __DIR__ . '/_files/topic_config.xml';
-        $expectedData = include(__DIR__ . '/_files/expected_topic_config.php');
+        $xmlFile = __DIR__ . '/../../../_files/topic_config.xml';
+        $expectedData = include(__DIR__ . '/../../../_files/expected_topic_config.php');
         $dom = new \DOMDocument();
         $dom->load($xmlFile);
         $result = $this->converter->convert($dom);
