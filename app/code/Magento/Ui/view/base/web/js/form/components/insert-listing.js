@@ -203,8 +203,8 @@ define([
                 'condition_type': filterType,
                 value: selections[itemsType]
             };
-
             _.extend(selectionsData, this.params || {}, selections.params);
+            selectionsData.filters = {};
 
             request = this.requestData(selectionsData);
             request
@@ -234,6 +234,11 @@ define([
             }
 
             provider = this.selections();
+
+            if (!this.provider) {
+                return;
+            }
+
             index = provider && provider.indexField;
             filter[provider.indexField] = {
                 'condition_type': this.externalCondition,
