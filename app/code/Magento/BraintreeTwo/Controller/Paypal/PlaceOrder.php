@@ -18,9 +18,9 @@ use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
 class PlaceOrder extends AbstractAction
 {
     /**
-     * @var Helper\PlaceOrder
+     * @var Helper\OrderPlace
      */
-    private $placeOrder;
+    private $orderPlace;
 
     /**
      * Constructor
@@ -28,16 +28,16 @@ class PlaceOrder extends AbstractAction
      * @param Context $context
      * @param Config $config
      * @param Session $checkoutSession
-     * @param Helper\PlaceOrder $placeOrder
+     * @param Helper\OrderPlace $orderPlace
      */
     public function __construct(
         Context $context,
         Config $config,
         Session $checkoutSession,
-        Helper\PlaceOrder $placeOrder
+        Helper\OrderPlace $orderPlace
     ) {
         parent::__construct($context, $config, $checkoutSession);
-        $this->placeOrder = $placeOrder;
+        $this->orderPlace = $orderPlace;
     }
 
 
@@ -54,7 +54,7 @@ class PlaceOrder extends AbstractAction
         try {
             $this->validateQuote($quote);
 
-            $this->placeOrder->execute($quote, $agreement);
+            $this->orderPlace->execute($quote, $agreement);
 
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             return $resultRedirect->setPath('checkout/onepage/success');

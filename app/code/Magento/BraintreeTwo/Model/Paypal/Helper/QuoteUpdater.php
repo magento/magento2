@@ -15,9 +15,9 @@ use Magento\BraintreeTwo\Observer\DataAssignObserver;
 use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
 
 /**
- * Class UpdateQuote
+ * Class QuoteUpdater
  */
-class UpdateQuote extends AbstractHelper
+class QuoteUpdater extends AbstractHelper
 {
     /**
      * @var Config
@@ -134,7 +134,7 @@ class UpdateQuote extends AbstractHelper
     {
         $billingAddress = $quote->getBillingAddress();
 
-        if ($this->config->isRequireBillingAddress()) {
+        if ($this->config->isRequiredBillingAddress()) {
             $this->updateAddressData($billingAddress, $details['billingAddress']);
         } else {
             $this->updateAddressData($billingAddress, $details['shippingAddress']);
