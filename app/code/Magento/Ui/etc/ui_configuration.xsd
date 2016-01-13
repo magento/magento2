@@ -42,6 +42,7 @@
                     <xs:element type="modalConfiguration" name="modal"/>
                     <xs:element type="columnsControls" name="columnsControls"/>
                     <xs:element type="listingToolbarConfiguration" name="listingToolbar"/>
+                    <xs:element type="htmlContent" name="htmlContent"/>
                     <xs:element type="button" name="button"/>
                 </xs:choice>
             </xs:extension>
