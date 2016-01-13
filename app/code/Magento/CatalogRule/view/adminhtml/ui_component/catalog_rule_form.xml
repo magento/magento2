@@ -28,15 +28,6 @@
                 <item name="name" xsi:type="string">save</item>
                 <item name="label" xsi:type="string" translate="true">Save</item>
                 <item name="class" xsi:type="string">save primary</item>
-                <item name="url" xsi:type="string">catalog_rule/promo_catalog/save</item>
-                <item name="data_attribute" xsi:type="array">
-                    <item name="mage-init" xsi:type="array">
-                        <item name="button" xsi:type="array">
-                            <item name="event" xsi:type="string">save</item>
-                        </item>
-                    </item>
-                    <item name="form-role" xsi:type="string">save</item>
-                </item>
             </item>
             <item name="reset" xsi:type="array">
                 <item name="name" xsi:type="string">reset</item>
@@ -49,13 +40,6 @@
                 <item name="name" xsi:type="string">save_and_continue</item>
                 <item name="label" xsi:type="string" translate="true">Save and Continue Edit</item>
                 <item name="class" xsi:type="string">save</item>
-                <item name="data_attribute" xsi:type="array">
-                    <item name="mage-init" xsi:type="array">
-                        <item name="button" xsi:type="array">
-                            <item name="event" xsi:type="string">saveAndContinueEdit</item>
-                        </item>
-                    </item>
-                </item>
                 <item name="sort_order" xsi:type="string">80</item>
             </item>
             <item name="save_and_apply" xsi:type="array">
@@ -63,13 +47,7 @@
                 <item name="label" xsi:type="string" translate="true">Save and Apply</item>
                 <item name="class" xsi:type="string">save</item>
                 <item name="data_attribute" xsi:type="array">
-                    <item name="mage-init" xsi:type="array">
-                        <item name="button" xsi:type="array">
-                            <item name="event" xsi:type="string">save</item>
-                            <item name="args" xsi:type="array">
-                                <item name="auto_apply" xsi:type="string">1</item>
-                            </item>
-                        </item>
+                    <item name="on_click" xsi:type="string">
                     </item>
                 </item>
                 <item name="sort_order" xsi:type="string">80</item>
