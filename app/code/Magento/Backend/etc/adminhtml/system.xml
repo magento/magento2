@@ -164,7 +164,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Warning! Enabling this feature is not recommended on production environments because it represents a potential security risk.</comment>
                 </field>
-                <field id="minify_html" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_html" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify Html</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
@@ -194,7 +194,7 @@
                     <label>Enable JavaScript Bundling</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
@@ -206,7 +206,7 @@
                     <label>Merge CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Minification is not applied in developer mode.</comment>
