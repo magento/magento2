@@ -48,7 +48,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param SynonymGroupInterface $synonymGroup
      * @param bool $errorOnMergeConflict
-     * @return void
+     * @return \Magento\Framework\Phrase
      * @throws \Exception
      */
     public function save(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict = false)
@@ -58,9 +58,9 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         $synonymGroupModel->load($synonymGroup->getGroupId());
         $isCreate = $synonymGroupModel->getSynonymGroup() === null;
         if ($isCreate) {
-            $this->create($synonymGroup, $errorOnMergeConflict);
+            return $this->create($synonymGroup, $errorOnMergeConflict);
         } else {
-            $this->update($synonymGroupModel, $synonymGroup, $errorOnMergeConflict);
+            return $this->update($synonymGroupModel, $synonymGroup, $errorOnMergeConflict);
         }
     }
 
@@ -91,7 +91,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param SynonymGroupInterface $synonymGroup
      * @param bool $errorOnMergeConflict
-     * @return void
+     * @return \Magento\Framework\Phrase
      * @throws Synonym\MergeConflictException
      */
     private function create(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict)
@@ -112,12 +112,20 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             $newSynonymGroupModel->setWebsiteId($synonymGroup->getWebsiteId());
             $newSynonymGroupModel->setStoreId($synonymGroup->getStoreId());
             $this->resourceModel->save($newSynonymGroupModel);
+            $synonymGroup->setSynonymGroup($newSynonymGroupModel->getSynonymGroup());
+            $synonymGroup->setGroupId($newSynonymGroupModel->getGroupId());
+            return __(
+                'You created the synonym group and merged with synonym group(s): %1.',
+                '(' . implode('), (', $matchingSynonymGroups) . ')'
+            );
         } else {
             // no merge conflict, perform simple insert
             /** @var SynonymGroup $synonymGroupModel */
             $synonymGroupModel = $this->synonymGroupFactory->create();
             $this->populateSynonymGroupModel($synonymGroupModel, $synonymGroup);
             $this->resourceModel->save($synonymGroupModel);
+            $synonymGroup->setGroupId($synonymGroupModel->getGroupId());
+            return __('You created the synonym group.');
         }
     }
 
@@ -163,7 +171,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroup $oldSynonymGroup
      * @param SynonymGroupInterface $newSynonymGroup
      * @param bool $errorOnMergeConflict
-     * @return void
+     * @return \Magento\Framework\Phrase
      * @throws Synonym\MergeConflictException
      */
     private function update(
@@ -190,10 +198,15 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             $oldSynonymGroup->setWebsiteId($newSynonymGroup->getWebsiteId());
             $oldSynonymGroup->setStoreId($newSynonymGroup->getStoreId());
             $this->resourceModel->save($oldSynonymGroup);
+            return __(
+                'You updated the synonym group and merged with synonym group(s): %1.',
+                '(' . implode('), (', $matchingSynonymGroups) . ')'
+            );
         } else {
             // no merge conflict, perform simple update
             $this->populateSynonymGroupModel($oldSynonymGroup, $newSynonymGroup);
             $this->resourceModel->save($oldSynonymGroup);
+            return __('You updated the synonym group.');
         }
     }
 
@@ -208,7 +221,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         $displayString = '(';
         $displayString .= implode('), (', $matchingSynonymGroups);
         $displayString .= ')';
-        return __('Merge conflict with current synonym groups: %1', $displayString);
+        return __('Merge conflict with existing synonym group(s): %1', $displayString);
     }
 
     /**
