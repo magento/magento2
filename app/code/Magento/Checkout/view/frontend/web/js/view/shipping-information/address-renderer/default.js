@@ -9,6 +9,10 @@ define([
 ], function(Component, customerData) {
     'use strict';
     var countryData = customerData.get('directory-data');
+    if (_.isEmpty(countryData())) {
+        countryData(customerData.reload(['directory-data'], false));
+    }
+
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-information/address-renderer/default'
