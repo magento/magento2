@@ -112,7 +112,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsScopePrivate()
     {
-        $this->assertEquals(false, $this->block->isScopePrivate());
+        $this->assertFalse($this->block->isScopePrivate());
     }
 
     /**
