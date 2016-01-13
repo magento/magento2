@@ -78,7 +78,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __(
-                    'Synonym Group with id %1 cannot be deleted. %2',
+                    'Synonym group with id %1 cannot be deleted. %2',
                     $synonymGroup->getGroupId(),
                     $exception->getMessage()
                 )
