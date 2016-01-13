@@ -33,8 +33,9 @@ class ProxyGeneratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configurationScannerMock = $this->getMockBuilder('Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner')
-            ->disableOriginalConstructor()
+        $this->configurationScannerMock = $this->getMockBuilder(
+            'Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner'
+        )->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

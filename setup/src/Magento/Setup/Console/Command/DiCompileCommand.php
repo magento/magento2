@@ -161,15 +161,9 @@ class DiCompileCommand extends Command
             'application' => $excludedModulePaths,
             'framework' => $excludedLibraryPaths
         ];
-        $dataAttributesIncludePattern = [
-            'extension_attributes' => '/\/etc\/([a-zA-Z_]*\/extension_attributes|extension_attributes)\.xml$/'
-        ];
         $this->configureObjectManager($output);
 
-        $operations = $this->getOperationsConfiguration(
-            $compiledPathsList,
-            $dataAttributesIncludePattern
-        );
+        $operations = $this->getOperationsConfiguration($compiledPathsList);
 
         try {
             $this->cleanupFilesystem(
@@ -286,12 +280,10 @@ class DiCompileCommand extends Command
      * Returns operations configuration
      *
      * @param array $compiledPathsList
-     * @param array $dataAttributesIncludePattern
      * @return array
      */
     private function getOperationsConfiguration(
-        array $compiledPathsList,
-        array $dataAttributesIncludePattern
+        array $compiledPathsList
     ) {
         $excludePatterns = [];
         foreach ($this->excludedPathsList as $excludedPaths) {
