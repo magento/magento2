@@ -19,17 +19,18 @@ class Batch
         }
 
         $i = 0;
-        $batch = [];
+        $batch = $items = [];
         foreach ($documents as $documentName => $documentValue) {
             $batch[$documentName] = $documentValue;
             if ($i++ >= $size) {
-                return [$batch];
+                $items[] = $batch;
                 $i = 0;
                 $batch = [];
             }
         }
         if (count($batch) > 0) {
-            return [$batch];
+            $items[] = $batch;
         }
+        return $items;
     }
 }
