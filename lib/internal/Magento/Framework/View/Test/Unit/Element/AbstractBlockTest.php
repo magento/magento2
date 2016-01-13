@@ -8,8 +8,27 @@
 
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use Magento\Framework\View\Element\AbstractBlock;
+
 class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var AbstractBlock
+     */
+    protected $block;
+
+    /**
+     * @return void
+     */
+    protected function setUp()
+    {
+        $contextMock = $this->getMock('Magento\Framework\View\Element\Context', [], [], '', false);
+        $this->block = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\AbstractBlock',
+            ['context' => $contextMock]
+        );
+    }
+
     /**
      * @param string $expectedResult
      * @param string $nameInLayout
@@ -18,11 +37,8 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUiId($expectedResult, $nameInLayout, $methodArguments)
     {
-        /** @var $block \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
-        $block = $this->getMockForAbstractClass('Magento\Framework\View\Element\AbstractBlock', [], '', false);
-        $block->setNameInLayout($nameInLayout);
-
-        $this->assertEquals($expectedResult, call_user_func_array([$block, 'getUiId'], $methodArguments));
+        $this->block->setNameInLayout($nameInLayout);
+        $this->assertEquals($expectedResult, call_user_func_array([$this->block, 'getUiId'], $methodArguments));
     }
 
     /**
@@ -57,25 +73,22 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testGetVar()
     {
         $this->markTestIncomplete('MAGETWO-11727');
         $config = $this->getMock('Magento\Framework\Config\View', ['getVarValue'], [], '', false);
         $module = uniqid();
-        $config->expects(
-            $this->at(0)
-        )->method(
-            'getVarValue'
-        )->with(
-            'Magento_Theme',
-            'v1'
-        )->will(
-            $this->returnValue('one')
-        );
+        $config->expects($this->at(0))
+            ->method('getVarValue')
+            ->with('Magento_Theme', 'v1')
+            ->willReturn('one');
         $config->expects($this->at(1))->method('getVarValue')->with($module, 'v2')->will($this->returnValue('two'));
 
         $configManager = $this->getMock('Magento\Framework\View\ConfigInterface', [], [], '', false);
-        $configManager->expects($this->exactly(2))->method('getViewConfig')->will($this->returnValue($config));
+        $configManager->expects($this->exactly(2))->method('getViewConfig')->willReturn($config);
 
         /** @var $block \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
         $params = ['viewConfig' => $configManager];
@@ -90,13 +103,32 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('two', $block->getVar('v2', $module));
     }
 
+    /**
+     * @return void
+     */
     public function testIsScopePrivate()
     {
-        $contextMock = $this->getMock('Magento\Framework\View\Element\Context', [], [], '', false);
-        $block = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\AbstractBlock',
-            ['context' => $contextMock]
-        );
-        $this->assertEquals(false, $block->isScopePrivate());
+        $this->assertEquals(false, $this->block->isScopePrivate());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetCacheKey()
+    {
+        $cacheKey = 'testKey';
+        $this->block->setData('cache_key', $cacheKey);
+        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetCacheKeyByName()
+    {
+        $nameInLayout = 'testBlock';
+        $this->block->setNameInLayout($nameInLayout);
+        $cacheKey = sha1($nameInLayout);
+        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
     }
 }
