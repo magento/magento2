@@ -143,13 +143,13 @@ class Preprocessor implements PreprocessorInterface
 
             $currentStoreId = $this->scopeResolver->getScope()->getId();
 
-            $select->from(
-                    ['e' => 'catalog_product_entity'],
-                    ['entity_id']
-                )->join(
+            $select->from(['e' => 'catalog_product_entity'], ['entity_id'])
+                ->join(
                     ['main_table' => $table],
-                    "main_table.$linkIdField = e.$linkIdField"
-                )->joinLeft(
+                    "main_table.{$linkIdField} = e.{$linkIdField}",
+                    []
+                )
+                ->joinLeft(
                     ['current_store' => $table],
                     'current_store.attribute_id = main_table.attribute_id AND current_store.store_id = '
                     . $currentStoreId,
@@ -186,12 +186,11 @@ class Preprocessor implements PreprocessorInterface
 
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
-        $select->from(
-                ['e' => 'catalog_product_entity'],
-                ['entity_id']
-            )->join(
+        $select->from(['e' => 'catalog_product_entity'], ['entity_id'])
+            ->join(
                 ['main_table' => $table],
-                "main_table.$linkIdField = e.$linkIdField"
+                "main_table.{$linkIdField} = e.{$linkIdField}",
+                []
             )
             ->columns([$filter->getField() => 'main_table.value'])
             ->where('main_table.attribute_id = ?', $attribute->getAttributeId())

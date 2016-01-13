@@ -229,10 +229,7 @@ class Source extends AbstractEav
         $select = $connection->select()->from(
             $this->getTable('eav_attribute_option'),
             ['attribute_id', 'option_id']
-        )->where(
-            'attribute_id IN(?)',
-            $attrIds
-        );
+        )->where('attribute_id IN(?)', $attrIds);
         $query = $select->query();
         while ($row = $query->fetch()) {
             $options[$row['attribute_id']][$row['option_id']] = true;
@@ -250,7 +247,7 @@ class Source extends AbstractEav
         )->joinLeft(
             ['pvs' => $this->getTable('catalog_product_entity_varchar')],
             "pvs.{$productIdField} = pvd.{$productIdField} AND pvs.attribute_id = pvd.attribute_id"
-            .' AND pvs.store_id=cs.store_id',
+            . ' AND pvs.store_id=cs.store_id',
             ['value' => $productValueExpression]
         )->joinLeft(
             ['cpe' => $this->getTable('catalog_product_entity')],
@@ -273,7 +270,6 @@ class Source extends AbstractEav
         if ($entityIds !== null) {
             $select->where('cpe.entity_id IN(?)', $entityIds);
         }
-
         /**
          * Add additional external limitation
          */
