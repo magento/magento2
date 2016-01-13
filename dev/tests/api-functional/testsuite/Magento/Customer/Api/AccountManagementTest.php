@@ -67,7 +67,7 @@ class AccountManagementTest extends WebapiAbstract
     private $dataObjectProcessor;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \Magento\Config\Model\Config
      */
     private $config;
 
