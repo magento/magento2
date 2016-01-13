@@ -126,7 +126,7 @@ class Source extends AbstractEav
         )->joinLeft(
             ['d' => $this->getTable('catalog_product_entity_int')],
             'd.store_id = 0 OR d.store_id = s.store_id',
-            [$productIdField, 'attribute_id', 'value']
+            ['attribute_id', 'value']
         )->joinLeft(
             ['d2' => $this->getTable('catalog_product_entity_int')],
             sprintf(
@@ -139,7 +139,7 @@ class Source extends AbstractEav
         )->joinLeft(
             ['cpe' => $this->getTable('catalog_product_entity')],
             "cpe.{$productIdField} = d.{$productIdField}",
-            ['entity_id']
+            array_unique([$productIdField, 'entity_id'])
         )->where(
             's.store_id != 0'
         )->where(
