@@ -65,13 +65,14 @@ define([
             $(this.options.newPasswordContainerSelector).show();
             $(this.options.confirmPasswordContainerSelector).show();
 
-            $(this.options.currentPasswordSelector).attr('data-validate', '{required:true}');
-            $(this.options.emailSelector).attr('data-validate', '{required:true}');
-            $(this.options.newPasswordSelector).attr('data-validate', '{required:true, \'validate-password\':true}');
+            $(this.options.currentPasswordSelector).attr('data-validate', '{required:true}').prop('disabled', false);
+            $(this.options.emailSelector).attr('data-validate', '{required:true}').prop('disabled', false);
+            $(this.options.newPasswordSelector).attr('data-validate', '{required:true, \'validate-password\':true}')
+                .prop('disabled', false);
             $(this.options.confirmPasswordSelector).attr(
                 'data-validate',
                 '{required:true, equalTo:"' + this.options.newPasswordSelector + '"}'
-            );
+            ).prop('disabled', false);
         },
 
         /**
@@ -84,10 +85,10 @@ define([
             $(this.options.newPasswordContainerSelector).hide();
             $(this.options.confirmPasswordContainerSelector).hide();
 
-            $(this.options.currentPasswordSelector).removeAttr('data-validate');
-            $(this.options.emailSelector).removeAttr('data-validate');
-            $(this.options.newPasswordSelector).removeAttr('data-validate');
-            $(this.options.confirmPasswordSelector).removeAttr('data-validate');
+            $(this.options.currentPasswordSelector).removeAttr('data-validate').prop('disabled', true);
+            $(this.options.emailSelector).removeAttr('data-validate').prop('disabled', true);
+            $(this.options.newPasswordSelector).removeAttr('data-validate').prop('disabled', true);
+            $(this.options.confirmPasswordSelector).removeAttr('data-validate').prop('disabled', true);
         },
 
         /**
@@ -101,8 +102,8 @@ define([
             $(this.options.newPasswordContainerSelector).hide();
             $(this.options.confirmPasswordContainerSelector).hide();
 
-            $(this.options.newPasswordSelector).removeAttr('data-validate');
-            $(this.options.confirmPasswordSelector).removeAttr('data-validate');
+            $(this.options.newPasswordSelector).removeAttr('data-validate').prop('disabled', true);
+            $(this.options.confirmPasswordSelector).removeAttr('data-validate').prop('disabled', true);
         },
 
         /**
@@ -115,7 +116,7 @@ define([
 
             $(this.options.emailContainerSelector).hide();
 
-            $(this.options.emailSelector).removeAttr('data-validate');
+            $(this.options.emailSelector).removeAttr('data-validate').prop('disabled', true);
         }
     });
 
