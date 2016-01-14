@@ -120,8 +120,10 @@ abstract class Integration extends Action
 
     /**
      * Restore saved form resources
+     *
+     * @return void
      */
-    protected function restoreResource()
+    protected function restoreResourceAndSaveToRegistry()
     {
         $restoredFormData = $this->_getSession()->getIntegrationData();
         if ($restoredFormData) {
