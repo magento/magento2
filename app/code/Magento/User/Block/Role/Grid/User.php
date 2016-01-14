@@ -37,6 +37,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_userRolesFactory;
 
     /**
+     * @var bool|array
+     */
+    protected $restoredUsersFormData;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -192,7 +197,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         ) : $this->_coreRegistry->registry(
             'RID'
         );
-        $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
+
+        $users = $this->restoreUsersFromData();
+        if (false === $users) {
+            $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
+        }
         if (sizeof($users) > 0) {
             if ($json) {
                 $jsonUsers = [];
@@ -210,5 +219,37 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
                 return [];
             }
         }
+    }
+
+    /**
+     * @return array|bool
+     */
+    protected function restoreUsersFromData()
+    {
+        if (false !== $this->restoredUsersFormData && null === $this->restoredUsersFormData) {
+            $this->restoredUsersFormData = $this->retrieveSessionData();
+        }
+
+        return $this->restoredUsersFormData;
+    }
+
+    /**
+     * @return array|bool
+     */
+    protected function retrieveSessionData()
+    {
+        $sessionData = $this->_session->getData('in_role_user_form_data', true);
+        if (null !== $sessionData) {
+            $pairs = explode('&', $sessionData);
+            $users = [];
+            foreach ($pairs as $pair) {
+                list($usersId) = explode('=', $pair);
+                $users[] = $usersId;
+            }
+
+            return $users;
+        }
+
+        return false;
     }
 }

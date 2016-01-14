@@ -123,8 +123,19 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     {
         parent::_construct();
 
-        $rid = $this->_request->getParam('rid', false);
-        $this->setSelectedResources($this->_aclRetriever->getAllowedResourcesByRole($rid));
+        $allResource = $this->_session->getData('resource_all_form_data', true);
+        if ($allResource) {
+            $resources = [$this->_rootResource->getId()];
+        } else {
+            $resources = $this->_session->getData('resource_form_data', true);
+        }
+
+        if (null === $resources) {
+            $rid = $this->_request->getParam('rid', false);
+            $resources = $this->_aclRetriever->getAllowedResourcesByRole($rid);
+        }
+
+        $this->setSelectedResources($resources);
     }
 
     /**

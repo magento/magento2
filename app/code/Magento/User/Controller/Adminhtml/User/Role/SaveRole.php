@@ -81,6 +81,13 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             return $resultRedirect->setPath('adminhtml/*/');
         }
 
+        $password = $this->getRequest()->getParam(
+            \Magento\User\Block\Role\Tab\Info::IDENTITY_VERIFICATION_PASSWORD_FIELD
+        );
+        if (!$this->securityCheck($password)) {
+            return $this->saveDataToSessionAndRedirect($role, $this->getRequest()->getPostValue(), $resultRedirect);
+        }
+
         try {
             $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
             $role->setName($roleName)
@@ -110,5 +117,55 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         }
 
         return $resultRedirect->setPath('adminhtml/*/');
+    }
+
+    /**
+     * @param string $passwordString
+     * @return bool
+     */
+    protected function securityCheck($passwordString)
+    {
+        $isCheckSuccessful = true;
+        if (!$this->performIdentityCheck($passwordString)) {
+            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            $isCheckSuccessful = false;
+        }
+
+        return $isCheckSuccessful;
+    }
+
+    /**
+     * @param string $passwordString
+     * @return bool
+     */
+    protected function performIdentityCheck($passwordString)
+    {
+        try {
+            $result = $this->_authSession->getUser()->verifyIdentity($passwordString);
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $result = false;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param \Magento\Authorization\Model\Role $role
+     * @param array $data
+     * @param \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    protected function saveDataToSessionAndRedirect($role, $data, $resultRedirect)
+    {
+        $this->_getSession()->setData('role_edit_form_data', ['rolename' => $data['rolename']]);
+        $this->_getSession()->setData('in_role_user_form_data', $data['in_role_user']);
+        if ($data['all']) {
+            $this->_getSession()->setData('resource_all_form_data', $data['all']);
+        } else {
+            $resource = isset($data['resource']) ? $data['resource'] : [];
+            $this->_getSession()->setData('resource_form_data', $resource);
+        }
+        $arguments = $role->getId() ? ['rid' => $role->getId()] : [];
+        return $resultRedirect->setPath('adminhtml/*/editrole', $arguments);
     }
 }
