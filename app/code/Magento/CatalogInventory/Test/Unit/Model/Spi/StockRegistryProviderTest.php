@@ -9,6 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class StockRegistryProviderTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,7 +82,6 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
         'product_sku' => 'simple',
         'scope_id' => 113
     ];
-    
 
     protected function setUp()
     {
