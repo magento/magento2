@@ -82,7 +82,6 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
         'product_sku' => 'simple',
         'scope_id' => 113
     ];
-    
 
     protected function setUp()
     {
