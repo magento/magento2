@@ -425,13 +425,13 @@ abstract class AbstractAction
             []
         )->joinInner(
             ['ccad' => $this->getTable('catalog_category_entity_int')],
-            'ccad.' . $categoryLinkField . ' = cc.entity_id AND ccad.store_id = 0' .
+            'ccad.' . $categoryLinkField . ' = cc.' . $categoryLinkField . ' AND ccad.store_id = 0' .
             ' AND ccad.attribute_id = ' . $isAnchorAttributeId,
             []
         )->joinLeft(
             ['ccas' => $this->getTable('catalog_category_entity_int')],
-            'ccas.' . $categoryLinkField . ' = cc.entity_id AND ccas.attribute_id = ccad.attribute_id' .
-            ' AND ccas.store_id = ' .
+            'ccas.' . $categoryLinkField . ' = cc.' . $categoryLinkField
+            . ' AND ccas.attribute_id = ccad.attribute_id AND ccas.store_id = ' .
             $store->getId(),
             []
         )->where(
