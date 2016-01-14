@@ -17,12 +17,14 @@ define([
             template: 'ui/modal/modal-component',
             options: {
                 title: '',
-                buttons: []
+                buttons: [],
+                keyEventHandlers: {}
             },
             valid: true,
             listens: {
                 state: 'onState'
-            }
+            },
+            modalClass: 'modal-component'
         },
 
         /**
@@ -51,9 +53,32 @@ define([
          * @returns {Object} Chainable.
          */
         initConfig: function () {
-            this._super();
-            this.modalClass = this.name.replace(/\./g, '_');
-            this.rootSelector = '.' + this.modalClass;
+            return this._super()
+                .initSelector()
+                .initModalEvents();
+        },
+
+        /**
+         * Configure modal selector
+         *
+         * @returns {Object} Chainable.
+         */
+        initSelector: function () {
+            this.contentSelector = '.' + this.modalClass;
+            this.options.modalClass = this.name.replace(/\./g, '_');
+            this.rootSelector = '.' + this.options.modalClass;
+
+            return this;
+        },
+
+        /**
+         * Configure modal keyboard handlers
+         * and outer click
+         *
+         * @returns {Object} Chainable.
+         */
+        initModalEvents: function () {
+            this.options.keyEventHandlers.escapeKey = this.options.outerClickHandler = this.actionCancel.bind(this);
 
             return this;
         },
@@ -62,7 +87,7 @@ define([
          * Initialize modal's content components
          */
         initializeContent: function () {
-            $.async(this.rootSelector, this, this.initModal);
+            $.async(this.contentSelector, this, this.initModal);
         },
 
         /**
@@ -202,6 +227,7 @@ define([
          */
         setPrevValues: function (elem) {
             if (typeof elem.value === 'function') {
+                this.modal.focus();
                 elem.value(this.applied[elem.index]);
             } else if (elem.elems) {
                 elem.elems().forEach(this.setPrevValues, this);
@@ -236,25 +262,31 @@ define([
 
             if (buttons && buttons.length) {
                 buttons.forEach(function (button) {
-                    button.click = this.getButtonClickHandler(button.click);
+                    button.click = this.getButtonClickHandler(button.actions);
                 }, this);
             }
         },
 
         /**
-         * Override modal buttons callback placeholders with real callbacks
+         * Generate button click handler based on button's 'actions' configuration
          */
-        getButtonClickHandler: function (clickConfig) {
-            if (_.isObject(clickConfig)) {
-                return clickConfig.closeAfter ?
-                    function () {
-                        this.triggerAction(clickConfig);
-                        this.closeModal();
-                    }.bind(this) :
-                    this.triggerAction.bind(this, clickConfig);
-            }
+        getButtonClickHandler: function (actionsConfig) {
+            var actions = actionsConfig.map(
+                function (actionConfig) {
+                    if (_.isObject(actionConfig)) {
+                        return this.triggerAction.bind(this, actionConfig);
+                    }
 
-            return this[clickConfig] ? this[clickConfig].bind(this) : function () {};
+                    return this[actionConfig] ? this[actionConfig].bind(this) : function () {};
+                }, this);
+
+            return function () {
+                actions.forEach(
+                    function (action) {
+                        action();
+                    }
+                );
+            };
         },
 
         /**
