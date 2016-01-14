@@ -106,6 +106,9 @@
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="dataScope" xsi:type="string">mergeOnConflict</item>
                     <item name="source" xsi:type="string">block</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string" translate="true">Synonym groups in the same scope have to be disjoint. If this option is selected, we will automatically merge with existing synonym groups when needed.</item>
+                    </item>
                 </item>
             </argument>
         </field>

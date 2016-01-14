@@ -58,10 +58,12 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
             /** @var \Magento\Search\Model\SynonymGroupRepository $synGroupRepository */
             $synGroupRepository = $this->_objectManager->create('Magento\Search\Model\SynonymGroupRepository');
             if (isset($data['mergeOnConflict']) && $data['mergeOnConflict'] === 'true') {
-                $this->getMessageManager()->addSuccessMessage($synGroupRepository->save($synGroupModel));
+                $synGroupRepository->save($synGroupModel);
+                $this->getMessageManager()->addSuccessMessage(__('You saved the synonym group.'));
             } else {
                 try {
-                    $this->getMessageManager()->addSuccessMessage($synGroupRepository->save($synGroupModel, true));
+                    $synGroupRepository->save($synGroupModel, true);
+                    $this->getMessageManager()->addSuccessMessage(__('You saved the synonym group.'));
                 } catch (MergeConflictException $exception) {
                     $this->getMessageManager()->addErrorMessage($exception->getMessage());
                     $this->_getSession()->setFormData($data);
