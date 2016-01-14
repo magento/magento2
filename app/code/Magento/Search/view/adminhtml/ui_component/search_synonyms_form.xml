@@ -74,7 +74,8 @@
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">If your Magento site has multiple views, you can adjust the scope of this synonym group(i.e. global, website level or store view level)</item>
+                        <item name="link" xsi:type="string">http://docs.magento.com/m2/ce/user_guide/stores/websites-stores-views.html</item>
+                        <item name="description" xsi:type="string" translate="true">You can adjust the scope of this synonym group by selecting an option from the list.</item>
                     </item>
                 </item>
             </argument>
@@ -91,7 +92,7 @@
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Comma separated list of synonyms</item>
+                        <item name="description" xsi:type="string" translate="true">Comma-separated list of synonyms</item>
                     </item>
                 </item>
             </argument>
