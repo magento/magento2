@@ -592,6 +592,29 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Validate password by customer ID.
+     *
+     * @param int $customerId
+     * @param string $currentPassword
+     * @return bool
+     * @throws InvalidEmailOrPasswordException
+     */
+    public function validatePasswordById($customerId, $currentPassword)
+    {
+        try {
+            $customer = $this->customerRepository->getById($customerId);
+            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+            $hash = $customerSecure->getPasswordHash();
+            if ($this->encryptor->validateHash($currentPassword, $hash)) {
+                return true;
+            }
+        } catch (NoSuchEntityException $e) {
+            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
+        }
+        return false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function changePassword($email, $currentPassword, $newPassword)

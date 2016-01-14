@@ -190,6 +190,7 @@ Visitor,Visitor
 "Please correct the email address.","Please correct the email address."
 "Unable to send password reset email.","Unable to send password reset email."
 "If there is an account associated with %1 you will receive an email with a link to reset your password.","If there is an account associated with %1 you will receive an email with a link to reset your password."
+"Please enter new email.","Please enter new email."
 "Please enter your email.","Please enter your email."
 "Your password reset link has expired.","Your password reset link has expired."
 "New Password and Confirm New Password values didn't match.","New Password and Confirm New Password values didn't match."
@@ -305,6 +306,8 @@ Admin,Admin
 "Manage Addresses","Manage Addresses"
 "Hello, %1!","Hello, %1!"
 "From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.","From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information."
+"Change Email","Change Email"
+"Change Email and Password","Change Email and Password"
 "Change Password","Change Password"
 Newsletters,Newsletters
 "You are currently subscribed to 'General Subscription'.","You are currently subscribed to 'General Subscription'."
