@@ -64,7 +64,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param SynonymGroupInterface $synonymGroup
      * @throws CouldNotDeleteException
-     * @return void
+     * @return bool
      */
     public function delete(SynonymGroupInterface $synonymGroup)
     {
@@ -79,6 +79,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
                 )
             );
         }
+        return true;
     }
 
     /**
