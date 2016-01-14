@@ -49,6 +49,7 @@ class QuoteUpdater extends AbstractHelper
      * @param string $nonce
      * @param array $details
      * @param Quote $quote
+     * @return void
      * @throws \InvalidArgumentException
      * @throws LocalizedException
      */
