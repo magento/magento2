@@ -157,7 +157,11 @@ class AfterImportDataObserver implements ObserverInterface
     protected function _populateForUrlGeneration($rowData)
     {
         $newSku = $this->import->getNewSku($rowData[ImportProduct::COL_SKU]);
-        if (empty($newSku) || !isset($newSku['entity_id']) || empty($rowData[self::URL_KEY_ATTRIBUTE_CODE])) {
+        if (empty($newSku) || !isset($newSku['entity_id'])) {
+            return null;
+        }
+        if ($this->import->getRowScope($rowData) == ImportProduct::SCOPE_STORE
+            && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE])) {
             return null;
         }
         $rowData['entity_id'] = $newSku['entity_id'];
