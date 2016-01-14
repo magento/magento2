@@ -343,7 +343,7 @@ class Topmenu extends Template implements IdentityInterface
     public function getCacheKeyInfo()
     {
         $keyInfo = parent::getCacheKeyInfo();
-        $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true]);
+        $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true, '_query' => '']);
         return $keyInfo;
     }
 }
