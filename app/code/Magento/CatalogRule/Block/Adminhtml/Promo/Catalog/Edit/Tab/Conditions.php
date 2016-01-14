@@ -90,6 +90,7 @@ class Conditions extends Generic implements TabInterface
      * Tab class getter
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTabClass()
     {
@@ -100,6 +101,7 @@ class Conditions extends Generic implements TabInterface
      * Return URL link to Tab content
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTabUrl()
     {
@@ -110,6 +112,7 @@ class Conditions extends Generic implements TabInterface
      * Tab should be loaded trough Ajax call
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isAjaxLoaded()
     {
