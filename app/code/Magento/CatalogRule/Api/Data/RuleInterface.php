@@ -21,10 +21,6 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
 
     const IS_ACTIVE = 'is_active';
 
-    const CONDITIONS_SERIALIZED = 'conditions_serialized';
-
-    const ACTIONS_SERIALIZED = 'actions_serialized';
-
     const STOP_RULES_PROCESSING = 'stop_rules_processing';
 
     const SORT_ORDER = 'sort_order';
@@ -88,30 +84,17 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
     public function setIsActive($isActive);
 
     /**
-     * Returns serialized rule condition
+     * Returns rule condition
      *
-     * @return string
+     * @return \Magento\CatalogRule\Api\Data\ConditionInterface
      */
-    public function getConditionsSerialized();
+    public function getRuleCondition();
 
     /**
-     * @param string $conditions
+     * @param \Magento\CatalogRule\Api\Data\ConditionInterface $condition
      * @return $this
      */
-    public function setConditionsSerialized($conditions);
-
-    /**
-     * Returns serialized rule actions
-     *
-     * @return string
-     */
-    public function getActionsSerialized();
-
-    /**
-     * @param string $actions
-     * @return $this
-     */
-    public function setActionsSerialized($actions);
+    public function setRuleCondition($condition);
 
     /**
      * Returns stop rule processing flag
