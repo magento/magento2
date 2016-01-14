@@ -6,9 +6,8 @@ define([
     'underscore',
     'mage/translate',
     './multiselect',
-    'jquery',
     'uiRegistry'
-], function (_, $t, Column, $qj, registry) {
+], function (_, $t, Column, registry) {
     'use strict';
 
     return Column.extend({
