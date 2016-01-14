@@ -27,6 +27,11 @@ class AddPaypalShortcuts implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        // Remove button from catalog pages
+        if ($observer->getData('is_catalog_product')) {
+            return;
+        }
+
         /** @var ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
 
