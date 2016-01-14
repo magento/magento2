@@ -13,6 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Security\Helper\SecurityConfig;
 
 /**
  * Test class for Magento\Customer\Api\AccountManagementInterface
@@ -102,10 +103,18 @@ class AccountManagementTest extends WebapiAbstract
             'Magento\Config\Model\Config'
         );
 
-        if($this->config->getConfigDataValue('customer/password/limit_password_reset_requests_method') != 0) {
+        if($this->config->getConfigDataValue(
+                SecurityConfig::XML_PATH_FRONTED_AREA .
+                SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+            ) != 0) {
             $this->configValue = $this->config
-                ->getConfigDataValue('customer/password/limit_password_reset_requests_method');
-            $this->config->setDataByPath('customer/password/limit_password_reset_requests_method', 0);
+                ->getConfigDataValue(
+                    SecurityConfig::XML_PATH_FRONTED_AREA .
+                    SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+                );
+            $this->config->setDataByPath(
+                SecurityConfig::XML_PATH_FRONTED_AREA . SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+                0);
             $this->config->save();
         }
     }
@@ -132,7 +141,7 @@ class AccountManagementTest extends WebapiAbstract
             }
         }
         $this->config->setDataByPath(
-            'customer/password/limit_password_reset_requests_method',
+            SecurityConfig::XML_PATH_FRONTED_AREA . SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
             $this->configValue
         );
         $this->config->save();
