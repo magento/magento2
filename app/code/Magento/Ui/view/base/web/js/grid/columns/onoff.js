@@ -35,18 +35,39 @@ define([
             return this.selected.indexOf(id) !== -1 ? $t('On') : $t('Off');
         },
 
-
         /**
          * Sets the ids for preselected elements
          * @returns void
          */
         setDefaultSelections: function () {
-
             var positionCacheValid = registry.get('position_cache_valid'),
+                selectedFromCache = registry.get('selected_cache'),
                 key,
                 i;
 
-            registry.set('position_cache_valid', true);
+            if (positionCacheValid && this.selected().length === 0) {
+                // Check selected data
+                selectedFromCache = JSON.parse(selectedFromCache);
+                for (i = 0; i < selectedFromCache.length; i++) {
+                    this.selected.push(selectedFromCache[i]);
+                }
+
+                registry.set('position_cache_valid', true);
+                registry.set('selected_cache', JSON.stringify(this.selected()));
+                return;
+            }
+
+            if (positionCacheValid && this.selected().length > 0) {
+                registry.set('position_cache_valid', true);
+                registry.set('selected_cache', JSON.stringify(this.selected()));
+                return;
+            }
+
+            if (this.selectedData.length === 0) {
+                registry.set('position_cache_valid', true);
+                registry.set('selected_cache', JSON.stringify([]));
+                return;
+            }
 
             // Check selected data
             for (key in this.selectedData) {
@@ -54,17 +75,14 @@ define([
                     this.selected.push(key);
                 }
             }
-
-            if (this.selectedData.length === 0 || positionCacheValid ) {
-               return;
-            }
-
             // Uncheck unselected data
             for (i = 0; i < this.selected().length; i++) {
                 key = this.selected()[i];
                 this.selectedData.hasOwnProperty(key) || this.selected.splice(this.selected().indexOf(key), 1);
                 this.selectedData.hasOwnProperty(key) || i--;
             }
+            registry.set('position_cache_valid', true);
+            registry.set('selected_cache', JSON.stringify(this.selected()));
         },
 
         /**
@@ -95,11 +113,17 @@ define([
          * @returns {Object} Chainable.
          */
         updateState: function () {
-            var totalRecords    = this.totalRecords(),
+            var positionCacheValid = registry.get('position_cache_valid'),
+                totalRecords    = this.totalRecords(),
                 selected        = this.selected().length,
                 excluded        = this.excluded().length,
                 totalSelected   = this.totalSelected(),
                 allSelected;
+
+            if (positionCacheValid && this.selected().length > 0) {
+                registry.set('position_cache_valid', true);
+                registry.set('selected_cache', JSON.stringify(this.selected()));
+            }
 
             // When filters are enabled then totalRecords is unknown
             if (this.getFiltering()) {
