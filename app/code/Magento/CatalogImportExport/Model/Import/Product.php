@@ -2369,7 +2369,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($this->urlKeys as $storeId => $urlKeys) {
             $urlKeyDuplicates = $this->_connection->fetchAssoc(
                 $this->_connection->select()->from(
-                    $this->_connection->getTableName('url_rewrite'),
+                    ['url_rewrite' => $this->_connection->getTableName('url_rewrite')],
                     ['request_path', 'store_id']
                 )->joinLeft(
                     ['cpe' => $this->_connection->getTableName('catalog_product_entity')],
