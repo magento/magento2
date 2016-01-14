@@ -76,7 +76,10 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
     }
 
     /**
-     * @throw \Magento\Framework\Exception\AuthenticationException
+     * Perform security checks
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @return void
      */
     protected function performSecurityCheck()
     {

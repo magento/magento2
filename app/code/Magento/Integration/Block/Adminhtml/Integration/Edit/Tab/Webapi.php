@@ -140,6 +140,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
+     * Retrieve saved resource
+     * 
      * @return array|bool
      */
     protected function retrieveFormResources()

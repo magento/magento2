@@ -45,7 +45,7 @@ class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
             return;
         }
         $this->_registry->register(self::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
-        $this->restoreResource();
+        $this->restoreResourceAndSaveToRegistry();
         $this->_view->loadLayout();
         $this->_getSession()->setIntegrationData([]);
         $this->_setActiveMenu('Magento_Integration::system_integrations');
