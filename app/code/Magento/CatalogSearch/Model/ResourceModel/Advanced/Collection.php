@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
+use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 
@@ -38,11 +39,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $temporaryStorageFactory;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
+     * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -53,20 +50,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager ,
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @param Product\OptionFactory $productOptionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param MetadataPool $metadataPool
      * @param \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Zend_Db_Adapter_Abstract|null $connection
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -89,10 +87,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        MetadataPool $metadataPool,
         \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connection = null
     ) {
         $this->requestBuilder = $requestBuilder;

@@ -11,6 +11,8 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Index\Collection;
 
+use Magento\Framework\Model\Entity\MetadataPool;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -29,11 +31,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
     protected $_customerVisitor;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
+     * AbstractCollection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -53,9 +51,9 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param MetadataPool $metadataPool
      * @param \Magento\Customer\Model\Visitor $customerVisitor
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @param mixed $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -79,8 +77,8 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        MetadataPool $metadataPool,
         \Magento\Customer\Model\Visitor $customerVisitor,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct(
