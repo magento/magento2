@@ -100,7 +100,7 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextMock = $this->getMock(Context::class, [], [], '', false);
-        $this->viewMock = $this->getMock(ViewInterface::class, ['loadLayout', 'getLayout', 'renderLayout']);
+        $this->viewMock = $this->getMock(ViewInterface::class);
         $this->requestMock = $this->getMock(Http::class, ['getParam'], [], '', false);
         $this->layoutMock = $this->getMock(LayoutInterface::class);
         $this->blockMock = $this
