@@ -45,6 +45,7 @@ class Converter
     /**
      * @param array $conditionArray
      * @return \Magento\CatalogRule\Api\Data\ConditionInterface
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function arrayToDataModel(array $conditionArray)
     {

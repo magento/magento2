@@ -11,7 +11,6 @@
         "magento/module-eav": "100.0.*",
         "magento/module-backend": "100.0.*",
         "magento/module-theme": "100.0.*",
-        "magento/module-ui": "100.0.*",
         "magento/framework": "100.0.*"
     },
     "type": "magento2-module",
