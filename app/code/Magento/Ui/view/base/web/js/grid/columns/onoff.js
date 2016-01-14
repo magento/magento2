@@ -6,8 +6,9 @@ define([
     'underscore',
     'mage/translate',
     './multiselect',
+    'jquery',
     'uiRegistry'
-], function (_, $t, Column, registry) {
+], function (_, $t, Column, $qj, registry) {
     'use strict';
 
     return Column.extend({
@@ -35,26 +36,30 @@ define([
             return this.selected.indexOf(id) !== -1 ? $t('On') : $t('Off');
         },
 
+
         /**
          * Sets the ids for preselected elements
          * @returns void
          */
         setDefaultSelections: function () {
+
             var positionCacheValid = registry.get('position_cache_valid'),
                 key,
                 i;
 
             registry.set('position_cache_valid', true);
 
-            if (this.selectedData.length === 0 && positionCacheValid) {
-                return;
-            }
             // Check selected data
             for (key in this.selectedData) {
                 if (this.selectedData.hasOwnProperty(key) && this.selected().indexOf(key) === -1) {
                     this.selected.push(key);
                 }
             }
+
+            if (this.selectedData.length === 0 || positionCacheValid ) {
+               return;
+            }
+
             // Uncheck unselected data
             for (i = 0; i < this.selected().length; i++) {
                 key = this.selected()[i];
