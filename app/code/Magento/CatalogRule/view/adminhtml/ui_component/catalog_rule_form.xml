@@ -230,7 +230,7 @@
                                 <item name="value" xsi:type="string">by_percent</item>
                                 <item name="actions" xsi:type="array">
                                     <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.discount_amount</item>
+                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amount</item>
                                         <item name="callback" xsi:type="string">setValidation</item>
                                         <item name="params" xsi:type="array">
                                             <item name="0" xsi:type="string">validate-number-range</item>
@@ -243,7 +243,7 @@
                                 <item name="value" xsi:type="string">to_percent</item>
                                 <item name="actions" xsi:type="array">
                                     <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.discount_amount</item>
+                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amount</item>
                                         <item name="callback" xsi:type="string">setValidation</item>
                                         <item name="params" xsi:type="array">
                                             <item name="0" xsi:type="string">validate-number-range</item>
@@ -256,7 +256,7 @@
                                 <item name="value" xsi:type="string">by_fixed</item>
                                 <item name="actions" xsi:type="array">
                                     <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.discount_amount</item>
+                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amount</item>
                                         <item name="callback" xsi:type="string">setValidation</item>
                                         <item name="params" xsi:type="array">
                                             <item name="0" xsi:type="string">validate-number-range</item>
@@ -269,7 +269,7 @@
                                 <item name="value" xsi:type="string">to_fixed</item>
                                 <item name="actions" xsi:type="array">
                                     <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.discount_amount</item>
+                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amountt</item>
                                         <item name="callback" xsi:type="string">setValidation</item>
                                         <item name="params" xsi:type="array">
                                             <item name="0" xsi:type="string">validate-number-range</item>
@@ -291,132 +291,6 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
                     <item name="dataScope" xsi:type="string">discount_amount</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
-                </item>
-            </argument>
-        </field>
-        <field name="sub_is_enable">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Subproduct discounts</item>
-                    <item name="fieldGroup" xsi:type="string">bool</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">sub_is_enable</item>
-                    <item name="switcherConfig" xsi:type="array">
-                        <item name="enabled" xsi:type="boolean">true</item>
-                        <item name="rules" xsi:type="array">
-                            <item name="0" xsi:type="array">
-                                <item name="value" xsi:type="string">0</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.sub_simple_action</item>
-                                        <item name="callback" xsi:type="string">hide</item>
-                                    </item>
-                                    <item name="1" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.sub_discount_amount</item>
-                                        <item name="callback" xsi:type="string">hide</item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="1" xsi:type="array">
-                                <item name="value" xsi:type="string">1</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.sub_simple_action</item>
-                                        <item name="callback" xsi:type="string">show</item>
-                                    </item>
-                                    <item name="1" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.sub_discount_amount</item>
-                                        <item name="callback" xsi:type="string">show</item>
-                                    </item>
-                                </item>
-                            </item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
-        </field>
-        <field name="sub_simple_action">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Apply</item>
-                    <item name="fieldGroup" xsi:type="string">apply</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">sub_simple_action</item>
-                    <item name="switcherConfig" xsi:type="array">
-                        <item name="enabled" xsi:type="boolean">true</item>
-                        <item name="rules" xsi:type="array">
-                            <item name="0" xsi:type="array">
-                                <item name="value" xsi:type="string">by_percent</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.sub_discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">0.00-100.00</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="1" xsi:type="array">
-                                <item name="value" xsi:type="string">to_percent</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.sub_discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">0.00-100.00</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="2" xsi:type="array">
-                                <item name="value" xsi:type="string">by_fixed</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.sub_discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">false</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="3" xsi:type="array">
-                                <item name="value" xsi:type="string">to_fixed</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.areas.actions.actions.sub_discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">false</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
-        </field>
-        <field name="sub_discount_amount">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Discount Amount</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">catalog_rule</item>
-                    <item name="dataScope" xsi:type="string">sub_discount_amount</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>

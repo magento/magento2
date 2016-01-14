@@ -125,15 +125,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     'simple_action' => [
                         'options' => $applyOptions
                     ],
-                    'sub_is_enable' => [
-                        'options' => [
-                            ['label' => __('No'), 'value' => '0'],
-                            ['label' => __('Yes'), 'value' => '1']
-                        ]
-                    ],
-                    'sub_simple_action' => [
-                        'options' => $applyOptions
-                    ],
                     'stop_rules_processing' => [
                         'options' => [
                             ['label' => __('Yes'), 'value' => '1'],
