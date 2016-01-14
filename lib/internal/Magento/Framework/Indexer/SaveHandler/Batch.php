@@ -22,7 +22,7 @@ class Batch
         $batch = $items = [];
         foreach ($documents as $documentName => $documentValue) {
             $batch[$documentName] = $documentValue;
-            if ($i++ >= $size) {
+            if (++$i >= $size) {
                 $items[] = $batch;
                 $i = 0;
                 $batch = [];

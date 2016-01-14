@@ -39,7 +39,6 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
     ) {
         $this->_eavEntityFactory = $eavEntityFactory;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $eavConfig, $connection, $resource);
-        $a = 10;
     }
 
     /**

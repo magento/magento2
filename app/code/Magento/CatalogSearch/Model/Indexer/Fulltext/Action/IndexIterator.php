@@ -6,51 +6,112 @@
 
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
-
 class IndexIterator implements \Iterator
 {
-
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\ClassTen
+     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
      */
     private $dataProvider;
 
-
-    /** Arguments */
+    /**
+     * @var int
+     */
     private $storeId;
+
+    /**
+     * @var array
+     */
     private $staticFields;
+
+    /**
+     * @var array
+     */
     private $productIds;
+
+    /**
+     * @var array
+     */
     private $dynamicFields;
+
+    /**
+     * @var \Magento\Eav\Model\Entity\Attribute
+     */
     private $visibility;
+
+    /**
+     * @var array
+     */
     private $allowedVisibility;
+
+    /**
+     * @var \Magento\Eav\Model\Entity\Attribute
+     */
     private $status;
+
+    /**
+     * @var array
+     */
     private $statusIds;
 
-
-    /** Internal vars */
+    /**
+     * @var int
+     */
     private $lastProductId = 0;
+
+    /**
+     * @var array
+     */
     private $products = [];
+
+    /**
+     * @var null
+     */
     private $current = null;
+
+    /**
+     * @var bool
+     */
     private $isValid = true;
+
+    /**
+     * @var null
+     */
     private $key = null;
+
+    /**
+     * @var array
+     */
     private $productAttributes = [];
+
+    /**
+     * @var array
+     */
     private $productRelations = [];
 
     /**
      * Initialize dependencies.
      *
-     * @param ClassTen $dataProvider
-     * @param $storeId
-     * @param $staticFields
-     * @param $productIds
-     * @param $dynamicFields
-     * @param $visibility
-     * @param $allowedVisibility
-     * @param $status
-     * @param $statusIds
+     * @param DataProvider $dataProvider
+     * @param int $storeId
+     * @param array $staticFields
+     * @param array $productIds
+     * @param array $dynamicFields
+     * @param \Magento\Eav\Model\Entity\Attribute $visibility
+     * @param array $allowedVisibility
+     * @param \Magento\Eav\Model\Entity\Attribute $status
+     * @param array $statusIds
      */
-    public function __construct(ClassTen $dataProvider, $storeId, $staticFields, $productIds, $dynamicFields, $visibility, $allowedVisibility, $status, $statusIds)
-    {
+    public function __construct(
+        DataProvider $dataProvider,
+        $storeId,
+        array $staticFields,
+        array $productIds,
+        array $dynamicFields,
+        \Magento\Eav\Model\Entity\Attribute $visibility,
+        array $allowedVisibility,
+        \Magento\Eav\Model\Entity\Attribute $status,
+        array $statusIds
+    ) {
         $this->dataProvider = $dataProvider;
         $this->storeId = $storeId;
         $this->staticFields = $staticFields;
@@ -64,7 +125,7 @@ class IndexIterator implements \Iterator
 
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function current()
     {
@@ -72,13 +133,13 @@ class IndexIterator implements \Iterator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function next()
     {
         \next($this->products);
         if (\key($this->products) === null) {
-            //check if storage has more items to process
+            // check if storage has more items to process
             $this->products = $this->dataProvider->getSearchableProducts(
                 $this->storeId,
                 $this->staticFields,
@@ -86,18 +147,20 @@ class IndexIterator implements \Iterator
                 $this->lastProductId
             );
 
-            if(!count($this->products)) {
+            if (!count($this->products)) {
                 $this->isValid = false;
                 return;
             }
-
 
             $productAttributes = [];
             $this->productRelations = [];
             foreach ($this->products as $productData) {
                 $this->lastProductId = $productData['entity_id'];
                 $productAttributes[$productData['entity_id']] = $productData['entity_id'];
-                $productChildren = $this->dataProvider->getProductChildIds($productData['entity_id'], $productData['type_id']);
+                $productChildren = $this->dataProvider->getProductChildIds(
+                    $productData['entity_id'],
+                    $productData['type_id']
+                );
                 $this->productRelations[$productData['entity_id']] = $productChildren;
                 if ($productChildren) {
                     foreach ($productChildren as $productChildId) {
@@ -106,7 +169,11 @@ class IndexIterator implements \Iterator
                 }
             }
 
-            $this->productAttributes = $this->dataProvider->getProductAttributes($this->storeId, $productAttributes, $this->dynamicFields);
+            $this->productAttributes = $this->dataProvider->getProductAttributes(
+                $this->storeId,
+                $productAttributes,
+                $this->dynamicFields
+            );
         }
 
         $productData = \current($this->products);
@@ -157,7 +224,7 @@ class IndexIterator implements \Iterator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function key()
     {
@@ -165,7 +232,7 @@ class IndexIterator implements \Iterator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function valid()
     {
@@ -173,7 +240,7 @@ class IndexIterator implements \Iterator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function rewind()
     {
