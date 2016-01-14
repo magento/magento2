@@ -10,11 +10,17 @@ use Magento\Checkout\Block\Onepage\Success;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Http;
 use Magento\Framework\App\View;
+use Magento\Framework\App\ViewInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Paypal\Controller\Payflow\ReturnUrl;
 use Magento\Paypal\Helper\Checkout;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
 use Psr\Log\LoggerInterface;
+use Magento\Paypal\Model\Config;
+use Magento\Framework\App\Action\Context;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Paypal\Model\PayflowlinkFactory;
 
 /**
  * Class ReturnUrlTest
@@ -29,7 +35,7 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
     protected $returnUrl;
 
     /**
-     * @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
@@ -49,12 +55,12 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
     protected $checkoutSessionMock;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderFactoryMock;
 
     /**
-     * @var \Magento\Paypal\Model\PayflowlinkFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PayflowlinkFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $payflowlinkFactoryMock;
 
@@ -85,24 +91,24 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
-        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
+        $this->contextMock = $this->getMock(Context::class, [], [], '', false);
+        $this->viewMock = $this->getMock(ViewInterface::class);
+        $this->requestMock = $this->getMock(Http::class, ['getParam'], [], '', false);
+        $this->layoutMock = $this->getMock(LayoutInterface::class);
         $this->blockMock = $this
-            ->getMockBuilder('\Magento\Checkout\Block\Onepage\Success')
+            ->getMockBuilder(Success::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderFactoryMock = $this->getMock('\Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $this->payflowlinkFactoryMock = $this->getMock('\Magento\Paypal\Model\PayflowlinkFactory', [], [], '', false);
-        $this->helperCheckoutMock = $this->getMock('\Magento\Paypal\Helper\Checkout', [], [], '', false);
-        $this->loggerMock = $this->getMockForAbstractClass('\Psr\Log\LoggerInterface');
+        $this->orderFactoryMock = $this->getMock(OrderFactory::class, ['create'], [], '', false);
+        $this->payflowlinkFactoryMock = $this->getMock(PayflowlinkFactory::class, [], [], '', false);
+        $this->helperCheckoutMock = $this->getMock(Checkout::class, [], [], '', false);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->orderMock = $this
-            ->getMockBuilder('\Magento\Sales\Model\Order')
+            ->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->checkoutSessionMock = $this
-            ->getMockBuilder('\Magento\Checkout\Model\Session')
+            ->getMockBuilder(Session::class)
             ->setMethods(['getLastRealOrderId', 'getLastRealOrder', 'restoreQuote'])
             ->disableOriginalConstructor()
             ->getMock();
