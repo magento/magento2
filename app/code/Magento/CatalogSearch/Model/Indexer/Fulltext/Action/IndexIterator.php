@@ -94,7 +94,7 @@ class IndexIterator implements \Iterator
      * @param DataProvider $dataProvider
      * @param int $storeId
      * @param array $staticFields
-     * @param array $productIds
+     * @param array|null $productIds
      * @param array $dynamicFields
      * @param \Magento\Eav\Model\Entity\Attribute $visibility
      * @param array $allowedVisibility
@@ -105,7 +105,7 @@ class IndexIterator implements \Iterator
         DataProvider $dataProvider,
         $storeId,
         array $staticFields,
-        array $productIds,
+        $productIds,
         array $dynamicFields,
         \Magento\Eav\Model\Entity\Attribute $visibility,
         array $allowedVisibility,
