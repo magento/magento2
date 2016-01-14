@@ -66,6 +66,9 @@ class AfterImportDataObserver implements ObserverInterface
     /** @var \Magento\Catalog\Model\ProductFactory $catalogProductFactory */
     protected $catalogProductFactory;
 
+    /** @var int */
+    protected $urlKeyAttribute;
+
     /** @var array */
     protected $acceptableCategories;
 
@@ -74,6 +77,9 @@ class AfterImportDataObserver implements ObserverInterface
 
     /** @var array */
     protected $websitesToStoreIds;
+
+    /** @var array */
+    protected $entityStoresToCheckOverridden = [];
 
     /** @var array */
     protected $storesCache = [];
@@ -94,8 +100,10 @@ class AfterImportDataObserver implements ObserverInterface
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
+     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
      * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param UrlPersistInterface $urlPersist
@@ -106,8 +114,10 @@ class AfterImportDataObserver implements ObserverInterface
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
+        \Magento\Eav\Model\Config $eavConfig,
         \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory,
         \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UrlPersistInterface $urlPersist,
@@ -121,6 +131,16 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
+        $attribute = $eavConfig->getAttribute(Product::ENTITY, self::URL_KEY_ATTRIBUTE_CODE);
+        if (!$attribute) {
+            throw new \InvalidArgumentException(sprintf(
+                'Cannot retrieve attribute for entity type "%s"',
+                Product::ENTITY
+            ));
+        }
+        $this->connection = $resource->getConnection();
+        $this->urlKeyAttributeId = $attribute->getId();
+        $this->urlKeyAttributeBackendTable = $attribute->getBackendTable();
         $this->urlFinder = $urlFinder;
     }
 
@@ -157,7 +177,7 @@ class AfterImportDataObserver implements ObserverInterface
     protected function _populateForUrlGeneration($rowData)
     {
         $newSku = $this->import->getNewSku($rowData[ImportProduct::COL_SKU]);
-        if (empty($newSku) || !isset($newSku['entity_id']) || empty($rowData[self::URL_KEY_ATTRIBUTE_CODE])) {
+        if (empty($newSku) || !isset($newSku['entity_id'])) {
             return null;
         }
         $rowData['entity_id'] = $newSku['entity_id'];
@@ -234,6 +254,8 @@ class AfterImportDataObserver implements ObserverInterface
                 $this->storesCache[$storeId] = true;
                 if (!$this->isGlobalScope($storeId)) {
                     $this->addProductToImport($product, $storeId);
+                    $this->entityStoresToCheckOverridden[] = $this->connection->quoteInto('(store_id = ?', $storeId)
+                        . $this->connection->quoteInto(' AND entity_id = ?)', $product->getId());
                 }
             }
         }
@@ -247,6 +269,8 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function generateUrls()
     {
+        $this->cleanOverriddenUrlKey();
+
         /**
          * @var $urls \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
          */
@@ -265,6 +289,25 @@ class AfterImportDataObserver implements ObserverInterface
 
         $this->products = [];
         return $result;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function cleanOverriddenUrlKey()
+    {
+        if (empty($this->entityStoresToCheckOverridden)) {
+            return $this;
+        }
+        $select = $this->connection->select()
+            ->from($this->urlKeyAttributeBackendTable, ['store_id', 'entity_id'])
+            ->where('attribute_id = ?', $this->urlKeyAttributeId)
+            ->where(implode(' OR ', $this->entityStoresToCheckOverridden));
+        $entityStoresToClean = $this->connection->fetchAll($select);
+        foreach ($entityStoresToClean as $entityStore) {
+            unset($this->products[$entityStore['entity_id']][$entityStore['store_id']]);
+        }
+        return $this;
     }
 
     /**
