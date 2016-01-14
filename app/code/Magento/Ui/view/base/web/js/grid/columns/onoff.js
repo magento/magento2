@@ -48,6 +48,7 @@ define([
             if (positionCacheValid && this.selected().length === 0) {
                 // Check selected data
                 selectedFromCache = JSON.parse(selectedFromCache);
+
                 for (i = 0; i < selectedFromCache.length; i++) {
                     this.selected.push(selectedFromCache[i]);
                 }
