@@ -38,7 +38,7 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
     public function testCheckDatabaseConnection()
     {
         $this->connection
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('fetchOne')
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
@@ -79,6 +79,7 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
                 ]
             );
         $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
+        $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host:3339', 'user', 'password'));
     }
 
     /**
