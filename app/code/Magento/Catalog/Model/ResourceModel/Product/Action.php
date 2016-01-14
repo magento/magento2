@@ -88,7 +88,7 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
         $storeId = (int) $this->_storeManager->getStore($object->getStoreId())->getId();
         $table = $attribute->getBackend()->getTable();
 
-        $entityId = $this->resolveEntityId($object->getId(), $attribute, $table, $storeId);
+        $entityId = $this->resolveEntityId($object->getId(), $table);
 
         /**
          * If we work in single store mode all values should be saved just
@@ -144,14 +144,12 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
 
     /**
      * @param int $entityId
-     * @param AbstractAttribute $attribute
      * @param string $table
-     * @param int $storeId
      * @return int
      */
-    protected function resolveEntityId($entityId, $attribute, $table, $storeId)
+    protected function resolveEntityId($entityId, $table)
     {
-        if ('entity_id' == $this->getLinkField()) {
+        if ($this->getIdFieldName() == $this->getLinkField()) {
             return $entityId;
         }
         $select = $this->getConnection()->select();
@@ -161,8 +159,6 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
                 'cpe.' . $this->getLinkField() . ' = ' . $table . '.' . $this->getLinkField(),
                 []
             )
-            ->where($table . '.attribute_id = ?', $attribute->getAttributeId())
-            ->where($table . '.store_id <> ?', $storeId)
             ->where('cpe.entity_id = ?', $entityId);
         return $this->getConnection()->fetchOne($select);
     }
