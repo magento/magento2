@@ -24,34 +24,10 @@
                 <item name="class" xsi:type="string">back</item>
                 <item name="url" xsi:type="string">*/*/</item>
             </item>
-            <item name="save" xsi:type="array">
-                <item name="name" xsi:type="string">save</item>
-                <item name="label" xsi:type="string" translate="true">Save</item>
-                <item name="class" xsi:type="string">save primary</item>
-            </item>
-            <item name="reset" xsi:type="array">
-                <item name="name" xsi:type="string">reset</item>
-                <item name="label" xsi:type="string" translate="true">Reset</item>
-                <item name="class" xsi:type="string">reset</item>
-                <item name="on_click" xsi:type="string">location.reload();</item>
-                <item name="sort_order" xsi:type="string">30</item>
-            </item>
-            <item name="save_and_continue" xsi:type="array">
-                <item name="name" xsi:type="string">save_and_continue</item>
-                <item name="label" xsi:type="string" translate="true">Save and Continue Edit</item>
-                <item name="class" xsi:type="string">save</item>
-                <item name="sort_order" xsi:type="string">80</item>
-            </item>
-            <item name="save_and_apply" xsi:type="array">
-                <item name="name" xsi:type="string">save_and_apply</item>
-                <item name="label" xsi:type="string" translate="true">Save and Apply</item>
-                <item name="class" xsi:type="string">save</item>
-                <item name="data_attribute" xsi:type="array">
-                    <item name="on_click" xsi:type="string">
-                    </item>
-                </item>
-                <item name="sort_order" xsi:type="string">80</item>
-            </item>
+            <item name="save" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\SaveButton</item>
+            <item name="reset" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\ResetButton</item>
+            <item name="save_and_continue" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\SaveAndContinueButton</item>
+            <item name="save_and_apply" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\SaveAndApplyButton</item>
             <item name="delete" xsi:type="string">Magento\CatalogRule\Block\Adminhtml\Edit\DeleteButton</item>
         </item>
     </argument>
