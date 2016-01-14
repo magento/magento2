@@ -10,6 +10,7 @@ use Magento\Checkout\Block\Onepage\Success;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Http;
 use Magento\Framework\App\View;
+use Magento\Framework\App\ViewInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Paypal\Controller\Payflow\ReturnUrl;
 use Magento\Paypal\Controller\Payflowadvanced\ReturnUrl as PayflowadvancedReturnUrl;
@@ -99,7 +100,7 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextMock = $this->getMock(Context::class, [], [], '', false);
-        $this->viewMock = $this->getMock(ViewInterface::class, ['loadLayout', 'getLayout', 'renderLayout']);
+        $this->viewMock = $this->getMock(ViewInterface::class);
         $this->requestMock = $this->getMock(Http::class, ['getParam'], [], '', false);
         $this->layoutMock = $this->getMock(LayoutInterface::class);
         $this->blockMock = $this
