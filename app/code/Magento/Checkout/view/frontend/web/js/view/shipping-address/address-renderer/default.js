@@ -15,6 +15,10 @@ define([
 ], function($, ko, Component, selectShippingAddressAction, quote, formPopUpState, checkoutData, customerData) {
     'use strict';
     var countryData = customerData.get('directory-data');
+    if (_.isEmpty(countryData())) {
+        countryData(customerData.reload(['directory-data'], false));
+    }
+
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-address/address-renderer/default'
