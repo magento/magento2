@@ -80,7 +80,7 @@ class Store extends Column
     {
         $content = '';
 
-        if (!isset($item['store_id']) || empty($item['store_id'])) {
+        if (empty($item['store_id'])) {
             return '';
         }
         $origStores = $item['store_id'];
