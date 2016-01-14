@@ -62,7 +62,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
-     * Change customer password action
+     * Change customer email or password action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -78,6 +78,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         if ($this->getRequest()->isPost()) {
             $customerId = $this->session->getCustomerId();
             $currentCustomer = $this->customerRepository->getById($customerId);
+            $currentCustomerEmail = $currentCustomer->getEmail();
 
             // Prepare new customer data
             $customer = $this->customerExtractor->extract('customer_account_edit', $this->_request);
@@ -86,9 +87,18 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $customer->setAddresses($currentCustomer->getAddresses());
             }
 
+            // Check if a customer can change email
+            if ($this->getRequest()->getParam('change_email') && $customer->getEmail() != $currentCustomerEmail) {
+                if (!$this->isAllowedChangeCustomerEmail($customerId)) {
+                    return $resultRedirect->setPath('*/*/edit');
+                }
+            } else {
+                $customer->setEmail($currentCustomerEmail);
+            }
+
             // Change customer password
             if ($this->getRequest()->getParam('change_password')) {
-                $this->changeCustomerPassword($currentCustomer->getEmail());
+                $this->changeCustomerPassword($currentCustomerEmail);
             }
 
             try {
@@ -114,6 +124,38 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         return $resultRedirect->setPath('*/*/edit');
+    }
+
+    /**
+     * Is allowed to change customer email
+     *
+     * @param int $customerId
+     * @return bool
+     */
+    protected function isAllowedChangeCustomerEmail($customerId)
+    {
+        if (!$this->getRequest()->getPost('email')) {
+            $this->messageManager->addError(__('Please enter new email.'));
+            return false;
+        }
+        try {
+            $result = $this->customerAccountManagement->validatePasswordById(
+                $customerId,
+                $this->getRequest()->getPost('current_password')
+            );
+            if ($result) {
+                return true;
+            }
+
+            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+
+        } catch (AuthenticationException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addException($e, __('Something went wrong while changing the email.'));
+        }
+
+        return false;
     }
 
     /**
