@@ -2366,17 +2366,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function checkUrlKeyDuplicates()
     {
-        if (!$this->_resource) {
-            $this->_resource = $this->_resourceFactory->create();
-        }
         foreach ($this->urlKeys as $storeId => $urlKeys) {
             $urlKeyDuplicates = $this->_connection->fetchAssoc(
-                $this->_connection->select()->from('url_rewrite', ['request_path', 'store_id'])
-                    ->joinLeft(
-                        ['cpe' => $this->_resource->getTable('catalog_product_entity')],
-                        "cpe.entity_id = url_rewrite.entity_id"
-                    )
-                    ->where('request_path IN (?)', array_keys($urlKeys))
+                $this->_connection->select()->from(
+                    $this->_connection->getTableName('url_rewrite'),
+                    ['request_path', 'store_id']
+                )->joinLeft(
+                    ['cpe' => $this->_connection->getTableName('catalog_product_entity')],
+                    "cpe.entity_id = url_rewrite.entity_id"
+                )->where('request_path IN (?)', array_keys($urlKeys))
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
