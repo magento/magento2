@@ -44,12 +44,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     }
 
     /**
-     * Saves a synonym group
-     *
-     * @param SynonymGroupInterface $synonymGroup
-     * @param bool $errorOnMergeConflict
-     * @return \Magento\Framework\Phrase
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function save(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict = false)
     {
@@ -91,7 +86,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      *
      * @param SynonymGroupInterface $synonymGroup
      * @param bool $errorOnMergeConflict
-     * @return \Magento\Framework\Phrase
+     * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
      */
     private function create(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict)
@@ -114,10 +109,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             $this->resourceModel->save($newSynonymGroupModel);
             $synonymGroup->setSynonymGroup($newSynonymGroupModel->getSynonymGroup());
             $synonymGroup->setGroupId($newSynonymGroupModel->getGroupId());
-            return __(
-                'You created the synonym group and merged with synonym group(s): %1.',
-                '(' . implode('), (', $matchingSynonymGroups) . ')'
-            );
+
         } else {
             // no merge conflict, perform simple insert
             /** @var SynonymGroup $synonymGroupModel */
@@ -125,8 +117,8 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             $this->populateSynonymGroupModel($synonymGroupModel, $synonymGroup);
             $this->resourceModel->save($synonymGroupModel);
             $synonymGroup->setGroupId($synonymGroupModel->getGroupId());
-            return __('You created the synonym group.');
         }
+        return $synonymGroup;
     }
 
     /**
@@ -171,7 +163,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroup $oldSynonymGroup
      * @param SynonymGroupInterface $newSynonymGroup
      * @param bool $errorOnMergeConflict
-     * @return \Magento\Framework\Phrase
+     * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
      */
     private function update(
@@ -198,16 +190,12 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             $oldSynonymGroup->setWebsiteId($newSynonymGroup->getWebsiteId());
             $oldSynonymGroup->setStoreId($newSynonymGroup->getStoreId());
             $this->resourceModel->save($oldSynonymGroup);
-            return __(
-                'You updated the synonym group and merged with synonym group(s): %1.',
-                '(' . implode('), (', $matchingSynonymGroups) . ')'
-            );
         } else {
             // no merge conflict, perform simple update
             $this->populateSynonymGroupModel($oldSynonymGroup, $newSynonymGroup);
             $this->resourceModel->save($oldSynonymGroup);
-            return __('You updated the synonym group.');
         }
+        return $oldSynonymGroup;
     }
 
     /**
