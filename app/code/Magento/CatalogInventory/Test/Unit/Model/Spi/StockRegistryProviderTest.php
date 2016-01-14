@@ -75,7 +75,7 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected  $productData = [
+    protected $productData = [
         'stock_id' => 111,
         'product_id' => 112,
         'product_sku' => 'simple',
