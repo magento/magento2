@@ -195,16 +195,7 @@ class File implements DriverInterface
      */
     public function createDirectory($path, $permissions)
     {
-        $result = $this->mkdirRecursive($path, $permissions);
-        if (!$result) {
-            throw new FileSystemException(
-                new \Magento\Framework\Phrase(
-                    'Directory "%1" cannot be created %2',
-                    [$path, $this->getWarningMessage()]
-                )
-            );
-        }
-        return $result;
+        return $this->mkdirRecursive($path, $permissions);
     }
 
     /**
