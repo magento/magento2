@@ -23,6 +23,10 @@ abstract class Integration extends Action
 
     const REGISTRY_KEY_CURRENT_INTEGRATION = 'current_integration';
 
+    /** Saved API form data session key */
+    const REGISTRY_KEY_CURRENT_RESOURCE = 'current_resource';
+
+
     /**
      * @var \Magento\Framework\Registry
      */
@@ -111,6 +115,21 @@ abstract class Integration extends Action
             return $this;
         } else {
             return parent::_redirect($path, $arguments);
+        }
+    }
+
+    /**
+     * Restore saved form resources
+     */
+    protected function restoreResource()
+    {
+        $restoredFormData = $this->_getSession()->getIntegrationData();
+        if ($restoredFormData) {
+            $resource = isset($restoredFormData['resource']) ? $restoredFormData['resource'] : [];
+            $this->_registry->register(
+                self::REGISTRY_KEY_CURRENT_RESOURCE,
+                ['all_resources' => $restoredFormData['all_resources'], 'resource' => $resource]
+            );
         }
     }
 }
