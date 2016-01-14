@@ -14,6 +14,8 @@ namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\SelectRenderer;
+use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
@@ -522,5 +524,30 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             [$longTableName, [], AdapterInterface::INDEX_TYPE_INDEX, 'IDX_'],
             ['short_table_name', ['field1', 'field2'], '', 'SHORT_TABLE_NAME_FIELD1_FIELD2'],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function connectPortThrow()
+    {
+        $arguments = [
+            'config' => ['host' => 'localhost'],
+        ];
+        $subject = (new ObjectManager($this))->getObject(Mysql::class, $arguments);
+        $this->assertInstanceOf(Mysql::class, $subject);
+
+        $arguments = [
+            'config' => ['host' => 'localhost', 'port' => '33390'],
+        ];
+
+        try {
+            (new ObjectManager($this))->getObject(Mysql::class, $arguments);
+            $this->fail('an expected exception was not thrown');
+        } catch (\InvalidArgumentException $e) {
+            $expected = 'MySQL adapter: Port must be configured within host (like \'localhost:33390\') ' .
+                        'parameter, not within port';
+            $this->assertSame($expected, $e->getMessage());
+        }
     }
 }
