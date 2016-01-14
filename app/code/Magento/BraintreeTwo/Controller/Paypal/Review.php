@@ -82,6 +82,7 @@ class Review extends AbstractAction
 
     /**
      * @param array $requestData
+     * @return void
      * @throws \InvalidArgumentException
      */
     private function validateRequestData(array $requestData)

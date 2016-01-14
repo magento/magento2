@@ -86,6 +86,7 @@ class OrderPlace extends AbstractHelper
     /**
      * Get checkout method
      *
+     * @param Quote $quote
      * @return string
      */
     private function getCheckoutMethod(Quote $quote)

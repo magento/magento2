@@ -49,6 +49,7 @@ class Button extends Template implements ShortcutInterface
      * @param ResolverInterface $localeResolver
      * @param Session $checkoutSession
      * @param Config $config
+     * @param ConfigProvider $configProvider
      * @param array $data
      */
     public function __construct(
@@ -128,7 +129,7 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
-     * @return bool
+     * @return string
      */
     public function getMerchantName()
     {

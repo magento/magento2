@@ -67,6 +67,7 @@ abstract class AbstractAction extends Action
 
     /**
      * @param CartInterface $quote
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function validateQuote($quote)

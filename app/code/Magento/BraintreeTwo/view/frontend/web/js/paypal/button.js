@@ -48,6 +48,7 @@ define(
                      */
                     onReady: function (integration) {
                         registry.set(this.integrationName, integration);
+                        $('#' + this.id).removeAttr('disabled');
                     },
 
                     /**
@@ -91,6 +92,7 @@ define(
                         currency: $this.data('currency')
                     },
                     initCallback = function () {
+                        $this.attr('disabled', 'disabled');
                         registry.remove(this.integrationName);
                         braintree.setup(this.clientToken, 'custom', this.getClientConfig(data));
 
