@@ -50,17 +50,19 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $objectConverter;
 
     /**
+     * DataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param FilterPool $filterPool
      * @param Store $store
      * @param GroupRepositoryInterface $groupRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataObject $objectConverter
      * @param array $meta
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
