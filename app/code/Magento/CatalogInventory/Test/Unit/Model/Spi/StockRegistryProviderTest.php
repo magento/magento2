@@ -9,6 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 /**
  * Class StockRegistryProviderTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
 {
