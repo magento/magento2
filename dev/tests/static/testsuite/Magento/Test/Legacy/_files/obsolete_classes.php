@@ -4128,4 +4128,10 @@ return [
         'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
         'Magento\Catalog\Model\ResourceModel\Product\Gallery'
     ],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Actions'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Form'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tabs'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit']
 ];
