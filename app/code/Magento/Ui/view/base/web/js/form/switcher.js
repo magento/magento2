@@ -76,7 +76,7 @@ define([
         applyRule: function (rule, value) {
             var actions = rule.actions;
 
-            if (rule.value != value) {
+            if (rule.value !== value) {
                 return;
             } else if (rule.strict && rule.value !== value) {
                 return;
