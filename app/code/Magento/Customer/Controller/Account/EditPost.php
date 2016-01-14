@@ -145,9 +145,10 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             );
             if ($result) {
                 return true;
-            } else {
-                $this->messageManager->addError(__('You have entered an invalid password for current user.'));
             }
+
+            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+
         } catch (AuthenticationException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
