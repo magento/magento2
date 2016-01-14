@@ -40,7 +40,7 @@ define([], function() {
                 return addressData.default_billing;
             },
             getType: function() {
-                return 'new-customer-address'
+                return 'new-customer-address';
             },
             getKey: function() {
                 return this.getType();
