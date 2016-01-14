@@ -152,7 +152,7 @@ class QuoteUpdater extends AbstractHelper
      * @param array $addressData
      * @return void
      */
-    private function updateAddressData(Address $address, $addressData)
+    private function updateAddressData(Address $address, array $addressData)
     {
         $extendedAddress = isset($addressData['extendedAddress'])
             ? $addressData['extendedAddress']
