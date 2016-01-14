@@ -62,7 +62,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
-     * Change customer password action
+     * Change customer email or password action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -87,7 +87,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $customer->setAddresses($currentCustomer->getAddresses());
             }
 
-            // Check to change customer email
+            // Check if a customer can change email
             if ($this->getRequest()->getParam('change_email') && $customer->getEmail() != $currentCustomerEmail) {
                 if (!$this->isAllowedChangeCustomerEmail($customerId)) {
                     return $resultRedirect->setPath('*/*/edit');
@@ -134,7 +134,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     protected function isAllowedChangeCustomerEmail($customerId)
     {
-        if (!strlen($this->getRequest()->getPost('email'))) {
+        if (!$this->getRequest()->getPost('email')) {
             $this->messageManager->addError(__('Please enter new email.'));
             return false;
         }
