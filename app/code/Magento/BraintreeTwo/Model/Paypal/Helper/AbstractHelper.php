@@ -20,11 +20,14 @@ abstract class AbstractHelper
      */
     protected function disabledQuoteAddressValidation(Quote $quote)
     {
-        $quote->getBillingAddress()->setShouldIgnoreValidation(true);
+        $billingAddress = $quote->getBillingAddress();
+        $billingAddress->setShouldIgnoreValidation(true);
+
         if (!$quote->getIsVirtual()) {
-            $quote->getShippingAddress()->setShouldIgnoreValidation(true);
-            if (!$quote->getBillingAddress()->getEmail()) {
-                $quote->getBillingAddress()->setSameAsBilling(1);
+            $shippingAddress = $quote->getShippingAddress();
+            $shippingAddress->setShouldIgnoreValidation(true);
+            if (!$billingAddress->getEmail()) {
+                $billingAddress->setSameAsBilling(1);
             }
         }
     }

@@ -49,7 +49,7 @@ class ShippingMethodUpdater extends AbstractHelper
     public function execute($shippingMethod, Quote $quote)
     {
         if (empty($shippingMethod)) {
-            throw new \InvalidArgumentException('The "shippingMethod" field does not exists');
+            throw new \InvalidArgumentException('The "shippingMethod" field does not exists.');
         }
 
         if (!$quote->getIsVirtual()) {
