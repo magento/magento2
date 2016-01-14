@@ -112,4 +112,5 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\CatalogRule\Api\Data\ConditionInterface" type="Magento\CatalogRule\Model\Data\Condition" />
 </config>
