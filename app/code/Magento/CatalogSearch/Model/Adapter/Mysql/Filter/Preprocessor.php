@@ -143,7 +143,7 @@ class Preprocessor implements PreprocessorInterface
 
             $currentStoreId = $this->scopeResolver->getScope()->getId();
 
-            $select->from(['e' => 'catalog_product_entity'], ['entity_id'])
+            $select->from(['e' => $this->resource->getTableName('catalog_product_entity')], ['entity_id'])
                 ->join(
                     ['main_table' => $table],
                     "main_table.{$linkIdField} = e.{$linkIdField}",
@@ -186,7 +186,7 @@ class Preprocessor implements PreprocessorInterface
 
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
-        $select->from(['e' => 'catalog_product_entity'], ['entity_id'])
+        $select->from(['e' => $this->resource->getTableName('catalog_product_entity')], ['entity_id'])
             ->join(
                 ['main_table' => $table],
                 "main_table.{$linkIdField} = e.{$linkIdField}",
