@@ -5,7 +5,7 @@
  */
 -->
 
-<!-- ko ifnot: disableLabel -->
+<!-- ko if: label -->
 <label
     class="admin__form-field-label"
     data-bind="attr: {for: uid}
@@ -25,7 +25,7 @@
             'admin__action-multiselect-tree': isTree()
         },
         event: {
-            focusin: function() { onFocusIn($element) },
+            focusin: onFocusIn,
             focusout: onFocusOut,
             keydown: keydownSwitcher
         },
@@ -159,11 +159,7 @@
         <div class="admin__action-multiselect-actions-wrap">
             <button class="action-default"
                 type="button"
-                data-bind="
-                    click: function(){
-                        outerClick();
-                    }
-            ">
+                data-bind="click: outerClick">
                 <span data-bind="text: closeBtnLabel"></span>
             </button>
         </div>

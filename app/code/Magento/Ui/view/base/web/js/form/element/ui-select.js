@@ -126,7 +126,6 @@ define([
             openLevelsAction: true,
             showOpenLevelsActionIcon: true,
             optgroupLabels: false,
-            disableLabel: false,
             closeBtn: true,
             showTree: false,
             labelsDecoration: false,
@@ -248,7 +247,6 @@ define([
          * @returns {Object} Object with handlers function name.
          */
         keyDownHandlers: function () {
-
             return {
                 enterKey: this.enterKeyHandler,
                 escapeKey: this.escapeKeyHandler,
@@ -469,20 +467,6 @@ define([
         },
 
         /**
-         * Get filtered value*
-         */
-        getValue: function () {
-            var options = this.options(),
-                selected = this.value();
-
-            _.chain(options)
-                .pluck(options, 'value')
-                .filter(function (opt) {
-                    return _.contains(selected, opt);
-                });
-        },
-
-        /**
          * Get selected element labels
          *
          * @returns {Array} array labels
@@ -562,7 +546,6 @@ define([
          * @param {Number} index - element index
          * @param {Object} event - mousemove event
          */
-
         onMousemove: function (data, index, event) {
             var id,
                 context = ko.contextFor(event.target);
@@ -625,9 +608,11 @@ define([
 
         /**
          * Set true to observable variable multiselectFocus
+         * @param {Object} ctx
+         * @param {Object} event - focus event
          */
-        onFocusIn: function (elem) {
-            !this.cacheUiSelect ? this.cacheUiSelect = elem : false;
+        onFocusIn: function (ctx, event) {
+            !this.cacheUiSelect ? this.cacheUiSelect = event.target : false;
             this.multiselectFocus(true);
         },
 
