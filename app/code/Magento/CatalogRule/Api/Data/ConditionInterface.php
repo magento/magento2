@@ -77,6 +77,7 @@ interface ConditionInterface extends \Magento\Framework\Api\CustomAttributesData
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsValueParsed();
 
