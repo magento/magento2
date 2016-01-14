@@ -13,7 +13,6 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Framework\Model\EntityManager;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -773,11 +772,13 @@ class Category extends AbstractResource
             'entity_id'
         )->joinLeft(
             ['d' => $backendTable],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.' . $this->getLinkField() . ' = m.entity_id',
+            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.' . $this->getLinkField()
+                . ' = m.' . $this->getLinkField(),
             []
         )->joinLeft(
             ['c' => $backendTable],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $this->getLinkField() . ' = m.entity_id',
+            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $this->getLinkField()
+                . ' = m.' . $this->getLinkField(),
             []
         )->where(
             $checkSql . ' = :scope'
