@@ -13,6 +13,11 @@ namespace Magento\User\Block\Role\Tab;
 class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
+     * Password input filed name
+     */
+    const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password';
+
+    /**
      * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
@@ -81,6 +86,23 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $fieldset->addField('in_role_user', 'hidden', ['name' => 'in_role_user', 'id' => 'in_role_userz']);
 
         $fieldset->addField('in_role_user_old', 'hidden', ['name' => 'in_role_user_old']);
+
+        $verificationFieldset = $form->addFieldset(
+            'current_user_verification_fieldset',
+            ['legend' => __('Current User Identity Verification')]
+        );
+        $verificationFieldset->addField(
+            self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+            'password',
+            [
+                'name' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+                'label' => __('Your Password'),
+                'id' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+                'title' => __('Your Password'),
+                'class' => 'input-text validate-current-password required-entry',
+                'required' => true
+            ]
+        );
 
         $form->setValues($this->getRole()->getData());
         $this->setForm($form);
