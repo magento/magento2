@@ -39,6 +39,7 @@ define([
             listens: {
                 visible: 'setPreview',
                 '${ $.provider }:data.reset': 'reset',
+                '${ $.provider }:data.overload': 'overload',
                 '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
             },
 
@@ -301,6 +302,15 @@ define([
          */
         reset: function () {
             this.value(this.initialValue);
+            this.error(false);
+        },
+
+        /**
+         * Sets current state as initial.
+         */
+        overload: function () {
+            this.setInitialValue();
+            this.bubble('update', this.hasChanged());
         },
 
         /**

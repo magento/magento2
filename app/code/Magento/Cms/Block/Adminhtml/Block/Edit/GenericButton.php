@@ -41,11 +41,11 @@ class GenericButton
     }
 
     /**
-     * Return the cms page Id.
+     * Return the cms block Id.
      *
      * @return int|null
      */
-    public function getPageId()
+    public function getBlockId()
     {
         $cmsBlock = $this->registry->registry(RegistryConstants::CMS_BLOCK);
         return $cmsBlock ? $cmsBlock->getId() : null;
