@@ -70,6 +70,8 @@ class AccountManagement implements AccountManagementInterface
 
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
+    const XML_PATH_CHANGE_EMAIL_TEMPLATE = 'customer/account_information/change_email_template';
+
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
@@ -855,6 +857,32 @@ class AccountManagement implements AccountManagementInterface
             $types[$type],
             self::XML_PATH_REGISTER_EMAIL_IDENTITY,
             ['customer' => $customerEmailData, 'back_url' => $backUrl, 'store' => $store],
+            $storeId
+        );
+
+        return $this;
+    }
+
+    /**
+     * Send email to customer when his email is changed
+     *
+     * @param CustomerInterface $customer
+     * @return $this
+     */
+    public function sendEmailChangeNotificationEmail($customer)
+    {
+        $storeId = $customer->getStoreId();
+        if (!$storeId) {
+            $storeId = $this->getWebsiteStoreId($customer);
+        }
+
+        $customerEmailData = $this->getFullCustomerObject($customer);
+
+        $this->sendEmailTemplate(
+            $customer,
+            self::XML_PATH_CHANGE_EMAIL_TEMPLATE,
+            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
             $storeId
         );
 

@@ -88,8 +88,10 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             }
 
             // Check if a customer can change email
-            if ($this->getRequest()->getParam('change_email') && $customer->getEmail() != $currentCustomerEmail) {
-                if (!$this->isAllowedChangeCustomerEmail($customerId)) {
+            $changeCustomerEmailIsAllowed = false;
+            if ($this->getRequest()->getParam('change_email')) {
+                $changeCustomerEmailIsAllowed = $this->isAllowedChangeCustomerEmail($customerId);
+                if (!$changeCustomerEmailIsAllowed) {
                     return $resultRedirect->setPath('*/*/edit');
                 }
             } else {
@@ -103,6 +105,11 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
 
             try {
                 $this->customerRepository->save($customer);
+
+                if ($changeCustomerEmailIsAllowed) {
+                    $this->customerAccountManagement->sendEmailChangeNotificationEmail($currentCustomer)
+                        ->sendEmailChangeNotificationEmail($customer);
+                }
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {
