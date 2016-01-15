@@ -6,6 +6,11 @@
 
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ */
 class IndexIterator implements \Iterator
 {
     /**
@@ -100,6 +105,8 @@ class IndexIterator implements \Iterator
      * @param array $allowedVisibility
      * @param \Magento\Eav\Model\Entity\Attribute $status
      * @param array $statusIds
+     *
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         DataProvider $dataProvider,
