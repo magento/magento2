@@ -52,7 +52,6 @@
     <fieldset name="rule_information">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <!--<item name="dataScope" xsi:type="string">data</item>-->
                 <item name="label" xsi:type="string" translate="true">Rule Information</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sort_order" xsi:type="string">10</item>
