@@ -44,7 +44,7 @@ class Manager
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\TranslateInterface $translator,
-        \Magento\Backend\App\ConfigInterface $backendConfig     
+        \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
         $this->_session = $session;
         $this->_authSession = $authSession;
