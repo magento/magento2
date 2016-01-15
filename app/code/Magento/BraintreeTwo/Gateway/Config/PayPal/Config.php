@@ -49,7 +49,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * Get overriden merchant name
+     * Get merchant name to display in PayPal popup
      *
      * @return string
      */

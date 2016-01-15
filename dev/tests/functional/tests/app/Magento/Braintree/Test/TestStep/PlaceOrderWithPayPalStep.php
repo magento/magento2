@@ -10,7 +10,6 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\TestStep\TestStepInterface;
 
-
 /**
  * Class PlaceOrderWithPayPalStep
  */
