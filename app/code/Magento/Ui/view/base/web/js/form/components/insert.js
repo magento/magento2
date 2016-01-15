@@ -48,17 +48,12 @@ define([
 
         /** @inheritdoc */
         initialize: function () {
-            var self = this._super();
-
+            this._super();
             _.bindAll(this, 'onRender', 'onUpdate');
 
-            $.async('.' + this.contentSelector, function (el) {
-                self.contentEl = $(el);
-
-                if (self.autoRender) {
-                    self.render();
-                }
-            });
+            if (this.autoRender) {
+                this.render();
+            }
 
             return this;
         },
@@ -116,23 +111,27 @@ define([
         /**
          * Request for render content.
          *
-         * @returns {Object|Boolean}
+         * @returns {Object}
          */
         render: function (params) {
-            var request;
+            var self = this,
+                request;
 
             if (this.isRendered) {
-                return false;
+                return this;
             }
 
-            this.startRender = true;
-            params = _.extend(params || {}, this.params);
-            request = this.requestData(params, this.renderSettings);
-            request
-                .done(this.onRender)
-                .fail(this.onError);
+            $.async('.' + this.contentSelector, function (el) {
+                self.contentEl = $(el);
+                self.startRender = true;
+                params = _.extend(params || {}, self.params);
+                request = self.requestData(params, self.renderSettings);
+                request
+                    .done(self.onRender)
+                    .fail(self.onError);
+            });
 
-            return request;
+            return this;
         },
 
         /**
