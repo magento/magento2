@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \Magento\Vault\Block\CreditCards $block */
+$tokens = $block->getPaymentTokens();
+?>
+<?php if (count($tokens) !== 0): ?>
+    <div class="items payment-methods credit-cards" id="my-credit-cards-container">
+        <?php
+        foreach ($tokens as $token) {
+            echo $block->renderTokenHtml($token);
+        }
+        ?>
+    </div>
+<?php else: ?>
+    <div class="message info empty"><span><?php /* @noEscape */ echo __('You have no credit cards.'); ?></span></div>
+<?php endif ?>
