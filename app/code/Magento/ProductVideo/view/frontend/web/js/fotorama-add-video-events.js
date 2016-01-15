@@ -207,6 +207,7 @@ define([
                     dataUrl = parseURL(dataUrl);
                     tmpVideoData.id = dataUrl.id;
                     tmpVideoData.provider = dataUrl.type;
+                    tmpVideoData.videoUrl = tmpInputData.videoUrl;
                 }
 
                 if (tmpVideoData.isBase) {
@@ -440,9 +441,12 @@ define([
             this.fotoramaItem.on('fotorama:showend', $.proxy(function (e, fotorama) {
                 this._startPrepareForPlayer(e, fotorama);
             }, this));
+            this.fotoramaItem.on('fotorama:show', $.proxy(function (e, fotorama) {
+                this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama, true);
+            }, this));
 
             this.fotoramaItem.on('fotorama:fullscreenexit', $.proxy(function (e, fotorama) {
-                fotorama.activeFrame.$stageFrame.parent().find('.' + this.PV).remove();
+                fotorama.activeFrame.$stageFrame.find('.' + this.PV).remove();
                 this._startPrepareForPlayer(e, fotorama);
             }, this));
         },
@@ -478,10 +482,10 @@ define([
 
                 !$image.type && this._setItemType($image, number - 1);
 
-                if ($image.type === 'image') {
+                if ($image.$navThumbFrame && $image.type === 'image') {
                     $image.$navThumbFrame.removeClass(this.TI);
                     return;
-                } else if ($image.type === 'video') {
+                } else if ($image.$navThumbFrame && $image.type === 'video') {
                     !$image.$navThumbFrame.hasClass(this.TI) && $image.$navThumbFrame.addClass(this.TI);
                 }
 

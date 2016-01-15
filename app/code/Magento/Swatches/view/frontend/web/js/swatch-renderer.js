@@ -905,13 +905,13 @@ define([
                     updateImg = imagesToUpdate.filter(function (img) {
                         return img.isMain;
                     });
-
-                    item = updateImg.length ? updateImg[0]: imagesToUpdate[0];
+                    item = updateImg.length ? updateImg[0] : imagesToUpdate[0];
                     gallery.updateDataByIndex(0, item);
 
                     gallery.seek(1);
                 } else {
                     gallery.updateData(imagesToUpdate);
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
                 }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
