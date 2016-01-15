@@ -373,7 +373,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT
             ],
             [
-                'expectedResult' => __(''),
+                'expectedResult' => '',
                 'isActiveSession' => true,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_IN
             ]
