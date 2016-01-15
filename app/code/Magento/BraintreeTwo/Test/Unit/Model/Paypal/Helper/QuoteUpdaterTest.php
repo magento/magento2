@@ -18,6 +18,8 @@ use Magento\BraintreeTwo\Model\Paypal\Helper\QuoteUpdater;
  * Class QuoteUpdaterTest
  *
  * @see \Magento\BraintreeTwo\Model\Paypal\Helper\QuoteUpdater
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteUpdaterTest extends \PHPUnit_Framework_TestCase
 {

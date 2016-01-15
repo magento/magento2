@@ -24,6 +24,8 @@ use Magento\BraintreeTwo\Block\Paypal\Checkout\Review as CheckoutReview;
  * Class ReviewTest
  *
  * @see \Magento\BraintreeTwo\Controller\Paypal\Review
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReviewTest extends \PHPUnit_Framework_TestCase
 {

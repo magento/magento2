@@ -25,6 +25,8 @@ use Magento\BraintreeTwo\Model\Paypal\Helper\ShippingMethodUpdater;
  * Class SaveShippingMethodTest
  *
  * @see \Magento\BraintreeTwo\Controller\Paypal\SaveShippingMethod
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveShippingMethodTest extends \PHPUnit_Framework_TestCase
 {
