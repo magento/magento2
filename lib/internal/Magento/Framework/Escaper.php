@@ -8,7 +8,7 @@ namespace Magento\Framework;
 /**
  * Magento escape methods
  */
-class Escaper
+class Escaper extends \Zend\Escaper\Escaper
 {
     /**
      * Escape html entities
@@ -103,4 +103,6 @@ class Escaper
         }
         return htmlspecialchars($data, ENT_QUOTES, null, false);
     }
+
+
 }
