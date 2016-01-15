@@ -48,24 +48,28 @@ define([
             if (positionCacheValid && this.selected().length === 0) {
                 // Check selected data
                 selectedFromCache = JSON.parse(selectedFromCache);
+
                 for (i = 0; i < selectedFromCache.length; i++) {
                     this.selected.push(selectedFromCache[i]);
                 }
 
                 registry.set('position_cache_valid', true);
                 registry.set('selected_cache', JSON.stringify(this.selected()));
+
                 return;
             }
 
             if (positionCacheValid && this.selected().length > 0) {
                 registry.set('position_cache_valid', true);
                 registry.set('selected_cache', JSON.stringify(this.selected()));
+
                 return;
             }
 
             if (this.selectedData.length === 0) {
                 registry.set('position_cache_valid', true);
                 registry.set('selected_cache', JSON.stringify([]));
+
                 return;
             }
 
