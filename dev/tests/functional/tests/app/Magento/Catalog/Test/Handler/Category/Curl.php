@@ -164,6 +164,7 @@ class Curl extends AbstractCurl implements CategoryInterface
         $this->prepareCategoryProducts();
 
         $this->fields['general'] = $this->replaceMappingData($this->fields['general']);
+        $this->fields['general']['parent_id'] = $this->fields['general']['parent_id']['id'];
         return $this->fields;
     }
 
