@@ -25,10 +25,12 @@ use Magento\Mtf\TestCase\Scenario;
  * 8. Select payment method
  * 9. Verify order total on review step.
  * 10. Click 'Continue to PayPal' button.
- * 13. Perform assertions.
+ * 11. Click 'Proceed purchase' in popup.
+ * 12. Perform assertions.
  *
  * @group Braintree_(CS)
  * @ZephyrId MAGETWO-47805
+ * @ZephyrId MAGETWO-47810
  */
 class OnePageCheckoutWithPayPalTest extends Scenario
 {
