@@ -864,12 +864,31 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Send emails to customer when his email is changed
+     *
+     * @param CustomerInterface $origCustomer
+     * @param CustomerInterface $savedCustomer
+     * @return $this
+     */
+    public function checkEmailChangesAndSendNotificationEmails(
+        CustomerInterface $origCustomer,
+        CustomerInterface $savedCustomer
+    ) {
+        if ($origCustomer->getEmail() != $savedCustomer->getEmail()) {
+            $this->sendEmailChangeNotificationEmail($origCustomer);
+            $this->sendEmailChangeNotificationEmail($savedCustomer);
+        }
+
+        return $this;
+    }
+
+    /**
      * Send email to customer when his email is changed
      *
      * @param CustomerInterface $customer
      * @return $this
      */
-    public function sendEmailChangeNotificationEmail($customer)
+    protected function sendEmailChangeNotificationEmail(CustomerInterface $customer)
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
@@ -895,7 +914,7 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @return $this
      */
-    protected function sendPasswordResetNotificationEmail($customer)
+    protected function sendPasswordResetNotificationEmail(CustomerInterface $customer)
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
