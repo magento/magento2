@@ -281,6 +281,11 @@
         <plugin name="install" type="Magento\Framework\Module\Plugin\DbStatusValidator" sortOrder="40"/>
         <plugin name="storeCookieValidate" type="Magento\Store\Model\Plugin\StoreCookie" sortOrder="10"/>
     </type>
+    <type name="Magento\Store\Model\Plugin\StoreCookie">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Module\Plugin\DbStatusValidator">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
