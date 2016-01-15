@@ -21,6 +21,7 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
             </label>
             <div class="control">
                 <select name="super_attribute[<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>]"
+                        data-selector="super_attribute[<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>]"
                         data-validate="{required:true}"
                         id="attribute<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>"
                         class="super-attribute-select">
