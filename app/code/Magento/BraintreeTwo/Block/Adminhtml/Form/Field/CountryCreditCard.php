@@ -5,8 +5,8 @@
  */
 namespace Magento\BraintreeTwo\Block\Adminhtml\Form\Field;
 
-use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 use Magento\Framework\DataObject;
+use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 
 /**
  * Class CountryCreditCard
@@ -49,7 +49,7 @@ class CountryCreditCard extends AbstractFieldArray
     {
         if (!$this->ccTypesRenderer) {
             $this->ccTypesRenderer = $this->getLayout()->createBlock(
-                Cctypes::class,
+                CcTypes::class,
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );

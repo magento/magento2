@@ -19,6 +19,8 @@ use Magento\Quote\Model\Quote\Address;
  * Class OrderPlaceTest
  *
  * @see \Magento\BraintreeTwo\Model\Paypal\Helper\OrderPlace
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderPlaceTest extends \PHPUnit_Framework_TestCase
 {

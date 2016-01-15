@@ -20,6 +20,8 @@ use Magento\BraintreeTwo\Model\Paypal\Helper\OrderPlace;
  * Class PlaceOrderTest
  *
  * @see \Magento\BraintreeTwo\Controller\Paypal\PlaceOrder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrderTest extends \PHPUnit_Framework_TestCase
 {

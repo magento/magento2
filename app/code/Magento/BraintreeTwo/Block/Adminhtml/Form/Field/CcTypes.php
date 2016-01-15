@@ -5,14 +5,14 @@
  */
 namespace Magento\BraintreeTwo\Block\Adminhtml\Form\Field;
 
+use Magento\BraintreeTwo\Helper\CcType;
 use Magento\Framework\View\Element\Context;
 use Magento\Framework\View\Element\Html\Select;
-use Magento\BraintreeTwo\Helper\CcType;
 
 /**
- * Class Cctypes
+ * Class CcTypes
  */
-class Cctypes extends Select
+class CcTypes extends Select
 {
     /**
      * @var CcType
