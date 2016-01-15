@@ -2016,11 +2016,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function retrieveAttributeByCode($attrCode)
     {
-        if (!$this->_resource) {
-            $this->_resource = $this->_resourceFactory->create();
-        }
         if (!isset($this->_attributeCache[$attrCode])) {
-            $this->_attributeCache[$attrCode] = $this->_resource->getAttribute($attrCode);
+            $this->_attributeCache[$attrCode] = $this->getResource()->getAttribute($attrCode);
         }
         return $this->_attributeCache[$attrCode];
     }
@@ -2366,13 +2363,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function checkUrlKeyDuplicates()
     {
+        $resource = $this->getResource();
         foreach ($this->urlKeys as $storeId => $urlKeys) {
             $urlKeyDuplicates = $this->_connection->fetchAssoc(
                 $this->_connection->select()->from(
-                    ['url_rewrite' => $this->_connection->getTableName('url_rewrite')],
+                    ['url_rewrite' => $resource->getTable('url_rewrite')],
                     ['request_path', 'store_id']
                 )->joinLeft(
-                    ['cpe' => $this->_connection->getTableName('catalog_product_entity')],
+                    ['cpe' => $resource->getTable('catalog_product_entity')],
                     "cpe.entity_id = url_rewrite.entity_id"
                 )->where('request_path IN (?)', array_keys($urlKeys))
                     ->where('store_id IN (?)', $storeId)
@@ -2416,5 +2414,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ? $this->productUrlKeys[$rowData[self::COL_SKU]]
             : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         return $urlKey;
+    }
+
+    /**
+     * @return Proxy\Product\ResourceModel
+     */
+    protected function getResource()
+    {
+        if (!$this->_resource) {
+            $this->_resource = $this->_resourceFactory->create();
+        }
+        return $this->_resource;
     }
 }
