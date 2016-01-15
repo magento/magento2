@@ -57,7 +57,8 @@
         "ext-intl": "*",
         "ext-xsl": "*",
         "ext-mbstring": "*",
-        "ext-openssl": "*"
+        "ext-openssl": "*",
+        "ext-zip": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
