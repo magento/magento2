@@ -18,10 +18,13 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
      */
     public function execute()
     {
-        $role = $this->_initRole();
-        $this->_initAction();
+        $this->restoreResourcesDataFromSession();
+        $this->restoreUsersDataFromSession();
 
-        $this->restoreFromDataFromSession($role);
+        $role = $this->_initRole();
+        $this->restoreFormDataFromSession($role);
+
+        $this->_initAction();
 
         if ($role->getId()) {
             $breadCrumb = __('Edit Role');
@@ -49,13 +52,33 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
         $this->_view->renderLayout();
     }
 
+    protected function restoreUsersDataFromSession()
+    {
+        $this->_coreRegistry->register(
+            SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY,
+            $this->_session->getData(SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY, true)
+        );
+    }
+
+    protected function restoreResourcesDataFromSession()
+    {
+        $this->_coreRegistry->register(
+            SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY,
+            $this->_session->getData(SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY, true)
+        );
+        $this->_coreRegistry->register(
+            SaveRole::RESOURCE_FORM_DATA_SESSION_KEY,
+            $this->_session->getData(SaveRole::RESOURCE_FORM_DATA_SESSION_KEY, true)
+        );
+    }
+
     /**
      * @param \Magento\Authorization\Model\Role $role
      * @return $this
      */
-    protected function restoreFromDataFromSession(\Magento\Authorization\Model\Role $role)
+    protected function restoreFormDataFromSession(\Magento\Authorization\Model\Role $role)
     {
-        $data = $this->_getSession()->getData('role_edit_form_data', true);
+        $data = $this->_getSession()->getData(SaveRole::ROLE_EDIT_FORM_DATA_SESSION_KEY, true);
         if (!empty($data['rolename'])) {
             $role->setRoleName($data['rolename']);
         }

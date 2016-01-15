@@ -12,24 +12,4 @@
             <argument name="authorization" xsi:type="object">Magento\Framework\Authorization</argument>
         </arguments>
     </type>
-    <virtualType name="AdminhtmlSessionStorage" type="Magento\Framework\Session\Generic">
-        <arguments>
-            <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Storage</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="AdminhtmlSessionStorageContext" type="Magento\Backend\Block\Template\Context">
-        <arguments>
-            <argument name="session" xsi:type="object">AdminhtmlSessionStorage</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\User\Block\Role\Grid\User">
-        <arguments>
-            <argument name="context" xsi:type="object">AdminhtmlSessionStorageContext</argument>
-        </arguments>
-    </type>
-    <type name="Magento\User\Block\Role\Tab\Edit">
-        <arguments>
-            <argument name="context" xsi:type="object">AdminhtmlSessionStorageContext</argument>
-        </arguments>
-    </type>
 </config>

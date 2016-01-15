@@ -13,6 +13,26 @@ use Magento\Framework\Controller\ResultFactory;
 class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**
+     * Session keys for Info form data
+     */
+    const ROLE_EDIT_FORM_DATA_SESSION_KEY = 'role_edit_form_data';
+
+    /**
+     * Session keys for Users form data
+     */
+    const IN_ROLE_USER_FORM_DATA_SESSION_KEY = 'in_role_user_form_data';
+
+    /**
+     * Session keys for Use all resources flag form data
+     */
+    const RESOURCE_ALL_FORM_DATA_SESSION_KEY = 'resource_all_form_data';
+
+    /**
+     * Session keys for Resource form data
+     */
+    const RESOURCE_FORM_DATA_SESSION_KEY = 'resource_form_data';
+
+    /**
      * Assign user to role
      *
      * @param int $userId
@@ -157,13 +177,13 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      */
     protected function saveDataToSessionAndRedirect($role, $data, $resultRedirect)
     {
-        $this->_getSession()->setData('role_edit_form_data', ['rolename' => $data['rolename']]);
-        $this->_getSession()->setData('in_role_user_form_data', $data['in_role_user']);
+        $this->_getSession()->setData(self::ROLE_EDIT_FORM_DATA_SESSION_KEY, ['rolename' => $data['rolename']]);
+        $this->_getSession()->setData(self::IN_ROLE_USER_FORM_DATA_SESSION_KEY, $data['in_role_user']);
         if ($data['all']) {
-            $this->_getSession()->setData('resource_all_form_data', $data['all']);
+            $this->_getSession()->setData(self::RESOURCE_ALL_FORM_DATA_SESSION_KEY, $data['all']);
         } else {
             $resource = isset($data['resource']) ? $data['resource'] : [];
-            $this->_getSession()->setData('resource_form_data', $resource);
+            $this->_getSession()->setData(self::RESOURCE_FORM_DATA_SESSION_KEY, $resource);
         }
         $arguments = $role->getId() ? ['rid' => $role->getId()] : [];
         return $resultRedirect->setPath('adminhtml/*/editrole', $arguments);
