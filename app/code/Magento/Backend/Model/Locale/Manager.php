@@ -44,7 +44,7 @@ class Manager
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\TranslateInterface $translator,
-        \Magento\Backend\App\ConfigInterface $backendConfig            
+        \Magento\Backend\App\ConfigInterface $backendConfig     
     ) {
         $this->_session = $session;
         $this->_authSession = $authSession;
@@ -61,11 +61,11 @@ class Manager
     public function switchBackendInterfaceLocale($localeCode)
     {
         $this->_session->setSessionLocale(null);
-
+        
         $this->_authSession->getUser()->setInterfaceLocale($localeCode);
-
+        
         $this->_translator->setLocale($localeCode)->loadData(null, true);
-
+        
         return $this;
     }
 
@@ -76,7 +76,7 @@ class Manager
      */
     public function getGeneralLocale()
     {
-    	return $this->_backendConfig->getValue('general/locale/code');
+        return $this->_backendConfig->getValue('general/locale/code');
     }
 
     /**
@@ -86,17 +86,15 @@ class Manager
      */
     public function getUserInterfaceLocale()
     {
-       $userData = $this->_authSession->getUser();
-    	
+        $userData = $this->_authSession->getUser();
+        $interfaceLocale = \Magento\Framework\Locale\Resolver::DEFAULT_LOCALE;
+        
         if ($userData && $userData->getInterfaceLocale()) {
-                $interfaceLocale = $userData->getInterfaceLocale();
-            }elseif ($this->getGeneralLocale()) {
-                $interfaceLocale = $this->getGeneralLocale();
-            }else {
-                $interfaceLocale = \Magento\Framework\Locale\Resolver::DEFAULT_LOCALE;
-	}
-
+            $interfaceLocale = $userData->getInterfaceLocale();
+        } elseif ($this->getGeneralLocale()) {
+            $interfaceLocale = $this->getGeneralLocale();
+        }
+        
         return $interfaceLocale;
-
     }
 }
