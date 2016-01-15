@@ -3878,6 +3878,7 @@ return [
         'Magento\Framework\Component\ComponentRegistrar'
     ],
     ['Magento\Framework\App\Router\ActionList\Reader'],
+    ['Magento\User\Observer\Backend\CheckAdminPasswordChangeObserver'],
     ['Magento\Framework\View\File\AbstractCollector'],
     ['Magento\Tools\Migration\Acl\FileManager'],
     ['Magento\Tools\Migration\Acl\Formatter'],
