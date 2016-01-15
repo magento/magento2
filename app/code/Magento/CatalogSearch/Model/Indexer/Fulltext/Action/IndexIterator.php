@@ -168,6 +168,7 @@ class IndexIterator implements \Iterator
                     }
                 }
             }
+            \reset($this->products);
 
             $this->productAttributes = $this->dataProvider->getProductAttributes(
                 $this->storeId,
@@ -180,6 +181,7 @@ class IndexIterator implements \Iterator
 
         if (!isset($this->productAttributes[$productData['entity_id']])) {
             $this->next();
+            return;
         }
 
         $productAttr = $this->productAttributes[$productData['entity_id']];
@@ -187,11 +189,13 @@ class IndexIterator implements \Iterator
             || !in_array($productAttr[$this->visibility->getId()], $this->allowedVisibility)
         ) {
             $this->next();
+            return;
         }
         if (!isset($productAttr[$this->status->getId()])
             || !in_array($productAttr[$this->status->getId()], $this->statusIds)
         ) {
             $this->next();
+            return;
         }
 
         $productIndex = [$productData['entity_id'] => $productAttr];
@@ -200,8 +204,8 @@ class IndexIterator implements \Iterator
         $productChildren = $this->productRelations[$productData['entity_id']];
         if ($productChildren) {
             foreach ($productChildren as $productChildId) {
-                if (isset($productAttributes[$productChildId])) {
-                    $productChildAttr = $productAttributes[$productChildId];
+                if (isset($this->productAttributes[$productChildId])) {
+                    $productChildAttr = $this->productAttributes[$productChildId];
                     if (!isset($productChildAttr[$this->status->getId()])
                         || !in_array($productChildAttr[$this->status->getId()], $this->statusIds)
                     ) {
@@ -215,6 +219,7 @@ class IndexIterator implements \Iterator
         }
         if ($productChildren !== null && !$hasChildren) {
             $this->next();
+            return;
         }
 
         $index = $this->dataProvider->prepareProductIndex($productIndex, $productData, $this->storeId);
