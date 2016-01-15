@@ -20,6 +20,7 @@
     <preference for="Magento\Ui\Api\BookmarkManagementInterface" type="Magento\Ui\Model\BookmarkManagement"/>
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Ui\Component\Wysiwyg\Config"/>
     <preference for="Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface" type="Magento\Ui\TemplateEngine\Xhtml\Result"/>
+    <preference for="Magento\Framework\Api\Search\ReportingInterface" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting"/>
     <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
     <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
     <type name="Magento\Framework\View\TemplateEngineFactory">
