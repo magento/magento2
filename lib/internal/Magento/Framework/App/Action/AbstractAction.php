@@ -36,7 +36,7 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
      * @param \Magento\Framework\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context
+        Context $context
     ) {
         $this->_request = $context->getRequest();
         $this->_response = $context->getResponse();
