@@ -26,7 +26,6 @@ abstract class Integration extends Action
     /** Saved API form data session key */
     const REGISTRY_KEY_CURRENT_RESOURCE = 'current_resource';
 
-
     /**
      * @var \Magento\Framework\Registry
      */
