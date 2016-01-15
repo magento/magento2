@@ -73,7 +73,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('category_id'));
 
         $modelMock = $this->getMock('\Magento\SalesRule\Model\Rule', [], [], '', false);
-        $modelFactoryMock = $this->getMock('\Magento\SalesRule\Model\RuleFactory', [], [], '', false);
+        $modelFactoryMock = $this->getMock('\Magento\SalesRule\Model\RuleFactory', ['create'], [], '', false);
         $modelFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($modelMock);
