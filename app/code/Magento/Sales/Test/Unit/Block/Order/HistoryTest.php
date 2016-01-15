@@ -115,7 +115,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             ->method('set')
             ->willReturnSelf();
 
-        $this->model = new \Magento\Sales\Block\Order\CreditCards(
+        $this->model = new \Magento\Sales\Block\Order\History(
             $this->context,
             $this->orderCollectionFactory,
             $this->customerSession,
