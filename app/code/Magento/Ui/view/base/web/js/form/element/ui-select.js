@@ -128,6 +128,7 @@ define([
             closeBtn: true,
             showTree: false,
             labelsDecoration: false,
+            disableLabel: false,
             closeBtnLabel: $t('Done'),
             optgroupTmpl: 'ui/grid/filters/elements/ui-select-optgroup',
             selectedPlaceholders: {
@@ -140,17 +141,19 @@ define([
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList'
             },
-            simple: {
-                showCheckbox: false,
-                chipsEnabled: false,
-                closeBtn: false
-            },
-            optgroup: {
-                showCheckbox: false,
-                lastSelectable: true,
-                optgroupLabels: true,
-                openLevelsAction: false,
-                labelsDecoration: true
+            presets: {
+                simple: {
+                    showCheckbox: false,
+                    chipsEnabled: false,
+                    closeBtn: false
+                },
+                optgroup: {
+                    showCheckbox: false,
+                    lastSelectable: true,
+                    optgroupLabels: true,
+                    openLevelsAction: false,
+                    labelsDecoration: true
+                }
             }
         },
 
@@ -168,7 +171,7 @@ define([
 
             defaults.levelsVisibility = defaults.levelsVisibility || config.lastSelectable;
             defaults.showOpenLevelsActionIcon = defaults.showOpenLevelsActionIcon && config.openLevelsAction;
-            _.extend(defaults, result, defaults[mode]);
+            _.extend(defaults, result, defaults.presets[mode]);
             this._super();
 
             return this;
@@ -244,9 +247,9 @@ define([
 
             if (!data.visible) {
                 data.visible = ko.observable(!!data.hasOwnProperty(this.separator) &&
-                    _.isBoolean(this.levelsVisibility) &&
-                    this.levelsVisibility ||
-                    data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility, 10) >= curLevel);
+                _.isBoolean(this.levelsVisibility) &&
+                this.levelsVisibility ||
+                data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility, 10) >= curLevel);
 
             }
 
@@ -341,7 +344,8 @@ define([
                     curOption = this.options()[i].label.toLowerCase();
 
                     if (curOption.indexOf(value) > -1) {
-                        array.push(this.options()[i]); /*eslint max-depth: [2, 4]*/
+                        array.push(this.options()[i]);
+                        /*eslint max-depth: [2, 4]*/
                     }
                 }
 
