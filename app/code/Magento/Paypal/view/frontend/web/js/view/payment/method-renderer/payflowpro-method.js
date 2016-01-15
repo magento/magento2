@@ -9,9 +9,10 @@ define(
         'Magento_Payment/js/view/payment/iframe',
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Checkout/js/action/set-payment-information',
-        'Magento_Checkout/js/model/full-screen-loader'
+        'Magento_Checkout/js/model/full-screen-loader',
+        'Magento_Vault/js/view/payment/vault-enabler'
     ],
-    function ($, Component, additionalValidators, setPaymentInformationAction, fullScreenLoader) {
+    function ($, Component, additionalValidators, setPaymentInformationAction, fullScreenLoader, vaultEnabler) {
         'use strict';
 
         return Component.extend({
@@ -20,6 +21,17 @@ define(
             },
             placeOrderHandler: null,
             validateHandler: null,
+
+            /**
+             * @returns {exports.initialize}
+             */
+            initialize: function () {
+                this._super();
+                this.vaultEnabler = vaultEnabler();
+                this.vaultEnabler.setPaymentCode(this.getCode());
+
+                return this;
+            },
 
             setPlaceOrderHandler: function(handler) {
                 this.placeOrderHandler = handler;
@@ -54,9 +66,7 @@ define(
                 if (this.validateHandler() && additionalValidators.validate()) {
                     fullScreenLoader.startLoader();
                     this.isPlaceOrderActionAllowed(false);
-                    $.when(setPaymentInformationAction(this.messageContainer, {
-                        'method': self.getCode()
-                    })).done(function () {
+                    $.when(setPaymentInformationAction(this.messageContainer, self.getData())).done(function () {
                         self.placeOrderHandler().fail(function () {
                             fullScreenLoader.stopLoader();
                         });
@@ -65,6 +75,32 @@ define(
                         self.isPlaceOrderActionAllowed(true);
                     });
                 }
+            },
+
+            /**
+             * @returns {Object}
+             */
+            getData: function () {
+                var data = {
+                    'method': this.getCode(),
+                    'additional_data': {
+                        'cc_type': this.creditCardType(),
+                        'cc_exp_year': this.creditCardExpYear(),
+                        'cc_exp_month': this.creditCardExpMonth(),
+                        'cc_last_4': this.creditCardNumber().substr(-4)
+                    }
+                };
+
+                this.vaultEnabler.visitAdditionalData(data);
+
+                return data;
+            },
+
+            /**
+             * @returns {Bool}
+             */
+            isVaultEnabled: function () {
+                return this.vaultEnabler.isVaultEnabled();
             }
         });
     }
