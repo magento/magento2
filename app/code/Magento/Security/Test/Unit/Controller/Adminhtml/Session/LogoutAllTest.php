@@ -90,7 +90,7 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
 
         $this->sessionsManager =  $this->getMock(
             '\Magento\Security\Model\AdminSessionsManager',
-            ['logoutAnotherUserSessions'],
+            ['logoutOtherUserSessions'],
             [],
             '',
             false
@@ -139,7 +139,7 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
     {
         $successMessage = 'All other open sessions for this account were terminated.';
         $this->sessionsManager->expects($this->once())
-            ->method('logoutAnotherUserSessions');
+            ->method('logoutOtherUserSessions');
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with($successMessage);
@@ -164,7 +164,7 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
     {
         $phrase = new \Magento\Framework\Phrase('some error');
         $this->sessionsManager->expects($this->once())
-            ->method('logoutAnotherUserSessions')
+            ->method('logoutOtherUserSessions')
             ->willThrowException(new LocalizedException($phrase));
         $this->messageManager->expects($this->once())
             ->method('addError')
@@ -179,7 +179,7 @@ class LogoutAllTest extends \PHPUnit_Framework_TestCase
     {
         $phrase = new \Magento\Framework\Phrase('We couldn\'t logout because of an error.');
         $this->sessionsManager->expects($this->once())
-            ->method('logoutAnotherUserSessions')
+            ->method('logoutOtherUserSessions')
             ->willThrowException(new \Exception());
         $this->messageManager->expects($this->once())
             ->method('addException')
