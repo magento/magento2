@@ -693,4 +693,5 @@ unverified,unverified
 Eligible,Eligible
 Ineligible,Inligible
 "PayPal Express Checkout","PayPal Express Checkout"
+"Requested payment method does not match with order.","Requested payment method does not match with order."
 "payflowpro", "PayflowPro"
