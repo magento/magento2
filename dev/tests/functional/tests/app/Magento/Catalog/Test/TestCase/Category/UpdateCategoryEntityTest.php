@@ -10,6 +10,7 @@ use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Test Creation for UpdateCategoryEntity
@@ -51,18 +52,28 @@ class UpdateCategoryEntityTest extends Injectable
     protected $catalogCategoryEdit;
 
     /**
+     * Fixture Factory.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
      * Inject page end prepare default category
      *
      * @param Category $initialCategory
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
+     * @param FixtureFactory $fixtureFactory
      * @return array
      */
     public function __inject(
         Category $initialCategory,
         CatalogCategoryIndex $catalogCategoryIndex,
-        CatalogCategoryEdit $catalogCategoryEdit
+        CatalogCategoryEdit $catalogCategoryEdit,
+        FixtureFactory $fixtureFactory
     ) {
+        $this->fixtureFactory = $fixtureFactory;
         $this->catalogCategoryIndex = $catalogCategoryIndex;
         $this->catalogCategoryEdit = $catalogCategoryEdit;
         $initialCategory->persist();
@@ -82,5 +93,24 @@ class UpdateCategoryEntityTest extends Injectable
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);
         $this->catalogCategoryEdit->getFormPageActions()->save();
+        return ['category' => $this->prepareData($category, $initialCategory)];
+    }
+
+    /**
+     * Prepare comparison data.
+     *
+     * @param Category $category
+     * @param Category $initialCategory
+     * @return Category
+     */
+    protected function prepareData(Category $category, Category $initialCategory)
+    {
+        $updatedCategory = $this->fixtureFactory->createByCode(
+            'category',
+            [
+                'data' => array_merge($initialCategory->getData(), $category->getData())
+            ]
+        );
+        return $updatedCategory;
     }
 }

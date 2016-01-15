@@ -116,6 +116,8 @@ class Webapi extends AbstractWebapi implements CategoryInterface
             ];
         }
 
+        $data['parent_id'] = $data['parent_id']['id'];
+
         return ['category' => $data];
     }
 

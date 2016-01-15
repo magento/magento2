@@ -36,7 +36,8 @@ class ParentId extends DataSource
             if (!$this->parentCategory->hasData('id')) {
                 $this->parentCategory->persist();
             }
-            $this->data = $this->parentCategory->getId();
+            $this->data['id'] = $this->parentCategory->getId();
+            $this->data['category'] = $this->parentCategory;
         } else {
             $this->data = $data;
         }
