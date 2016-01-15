@@ -344,8 +344,7 @@ define([
                     curOption = this.options()[i].label.toLowerCase();
 
                     if (curOption.indexOf(value) > -1) {
-                        array.push(this.options()[i]);
-                        /*eslint max-depth: [2, 4]*/
+                        array.push(this.options()[i]); /*eslint max-depth: [2, 4]*/
                     }
                 }
 
@@ -694,7 +693,7 @@ define([
         setCaption: function () {
             var length;
 
-            if (!_.isArray(this.value())) {
+            if (!_.isArray(this.value()) && this.value()) {
                 length = 1;
             } else if (this.value()) {
                 length = this.value().length;
