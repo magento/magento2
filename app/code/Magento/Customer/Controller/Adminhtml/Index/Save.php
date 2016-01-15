@@ -233,11 +233,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 if ($isExistingCustomer) {
                     $this->_customerRepository->save($customer);
 
-                    // If a customer email changed - send email notification
-                    if ($currentCustomer->getEmail()!=$customer->getEmail()) {
-                        $this->customerAccountManagement->sendEmailChangeNotificationEmail($currentCustomer)
-                            ->sendEmailChangeNotificationEmail($customer);
-                    }
+                    $this->customerAccountManagement
+                        ->checkEmailChangesAndSendNotificationEmails($currentCustomer, $customer);
 
                 } else {
                     $customer = $this->customerAccountManagement->createAccount($customer);
