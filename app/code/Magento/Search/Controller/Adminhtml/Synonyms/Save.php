@@ -7,8 +7,6 @@
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
 use Magento\Search\Model\Synonym\MergeConflictException;
-use Magento\Search\Model\SynonymGroup;
-use Magento\Search\Model\SynonymGroupRepository;
 
 class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
 {
