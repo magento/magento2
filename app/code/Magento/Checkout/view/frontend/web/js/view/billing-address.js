@@ -50,10 +50,6 @@ define(
         });
         addressOptions.push(newAddressOption);
 
-        if (_.isEmpty(countryData())) {
-            countryData(customerData.reload(['directory-data'], false));
-        }
-
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/billing-address'
