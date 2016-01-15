@@ -33,7 +33,7 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
     protected $resultFactory;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
+     * @param Context $context
      */
     public function __construct(
         Context $context
