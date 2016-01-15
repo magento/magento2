@@ -118,8 +118,7 @@ define([
             filterInputValue: '',
             filterOptionsFocus: false,
             multiselectFocus: false,
-            simpleMode: false,
-            optgroupMode: false,
+            mode: 'simple',
             lastSelectable: false,
             showCheckbox: true,
             levelsVisibility: true,
@@ -140,30 +139,36 @@ define([
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList'
+            },
+            simple: {
+                showCheckbox: false,
+                chipsEnabled: false,
+                closeBtn: false
+            },
+            optgroup: {
+                showCheckbox: false,
+                lastSelectable: true,
+                optgroupLabels: true,
+                openLevelsAction: false,
+                labelsDecoration: true
             }
         },
 
         /**
-         * Initialize conponent
-         */
-        initialize: function () {
-            this._super()
-                .preprocessingConfig();
-
-            return this;
-        },
-
-        /**
          * Parses options and merges the result with instance
+         * Set defaults according to mode and levels configuration
          *
          * @param  {Object} config
          * @returns {Object} Chainable.
          */
         initConfig: function (config) {
-            var result = parseOptions(config.options);
+            var result = parseOptions(config.options),
+                defaults = this.constructor.defaults,
+                mode = config.mode || defaults.mode;
 
-            _.extend(config, result);
-
+            defaults.levelsVisibility = defaults.levelsVisibility || config.lastSelectable;
+            defaults.showOpenLevelsActionIcon = defaults.showOpenLevelsActionIcon && config.openLevelsAction;
+            _.extend(defaults, result, defaults[mode]);
             this._super();
 
             return this;
@@ -208,35 +213,6 @@ define([
                 'filterInputValue',
                 'filterOptionsFocus'
             ]);
-
-            return this;
-        },
-
-        /**
-         * Change configuration for different mods
-         */
-        preprocessingConfig: function () {
-            if (this.simpleMode) {
-                this.showCheckbox = false;
-                this.chipsEnabled = false;
-                this.closeBtn = false;
-            }
-
-            if (this.optgroupMode) {
-                this.showCheckbox = false;
-                this.lastSelectable = true;
-                this.optgroupLabels = true;
-                this.openLevelsAction = false;
-                this.labelsDecoration = true;
-            }
-
-            if (this.lastSelectable) {
-                this.levelsVisibility = true;
-            }
-
-            if (!this.openLevelsAction) {
-                this.showOpenLevelsActionIcon = false;
-            }
 
             return this;
         },
