@@ -11,8 +11,14 @@
     * Fixed a potential vulnerability on checkout page
     * Fixed an issue with upload empty file to custom option
     * Fixed an issue with performance on customer edit form
+    * Fixed an issue plugin incorrect calls when proxy exists
+    * Fixed an issue when travis CI builds fail due to authentication
+    * Fixed an issue when custom options calculated incorrect for configurable products
+    * Fixed an issue with changing category form on store view level
+    * Updated composer version in braintree package
 * GitHub requests:
     * [#2519](https://github.com/magento/magento2/issues/2519) -- Fixed an issue where synonyms don't work with Magento 2.0
+    * [#2675](https://github.com/magento/magento2/issues/2675) -- Fixed an issue with admin order creation when config "Include Tax In Order Total" set to yes
     
 2.0.0
 =============
