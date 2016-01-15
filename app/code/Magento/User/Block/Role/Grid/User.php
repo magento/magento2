@@ -198,7 +198,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             'RID'
         );
 
-        $users = $this->restoreUsersFromData();
+        $users = $this->getUsersFormData();
         if (false === $users) {
             $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
         }
@@ -224,10 +224,10 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @return array|bool
      */
-    protected function restoreUsersFromData()
+    protected function getUsersFormData()
     {
         if (false !== $this->restoredUsersFormData && null === $this->restoredUsersFormData) {
-            $this->restoredUsersFormData = $this->retrieveSessionData();
+            $this->restoredUsersFormData = $this->restoreUsersFormData();
         }
 
         return $this->restoredUsersFormData;
@@ -236,9 +236,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @return array|bool
      */
-    protected function retrieveSessionData()
+    protected function restoreUsersFormData()
     {
-        $sessionData = $this->_session->getData('in_role_user_form_data', true);
+        $sessionData = $this->_coreRegistry->registry(
+            \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY
+        );
         if (null !== $sessionData) {
             $pairs = explode('&', $sessionData);
             $users = [];
