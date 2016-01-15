@@ -1,3 +1,19 @@
+2.0.1
+=============
+* Fixed bugs:
+    * Fixed an issue where can't deploy sample data after "composer create-project"
+    * Fixed a security issue on user account page
+    * Fixed a security issue on product page
+    * Fixed an issue where possible edit someone else reviews
+    * Fixed an issue where possible view order details for certain orders
+    * Fixed an issue where catalog price rule isn't applied to product created using Web API
+    * Fixed a potential vulnerability where possible insert SQL injection
+    * Fixed a potential vulnerability on checkout page
+    * Fixed an issue with upload empty file to custom option
+    * Fixed an issue with performance on customer edit form
+* GitHub requests:
+    * [#2519](https://github.com/magento/magento2/issues/2519) -- Fixed an issue where synonyms don't work with Magento 2.0
+    
 2.0.0
 =============
 * Fixed bugs:

@@ -80,7 +80,7 @@ class SampleDataDeployCommand extends Command
         $sampleDataPackages = $this->sampleDataDependency->getSampleDataPackages();
         if (!empty($sampleDataPackages)) {
             $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
-            $commonArgs = ['--working-dir' => $baseDir, '--no-interaction' => 1, '--no-progress' => 1];
+            $commonArgs = ['--working-dir' => $baseDir, '--no-progress' => 1];
             $packages = [];
             foreach ($sampleDataPackages as $name => $version) {
                 $packages[] = "$name:$version";

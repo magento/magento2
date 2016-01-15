@@ -53,21 +53,22 @@ class Form extends AbstractComponent
     public function getDataSourceData()
     {
         $dataSource = [];
-        $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName());
 
+        $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName());
         if ($id) {
             $filter = $this->filterBuilder->setField($this->getContext()->getDataProvider()->getPrimaryFieldName())
                 ->setValue($id)
                 ->create();
             $this->getContext()->getDataProvider()
                 ->addFilter($filter);
-        }
-        $data = $this->getContext()->getDataProvider()->getData();
 
-        if (isset($data[$id])) {
-            $dataSource = [
-                'data' => $data[$id]
-            ];
+            $data = $this->getContext()->getDataProvider()->getData();
+
+            if (isset($data[$id])) {
+                $dataSource = [
+                    'data' => $data[$id]
+                ];
+            }
         }
 
         return $dataSource;
