@@ -201,4 +201,13 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="braintree_report_data_source" xsi:type="string">Magento\BraintreeTwo\Model\Report\TransactionsCollection</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
