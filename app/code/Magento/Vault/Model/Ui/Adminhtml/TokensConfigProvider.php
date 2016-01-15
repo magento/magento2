@@ -12,6 +12,7 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
@@ -99,23 +100,21 @@ final class TokensConfigProvider
     }
 
     /**
-     * Retrieve assoc array of configuration
-     *
-     * @return array
+     * @return TokenUiComponentInterface[]
      */
-    public function getConfig()
+    public function getTokensComponents()
     {
-        $vaultPayments = [];
+        $result = [];
 
         $customerId = $this->session->getCustomerId();
         if (!$customerId) {
-            return $vaultPayments;
+            return $result;
         }
 
         $vaultProviderCode = $this->getProviderMethodCode();
         $componentProvider = $this->getComponentProvider($vaultProviderCode);
         if (null === $componentProvider) {
-            return $vaultPayments;
+            return $result;
         }
 
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
@@ -123,6 +122,9 @@ final class TokensConfigProvider
             ->create();
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
             ->setValue($vaultProviderCode)
+            ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
+            ->setValue(1)
             ->create();
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
             ->setConditionType('gt')
@@ -137,14 +139,10 @@ final class TokensConfigProvider
             ->create();
 
         foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $index => $token) {
-            $component = $componentProvider->getComponentForToken($token);
-            $vaultPayments[VaultPaymentInterface::CODE . '_item_' . $index] = [
-                'config' => $component->getConfig(),
-                'component' => $component->getName()
-            ];
+            $result[] = $componentProvider->getComponentForToken($token);
         }
 
-        return $vaultPayments;
+        return $result;
     }
 
     /**

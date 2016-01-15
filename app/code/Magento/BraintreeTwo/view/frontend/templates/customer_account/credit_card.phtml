@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\BraintreeTwo\Block\Customer\CardRenderer;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
+
+/** @var CardRenderer $block */
+$details = $block->getTokenDetails();
+$icon = $block->getIconForType($details['type']);
+?>
+<div class="payment-method">
+    <form class="form" action="<?php /* @noEscape */ echo $block->getUrl('vault/cards/deleteaction') ?>" method="post">
+        <?php echo $block->getBlockHtml('formkey')?>
+        <input
+            name="<?php echo /* @noEscape */ PaymentTokenInterface::PUBLIC_HASH?>"
+            value="<?php echo /* @noEscape */ $block->getToken()->getPublicHash()?>"
+            type="hidden"/>
+        <div class="payment-method-title field">
+            <label class="label">
+                <img src="<?php echo $block->escapeUrl($icon['url']); ?>"
+                     width="<?php echo $block->escapeHtml($icon['width']); ?>"
+                     height="<?php echo $block->escapeHtml($icon['height']); ?>"
+                >
+                <span><?php echo $block->escapeHtml(__('ending'));?></span>
+                <span><?php echo $block->escapeHtml($details['maskedCC']); ?></span>
+                <span><?php echo $block->escapeHtml(__('expires'));?></span>:
+                <span><?php echo $block->escapeHtml($details['expirationDate']); ?></span>
+            </label>
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button
+                    type="submit"
+                    class="action delete primary"
+                    title="<?php /* @noEscape */ echo __('Delete') ?>">
+                    <span><?php /* @noEscape */ echo __('Delete') ?></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
