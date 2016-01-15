@@ -12,9 +12,6 @@ define(
     function($, address, customerData, mageUtils) {
         'use strict';
         var countryData = customerData.get('directory-data');
-        if (_.isEmpty(countryData())) {
-            countryData(customerData.reload(['directory-data'], false));
-        }
 
         return {
             /**

@@ -49,10 +49,6 @@ define(
                 return address.getType() == 'customer-address';
             });
 
-        if (_.isEmpty(countryData())) {
-            countryData(customerData.reload(['directory-data'], false));
-        }
-
         addressOptions.push(newAddressOption);
 
         return Component.extend({
