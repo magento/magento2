@@ -1317,16 +1317,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!$productMediaGalleryTableName) {
             $productMediaGalleryTableName = $resource->getTable('catalog_product_entity_media_gallery');
         }
-        $linkField = $this->metadataPool
-            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->getLinkField();
         $select = $this->_connection->select()->from(
             ['mg' => $resource->getTable('catalog_product_entity_media_gallery')],
             ['value' => 'mg.value']
         )->joinLeft(
             ['mgvte' => $resource->getTable('catalog_product_entity_media_gallery_value_to_entity')],
             '(mg.value_id = mgvte.value_id)',
-            [$linkField => 'mgvte.' . $linkField]
+            ['entity_id' => 'mgvte.entity_id']
         )->where(
             'mg.value IN(?)',
             $images
@@ -2391,7 +2388,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
-            foreach ($urlKeyDuplicates as $urlKey => $entityData) {
+            foreach ($urlKeyDuplicates as $entityData) {
                 $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];
                 $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum);
             }
