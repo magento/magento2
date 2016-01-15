@@ -29,6 +29,8 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
     protected $tansactionMock;
     /** @var |\PHPUnit_Framework_MockObject_MockObject */
     protected $objRelationMock;
+    /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
+    protected $randomMock;
     /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change */
     protected $model;
 
@@ -72,6 +74,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
+        $this->randomMock = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -85,12 +88,13 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
                 'adapterInterface' => $this->adapterMock,
                 'resource' => $this->resourceMock,
                 'transactionManager' => $this->tansactionMock,
-                'relationProcessor' => $this->objRelationMock
+                'relationProcessor' => $this->objRelationMock,
+                'random' => $this->randomMock
             ]
         );
     }
 
-    public function testChangeEncryptionKey()
+    private function setUpChangeEncryptionKey()
     {
         $paths = ['path1', 'path2'];
         $table = ['item1', 'item2'];
@@ -98,7 +102,6 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
             'key1' => 'value1',
             'key2' => 'value2'
         ];
-        $key = 'key';
 
         $this->writerMock->expects($this->once())->method('checkIfWritable')->willReturn(true);
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->adapterMock);
@@ -112,8 +115,21 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
         $this->selectMock->expects($this->any())->method('update')->willReturnSelf();
         $this->writerMock->expects($this->once())->method('saveConfig');
         $this->adapterMock->expects($this->once())->method('getTransactionLevel')->willReturn(1);
+    }
 
+    public function testChangeEncryptionKey()
+    {
+        $this->setUpChangeEncryptionKey();
+        $this->randomMock->expects($this->never())->method('getRandomString');
+        $key = 'key';
         $this->assertEquals($key, $this->model->changeEncryptionKey($key));
+    }
+
+    public function testChangeEncryptionKeyAutogenerate()
+    {
+        $this->setUpChangeEncryptionKey();
+        $this->randomMock->expects($this->once())->method('getRandomString')->willReturn('abc');
+        $this->assertEquals(md5('abc'), $this->model->changeEncryptionKey());
     }
 
     public function testChangeEncryptionKeyThrowsException()
@@ -127,6 +143,6 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
             return;
         }
 
-        $this->fail('An excpected exception was not signaled.');
+        $this->fail('An expected exception was not signaled.');
     }
 }
