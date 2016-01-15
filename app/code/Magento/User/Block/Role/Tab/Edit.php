@@ -6,6 +6,8 @@
 
 namespace Magento\User\Block\Role\Tab;
 
+use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
+
 /**
  * Rolesedit Tab Display Block.
  *
@@ -49,12 +51,20 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     protected $_integrationData;
 
     /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $coreRegistry = null;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever
      * @param \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -64,6 +74,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
         \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
+        \Magento\Framework\Registry $registry,
         array $data = []
     ) {
         $this->_aclRetriever = $aclRetriever;
@@ -71,6 +82,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
         $this->_rulesCollectionFactory = $rulesCollectionFactory;
         $this->_aclResourceProvider = $aclResourceProvider;
         $this->_integrationData = $integrationData;
+        $this->coreRegistry = $registry;
         parent::__construct($context, $data);
     }
 
@@ -123,11 +135,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     {
         parent::_construct();
 
-        $allResource = $this->_session->getData('resource_all_form_data', true);
+        $allResource = $this->coreRegistry->registry(SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY);
         if ($allResource) {
             $resources = [$this->_rootResource->getId()];
         } else {
-            $resources = $this->_session->getData('resource_form_data', true);
+            $resources = $this->coreRegistry->registry(SaveRole::RESOURCE_FORM_DATA_SESSION_KEY);
         }
 
         if (null === $resources) {
