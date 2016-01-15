@@ -58,6 +58,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
     }
 
     /**
+     * Update status by user ID
+     *
      * @param int $status
      * @param int $userId
      * @param array $withStatuses
