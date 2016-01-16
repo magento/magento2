@@ -37,6 +37,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
+    const XML_PATH_CHANGE_USERNAME_TEMPLATE = 'admin/emails/change_username_template';
+
+    const XML_PATH_CHANGE_EMAIL_TEMPLATE = 'admin/emails/change_email_template';
+
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
 
     /**
@@ -283,6 +287,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function afterSave()
     {
+        $this->checkChangesAndSendNotificationEmails();
+
         $this->_role = null;
         return parent::afterSave();
     }
@@ -372,19 +378,84 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
+     * Check changes and send notification emails
+     *
+     * @return $this
+     */
+    public function checkChangesAndSendNotificationEmails()
+    {
+        if ($this->getPassword() && $this->getOrigData('password')) {
+            $this->sendPasswordResetNotificationEmail();
+        }
+
+        if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
+            $this->sendEmailChangeNotificationEmails();
+        }
+
+        if ($this->getUsername() != $this->getOrigData('username') && $this->getOrigData('username')) {
+            $this->sendUsernameChangeNotificationEmail();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Send email to when username is changed
+     *
+     * @return $this
+     */
+    public function sendUsernameChangeNotificationEmail()
+    {
+        $this->sendNotificationEmail($this->_config->getValue(self::XML_PATH_CHANGE_USERNAME_TEMPLATE));
+        return $this;
+    }
+
+    /**
+     * Send email to when email is changed
+     *
+     * @return $this
+     */
+    public function sendEmailChangeNotificationEmails()
+    {
+        $this->sendNotificationEmail($this->_config->getValue(self::XML_PATH_CHANGE_EMAIL_TEMPLATE), $this->getEmail());
+        $this->sendNotificationEmail(
+            $this->_config->getValue(self::XML_PATH_CHANGE_EMAIL_TEMPLATE),
+            $this->getOrigData('email')
+        );
+
+        return $this;
+    }
+
+    /**
      * Send email to when password is resetting
      *
      * @return $this
      */
     public function sendPasswordResetNotificationEmail()
     {
-        $templateId = $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE);
+        $this->sendNotificationEmail($this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE));
+        return $this;
+    }
+
+    /**
+     * Send notification email
+     *
+     * @param string $templateId
+     * @param string $email
+     * @return $this
+     */
+    protected function sendNotificationEmail($templateId, $email = null)
+    {
+        if (is_null($email)) {
+            $email = $this->getEmail();
+        }
+
         $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateModel('Magento\Email\Model\BackendTemplate')
             ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
             ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
             ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName())
+            ->addTo($email, $this->getName())
             ->getTransport();
 
         $transport->sendMessage();
