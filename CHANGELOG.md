@@ -11,6 +11,8 @@
     * Fixed a potential vulnerability on checkout page
     * Fixed an issue with upload empty file to custom option
     * Fixed an issue with performance on customer edit form
+    * Fixed an issue where minicart does not clears after completing an order via PayPal
+    * Fixed an potential XSS vulnerability
     * USPS January 17, 2016 API Changes
     * Fixed an issue plugin incorrect calls when proxy exists
     * Fixed an issue when travis CI builds fail due to authentication
