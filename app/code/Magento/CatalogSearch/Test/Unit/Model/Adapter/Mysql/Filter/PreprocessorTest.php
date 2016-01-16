@@ -190,11 +190,9 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessCategoryIds($categoryId, $expectedResult)
     {
-        $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT category_ids FROM catalog_product_entity';
 
-        $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
         $this->filter->expects($this->exactly(3))
             ->method('getField')
             ->will($this->returnValue('category_ids'));
@@ -215,7 +213,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessStaticAttribute()
     {
         $expectedResult = 'attr_table_alias.static_attribute LIKE %name%';
-        $scopeId = 0;
         $isNegation = false;
         $query = 'static_attribute LIKE %name%';
 
@@ -223,7 +220,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn('static_attribute');
         $this->tableMapper->expects($this->once())->method('getMappingAlias')
             ->willReturn('attr_table_alias');
-        $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
         $this->filter->expects($this->exactly(3))
             ->method('getField')
             ->will($this->returnValue('static_attribute'));
@@ -234,11 +230,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects($this->once())
             ->method('isStatic')
             ->will($this->returnValue(true));
-        $this->attribute->expects($this->once())
-            ->method('getBackendTable')
-            ->will($this->returnValue('backend_table'));
 
-        $this->connection->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);
         $actualResult = $this->target->process($this->filter, $isNegation, $query);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
