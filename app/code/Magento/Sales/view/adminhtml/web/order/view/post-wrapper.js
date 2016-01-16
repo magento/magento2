@@ -3,7 +3,6 @@
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
-/*global confirm:true*/
 define([
     'jquery',
     'mage/translate'
@@ -30,7 +29,7 @@ define([
         var msg = $.mage.__('Are you sure you want to cancel this order?'),
             url = $('#order-view-cancel-button').data('url');
 
-        if (confirm(msg)) {
+        if (window.confirm(msg)) {
             getForm(url).submit();
         } else {
             return false;
