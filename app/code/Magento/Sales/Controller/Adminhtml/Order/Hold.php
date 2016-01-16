@@ -15,7 +15,7 @@ class Hold extends \Magento\Sales\Controller\Adminhtml\Order
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        if(!$this->isValidPostRequest()) {
+        if (!$this->isValidPostRequest()) {
             $this->messageManager->addError(__('You have not put the order on hold.'));
             return $resultRedirect->setPath('sales/*/');
         }

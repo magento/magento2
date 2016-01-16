@@ -16,7 +16,7 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        if(!$this->isValidPostRequest()) {
+        if (!$this->isValidPostRequest()) {
             $this->messageManager->addError(__('You have not canceled the item.'));
             return $resultRedirect->setPath('sales/*/');
         }

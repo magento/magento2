@@ -19,7 +19,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
         $resultRedirect = $this->resultRedirectFactory->create();
         $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
         $isPost = $this->getRequest()->isPost();
-        if(!$formKeyIsValid || !$isPost) {
+        if (!$formKeyIsValid || !$isPost) {
             $this->messageManager->addError(__('Customer could not be deleted.'));
             return $resultRedirect->setPath('customer/index');
         }
