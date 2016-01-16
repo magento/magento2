@@ -4,14 +4,14 @@
  */
 
 define([
-    "jquery",
-    "mage/translate"
+    'jquery',
+    'mage/translate'
 ], function ($) {
     'use strict';
 
     $('#order-view-cancel-button').click(function () {
-        var msg = $.mage.__('Are you sure you want to cancel this order?');
-        var url = $('#order-view-cancel-button').data('url');
+        var msg = $.mage.__('Are you sure you want to cancel this order?'),
+            url = $('#order-view-cancel-button').data('url');
 
         if (confirm(msg)) {
             getForm(url).submit();
@@ -30,6 +30,10 @@ define([
         getForm(url).submit();
     });
 
+    /**
+     * Create and get form with form key
+     * @param {String} url
+     */
     function getForm(url) {
         return $('<form>', {
             'action': url,
