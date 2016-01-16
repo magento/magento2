@@ -384,7 +384,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function checkChangesAndSendNotificationEmails()
     {
-        if ($this->getPassword() && $this->getOrigData('password')) {
+        if ($this->getPassword()
+            && $this->getOrigData('password')
+            && $this->getPassword() != $this->getOrigData('password')) {
             $this->sendPasswordResetNotificationEmail();
         }
 
