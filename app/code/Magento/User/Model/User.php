@@ -407,7 +407,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 $this->sendUserNotificationEmail($changes, $this->getOrigData('email'));
             }
             $this->sendUserNotificationEmail($changes);
-
         }
 
         return $this;
