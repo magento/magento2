@@ -74,6 +74,16 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirect;
+
+    /**
+     * @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $formKeyValidator;
+
+    /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save
      */
     protected $saveAction;
@@ -136,7 +146,38 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
-        $this->helper = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
+        $this->helper = $this->getMock('Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
+
+        $this->resultRedirect = $this->getMock(
+            'Magento\Framework\Controller\Result\Redirect',
+            ['setPath'],
+            [],
+            '',
+            false
+        );
+        $this->resultRedirect->expects($this->any())
+            ->method('setPath')
+            ->willReturn($this->resultRedirect);
+
+        $resultRedirectFactory = $this->getMock(
+            'Magento\Framework\Controller\Result\RedirectFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $resultRedirectFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirect);
+
+        $this->formKeyValidator = $this->getMock(
+            'Magento\Framework\Data\Form\FormKey\Validator',
+            ['validate'],
+            [],
+            '',
+            false
+        );
+
         $this->context->expects($this->once())
             ->method('getMessageManager')
             ->will($this->returnValue($this->messageManager));
@@ -158,6 +199,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('getHelper')
             ->will($this->returnValue($this->helper));
+        $this->context->expects($this->once())
+            ->method('getResultRedirectFactory')
+            ->will($this->returnValue($resultRedirectFactory));
+        $this->context->expects($this->once())
+            ->method('getFormKeyValidator')
+            ->will($this->returnValue($this->formKeyValidator));
+
         $this->saveAction = $objectManagerHelper->getObject(
             'Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save',
             [
