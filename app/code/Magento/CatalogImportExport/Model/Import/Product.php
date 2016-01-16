@@ -138,6 +138,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const INVENTORY_USE_CONFIG_PREFIX = 'use_config_';
 
     /**
+     * Url key attribute code
+     */
+    const URL_KEY = 'url_key';
+
+    /**
      * Attribute cache
      *
      * @var array
@@ -233,6 +238,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
+        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Specified url key is already exist',
     ];
 
     /**
@@ -502,11 +508,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $categoryProcessor;
 
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    protected $scopeConfig;
+
+    /** @var \Magento\Catalog\Model\Product\Url */
+    protected $productUrl;
+
     /** @var array */
     protected $websitesCache = [];
 
     /** @var array */
     protected $categoriesCache = [];
+
+    /** @var array */
+    protected $productUrlSuffix = [];
+
+    /** @var array */
+    protected $productUrlKeys = [];
 
     /**
      * Instance of product tax class processor.
@@ -561,6 +579,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $cachedImages = null;
 
+    /** @var array */
+    protected $urlKeys = [];
+
+    /** @var array */
+    protected $rowNumbers = [];
+
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -596,6 +620,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param ObjectRelationProcessor $objectRelationProcessor
      * @param TransactionManagerInterface $transactionManager
      * @param Product\TaxClassProcessor $taxClassProcessor
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -636,6 +661,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ObjectRelationProcessor $objectRelationProcessor,
         TransactionManagerInterface $transactionManager,
         Product\TaxClassProcessor $taxClassProcessor,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Catalog\Model\Product\Url $productUrl,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -663,6 +690,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->objectRelationProcessor = $objectRelationProcessor;
         $this->transactionManager = $transactionManager;
         $this->taxClassProcessor = $taxClassProcessor;
+        $this->scopeConfig = $scopeConfig;
+        $this->productUrl = $productUrl;
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -1999,11 +2028,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function retrieveAttributeByCode($attrCode)
     {
-        if (!$this->_resource) {
-            $this->_resource = $this->_resourceFactory->create();
-        }
         if (!isset($this->_attributeCache[$attrCode])) {
-            $this->_attributeCache[$attrCode] = $this->_resource->getAttribute($attrCode);
+            $this->_attributeCache[$attrCode] = $this->getResource()->getAttribute($attrCode);
         }
         return $this->_attributeCache[$attrCode];
     }
@@ -2214,7 +2240,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         // validate custom options
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
-
+        if (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME])) {
+            $urlKey = $this->getUrlKey($rowData);
+            $storeCodes = empty($rowData[self::COL_STORE_VIEW_CODE])
+                ? array_flip($this->storeResolver->getStoreCodeToId())
+                : explode($this->getMultipleValueSeparator(), $rowData[self::COL_STORE_VIEW_CODE]);
+            foreach ($storeCodes as $storeCode) {
+                $storeId = $this->storeResolver->getStoreCodeToId($storeCode);
+                $productUrlSuffix = $this->getProductUrlSuffix($storeId);
+                $urlPath = $urlKey . $productUrlSuffix;
+                if (empty($this->urlKeys[$storeId][$urlPath])
+                    || ($this->urlKeys[$storeId][$urlPath] == $rowData[self::COL_SKU])
+                ) {
+                    $this->urlKeys[$storeId][$urlPath] = $rowData[self::COL_SKU];
+                    $this->rowNumbers[$storeId][$urlPath] = $rowNum;
+                } else {
+                    $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum);
+                }
+            }
+        }
         return !$this->getErrorAggregator()->isRowInvalid($rowNum);
     }
 
@@ -2319,7 +2363,79 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->validateRow($rowData, $source->key());
             $source->next();
         }
+        $this->checkUrlKeyDuplicates();
         $this->getOptionEntity()->validateAmbiguousData();
         return parent::_saveValidatedBunches();
+    }
+
+    /**
+     * Check that url_keys are not assigned to other products in DB
+     *
+     * @return void
+     */
+    protected function checkUrlKeyDuplicates()
+    {
+        $resource = $this->getResource();
+        foreach ($this->urlKeys as $storeId => $urlKeys) {
+            $urlKeyDuplicates = $this->_connection->fetchAssoc(
+                $this->_connection->select()->from(
+                    ['url_rewrite' => $resource->getTable('url_rewrite')],
+                    ['request_path', 'store_id']
+                )->joinLeft(
+                    ['cpe' => $resource->getTable('catalog_product_entity')],
+                    "cpe.entity_id = url_rewrite.entity_id"
+                )->where('request_path IN (?)', array_keys($urlKeys))
+                    ->where('store_id IN (?)', $storeId)
+                    ->where('cpe.sku not in (?)', array_values($urlKeys))
+            );
+            foreach ($urlKeyDuplicates as $entityData) {
+                $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];
+                $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum);
+            }
+        }
+    }
+
+    /**
+     * Retrieve product rewrite suffix for store
+     *
+     * @param int $storeId
+     * @return string
+     */
+    protected function getProductUrlSuffix($storeId = null)
+    {
+        if (!isset($this->productUrlSuffix[$storeId])) {
+            $this->productUrlSuffix[$storeId] = $this->scopeConfig->getValue(
+                \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
+        }
+        return $this->productUrlSuffix[$storeId];
+    }
+
+    /**
+     * @param array $rowData
+     * @return string
+     */
+    protected function getUrlKey($rowData)
+    {
+        if (!empty($rowData[self::URL_KEY])) {
+            $this->productUrlKeys[$rowData[self::COL_SKU]] = $rowData[self::URL_KEY];
+        }
+        $urlKey = !empty($this->productUrlKeys[$rowData[self::COL_SKU]])
+            ? $this->productUrlKeys[$rowData[self::COL_SKU]]
+            : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
+        return $urlKey;
+    }
+
+    /**
+     * @return Proxy\Product\ResourceModel
+     */
+    protected function getResource()
+    {
+        if (!$this->_resource) {
+            $this->_resource = $this->_resourceFactory->create();
+        }
+        return $this->_resource;
     }
 }
