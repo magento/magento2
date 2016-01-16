@@ -98,7 +98,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'Magento\Backend\App\Action\Context',
             [
                 'getRequest', 'getResponse', 'getMessageManager', 'getRedirect',
-                'getObjectManager', 'getSession', 'getActionFlag', 'getHelper'
+                'getObjectManager', 'getSession', 'getActionFlag', 'getHelper',
+                'getResultRedirectFactory', 'getFormKeyValidator'
             ],
             [],
             '',
