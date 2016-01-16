@@ -11,18 +11,25 @@ namespace Magento\Framework\Event;
 class Manager implements ManagerInterface
 {
     /**
+     * Events cache
+     *
+     * @var array
+     */
+    protected $_events = [];
+
+    /**
      * Event invoker
      *
      * @var InvokerInterface
      */
-    protected $invoker;
+    protected $_invoker;
 
     /**
      * Event config
      *
      * @var ConfigInterface
      */
-    protected $eventConfig;
+    protected $_eventConfig;
 
     /**
      * @param InvokerInterface $invoker
@@ -30,8 +37,8 @@ class Manager implements ManagerInterface
      */
     public function __construct(InvokerInterface $invoker, ConfigInterface $eventConfig)
     {
-        $this->invoker = $invoker;
-        $this->eventConfig = $eventConfig;
+        $this->_invoker = $invoker;
+        $this->_eventConfig = $eventConfig;
     }
 
     /**
@@ -48,7 +55,7 @@ class Manager implements ManagerInterface
     {
         $eventName = mb_strtolower($eventName);
         \Magento\Framework\Profiler::start('EVENT:' . $eventName, ['group' => 'EVENT', 'name' => $eventName]);
-        foreach ($this->eventConfig->getObservers($eventName) as $observerConfig) {
+        foreach ($this->_eventConfig->getObservers($eventName) as $observerConfig) {
             $event = new \Magento\Framework\Event($data);
             $event->setName($eventName);
 
@@ -56,7 +63,7 @@ class Manager implements ManagerInterface
             $wrapper->setData(array_merge(['event' => $event], $data));
 
             \Magento\Framework\Profiler::start('OBSERVER:' . $observerConfig['name']);
-            $this->invoker->dispatch($observerConfig, $wrapper);
+            $this->_invoker->dispatch($observerConfig, $wrapper);
             \Magento\Framework\Profiler::stop('OBSERVER:' . $observerConfig['name']);
         }
         \Magento\Framework\Profiler::stop('EVENT:' . $eventName);
