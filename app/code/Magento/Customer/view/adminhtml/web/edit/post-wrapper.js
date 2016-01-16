@@ -2,7 +2,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true devel:true*/
+/*global confirm*/
+/*global define*/
 define([
     'jquery',
     'mage/translate'
@@ -29,7 +30,7 @@ define([
         var msg = $.mage.__('Are you sure you want to do this?'),
             url = $('#customer-edit-delete-button').data('url');
 
-        if (window.confirm(msg)) {
+        if (confirm(msg)) {
             getForm(url).submit();
         } else {
             return false;
