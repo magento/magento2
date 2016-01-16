@@ -12,9 +12,7 @@
                 <forgot_email_template>admin_emails_forgot_email_template</forgot_email_template>
                 <forgot_email_identity>general</forgot_email_identity>
                 <password_reset_link_expiration_period>1</password_reset_link_expiration_period>
-                <change_username_template>admin_emails_change_username_template</change_username_template>
-                <change_email_template>admin_emails_change_email_template</change_email_template>
-                <reset_password_template>admin_emails_reset_password_template</reset_password_template>
+                <user_notification_template>admin_emails_user_notification_template</user_notification_template>
             </emails>
             <security>
                 <lockout_failures>6</lockout_failures>
