@@ -5,6 +5,8 @@
  */
 namespace Magento\Captcha\Model;
 
+use Magento\Framework\Message\MessageInterface;
+
 /**
  * Test captcha observer behavior
  *
@@ -32,7 +34,13 @@ class ObserverTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
         $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/admin');
-        $this->assertContains((string)__('Incorrect CAPTCHA'), $this->getResponse()->getBody());
+        $this->assertSessionMessages($this->equalTo([(string)__('Incorrect CAPTCHA.')]), MessageInterface::TYPE_ERROR);
+        $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\UrlInterface'
+        );
+        $backendUrlModel->turnOffSecretKey();
+        $url = $backendUrlModel->getUrl('admin');
+        $this->assertRedirect($this->stringStartsWith($url));
     }
 
     /**
