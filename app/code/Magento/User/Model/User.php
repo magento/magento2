@@ -37,11 +37,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
-    const XML_PATH_CHANGE_USERNAME_TEMPLATE = 'admin/emails/change_username_template';
-
-    const XML_PATH_CHANGE_EMAIL_TEMPLATE = 'admin/emails/change_email_template';
-
-    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
+    const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
 
     /**
      * Model event prefix
@@ -384,78 +380,59 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function checkChangesAndSendNotificationEmails()
     {
+        $changes = [];
+
+        if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
+            $this->sendUserNotificationEmail(__('email'), $this->getOrigData('email'));
+            $changes[] = __('email');
+        }
+
         if ($this->getPassword()
             && $this->getOrigData('password')
             && $this->getPassword() != $this->getOrigData('password')) {
-            $this->sendPasswordResetNotificationEmail();
-        }
-
-        if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
-            $this->sendEmailChangeNotificationEmails();
+            $changes[] = __('password');
         }
 
         if ($this->getUsername() != $this->getOrigData('username') && $this->getOrigData('username')) {
-            $this->sendUsernameChangeNotificationEmail();
+            $changes[] = __('username');
+        }
+
+        if ($changes) {
+            if (count($changes) > 1) {
+                $last = array_pop($changes);
+                $changes[count($changes) - 1] .= __(' and ') . $last;
+            }
+            $changes = implode(', ', $changes);
+            $this->sendUserNotificationEmail($changes);
         }
 
         return $this;
     }
 
     /**
-     * Send email to when username is changed
+     * Send user notification email
      *
-     * @return $this
-     */
-    public function sendUsernameChangeNotificationEmail()
-    {
-        $this->sendNotificationEmail($this->_config->getValue(self::XML_PATH_CHANGE_USERNAME_TEMPLATE));
-        return $this;
-    }
-
-    /**
-     * Send email to when email is changed
-     *
-     * @return $this
-     */
-    public function sendEmailChangeNotificationEmails()
-    {
-        $this->sendNotificationEmail($this->_config->getValue(self::XML_PATH_CHANGE_EMAIL_TEMPLATE), $this->getEmail());
-        $this->sendNotificationEmail(
-            $this->_config->getValue(self::XML_PATH_CHANGE_EMAIL_TEMPLATE),
-            $this->getOrigData('email')
-        );
-
-        return $this;
-    }
-
-    /**
-     * Send email to when password is resetting
-     *
-     * @return $this
-     */
-    public function sendPasswordResetNotificationEmail()
-    {
-        $this->sendNotificationEmail($this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE));
-        return $this;
-    }
-
-    /**
-     * Send notification email
-     *
-     * @param string $templateId
+     * @param string $changes
      * @param string $email
      * @return $this
      */
-    protected function sendNotificationEmail($templateId, $email = null)
+    protected function sendUserNotificationEmail($changes, $email = null)
     {
         if (is_null($email)) {
             $email = $this->getEmail();
         }
 
-        $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
+        $transport = $this->_transportBuilder
+            ->setTemplateIdentifier($this->_config->getValue(self::XML_PATH_USER_NOTIFICATION_TEMPLATE))
             ->setTemplateModel('Magento\Email\Model\BackendTemplate')
             ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
-            ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
+            ->setTemplateVars(
+                [
+                    'user' => $this,
+                    'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID),
+                    'changes' => $changes
+                ]
+            )
             ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
             ->addTo($email, $this->getName())
             ->getTransport();
