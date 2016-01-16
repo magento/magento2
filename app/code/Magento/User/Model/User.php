@@ -283,8 +283,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function afterSave()
     {
-        $this->checkChangesAndSendNotificationEmails();
-
         $this->_role = null;
         return parent::afterSave();
     }
@@ -378,13 +376,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @return $this
      */
-    public function checkChangesAndSendNotificationEmails()
+    public function sendNotificationEmailsIfRequired()
     {
         $changes = [];
+        $sendToOldEmail = false;
 
         if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
-            $this->sendUserNotificationEmail(__('email'), $this->getOrigData('email'));
             $changes[] = __('email');
+            $sendToOldEmail = true;
         }
 
         if ($this->getPassword()
@@ -403,7 +402,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 $changes[count($changes) - 1] .= __(' and ') . $last;
             }
             $changes = implode(', ', $changes);
+
+            if ($sendToOldEmail) {
+                $this->sendUserNotificationEmail($changes, $this->getOrigData('email'));
+            }
             $this->sendUserNotificationEmail($changes);
+
         }
 
         return $this;

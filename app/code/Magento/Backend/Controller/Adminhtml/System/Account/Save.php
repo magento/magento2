@@ -53,6 +53,9 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
                 $user->setPasswordConfirmation($passwordConfirmation);
             }
             $user->save();
+
+            $user->sendNotificationEmailsIfRequired();
+
             $this->messageManager->addSuccess(__('You saved the account.'));
         } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
