@@ -88,7 +88,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             }
 
             // Check if a customer can change email
-            if ($this->getRequest()->getParam('change_email') && $customer->getEmail() != $currentCustomerEmail) {
+            if ($this->getRequest()->getParam('change_email')) {
                 if (!$this->isAllowedChangeCustomerEmail($customerId)) {
                     return $resultRedirect->setPath('*/*/edit');
                 }
