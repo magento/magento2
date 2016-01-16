@@ -39,7 +39,8 @@ class UrlRewrite extends AbstractSimpleObject
 
     /**
      * URL suffix for rewrite (used in import)
-     * @var string|null
+     * 
+     * @var string
      */
     protected $urlSuffix;
 
