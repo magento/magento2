@@ -52,6 +52,11 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
         $this->_view->renderLayout();
     }
 
+    /**
+     * Restore Users Form Data from Session and save one in Registry
+     *
+     * @return void
+     */
     protected function restoreUsersDataFromSession()
     {
         $this->_coreRegistry->register(
@@ -60,6 +65,11 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
         );
     }
 
+    /**
+     * Restore Resources Form Data from Session and save one in Registry
+     *
+     * @return void
+     */
     protected function restoreResourcesDataFromSession()
     {
         $this->_coreRegistry->register(
@@ -73,6 +83,8 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
     }
 
     /**
+     * Restore general information Form Data from Session and save one in Registry
+     *
      * @param \Magento\Authorization\Model\Role $role
      * @return $this
      */
