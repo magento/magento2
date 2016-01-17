@@ -76,7 +76,7 @@ class BackendDecorator implements CurlInterface
             'login[password]' => $this->configuration->get('application/0/backendPassword/0/value'),
             'form_key' => $this->formKey,
         ];
-        $this->transport->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $this->transport->write(CurlInterface::POST, $url, '1.0', [], http_build_query($data));
         $response = $this->read();
         if (strpos($response, 'page-login')) {
             throw new \Exception(
