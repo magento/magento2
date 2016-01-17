@@ -67,7 +67,7 @@ class BackendDecorator implements CurlInterface
     {
         // Perform GET to backend url so form_key is set
         $url = $_ENV['app_backend_url'];
-        $this->transport->write($url, [], CurlInterface::GET);
+        $this->transport->write(CurlInterface::GET, $url);
         $this->read();
 
         $url = $_ENV['app_backend_url'] . $this->configuration->get('application/0/backendLoginUrl/0/value');
