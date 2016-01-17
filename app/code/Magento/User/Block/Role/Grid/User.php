@@ -222,6 +222,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get Form Data if exist
+     *
      * @return array|bool
      */
     protected function getUsersFormData()
@@ -234,6 +236,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Restore Usrs Form Data from the registry
+     *
      * @return array|bool
      */
     protected function restoreUsersFormData()
