@@ -144,7 +144,7 @@ class AuthSession
     }
 
     /**
-     * Validation if a request is session check
+     * Check if a request is session check
      *
      * @return bool
      */
