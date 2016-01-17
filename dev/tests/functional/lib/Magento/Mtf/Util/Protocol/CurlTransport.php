@@ -130,7 +130,7 @@ class CurlTransport implements CurlInterface
         ];
         if ($method == CurlInterface::POST) {
             $options[CURLOPT_POST] = true;
-            $options[CURLOPT_POSTFIELDS] = $params;Ω
+            $options[CURLOPT_POSTFIELDS] = $params;
         } elseif ($method == CurlInterface::GET) {
             $options[CURLOPT_HTTPGET] = true;
         }
