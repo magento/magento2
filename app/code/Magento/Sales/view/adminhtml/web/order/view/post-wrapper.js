@@ -2,12 +2,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true, jquery:true*/
-/*global confirm:true*/
+
 define([
     'jquery',
+    'Magento_Ui/js/modal/confirm',
     'mage/translate'
-], function ($) {
+], function ($, confirm) {
     'use strict';
 
     /**
@@ -30,11 +30,20 @@ define([
         var msg = $.mage.__('Are you sure you want to cancel this order?'),
             url = $('#order-view-cancel-button').data('url');
 
-        if (confirm(msg)) {
-            getForm(url).submit();
-        } else {
-            return false;
-        }
+        confirm({
+            'content': msg,
+            'actions': {
+
+                /**
+                 * 'Confirm' action handler.
+                 */
+                confirm: function () {
+                    getForm(url).appendTo('body').submit();
+                }
+            }
+        });
+
+        return false;
     });
 
     $('#order-view-hold-button').click(function () {
