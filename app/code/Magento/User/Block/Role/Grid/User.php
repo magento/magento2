@@ -236,7 +236,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Restore Usrs Form Data from the registry
+     * Restore Users Form Data from the registry
      *
      * @return array|bool
      */
