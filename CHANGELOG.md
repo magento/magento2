@@ -35,12 +35,14 @@
     * Fixed an issue where import product with replace behaviour causes an error for multistore
     * Fixed an issue with validation of url_key during import
     * Fixed an issue with "Learn More" link for Payments Pro goes to Payflow Pro
+    * Fixed an issue with JS error appears if loading product grid after clean cache and static files
 Tests:
     * Fixed an issue with test failure in testGetPackagesForUpdate
     * Fixed integration tests related to setup/upgrade functionality
     * Fixed an issue where PHP7 Integration test failed
     * Fixed an issue with autoload functionality for jmx-generator.php file
     * Fixed an issue with legacy tests
+    * Fixed an issues in tests related to PHP7
 * GitHub requests:
     * [#2519](https://github.com/magento/magento2/issues/2519) -- Fixed an issue where synonyms don't work with Magento 2.0
     * [#2675](https://github.com/magento/magento2/issues/2675) -- Fixed an issue with admin order creation when config "Include Tax In Order Total" set to yes
