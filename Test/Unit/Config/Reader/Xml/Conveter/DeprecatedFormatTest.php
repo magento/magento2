@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Test\Unit\Config;
+namespace Magento\Framework\MessageQueue\Test\Unit\Config\Reader\Xml;
 
 use Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\DeprecatedFormat;
 
