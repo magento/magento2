@@ -373,7 +373,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT
             ],
             [
-                'expectedResult' => __(''),
+                'expectedResult' => '',
                 'isActiveSession' => true,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_IN
             ]
@@ -416,7 +416,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testLogoutAnotherUserSessions()
+    public function testLogoutOtherUserSessions()
     {
         $useId = 1;
         $sessionLifetime = 100;
@@ -454,6 +454,6 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         $this->adminSessionInfoCollectionMock->expects($this->once())
             ->method('save');
 
-        $this->model->logoutAnotherUserSessions();
+        $this->model->logoutOtherUserSessions();
     }
 }
