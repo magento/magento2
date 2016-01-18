@@ -253,7 +253,7 @@ class QuoteUpdaterTest extends \PHPUnit_Framework_TestCase
     {
         $quoteMock->expects(self::once())
             ->method('setMayEditShippingAddress')
-            ->with(true);
+            ->with(false);
         $quoteMock->expects(self::once())
             ->method('setMayEditShippingMethod')
             ->with(true);
