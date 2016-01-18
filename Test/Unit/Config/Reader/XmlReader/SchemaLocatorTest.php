@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\MessageQueue\Test\Unit\Config;
+namespace Magento\Framework\MessageQueue\Test\Unit\Config\Reader\XmlReader;
 
 /**
  * @codingStandardsIgnoreFile
@@ -21,8 +21,8 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = new \Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator();
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->model = new \Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator($this->urnResolver);
     }
 
     public function testGetSchema()
