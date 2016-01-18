@@ -378,12 +378,27 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function sendNotificationEmailsIfRequired()
     {
-        $changes = [];
-        $sendToOldEmail = false;
+        $changes = $this->createChangesDescriptionString();
 
+        if ($changes) {
+            if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
+                $this->sendUserNotificationEmail($changes, $this->getOrigData('email'));
+            }
+            $this->sendUserNotificationEmail($changes);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Create changes description string
+     *
+     * @return string
+     */
+    protected function createChangesDescriptionString()
+    {
         if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
             $changes[] = __('email');
-            $sendToOldEmail = true;
         }
 
         if ($this->getPassword()
@@ -396,26 +411,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             $changes[] = __('username');
         }
 
-        if ($changes) {
-            $changes = $this->createChangesDescriptionString($changes);
-            if ($sendToOldEmail) {
-                $this->sendUserNotificationEmail($changes, $this->getOrigData('email'));
-            }
-            $this->sendUserNotificationEmail($changes);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * Create changes description string
-     *
-     * @param string $changes
-     * @return string
-     */
-    protected function createChangesDescriptionString($changes)
-    {
         if (count($changes) > 1) {
             $last = array_pop($changes);
             $changes[count($changes) - 1] .= __(' and ') . $last;
