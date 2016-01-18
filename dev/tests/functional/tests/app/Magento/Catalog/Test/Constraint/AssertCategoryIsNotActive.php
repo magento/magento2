@@ -58,8 +58,8 @@ class AssertCategoryIsNotActive extends AbstractConstraint
                 ? strtolower($category->getUrlKey())
                 : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
 
-            $category = $category->getParentId()['category'];
-            if (1 == $category->getParentId()['id']) {
+            $category = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
+            if (1 == $category->getParentId()) {
                 $category = null;
             }
         }

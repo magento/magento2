@@ -67,9 +67,7 @@ class AssertCategoryForm extends AbstractAssertForm
             $data['url_key'] = strtolower($data['url_key']);
         }
 
-        if (isset($data['id'])) {
-            unset($data['id']);
-        }
+        unset($data['id']);
 
         return array_diff_key($data, array_flip($this->skippedFixtureFields));
     }

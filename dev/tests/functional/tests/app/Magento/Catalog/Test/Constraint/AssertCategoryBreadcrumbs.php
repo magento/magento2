@@ -71,7 +71,7 @@ class AssertCategoryBreadcrumbs extends AbstractConstraint
                 : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
 
             $category = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
-            if ($category !== null && 1 == $category->getParentId()['id']) {
+            if ($category !== null && 1 == $category->getParentId()) {
                 $category = null;
             }
         }
@@ -94,7 +94,7 @@ class AssertCategoryBreadcrumbs extends AbstractConstraint
             $breadcrumbs[] = $category->getName();
 
             $category = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
-            if ($category !== null && 1 == $category->getParentId()['id']) {
+            if ($category !== null && 1 == $category->getParentId()) {
                 $category = null;
             }
         }

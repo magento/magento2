@@ -12,7 +12,6 @@ use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Prepare parent category.
- * Sets parent_id data as [['id' => 'N' ], ['category' => Category ]]
  */
 class ParentId extends DataSource
 {
@@ -37,8 +36,10 @@ class ParentId extends DataSource
             if (!$this->parentCategory->hasData('id')) {
                 $this->parentCategory->persist();
             }
-            $this->data['id'] = $this->parentCategory->getId();
-            $this->data['category'] = $this->parentCategory;
+            $this->data = $this->parentCategory->getId();
+        } else if (isset($data['source']) && $data['source'] instanceof Category) {
+            $this->parentCategory = $data['source'];
+            $this->data = $data['source']->getId();
         } else {
             $this->data = $data;
         }
