@@ -8,7 +8,6 @@
 //  ---------------------------------------------
 
 @control-table__dragging__outline-color: @color-blue-pure;
-@control-table__dragging__z-index: @z-index-10;
 
 @control-table-row__dragging__background-color: @color-light-gray0;
 
@@ -154,8 +153,6 @@
 
     &._dragged {
         outline: 1px solid @control-table__dragging__outline-color;
-        position: absolute;
-        z-index: @control-table__dragging__z-index;
     }
 }
 
@@ -163,4 +160,11 @@
     background-color: @control-table-cell__background-color;
     border-top: 1px solid @control-table-cell__border-color;
     padding: @control-table-cell__padding-vertical @control-table-cell__padding-horizontal;
+}
+
+.admin__dynamic-rows {
+    &._dragged {
+        position: absolute;
+        z-index: 999;
+    }
 }
