@@ -11,7 +11,7 @@ use Magento\Framework\MessageQueue\Config\Reader\Env;
  * Class ConverterTest to test <queue> root node type definition of MQ
  *
  */
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class QueueConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\QueueConfig

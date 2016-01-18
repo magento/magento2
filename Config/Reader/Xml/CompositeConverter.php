@@ -63,8 +63,16 @@ class CompositeConverter implements ConverterInterface
         usort(
             $converters,
             function ($firstItem, $secondItem) {
-                $firstValue = isset($firstItem['sortOrder']) ? intval($firstItem['sortOrder']) : 0;
-                $secondValue = isset($secondItem['sortOrder']) ? intval($secondItem['sortOrder']) : 0;
+                $firstValue = 0;
+                $secondValue = 0;
+                if (isset($firstItem['sortOrder'])) {
+                    $firstValue = intval($firstItem['sortOrder']);
+                }
+
+                if (isset($secondItem['sortOrder'])) {
+                    $secondValue = intval($secondItem['sortOrder']);
+                }
+
                 if ($firstValue == $secondValue) {
                     return 0;
                 }
