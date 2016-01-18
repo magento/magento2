@@ -147,7 +147,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Gift Messages is not applicable for empty cart
+     * @expectedExceptionMessage Gift Messages are not applicable for empty cart
      */
     public function testSaveWithInputException()
     {
@@ -158,7 +158,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift Messages is not applicable for virtual products
+     * @expectedExceptionMessage Gift Messages are not applicable for virtual products
      */
     public function testSaveWithInvalidTransitionException()
     {

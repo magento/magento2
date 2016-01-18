@@ -34,6 +34,11 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $integrationAuthServiceMock;
 
+    /**
+     * @var \Magento\Integration\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $integrationConfig;
+
     public function setUp()
     {
         $this->subjectMock = $this->getMock('Magento\Integration\Model\IntegrationService', [], [], '', false);
@@ -51,9 +56,15 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->integrationConfig = $this->getMockBuilder('Magento\Integration\Model\IntegrationConfig')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
         $this->integrationPlugin = new \Magento\Integration\Model\Plugin\Integration(
             $this->integrationAuthServiceMock,
-            $this->aclRetrieverMock
+            $this->aclRetrieverMock,
+            $this->integrationConfig
         );
     }
 
@@ -104,15 +115,15 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $integrationModelMock->expects($this->exactly(2))
             ->method('getId')
             ->will($this->returnValue($integrationId));
-        $integrationModelMock->expects($this->at(1))
+        $integrationModelMock->expects($this->at(2))
             ->method('getData')
             ->with('all_resources')
             ->will($this->returnValue(null));
-        $integrationModelMock->expects($this->at(2))
+        $integrationModelMock->expects($this->at(3))
             ->method('getData')
             ->with('resource')
             ->will($this->returnValue(['testResource']));
-        $integrationModelMock->expects($this->at(4))
+        $integrationModelMock->expects($this->at(5))
             ->method('getData')
             ->with('resource')
             ->will($this->returnValue(['testResource']));
@@ -133,11 +144,11 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $integrationModelMock->expects($this->exactly(2))
             ->method('getId')
             ->will($this->returnValue($integrationId));
-        $integrationModelMock->expects($this->at(1))
+        $integrationModelMock->expects($this->at(2))
             ->method('getData')
             ->with('all_resources')
             ->will($this->returnValue(null));
-        $integrationModelMock->expects($this->at(2))
+        $integrationModelMock->expects($this->at(3))
             ->method('getData')
             ->with('resource')
             ->will($this->returnValue(null));
