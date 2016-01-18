@@ -77,7 +77,7 @@ class Review extends AbstractAction
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
-        return $resultRedirect->setPath('checkout/cart');
+        return $resultRedirect->setPath('checkout/cart', ['_secure' => true]);
     }
 
     /**
