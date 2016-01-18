@@ -397,12 +397,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         }
 
         if ($changes) {
-            if (count($changes) > 1) {
-                $last = array_pop($changes);
-                $changes[count($changes) - 1] .= __(' and ') . $last;
-            }
-            $changes = implode(', ', $changes);
-
+            $changes = $this->createChangesDescriptionString($changes);
             if ($sendToOldEmail) {
                 $this->sendUserNotificationEmail($changes, $this->getOrigData('email'));
             }
@@ -410,6 +405,24 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         }
 
         return $this;
+    }
+
+
+    /**
+     * Create changes description string
+     *
+     * @param string $changes
+     * @return string
+     */
+    protected function createChangesDescriptionString($changes)
+    {
+        if (count($changes) > 1) {
+            $last = array_pop($changes);
+            $changes[count($changes) - 1] .= __(' and ') . $last;
+        }
+        $changes = implode(', ', $changes);
+
+        return $changes;
     }
 
     /**
