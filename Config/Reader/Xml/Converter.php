@@ -111,23 +111,4 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
         return $output;
     }
-
-    /**
-     * Return topic handlers
-     *
-     * @param string $topicName
-     * @return array
-     */
-    private function getTopicHandlers($topicName)
-    {
-        $topicHandlers = [];
-        $communicationTopicHandlers = $this->communicationConfig->getTopicHandlers($topicName);
-        foreach ($communicationTopicHandlers as $handlerName => $handler) {
-            $topicHandlers[$handlerName] = [
-                QueueConfig::CONSUMER_HANDLER_TYPE => $handler[CommunicationConfig::HANDLER_TYPE],
-                QueueConfig::CONSUMER_HANDLER_METHOD => $handler[CommunicationConfig::HANDLER_METHOD]
-            ];
-        }
-        return $topicHandlers;
-    }
 }

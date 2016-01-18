@@ -141,26 +141,10 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $this->communicationReaderMock->expects($this->any())->method('generateTopicName')->willReturnMap(
             [
-                [
-                    '\Magento\Customer\Api\CustomerRepositoryInterface',
-                    'save',
-                    'topic.save'
-                ],
-                [
-                    '\Magento\Customer\Api\CustomerRepositoryInterface',
-                    'get',
-                    'topic.get'
-                ],
-                [
-                    '\Magento\Customer\Api\CustomerRepositoryInterface',
-                    'getList',
-                    'topic.getList'
-                ],
-                [
-                    '\Magento\Customer\Api\CustomerRepositoryInterface',
-                    'delete',
-                    'topic.delete'
-                ],
+                ['\Magento\Customer\Api\CustomerRepositoryInterface', 'save', 'topic.save'],
+                ['\Magento\Customer\Api\CustomerRepositoryInterface', 'get', 'topic.get'],
+                ['\Magento\Customer\Api\CustomerRepositoryInterface', 'getList', 'topic.getList'],
+                ['\Magento\Customer\Api\CustomerRepositoryInterface', 'delete', 'topic.delete'],
             ]
         );
 
@@ -168,25 +152,12 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getTopic')
             ->willReturnMap(
                 [
-                    [
-                        'topic.save',
-                        [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]
-                    ],
-                    [
-                        'topic.get',
-                        [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]
-                    ],
-                    [
-                        'topic.getList',
-                        [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]
-                    ],
-                    [
-                        'topic.delete',
-                        [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => false]
-                    ],
+                    ['topic.save', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
+                    ['topic.get', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
+                    ['topic.getList', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
+                    ['topic.delete', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => false]],
                 ]
             );
-
         $expectedResult = file_get_contents(__DIR__ . '/_files/RemoteService.txt');
         $this->validateGeneratedCode($expectedResult);
     }

@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceRead
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
-use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as CommunicationRemoteServiceReader;
 
 /**
  * Remote service configuration reader.
@@ -19,17 +18,17 @@ class MessageQueue implements \Magento\Framework\Config\ReaderInterface
     const DEFAULT_EXCHANGE = 'magento';
 
     /**
-     * @var CommunicationRemoteServiceReader
+     * @var Communication
      */
     private $communicationReader;
 
     /**
      * Initialize dependencies.
      *
-     * @param CommunicationRemoteServiceReader $communicationReader
+     * @param Communication $communicationReader
      */
     public function __construct(
-        CommunicationRemoteServiceReader $communicationReader
+        Communication $communicationReader
     ) {
         $this->communicationReader = $communicationReader;
     }

@@ -32,7 +32,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     protected function extractTopics($config)
     {
         $output = [];
-        /** @var $topicNode \DOMNode */
+        /** @var $topicNode \DOMElement */
         foreach ($config->getElementsByTagName('topic') as $topicNode) {
             $topicName = $topicNode->attributes->getNamedItem('name')->nodeValue;
             $topicType = $topicNode->attributes->getNamedItem('type');
@@ -41,28 +41,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
             $topicExchange = $topicNode->attributes->getNamedItem('exchange');
             $topicConsumerInstance = $topicNode->attributes->getNamedItem('consumerInstance');
             $topicMaxMessages = $topicNode->attributes->getNamedItem('maxMessages');
-            $queues = [];
-            /** @var $queueNode \DOMNode */
-            foreach ($topicNode->getElementsByTagName('queue') as $queueNode) {
-                $queueName = $queueNode->attributes->getNamedItem('name')->nodeValue;
-                $queueHandlerName = $queueNode->attributes->getNamedItem('handlerName');
-                $queueHandler = $queueNode->attributes->getNamedItem('handler');
-                $queueExchange = $queueNode->attributes->getNamedItem('exchange');
-                $queueConsumer = $queueNode->attributes->getNamedItem('consumer');
-                $queueConsumerInstance = $queueNode->attributes->getNamedItem('consumerInstance');
-                $queueMaxMessages = $queueNode->attributes->getNamedItem('maxMessages');
-                $queueType = $queueNode->attributes->getNamedItem('type');
-                $queue['name'] = $queueName;
-                $queue['handlerName'] = $queueHandlerName ? $queueHandlerName->nodeValue : null;
-                $queue['handler'] = $queueHandler ? $queueHandler->nodeValue : null;
-                $queue['exchange'] = $queueExchange ? $queueExchange->nodeValue : null;
-                $queue['consumer'] = $queueConsumer ? $queueConsumer->nodeValue : null;
-                $queue['consumerInstance'] = $queueConsumerInstance ? $queueConsumerInstance->nodeValue : null;
-                $queue['maxMessages'] = $queueMaxMessages ? $queueMaxMessages->nodeValue : null;
-                $queue['type'] = $queueType ? $queueType->nodeValue : null;
-                $queues[$queueName] = $queue;
-            }
-
+            $queues = $this->extractQueuesFromTopic($topicNode);
             $output[$topicName] = [
                 QueueConfigInterface::TOPIC_NAME => $topicName,
                 'type' => $topicType ? $topicType->nodeValue : null,
@@ -75,5 +54,38 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
             ];
         }
         return $output;
+    }
+
+    /**
+     * Extract queues configuration from the topic node.
+     *
+     * @param \DOMElement $topicNode
+     * @return mixed
+     */
+    protected function extractQueuesFromTopic(\DOMElement $topicNode)
+    {
+        $queues = [];
+        /** @var $queueNode \DOMElement */
+        foreach ($topicNode->getElementsByTagName('queue') as $queueNode) {
+            $queueName = $queueNode->attributes->getNamedItem('name')->nodeValue;
+            $queueHandlerName = $queueNode->attributes->getNamedItem('handlerName');
+            $queueHandler = $queueNode->attributes->getNamedItem('handler');
+            $queueExchange = $queueNode->attributes->getNamedItem('exchange');
+            $queueConsumer = $queueNode->attributes->getNamedItem('consumer');
+            $queueConsumerInstance = $queueNode->attributes->getNamedItem('consumerInstance');
+            $queueMaxMessages = $queueNode->attributes->getNamedItem('maxMessages');
+            $queueType = $queueNode->attributes->getNamedItem('type');
+            $queue = [];
+            $queue['name'] = $queueName;
+            $queue['handlerName'] = $queueHandlerName ? $queueHandlerName->nodeValue : null;
+            $queue['handler'] = $queueHandler ? $queueHandler->nodeValue : null;
+            $queue['exchange'] = $queueExchange ? $queueExchange->nodeValue : null;
+            $queue['consumer'] = $queueConsumer ? $queueConsumer->nodeValue : null;
+            $queue['consumerInstance'] = $queueConsumerInstance ? $queueConsumerInstance->nodeValue : null;
+            $queue['maxMessages'] = $queueMaxMessages ? $queueMaxMessages->nodeValue : null;
+            $queue['type'] = $queueType ? $queueType->nodeValue : null;
+            $queues[$queueName] = $queue;
+        }
+        return $queues;
     }
 }

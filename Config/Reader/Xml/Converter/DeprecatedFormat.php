@@ -287,5 +287,4 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
         }
         return $output;
     }
-
 }

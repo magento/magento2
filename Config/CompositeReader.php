@@ -25,18 +25,8 @@ class CompositeReader implements ReaderInterface
      */
     public function __construct(array $readers)
     {
-        usort(
-            $readers,
-            function ($firstItem, $secondItem) {
-                $firstValue = isset($firstItem['sortOrder']) ? intval($firstItem['sortOrder']) : 0;
-                $secondValue = isset($secondItem['sortOrder']) ? intval($secondItem['sortOrder']) : 0;
-                if ($firstValue == $secondValue) {
-                    return 0;
-                }
-                return $firstValue < $secondValue ? -1 : 1;
-            }
-        );
         $this->readers = [];
+        $readers = $this->sortReaders($readers);
         foreach ($readers as $name => $readerInfo) {
             if (!isset($readerInfo['reader']) || !($readerInfo['reader'] instanceof ReaderInterface)) {
                 throw new \InvalidArgumentException(
@@ -63,5 +53,27 @@ class CompositeReader implements ReaderInterface
             $result = array_replace_recursive($result, $reader->read($scope));
         }
         return $result;
+    }
+
+    /**
+     * Sort readers according to param 'sortOrder'
+     *
+     * @param array $readers
+     * @return array
+     */
+    private function sortReaders(array $readers)
+    {
+        usort(
+            $readers,
+            function ($firstItem, $secondItem) {
+                $firstValue = isset($firstItem['sortOrder']) ? intval($firstItem['sortOrder']) : 0;
+                $secondValue = isset($secondItem['sortOrder']) ? intval($secondItem['sortOrder']) : 0;
+                if ($firstValue == $secondValue) {
+                    return 0;
+                }
+                return $firstValue < $secondValue ? -1 : 1;
+            }
+        );
+        return $readers;
     }
 }

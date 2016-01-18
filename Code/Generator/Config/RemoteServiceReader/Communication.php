@@ -53,7 +53,9 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
-     */
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+    */
     public function read($scope = null)
     {
         $preferences = $this->objectManagerConfig->getPreferences();

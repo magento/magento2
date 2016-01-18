@@ -28,7 +28,12 @@ class DeprecatedFormatTest extends \PHPUnit_Framework_TestCase
     {
         $this->methodMapMock = $this->getMock('Magento\Framework\Reflection\MethodsMap', [], [], '', false, false);
         $this->validatorMock = $this->getMock(
-            'Magento\Framework\MessageQueue\Config\Validator', [], [], '', false, false
+            'Magento\Framework\MessageQueue\Config\Validator',
+            [],
+            [],
+            '',
+            false,
+            false
         );
         $wildcardPatternMap =  include(__DIR__ . '/../../../_files/wildcard_pattern_map.php');
         $this->validatorMock->expects($this->any())

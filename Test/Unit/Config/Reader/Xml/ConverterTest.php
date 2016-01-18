@@ -52,15 +52,14 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     // TODO: Mock CommunicationConfig
+    // TODO Add assertion
     public function testConvert()
     {
         $topicConfigData = include(__DIR__ . '/../../_files/expected_topic_config.php');
         $deprecatedConfigData = include(__DIR__ . '/../../_files/expected_queue.php');
-        // $expectedData = include(__DIR__ . '/../../../_files/');
         $dom = new \DOMDocument();
         $this->topicConfigMock->expects($this->once())->method('convert')->willReturn($topicConfigData);
         $this->deprecatedConfigMock->expects($this->once())->method('convert')->willReturn($deprecatedConfigData);
-        $result = $this->converter->convert($dom);
-        // $this->assertEquals($expectedData, $result);
+        $this->converter->convert($dom);
     }
 }

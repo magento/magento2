@@ -27,6 +27,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * Initialize dependencies.
+     *
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
