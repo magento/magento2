@@ -95,7 +95,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
                 true
             ],
             'manual integration data' => [
-                [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL],
+                Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL,
                 true
             ],
             'config integration data' => [
@@ -185,9 +185,12 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->registry->expects($this->any())
-            ->method('registry')
-            ->with(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION)
-            ->will($this->returnValue($integrationData));
+            ->method('registry')->withConsecutive(
+                [IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE],
+                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION],
+                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION]
+            )
+            ->willReturnOnConsecutiveCalls(false, $integrationData, $integrationData);
 
         return $this->objectManager->getObject(
             'Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi',
