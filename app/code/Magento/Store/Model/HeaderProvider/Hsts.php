@@ -18,14 +18,14 @@ class Hsts extends \Magento\Framework\App\Response\HeaderProvider\AbstractHeader
      *
      * @var string
      */
-    protected $name = 'Strict-Transport-Security';
+    protected $headerName = 'Strict-Transport-Security';
 
     /**
      * Strict-Transport-Security (HSTS) header value
      *
      * @var string
      */
-    protected $value = 'max-age=31536000';
+    protected $headerValue = 'max-age=31536000';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
