@@ -29,6 +29,13 @@ class Info extends Block
     protected $contactInfoChangePasswordLink = '.block-dashboard-info .box-information .action.change-password';
 
     /**
+     * Css selector for Contact Information Change Password Link
+     *
+     * @var string
+     */
+    protected $contactInfoChangeEmailLink = '.form-edit-account .fieldset.info .checkbox#change-email';
+
+    /**
      * Dashboard Welcome block locator
      *
      * @var string
@@ -43,6 +50,7 @@ class Info extends Block
     public function openEditContactInfo()
     {
         $this->_rootElement->find($this->contactInfoEditLink)->click();
+        $this->openChangeEmail();
     }
 
     /**
@@ -63,5 +71,15 @@ class Info extends Block
     public function getWelcomeText()
     {
         return $this->_rootElement->find($this->dashboardWelcome)->getText();
+    }
+
+    /**
+     * Click on Change Email checkbox
+     *
+     * @return void
+     */
+    public function openChangeEmail()
+    {
+        $this->_rootElement->find($this->contactInfoChangeEmailLink)->click();
     }
 }
