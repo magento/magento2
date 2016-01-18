@@ -690,11 +690,7 @@ class TypeProcessor
             foreach ($interfaceData['parameters'] as $parameterData) {
                 if (!$this->isTypeSimple($parameterData['type']) && !$this->isTypeAny($parameterData['type'])) {
                     $operation = $this->getOperationName($serviceName, $methodName);
-                    if ($parameterData['required']) {
-                        $condition = ($direction == 'requiredInput') ? 'yes' : 'always';
-                    } else {
-                        $condition = ($direction == 'requiredInput') ? 'no' : 'conditionally';
-                    }
+                    $condition = $this->getCondition($direction, $parameterData['required']);
                     $callInfo = [];
                     $callInfo[$direction][$condition]['calls'][] = $operation;
                     $this->setTypeData($parameterData['type'], ['callInfo' => $callInfo]);
@@ -714,5 +710,22 @@ class TypeProcessor
     public function getOperationName($serviceName, $methodName)
     {
         return $serviceName . ucfirst($methodName);
+    }
+
+    /**
+     * Returns a condition.
+     *
+     * @param string $direction
+     * @param bool $required
+     * @return string
+     */
+    private function getCondition($direction, $required)
+    {
+        if ($required) {
+            $condition = ($direction == 'requiredInput') ? 'yes' : 'always';
+        } else {
+            $condition = ($direction == 'requiredInput') ? 'no' : 'conditionally';
+        }
+        return $condition;
     }
 }
