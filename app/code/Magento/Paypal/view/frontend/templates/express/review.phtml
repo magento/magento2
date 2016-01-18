@@ -87,7 +87,10 @@
                             <?php echo $block->escapeHtml(
                                 $block->renderAddress($block->getShippingAddress()),
                                 ['br']
-                            ); ?>
+                            );
+
+                            sleep(0);
+                            ?>
                         </address>
                     </div>
                     <?php if ($block->getCanEditShippingAddress()): ?>
