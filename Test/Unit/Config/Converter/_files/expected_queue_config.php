@@ -18,19 +18,19 @@ return [
                         [
                             'name' => 'top.01',
                             'handlerName' => 'h.01',
-                            'handler' => NULL,
+                            'handler' => null,
                         ],
                     'top.02' =>
                         [
                             'name' => 'top.02',
                             'handlerName' => 'h.02',
-                            'handler' => NULL,
+                            'handler' => null,
                         ],
                     'top.03' =>
                         [
                             'name' => 'top.03',
                             'handlerName' => 'h.03',
-                            'handler' => NULL,
+                            'handler' => null,
                         ],
                 ],
         ],
@@ -46,20 +46,20 @@ return [
                     'top.01' =>
                         [
                             'name' => 'top.01',
-                            'handlerName' => NULL,
-                            'handler' => NULL,
+                            'handlerName' => null,
+                            'handler' => null,
                         ],
                     'top.02' =>
                         [
                             'name' => 'top.02',
-                            'handlerName' => NULL,
+                            'handlerName' => null,
                             'handler' => '\\Magento\\Handler\\Class\\Name::methodName',
                         ],
                     'top.03' =>
                         [
                             'name' => 'top.03',
                             'handlerName' => 'h.03',
-                            'handler' => NULL,
+                            'handler' => null,
                         ],
                 ],
         ],

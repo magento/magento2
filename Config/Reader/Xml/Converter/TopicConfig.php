@@ -78,16 +78,16 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Return an attribute value of the given node
+     * Get attribute value of the given node
      *
      * @param \DOMNode $node
-     * @param $attributeName
+     * @param string $attributeName
+     * @param mixed $default
      * @return string|null
      */
-    protected function getAttributeValue(\DOMNode $node, $attributeName)
+    protected function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
     {
-        /** @var \DOMNode $item */
         $item =  $node->attributes->getNamedItem($attributeName);
-        return $item ? $item->nodeValue : null;
+        return $item ? $item->nodeValue : $default;
     }
 }

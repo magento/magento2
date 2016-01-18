@@ -31,46 +31,42 @@ class QueueConfig implements \Magento\Framework\Config\ConverterInterface
         /** @var $queueNode \DOMNode */
         foreach ($config->getElementsByTagName('queue') as $queueNode) {
             // required attributes
-            $queueName = $queueNode->attributes->getNamedItem('name')->nodeValue;
-            $exchange = $queueNode->attributes->getNamedItem('exchange')->nodeValue;
-            $queueType = $queueNode->attributes->getNamedItem('type')->nodeValue;
-            // optional attributes
-            $consumer = $queueNode->hasAttribute('consumer') ?
-                $queueNode->attributes->getNamedItem('consumer')->nodeValue
-                : null;
-            $consumerInstance = $queueNode->hasAttribute('consumerInstance') ?
-                $queueNode->attributes->getNamedItem('consumerInstance')->nodeValue
-                : null;
+            $queueName = $this->getAttributeValue($queueNode, 'name');
             $topics = [];
             /** @var $topicNode \DOMNode */
             foreach ($queueNode->childNodes as $topicNode) {
                 if ($topicNode->hasAttributes()) {
-                    // required attribute
-                    $topicName = $topicNode->attributes->getNamedItem('name')->nodeValue;
-                    // optional attributes
-                    $handlerName = $topicNode->hasAttribute('handlerName') ?
-                        $topicNode->attributes->getNamedItem('handlerName')->nodeValue
-                        : null;
-                    $handler = $topicNode->hasAttribute('handler') ?
-                        $topicNode->attributes->getNamedItem('handler')->nodeValue
-                        : null;
-
+                    $topicName = $this->getAttributeValue($topicNode, 'name');
                     $topics[$topicName] = [
                         'name'        => $topicName,
-                        'handlerName' => $handlerName,
-                        'handler'     => $handler
+                        'handlerName' => $this->getAttributeValue($topicNode, 'handlerName'),
+                        'handler'     => $this->getAttributeValue($topicNode, 'handler')
                     ];
                 }
             }
             $output[$queueName] = [
                 'name' => $queueName,
-                'exchange' => $exchange,
-                'consumer' => $consumer,
-                'consumerInstance' => $consumerInstance,
-                'type' => $queueType,
+                'exchange' => $this->getAttributeValue($queueNode, 'exchange'),
+                'consumer' => $this->getAttributeValue($queueNode, 'consumer'),
+                'consumerInstance' => $this->getAttributeValue($queueNode, 'consumerInstance'),
+                'type' => $this->getAttributeValue($queueNode, 'type'),
                 'topics' => $topics
             ];
         }
         return $output;
+    }
+
+    /**
+     * Get attribute value of the given node
+     *
+     * @param \DOMNode $node
+     * @param string $attributeName
+     * @param mixed $default
+     * @return string|null
+     */
+    protected function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
+    {
+        $item =  $node->attributes->getNamedItem($attributeName);
+        return $item ? $item->nodeValue : $default;
     }
 }
