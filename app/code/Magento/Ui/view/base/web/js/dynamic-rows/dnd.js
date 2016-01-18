@@ -12,6 +12,8 @@ define([
 ], function (ko, $, _, Element) {
     'use strict';
 
+    var transformProp;
+
     /**
      * Get element context
      */
@@ -25,7 +27,7 @@ define([
      * @returns {String|Undefined}
      */
 
-    var transformProp = (function () {
+    transformProp = (function () {
         var style = document.body.style,
             base = 'Transform',
             vendors = ['webkit', 'moz', 'ms', 'o'],
@@ -71,7 +73,8 @@ define([
                 'mouseupHandler'
             );
 
-            this._super();
+            this._super()
+                .body = $('body');
             $.async(this.tableSelector, this.initTable);
 
             return this;
@@ -113,8 +116,7 @@ define([
          */
         mousedownHandler: function (data, elem, event) {
             var recordNode = this.getRecordNode(elem),
-                originRecord = $(elem).parents('tr'),
-                body = $('body');
+                originRecord = $(elem).parents('tr');
 
             $(recordNode).addClass(this.draggableElementClass);
             $(originRecord).addClass(this.draggableElementClass);
@@ -130,8 +132,8 @@ define([
                 this.table.find('tbody').outerHeight() - originRecord.outerHeight();
             this.tableWrapper.append(recordNode);
 
-            body.bind('mousemove', this.mousemoveHandler);
-            body.bind('mouseup', this.mouseupHandler);
+            this.body.bind('mousemove', this.mousemoveHandler);
+            this.body.bind('mouseup', this.mouseupHandler);
         },
 
         /**
@@ -158,20 +160,46 @@ define([
          * Mouse up handler
          */
         mouseupHandler: function () {
-            var body = $('body'),
-                depElement = this._getDepElement(this.draggableElement.instance),
-                depElementCtx = this.getRecord(depElement[0]),
-                path = this.draggableElement.instanceCtx.dataScope + '.' +
-                       this.draggableElement.instanceCtx.sortNamespace;
+            var depElement = this._getDepElement(this.draggableElement.instance),
+                depElementCtx = this.getRecord(depElement[0]);
 
-            this.draggableElement.instanceCtx.source.set(path, depElementCtx.curSortOrder);
+            this.setPosition(depElement, depElementCtx, this.draggableElement);
             this.draggableElement.originRow.removeClass(this.draggableElementClass);
-
-            body.unbind('mousemove', this.mousemoveHandler);
-            body.unbind('mouseup', this.mouseupHandler);
-
+            this.body.unbind('mousemove', this.mousemoveHandler);
+            this.body.unbind('mouseup', this.mouseupHandler);
             this.draggableElement.instance.remove();
             this.draggableElement = {};
+        },
+
+        /**
+         * Set position to element
+         *
+         * @param {Object} depElem - dep element
+         * @param {Object} depElementCtx - dep element context
+         * @param {Object} dragData - data draggable element
+         */
+        setPosition: function (depElem, depElementCtx, dragData) {
+            var prevElem = depElem.prev(),
+                depElemPosition = parseInt(depElementCtx.position, 10),
+                prevElemCtx,
+                prevElemPosition;
+
+            if (!prevElem.length) {
+                depElemPosition = --depElemPosition ? depElemPosition : 1;
+                dragData.instanceCtx.position = depElemPosition;
+
+                return false;
+            }
+
+            prevElemCtx = this.getRecord(prevElem[0]);
+            prevElemPosition = prevElemCtx.position;
+
+            if (prevElemPosition === depElemPosition - 1) {
+                dragData.instanceCtx.position = depElemPosition;
+            } else {
+                dragData.instanceCtx.position = --depElemPosition;
+            }
+
         },
 
         /**
