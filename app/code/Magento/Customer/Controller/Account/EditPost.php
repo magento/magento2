@@ -96,13 +96,18 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $customer->setEmail($currentCustomerEmail);
             }
 
-            // Change customer password
-            if ($this->getRequest()->getParam('change_password')) {
-                $this->changeCustomerPassword($currentCustomerEmail);
-            }
-
             try {
                 $this->customerRepository->save($customer);
+
+                // Change customer password
+                $isPasswordChanged = false;
+                if ($this->getRequest()->getParam('change_password')) {
+                    $isPasswordChanged = $this->changeCustomerPassword($currentCustomerEmail);
+                }
+
+                $this->customerAccountManagement
+                    ->sendNotificationEmailsIfRequired($currentCustomer, $customer, $isPasswordChanged);
+
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {
@@ -162,7 +167,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * Change customer password
      *
      * @param string $email
-     * @return $this
+     * @return bool
      */
     protected function changeCustomerPassword($email)
     {
@@ -181,13 +186,13 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         try {
-            $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
+            return $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
         } catch (AuthenticationException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong while changing the password.'));
         }
 
-        return $this;
+        return false;
     }
 }

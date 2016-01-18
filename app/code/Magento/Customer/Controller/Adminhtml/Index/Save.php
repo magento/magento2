@@ -192,9 +192,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $isExistingCustomer = (bool)$customerId;
                 $customer = $this->customerDataFactory->create();
                 if ($isExistingCustomer) {
-                    $savedCustomerData = $this->_customerRepository->getById($customerId);
+                    $currentCustomer = $this->_customerRepository->getById($customerId);
                     $customerData = array_merge(
-                        $this->customerMapper->toFlatArray($savedCustomerData),
+                        $this->customerMapper->toFlatArray($currentCustomer),
                         $customerData
                     );
                     $customerData['id'] = $customerId;
@@ -232,6 +232,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 // Save customer
                 if ($isExistingCustomer) {
                     $this->_customerRepository->save($customer);
+
+                    $this->customerAccountManagement
+                        ->sendNotificationEmailsIfRequired($currentCustomer, $customer);
+
                 } else {
                     $customer = $this->customerAccountManagement->createAccount($customer);
                     $customerId = $customer->getId();
