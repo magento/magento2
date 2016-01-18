@@ -77,8 +77,8 @@ class Iframe extends \Magento\Payment\Block\Form
         $this->_hssHelper = $hssHelper;
         $this->_orderFactory = $orderFactory;
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        parent::__construct($context, $data);
     }
 
     /**

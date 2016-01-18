@@ -101,7 +101,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $expected = <<<expected
 (function(require){
-require.config({"baseUrl":""});
 (function() {
 relative/file_one.js content
 require.config(config);

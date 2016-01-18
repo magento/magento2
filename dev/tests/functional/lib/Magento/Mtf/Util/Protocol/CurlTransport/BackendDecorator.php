@@ -65,12 +65,18 @@ class BackendDecorator implements CurlInterface
      */
     protected function authorize()
     {
+        // Perform GET to backend url so form_key is set
+        $url = $_ENV['app_backend_url'];
+        $this->transport->write(CurlInterface::GET, $url);
+        $this->read();
+
         $url = $_ENV['app_backend_url'] . $this->configuration->get('application/0/backendLoginUrl/0/value');
         $data = [
             'login[username]' => $this->configuration->get('application/0/backendLogin/0/value'),
             'login[password]' => $this->configuration->get('application/0/backendPassword/0/value'),
+            'form_key' => $this->formKey,
         ];
-        $this->transport->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $this->transport->write(CurlInterface::POST, $url, '1.0', [], http_build_query($data));
         $response = $this->read();
         if (strpos($response, 'page-login')) {
             throw new \Exception(

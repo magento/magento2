@@ -181,7 +181,7 @@ class Import
      */
     protected function groupUrls($urls)
     {
-        $groups =[];
+        $groups = [];
         foreach ($urls as $url) {
             $key = sprintf(
                 '%s-%s',

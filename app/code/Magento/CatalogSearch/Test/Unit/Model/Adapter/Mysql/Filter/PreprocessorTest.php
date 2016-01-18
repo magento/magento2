@@ -103,7 +103,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['select', 'getIfNullSql'])
+            ->setMethods(['select', 'getIfNullSql', 'quote'])
             ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
@@ -171,21 +171,35 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
-    public function testProcessCategoryIds()
+    /**
+     * @return array
+     */
+    public function processCategoryIdsDataProvider()
     {
-        $expectedResult = 'category_ids_index.category_id = FilterValue';
-        $scopeId = 0;
+        return [
+            ['5', 'category_ids_index.category_id = 5'],
+            [3, 'category_ids_index.category_id = 3'],
+            ["' and 1 = 0", 'category_ids_index.category_id = 0'],
+        ];
+    }
+
+    /**
+     * @param string|int $categoryId
+     * @param string $expectedResult
+     * @dataProvider processCategoryIdsDataProvider
+     */
+    public function testProcessCategoryIds($categoryId, $expectedResult)
+    {
         $isNegation = false;
         $query = 'SELECT category_ids FROM catalog_product_entity';
 
-        $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
         $this->filter->expects($this->exactly(3))
             ->method('getField')
             ->will($this->returnValue('category_ids'));
 
         $this->filter->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue('FilterValue'));
+            ->will($this->returnValue($categoryId));
 
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
@@ -199,7 +213,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessStaticAttribute()
     {
         $expectedResult = 'attr_table_alias.static_attribute LIKE %name%';
-        $scopeId = 0;
         $isNegation = false;
         $query = 'static_attribute LIKE %name%';
 
@@ -207,7 +220,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn('static_attribute');
         $this->tableMapper->expects($this->once())->method('getMappingAlias')
             ->willReturn('attr_table_alias');
-        $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
         $this->filter->expects($this->exactly(3))
             ->method('getField')
             ->will($this->returnValue('static_attribute'));
@@ -218,9 +230,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects($this->once())
             ->method('isStatic')
             ->will($this->returnValue(true));
-        $this->attribute->expects($this->once())
-            ->method('getBackendTable')
-            ->will($this->returnValue('backend_table'));
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
