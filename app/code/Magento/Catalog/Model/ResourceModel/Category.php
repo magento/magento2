@@ -210,7 +210,6 @@ class Category extends AbstractResource
     {
         $connection = $this->getConnection();
         $pathField = $connection->quoteIdentifier('path');
-
         $select = $connection->select()->from(
             $this->getEntityTable(),
             ['entity_id']
@@ -1010,7 +1009,9 @@ class Category extends AbstractResource
          * Load object base row data
          */
         $this->entityManager->load(CategoryInterface::class, $object, $entityId);
-        if (!$object->getId()) {
+
+
+        if (!$this->entityManager->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $entityId)) {
             $object->isObjectNew(true);
         }
 
@@ -1093,8 +1094,35 @@ class Category extends AbstractResource
     /**
      * {@inheritdoc}
      */
-    protected function evaluateDelete($object, $id, $connection)
+    public function delete($object)
     {
-        $this->entityManager->delete(CategoryInterface::class, $object);
+        try {
+            $this->transactionManager->start($this->getConnection());
+            if (is_numeric($object)) {
+            } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->beforeDelete();
+            }
+            $this->_beforeDelete($object);
+            $this->entityManager->delete(\Magento\Catalog\Api\Data\CategoryInterface::class, $object);
+
+            $this->_afterDelete($object);
+
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->isDeleted(true);
+                $object->afterDelete();
+            }
+            $this->transactionManager->commit();
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->afterDeleteCommit();
+            }
+        } catch (\Exception $e) {
+            $this->transactionManager->rollBack();
+            throw $e;
+        }
+        $this->_eventManager->dispatch(
+            'catalog_category_delete_after_done',
+            ['product' => $object]
+        );
+        return $this;
     }
 }
