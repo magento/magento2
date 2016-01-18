@@ -17,7 +17,6 @@ define([
             dataProvider: '',
             insertData: [],
             map: null,
-            temporaryData: null,
             cacheGridData: [],
             dataLength: 0,
             listens: {
