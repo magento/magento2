@@ -55,7 +55,12 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                     throw new LocalizedException(__('Cannot edit integrations created via config file.'));
                 }
             }
+            $this->performSecurityCheck();
             $this->processData($integrationData);
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $this->messageManager->addError($e->getMessage());
+            $this->_getSession()->setIntegrationData($this->getRequest()->getPostValue());
+            $this->_redirectOnSaveError();
         } catch (IntegrationException $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_getSession()->setIntegrationData($integrationData);
@@ -67,6 +72,25 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->_logger->critical($e);
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
+        }
+    }
+
+    /**
+     * Perform security checks
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @return void
+     */
+    protected function performSecurityCheck()
+    {
+        if (!$this->_auth->getUser()->verifyIdentity(
+            $this->getRequest()->getParam(
+                \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD
+            )
+        )) {
+            throw new \Magento\Framework\Exception\AuthenticationException(
+                __('You have entered an invalid password for current user.')
+            );
         }
     }
 
