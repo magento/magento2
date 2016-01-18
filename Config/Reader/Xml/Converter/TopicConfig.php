@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Config\Reader\Xml\Converter;
 
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfigInterface;
+use Magento\Framework\MessageQueue\ConfigInterface;
 
 /**
  * Converts MessageQueue config from \DOMDocument to array
@@ -19,7 +19,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     {
         $topics = $this->extractTopics($source);
         return [
-            QueueConfigInterface::TOPICS => $topics,
+            ConfigInterface::TOPICS => $topics,
         ];
     }
 
@@ -36,7 +36,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         foreach ($config->getElementsByTagName('topic') as $topicNode) {
             $topicName = $this->getAttributeValue($topicNode, 'name');
             $output[$topicName] = [
-                QueueConfigInterface::TOPIC_NAME => $topicName,
+                ConfigInterface::TOPIC_NAME => $topicName,
                 'type' => $this->getAttributeValue($topicNode, 'type'),
                 'exchange' => $this->getAttributeValue($topicNode, 'exchange'),
                 'consumerInstance' => $this->getAttributeValue($topicNode, 'consumerInstance'),

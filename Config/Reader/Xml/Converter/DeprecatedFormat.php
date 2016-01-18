@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue\Config\Reader\Xml\Converter;
 
 use Magento\Framework\Reflection\MethodsMap;
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\MessageQueue\ConfigInterface;
 use Magento\Framework\MessageQueue\Config\Validator;
 use Magento\Framework\MessageQueue\Config\Reader\Xml\Converter;
 
@@ -46,11 +46,11 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
         $binds = $this->extractBinds($source, $topics);
         $consumers = $this->extractConsumers($source, $binds, $topics);
         return [
-            QueueConfig::PUBLISHERS => $publishers,
-            QueueConfig::TOPICS => $topics,
-            QueueConfig::CONSUMERS => $consumers,
-            QueueConfig::BINDS => $binds,
-            QueueConfig::EXCHANGE_TOPIC_TO_QUEUES_MAP => $this->buildExchangeTopicToQueuesMap($binds, $topics),
+            ConfigInterface::PUBLISHERS => $publishers,
+            ConfigInterface::TOPICS => $topics,
+            ConfigInterface::CONSUMERS => $consumers,
+            ConfigInterface::BINDS => $binds,
+            ConfigInterface::EXCHANGE_TOPIC_TO_QUEUES_MAP => $this->buildExchangeTopicToQueuesMap($binds, $topics),
         ];
     }
 
@@ -67,9 +67,9 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
         foreach ($config->getElementsByTagName('publisher') as $publisherNode) {
             $publisherName = $publisherNode->attributes->getNamedItem('name')->nodeValue;
             $output[$publisherName] = [
-                QueueConfig::PUBLISHER_NAME => $publisherName,
-                QueueConfig::PUBLISHER_CONNECTION => $publisherNode->attributes->getNamedItem('connection')->nodeValue,
-                QueueConfig::PUBLISHER_EXCHANGE => $publisherNode->attributes->getNamedItem('exchange')->nodeValue
+                ConfigInterface::PUBLISHER_NAME => $publisherName,
+                ConfigInterface::PUBLISHER_CONNECTION => $publisherNode->attributes->getNamedItem('connection')->nodeValue,
+                ConfigInterface::PUBLISHER_EXCHANGE => $publisherNode->attributes->getNamedItem('exchange')->nodeValue
             ];
         }
         return $output;
@@ -90,23 +90,23 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
             $topicName = $topicNode->attributes->getNamedItem('name')->nodeValue;
             $schemaId = $topicNode->attributes->getNamedItem('schema')->nodeValue;
             $schemaType = $this->identifySchemaType($schemaId);
-            $schemaValue = ($schemaType == QueueConfig::TOPIC_SCHEMA_TYPE_METHOD)
+            $schemaValue = ($schemaType == ConfigInterface::TOPIC_SCHEMA_TYPE_METHOD)
                 ? $this->getSchemaDefinedByMethod($schemaId, $topicName)
                 : $schemaId;
             $publisherName = $topicNode->attributes->getNamedItem('publisher')->nodeValue;
             $this->xmlValidator->validateTopicPublisher(array_keys($publishers), $publisherName, $topicName);
 
             $output[$topicName] = [
-                QueueConfig::TOPIC_NAME => $topicName,
-                QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => $schemaType,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => $schemaValue
+                ConfigInterface::TOPIC_NAME => $topicName,
+                ConfigInterface::TOPIC_SCHEMA => [
+                    ConfigInterface::TOPIC_SCHEMA_TYPE => $schemaType,
+                    ConfigInterface::TOPIC_SCHEMA_VALUE => $schemaValue
                 ],
-                QueueConfig::TOPIC_RESPONSE_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => null,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => null
+                ConfigInterface::TOPIC_RESPONSE_SCHEMA => [
+                    ConfigInterface::TOPIC_SCHEMA_TYPE => null,
+                    ConfigInterface::TOPIC_SCHEMA_VALUE => null
                 ],
-                QueueConfig::TOPIC_PUBLISHER => $publisherName
+                ConfigInterface::TOPIC_PUBLISHER => $publisherName
             ];
         }
         return $output;
@@ -121,8 +121,8 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
     protected function identifySchemaType($schemaId)
     {
         return preg_match(Converter::SERVICE_METHOD_NAME_PATTERN, $schemaId)
-            ? QueueConfig::TOPIC_SCHEMA_TYPE_METHOD
-            : QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT;
+            ? ConfigInterface::TOPIC_SCHEMA_TYPE_METHOD
+            : ConfigInterface::TOPIC_SCHEMA_TYPE_OBJECT;
     }
 
     /**
@@ -142,10 +142,11 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
         $paramsMeta = $this->methodsMap->getMethodParams($serviceClass, $serviceMethod);
         foreach ($paramsMeta as $paramPosition => $paramMeta) {
             $result[] = [
-                QueueConfig::SCHEMA_METHOD_PARAM_NAME => $paramMeta[MethodsMap::METHOD_META_NAME],
-                QueueConfig::SCHEMA_METHOD_PARAM_POSITION => $paramPosition,
-                QueueConfig::SCHEMA_METHOD_PARAM_IS_REQUIRED => !$paramMeta[MethodsMap::METHOD_META_HAS_DEFAULT_VALUE],
-                QueueConfig::SCHEMA_METHOD_PARAM_TYPE => $paramMeta[MethodsMap::METHOD_META_TYPE],
+                ConfigInterface::SCHEMA_METHOD_PARAM_NAME => $paramMeta[MethodsMap::METHOD_META_NAME],
+                ConfigInterface::SCHEMA_METHOD_PARAM_POSITION => $paramPosition,
+                ConfigInterface::SCHEMA_METHOD_PARAM_IS_REQUIRED =>
+                    !$paramMeta[MethodsMap::METHOD_META_HAS_DEFAULT_VALUE],
+                ConfigInterface::SCHEMA_METHOD_PARAM_TYPE => $paramMeta[MethodsMap::METHOD_META_TYPE],
             ];
         }
         return $result;
@@ -183,12 +184,12 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
             $consumerInstanceType = $consumerNode->attributes->getNamedItem('executor');
             $queueName = $consumerNode->attributes->getNamedItem('queue')->nodeValue;
             $handler = [
-                QueueConfig::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
-                QueueConfig::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
+                ConfigInterface::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
+                ConfigInterface::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
             ];
             $this->xmlValidator->validateHandlerType(
-                $handler[QueueConfig::CONSUMER_CLASS],
-                $handler[QueueConfig::CONSUMER_METHOD],
+                $handler[ConfigInterface::CONSUMER_CLASS],
+                $handler[ConfigInterface::CONSUMER_METHOD],
                 $consumerName
             );
             $handlers = [];
@@ -198,13 +199,14 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
                 }
             }
             $output[$consumerName] = [
-                QueueConfig::CONSUMER_NAME => $consumerName,
-                QueueConfig::CONSUMER_QUEUE => $queueName,
-                QueueConfig::CONSUMER_CONNECTION => $connections ? $connections->nodeValue : null,
-                QueueConfig::CONSUMER_TYPE => QueueConfig::CONSUMER_TYPE_ASYNC,
-                QueueConfig::CONSUMER_HANDLERS => $handlers,
-                QueueConfig::CONSUMER_MAX_MESSAGES => $maxMessages ? $maxMessages->nodeValue : null,
-                QueueConfig::CONSUMER_INSTANCE_TYPE => $consumerInstanceType ? $consumerInstanceType->nodeValue : null,
+                ConfigInterface::CONSUMER_NAME => $consumerName,
+                ConfigInterface::CONSUMER_QUEUE => $queueName,
+                ConfigInterface::CONSUMER_CONNECTION => $connections ? $connections->nodeValue : null,
+                ConfigInterface::CONSUMER_TYPE => ConfigInterface::CONSUMER_TYPE_ASYNC,
+                ConfigInterface::CONSUMER_HANDLERS => $handlers,
+                ConfigInterface::CONSUMER_MAX_MESSAGES => $maxMessages ? $maxMessages->nodeValue : null,
+                ConfigInterface::CONSUMER_INSTANCE_TYPE =>
+                    $consumerInstanceType ? $consumerInstanceType->nodeValue : null,
             ];
         }
         return $output;
@@ -228,9 +230,9 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
             $key = $this->getBindName($topicName, $exchangeName, $queueName);
             $this->xmlValidator->validateBindTopic(array_keys($topics), $topicName);
             $output[$key] = [
-                QueueConfig::BIND_QUEUE => $queueName,
-                QueueConfig::BIND_EXCHANGE => $exchangeName,
-                QueueConfig::BIND_TOPIC => $topicName,
+                ConfigInterface::BIND_QUEUE => $queueName,
+                ConfigInterface::BIND_EXCHANGE => $exchangeName,
+                ConfigInterface::BIND_TOPIC => $topicName,
             ];
         }
         return $output;
@@ -261,11 +263,11 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
         $output = [];
         $wildcardKeys = [];
         foreach ($binds as $bind) {
-            $key = $bind[QueueConfig::BIND_EXCHANGE] . '--' . $bind[QueueConfig::BIND_TOPIC];
+            $key = $bind[ConfigInterface::BIND_EXCHANGE] . '--' . $bind[ConfigInterface::BIND_TOPIC];
             if (strpos($key, '*') !== false || strpos($key, '#') !== false) {
                 $wildcardKeys[] = $key;
             }
-            $output[$key][] = $bind[QueueConfig::BIND_QUEUE];
+            $output[$key][] = $bind[ConfigInterface::BIND_QUEUE];
         }
 
         foreach (array_unique($wildcardKeys) as $wildcardKey) {
