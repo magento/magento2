@@ -125,8 +125,7 @@ define([
                 recordId: prop
             });
 
-            this._super(data, index);
-
+            this._super();
             this.templates.record = template;
 
             return this;
