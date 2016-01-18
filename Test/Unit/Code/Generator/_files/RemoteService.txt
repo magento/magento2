@@ -6,20 +6,20 @@ namespace Magento\Customer\Api;
 class CustomerRepositoryInterfaceRemote implements \Magento\Customer\Api\CustomerRepositoryInterface
 {
     /**
-     * Publisher pool
+     * Publisher
      *
-     * @var \Magento\Framework\MessageQueue\PublisherPool
+     * @var \Magento\Framework\MessageQueue\PublisherInterface
      */
-    protected $publisherPool = null;
+    protected $publisher = null;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\MessageQueue\PublisherPool $publisherPool
+     * @param \Magento\Framework\MessageQueue\PublisherInterface $publisher
      */
-    public function __construct(\Magento\Framework\MessageQueue\PublisherPool $publisherPool)
+    public function __construct(\Magento\Framework\MessageQueue\PublisherInterface $publisher)
     {
-        $this->publisherPool = $publisherPool;
+        $this->publisher = $publisher;
     }
 
     /**
@@ -27,12 +27,10 @@ class CustomerRepositoryInterfaceRemote implements \Magento\Customer\Api\Custome
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = 'default_string_value')
     {
-        return $this->publisherPool
-            ->getByTopicType('topic.save')
-            ->publish(
-                'topic.save',
-                ['customer' => $customer, 'passwordHash' => $passwordHash]
-            );
+        return $this->publisher->publish(
+            'topic.save',
+            ['customer' => $customer, 'passwordHash' => $passwordHash]
+        );
     }
 
     /**
@@ -40,12 +38,10 @@ class CustomerRepositoryInterfaceRemote implements \Magento\Customer\Api\Custome
      */
     public function get($email, $websiteId = null)
     {
-        return $this->publisherPool
-            ->getByTopicType('topic.get')
-            ->publish(
-                'topic.get',
-                ['email' => $email, 'websiteId' => $websiteId]
-            );
+        return $this->publisher->publish(
+            'topic.get',
+            ['email' => $email, 'websiteId' => $websiteId]
+        );
     }
 
     /**
@@ -53,12 +49,10 @@ class CustomerRepositoryInterfaceRemote implements \Magento\Customer\Api\Custome
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        return $this->publisherPool
-            ->getByTopicType('topic.getList')
-            ->publish(
-                'topic.getList',
-                ['searchCriteria' => $searchCriteria]
-            );
+        return $this->publisher->publish(
+            'topic.getList',
+            ['searchCriteria' => $searchCriteria]
+        );
     }
 
     /**
@@ -66,11 +60,9 @@ class CustomerRepositoryInterfaceRemote implements \Magento\Customer\Api\Custome
      */
     public function delete($customerId)
     {
-        $this->publisherPool
-            ->getByTopicType('topic.delete')
-            ->publish(
-                'topic.delete',
-                ['customerId' => $customerId]
-            );
+        $this->publisher->publish(
+            'topic.delete',
+            ['customerId' => $customerId]
+        );
     }
 }

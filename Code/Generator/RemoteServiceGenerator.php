@@ -76,15 +76,15 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
         return [
             'name' => '__construct',
             'parameters' => [
-                ['name' => 'publisherPool', 'type' => '\Magento\Framework\MessageQueue\PublisherPool'],
+                ['name' => 'publisher', 'type' => '\Magento\Framework\MessageQueue\PublisherInterface'],
             ],
-            'body' => "\$this->publisherPool = \$publisherPool;",
+            'body' => "\$this->publisher = \$publisher;",
             'docblock' => [
                 'shortDescription' => 'Initialize dependencies.',
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => '\Magento\Framework\MessageQueue\PublisherPool $publisherPool',
+                        'description' => '\Magento\Framework\MessageQueue\PublisherInterface $publisher',
                     ],
                 ],
             ]
@@ -98,11 +98,11 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     {
         return [
             [
-                'name' => 'publisherPool',
+                'name' => 'publisher',
                 'visibility' => 'protected',
                 'docblock' => [
-                    'shortDescription' => 'Publisher pool',
-                    'tags' => [['name' => 'var', 'description' => '\Magento\Framework\MessageQueue\PublisherPool']],
+                    'shortDescription' => 'Publisher',
+                    'tags' => [['name' => 'var', 'description' => '\Magento\Framework\MessageQueue\PublisherInterface']],
                 ],
             ]
         ];
@@ -149,12 +149,10 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
             );
             $topicConfig = $this->communicationConfig->getTopic($topicName);
             $methodBody = $topicConfig[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? 'return ' : '';
-            $methodBody .= "\$this->publisherPool\n"
-                . "    ->getByTopicType('{$topicName}')\n"
-                . "    ->publish(\n"
-                . "        '{$topicName}',\n"
-                . "        [" . implode(', ', $topicParameters) . "]\n"
-                . "    );";
+            $methodBody .= "\$this->publisher->publish(\n"
+                . "    '{$topicName}',\n"
+                . "    [" . implode(', ', $topicParameters) . "]\n"
+                . ");";
             $annotations = [['name' => 'inheritdoc']];
             $methods[] = [
                 'name' => $methodName,

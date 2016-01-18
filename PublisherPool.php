@@ -12,7 +12,7 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 /**
  * Publishers pool.
  */
-class PublisherPool
+class PublisherPool implements PublisherInterface
 {
     const MODE_SYNC = 'sync';
     const MODE_ASYNC = 'async';
@@ -58,12 +58,9 @@ class PublisherPool
     }
 
     /**
-     * Get publisher by topic.
-     *
-     * @param string $topicName
-     * @return PublisherInterface
+     * {@inheritdoc}
      */
-    public function getByTopicType($topicName)
+    public function publish($topicName, $data)
     {
         /* read the topic configuration for the publisher name */
         $publisherName = $this->getPublisherNameForTopic($topicName);
@@ -74,7 +71,10 @@ class PublisherPool
             $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] = true;
         }
         $type = $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? self::MODE_SYNC : self::MODE_ASYNC;
-        return $this->getPublisherForConnectionNameAndType($type, $publisherConfig[QueueConfig::PUBLISHER_CONNECTION]);
+        /** @var PublisherInterface $publisher */
+        $publisher = $this->getPublisherForConnectionNameAndType($type, $publisherConfig[QueueConfig::PUBLISHER_CONNECTION]);
+        return $publisher->publish($topicName, $data);
+
     }
 
     /**
