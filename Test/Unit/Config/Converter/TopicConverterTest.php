@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Test\Unit\Config\Reader\Xml\Converter;
+namespace Magento\Framework\MessageQueue\Test\Unit\Config\Converter;
 
 /**
  * Class TopicConverterTest to test <topic> root node type definition of MQ
