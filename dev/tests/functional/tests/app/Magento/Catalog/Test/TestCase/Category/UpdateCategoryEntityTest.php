@@ -98,7 +98,7 @@ class UpdateCategoryEntityTest extends Injectable
     }
 
     /**
-     * Prepare comparison data.
+     * Prepare Category fixture with the updated data.
      *
      * @param Category $category
      * @param Category $initialCategory
