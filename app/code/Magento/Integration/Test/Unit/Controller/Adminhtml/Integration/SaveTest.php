@@ -32,6 +32,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             );
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         $intData = $this->_getSampleIntegrationData();
+
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
