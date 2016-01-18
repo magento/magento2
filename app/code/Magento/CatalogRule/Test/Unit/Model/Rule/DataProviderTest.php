@@ -42,7 +42,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $collectionMock;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         $this->collectionFactoryMock = $this->getMock(
             'Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory',
             [],
@@ -99,7 +100,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetData() {
+    public function testGetData()
+    {
         $ruleId = 42;
         $ruleData = ['name' => 'Catalog Price Rule'];
 
