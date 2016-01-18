@@ -57,11 +57,11 @@ class PlaceOrder extends AbstractAction
             $this->orderPlace->execute($quote, $agreement);
 
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-            return $resultRedirect->setPath('checkout/onepage/success');
+            return $resultRedirect->setPath('checkout/onepage/success', ['_secure' => true]);
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 
-        return $resultRedirect->setPath('checkout/cart');
+        return $resultRedirect->setPath('checkout/cart', ['_secure' => true]);
     }
 }
