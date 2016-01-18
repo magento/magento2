@@ -37,7 +37,7 @@ class LogoutAll extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $this->sessionsManager->logoutAnotherUserSessions();
+            $this->sessionsManager->logoutOtherUserSessions();
             $this->messageManager->addSuccess(__('All other open sessions for this account were terminated.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

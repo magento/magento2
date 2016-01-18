@@ -51,6 +51,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     protected $securityConfig;
 
     /**
+     * AdminSessionInfo constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Security\Helper\SecurityConfig $securityConfig
@@ -81,6 +83,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Check if a status is logged in
+     *
      * @return bool
      */
     public function isLoggedInStatus()
@@ -89,6 +93,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Check if a user is active
+     *
      * @return bool
      */
     public function isActive()
@@ -114,6 +120,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get formatted IP
+     *
      * @return string
      */
     public function getFormattedIp()
@@ -122,6 +130,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Check if other sessions terminated
+     *
      * @return bool
      */
     public function isOtherSessionsTerminated()
@@ -130,6 +140,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Setter for isOtherSessionsTerminated
+     *
      * @param bool $isOtherSessionsTerminated
      * @return this
      */
