@@ -8,7 +8,6 @@ namespace Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 use Magento\Store\Model\System\Store;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -76,19 +75,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $meta = [],
         array $data = []
     ) {
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        $this->groupRepository = $groupRepository;
         $this->collection = $collectionFactory->create();
         $this->store = $store;
-        $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->objectConverter = $objectConverter;
-        $this->initMeta();
+
+        $meta = array_replace_recursive($meta, $this->getMetadata());
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
-     * @return void
+     * @return array
      */
-    protected function initMeta()
+    protected function getMetadata()
     {
         $customerGroups = $this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems();
         $applyOptions = [
@@ -98,7 +98,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ['label' => __('Adjust final price to discount value'), 'value' => 'to_fixed']
         ];
 
-        $this->meta = [
+        return [
             'rule_information' => [
                 'fields' => [
                     'website_ids' => [
