@@ -113,7 +113,7 @@ define([
             options: [],
             listVisible: false,
             value: [],
-            filterOptions: false,
+            filterOptions: true,
             chipsEnabled: true,
             filterInputValue: '',
             filterOptionsFocus: false,
@@ -609,9 +609,13 @@ define([
          */
         enterKeyHandler: function () {
 
+            if (this.filterOptionsFocus()) {
+                return false;
+            }
+
             if (this.listVisible()) {
                 if (!_.isNull(this.hoverElIndex())) {
-                    this.toggleOptionSelected(this.options()[this.hoverElIndex()]);
+                    this.toggleOptionSelected(this.cacheOptions.plain[this.hoverElIndex()]);
                 }
             } else {
                 this.setListVisible(true);
@@ -631,7 +635,7 @@ define([
          */
         pageDownKeyHandler: function () {
             if (!_.isNull(this.hoverElIndex())) {
-                if (this.hoverElIndex() !== this.options().length - 1) {
+                if (this.hoverElIndex() !== this.cacheOptions.plain.length - 1) {
                     this.hoverElIndex(this.hoverElIndex() + 1);
                 } else {
                     this.hoverElIndex(0);
@@ -650,10 +654,10 @@ define([
                 if (this.hoverElIndex() !== 0) {
                     this.hoverElIndex(this.hoverElIndex() - 1);
                 } else {
-                    this.hoverElIndex(this.options().length - 1);
+                    this.hoverElIndex(this.cacheOptions.plain.length - 1);
                 }
             } else {
-                this.hoverElIndex(this.options().length - 1);
+                this.hoverElIndex(this.cacheOptions.plain.length - 1);
             }
         },
 
@@ -666,6 +670,7 @@ define([
          */
         keydownSwitcher: function (data, event) {
             var keyName = keyCodes[event.keyCode];
+
 
             if (this.isTabKey(event)) {
                 if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions) {
