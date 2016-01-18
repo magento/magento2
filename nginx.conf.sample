@@ -24,9 +24,6 @@ index index.php;
 autoindex off;
 charset off;
 
-add_header 'X-Content-Type-Options' 'nosniff';
-add_header 'X-XSS-Protection' '1; mode=block';
-
 location /setup {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {

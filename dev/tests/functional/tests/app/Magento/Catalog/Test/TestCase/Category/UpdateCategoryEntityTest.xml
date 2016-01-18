@@ -9,13 +9,13 @@
     <testCase name="Magento\Catalog\Test\TestCase\Category\UpdateCategoryEntityTest" summary="Update Category" ticketId="MAGETWO-23290">
         <variation name="UpdateCategoryEntityTestVariation1">
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
-            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
-            <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
             <data name="category/data/default_product_listing_config" xsi:type="string">No</data>
             <data name="category/data/default_sort_by" xsi:type="string">Name</data>
+            <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
@@ -24,16 +24,16 @@
         </variation>
         <variation name="UpdateCategoryEntityTestVariation2">
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
-            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
-            <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
-            <data name="category/data/description" xsi:type="string">Category Description</data>
-            <data name="category/data/meta_title" xsi:type="string">Category Title</data>
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
+            <data name="category/data/description" xsi:type="string">Category Description</data>
             <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
             <data name="category/data/available_sort_by/sort_2" xsi:type="string">Position</data>
             <data name="category/data/available_sort_by/sort_1" xsi:type="string">Price</data>
             <data name="category/data/default_product_listing_config" xsi:type="string">Yes</data>
+            <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
+            <data name="category/data/meta_title" xsi:type="string">Category Title</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
@@ -41,14 +41,14 @@
         </variation>
         <variation name="UpdateCategoryEntityTestVariation3">
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
-            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">No</data>
+            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
         <variation name="UpdateCategoryEntityTestVariation4" summary="Update Category with custom Store View.">
             <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
-	    <data name="category/data/use_default_name" xsi:type="string">No</data>
+	        <data name="category/data/use_default_name" xsi:type="string">No</data>
             <data name="category/data/name" xsi:type="string">Category %isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryWithCustomStoreOnFrontend" />
