@@ -722,9 +722,17 @@ class TypeProcessor
     private function getCondition($direction, $required)
     {
         if ($required) {
-            $condition = ($direction == 'requiredInput') ? 'yes' : 'always';
+            if ($direction == 'requiredInput') {
+                $condition = 'yes';
+            } else {
+                $condition = 'always';
+            }
         } else {
-            $condition = ($direction == 'requiredInput') ? 'no' : 'conditionally';
+            if ($direction == 'requiredInput') {
+                $condition =  'no';
+            } else {
+                $condition = 'conditionally';
+            }
         }
         return $condition;
     }
