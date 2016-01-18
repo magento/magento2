@@ -1006,12 +1006,24 @@ class Category extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->_attributes = [];
-        $this->loadAttributesMetadata($attributes);
+        \Magento\Framework\Profiler::start('EAV:load_entity');
+        /**
+         * Load object base row data
+         */
         $this->entityManager->load(CategoryInterface::class, $object, $entityId);
         if (!$object->getId()) {
             $object->isObjectNew(true);
         }
+
+        $this->loadAttributesMetadata($attributes);
+
+        $this->_loadModelAttributes($object);
+
+        $object->setOrigData();
+
         $this->_afterLoad($object);
+
+        \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
     }
 

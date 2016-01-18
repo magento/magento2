@@ -7,9 +7,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Search\Adapter\Mysql\Adapter;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use Magento\Framework\Search\Response\Aggregation\Value;
 use Magento\Framework\Search\Response\QueryResponse;
 
 /**
@@ -38,24 +36,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     private $searchEngine;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $queryText;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $order = null;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $searchRequestName;
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
      */
     private $temporaryStorageFactory;
-
-    /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    protected $metadataPool;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -81,7 +80,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\Search\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $searchRequestName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -110,7 +108,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Search\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $searchRequestName = 'catalog_view_container'
     ) {
@@ -135,7 +132,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $metadataPool,
             $connection
         );
         $this->requestBuilder = $requestBuilder;
