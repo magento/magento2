@@ -208,20 +208,16 @@ class Category extends AbstractResource
      */
     public function deleteChildren(\Magento\Framework\DataObject $object)
     {
-        $connection = $this->getConnection();
-        $pathField = $connection->quoteIdentifier('path');
+        if ($object->getSkipDeleteChildren()) {
+            return $this;
+        }
 
-        $select = $connection->select()->from(
-            $this->getEntityTable(),
-            ['entity_id']
-        )->where(
-            $pathField . ' LIKE :c_path'
-        );
-
-        $childrenIds = $connection->fetchCol($select, ['c_path' => $object->getPath() . '/%']);
-
-        if (!empty($childrenIds)) {
-            $connection->delete($this->getEntityTable(), ['entity_id IN (?)' => $childrenIds]);
+        $categories = $this->_categoryCollectionFactory->create();
+        $categories->addAttributeToFilter('path', ['like' => $object->getPath() . '/%']);
+        $childrenIds = $categories->getAllIds();
+        foreach ($categories as $category) {
+            $category->setSkipDeleteChildren(true);
+            $category->delete();
         }
 
         /**
