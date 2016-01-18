@@ -183,7 +183,7 @@ define([
                 _.filter(rows, function (row) {
                     return _.contains(selections.selected, row[index]);
                 }) : [];
-            this.set('externalValue', rows);
+            this.setExternalValue(rows);
         },
 
         /**
@@ -211,12 +211,32 @@ define([
             request = this.requestData(selectionsData);
             request
                 .done(function (data) {
-                    this.set('externalValue', data.items || data);
+                    this.setExternalValue(data.items || data);
                     this.loading(false);
                 }.bind(this))
                 .fail(this.onError);
 
             return request;
+        },
+
+        /**
+         * Set listing rows data to the externalValue,
+         * or if externalData is configured with the names of particular columns,
+         * filter rows data to have only these columns, and then set to the externalValue
+         *
+         * @param {Object} val - rows data
+         *
+         */
+        setExternalValue: function (val) {
+            var keys = this.externalData;
+
+            if (keys) {
+                val = _.map(val, function (item) {
+                    return _.pick(item, keys);
+                }, this);
+            }
+
+            this.set('externalValue', val);
         },
 
         /**
