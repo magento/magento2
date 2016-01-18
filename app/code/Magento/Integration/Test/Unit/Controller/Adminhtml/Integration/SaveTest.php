@@ -32,7 +32,6 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             );
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         $intData = $this->_getSampleIntegrationData();
-
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
@@ -59,6 +58,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             )->with(
                 __('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME])
             );
+
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
