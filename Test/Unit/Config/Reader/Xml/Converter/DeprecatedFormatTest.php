@@ -35,7 +35,7 @@ class DeprecatedFormatTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $wildcardPatternMap =  include(__DIR__ . '/../../../_files/wildcard_pattern_map.php');
+        $wildcardPatternMap =  include(__DIR__ . '/../../../../_files/wildcard_pattern_map.php');
         $this->validatorMock->expects($this->any())
             ->method('buildWildcardPattern')
             ->willReturnMap($wildcardPatternMap);
@@ -49,8 +49,8 @@ class DeprecatedFormatTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert($type)
     {
-        $xmlFile = __DIR__ . '/../../../_files/queue.xml';
-        $expectedData = include(__DIR__ . '/../../../_files/expected_queue.php');
+        $xmlFile = __DIR__ . '/../../../../_files/queue.xml';
+        $expectedData = include(__DIR__ . '/../../../../_files/expected_queue.php');
 
         $dom = new \DOMDocument();
         $dom->load($xmlFile);
