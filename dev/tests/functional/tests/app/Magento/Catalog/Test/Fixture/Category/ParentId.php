@@ -12,6 +12,7 @@ use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Prepare parent category.
+ * Sets parent_id data as [['id' => 'N' ], ['category' => Category ]]
  */
 class ParentId extends DataSource
 {
