@@ -25,7 +25,8 @@ define([
             },
             imports: {
                 onSelectedChange: '${ $.selectionsProvider }:selected',
-                'update_url': '${ $.externalProvider }:update_url'
+                'update_url': '${ $.externalProvider }:update_url',
+                'initialUpdateListing': '${ $.selectionsProvider }:indexField'
             },
             exports: {
                 externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
@@ -89,6 +90,7 @@ define([
         /**
          * Updates externalValue every time row is selected,
          * if it is configured by 'dataLinks.imports'
+         * Also suppress dataLinks so import/export of selections will not activate each other in circle
          *
          */
         onSelectedChange: function () {
@@ -235,7 +237,9 @@ define([
 
             provider = this.selections();
 
-            if (!this.provider) {
+            if (!provider) {
+                this.needInitialListingUpdate = true;
+
                 return;
             }
 
@@ -251,10 +255,12 @@ define([
          * Updates grid selections
          * every time, when extenalValue is updated,
          * so grid is re-selected according to externalValue updated
+         * Also suppress dataLinks so import/export of selections will not activate each other in circle
          *
+         * @param {Object} items
          */
-        updateSelections: function () {
-            var provider = this.selections(),
+        updateSelections: function (items) {
+            var provider,
                 ids;
 
             if (!this.dataLinks.exports || this.suppressDataLinks) {
@@ -263,9 +269,35 @@ define([
                 return;
             }
 
+            provider = this.selections();
+
+            if (!provider) {
+                this.needInitialListingUpdate = true;
+
+                return;
+            }
+
             this.suppressDataLinks = true;
-            ids = _.pluck(this.value() || [], provider.indexField);
+            ids = _.pluck(items || [], provider.indexField)
+                .map(function (item) {
+                    return item.toString();
+                });
             provider.selected(ids || []);
+        },
+
+        /**
+         * initial update of the listing
+         * with rows that must be checked/filtered
+         * by the indexes
+         */
+        initialUpdateListing: function () {
+            var items = this.value();
+
+            if (this.needInitialListingUpdate && items) {
+                this.updateExternalFiltersModifier(items);
+                this.updateSelections(items);
+                this.needInitialListingUpdate = false;
+            }
         },
 
         /**
