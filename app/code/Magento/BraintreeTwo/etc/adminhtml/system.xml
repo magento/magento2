@@ -139,6 +139,7 @@
                         <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Title</label>
                             <config_path>payment/braintreetwo_paypal/title</config_path>
+                            <comment>It is recommended to set this value to "Magento_BraintreeTwo" per store views.</comment>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -169,6 +170,7 @@
                             <label>Require Customer's Billing Address</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintreetwo_paypal/require_billing_address</config_path>
+                            <comment>This feature needs be enabled first for the merchant account through PayPal technical support.</comment>
                         </field>
                         <field id="allow_shipping_address_override" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Allow to Edit Shipping Address Entered During Checkout on PayPal Side</label>
@@ -184,6 +186,7 @@
                             <label>Display on Shopping Cart</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintreetwo_paypal/display_on_shopping_cart</config_path>
+                            <comment>Also affects mini-shopping cart.</comment>
                         </field>
                     </group>
                     <group id="braintreetwo_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="41">
