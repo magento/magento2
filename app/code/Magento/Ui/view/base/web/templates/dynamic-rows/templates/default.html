@@ -4,38 +4,38 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field" css="element.setClasses(element)">
+<div class="admin__field" visible="visible" disabled="disabled" css="element.setClasses(element)">
     <label if="element.label" class="admin__field-label" attr="for: element.uid">
         <span text="element.label"/>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
         <div class="admin__control-table-wrapper">
-            <table class="admin__dynamic-rows data-grid" data-role="grid">
+            <table class="admin__dynamic-rows admin__control-table" data-role="grid">
                 <thead if="element.renderColumnsHeader">
                     <tr>
-                        <th if="dndConfig.enabled"
-                            class="data-grid-draggable-row-cell"/>
+                        <th if="dndConfig.enabled"/>
 
-                        <!-- ko foreach: {data: labels, as: 'label'}  -->
-                        <th class="data-grid-th"
-                            text="label.config.label"
-                            css="$parent.setClasses(label.config)">
-                        </th>
+                        <!-- ko foreach: {data: labels, as: 'item'}  -->
+                        <th text="item.label",
+                            css="$parent.setClasses(item)",
+                            visible="item.visible",
+                            disabled="item.disabled"/>
                         <!-- /ko -->
                     </tr>
                 </thead>
 
                 <tbody data-bind="foreach: elems">
-                    <tr class="data-row"
-                        css="'_odd-row': $index % 2">
+                    <tr class="data-row">
                         <td if="$parent.dndConfig.enabled"
-                            class="data-grid-draggable-row-cell"
+                            class="_fit"
                             template="name: $parent.dndConfig.template, data: $parent.dnd"/>
 
                         <!-- ko foreach: { data: elems, as: 'elem'}  -->
                         <td if="elem.template"
                             css="$parents[1].setClasses(elem)"
+                            visible="elem.visible"
+                            disabled="elem.disabled"
                             template="elem.template"/>
                         <!-- /ko -->
                     </tr>
