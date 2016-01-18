@@ -536,7 +536,7 @@ class Category extends AbstractResource
         $table = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
-
+        $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $storeId,
@@ -548,12 +548,11 @@ class Category extends AbstractResource
             ['COUNT(m.entity_id)']
         )->joinLeft(
             ['d' => $table],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.' . $this->getLinkField() . ' = m.entity_id',
+            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = m.{$linkField}",
             []
         )->joinLeft(
             ['c' => $table],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.'
-            . $this->getLinkField() . ' = m.entity_id',
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = m.{$linkField}",
             []
         )->where(
             'm.path LIKE :c_path'
