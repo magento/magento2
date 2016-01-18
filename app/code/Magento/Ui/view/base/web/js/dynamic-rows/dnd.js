@@ -26,9 +26,8 @@ define([
      *
      * @returns {String|Undefined}
      */
-
     transformProp = (function () {
-        var style = document.body.style,
+        var style =  document.createElement('div').style,
             base = 'Transform',
             vendors = ['webkit', 'moz', 'ms', 'o'],
             vi = vendors.length,
