@@ -678,6 +678,7 @@ class TypeProcessor
      * @param string $serviceName API service name
      * @param string $methodName
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processInterfaceCallInfo($interface, $serviceName, $methodName)
     {
@@ -691,17 +692,9 @@ class TypeProcessor
                 if (!$this->isTypeSimple($parameterData['type']) && !$this->isTypeAny($parameterData['type'])) {
                     $operation = $this->getOperationName($serviceName, $methodName);
                     if ($parameterData['required']) {
-                        if ($direction == 'requiredInput') {
-                            $condition = 'yes';
-                        } else {
-                            $condition = 'always';
-                        }
+                        $condition = ($direction == 'requiredInput') ? 'yes' : 'always';
                     } else {
-                        if ($direction == 'requiredInput') {
-                            $condition =  'no';
-                        } else {
-                            $condition = 'conditionally';
-                        }
+                        $condition = ($direction == 'requiredInput') ? 'no' : 'conditionally';
                     }
                     $callInfo = [];
                     $callInfo[$direction][$condition]['calls'][] = $operation;
