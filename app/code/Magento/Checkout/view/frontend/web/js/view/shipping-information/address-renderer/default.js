@@ -9,6 +9,7 @@ define([
 ], function(Component, customerData) {
     'use strict';
     var countryData = customerData.get('directory-data');
+
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-information/address-renderer/default'
