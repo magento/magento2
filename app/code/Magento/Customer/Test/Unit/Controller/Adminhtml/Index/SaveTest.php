@@ -121,7 +121,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $redirectFactoryMock;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AccountManagement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $managementMock;
 
@@ -199,8 +199,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->managementMock = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
+        $this->managementMock = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
             ->disableOriginalConstructor()
+            ->setMethods(['createAccount', 'sendNotificationEmailsIfRequired'])
             ->getMock();
         $this->addressDataFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
             ->disableOriginalConstructor()
@@ -457,6 +458,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->customerRepositoryMock->expects($this->once())
             ->method('save')
             ->with($customerMock)
+            ->willReturnSelf();
+
+        $this->managementMock->expects($this->once())
+            ->method('sendNotificationEmailsIfRequired')
+            ->with($customerMock, $customerMock)
             ->willReturnSelf();
 
         $this->authorizationMock->expects($this->once())
