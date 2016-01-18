@@ -140,7 +140,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $select = $this->getConnection()
             ->select()
             ->from(['attr_table' => $table], [])
-            ->where("attr_table.{$this->getLinkField()} = ?", $object->getId())
+            ->where("attr_table.{$this->getLinkField()} = ?", $object->getData($this->getLinkField()))
             ->where('attr_table.store_id IN (?)', $storeIds);
 
         if ($setId) {

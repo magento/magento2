@@ -29,11 +29,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
     protected $_customerVisitor;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
      * AbstractCollection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -55,7 +50,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Customer\Model\Visitor $customerVisitor
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param mixed $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -81,7 +75,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Model\Visitor $customerVisitor,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct(
@@ -104,7 +97,6 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
             $customerSession,
             $dateTime,
             $groupManagement,
-            $metadataPool,
             $connection
         );
         $this->_customerVisitor = $customerVisitor;

@@ -50,11 +50,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_catalogProductCompareItem;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
      * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -77,7 +72,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -104,7 +98,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
@@ -129,7 +122,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $metadataPool,
             $connection
         );
     }

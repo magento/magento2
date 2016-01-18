@@ -62,11 +62,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $quoteResource;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
      * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -91,7 +86,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param mixed $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -120,7 +114,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->setProductEntityId($product->getEntityIdField());
@@ -146,7 +139,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $metadataPool,
             $connection
         );
         $this->_eventTypeFactory = $eventTypeFactory;
