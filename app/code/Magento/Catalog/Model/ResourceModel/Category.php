@@ -544,12 +544,13 @@ class Category extends AbstractResource
             ['COUNT(m.entity_id)']
         )->joinLeft(
             ['d' => $table],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.' . $this->getLinkField() . ' = m.entity_id',
+            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.'
+            . $this->getLinkField() . ' = m.' . $this->getLinkField(),
             []
         )->joinLeft(
             ['c' => $table],
             'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.'
-            . $this->getLinkField() . ' = m.entity_id',
+            . $this->getLinkField() . ' = m.' . $this->getLinkField(),
             []
         )->where(
             'm.path LIKE :c_path'
