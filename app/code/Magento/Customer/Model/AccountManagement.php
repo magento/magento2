@@ -72,6 +72,8 @@ class AccountManagement implements AccountManagementInterface
 
     const XML_PATH_CHANGE_EMAIL_TEMPLATE = 'customer/account_information/change_email_template';
 
+    const XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE = 'customer/account_information/change_email_and_password_template';
+
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
@@ -664,13 +666,6 @@ class AccountManagement implements AccountManagementInterface
         $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->customerRepository->save($customer);
-        // FIXME: Are we using the proper template here?
-        try {
-            $this->sendPasswordResetNotificationEmail($customer);
-        } catch (MailException $e) {
-            $this->logger->critical($e);
-        }
-
         return true;
     }
 
@@ -864,20 +859,59 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Send emails to customer when his email is changed
+     * Send emails to customer when his email or/and password is changed
      *
      * @param CustomerInterface $origCustomer
      * @param CustomerInterface $savedCustomer
+     * @param bool $passwordIsChanged
      * @return $this
      */
-    public function checkEmailChangesAndSendNotificationEmails(
+    public function sendNotificationEmailsIfRequired(
         CustomerInterface $origCustomer,
-        CustomerInterface $savedCustomer
+        CustomerInterface $savedCustomer,
+        $passwordIsChanged = false
     ) {
         if ($origCustomer->getEmail() != $savedCustomer->getEmail()) {
+            if ($passwordIsChanged) {
+                $this->sendEmailAndPasswordChangeNotificationEmail($origCustomer);
+                $this->sendEmailAndPasswordChangeNotificationEmail($savedCustomer);
+                return $this;
+            }
+
             $this->sendEmailChangeNotificationEmail($origCustomer);
             $this->sendEmailChangeNotificationEmail($savedCustomer);
+            return $this;
         }
+
+        if ($passwordIsChanged) {
+            $this->sendPasswordResetNotificationEmail($savedCustomer);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Send email to customer when his email and password is changed
+     *
+     * @param CustomerInterface $customer
+     * @return $this
+     */
+    protected function sendEmailAndPasswordChangeNotificationEmail(CustomerInterface $customer)
+    {
+        $storeId = $customer->getStoreId();
+        if (!$storeId) {
+            $storeId = $this->getWebsiteStoreId($customer);
+        }
+
+        $customerEmailData = $this->getFullCustomerObject($customer);
+
+        $this->sendEmailTemplate(
+            $customer,
+            self::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE,
+            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
+            $storeId
+        );
 
         return $this;
     }
