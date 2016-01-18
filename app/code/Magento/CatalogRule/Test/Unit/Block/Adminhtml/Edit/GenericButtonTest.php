@@ -38,12 +38,14 @@ class GenericButtonTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCanRender() {
+    public function testCanRender()
+    {
         $name = "Catalog Rule";
         $this->assertEquals($name, $this->model->canRender($name));
     }
 
-    public function testGetUrl() {
+    public function testGetUrl()
+    {
         $url = "http://magento.com/catalogRule/";
         $route = 'button';
         $params = ['unit' => 'test'];
@@ -56,7 +58,8 @@ class GenericButtonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($url, $this->model->getUrl($route, $params));
     }
 
-    public function testGetRuleId() {
+    public function testGetRuleId()
+    {
         $ruleId = 42;
         $ruleMock = new \Magento\Framework\DataObject(['id' => $ruleId]);
         $this->registryMock->expects($this->once())
@@ -67,7 +70,8 @@ class GenericButtonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($ruleId, $this->model->getRuleId());
     }
 
-    public function testGetRuleIdWithoutRule() {
+    public function testGetRuleIdWithoutRule()
+    {
         $this->assertNull($this->model->getRuleId());
     }
 }

@@ -38,7 +38,8 @@ class DeleteButtonTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetButtonData() {
+    public function testGetButtonData()
+    {
         $ruleId = 42;
         $deleteUrl = 'http://magento.com/rule/delete/' . $ruleId;
         $ruleMock = new \Magento\Framework\DataObject(['id' => $ruleId]);
@@ -64,7 +65,8 @@ class DeleteButtonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $this->model->getButtonData());
     }
 
-    public function testGetButtonDataWithoutRule() {
+    public function testGetButtonDataWithoutRule()
+    {
         $this->assertEquals([], $this->model->getButtonData());
     }
 }
