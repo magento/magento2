@@ -48,7 +48,7 @@ class BackendTest extends \PHPUnit_Framework_TestCase
      */
     private $helper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
             ->disableOriginalConstructor()

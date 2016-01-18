@@ -22,7 +22,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var Config */
     protected $config;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);

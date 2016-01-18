@@ -38,7 +38,7 @@ class InterpretationStrategyTest extends \PHPUnit_Framework_TestCase
      */
     private $interpretationStrategy;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->renderersPool = $this->getMockBuilder(
             'Magento\Framework\View\Element\Message\Renderer\RenderersPool'

@@ -45,7 +45,7 @@ class ShowTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManager|\Magento\Swatches\Controller\Adminhtml\Iframe\Show */
     protected $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Backend\App\Action\Context', [], [], '', false);
         $observerMock = $this->getMock('\Magento\Framework\Event\Manager', [], [], '', false);

@@ -34,7 +34,7 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->encryptMock = $this->getMockBuilder('Magento\Framework\Encryption\EncryptorInterface')
             ->disableOriginalConstructor()

@@ -34,7 +34,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     private $loaderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
         $requireMap = [

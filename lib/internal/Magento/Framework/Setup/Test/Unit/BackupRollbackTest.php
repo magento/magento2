@@ -56,7 +56,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
      */
     private $path;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
         $this->log = $this->getMock('Magento\Framework\Setup\LoggerInterface', [], [], '', false);

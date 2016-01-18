@@ -56,7 +56,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
      */
     protected $closureMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->stockRegistry = $this->getMock('\Magento\CatalogInventory\Api\StockRegistryInterface');
         $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');

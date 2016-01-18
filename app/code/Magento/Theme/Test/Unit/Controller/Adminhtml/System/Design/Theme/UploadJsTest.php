@@ -28,7 +28,7 @@ class UploadJsTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\
     /** @var \Magento\Framework\View\Design\Theme\CustomizationInterface|\PHPUnit_Framework_MockObject_MockObject  */
     protected $themeCustomization;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->serviceModel = $this->getMock('Magento\Theme\Model\Uploader\Service', [], [], '', false);

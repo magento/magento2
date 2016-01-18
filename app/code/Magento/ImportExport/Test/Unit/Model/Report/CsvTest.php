@@ -42,7 +42,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      */
     protected $csvModel;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

@@ -25,7 +25,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $filter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->filter = $this->getMockBuilder('Magento\Ui\Component\MassAction\Filter')
             ->disableOriginalConstructor()

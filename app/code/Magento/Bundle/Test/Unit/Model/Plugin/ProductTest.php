@@ -21,7 +21,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var  MockObject|\Magento\Catalog\Model\Product */
     private $product;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 

@@ -21,7 +21,7 @@ class ExtendTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend */
     protected $object;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->registry = $this->getMockBuilder('Magento\\Framework\\Registry')->disableOriginalConstructor()->getMock(
         );

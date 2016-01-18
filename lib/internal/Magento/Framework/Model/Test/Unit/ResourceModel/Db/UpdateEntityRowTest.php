@@ -19,7 +19,7 @@ class UpdateEntityRowTest extends \PHPUnit_Framework_TestCase
      */
     protected $metadataPoolMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\MetadataPool')

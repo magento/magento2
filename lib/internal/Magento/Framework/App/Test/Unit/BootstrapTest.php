@@ -61,7 +61,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      */
     protected $bootstrapMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');

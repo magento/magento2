@@ -45,7 +45,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $entitySnapshotMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->addressMock = $this->getMock(
             'Magento\Sales\Model\Order\Address',

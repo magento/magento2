@@ -22,7 +22,7 @@ class DeleteFolderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject */
     protected $storageHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);

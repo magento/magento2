@@ -62,7 +62,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->mathRandomMock = $this->getMockBuilder('\Magento\Framework\Math\Random')
             ->disableOriginalConstructor()

@@ -72,7 +72,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         // Mocks

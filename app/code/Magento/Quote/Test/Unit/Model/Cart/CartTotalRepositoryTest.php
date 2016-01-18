@@ -60,7 +60,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $totalsConverterMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->totalsFactoryMock = $this->getMock(

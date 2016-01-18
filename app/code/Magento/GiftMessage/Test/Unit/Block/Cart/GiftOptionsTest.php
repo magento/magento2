@@ -27,7 +27,7 @@ class GiftOptionsTest extends \PHPUnit_Framework_TestCase
     /** @var array  */
     protected $jsLayout = ['root' => 'node'];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
         $this->jsonEncoderMock = $this->getMock('Magento\Framework\Json\Encoder', [], [], '', false);

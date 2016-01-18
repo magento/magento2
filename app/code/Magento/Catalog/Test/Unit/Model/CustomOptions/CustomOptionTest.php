@@ -20,7 +20,7 @@ class CustomOptionTest extends \PHPUnit_Framework_TestCase
      */
     protected $fileProcessor;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()

@@ -29,7 +29,7 @@ class ClassLoaderWrapperTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->autoloaderMock = $this->getMock('Composer\Autoload\ClassLoader');
         $this->model = (new ObjectManager($this))->getObject('Magento\Framework\Autoload\ClassLoaderWrapper',

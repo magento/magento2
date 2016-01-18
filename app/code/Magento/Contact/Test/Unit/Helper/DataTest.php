@@ -36,7 +36,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $_customerViewHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = '\Magento\Contact\Helper\Data';

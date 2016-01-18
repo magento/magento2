@@ -49,7 +49,7 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 

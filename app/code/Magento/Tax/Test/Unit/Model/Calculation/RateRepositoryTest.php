@@ -64,7 +64,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $joinProcessorMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->rateConverterMock = $this->getMock(
             'Magento\Tax\Model\Calculation\Rate\Converter',

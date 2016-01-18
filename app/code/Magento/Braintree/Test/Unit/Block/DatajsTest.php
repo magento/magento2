@@ -27,7 +27,7 @@ class DatajsTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataJs;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('\Magento\Framework\View\Element\Template\Context')
             ->disableOriginalConstructor()

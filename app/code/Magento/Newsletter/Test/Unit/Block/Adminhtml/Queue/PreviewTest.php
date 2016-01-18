@@ -42,7 +42,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
      */
     protected $preview;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);

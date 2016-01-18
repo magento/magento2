@@ -50,7 +50,7 @@ class QuoteAddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Init
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->addressMock = $this->getMock(
             'Magento\Quote\Model\Quote\Address',

@@ -12,7 +12,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
     }

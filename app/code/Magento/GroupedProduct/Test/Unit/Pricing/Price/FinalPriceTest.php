@@ -34,7 +34,7 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->saleableItemMock =  $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->calculatorMock = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);

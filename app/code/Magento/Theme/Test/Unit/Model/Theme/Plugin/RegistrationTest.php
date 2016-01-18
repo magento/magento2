@@ -35,7 +35,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     /** @var Registration */
     protected $plugin;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->themeRegistration = $this->getMock('Magento\Theme\Model\Theme\Registration', [], [], '', false);
         $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);

@@ -21,7 +21,7 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected $authorizationMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->urlMock = $this->getMockForAbstractClass(
             'Magento\Backend\Model\UrlInterface',

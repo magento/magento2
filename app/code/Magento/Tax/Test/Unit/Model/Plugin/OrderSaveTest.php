@@ -39,7 +39,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->orderTaxFactoryMock = $this->getMockBuilder(
             '\Magento\Tax\Model\Sales\Order\TaxFactory'

@@ -56,7 +56,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
      */
     protected $context;
 
-    public function setUp()
+    protected function setUp()
     {
         $reportTypes = [
             'sales' => 'Magento\Sales\Model\ResourceModel\Report\Order'

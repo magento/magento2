@@ -68,7 +68,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()

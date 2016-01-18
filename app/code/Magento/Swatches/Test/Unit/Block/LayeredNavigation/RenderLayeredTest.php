@@ -40,7 +40,7 @@ class RenderLayeredTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->requestMock = $this->getMock('\Magento\Framework\App\Request', ['getParams'], [], '', false);

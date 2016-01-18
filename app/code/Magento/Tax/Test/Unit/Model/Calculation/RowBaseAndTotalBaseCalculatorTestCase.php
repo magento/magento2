@@ -78,7 +78,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
         $this->initMockAppliedTaxDataObjectFactory();
     }
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->taxItemDetailsDataObjectFactory = $this->getMock(

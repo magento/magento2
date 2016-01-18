@@ -27,7 +27,7 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $catalogPriceInterfaceMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->priceFactoryMock = $this->getMock(
             'Magento\Catalog\Model\Product\CatalogPriceFactory',

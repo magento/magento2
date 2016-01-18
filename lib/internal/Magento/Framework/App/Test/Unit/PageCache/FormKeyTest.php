@@ -44,7 +44,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
     /**
      * Create cookie mock and FormKey instance
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactory = $this->getMockBuilder(

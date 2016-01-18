@@ -71,7 +71,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
      */
     private $templateFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
             ->disableOriginalConstructor()

@@ -39,7 +39,7 @@ class BookmarkManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $userContext;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->bookmarkRepository = $this->getMockBuilder('Magento\Ui\Api\BookmarkRepositoryInterface')
             ->getMockForAbstractClass();

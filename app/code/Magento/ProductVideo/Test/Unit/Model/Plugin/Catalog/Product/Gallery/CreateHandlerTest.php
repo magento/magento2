@@ -37,7 +37,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $mediaGalleryCreateHandler;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',

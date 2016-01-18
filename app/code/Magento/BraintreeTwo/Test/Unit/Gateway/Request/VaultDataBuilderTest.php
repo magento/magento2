@@ -21,7 +21,7 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $vaultPaymentMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->vaultPaymentMock = $this->getMock(VaultPaymentInterface::class);
 

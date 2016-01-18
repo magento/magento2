@@ -76,7 +76,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->scheduledStructure = $this->getMock(
             'Magento\Framework\View\Layout\ScheduledStructure',

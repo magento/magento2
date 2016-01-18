@@ -34,7 +34,7 @@ class ThemeUninstallerTest extends \PHPUnit_Framework_TestCase
      */
     private $output;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->themePackageInfo = $this->getMock('Magento\Theme\Model\Theme\ThemePackageInfo', [], [], '', false);
         $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);

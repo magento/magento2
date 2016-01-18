@@ -27,7 +27,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
      */
     protected $coreUrl;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerUrl = $this->getMockBuilder(
             'Magento\Customer\Model\Url'

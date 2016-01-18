@@ -144,7 +144,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->importProduct = $this->getMock(
             '\Magento\CatalogImportExport\Model\Import\Product',

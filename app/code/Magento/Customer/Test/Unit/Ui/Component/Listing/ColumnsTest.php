@@ -30,7 +30,7 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
     /** @var Columns */
     protected $component;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
             ->getMockForAbstractClass();

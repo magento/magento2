@@ -52,7 +52,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $entitySnapshotMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);

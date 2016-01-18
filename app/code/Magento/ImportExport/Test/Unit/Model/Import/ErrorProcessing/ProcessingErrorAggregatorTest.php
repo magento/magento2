@@ -39,7 +39,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Preparing mock objects
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->processingErrorFactoryMock = $this->getMock(
             '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory',

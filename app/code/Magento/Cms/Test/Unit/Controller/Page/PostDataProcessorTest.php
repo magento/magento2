@@ -21,7 +21,7 @@ class PostDataProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var PostDataProcessor */
     protected $postDataProcessor;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dateFilter = $this->getMock('Magento\Framework\Stdlib\DateTime\Filter\Date', [], [], '', false);
         $this->messageManager = $this->getMockForAbstractClass(

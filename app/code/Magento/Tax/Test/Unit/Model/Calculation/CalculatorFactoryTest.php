@@ -20,7 +20,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
     }

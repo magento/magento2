@@ -15,7 +15,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare parameters
      */
-    public function setUp()
+    protected function setUp()
     {
         $fileResolver = $this->getMockBuilder('Magento\Framework\App\Config\FileResolver')
             ->disableOriginalConstructor()

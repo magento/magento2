@@ -62,7 +62,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $repository;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->addressFactory = $this->getMock('Magento\Customer\Model\AddressFactory', ['create'], [], '', false);
         $this->addressRegistry = $this->getMock('Magento\Customer\Model\AddressRegistry', [], [], '', false);
