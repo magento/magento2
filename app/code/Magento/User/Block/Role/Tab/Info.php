@@ -104,7 +104,20 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        $form->setValues($this->getRole()->getData());
+        $data = array_merge($this->getRole()->getData(), ['in_role_user_old' => $this->getOldUsers()]);
+        $form->setValues($data);
         $this->setForm($form);
+    }
+
+    /**
+     * Get old Users Form Data
+     *
+     * @return null|string
+     */
+    protected function getOldUsers()
+    {
+        return $this->_coreRegistry->registry(
+            \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY
+        );
     }
 }
