@@ -26,7 +26,8 @@ class AssertCategoryForm extends AbstractAssertForm
      * @var array
      */
     protected $skippedFixtureFields = [
-        'parent_id'
+        'parent_id',
+        'id'
     ];
 
     /**
@@ -66,8 +67,6 @@ class AssertCategoryForm extends AbstractAssertForm
         if (isset($data['url_key'])) {
             $data['url_key'] = strtolower($data['url_key']);
         }
-
-        unset($data['id']);
 
         return array_diff_key($data, array_flip($this->skippedFixtureFields));
     }
