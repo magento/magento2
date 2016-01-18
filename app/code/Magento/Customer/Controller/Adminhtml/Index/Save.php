@@ -234,7 +234,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $this->_customerRepository->save($customer);
 
                     $this->customerAccountManagement
-                        ->checkEmailChangesAndSendNotificationEmails($currentCustomer, $customer);
+                        ->sendNotificationEmailsIfRequired($currentCustomer, $customer);
 
                 } else {
                     $customer = $this->customerAccountManagement->createAccount($customer);
