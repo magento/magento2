@@ -139,7 +139,7 @@
                         <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Title</label>
                             <config_path>payment/braintreetwo_paypal/title</config_path>
-                            <comment>It is recommended to set this value to "Magento_BraintreeTwo" per store views.</comment>
+                            <comment>It is recommended to set this value to "PayPal" per store views.</comment>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>

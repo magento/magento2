@@ -538,7 +538,7 @@ Vendor,Vendor
 "Publisher ID","Publisher ID"
 "Required to display a banner","Required to display a banner"
 "Get Publisher ID from PayPal","Get Publisher ID from PayPal"
-"It is recommended to set this value to ""Magento_Paypal"" per store views.","It is recommended to set this value to ""Magento_Paypal"" per store views."
+"It is recommended to set this value to ""PayPal"" per store views.","It is recommended to set this value to ""PayPal"" per store views."
 "Shortcut on Shopping Cart","Shortcut on Shopping Cart"
 "Also affects mini-shopping cart.","Also affects mini-shopping cart."
 "Shortcut on Product View","Shortcut on Product View"
