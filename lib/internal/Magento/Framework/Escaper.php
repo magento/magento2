@@ -103,6 +103,4 @@ class Escaper extends \Zend\Escaper\Escaper
         }
         return htmlspecialchars($data, ENT_QUOTES, null, false);
     }
-
-
 }
