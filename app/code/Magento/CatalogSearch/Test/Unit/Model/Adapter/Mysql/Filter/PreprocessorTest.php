@@ -369,6 +369,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('getIfNullSql')
             ->with('current_store.value', 'main_table.value')
             ->will($this->returnValue('IF NULL SQL'));
+        $this->resource->expects($this->once())->method('getTableName')->willReturn('catalog_product_entity');
         $this->select->expects($this->once())
             ->method('from')
             ->with(['e' => 'catalog_product_entity'], ['entity_id'])
