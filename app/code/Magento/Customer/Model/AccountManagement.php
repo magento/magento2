@@ -863,16 +863,16 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $origCustomer
      * @param CustomerInterface $savedCustomer
-     * @param bool $passwordIsChanged
+     * @param bool $isPasswordChanged
      * @return $this
      */
     public function sendNotificationEmailsIfRequired(
         CustomerInterface $origCustomer,
         CustomerInterface $savedCustomer,
-        $passwordIsChanged = false
+        $isPasswordChanged = false
     ) {
         if ($origCustomer->getEmail() != $savedCustomer->getEmail()) {
-            if ($passwordIsChanged) {
+            if ($isPasswordChanged) {
                 $this->sendEmailAndPasswordChangeNotificationEmail($origCustomer);
                 $this->sendEmailAndPasswordChangeNotificationEmail($savedCustomer);
                 return $this;
@@ -883,7 +883,7 @@ class AccountManagement implements AccountManagementInterface
             return $this;
         }
 
-        if ($passwordIsChanged) {
+        if ($isPasswordChanged) {
             $this->sendPasswordResetNotificationEmail($savedCustomer);
         }
 
