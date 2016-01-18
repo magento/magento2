@@ -93,7 +93,8 @@ class UpdateCategoryEntityTest extends Injectable
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);
         $this->catalogCategoryEdit->getFormPageActions()->save();
-        return ['category' => $this->prepareData($category, $initialCategory)];
+
+        return ['category' => $this->prepareCategory($category, $initialCategory)];
     }
 
     /**
@@ -103,14 +104,20 @@ class UpdateCategoryEntityTest extends Injectable
      * @param Category $initialCategory
      * @return Category
      */
-    protected function prepareData(Category $category, Category $initialCategory)
+    protected function prepareCategory(Category $category, Category $initialCategory)
     {
-        $updatedCategory = $this->fixtureFactory->createByCode(
-            'category',
-            [
-                'data' => array_merge($initialCategory->getData(), $category->getData())
-            ]
-        );
-        return $updatedCategory;
+        $parentCategory = $category->hasData('parent_id')
+            ? $category->getDataFieldConfig('parent_id')['source']->getParentCategory()
+            : $initialCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
+
+        $data = [
+            'data' => array_merge(
+                $initialCategory->getData(),
+                $category->getData(),
+                ['parent_id' => ['source' => $parentCategory]]
+            )
+        ];
+
+        return $this->fixtureFactory->createByCode('category', $data);
     }
 }

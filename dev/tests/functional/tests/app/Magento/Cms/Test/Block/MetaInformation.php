@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Block\Category;
+namespace Magento\Cms\Test\Block;
 
 use Magento\Mtf\Block\Block;
 
 /**
- * MetaInformation block on the category page.
+ * MetaInformation block on the Storefront page.
  */
 class MetaInformation extends Block
 {
