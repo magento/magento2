@@ -989,8 +989,8 @@ class AccountManagement implements AccountManagementInterface
             return true;
         }
 
-        $dayDifference = floor(($currentTimestamp - $tokenTimestamp) / (24 * 60 * 60));
-        if ($dayDifference >= $expirationPeriod) {
+        $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
+        if ($hourDifference >= $expirationPeriod) {
             return true;
         }
 

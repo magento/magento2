@@ -150,7 +150,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
                 <field id="reset_link_expiration_period" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Recovery Link Expiration Period (days)</label>
+                    <label>Recovery Link Expiration Period (hours)</label>
                     <comment>Please enter a number 1 or greater in this field.</comment>
                     <validate>required-entry validate-digits validate-digits-range digits-range-1-</validate>
                     <backend_model>Magento\Customer\Model\Config\Backend\Password\Link\Expirationperiod</backend_model>
