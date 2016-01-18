@@ -587,20 +587,21 @@ class Category extends AbstractResource
      */
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
+        $linkField = $this->getLinkField();
         $bind = ['attribute_id' => $attribute->getId(), 'value' => $expectedValue];
-        $select = $this->getConnection()->select()->from(
-            $attribute->getBackend()->getTable(),
-            ['entity_id']
+        $selectEntities = $this->getConnection()->select()->from(
+            ['ce' => $this->getTable('catalog_category_entity')], ['entity_id']
+        )->joinLeft(
+            ['ci' => $attribute->getBackend()->getTable()],
+            "ci.{$linkField} = ce.{$linkField} AND attribute_id = :attribute_id",
+            ['value']
         )->where(
-            'attribute_id = :attribute_id'
+            'ci.value = :value'
         )->where(
-            'value = :value'
-        )->where(
-            'entity_id IN(?)',
+            'ce.entity_id IN (?)',
             $entityIdsFilter
         );
-
-        return $this->getConnection()->fetchCol($select, $bind);
+        return $this->getConnection()->fetchCol($selectEntities, $bind);
     }
 
     /**
