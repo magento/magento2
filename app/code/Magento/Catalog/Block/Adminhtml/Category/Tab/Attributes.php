@@ -11,7 +11,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
 
-class Attributes extends \Magento\Backend\Block\Widget\Form\Generic
+class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**
      * Retrieve Category object
