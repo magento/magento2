@@ -76,7 +76,7 @@ class QuoteUpdater extends AbstractHelper
      */
     private function updateQuote(Quote $quote, array $details)
     {
-        $quote->setMayEditShippingAddress(true);
+        $quote->setMayEditShippingAddress(false);
         $quote->setMayEditShippingMethod(true);
 
         $this->updateQuoteAddress($quote, $details);
