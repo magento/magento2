@@ -62,6 +62,8 @@
             <xs:element name="actionsColumn" type="actionsColumn" />
             <xs:element name="selectionsColumn" type="selectionsColumn" />
             <xs:element name="htmlContent" type="htmlContent" />
+            <xs:element type="insertForm" name="insertForm"/>
+            <xs:element type="insertListing" name="insertListing"/>
         </xs:all>
     </xs:complexType>
     <!-- Custom configuration -->
@@ -85,6 +87,8 @@
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="fieldset" name="fieldset"/>
                     <xs:element type="dataSource" name="dataSource"/>
+                    <xs:element type="insertForm" name="insertForm"/>
+                    <xs:element type="insertListing" name="insertListing"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
