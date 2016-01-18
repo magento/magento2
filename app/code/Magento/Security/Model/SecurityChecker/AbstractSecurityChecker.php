@@ -38,6 +38,8 @@ abstract class AbstractSecurityChecker
     }
 
     /**
+     * Create collection
+     *
      * @param int $securityEventType
      * @return \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection
      */
@@ -51,6 +53,8 @@ abstract class AbstractSecurityChecker
     }
 
     /**
+     * Apply config filters
+     *
      * @param RequestCollection $passwordResetRequestEventCollection
      * @param int $securityEventType
      * @param string $accountReference
@@ -82,6 +86,8 @@ abstract class AbstractSecurityChecker
     }
 
     /**
+     * Get scope by event type
+     *
      * @param int $eventType
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException

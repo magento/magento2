@@ -133,6 +133,8 @@ class AdminSessionsManager
     }
 
     /**
+     * Get logout reason message by status
+     *
      * @param int $statusCode
      * @return string
      */
@@ -191,7 +193,7 @@ class AdminSessionsManager
      *
      * @return $this
      */
-    public function logoutAnotherUserSessions()
+    public function logoutOtherUserSessions()
     {
         $collection = $this->createAdminSessionInfoCollection()
             ->filterByUser(
