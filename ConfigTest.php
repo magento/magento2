@@ -91,7 +91,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $converter = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\Xml\Converter',
+            'Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter',
             [
                 'communicationConfig' => $this->getCommunicationConfigInstance()
             ]
