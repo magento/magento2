@@ -113,7 +113,7 @@ define([
             options: [],
             listVisible: false,
             value: [],
-            filterOptions: true,
+            filterOptions: false,
             chipsEnabled: true,
             filterInputValue: '',
             filterOptionsFocus: false,
