@@ -61,6 +61,9 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject*/
     protected $logger;
 
+    /** @var \Magento\Customer\Model\AccountManagement | \PHPUnit_Framework_MockObject_MockObject */
+    protected $customerAccountManagement;
+
     /** @var array */
     protected $items;
 
@@ -126,6 +129,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         );
         $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);
 
+        $this->customerAccountManagement = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
+            ->disableOriginalConstructor()
+            ->setMethods(['sendNotificationEmailsIfRequired'])
+            ->getMock();
+
         $this->context = $objectManager->getObject(
             'Magento\Backend\App\Action\Context',
             [
@@ -145,6 +153,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'addressDataFactory' => $this->addressDataFactory,
                 'addressRepository' => $this->addressRepository,
                 'logger' => $this->logger,
+                'customerAccountManagement' => $this->customerAccountManagement
             ]
         );
 
@@ -254,10 +263,19 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(23);
+
+        $currentCustomerData = clone $this->customerData;
+
         $this->prepareMocksForUpdateDefaultBilling();
         $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($this->customerData);
+
+        $this->customerAccountManagement->expects($this->once())
+            ->method('sendNotificationEmailsIfRequired')
+            ->with($currentCustomerData, $this->customerData)
+            ->willReturnSelf();
+
         $this->prepareMocksForErrorMessagesProcessing();
         $this->assertSame($this->resultJson, $this->controller->execute());
     }

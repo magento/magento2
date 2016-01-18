@@ -39,7 +39,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     protected $session;
 
     /**
-     * @var AccountManagementInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AccountManagement | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerAccountManagement;
 
@@ -95,8 +95,10 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->customerAccountManagement = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
-            ->getMockForAbstractClass();
+        $this->customerAccountManagement = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
+            ->disableOriginalConstructor()
+            ->setMethods(['sendNotificationEmailsIfRequired', 'validatePasswordById', 'changePassword'])
+            ->getMock();
 
         $this->customerRepository = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
             ->getMockForAbstractClass();
@@ -196,6 +198,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->method('extract')
             ->with('customer_account_edit', $this->request)
             ->willReturn($newCustomerMock);
+
+        $this->customerAccountManagement->expects($this->once())
+            ->method('sendNotificationEmailsIfRequired')
+            ->with($currentCustomerMock, $newCustomerMock, false)
+            ->willReturnSelf();
 
         $this->messageManager->expects($this->once())
             ->method('getMessages')
@@ -406,12 +413,9 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(true);
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->once())
             ->method('getParam')
-            ->withConsecutive(
-                ['change_email'],
-                ['change_password']
-            )
+            ->with('change_email')
             ->willReturn(false);
         $this->request->expects($this->any())
             ->method('getPostValue')
