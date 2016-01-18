@@ -153,14 +153,6 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['verifyIdentity'])
             ->getMock();
-//        $this->_userMock = $this->getMockBuilder(
-//            'Magento\User\Model\User'
-//        )->setMethods(
-//            ['verifyIdentity']
-//        )->disableOriginalConstructor()->getMock();
-//        $this->_userMock = $this->getMockBuilder('\Magento\Backend\Model\Auth\Credential\StorageInterface')
-//            ->setMethods(['verifyIdentity'])
-//            ->getMockForAbstractClass();
         $this->_requestMock = $this->getMockBuilder(
             'Magento\Framework\App\Request\Http'
         )->disableOriginalConstructor()->getMock();
@@ -198,6 +190,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $actionName
      * @return \Magento\Integration\Controller\Adminhtml\Integration
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _createIntegrationController($actionName)
     {
