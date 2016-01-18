@@ -67,7 +67,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->catalogOutputMock = $this->getMock('Magento\Catalog\Helper\Output', [], [], '', false);
         $this->rssFactoryMock = $this->getMock('Magento\Rss\Model\RssFactory', ['create'], [], '', false);

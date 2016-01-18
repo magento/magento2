@@ -30,7 +30,7 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var ColumnFactory */
     protected $columnFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMockForAbstractClass(
             'Magento\Framework\View\Element\UiComponent\ContextInterface',

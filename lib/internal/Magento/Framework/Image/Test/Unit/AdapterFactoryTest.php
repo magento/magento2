@@ -14,7 +14,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $configMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMock(
             'Magento\Framework\Image\Adapter\ConfigInterface',

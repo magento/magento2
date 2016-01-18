@@ -24,7 +24,7 @@ class CostTest extends \PHPUnit_Framework_TestCase
      */
     protected $creditmemoItemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->creditmemoMock = $this->getMock('\Magento\Sales\Model\Order\Creditmemo', [
             'setBaseCost', 'getAllItems'

@@ -41,7 +41,7 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected $converter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->paymentMock = $this->getMock(
             'Magento\Quote\Model\Quote\Payment',

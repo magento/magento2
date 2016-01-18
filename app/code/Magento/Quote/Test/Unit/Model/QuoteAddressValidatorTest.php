@@ -38,7 +38,7 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerSessionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

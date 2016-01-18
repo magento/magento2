@@ -36,7 +36,7 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $subjectReaderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->paymentDOMock = $this->getMock(PaymentDataObjectInterface::class);
         $this->orderMock = $this->getMock(OrderAdapterInterface::class);

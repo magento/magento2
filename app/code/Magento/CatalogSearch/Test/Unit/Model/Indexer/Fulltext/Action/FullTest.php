@@ -15,7 +15,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full */
     protected $object;
 
-    public function setUp()
+    protected function setUp()
     {
         $resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()

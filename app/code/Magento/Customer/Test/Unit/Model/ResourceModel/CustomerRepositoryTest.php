@@ -88,7 +88,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
     
-    public function setUp()
+    protected function setUp()
     {
         $this->customerResourceModel =
             $this->getMock('Magento\Customer\Model\ResourceModel\Customer', [], [], '', false);

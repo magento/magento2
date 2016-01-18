@@ -30,7 +30,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject */
     private $minificationMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()

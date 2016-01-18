@@ -49,7 +49,7 @@ class ExternalVideoEntryConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $modelObject;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->mediaGalleryEntryFactoryMock =
             $this->getMock(

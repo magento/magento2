@@ -31,7 +31,7 @@ class GridAsyncInsertTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfigurationMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->gridAggregatorMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\GridInterface')
             ->getMockForAbstractClass();

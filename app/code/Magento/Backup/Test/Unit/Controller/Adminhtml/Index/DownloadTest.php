@@ -84,7 +84,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRedirectMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->getMock();

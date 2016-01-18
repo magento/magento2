@@ -32,7 +32,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
      */
     protected $weeeData;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->weeeData = $this->getMockBuilder('\Magento\Weee\Helper\Data')
             ->setMethods(

@@ -42,7 +42,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $subjectMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->integrationConfigMock = $this->getMockBuilder(
             '\Magento\Integration\Model\IntegrationConfig'

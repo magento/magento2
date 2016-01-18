@@ -51,7 +51,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\CustomerMetadataInterface */
     private $customerMetadata;
 
-    public function setUp()
+    protected function setUp()
     {
         $zendCacheCore = new \Zend_Cache_Core();
         $zendCacheCore->setBackend(new \Zend_Cache_Backend_BlackHole());

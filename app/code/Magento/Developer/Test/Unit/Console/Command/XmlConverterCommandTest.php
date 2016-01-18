@@ -34,7 +34,7 @@ class XmlConverterCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $xsltProcessorFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');

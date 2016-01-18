@@ -89,7 +89,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      */
     protected $invoiceManagement;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);

@@ -107,7 +107,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up instances and mock objects
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
         $this->response = $this->getMock('Magento\Framework\App\ResponseInterface');

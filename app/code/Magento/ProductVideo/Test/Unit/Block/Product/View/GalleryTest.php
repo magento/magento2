@@ -49,7 +49,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Catalog\Block\Product\Context', [], [], '', false);
         $this->arrayUtilsMock = $this->getMock('\Magento\Framework\Stdlib\ArrayUtils', [], [], '', false);

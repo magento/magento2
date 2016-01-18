@@ -19,7 +19,7 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Swatches\Observer\AddSwatchAttributeTypeObserver|\PHPUnit_Framework_MockObject_MockObject */
     protected $observerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->moduleManagerMock = $this->getMock(
             '\Magento\Framework\Module\Manager',

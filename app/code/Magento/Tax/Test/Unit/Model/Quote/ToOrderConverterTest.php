@@ -35,7 +35,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->orderExtensionFactoryMock = $this->getMockBuilder(
             '\Magento\Sales\Api\Data\OrderExtensionFactory'

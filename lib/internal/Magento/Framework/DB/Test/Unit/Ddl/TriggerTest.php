@@ -12,7 +12,7 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_object;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_object = new \Magento\Framework\DB\Ddl\Trigger();
     }

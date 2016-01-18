@@ -34,7 +34,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $product;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 

@@ -29,7 +29,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->taxRateDataObjectFactory = $this->getMockBuilder(
             '\Magento\Tax\Api\Data\TaxRateInterfaceFactory'

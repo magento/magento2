@@ -22,7 +22,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfig;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = 'Magento\Shipping\Helper\Carrier';

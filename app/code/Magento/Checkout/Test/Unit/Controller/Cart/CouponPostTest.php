@@ -70,7 +70,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);

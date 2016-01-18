@@ -29,7 +29,7 @@ class SendFriendTest extends \PHPUnit_Framework_TestCase
      */
     protected $sendfriendDataMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->sendfriendDataMock = $this->getMockBuilder('Magento\SendFriend\Helper\Data')

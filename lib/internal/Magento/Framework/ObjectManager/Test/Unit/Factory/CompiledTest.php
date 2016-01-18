@@ -34,7 +34,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
      */
     private $sharedInstances;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->setMethods([])

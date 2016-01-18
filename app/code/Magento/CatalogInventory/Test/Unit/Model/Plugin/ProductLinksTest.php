@@ -22,7 +22,7 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
      */
     protected $stockHelperMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMock(
             'Magento\CatalogInventory\Model\Configuration',

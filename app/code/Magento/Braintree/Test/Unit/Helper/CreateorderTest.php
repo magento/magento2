@@ -46,7 +46,7 @@ class CreateorderTest extends \PHPUnit_Framework_TestCase
     /**
      * test setup
      */
-    public function setUp()
+    protected function setUp()
     {
 
         $this->paymentHelper = $this->getMockBuilder('\Magento\Braintree\Helper\Data')

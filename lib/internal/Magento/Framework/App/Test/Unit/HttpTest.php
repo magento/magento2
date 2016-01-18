@@ -62,7 +62,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $cookieReaderMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieReaderInterface')

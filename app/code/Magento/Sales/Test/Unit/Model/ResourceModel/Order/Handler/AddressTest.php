@@ -31,7 +31,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $addressMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->attributeMock = $this->getMock(
             'Magento\Sales\Model\ResourceModel\Attribute',

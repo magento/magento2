@@ -53,7 +53,7 @@ HTML;
 
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    protected function setUp()
     {
         $isCurrentItem = $this->getName() == 'testGetHtmlWithSelectedCategory' ? true : false;
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

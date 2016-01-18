@@ -18,7 +18,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Acl\AclResource\ProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $resourceProviderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->resourceProviderMock = $this->getMockBuilder('Magento\Framework\Acl\AclResource\ProviderInterface')
             ->disableOriginalConstructor()

@@ -27,7 +27,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key\Save */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->encryptMock = $this->getMockBuilder('Magento\Framework\Encryption\EncryptorInterface')
             ->disableOriginalConstructor()

@@ -19,7 +19,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Metadata\ElementFactory | \PHPUnit_Framework_MockObject_MockObject */
     protected $attrDataFactoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->attrDataFactoryMock = $this->getMockBuilder(
             '\Magento\Customer\Model\Metadata\ElementFactory'

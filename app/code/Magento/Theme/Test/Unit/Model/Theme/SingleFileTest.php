@@ -22,7 +22,7 @@ class SingleFileTest extends \PHPUnit_Framework_TestCase
     /**
      * Initialize testable object
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->file = $this->getMockBuilder('Magento\Framework\View\Design\Theme\Customization\FileInterface')
             ->getMock();

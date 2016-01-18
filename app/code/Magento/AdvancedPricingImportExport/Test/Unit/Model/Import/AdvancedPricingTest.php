@@ -121,7 +121,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     protected $errorAggregator;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

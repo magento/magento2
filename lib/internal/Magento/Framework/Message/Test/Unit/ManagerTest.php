@@ -58,7 +58,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $logger;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->messagesFactory = $this->getMockBuilder(
             'Magento\Framework\Message\CollectionFactory'

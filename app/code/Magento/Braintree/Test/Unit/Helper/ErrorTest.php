@@ -26,7 +26,7 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
     /**
      * test setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(

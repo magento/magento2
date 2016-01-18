@@ -57,7 +57,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $directory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->viewDesign = $this->getMock('\Magento\Framework\View\DesignInterface', [], [], '', false);
         $this->cache = $this->getMock('\Magento\Framework\Cache\FrontendInterface', [], [], '', false);

@@ -28,7 +28,7 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
     /**
      * Init mocks and model
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

@@ -24,7 +24,7 @@ class CheckAdminPasswordChangeObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\User\Observer\Backend\CheckAdminPasswordChangeObserver */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->userMock = $this->getMockBuilder('Magento\User\Model\ResourceModel\User')
             ->disableOriginalConstructor()

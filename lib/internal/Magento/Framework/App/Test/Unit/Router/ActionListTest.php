@@ -29,7 +29,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
      */
     protected $actionList;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->cacheMock = $this->getMockBuilder('Magento\Framework\Config\CacheInterface')

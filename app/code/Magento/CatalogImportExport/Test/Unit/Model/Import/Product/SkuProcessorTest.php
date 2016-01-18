@@ -19,7 +19,7 @@ class SkuProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $skuProcessor;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->productFactory = $this->getMock(
             '\Magento\Catalog\Model\ProductFactory',

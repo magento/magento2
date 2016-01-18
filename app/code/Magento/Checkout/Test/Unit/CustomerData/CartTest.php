@@ -43,7 +43,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected $layoutMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
         $this->catalogUrlMock = $this->getMock(

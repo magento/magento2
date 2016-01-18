@@ -57,7 +57,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected $form;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->onePageMock = $this->getMockBuilder('\Magento\Checkout\Model\Type\Onepage')
             ->disableOriginalConstructor()

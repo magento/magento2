@@ -13,7 +13,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     private $cacheHelperMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->cacheHelperMock = $this->getCacheHelperMock(['getCache']);
     }

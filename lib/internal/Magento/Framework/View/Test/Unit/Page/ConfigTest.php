@@ -59,7 +59,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $title;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
         $this->pageAssets = $this->getMock('Magento\Framework\View\Asset\GroupedCollection', [], [], '', false);

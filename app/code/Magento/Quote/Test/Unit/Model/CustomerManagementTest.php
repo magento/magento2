@@ -44,7 +44,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerAddressMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             'Magento\Customer\Api\CustomerRepositoryInterface',
