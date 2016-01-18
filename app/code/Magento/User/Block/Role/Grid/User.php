@@ -246,14 +246,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY
         );
         if (null !== $sessionData) {
-            $pairs = explode('&', $sessionData);
-            $users = [];
-            foreach ($pairs as $pair) {
-                list($usersId) = explode('=', $pair);
-                $users[] = $usersId;
-            }
-
-            return $users;
+            parse_str($sessionData, $sessionData);
+            return array_keys($sessionData);
         }
 
         return false;

@@ -23,6 +23,11 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     const IN_ROLE_USER_FORM_DATA_SESSION_KEY = 'in_role_user_form_data';
 
     /**
+     * Session keys for original Users form data
+     */
+    const IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY = 'in_role_old_user_form_data';
+
+    /**
      * Session keys for Use all resources flag form data
      */
     const RESOURCE_ALL_FORM_DATA_SESSION_KEY = 'resource_all_form_data';
@@ -179,6 +184,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     {
         $this->_getSession()->setData(self::ROLE_EDIT_FORM_DATA_SESSION_KEY, ['rolename' => $data['rolename']]);
         $this->_getSession()->setData(self::IN_ROLE_USER_FORM_DATA_SESSION_KEY, $data['in_role_user']);
+        $this->_getSession()->setData(self::IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY, $data['in_role_user_old']);
         if ($data['all']) {
             $this->_getSession()->setData(self::RESOURCE_ALL_FORM_DATA_SESSION_KEY, $data['all']);
         } else {
