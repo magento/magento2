@@ -12,6 +12,9 @@ use Magento\Framework\MessageQueue\Config\Reader\Xml\Converter;
 
 class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
 {
+    const SERVICE_METHOD_NAME_PATTERN = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
+    const DEFAULT_HANDLER = 'defaultHandler';
+
     /**
      * @var MethodsMap
      */
@@ -120,7 +123,7 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
      */
     protected function identifySchemaType($schemaId)
     {
-        return preg_match(Converter::SERVICE_METHOD_NAME_PATTERN, $schemaId)
+        return preg_match(self::SERVICE_METHOD_NAME_PATTERN, $schemaId)
             ? ConfigInterface::TOPIC_SCHEMA_TYPE_METHOD
             : ConfigInterface::TOPIC_SCHEMA_TYPE_OBJECT;
     }
@@ -134,7 +137,7 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
      */
     protected function getSchemaDefinedByMethod($schemaId, $topic)
     {
-        preg_match(Converter::SERVICE_METHOD_NAME_PATTERN, $schemaId, $matches);
+        preg_match(self::SERVICE_METHOD_NAME_PATTERN, $schemaId, $matches);
         $serviceClass = $matches[1];
         $serviceMethod = $matches[2];
         $this->xmlValidator->validateSchemaMethodType($serviceClass, $serviceMethod, $topic);
@@ -195,7 +198,7 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
             $handlers = [];
             if (isset($map[$queueName])) {
                 foreach ($map[$queueName] as $topic) {
-                    $handlers[$topic][Converter::DEFAULT_HANDLER] = $handler;
+                    $handlers[$topic][self::DEFAULT_HANDLER] = $handler;
                 }
             }
             $output[$consumerName] = [

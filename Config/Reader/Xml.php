@@ -27,7 +27,7 @@ class Xml extends \Magento\Framework\Config\Reader\Filesystem
 
     /**
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter $converter
+     * @param \Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter $converter
      * @param \Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
@@ -37,7 +37,7 @@ class Xml extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter $converter,
+        \Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter $converter,
         \Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'queue.xml',
