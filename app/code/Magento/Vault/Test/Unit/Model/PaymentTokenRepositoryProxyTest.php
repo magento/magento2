@@ -58,8 +58,6 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
         $this->nullRepositoryMock = $this->getMockBuilder(PaymentTokenNullRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->vaultPaymentMock = $this->getMockBuilder(VaultPaymentInterface::class)
-            ->getMockForAbstractClass();
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
@@ -87,10 +85,6 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
         $proxyCallsMock = $this->getMockBuilder(PaymentTokenRepositoryInterface::class)
             ->getMockForAbstractClass();
 
-        $this->vaultPaymentMock->expects(self::once())
-            ->method('isActive')
-            ->willReturn(1);
-
         $this->configMock->expects(self::once())
             ->method('getValue')
             ->with(VaultProvidersMap::VALUE_CODE)
@@ -103,7 +97,6 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
 
         $proxy = new PaymentTokenRepositoryProxy(
             $this->nullRepositoryMock,
-            $this->vaultPaymentMock,
             $this->configMock,
             $this->objectManagerMock,
             ['code' => get_class($proxyCallsMock)]
@@ -152,7 +145,6 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
 
         $proxy = new PaymentTokenRepositoryProxy(
             $this->nullRepositoryMock,
-            $this->vaultPaymentMock,
             $this->configMock,
             $this->objectManagerMock,
             []
@@ -195,7 +187,6 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
                 $tokenFactoryMock,
                 $searchResultFactoryMock
             ),
-            $this->vaultPaymentMock,
             $this->configMock,
             $this->objectManagerMock,
             []
@@ -228,7 +219,6 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
                 $tokenFactoryMock,
                 $searchResultFactoryMock
             ),
-            $this->vaultPaymentMock,
             $this->configMock,
             $this->objectManagerMock,
             []
