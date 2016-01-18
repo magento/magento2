@@ -21,7 +21,7 @@
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrderWith3dSecure"/>
         <step name="placeOrderWith3dSecure" module="Magento_Braintree"/>
     </scenario>
-    <scenario name="OnePageCheckoutWithPayPalTest" firstStep="setupConfiguration">
+    <scenario name="OnePageCheckoutWithBraintreePaypalTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts"/>
         <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart"/>
         <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax"/>
@@ -31,7 +31,14 @@
         <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress"/>
         <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod"/>
         <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod"/>
-        <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrderWithPayPal"/>
-        <step name="placeOrderWithPayPal" module="Magento_Braintree"/>
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrderWithPaypal"/>
+        <step name="placeOrderWithPaypal" module="Magento_Braintree"/>
+    </scenario>
+    <scenario name="CheckoutWithBraintreePaypalCartTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts"/>
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart"/>
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="checkoutWithPaypalFromCart"/>
+        <step name="checkoutWithPaypalFromCart" module="Magento_Braintree" next="expressCheckoutOrderPlace"/>
+        <step name="expressCheckoutOrderPlace" module="Magento_Paypal"/>
     </scenario>
 </config>

@@ -3,15 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Test\Block\Form;
+namespace Magento\Braintree\Test\Block\Paypal;
 
-use Magento\Mtf\Block\Form;
+use Magento\Mtf\Block\Block;
 
 /**
- * Class PayPal
- * Form with Braintree PayPal details
+ * Class PopupWindow
  */
-class PayPal extends Form
+class PopupWindow extends Block
 {
     /**
      * @var string
