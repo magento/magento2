@@ -100,13 +100,13 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->customerRepository->save($customer);
 
                 // Change customer password
-                $passwordIsChanged = false;
+                $isPasswordChanged = false;
                 if ($this->getRequest()->getParam('change_password')) {
-                    $passwordIsChanged = $this->changeCustomerPassword($currentCustomerEmail);
+                    $isPasswordChanged = $this->changeCustomerPassword($currentCustomerEmail);
                 }
 
                 $this->customerAccountManagement
-                    ->sendNotificationEmailsIfRequired($currentCustomer, $customer, $passwordIsChanged);
+                    ->sendNotificationEmailsIfRequired($currentCustomer, $customer, $isPasswordChanged);
 
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
