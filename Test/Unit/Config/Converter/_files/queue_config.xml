@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config>
+    <queue name="q.01" exchange="ex.01" consumer="cons.01" consumerInstance="\Magento\Consumer\Instance" type="amqp">
+        <topic name="top.01" handlerName="h.01" />
+        <topic name="top.02" handlerName="h.02" />
+        <topic name="top.03" handlerName="h.03" />
+    </queue>
+    <queue name="q.02" exchange="ex.01" consumer="cons.01" consumerInstance="\Magento\Consumer\Instance" type="db">
+        <topic name="top.01" />
+        <topic name="top.02" handler="\Magento\Handler\Class\Name::methodName" />
+        <topic name="top.03" handlerName="h.03" />
+    </queue>
+</config>
