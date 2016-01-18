@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+
 /** @var \Magento\TestFramework\ObjectManager $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -144,7 +146,11 @@ foreach ($oldOptions as $option) {
     $options[] = $option;
 }
 
-$product->setOptions($options)->save();
+$product->setOptions($options);
+
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
+$productRepositoryFactory = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+$productRepositoryFactory->save($product);
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
