@@ -55,6 +55,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     // TODO Add assertion
     public function testConvert()
     {
+        $this->markTestIncomplete('TODO in MAGETWO-47766');
         $topicConfigData = include(__DIR__ . '/../../_files/expected_topic_config.php');
         $deprecatedConfigData = include(__DIR__ . '/../../_files/expected_queue.php');
         $dom = new \DOMDocument();
