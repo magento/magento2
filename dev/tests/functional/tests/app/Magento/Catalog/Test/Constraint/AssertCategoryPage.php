@@ -106,7 +106,7 @@ class AssertCategoryPage extends AbstractConstraint
                 : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
 
             $category = $category->getParentId()['category'];
-            if (1 == $category->getParentId()) {
+            if (1 == $category->getParentId()['id']) {
                 $category = null;
             }
         }

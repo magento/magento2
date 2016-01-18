@@ -159,13 +159,25 @@ class Curl extends AbstractCurl implements CategoryInterface
         $this->fixture = $fixture;
         $this->fields = ['general' => $fixture->getData()];
 
+        $this->prepareParentId();
         $this->prepareGeneralInformation();
         $this->prepareDisplaySetting();
         $this->prepareCategoryProducts();
 
         $this->fields['general'] = $this->replaceMappingData($this->fields['general']);
-        $this->fields['general']['parent_id'] = $this->fields['general']['parent_id']['id'];
         return $this->fields;
+    }
+
+    /**
+     * Prepare parent_id received from a fixture.
+     *
+     * @return void
+     */
+    protected function prepareParentId()
+    {
+        $this->fields['general']['parent_id'] = isset($this->fields['general']['parent_id']['id'])
+            ? $this->fields['general']['parent_id']['id']
+            : $this->fields['general']['parent_id'];
     }
 
     /**
