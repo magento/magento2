@@ -53,6 +53,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected $eventManager;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
+
+    /**
      * @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $product;
@@ -178,6 +183,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
+        $this->metadataPool = $this->getMockBuilder('\Magento\Framework\Model\Entity\MetadataPool')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getMetadata',
+                'getIdentifierField'
+            ])
+            ->getMock();
+
         $this->context->expects($this->any())
             ->method('getResources')
             ->willReturn($this->resources);
@@ -190,12 +203,18 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getTablePrefix')
             ->willReturn('');
 
+        $this->metadataPool->method('getMetadata')
+            ->willReturnSelf();
+        $this->metadataPool->method('getIdentifierField')
+            ->willReturn('entity_id');
+
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
             '\Magento\Elasticsearch\Model\ResourceModel\Index',
             [
                 'context' => $this->context,
                 'storeManager' => $this->storeManager,
+                'metadataPool' => $this->metadataPool,
                 'productRepository' => $this->productRepository,
                 'categoryRepository' => $this->categoryRepository,
                 'eavConfig' => $this->eavConfig,
