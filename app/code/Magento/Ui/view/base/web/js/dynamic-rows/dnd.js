@@ -208,7 +208,7 @@ define([
          * @param {Object} curInstance - current element instance
          */
         _getDepElement: function (curInstance) {
-            var recordsCollection = this.table.find('tbody tr'),
+            var recordsCollection = this.table.find('tbody > tr'),
                 curInstancePosition = $(curInstance).position().top,
                 i = 0,
                 length = recordsCollection.length,
