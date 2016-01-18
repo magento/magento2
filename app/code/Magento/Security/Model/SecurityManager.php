@@ -66,6 +66,8 @@ class SecurityManager
     }
 
     /**
+     * Perform security check
+     *
      * @param int $requestType
      * @param string|null $accountReference
      * @param int|null $longIp
@@ -101,6 +103,8 @@ class SecurityManager
     }
 
     /**
+     * Create new password reset request record
+     *
      * @param int $requestType
      * @param string|null $accountReference
      * @param int $longIp

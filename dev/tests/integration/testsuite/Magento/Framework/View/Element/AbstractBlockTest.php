@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\View\Element\AbstractBlock;
+
 /**
  * @magentoAppIsolation enabled
  */
@@ -556,7 +558,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals($name, $key);
 
         $block->setCacheKey('key');
-        $this->assertEquals('key', $block->getCacheKey());
+        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . 'key', $block->getCacheKey());
     }
 
     /**
