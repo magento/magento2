@@ -34,23 +34,16 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         $output = [];
         /** @var $topicNode \DOMElement */
         foreach ($config->getElementsByTagName('topic') as $topicNode) {
-            $topicName = $topicNode->attributes->getNamedItem('name')->nodeValue;
-            $topicType = $topicNode->attributes->getNamedItem('type');
-            $topicHandlerName = $topicNode->attributes->getNamedItem('handlerName');
-            $topicHandler = $topicNode->attributes->getNamedItem('handler');
-            $topicExchange = $topicNode->attributes->getNamedItem('exchange');
-            $topicConsumerInstance = $topicNode->attributes->getNamedItem('consumerInstance');
-            $topicMaxMessages = $topicNode->attributes->getNamedItem('maxMessages');
-            $queues = $this->extractQueuesFromTopic($topicNode);
+            $topicName = $this->getAttributeValue($topicNode, 'name');
             $output[$topicName] = [
                 QueueConfigInterface::TOPIC_NAME => $topicName,
-                'type' => $topicType ? $topicType->nodeValue : null,
-                'exchange' => $topicExchange ? $topicExchange->nodeValue : null,
-                'consumerInstance' => $topicConsumerInstance ? $topicConsumerInstance->nodeValue : null,
-                'handlerName' => $topicHandlerName ? $topicHandlerName->nodeValue : null,
-                'handler' => $topicHandler ? $topicHandler->nodeValue : null,
-                'maxMessages' => $topicMaxMessages ? $topicMaxMessages->nodeValue : null,
-                'queues' => $queues,
+                'type' => $this->getAttributeValue($topicNode, 'type'),
+                'exchange' => $this->getAttributeValue($topicNode, 'exchange'),
+                'consumerInstance' => $this->getAttributeValue($topicNode, 'consumerInstance'),
+                'handlerName' => $this->getAttributeValue($topicNode, 'handlerName'),
+                'handler' => $this->getAttributeValue($topicNode, 'handler'),
+                'maxMessages' => $this->getAttributeValue($topicNode, 'maxMessages'),
+                'queues' => $this->extractQueuesFromTopic($topicNode)
             ];
         }
         return $output;
@@ -67,25 +60,34 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         $queues = [];
         /** @var $queueNode \DOMElement */
         foreach ($topicNode->getElementsByTagName('queue') as $queueNode) {
-            $queueName = $queueNode->attributes->getNamedItem('name')->nodeValue;
-            $queueHandlerName = $queueNode->attributes->getNamedItem('handlerName');
-            $queueHandler = $queueNode->attributes->getNamedItem('handler');
-            $queueExchange = $queueNode->attributes->getNamedItem('exchange');
-            $queueConsumer = $queueNode->attributes->getNamedItem('consumer');
-            $queueConsumerInstance = $queueNode->attributes->getNamedItem('consumerInstance');
-            $queueMaxMessages = $queueNode->attributes->getNamedItem('maxMessages');
-            $queueType = $queueNode->attributes->getNamedItem('type');
-            $queue = [];
-            $queue['name'] = $queueName;
-            $queue['handlerName'] = $queueHandlerName ? $queueHandlerName->nodeValue : null;
-            $queue['handler'] = $queueHandler ? $queueHandler->nodeValue : null;
-            $queue['exchange'] = $queueExchange ? $queueExchange->nodeValue : null;
-            $queue['consumer'] = $queueConsumer ? $queueConsumer->nodeValue : null;
-            $queue['consumerInstance'] = $queueConsumerInstance ? $queueConsumerInstance->nodeValue : null;
-            $queue['maxMessages'] = $queueMaxMessages ? $queueMaxMessages->nodeValue : null;
-            $queue['type'] = $queueType ? $queueType->nodeValue : null;
+            $queueName = $this->getAttributeValue($queueNode, 'name');
+            $queue = [
+               'name'=> $queueName,
+               'handlerName' => $this->getAttributeValue($queueNode, 'handlerName'),
+               'handler' => $this->getAttributeValue($queueNode, 'handler'),
+               'exchange' => $this->getAttributeValue($queueNode, 'exchange'),
+               'consumer' => $this->getAttributeValue($queueNode, 'consumer'),
+               'consumerInstance' => $this->getAttributeValue($queueNode, 'consumerInstance'),
+               'maxMessages' => $this->getAttributeValue($queueNode, 'maxMessages'),
+               'type' => $this->getAttributeValue($queueNode, 'type')
+
+            ];
             $queues[$queueName] = $queue;
         }
         return $queues;
+    }
+
+    /**
+     * Return an attribute value of the given node
+     *
+     * @param \DOMNode $node
+     * @param $attributeName
+     * @return string|null
+     */
+    protected function getAttributeValue(\DOMNode $node, $attributeName)
+    {
+        /** @var \DOMNode $item */
+        $item =  $node->attributes->getNamedItem($attributeName);
+        return $item ? $item->nodeValue : null;
     }
 }
