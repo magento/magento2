@@ -16,23 +16,19 @@ use Magento\Mtf\TestCase\Scenario;
  * 5. Create sales rule according to dataset.
  *
  * Steps:
- * 1. Log in Storefront.
- * 2. Add products to the Shopping Cart.
- * 3. In 'Estimate Shipping and Tax' section specify destination using values from Test Data.
- * 4. Click the 'Go to Checkout' button.
- * 5. Fill shipping information.
- * 6. Select shipping method.
- * 8. Select payment method
- * 9. Verify order total on review step.
- * 10. Click 'Continue to PayPal' button.
- * 11. Click 'Proceed purchase' in popup.
+ * 1.  Log in Storefront.
+ * 2.  Add products to the Shopping Cart.
+ * 3.  Open the Shopping cart and click "Checkout with PayPal"
+ * 4.  Click 'Proceed purchase' in popup.
+ * 5.  Select a shipping method.
+ * 6.  Click 'Place Order' button.
+ * 8.  Select payment method
  * 12. Perform assertions.
  *
  * @group Braintree_(CS)
- * @ZephyrId MAGETWO-47805
- * @ZephyrId MAGETWO-47810
+ * @ZephyrId MAGETWO-39359
  */
-class OnePageCheckoutWithPayPalTest extends Scenario
+class CheckoutWithBraintreePaypalCartTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';

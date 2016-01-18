@@ -11,11 +11,10 @@ use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class PlaceOrderWithPayPalStep
+ * Class PlaceOrderWithPaypalStep
  */
-class PlaceOrderWithPayPalStep implements TestStepInterface
+class PlaceOrderWithPaypalStep implements TestStepInterface
 {
-
     /**
      * @var CheckoutOnepage
      */
@@ -63,7 +62,7 @@ class PlaceOrderWithPayPalStep implements TestStepInterface
             $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
         $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
-        $this->checkoutOnepage->getBraintreePayPalBlock()->process();
+        $this->checkoutOnepage->getBraintreePaypalBlock()->process();
         return ['orderId' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId()];
     }
 }

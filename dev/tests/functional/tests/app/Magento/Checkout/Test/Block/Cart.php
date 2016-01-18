@@ -58,6 +58,13 @@ class Cart extends Block
     protected $paypalCheckoutButton = '[data-action=checkout-form-submit]';
 
     /**
+     * Locator value for "Check out with Braintree PayPal" button.
+     *
+     * @var string
+     */
+    protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
+
+    /**
      * Locator value for "empty Shopping Cart" block.
      *
      * @var string
@@ -126,6 +133,17 @@ class Cart extends Block
     public function paypalCheckout()
     {
         $this->_rootElement->find($this->paypalCheckoutButton)->click();
+    }
+
+    /**
+     * Click "Check out with Braintree PayPal" button.
+     *
+     * @return void
+     */
+    public function braintreePaypalCheckout()
+    {
+        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
+            ->click();
     }
 
     /**
