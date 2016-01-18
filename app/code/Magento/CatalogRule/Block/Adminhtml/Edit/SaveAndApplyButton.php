@@ -12,6 +12,7 @@ class SaveAndApplyButton extends GenericButton implements ButtonProviderInterfac
 {
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function getButtonData()
     {
