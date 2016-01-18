@@ -12,46 +12,43 @@ use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Delete Category URL Rewrites Entity
- *
- * Test Flow:
  * Preconditions:
- * 1. Create category
- * 2. Create custom category UrlRewrite
+ * 1. Create category.
+ * 2. Create custom category UrlRewrite.
  *
  * Steps:
- * 1. Open Backend
- * 2. Go to Marketing->URL Rewrites
- * 3. Search and open created URL Rewrite
- * 4. Delete URL Rewrite
- * 5. Perform all assertions
+ * 1. Open Backend.
+ * 2. Go to Marketing > URL Rewrites.
+ * 3. Search and open created URL Rewrite.
+ * 4. Delete URL Rewrite.
+ * 5. Perform all assertions.
  *
- * @group URL_Rewrites_(PS)
+ * @group URL_Rewrites_(MX)
  * @ZephyrId MAGETWO-25086
  */
 class DeleteCategoryUrlRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const DOMAIN = 'MX';
     /* end tags */
 
     /**
-     * Url rewrite index page
+     * Url rewrite index page.
      *
      * @var UrlRewriteIndex
      */
     protected $urlRewriteIndex;
 
     /**
-     * Url rewrite edit page
+     * Url rewrite edit page.
      *
      * @var UrlRewriteEdit
      */
     protected $urlRewriteEdit;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewriteEdit $urlRewriteEdit
@@ -64,7 +61,7 @@ class DeleteCategoryUrlRewriteEntityTest extends Injectable
     }
 
     /**
-     * Delete category Url Rewrite
+     * Delete category Url Rewrite.
      *
      * @param UrlRewrite $urlRewrite
      * @return void

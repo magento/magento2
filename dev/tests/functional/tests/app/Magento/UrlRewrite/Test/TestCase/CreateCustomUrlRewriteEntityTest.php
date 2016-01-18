@@ -13,19 +13,23 @@ use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
- * 1. Custom URL Rewrites is created.
+ * 1. Create CMS Page.
+ * 2. Create subcategory.
+ * 3. Create simple product.
  *
  * Steps:
  * 1. Login to backend as Admin.
- * 2. Go to the Marketing > SEO & Search > URL Redirects.
- * 3. Search and open created URL Redirect.
- * 4. Delete Redirect.
- * 5. Perform all assertions.
+ * 2. Go to the Marketing > SEO & Search > URL Rewrites.
+ * 3. Click "Add Url Rewrite" button.
+ * 4. Select "Custom" in Create URL Rewrite dropdown.
+ * 5. Fill data according to data set.
+ * 6. Save Rewrite.
+ * 7. Perform all assertions.
  *
  * @group URL_Rewrites_(MX)
- * @ZephyrId MAGETWO-26337
+ * @ZephyrId MAGETWO-25474
  */
-class DeleteCustomUrlRewriteEntityTest extends Injectable
+class CreateCustomUrlRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
@@ -60,21 +64,16 @@ class DeleteCustomUrlRewriteEntityTest extends Injectable
     }
 
     /**
-     * Delete custom URL Rewrite.
+     * Create custom URL Rewrite.
      *
      * @param UrlRewrite $urlRewrite
      * @return void
      */
     public function test(UrlRewrite $urlRewrite)
     {
-        // Precondition
-        $urlRewrite->persist();
-
-        // Steps
         $this->urlRewriteIndex->open();
-        $filter = ['request_path' => $urlRewrite->getRequestPath()];
-        $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen($filter);
-        $this->urlRewriteEdit->getPageMainActions()->delete();
-        $this->urlRewriteEdit->getModalBlock()->acceptAlert();
+        $this->urlRewriteIndex->getPageActionsBlock()->addNew();
+        $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
+        $this->urlRewriteEdit->getPageMainActions()->save();
     }
 }
