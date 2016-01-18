@@ -410,7 +410,7 @@ class AbstractAction
             [$linkField, 'attribute_id']
         )->joinLeft(
             [
-                'e' => $this->connection->getTableName('catalog_category_entity')
+                'e' => $this->connection->getTableName($this->getTableName('catalog_category_entity'))
             ],
             "def.{$linkField} = e.{$linkField}"
         )->joinLeft(
