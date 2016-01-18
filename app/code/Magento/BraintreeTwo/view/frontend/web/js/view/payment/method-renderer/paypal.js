@@ -84,6 +84,15 @@ define([
         },
 
         /**
+         * Get payment title
+         *
+         * @returns {String}
+         */
+        getTitle: function () {
+            return window.checkoutConfig.payment[this.getCode()].title;
+        },
+
+        /**
          * Check if payment is active
          *
          * @returns {Boolean}

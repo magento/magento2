@@ -102,6 +102,10 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getMerchantName')
             ->willReturn('Test');
 
+        $this->payPalConfig->expects(static::once())
+            ->method('getTitle')
+            ->willReturn('Payment Title');
+
         $this->localeResolver->expects(static::once())
             ->method('getLocale')
             ->willReturn('en_US');
@@ -172,6 +176,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                         ConfigProvider::PAYPAL_CODE => [
                             'isActive' => true,
+                            'title' => 'Payment Title',
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
                             'locale' => 'en_us',

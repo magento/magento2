@@ -96,6 +96,7 @@ final class ConfigProvider implements ConfigProviderInterface
                 ],
                 self::PAYPAL_CODE => [
                     'isActive' => $isPayPalActive,
+                    'title' => $this->payPalConfig->getTitle(),
                     'isAllowShippingAddressOverride' => $this->payPalConfig->isAllowToEditShippingAddress(),
                     'merchantName' => $this->payPalConfig->getMerchantName(),
                     'locale' => strtolower($this->localeResolver->getLocale()),
