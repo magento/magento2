@@ -46,7 +46,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->collectionFactoryMock = $this->getMock(
             'Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
