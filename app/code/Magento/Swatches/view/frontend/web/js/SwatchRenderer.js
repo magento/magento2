@@ -857,7 +857,6 @@ define([
         /**
          * Emulate mouse click on all swatches that should be selected
          * @param {Object} [selectedAttributes]
-
          * @private
          */
         _EmulateSelected: function (selectedAttributes) {
@@ -873,10 +872,11 @@ define([
          */
         _getSelectedAttributes: function () {
             var hashIndex = window.location.href.indexOf('#'),
-                selectedAttributes = {};
+                selectedAttributes = {},
+                params;
 
             if (hashIndex !== -1) {
-                var params = $.parseQuery(window.location.href.substr(hashIndex + 1));
+                params = $.parseQuery(window.location.href.substr(hashIndex + 1));
 
                 selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
                     var attribute = this.options.jsonConfig.attributes[attributeId];
