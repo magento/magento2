@@ -6,6 +6,7 @@
 namespace Magento\Framework\Stdlib\DateTime;
 
 use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Timezone library
@@ -46,6 +47,11 @@ class Timezone implements TimezoneInterface
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
+
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
 
     /**
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
@@ -294,7 +300,7 @@ class Timezone implements TimezoneInterface
         } else {
             if ($date->getTimezone()->getName() !== $this->getConfigTimezone()) {
                 throw new LocalizedException(
-                    __('DateTime object timezone must be the same as config - %1', $this->getConfigTimezone())
+                    new Phrase('DateTime object timezone must be the same as config - %1', $this->getConfigTimezone())
                 );
             }
         }
