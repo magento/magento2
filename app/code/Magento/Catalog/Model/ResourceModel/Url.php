@@ -14,6 +14,12 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\Model\Entity\MetadataPool;
 
+/**
+ * Class Url
+ * @package Magento\Catalog\Model\ResourceModel
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
