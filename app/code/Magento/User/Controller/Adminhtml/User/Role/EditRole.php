@@ -63,6 +63,10 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
             SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY,
             $this->_session->getData(SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY, true)
         );
+        $this->_coreRegistry->register(
+            SaveRole::IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY,
+            $this->_session->getData(SaveRole::IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY, true)
+        );
     }
 
     /**
