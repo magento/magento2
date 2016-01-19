@@ -154,11 +154,6 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
         }
         $select = $this->getConnection()->select();
         $select->from($table, ['cpe.' . $this->getLinkField()])
-            ->joinInner(
-                ['cpe' => $this->getTable('catalog_product_entity')],
-                'cpe.' . $this->getLinkField() . ' = ' . $table . '.' . $this->getLinkField(),
-                []
-            )
             ->where('cpe.entity_id = ?', $entityId);
         return $this->getConnection()->fetchOne($select);
     }
