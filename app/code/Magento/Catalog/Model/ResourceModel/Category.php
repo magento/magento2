@@ -590,7 +590,8 @@ class Category extends AbstractResource
         $linkField = $this->getLinkField();
         $bind = ['attribute_id' => $attribute->getId(), 'value' => $expectedValue];
         $selectEntities = $this->getConnection()->select()->from(
-            ['ce' => $this->getTable('catalog_category_entity')], ['entity_id']
+            ['ce' => $this->getTable('catalog_category_entity')],
+            ['entity_id']
         )->joinLeft(
             ['ci' => $attribute->getBackend()->getTable()],
             "ci.{$linkField} = ce.{$linkField} AND attribute_id = :attribute_id",
