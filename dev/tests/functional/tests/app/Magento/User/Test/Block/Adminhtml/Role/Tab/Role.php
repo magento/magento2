@@ -22,7 +22,7 @@ class Role extends Tab
      * @param SimpleElement $element
      * @return void
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $users = (is_array($fields['in_role_users']['value']))
             ? $fields['in_role_users']['value']
