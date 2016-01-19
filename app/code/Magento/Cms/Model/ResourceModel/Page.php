@@ -90,6 +90,14 @@ class Page extends AbstractDb
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getConnection()
+    {
+        return $this->metadataPool->getMetadata(PageInterface::class)->getEntityConnection();
+    }
+
+    /**
      * Process page data before saving
      *
      * @param AbstractModel $object
@@ -373,9 +381,7 @@ class Page extends AbstractDb
     }
 
     /**
-     * @param AbstractModel $object
-     * @return $this
-     * @throws \Exception
+     * @inheritDoc
      */
     public function save(AbstractModel $object)
     {
@@ -408,6 +414,28 @@ class Page extends AbstractDb
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(AbstractModel $object)
+    {
+        $this->transactionManager->start($this->getConnection());
+        try {
+            $object->beforeDelete();
+            $this->_beforeDelete($object);
+            $this->entityManager->delete(PageInterface::class, $object);
+            $this->_afterDelete($object);
+            $object->isDeleted(true);
+            $object->afterDelete();
+            $this->transactionManager->commit();
+            $object->afterDeleteCommit();
+        } catch (\Exception $e) {
+            $this->transactionManager->rollBack();
             throw $e;
         }
         return $this;
