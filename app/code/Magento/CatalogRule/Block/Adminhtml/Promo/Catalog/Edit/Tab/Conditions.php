@@ -127,6 +127,21 @@ class Conditions extends Generic implements TabInterface
         $model = $this->_coreRegistry->registry('current_promo_catalog_rule');
 
         /** @var \Magento\Framework\Data\Form $form */
+        $form = $this->addTabToForm($model);
+        $this->setForm($form);
+
+        return parent::_prepareForm();
+    }
+
+    /**
+     * @param \Magento\CatalogRule\Api\Data\RuleInterface $model
+     * @param string $fieldsetId
+     * @return \Magento\Framework\Data\Form
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function addTabToForm($model, $fieldsetId = 'conditions_fieldset')
+    {
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
@@ -137,7 +152,7 @@ class Conditions extends Generic implements TabInterface
         );
 
         $fieldset = $form->addFieldset(
-            'conditions_fieldset',
+            $fieldsetId,
             ['legend' => __('Conditions (don\'t add conditions if rule is applied to all products)')]
         )->setRenderer(
             $renderer
@@ -160,8 +175,6 @@ class Conditions extends Generic implements TabInterface
         );
 
         $form->setValues($model->getData());
-        $this->setForm($form);
-
-        return parent::_prepareForm();
+        return $form;
     }
 }
