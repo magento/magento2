@@ -6,13 +6,17 @@
 namespace Magento\BraintreeTwo\Model\Report\Row;
 
 use Braintree\Transaction;
-use Braintree\Transaction\PayPalDetails;
 use DateTime;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
 
+/**
+ * Class TransactionMap
+ */
 class TransactionMap implements DocumentInterface
 {
+    const TRANSACTION_FIELD_MAP_DELIMITER = '_';
+
     /**
      * @var AttributeValueFactory
      */
@@ -156,9 +160,12 @@ class TransactionMap implements DocumentInterface
         return $result;
     }
 
+    /*
+     * Recursive get transaction field value
+     */
     private function getTransactionFieldValue($key)
     {
-        $keys = explode('_', $key);
+        $keys = explode(self::TRANSACTION_FIELD_MAP_DELIMITER, $key);
         $result = $this->transaction;
         foreach ($keys as $k) {
             if (!isset($result->$k)) {
@@ -172,6 +179,7 @@ class TransactionMap implements DocumentInterface
 
     /**
      * Convert value to text representation
+     *
      * @param string $val
      * @return string
      */
