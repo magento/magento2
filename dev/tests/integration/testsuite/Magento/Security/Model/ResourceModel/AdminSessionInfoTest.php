@@ -18,7 +18,6 @@ namespace Magento\Security\Model\ResourceModel\AdminSessionInfo {
 
         protected function tearDown()
         {
-
             $session = $this->_objectManager->create('Magento\Security\Model\AdminSessionInfo');
             /** @var $session \Magento\Security\Model\AdminSessionInfo */
             $session->getResource()->getConnection()->delete(
