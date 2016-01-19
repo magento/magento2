@@ -18,7 +18,7 @@ use Magento\Mtf\TestCase\Scenario;
  * Steps:
  * 1.  Log in Storefront.
  * 2.  Add products to the Shopping Cart.
- * 3.  Open the Shopping cart and click "Checkout with PayPal"
+ * 3.  Open the Mini shopping cart and click "Checkout with PayPal"
  * 4.  Click 'Proceed purchase' in popup.
  * 5.  Select a shipping method.
  * 6.  Click 'Place Order' button.
@@ -26,9 +26,9 @@ use Magento\Mtf\TestCase\Scenario;
  * 12. Perform assertions.
  *
  * @group Braintree_(CS)
- * @ZephyrId MAGETWO-39363
+ * @ZephyrId MAGETWO-39359
  */
-class CheckoutWithBraintreePaypalCartTest extends Scenario
+class CheckoutWithBraintreePaypalMinicartTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
