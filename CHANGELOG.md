@@ -1,54 +1,39 @@
 2.0.1
 =============
 * Fixed bugs:
-    * Fixed an issue where can't deploy sample data after "composer create-project"
-    * Fixed a security issue on user account page
-    * Fixed a security issue on product page
+    * Fixed an issue where can't deploy sample data after "composer create-project
     * Fixed an issue where possible edit someone else reviews
     * Fixed an issue where possible view order details for certain orders
     * Fixed an issue where catalog price rule isn't applied to product created using Web API
-    * Fixed a potential vulnerability where possible insert SQL injection
-    * Fixed a potential vulnerability on checkout page
     * Fixed an issue with upload empty file to custom option
-    * Fixed an issue with performance on customer edit form
     * Fixed an issue where minicart does not clears after completing an order via PayPal
-    * Fixed an potential XSS vulnerability
-    * USPS January 17, 2016 API Changes
     * Fixed an issue plugin incorrect calls when proxy exists
     * Fixed an issue when travis CI builds fail due to authentication
     * Fixed an issue when custom options calculated incorrect for configurable products
     * Fixed an issue with changing category form on store view level
-    * Updated composer version in braintree package
     * Fixed an issue where URL rewrites works incorrect for sample data
     * Fixed an issue with BaseURL in static files
     * Fixed an issue where customer custom attribute of 'file' type isn't supported by UI Form Component
     * Fixed an issue when bin/magento setup:upgrade does not clear cache properly
-    * Fixed an issue where MessageBox plugin duplicating logic
-    * Fixed an issue where unnecessary StoreCookie plugin is executed on each request
-    * Fixed a potential security issue in input filter
     * Fixed an issue where category creation from product page fails if google experiments enabled
-    * Fixed a potential security issue with frontend captcha
-    * Fixed a potential security issue with block cache
     * Fixed an issue where information about selected country in address is not presented on checkout flow
     * Fixed an issue where customer segments prevent page from caching
-    * Fixed an performance issue related to swatch module
     * Fixed an issue where import product with replace behaviour causes an error for multistore
     * Fixed an issue with validation of url_key during import
     * Fixed an issue with "Learn More" link for Payments Pro goes to Payflow Pro
     * Fixed an issue with JS error appears if loading product grid after clean cache and static files
-Tests:
-    * Fixed an issue with test failure in testGetPackagesForUpdate
-    * Fixed integration tests related to setup/upgrade functionality
-    * Fixed an issue where PHP7 Integration test failed
-    * Fixed an issue with autoload functionality for jmx-generator.php file
-    * Fixed an issue with legacy tests
-    * Fixed an issues in tests related to PHP7
 * GitHub requests:
     * [#2519](https://github.com/magento/magento2/issues/2519) -- Fixed an issue where synonyms don't work with Magento 2.0
     * [#2675](https://github.com/magento/magento2/issues/2675) -- Fixed an issue with admin order creation when config "Include Tax In Order Total" set to yes
     * [#2471](https://github.com/magento/magento2/issues/2471) -- Fixed an issue with incorrect prices on configurable product page when catalog prices include tax
     * [#2674](https://github.com/magento/magento2/issues/2674) -- Fixed an issue where plugins/interceptors don't work with early stage single instance objects
     * [#2888](https://github.com/magento/magento2/issues/2888) -- Fixed an issue where not all files are pre-compiled
+* Various improvements:
+    * Fixed performance issue on customer edit form
+    * Fixed performance issue related to swatch module
+    * Fixed several security-related issues
+    * Added support of latest USPS API
+    * Added support of PHP 7.0.2
 
 2.0.0
 =============
