@@ -130,6 +130,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'isVirtual',
                 'getItemsCount',
                 'getIsMultiShipping',
+                'setIsMultiShipping',
                 'validateMinimumAmount',
                 'getStoreId',
                 'setShippingAddress',
@@ -422,7 +423,8 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(5);
-        $this->quoteMock->expects($this->exactly(2))->method('getIsMultiShipping')->willReturn(true);
+        $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(true);
+        $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(false)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(true)->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
@@ -506,7 +508,8 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(5);
-        $this->quoteMock->expects($this->exactly(2))->method('getIsMultiShipping')->willReturn(true);
+        $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(true);
+        $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(false)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(true)->willReturn(true);
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
 
@@ -586,7 +589,8 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(5);
-        $this->quoteMock->expects($this->exactly(2))->method('getIsMultiShipping')->willReturn(true);
+        $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(true);
+        $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(false)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(true)->willReturn(true);
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
 

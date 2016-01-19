@@ -117,10 +117,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $this->validateQuote($quote);
-
-        if ($quote->getIsMultiShipping()) {
-            $quote->setIsMultiShipping(false);
-        }
+        $quote->setIsMultiShipping(false);
 
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
