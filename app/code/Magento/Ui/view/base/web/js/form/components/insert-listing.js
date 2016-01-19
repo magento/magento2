@@ -230,7 +230,7 @@ define([
         setExternalValue: function (val) {
             var keys = this.externalData;
 
-            if (keys) {
+            if (keys && !_.isEmpty(keys)) {
                 val = _.map(val, function (item) {
                     return _.pick(item, keys);
                 }, this);
