@@ -6,6 +6,7 @@
 namespace Magento\BraintreeTwo\Model\Report\Row;
 
 use Braintree\Transaction;
+use Braintree\Transaction\PayPalDetails;
 use DateTime;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
@@ -23,16 +24,6 @@ class TransactionMap implements DocumentInterface
     private $transaction;
 
     /**
-     * @var \Closure
-     */
-    private $simpleFieldReader;
-
-    /**
-     * @var array
-     */
-    private $mappedValues = [];
-
-    /**
      * @var array
      */
     public static $simpleFieldsMap = [
@@ -40,6 +31,7 @@ class TransactionMap implements DocumentInterface
         'merchantAccountId',
         'orderId',
         'paymentInstrumentType',
+        'paypalDetails_paymentId',
         'type',
         'createdAt',
         'amount',
@@ -47,7 +39,8 @@ class TransactionMap implements DocumentInterface
         'status',
         'processorSettlementResponseText',
         'refundIds',
-        'settlementBatchId'
+        'settlementBatchId',
+        'currencyIsoCode'
     ];
 
     /**
@@ -60,14 +53,6 @@ class TransactionMap implements DocumentInterface
     ) {
         $this->attributeValueFactory = $attributeValueFactory;
         $this->transaction = $transaction;
-
-        $this->simpleFieldReader = function ($key) use ($transaction) {
-            return $transaction->$key;
-        };
-
-        foreach (self::$simpleFieldsMap as $key) {
-            $this->mappedValues[$key] = $this->simpleFieldReader;
-        }
     }
 
     /**
@@ -146,11 +131,13 @@ class TransactionMap implements DocumentInterface
      */
     private function getMappedValue($key)
     {
-        if (!isset($this->mappedValues[$key])) {
+        if (!in_array($key, static::$simpleFieldsMap)) {
             return null;
         }
 
-        return $this->mappedValues[$key]();
+        $val = $this->getTransactionFieldValue($key);
+        $val = $this->convertToText($val);
+        return $val;
     }
 
     /**
@@ -159,20 +146,47 @@ class TransactionMap implements DocumentInterface
     private function getMappedValues()
     {
         $result = [];
-        foreach ($this->mappedValues as $key => $callback) {
-            $val = $callback($key);
 
-            if (is_object($val)) {
-                switch (get_class($val)) {
-                    case 'DateTime':
-                        /** @var DateTime $val */
-                        $val = $val->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
-                }
-            }
-
+        foreach (static::$simpleFieldsMap as $key) {
+            $val = $this->getTransactionFieldValue($key);
+            $val = $this->convertToText($val);
             $result[$key] = $val;
         }
 
         return $result;
+    }
+
+    private function getTransactionFieldValue($key)
+    {
+        $keys = explode('_', $key);
+        $result = $this->transaction;
+        foreach ($keys as $k) {
+            if (!isset($result->$k)) {
+                $result = null;
+                break;
+            }
+            $result = $result->$k;
+        }
+        return $result;
+    }
+
+    /**
+     * Convert value to text representation
+     * @param string $val
+     * @return string
+     */
+    private function convertToText($val)
+    {
+        if (is_object($val)) {
+            switch (get_class($val)) {
+                case 'DateTime':
+                    /** @var DateTime $val */
+                    $val = $val->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            }
+        } elseif(is_array($val)) {
+            $val = implode(', ', $val);
+        }
+
+        return (string) $val;
     }
 }

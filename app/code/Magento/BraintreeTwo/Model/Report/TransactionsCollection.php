@@ -16,7 +16,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     /**
      * Transaction maximum count
      */
-    const TRANSACTION_MAXIMUM_COUNT = 50;
+    const TRANSACTION_MAXIMUM_COUNT = 100;
 
     /**
      * Item object class name
@@ -77,6 +77,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
             return [];
         }
 
+        // Fetch all IDs in order to filter
         $this->collection = $this->braintreeAdapter->search($this->getFilters());
 
         $result = [];

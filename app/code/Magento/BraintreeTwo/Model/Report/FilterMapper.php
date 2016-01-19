@@ -22,14 +22,14 @@ class FilterMapper
             'id' => TransactionSearch::id(),
             'merchantAccountId' => TransactionSearch::merchantAccountId(),
             'orderId' => TransactionSearch::orderId(),
-            'paypalPaymentId' => TransactionSearch::paypalPaymentId(),
+            'paypalDetails_paymentId' => TransactionSearch::paypalPaymentId(),
             'createdUsing' => TransactionSearch::createdUsing(),
             'type' => TransactionSearch::type(),
             'createdAt' => TransactionSearch::createdAt(),
             'amount' => TransactionSearch::amount(),
             'status' => TransactionSearch::status(),
             'settlementBatchId' => TransactionSearch::settlementBatchId(),
-            'paymentInstrumentType' => TransactionSearch::paymentInstrumentType(),
+            'paymentInstrumentType' => TransactionSearch::paymentInstrumentType()
         ];
 
         $this->conditionsMap = [
