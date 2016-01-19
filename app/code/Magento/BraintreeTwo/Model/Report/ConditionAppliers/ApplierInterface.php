@@ -17,7 +17,7 @@ interface ApplierInterface
     const IS = 'is';
 
     /**
-     * Apply filter value
+     * Apply filter condition
      *
      * @param $field
      * @param $condition

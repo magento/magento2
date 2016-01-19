@@ -13,6 +13,8 @@ use Braintree\RangeNode;
 class Range implements ApplierInterface
 {
     /**
+     * Apply filter condition
+     *
      * @param RangeNode $field
      * @param $condition
      * @param $value

@@ -160,8 +160,11 @@ class TransactionMap implements DocumentInterface
         return $result;
     }
 
-    /*
+    /**
      * Recursive get transaction field value
+     *
+     * @param $key
+     * @return Transaction|mixed|null
      */
     private function getTransactionFieldValue($key)
     {
