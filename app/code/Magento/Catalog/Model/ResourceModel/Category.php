@@ -208,19 +208,16 @@ class Category extends AbstractResource
      */
     public function deleteChildren(\Magento\Framework\DataObject $object)
     {
-        $connection = $this->getConnection();
-        $pathField = $connection->quoteIdentifier('path');
-        $select = $connection->select()->from(
-            $this->getEntityTable(),
-            ['entity_id']
-        )->where(
-            $pathField . ' LIKE :c_path'
-        );
+        if ($object->getSkipDeleteChildren()) {
+            return $this;
+        }
 
-        $childrenIds = $connection->fetchCol($select, ['c_path' => $object->getPath() . '/%']);
-
-        if (!empty($childrenIds)) {
-            $connection->delete($this->getEntityTable(), ['entity_id IN (?)' => $childrenIds]);
+        $categories = $this->_categoryCollectionFactory->create();
+        $categories->addAttributeToFilter('path', ['like' => $object->getPath() . '/%']);
+        $childrenIds = $categories->getAllIds();
+        foreach ($categories as $category) {
+            $category->setSkipDeleteChildren(true);
+            $category->delete();
         }
 
         /**
@@ -763,6 +760,7 @@ class Category extends AbstractResource
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
+        $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $category->getStoreId(),
