@@ -35,6 +35,8 @@ class Quantity extends AbstractSecurityChecker implements SecurityCheckerInterfa
     }
 
     /**
+     * Prepare collection
+     *
      * @param int $securityEventType
      * @param string $accountReference
      * @param int $longIp

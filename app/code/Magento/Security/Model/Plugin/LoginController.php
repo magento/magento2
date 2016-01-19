@@ -69,6 +69,8 @@ class LoginController
     }
 
     /**
+     * Before execute login
+     *
      * @param Login $login
      * @return void
      */
@@ -95,6 +97,8 @@ class LoginController
     }
 
     /**
+     * Delete cookie with reason of logout
+     *
      * @return $this
      */
     protected function deleteLogoutReasonCookie()
