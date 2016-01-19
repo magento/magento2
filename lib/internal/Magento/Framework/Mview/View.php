@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Mview;
+
 use Magento\Framework\Mview\View\SubscriptionFactory;
 
 /**
