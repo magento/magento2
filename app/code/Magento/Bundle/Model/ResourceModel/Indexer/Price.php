@@ -500,13 +500,12 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $query = $select->deleteFromSelect('i');
         $connection->query($query);
 
-        $productIdField = $this->getProductIdFieldName();
         $select = $connection->select()->from(
             ['tp' => $this->getTable('catalog_product_entity_tier_price')],
-            [$productIdField]
+            [$linkField]
         )->join(
             ['e' => $this->getTable('catalog_product_entity')],
-            "tp.{$productIdField} = e.{$productIdField}",
+            "tp.{$linkField} = e.{$linkField}",
             []
         )->join(
             ['cg' => $this->getTable('customer_group')],
@@ -524,11 +523,11 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         )->columns(
             new \Zend_Db_Expr('MIN(tp.value)')
         )->group(
-            ["tp.{$productIdField}", 'cg.customer_group_id', 'cw.website_id']
+            ["tp.{$linkField}", 'cg.customer_group_id', 'cw.website_id']
         );
 
         if (!empty($entityIds)) {
-            $select->where("tp.{$productIdField} IN(?)", $entityIds);
+            $select->where("tp.{$linkField} IN(?)", $entityIds);
         }
 
         $query = $select->insertFromSelect($this->_getTierPriceIndexTable());
