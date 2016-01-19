@@ -28,7 +28,7 @@
                     <field id="enable_paypal_payflow"/>
                 </requires>
             </field>
-            <field id="enable_express_checkout_bml_payflow" translate="label" type="select" sortOrder="22" showInWebsite="1" showInDefault="1">
+            <field id="enable_express_checkout_bml_payflow" translate="label" type="select" sortOrder="21" showInWebsite="1" showInDefault="1">
                 <label>Enable PayPal Credit</label>
                 <comment><![CDATA[PayPal Express Checkout Payflow Edition lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                             You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
@@ -41,7 +41,7 @@
                     <field id="enable_paypal_payflow"/>
                 </requires>
             </field>
-            <group id="paypal_payflow_advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="23">
+            <group id="paypal_payflow_advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="22">
                 <label>Advertise PayPal Credit</label>
                 <comment>
                     <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
