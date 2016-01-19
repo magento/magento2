@@ -29,7 +29,7 @@ class MultipleValue implements ApplierInterface
                 $field->in($value);
                 $result = true;
                 break;
-            case ApplierInterface::IS:
+            case ApplierInterface::EQ:
                 $field->is($value);
                 $result = true;
                 break;

@@ -14,7 +14,7 @@ interface ApplierInterface
     const QTEQ = 'gteq';
     const LTEQ = 'lteq';
     const IN = 'in';
-    const IS = 'is';
+    const LIKE = 'like';
 
     /**
      * Apply filter condition
