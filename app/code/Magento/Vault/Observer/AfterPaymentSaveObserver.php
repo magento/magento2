@@ -10,7 +10,6 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
-use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
@@ -58,14 +57,24 @@ class AfterPaymentSaveObserver implements ObserverInterface
         $extensionAttributes = $payment->getExtensionAttributes();
 
         $paymentToken = $this->getPaymentToken($extensionAttributes);
-
-        // Save only new tokens that has been set during first order placement
-        if ($paymentToken === null || $paymentToken->getEntityId() > 0) {
+        if ($paymentToken === null) {
             return $this;
         }
 
-        $paymentToken->setPublicHash($this->generatePublicHash($paymentToken));
+        if ($paymentToken->getEntityId() !== null) {
+            $this->paymentTokenManagement->addLinkToOrderPayment(
+                $paymentToken->getEntityId(),
+                $payment->getEntityId()
+            );
+
+            return $this;
+        }
+
+        $order = $payment->getOrder();
+
+        $paymentToken->setCustomerId($order->getCustomerId());
         $paymentToken->setIsActive(true);
+        $paymentToken->setPaymentMethodCode($payment->getMethod());
 
         $additionalInformation = $payment->getAdditionalInformation();
         if (isset($additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE])) {
@@ -73,6 +82,8 @@ class AfterPaymentSaveObserver implements ObserverInterface
                 (bool) (int) $additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE]
             );
         }
+
+        $paymentToken->setPublicHash($this->generatePublicHash($paymentToken));
 
         $this->paymentTokenManagement->saveTokenWithPaymentLink($paymentToken, $payment);
 
