@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
@@ -29,6 +30,7 @@ class Source extends AbstractEav
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -37,10 +39,11 @@ class Source extends AbstractEav
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $metadataPool, $connectionName);
     }
 
     /**
@@ -117,7 +120,7 @@ class Source extends AbstractEav
         if (!$attrIds) {
             return $this;
         }
-        $productIdField = $this->getProductIdFieldName();
+        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         /**@var $subSelect \Magento\Framework\DB\Select*/
         $subSelect = $connection->select()->from(
@@ -222,7 +225,7 @@ class Source extends AbstractEav
         if (!$attrIds) {
             return $this;
         }
-        $productIdField = $this->getProductIdFieldName();
+        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         // load attribute options
         $options = [];

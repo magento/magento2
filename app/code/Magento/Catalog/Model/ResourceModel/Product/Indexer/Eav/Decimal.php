@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Catalog Product Eav Decimal Attributes Indexer resource model
  *
@@ -44,7 +46,7 @@ class Decimal extends AbstractEav
             return $this;
         }
 
-        $productIdField = $this->getProductIdFieldName();
+        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productValueExpression = $connection->getCheckSql('pds.value_id > 0', 'pds.value', 'pdd.value');
 
         $select = $connection->select()->from(
