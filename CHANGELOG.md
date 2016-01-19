@@ -1,19 +1,40 @@
 2.0.1
 =============
 * Fixed bugs:
-    * Fixed an issue where can't deploy sample data after "composer create-project"
-    * Fixed a security issue on user account page
-    * Fixed a security issue on product page
-    * Fixed an issue where possible edit someone else reviews
-    * Fixed an issue where possible view order details for certain orders
-    * Fixed an issue where catalog price rule isn't applied to product created using Web API
-    * Fixed a potential vulnerability where possible insert SQL injection
-    * Fixed a potential vulnerability on checkout page
-    * Fixed an issue with upload empty file to custom option
-    * Fixed an issue with performance on customer edit form
+    * Fixed an issue to allow deployment of sample data after running "composer create-project"
+    * Fixed an issue that made it possible for someone to edit someone else's reviews
+    * Fixed an issue that made it possible to view order details for certain orders that were created by someone else
+    * Fixed an issue where catalog price rule isn't applied to a product that is created when using Web API
+    * Fixed an issue where an empty file was uploaded to custom option
+    * Fixed an issue where minicart does not clears after completing an order via PayPal
+    * Fixed an issue plugin incorrect calls when proxy exists
+    * Fixed an issue when travis CI builds fail due to authentication
+    * Fixed an issue when custom options for configurable products were calculated incorrectly
+    * Fixed an issue with modifying a category form on store view level
+    * Fixed an issue where URL rewrites worked incorrectly for sample data
+    * Fixed an issue with BaseURL in static files
+    * Fixed an issue where a customer's custom attribute of 'file' type isn't supported by UI Form Component
+    * Fixed an issue when bin/magento setup:upgrade does not clear cache properly
+    * Fixed an issue where category creation from product page fails if Google Chrome Experiments are enabled
+    * Fixed an issue where information about the country selected in address is not presented in checkout flow
+    * Fixed an issue where customer segments prevent page from caching
+    * Fixed an issue where an imported product with replace behaviour causes an error for multi-store implementations.
+    * Fixed an issue with validation of url_key during import
+    * Fixed an issue with "Learn More" link for Payments Pro goes to Payflow Pro
+    * Fixed an issue in which a JS error appears if loading a product grid after clearing cache and static files
 * GitHub requests:
     * [#2519](https://github.com/magento/magento2/issues/2519) -- Fixed an issue where synonyms don't work with Magento 2.0
-    
+    * [#2675](https://github.com/magento/magento2/issues/2675) -- Fixed an issue with admin order creation when config "Include Tax In Order Total is set to yes
+    * [#2471](https://github.com/magento/magento2/issues/2471) -- Fixed an issue with incorrect prices on configurable product page when catalog prices include tax
+    * [#2674](https://github.com/magento/magento2/issues/2674) -- Fixed an issue where plugins/interceptors don't work with early stage single instance objects
+    * [#2888](https://github.com/magento/magento2/issues/2888) -- Fixed an issue where not all files are pre-compiled
+* Various improvements:
+    * Fixed performance issue on customer edit form
+    * Fixed performance issue related to swatch module
+    * Fixed several security-related issues
+    * Added support of latest USPS API
+    * Added support of PHP 7.0.2
+
 2.0.0
 =============
 * Fixed bugs:
@@ -124,7 +145,7 @@
    * Added the ability of inline and bulk inline editing in data grids
 * WebApi Framework improvements:
     * Added the support for store codes in API calls
-    * Added the ability to update the Magento system to a particular version of Magento 
+    * Added the ability to update the Magento system to a particular version of Magento
     * Added the ability to enable/disable modules for Magento application
     * Added the ability to use maintenance mode
     * Introduced the common interface for Webapi payload processors
@@ -162,7 +183,7 @@
     * Updated the extensions styles in the Web Installation Wizard
     * Added the ability to control access to the setup tool
     * Added the Install Components functionality for Web Installation Wizard
-    * Updated styles 
+    * Updated styles
 * Sample Data:
     * Improved sample data installation UX
     * Updated sample data with Product Heros, color swatches, MAP and rule based product relations
@@ -248,7 +269,7 @@
     * [#1418](https://github.com/magento/magento2/issue/1418) -- Items in minicart are not cleared after successful placing an order
     * [#1408](https://github.com/magento/magento2/issue/1408) -- Error command cli setup:static-content:deploy
     * [#1396](https://github.com/magento/magento2/issue/1396) -- Products are not shown in category right after import
-    
+
 1.0.0-beta
 =============
 * Framework improvements:
