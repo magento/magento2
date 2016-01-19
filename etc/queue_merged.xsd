@@ -14,7 +14,7 @@
                 <xs:element name="topic" type="topicType"/>
                 <xs:element name="consumer" type="consumerType"/>
                 <xs:element name="bind" type="bindType"/>
-                <xs:element name="broker" type="brokerType"/>
+                <xs:element name="broker" type="xs:anyType"/>
             </xs:choice>
         </xs:complexType>
         <xs:unique name="consumer-unique-name">
