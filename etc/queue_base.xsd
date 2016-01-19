@@ -6,57 +6,51 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:complexType name="publisherType">
-        <xs:attribute type="xs:string" name="name" use="required"/>
-        <xs:attribute type="xs:string" name="connection" use="required"/>
-        <xs:attribute type="xs:string" name="exchange" use="required"/>
-    </xs:complexType>
-    <xs:complexType name="topicType">
-        <xs:attribute type="xs:string" name="name" use="required"/>
-        <xs:attribute type="xs:string" name="schema" use="required"/>
-        <xs:attribute type="xs:string" name="publisher" use="required"/>
-    </xs:complexType>
-    <xs:complexType name="consumerType">
-        <xs:attribute type="consumerNameType" name="name" use="required"/>
-        <xs:attribute type="xs:string" name="queue" use="required"/>
-        <xs:attribute type="xs:string" name="class" use="required"/>
-        <xs:attribute type="xs:string" name="method" use="required"/>
-        <xs:attribute type="xs:string" name="connection" use="required"/>
-        <xs:attribute type="xs:integer" name="max_messages" use="optional"/>
-        <xs:attribute type="executorClassType" name="executor" use="optional"/>
-    </xs:complexType>
-    <xs:simpleType name="consumerNameType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-z]([a-zA-Z])+"/>
-        </xs:restriction>
-    </xs:simpleType>
-    <xs:complexType name="bindType">
-        <xs:attribute type="xs:string" name="queue" use="required"/>
-        <xs:attribute type="xs:string" name="exchange" use="required"/>
-        <xs:attribute type="xs:string" name="topic" use="required"/>
-    </xs:complexType>
-    <xs:simpleType name="executorClassType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z][A-Za-z0-9]*(\\[A-Z][A-Za-z0-9]*)*"/>
-        </xs:restriction>
-    </xs:simpleType>
-    <xs:complexType name="brokerConsumerType">
-        <xs:attribute type="xs:string" name="name" use="required" />
-        <xs:attribute type="xs:string" name="queue" use="required" />
-        <xs:attribute type="executorClassType" name="instanceType" use="optional" />
-        <xs:attribute type="xs:integer" name="max_messages" use="optional"/>
-    </xs:complexType>
     <xs:complexType name="brokerType">
         <xs:annotation>
             <xs:documentation>
-                Broker configuration describes relations for topic, published, consumer, queue and exchange server
+                Broker configuration describes relations for topic, publisher, consumer, queue and exchange server
             </xs:documentation>
         </xs:annotation>
         <xs:sequence  minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="consumer" type="brokerConsumerType" />
+            <xs:element name="queue" type="brokerQueueType" />
         </xs:sequence>
-        <xs:attribute type="xs:string" name="topic" use="required"/>
-        <xs:attribute type="xs:string" name="type" use="optional"/>
-        <xs:attribute type="xs:string" name="exchange" use="optional"/>
+        <xs:attribute name="topic" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="optional"/>
+        <xs:attribute name="exchange" type="xs:string" use="optional"/>
     </xs:complexType>
+    <xs:complexType name="brokerQueueType">
+        <xs:annotation>
+            <xs:documentation>
+                Queue element of the broker element
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="handler" type="handlerType" use="optional" />
+        <xs:attribute name="consumer" type="xs:string" use="required" />
+        <xs:attribute name="consumerInstance" type="instanceType" use="optional" />
+        <xs:attribute name="maxMessages" type="xs:integer" use="optional"/>
+    </xs:complexType>
+    <xs:simpleType name="instanceType">
+        <xs:annotation>
+            <xs:documentation>
+                Instance is expected in a format "Vendor\Module\Api\ServiceName".
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z\\]+" />
+            <xs:minLength value="4" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="handlerType">
+        <xs:annotation>
+            <xs:documentation>
+                Handler is expected in a format "Vendor\Module\Api\ServiceName::methodName".
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z\\]+::[a-zA-Z]+" />
+            <xs:minLength value="5" />
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
