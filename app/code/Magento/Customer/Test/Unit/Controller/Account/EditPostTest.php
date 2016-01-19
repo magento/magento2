@@ -158,6 +158,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     public function testGeneralSave()
     {
         $customerId = 1;
+        $currentPassword = '1234567';
 
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
@@ -173,13 +174,21 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(true);
+
         $this->request->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(
-                ['change_email'],
-                ['change_password']
-            )
-            ->willReturn(false);
+            ->withConsecutive(['change_email'], ['change_password'])
+            ->willReturnOnConsecutiveCalls(true, false);
+
+        $this->request->expects($this->exactly(2))
+            ->method('getPost')
+            ->withConsecutive(['email'], ['current_password'])
+            ->willReturnOnConsecutiveCalls('test@example.com', $currentPassword);
+
+        $this->customerAccountManagement->expects($this->once())
+            ->method('validatePasswordById')
+            ->with($customerId, $currentPassword)
+            ->willReturn(true);
 
         $this->session->expects($this->once())
             ->method('getCustomerId')
@@ -189,6 +198,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->method('getById')
             ->with($customerId)
             ->willReturn($currentCustomerMock);
+
         $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($newCustomerMock)
@@ -222,6 +232,100 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->model->execute());
+    }
+
+    /**
+     * @param int $errorNumber
+     * @param string $postedEmail
+     * @param string $errorMessage
+     *
+     * @dataProvider changeEmailErrorDataProvider
+     */
+    public function testChangeEmailError(
+        $errorNumber,
+        $postedEmail,
+        $errorMessage
+    ) {
+        $customerId = 1;
+        $customerEmail = 'user1@example.com';
+        $password = '1234567';
+
+        $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+            ->getMockForAbstractClass();
+
+        $currentCustomerMock = $this->getCurrentCustomerMock($address);
+        $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
+
+        $this->customerExtractor->expects($this->once())
+            ->method('extract')
+            ->with('customer_account_edit', $this->request)
+            ->willReturn($newCustomerMock);
+
+        $this->validator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
+
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->willReturn(true);
+
+        $this->session->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($currentCustomerMock);
+
+        $this->request->expects($this->once())
+            ->method('getParam')
+            ->with('change_email')
+            ->willReturn(true);
+
+        $this->request->expects($this->any())
+            ->method('getPost')
+            ->withConsecutive(['email'], ['current_password'])
+            ->willReturnOnConsecutiveCalls($postedEmail, $password);
+
+        if ($errorNumber == 2) {
+            $this->customerAccountManagement->expects($this->once())
+                ->method('validatePasswordById')
+                ->with($customerId, $password)
+                ->willReturn(false);
+        }
+
+        $this->messageManager->expects($this->once())
+            ->method('addError')
+            ->with($errorMessage)
+            ->willReturnSelf();
+
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/edit')
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultRedirect, $this->model->execute());
+    }
+
+    /**
+     * @return array
+     */
+    public function changeEmailErrorDataProvider()
+    {
+        return [
+            [
+                'error_number' => 1,
+                'posted_email' => '',
+                'error_message' => __('Please enter new email.')
+            ],
+            [
+                'error_number' => 2,
+                'posted_email' => 'test@example.com',
+                'error_message' => __('You have entered an invalid password for current user.')
+            ]
+        ];
     }
 
     /**
