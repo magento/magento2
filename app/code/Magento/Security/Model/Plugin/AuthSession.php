@@ -103,6 +103,8 @@ class AuthSession
     }
 
     /**
+     * Add user logout notification
+     *
      * @return $this
      */
     protected function addUserLogoutNotification()
@@ -121,6 +123,8 @@ class AuthSession
     }
 
     /**
+     * Set logout reason cookie
+     *
      * @param int $status
      * @return $this
      */
@@ -140,6 +144,8 @@ class AuthSession
     }
 
     /**
+     * Check if a request is session check
+     *
      * @return bool
      */
     protected function isSessionCheckRequest()
@@ -148,6 +154,8 @@ class AuthSession
     }
 
     /**
+     * Check if a request is AJAX request
+     *
      * @return bool
      */
     protected function isAjaxRequest()
