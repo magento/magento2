@@ -14,6 +14,7 @@ define([
         defaults: {
             $selector: null,
             selector: 'edit_form',
+            fieldset: '',
             active: false,
             imports: {
                 onActiveChange: 'active'
@@ -46,6 +47,10 @@ define([
          */
         changePaymentMethod: function (event, method) {
             this.active(method === this.code);
+
+            if (this.active()) {
+                $('#' + this.fieldset + ' input:radio:first').prop('checked', true);
+            }
 
             return this;
         },
