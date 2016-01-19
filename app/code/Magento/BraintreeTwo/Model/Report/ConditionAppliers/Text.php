@@ -24,9 +24,14 @@ class Text implements ApplierInterface
     {
         $result = false;
 
+        $value = trim($value, "% \r\n\t");
         switch($condition) {
             case ApplierInterface::EQ:
                 $field->is($value);
+                $result = true;
+                break;
+            case ApplierInterface::LIKE:
+                $field->contains($value);
                 $result = true;
                 break;
         }
