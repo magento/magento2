@@ -5,55 +5,48 @@
  */
 namespace Magento\BraintreeTwo\Model\Report;
 
-use Braintree\MultipleValueNode;
-use Braintree\RangeNode;
-use Braintree\TextNode;
-use Braintree\TransactionSearch;
+use Magento\BraintreeTwo\Model\Adapter\BraintreeSearchAdapter;
+use Magento\BraintreeTwo\Model\Report\ConditionAppliers\AppliersPool;
 
+/**
+ * Class FilterMapper
+ */
 class FilterMapper
 {
-    private $fieldsMap = [];
+    private $searchFieldsToFiltersMap = [];
 
-    private $conditionsMap = [];
+    /** @var AppliersPool */
+    private $appliersPool;
 
-    public function __construct()
+    /** @var BraintreeSearchAdapter */
+    private $braintreeSearchAdapter;
+
+    public function __construct(
+        AppliersPool $appliersPool,
+        BraintreeSearchAdapter $braintreeSearchAdapter
+    ) {
+        $this->appliersPool = $appliersPool;
+        $this->braintreeSearchAdapter = $braintreeSearchAdapter;
+        $this->initFieldsToFiltersMap();
+    }
+
+    /**
+     * Init fields map with Braintree filters
+     */
+    private function initFieldsToFiltersMap()
     {
-        $this->fieldsMap = [
-            'id' => TransactionSearch::id(),
-            'merchantAccountId' => TransactionSearch::merchantAccountId(),
-            'orderId' => TransactionSearch::orderId(),
-            'paypalDetails_paymentId' => TransactionSearch::paypalPaymentId(),
-            'createdUsing' => TransactionSearch::createdUsing(),
-            'type' => TransactionSearch::type(),
-            'createdAt' => TransactionSearch::createdAt(),
-            'amount' => TransactionSearch::amount(),
-            'status' => TransactionSearch::status(),
-            'settlementBatchId' => TransactionSearch::settlementBatchId(),
-            'paymentInstrumentType' => TransactionSearch::paymentInstrumentType()
-        ];
-
-        $this->conditionsMap = [
-            'Braintree\TextNode' => [
-                'eq' => function (TextNode $field, $value) {
-                    return $field->is($value);
-                }
-            ],
-            'Braintree\RangeNode' => [
-                'gteq' => function (RangeNode $field, $value) {
-                    return $field->greaterThanOrEqualTo($value);
-                },
-                'lteq' => function (RangeNode $field, $value) {
-                    return $field->lessThanOrEqualTo($value);
-                }
-            ],
-            'Braintree\MultipleValueNode' => [
-                'in' => function (MultipleValueNode $field, array $value) {
-                    return $field->in(!is_array($value) ? [$value] : $value);
-                },
-                'eq' => function (MultipleValueNode $field, $value) {
-                    return $field->is($value);
-                }
-            ]
+        $this->searchFieldsToFiltersMap = [
+            'id' => $this->braintreeSearchAdapter->id(),
+            'merchantAccountId' => $this->braintreeSearchAdapter->merchantAccountId(),
+            'orderId' => $this->braintreeSearchAdapter->orderId(),
+            'paypalDetails_paymentId' => $this->braintreeSearchAdapter->paypalPaymentId(),
+            'createdUsing' => $this->braintreeSearchAdapter->createdUsing(),
+            'type' => $this->braintreeSearchAdapter->type(),
+            'createdAt' => $this->braintreeSearchAdapter->createdAt(),
+            'amount' => $this->braintreeSearchAdapter->amount(),
+            'status' => $this->braintreeSearchAdapter->status(),
+            'settlementBatchId' => $this->braintreeSearchAdapter->settlementBatchId(),
+            'paymentInstrumentType' => $this->braintreeSearchAdapter->paymentInstrumentType()
         ];
     }
 
@@ -64,67 +57,36 @@ class FilterMapper
      */
     public function getFilter($field, array $conditionMap)
     {
-        $fieldExpression = $this->getField($field);
-        if (null === $fieldExpression) {
+        if (!isset($this->searchFieldsToFiltersMap[$field])) {
             return null;
         }
 
-        if ($this->applyConditions($fieldExpression, $conditionMap)) {
-            return $fieldExpression;
+        $fieldFilter = $this->searchFieldsToFiltersMap[$field];
+        if ($this->applyConditions($fieldFilter, $conditionMap)) {
+            return $fieldFilter;
         }
 
         return null;
     }
 
     /**
-     * @param string $field
-     * @return object|null
-     */
-    private function getField($field)
-    {
-        if (!isset($this->fieldsMap[$field])) {
-            return null;
-        }
-
-        return $this->fieldsMap[$field];
-    }
-
-    /**
-     * @param object $field
-     * @param string $conditionKey
-     * @return null|\Closure
-     */
-    private function getCondition($field, $conditionKey)
-    {
-        if (
-            !is_object($field)
-            || !isset(
-                $this->conditionsMap[get_class($field)],
-                $this->conditionsMap[get_class($field)][$conditionKey]
-            )
-        ) {
-            return null;
-        }
-
-        return $this->conditionsMap[get_class($field)][$conditionKey];
-    }
-
-    /**
-     * @param object $fieldExpression
+     * Apply conditions to filter
+     *
+     * @param object $fieldFilter
      * @param array $conditionMap
      * @return bool
      */
-    private function applyConditions($fieldExpression, array $conditionMap)
+    private function applyConditions($fieldFilter, array $conditionMap)
     {
-        $conditionsAppliedF = false;
+        $applier = $this->appliersPool->getApplier($fieldFilter);
+
+        $conditionsAppliedCounter = 0;
         foreach ($conditionMap as $conditionKey => $value) {
-            $condition = $this->getCondition($fieldExpression, $conditionKey);
-            if (null !== $condition) {
-                $conditionsAppliedF = true;
-                $condition($fieldExpression, $value);
+            if ($applier->apply($fieldFilter, $conditionKey, $value)) {
+                $conditionsAppliedCounter ++;
             }
         }
 
-        return $conditionsAppliedF;
+        return $conditionsAppliedCounter > 0;
     }
 }

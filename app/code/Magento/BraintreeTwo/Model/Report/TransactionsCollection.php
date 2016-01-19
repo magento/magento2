@@ -11,6 +11,9 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class TransactionsCollection
+ */
 class TransactionsCollection extends Collection implements SearchResultInterface
 {
     /**

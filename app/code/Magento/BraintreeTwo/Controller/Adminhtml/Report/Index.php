@@ -10,6 +10,9 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Braintree Settlement Report controller
+ */
 class Index extends Action
 {
     /**
@@ -44,7 +47,7 @@ class Index extends Action
         $resultPage
             ->getConfig()
             ->getTitle()
-            ->prepend(__('Braintree settlement report'));
+            ->prepend(__('Braintree Settlement Report'));
 
         return $resultPage;
     }

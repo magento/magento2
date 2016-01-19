@@ -222,4 +222,14 @@
         </arguments>
     </virtualType>
 
+    <type name="Magento\BraintreeTwo\Model\Report\ConditionAppliers\AppliersPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="Braintree\TextNode" xsi:type="object">Magento\BraintreeTwo\Model\Report\ConditionAppliers\Text</item>
+                <item name="Braintree\RangeNode" xsi:type="object">Magento\BraintreeTwo\Model\Report\ConditionAppliers\Range</item>
+                <item name="Braintree\MultipleValueNode" xsi:type="object">Magento\BraintreeTwo\Model\Report\ConditionAppliers\MultipleValue</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
