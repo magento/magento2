@@ -25,22 +25,23 @@ define([
         return result;
     }
 
-    function validateFields(items){
+    function isValidFields(items) {
         var result = true;
 
-        items = document.querySelectorAll(selector);
-
-        _.each(items, function (item){
-           if (!$.validator.validateAndShowLabel(item)){
-               result = false;
-           }
+        _.each(items, function (item) {
+            if (!$.validator.validateElement(item)) {
+                result = false;
+            }
         });
 
         return result;
     }
 
     return Collection.extend({
-        items: [],
+        defaults: {
+            additionalFields: [],
+            additionalInvalid: false
+        },
 
         initialize: function () {
             this._super()
@@ -77,9 +78,8 @@ define([
 
         save: function (redirect) {
             this.validate();
-            this.items = document.querySelectorAll(selector);
 
-            if (validateFields(this.items) && !this.source.get('params.invalid')) {
+            if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 this.submit(redirect);
             }
         },
@@ -88,7 +88,7 @@ define([
          * Submits form
          */
         submit: function (redirect) {
-            var additional = collectData(this.items),
+            var additional = collectData(this.additionalFields),
                 source = this.source;
 
             _.each(additional, function (value, name) {
@@ -107,8 +107,10 @@ define([
          * Validates each element and returns true, if all elements are valid.
          */
         validate: function () {
+            this.additionalFields = document.querySelectorAll(this.selector);
             this.source.set('params.invalid', false);
             this.source.trigger('data.validate');
+            this.set('additionalInvalid', !isValidFields(this.additionalFields));
         },
 
         reset: function () {
