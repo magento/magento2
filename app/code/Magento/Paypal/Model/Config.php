@@ -924,6 +924,19 @@ class Config extends AbstractConfig
     }
 
     /**
+     * PayPal web URL for IPN
+     *
+     * @return string
+     */
+    public function getPayPalIpnUrl()
+    {
+        return sprintf(
+            'https://ipnpb.%spaypal.com/cgi-bin/webscr',
+            $this->getValue('sandboxFlag') ? 'sandbox.' : ''
+        );
+    }
+
+    /**
      * Whether Express Checkout button should be rendered dynamically
      *
      * @return bool
