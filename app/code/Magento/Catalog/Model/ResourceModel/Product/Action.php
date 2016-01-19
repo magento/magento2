@@ -153,8 +153,9 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
             return $entityId;
         }
         $select = $this->getConnection()->select();
-        $select->from($table, ['cpe.' . $this->getLinkField()])
-            ->where('cpe.entity_id = ?', $entityId);
+        $tableName = $this->_resource->getTableName('catalog_product_entity');
+        $select->from($tableName, [$this->getLinkField()])
+            ->where('entity_id = ?', $entityId);
         return $this->getConnection()->fetchOne($select);
     }
 }
