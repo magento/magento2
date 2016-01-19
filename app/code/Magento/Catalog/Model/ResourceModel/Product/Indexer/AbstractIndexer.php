@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Catalog Product Indexer Abstract Resource Model
  *
@@ -20,20 +22,28 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     protected $_eavConfig;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_eavConfig = $eavConfig;
+        $this->metadataPool = $metadataPool;
         parent::__construct($context, $tableStrategy, $connectionName);
     }
 
@@ -68,7 +78,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
         $attributeTable = $attribute->getBackend()->getTable();
         $connection = $this->getConnection();
         $joinType = $condition !== null || $required ? 'join' : 'joinLeft';
-        $productIdField = $this->getProductIdFieldName();
+        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         if ($attribute->isScopeGlobal()) {
             $alias = 'ta_' . $attrCode;
@@ -211,15 +221,5 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
         }
 
         return $result;
-    }
-
-    /**
-     * @return int
-     */
-    protected function getProductIdFieldName()
-    {
-        $table = $this->getTable('catalog_product_entity');
-        $indexList = $this->getConnection()->getIndexList($table);
-        return $indexList[$this->getConnection()->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }

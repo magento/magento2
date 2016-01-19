@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Catalog Product Eav Attributes abstract indexer resource model
  *
@@ -26,6 +28,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -33,10 +36,11 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $connectionName);
     }
 
     /**
@@ -162,12 +166,12 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             "cpe.entity_id = {$idxTable}.entity_id",
             []
         );
-
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $condition = $connection->quoteInto('=?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
         $this->_addAttributeToSelect(
             $select,
             'visibility',
-            "cpe.{$this->getProductIdFieldName()}",
+            "cpe.{$linkField}",
             $idxTable . '.store_id',
             $condition
         );

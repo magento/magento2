@@ -44,11 +44,6 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected $_eventManager = null;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -70,8 +65,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
-        $this->metadataPool = $metadataPool;
-        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $connectionName);
     }
 
     /**
