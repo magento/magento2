@@ -151,14 +151,13 @@ class AfterPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
                 ->with($this->paymentTokenMock);
         }
 
-        $this->assertSame($this->observer, $this->observer->execute($this->eventObserverArgMock));
+        static::assertSame($this->observer, $this->observer->execute($this->eventObserverArgMock));
 
-        $payment = $this->salesOrderPaymentMock->getExtensionAttributes()->getVaultPaymentToken();
-        $this->assertSame($payment, $this->paymentTokenMock);
-        $this->assertEquals($token, $payment->getGatewayToken());
-        $this->assertEquals($customerId, $payment->getCustomerId());
-        $this->assertEquals($isActive, $payment->getIsActive());
-        $this->assertEquals($createdAt, $payment->getCreatedAt());
+        $paymentToken = $this->salesOrderPaymentMock->getExtensionAttributes()->getVaultPaymentToken();
+        static::assertSame($paymentToken, $this->paymentTokenMock);
+        static::assertEquals($token, $paymentToken->getGatewayToken());
+        static::assertEquals($isActive, $paymentToken->getIsActive());
+        static::assertEquals($createdAt, $paymentToken->getCreatedAt());
     }
 
     public function testPositiveCaseDataProvider()
