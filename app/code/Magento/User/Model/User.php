@@ -397,6 +397,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function createChangesDescriptionString()
     {
+        $changes = [];
+
         if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
             $changes[] = __('email');
         }
