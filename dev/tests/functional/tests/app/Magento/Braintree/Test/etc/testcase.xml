@@ -41,4 +41,11 @@
         <step name="checkoutWithPaypalFromCart" module="Magento_Braintree" next="expressCheckoutOrderPlace"/>
         <step name="expressCheckoutOrderPlace" module="Magento_Paypal"/>
     </scenario>
+    <scenario name="CheckoutWithBraintreePaypalMinicartTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts"/>
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart"/>
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="checkoutWithPaypalFromMinicart"/>
+        <step name="checkoutWithPaypalFromMinicart" module="Magento_Braintree" next="expressCheckoutOrderPlace"/>
+        <step name="expressCheckoutOrderPlace" module="Magento_Paypal"/>
+    </scenario>
 </config>
