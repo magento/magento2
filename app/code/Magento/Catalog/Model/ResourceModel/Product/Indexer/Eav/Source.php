@@ -29,8 +29,8 @@ class Source extends AbstractEav
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param string $connectionName
      */
     public function __construct(
@@ -38,8 +38,8 @@ class Source extends AbstractEav
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         $connectionName = null
     ) {
         $this->_resourceHelper = $resourceHelper;
