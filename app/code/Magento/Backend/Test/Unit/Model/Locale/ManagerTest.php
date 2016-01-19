@@ -15,7 +15,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\TranslateInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\TranslateInterface
      */
     protected $_translator;
 
@@ -25,12 +25,12 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected $_session;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Auth\Session
      */
     protected $_authSession;
     
     /**
-     * @var \Magento\Backend\App\ConfigInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\ConfigInterface
      */
     protected $_backendConfig;
 
@@ -109,5 +109,18 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $locale = $this->_model->getUserInterfaceLocale();
 
         $this->assertEquals($locale, 'de_DE');
+    }
+
+    /**
+     * @covers \Magento\Backend\Model\Locale\Manager::getUserInterfaceLocale
+     */
+    public function testGetUserInterfaceGeneralLocale()
+    {
+        $this->_backendConfig->expects($this->any())
+            ->method('getValue')
+            ->with('general/locale/code')
+            ->willReturn('test_locale');
+        $locale = $this->_model->getUserInterfaceLocale();
+        $this->assertEquals($locale, 'test_locale');
     }
 }
