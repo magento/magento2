@@ -213,8 +213,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [$linkField, 'value' => $valueExpr]
             )->joinLeft(
                 ['t2' => $attributeTable],
-                't1.' . $linkField . ' = t2.' . $linkField
-                    . ' AND t1.attribute_id = t2.attribute_id AND t2.store_id = :store_id',
+                "t1.{$linkField} = t2.{$linkField} AND t1.attribute_id = t2.attribute_id AND t2.store_id = :store_id",
                 []
             )->where(
                 't1.store_id = ?',
@@ -222,7 +221,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             )->where(
                 't1.attribute_id = :attribute_id'
             )->where(
-                't1.' . $linkField . ' IN(?)',
+                "t1.{$linkField} IN(?)",
                 $categoryIds
             );
 

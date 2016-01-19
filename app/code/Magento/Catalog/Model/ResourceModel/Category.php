@@ -757,6 +757,7 @@ class Category extends AbstractResource
      */
     public function getChildren($category, $recursive = true)
     {
+        $linkField = $this->getLinkField();
         $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
@@ -772,13 +773,11 @@ class Category extends AbstractResource
             'entity_id'
         )->joinLeft(
             ['d' => $backendTable],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.' . $this->getLinkField()
-                . ' = m.' . $this->getLinkField(),
+            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = m.{$linkField}",
             []
         )->joinLeft(
             ['c' => $backendTable],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $this->getLinkField()
-                . ' = m.' . $this->getLinkField(),
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = m.{$linkField}",
             []
         )->where(
             $checkSql . ' = :scope'
