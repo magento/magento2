@@ -13,6 +13,10 @@ class AppliersPool
     /** @var ApplierInterface[] */
     private $appliersPool = [];
 
+    /**
+     * AppliersPool constructor.
+     * @param ApplierInterface[] $appliers
+     */
     public function __construct(array $appliers)
     {
         $this->appliersPool = $appliers;

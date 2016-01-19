@@ -13,10 +13,12 @@ use Braintree\TextNode;
 class Text implements ApplierInterface
 {
     /**
+     * Apply filter condition
+     *
      * @param TextNode $field
      * @param $condition
      * @param $value
-     * @return $this
+     * @return bool
      */
     public function apply($field, $condition, $value)
     {
