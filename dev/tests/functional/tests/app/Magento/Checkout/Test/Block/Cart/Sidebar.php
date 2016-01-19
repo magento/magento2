@@ -30,6 +30,13 @@ class Sidebar extends Block
     protected $cartLink = 'a.showcart';
 
     /**
+     * Locator value for "Check out with Braintree PayPal" button.
+     *
+     * @var string
+     */
+    protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
+
+    /**
      * Minicart items quantity
      *
      * @var string
@@ -96,6 +103,17 @@ class Sidebar extends Block
         if (!$this->_rootElement->find($this->cartContent)->isVisible()) {
             $this->_rootElement->find($this->cartLink)->click();
         }
+    }
+
+    /**
+     * Click "Check out with Braintree PayPal" button.
+     *
+     * @return void
+     */
+    public function clickBraintreePaypalButton()
+    {
+        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
+            ->click();
     }
 
     /**
