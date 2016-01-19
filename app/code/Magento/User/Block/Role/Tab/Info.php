@@ -104,7 +104,10 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        $data = array_merge($this->getRole()->getData(), ['in_role_user_old' => $this->getOldUsers()]);
+        $data =  ['in_role_user_old' => $this->getOldUsers()];
+        if ($this->getRole() && is_array($this->getRole()->getData())) {
+            $data = array_merge($this->getRole()->getData(), $data);
+        }
         $form->setValues($data);
         $this->setForm($form);
     }
