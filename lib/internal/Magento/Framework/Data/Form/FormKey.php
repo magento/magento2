@@ -52,7 +52,7 @@ class FormKey
         if (!$this->isPresent()) {
             $this->set($this->mathRandom->getRandomString(16));
         }
-        return $this->escaper->escapeHtml($this->session->getData(self::FORM_KEY));
+        return $this->escaper->escapeHtmlAttr($this->session->getData(self::FORM_KEY));
     }
 
     /**
