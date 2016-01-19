@@ -125,6 +125,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Delete sessions older than some value
+     *
      * @param int $timestamp
      * @return $this
      */

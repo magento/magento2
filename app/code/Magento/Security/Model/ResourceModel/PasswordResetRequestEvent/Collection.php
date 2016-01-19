@@ -6,7 +6,7 @@
 namespace Magento\Security\Model\ResourceModel\PasswordResetRequestEvent;
 
 /**
- * Security Control collection
+ * Password reset request event collection
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -64,6 +64,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Filter by account reference
+     *
      * @param string $reference
      * @return $this
      */
@@ -75,6 +77,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Filter by IP
+     *
      * @param int $ip
      * @return $this
      */
@@ -86,6 +90,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Filter by request type
+     *
      * @param int $requestType
      * @return $this
      */
@@ -97,6 +103,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Filter by lifetime
+     *
      * @param int $lifetime
      * @return $this
      */
@@ -111,6 +119,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Filter last item
+     *
      * @return $this
      */
     public function filterLastItem()
@@ -121,6 +131,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Filter by IP or by account reference
+     *
      * @param int $ip
      * @param string $accountReference
      * @return $this
@@ -139,6 +151,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Delete records older than some value
+     *
      * @param int $timestamp
      * @return $this
      */
