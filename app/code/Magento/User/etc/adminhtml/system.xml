@@ -9,8 +9,8 @@
     <system>
         <section id="admin">
             <group id="emails">
-                <field id="reset_password_template" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Reset Password Template</label>
+                <field id="user_notification_template" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>User Notification Template</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
