@@ -135,6 +135,7 @@ class CartPriceRulesFixture extends Fixture
     /**
      * @param \Magento\SalesRule\Model\RuleFactory $modelFactory
      * @param array $categoriesArray
+     * @return void
      */
     public function generateRules($modelFactory, $categoriesArray)
     {
@@ -319,6 +320,7 @@ class CartPriceRulesFixture extends Fixture
     /**
      * @param \Magento\SalesRule\Model\RuleFactory $modelFactory
      * @param array $categoriesArray
+     * @return void
      */
     public function generateAdvancedRules($modelFactory, $categoriesArray)
     {
