@@ -419,12 +419,11 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $table = $this->getTable('catalog_category_entity_int');
         $select->joinLeft(
             ['d' => $table],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.' . $linkField . ' = main_table.' . $linkField,
+            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = main_table.{$linkField}",
             []
         )->joinLeft(
             ['c' => $table],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $linkField
-                . ' = main_table.' . $linkField,
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = main_table.{$linkField}",
             []
         );
 
