@@ -6,19 +6,19 @@
  */
 -->
 <config>
-    <topic name="top.01" type="amqp" exchange="ex.01">
+    <broker topic="top.01" type="amqp" exchange="ex.01">
         <queue name="q.01" handler="Magento\Handler\Class\Name::methodName" consumer="cons.01" consumerInstance="Magento\Consumer\Instance" maxMessages="512" />
-    </topic>
-    <topic name="top.03">
+    </broker>
+    <broker topic="top.03">
         <queue name="q.03" consumer="cons.03" />
         <queue name="q.04" consumer="cons.07" />
-    </topic>
-    <topic name="top.04" type="db">
+    </broker>
+    <broker topic="top.04" type="db">
         <queue name="q.04" handler="Magento\Handler\Class\Name::methodName" consumer="cons.04" consumerInstance="Magento\Consumer\Instance" maxMessages="512" />
         <queue name="q.05" handler="Magento\Handler\Class\Name::methodName" consumer="cons.05" consumerInstance="Magento\Consumer\Instance" maxMessages="512" />
         <queue name="q.06" handler="Magento\Handler\Class\Name::methodName" consumer="cons.06" consumerInstance="Magento\Consumer\Instance" maxMessages="512" />
-    </topic>
-    <topic name="*.created.*">
+    </broker>
+    <broker topic="*.created.*">
         <queue name="q.log" handler="Magento\Handler\Class\Name::logger" consumer="cons.logger" />
-    </topic>
+    </broker>
 </config>

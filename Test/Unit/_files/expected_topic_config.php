@@ -47,7 +47,9 @@ return [
         'cons.01' => [
             'name' => 'cons.01',
             'handlers' => [
-                'default' => 'Magento\Handler\Class\Name::methodName'
+                'top.01' => [
+                    'default' => 'Magento\Handler\Class\Name::methodName'
+                ]
             ],
             'instance_type' => 'Magento\Consumer\Instance',
             'consumer_type' => 'async',
@@ -58,25 +60,29 @@ return [
         'cons.03' => [
             'name' => 'cons.03',
             'handlers' => [
-                'customerCreatedFirst' => [
-                    'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
-                    'method' => 'save',
-                ],
-                'customerCreatedSecond' => [
-                    'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
-                    'method' => 'delete',
-                ],
+                'top.03' => [
+                    'customerCreatedFirst' => [
+                        'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
+                        'method' => 'save',
+                    ],
+                    'customerCreatedSecond' => [
+                        'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
+                        'method' => 'delete',
+                    ],
+                ]
             ],
             'instance_type' => null,
             'consumer_type' => 'async',
-            'max_messages' => PHP_INT_MAX,
+            'max_messages' => null,
             'connection' => 'amqp',
             'queue' => 'q.03'
         ],
         'cons.04' => [
             'name' => 'cons.04',
             'handlers' => [
-                'default' => 'Magento\Handler\Class\Name::methodName'
+                'top.04' => [
+                    'default' => 'Magento\Handler\Class\Name::methodName'
+                ]
             ],
             'instance_type' => 'Magento\Consumer\Instance',
             'consumer_type' => 'async',
@@ -87,7 +93,9 @@ return [
         'cons.05' => [
             'name' => 'cons.05',
             'handlers' => [
-                'default' => 'Magento\Handler\Class\Name::methodName'
+                'top.04' => [
+                    'default' => 'Magento\Handler\Class\Name::methodName'
+                ]
             ],
             'instance_type' => 'Magento\Consumer\Instance',
             'consumer_type' => 'async',
@@ -98,7 +106,9 @@ return [
          'cons.06' => [
             'name' => 'cons.06',
             'handlers' => [
-                'default' => 'Magento\Handler\Class\Name::methodName'
+                'top.04' => [
+                    'default' => 'Magento\Handler\Class\Name::methodName'
+                ]
             ],
             'instance_type' => 'Magento\Consumer\Instance',
             'consumer_type' => 'async',
@@ -109,29 +119,33 @@ return [
         'cons.07' => [
             'name' => 'cons.07',
             'handlers' => [
-                'customerCreatedFirst' => [
-                    'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
-                    'method' => 'save',
-                ],
-                'customerCreatedSecond' => [
-                    'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
-                    'method' => 'delete',
-                ],
+                'top.03' => [
+                    'customerCreatedFirst' => [
+                        'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
+                        'method' => 'save',
+                    ],
+                    'customerCreatedSecond' => [
+                        'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
+                        'method' => 'delete',
+                    ],
+                ]
             ],
             'instance_type' => null,
             'consumer_type' => 'async',
-            'max_messages' => PHP_INT_MAX,
+            'max_messages' => null,
             'connection' => 'amqp',
             'queue' => 'q.04'
         ],
         'cons.logger' => [
             'name' => 'cons.logger',
             'handlers' => [
-                'default' => 'Magento\Handler\Class\Name::logger'
+                'product.created.local' => [
+                    'default' => 'Magento\Handler\Class\Name::logger'
+                ]
             ],
             'instance_type' => null,
             'consumer_type' => 'async',
-            'max_messages' => PHP_INT_MAX,
+            'max_messages' => null,
             'connection' => 'amqp',
             'queue' => 'q.log'
         ],
