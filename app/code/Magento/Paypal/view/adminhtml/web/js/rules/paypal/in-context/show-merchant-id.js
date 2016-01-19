@@ -6,6 +6,7 @@ define([], function () {
     'use strict';
 
     return function ($target, $owner, data) {
-        $target.find(data.enableInContext).prop('disabled', false);
+        $target.find('tr[id$="_merchant_id"], input[id$="_merchant_id"]').show();
+        $target.find('input[id$="_merchant_id"]').attr('disabled', false);
     };
 });

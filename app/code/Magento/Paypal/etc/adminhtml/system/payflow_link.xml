@@ -80,6 +80,9 @@
                     <attribute type="shared">1</attribute>
                 </field>
             </group>
+
+
+
             <field id="enable_payflow_link" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">
                 <label>Enable Payflow Link</label>
                 <config_path>payment/payflow_link/active</config_path>
@@ -88,17 +91,6 @@
                 <requires>
                     <group id="payflow_link_payflow_link"/>
                 </requires>
-            </field>
-            <field id="enable_in_context_checkout" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
-                <label>Enable In-Context Checkout Experience</label>
-                <comment>
-                    <![CDATA[See PayPal Feature Support details and list of supported regions
-                    <a href="https://developer.paypal.com/docs/classic/express-checkout/in-context/" target="_blank">here</a>.]]>
-                </comment>
-                <config_path>payment/paypal_express/in_context</config_path>
-                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\InContext</frontend_model>
-                <attribute type="shared">1</attribute>
             </field>
             <field id="enable_express_checkout_basic" translate="label" type="select" sortOrder="40">
                 <label>Enable Express Checkout</label>
@@ -122,6 +114,9 @@
                     <field id="enable_express_checkout"/>
                 </requires>
             </field>
+
+
+
             <group id="payflow_link_advertise_bml"  translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="42">
                 <label>Advertise PayPal Credit</label>
                 <comment>
