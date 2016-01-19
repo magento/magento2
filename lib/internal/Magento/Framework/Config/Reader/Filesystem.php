@@ -68,6 +68,16 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
     protected $validationState;
 
     /**
+     * @var string
+     */
+    protected $_defaultScope;
+
+    /**
+     * @var string
+     */
+    protected $_schemaFile;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
