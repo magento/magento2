@@ -37,13 +37,13 @@ class Source extends AbstractEav
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         $connectionName = null
     ) {
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $metadataPool, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $eventManager, $connectionName);
     }
 
     /**
