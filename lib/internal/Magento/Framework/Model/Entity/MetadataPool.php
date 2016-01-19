@@ -43,6 +43,7 @@ class MetadataPool
     /**
      * @param EntityMetadataFactory $metadataFactory
      * @param EntityHydratorFactory $hydratorFactory
+     * @param SequenceFactory $sequenceFactory
      * @param array $metadata
      * @param array $eavMapping
      */

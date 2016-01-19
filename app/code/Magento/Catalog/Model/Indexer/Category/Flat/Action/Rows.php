@@ -29,8 +29,8 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         MetadataPool $metadataPool,
-        $skipStaticColumns = [],
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        $skipStaticColumns = []
     ) {
         $this->categoryRepository = $categoryRepository;
         parent::__construct($resource, $storeManager, $resourceHelper, $metadataPool, $skipStaticColumns);
