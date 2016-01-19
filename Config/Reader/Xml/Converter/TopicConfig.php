@@ -31,7 +31,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     private $methodsMap;
 
     /**
-     * @var \Magento\Framework\Communication\ConfigInterface
+     * @var CommunicationConfig
      */
     private $communicationConfig;
 
@@ -40,12 +40,12 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      *
      * @param MethodsMap $methodsMap
      * @param Validator $xmlValidator
-     * @param \Magento\Framework\Communication\ConfigInterface $communicationConfig
+     * @param CommunicationConfig $communicationConfig
      */
     public function __construct(
         MethodsMap $methodsMap,
         Validator $xmlValidator,
-        \Magento\Framework\Communication\ConfigInterface $communicationConfig
+        CommunicationConfig $communicationConfig
     ) {
         $this->methodsMap = $methodsMap;
         $this->xmlValidator = $xmlValidator;
@@ -53,7 +53,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function convert($source)
     {
@@ -72,6 +72,12 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         ];
     }
 
+    /**
+     * Generate list of topics.
+     *
+     * @param array $topics
+     * @return array
+     */
     private function buildTopicsConfiguration($topics)
     {
         $output = [];
@@ -99,6 +105,8 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Generate consumers.
+     *
      * @param array $topics
      * @return array
      */
@@ -111,9 +119,9 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
                 $output[$queueConfig['consumer']] = [
                     'name' => $queueConfig['consumer'],
                     'queue' => $queueName,
-                    'handlers' => $queueConfig['handlers'],
+                    'handlers' => [$topicName => $queueConfig['handlers']],
                     'instance_type' => $queueConfig['consumerInstance'],
-                    'consumer_type' => $topic[\Magento\Framework\Communication\ConfigInterface::TOPIC_IS_SYNCHRONOUS] ? 'sync' : 'async',
+                    'consumer_type' => $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? 'sync' : 'async',
                     'max_messages' => $queueConfig['maxMessages'],
                     'connection' => $topicConfig['type']
                 ];
@@ -123,6 +131,8 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Generate topics list based on wildcards.
+     *
      * @param array $topics
      * @return array
      */
@@ -153,6 +163,8 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Generate publishers
+     *
      * @param array $topics
      * @return array
      */
@@ -171,7 +183,9 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * @param $topics
+     * Generate binds
+     *
+     * @param array $topics
      * @return array
      */
     private function buildBinds($topics)
@@ -190,6 +204,12 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         return $output;
     }
 
+    /**
+     * Generate topic-to-queues map.
+     *
+     * @param array $topics
+     * @return array
+     */
     private function buildExchangeTopicToQueue($topics)
     {
         $output = [];
@@ -203,7 +223,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         return $output;
     }
 
-
     /**
      * Extract topics configuration.
      *
@@ -213,16 +232,16 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     private function extractTopics($config)
     {
         $output = [];
-        /** @var $topicNode \DOMElement */
-        foreach ($config->getElementsByTagName('topic') as $topicNode) {
-            $topicName = $this->getAttributeValue($topicNode, 'name');
+        /** @var $brokerNode \DOMElement */
+        foreach ($config->getElementsByTagName('broker') as $brokerNode) {
+            $topicName = $this->getAttributeValue($brokerNode, 'topic');
             $output[$topicName] = [
                 ConfigInterface::TOPIC_NAME => $topicName,
-                'type' => $this->getAttributeValue($topicNode, 'type', self::DEFAULT_TYPE),
-                'exchange' => $this->getAttributeValue($topicNode, 'exchange', self::DEFAULT_EXCHANGE),
-                'consumerInstance' => $this->getAttributeValue($topicNode, 'consumerInstance'),
-                'maxMessages' => $this->getAttributeValue($topicNode, 'maxMessages'),
-                'queues' => $this->extractQueuesFromTopic($topicNode, $topicName)
+                'type' => $this->getAttributeValue($brokerNode, 'type', self::DEFAULT_TYPE),
+                'exchange' => $this->getAttributeValue($brokerNode, 'exchange', self::DEFAULT_EXCHANGE),
+                'consumerInstance' => $this->getAttributeValue($brokerNode, 'consumerInstance'),
+                'maxMessages' => $this->getAttributeValue($brokerNode, 'maxMessages'),
+                'queues' => $this->extractQueuesFromBroker($brokerNode, $topicName)
             ];
         }
         return $output;
@@ -231,15 +250,16 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     /**
      * Extract queues configuration from the topic node.
      *
-     * @param \DOMElement $topicNode
-     * @return mixed
+     * @param \DOMElement $brokerNode
+     * @param string $topicName
+     * @return array
      */
-    protected function extractQueuesFromTopic(\DOMElement $topicNode, $topicName)
+    protected function extractQueuesFromBroker(\DOMElement $brokerNode, $topicName)
     {
         $queues = [];
         $topicConfig = $this->communicationConfig->getTopic($topicName);
         /** @var $queueNode \DOMElement */
-        foreach ($topicNode->getElementsByTagName('queue') as $queueNode) {
+        foreach ($brokerNode->getElementsByTagName('queue') as $queueNode) {
             $handler = $this->getAttributeValue($queueNode, 'handler');
             $queueName = $this->getAttributeValue($queueNode, 'name');
             $queue = [
@@ -249,7 +269,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
                'exchange' => $this->getAttributeValue($queueNode, 'exchange'),
                'consumer' => $this->getAttributeValue($queueNode, 'consumer'),
                'consumerInstance' => $this->getAttributeValue($queueNode, 'consumerInstance'),
-               'maxMessages' => $this->getAttributeValue($queueNode, 'maxMessages', PHP_INT_MAX),
+               'maxMessages' => $this->getAttributeValue($queueNode, 'maxMessages', null),
                'type' => $this->getAttributeValue($queueNode, 'type')
 
             ];

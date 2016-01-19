@@ -71,7 +71,8 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
             $publisherName = $publisherNode->attributes->getNamedItem('name')->nodeValue;
             $output[$publisherName] = [
                 ConfigInterface::PUBLISHER_NAME => $publisherName,
-                ConfigInterface::PUBLISHER_CONNECTION => $publisherNode->attributes->getNamedItem('connection')->nodeValue,
+                ConfigInterface::PUBLISHER_CONNECTION =>
+                    $publisherNode->attributes->getNamedItem('connection')->nodeValue,
                 ConfigInterface::PUBLISHER_EXCHANGE => $publisherNode->attributes->getNamedItem('exchange')->nodeValue
             ];
         }
