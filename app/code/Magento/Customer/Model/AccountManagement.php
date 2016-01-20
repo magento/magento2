@@ -859,12 +859,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Send emails to customer when his email or/and password is changed
-     *
-     * @param CustomerInterface $origCustomer
-     * @param CustomerInterface $savedCustomer
-     * @param bool $isPasswordChanged
-     * @return $this
+     * {@inheritdoc}
      */
     public function sendNotificationEmailsIfRequired(
         CustomerInterface $origCustomer,
@@ -873,13 +868,13 @@ class AccountManagement implements AccountManagementInterface
     ) {
         if ($origCustomer->getEmail() != $savedCustomer->getEmail()) {
             if ($isPasswordChanged) {
-                $this->sendEmailAndPasswordChangeNotificationEmail($origCustomer);
-                $this->sendEmailAndPasswordChangeNotificationEmail($savedCustomer);
+                $this->sendEmailAndPasswordChangeNotificationEmail($savedCustomer, $origCustomer->getEmail());
+                $this->sendEmailAndPasswordChangeNotificationEmail($savedCustomer, $savedCustomer->getEmail());
                 return $this;
             }
 
-            $this->sendEmailChangeNotificationEmail($origCustomer);
-            $this->sendEmailChangeNotificationEmail($savedCustomer);
+            $this->sendEmailChangeNotificationEmail($savedCustomer, $origCustomer->getEmail());
+            $this->sendEmailChangeNotificationEmail($savedCustomer, $savedCustomer->getEmail());
             return $this;
         }
 
@@ -894,9 +889,10 @@ class AccountManagement implements AccountManagementInterface
      * Send email to customer when his email and password is changed
      *
      * @param CustomerInterface $customer
+     * @param string $email
      * @return $this
      */
-    protected function sendEmailAndPasswordChangeNotificationEmail(CustomerInterface $customer)
+    protected function sendEmailAndPasswordChangeNotificationEmail(CustomerInterface $customer, $email)
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
@@ -910,7 +906,8 @@ class AccountManagement implements AccountManagementInterface
             self::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE,
             self::XML_PATH_FORGOT_EMAIL_IDENTITY,
             ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
-            $storeId
+            $storeId,
+            $email
         );
 
         return $this;
@@ -920,9 +917,10 @@ class AccountManagement implements AccountManagementInterface
      * Send email to customer when his email is changed
      *
      * @param CustomerInterface $customer
+     * @param string $email
      * @return $this
      */
-    protected function sendEmailChangeNotificationEmail(CustomerInterface $customer)
+    protected function sendEmailChangeNotificationEmail(CustomerInterface $customer, $email)
     {
         $storeId = $customer->getStoreId();
         if (!$storeId) {
@@ -936,7 +934,8 @@ class AccountManagement implements AccountManagementInterface
             self::XML_PATH_CHANGE_EMAIL_TEMPLATE,
             self::XML_PATH_FORGOT_EMAIL_IDENTITY,
             ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
-            $storeId
+            $storeId,
+            $email
         );
 
         return $this;
@@ -1016,16 +1015,27 @@ class AccountManagement implements AccountManagementInterface
      * @param string $sender configuration path of email identity
      * @param array $templateParams
      * @param int|null $storeId
+     * @param string $email
      * @return $this
      */
-    protected function sendEmailTemplate($customer, $template, $sender, $templateParams = [], $storeId = null)
-    {
+    protected function sendEmailTemplate(
+        $customer,
+        $template,
+        $sender,
+        $templateParams = [],
+        $storeId = null,
+        $email = null
+    ) {
         $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
+        if (is_null($email)) {
+            $email = $customer->getEmail();
+        }
+
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
             ->setTemplateVars($templateParams)
             ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
-            ->addTo($customer->getEmail(), $this->customerViewHelper->getCustomerName($customer))
+            ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
 
         $transport->sendMessage();
