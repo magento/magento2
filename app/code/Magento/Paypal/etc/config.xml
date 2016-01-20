@@ -90,6 +90,8 @@
                 <avs_international>0</avs_international>
                 <avs_security_code>1</avs_security_code>
                 <cc_year_length>2</cc_year_length>
+                <can_authorize_vault>1</can_authorize_vault>
+                <can_capture_vault>1</can_capture_vault>
             </payflowpro>
             <paypal_billing_agreement>
                 <active>1</active>
