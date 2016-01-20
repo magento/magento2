@@ -304,12 +304,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'methodsMap' => $methodsMap
             ]
         );
+        $readersConfig = [
+            'xmlReader' => ['reader' => $xmlReader, 'sortOrder' => 10],
+            'envReader' => ['reader' => $envReader, 'sortOrder' => 20]
+        ];
+        /** @var \Magento\Framework\Communication\Config\CompositeReader $reader */
+        $reader = $objectManager->create(
+            'Magento\Framework\Communication\Config\CompositeReader',
+            ['readers' => $readersConfig]
+
+        );
         /** @var \Magento\Framework\Communication\Config $config */
         $configData = $objectManager->create(
             'Magento\Framework\Communication\Config\Data',
             [
-                'reader' => $xmlReader,
-                'envReader' => $envReader
+                'reader' => $reader
             ]
         );
         return $objectManager->create(
