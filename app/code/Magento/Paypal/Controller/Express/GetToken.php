@@ -80,7 +80,7 @@ class GetToken extends AbstractExpress
     {
         $this->_initCheckout();
         $quote = $this->_getQuote();
-        $hasButton = $this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON) === 'true';
+        $hasButton = $this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON) == 1;
 
         /** @var Data $checkoutHelper */
         $checkoutHelper = $this->_objectManager->get(Data::class);

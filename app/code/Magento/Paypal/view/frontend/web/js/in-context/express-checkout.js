@@ -36,7 +36,7 @@ define(
                         $.get(
                             this.path,
                             {
-                                button: this.button
+                                button: +this.button
                             }
                         ).done(
                             function (response) {

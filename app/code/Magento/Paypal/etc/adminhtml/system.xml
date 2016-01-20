@@ -72,6 +72,8 @@
                         <group id="express_checkout_required_express_checkout">
                             <label>Payments Standard</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
@@ -136,6 +138,8 @@
                         <group id="express_checkout_required_express_checkout">
                             <label>Website Payments Standard</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
@@ -199,6 +203,8 @@
                         <group id="express_checkout_required_express_checkout">
                             <label>Website Payments Standard</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
@@ -227,6 +233,8 @@
                         <group id="paypal_payflow_api_settings">
                             <label>Payments Pro</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_paypal_payflow">
                             <frontend_class>paypal-enabler paypal-ec-pe</frontend_class>
                             <attribute type="shared">0</attribute>
