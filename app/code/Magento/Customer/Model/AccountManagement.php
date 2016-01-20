@@ -592,26 +592,16 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Validate password by customer ID.
-     *
-     * @param int $customerId
-     * @param string $currentPassword
-     * @return bool
-     * @throws InvalidEmailOrPasswordException
+     * {@inheritdoc}
      */
-    public function validatePasswordById($customerId, $currentPassword)
+    public function validatePasswordById($customerId, $password)
     {
         try {
             $customer = $this->customerRepository->getById($customerId);
-            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-            $hash = $customerSecure->getPasswordHash();
-            if ($this->encryptor->validateHash($currentPassword, $hash)) {
-                return true;
-            }
         } catch (NoSuchEntityException $e) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
-        return false;
+        return $this->validatePasswordByCustomer($customer, $password);
     }
 
     /**
@@ -652,11 +642,9 @@ class AccountManagement implements AccountManagementInterface
      */
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
+        $this->validatePasswordByCustomer($customer, $currentPassword);
+
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $hash = $customerSecure->getPasswordHash();
-        if (!$this->encryptor->validateHash($currentPassword, $hash)) {
-            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
-        }
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $this->checkPasswordStrength($newPassword);
@@ -669,6 +657,24 @@ class AccountManagement implements AccountManagementInterface
             $this->logger->critical($e);
         }
 
+        return true;
+    }
+
+    /**
+     * Validate customer password.
+     *
+     * @param CustomerModel $customer
+     * @param string $password
+     * @return bool true on success
+     * @throws InvalidEmailOrPasswordException
+     */
+    private function validatePasswordByCustomer($customer, $password)
+    {
+        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+        $hash = $customerSecure->getPasswordHash();
+        if (!$this->encryptor->validateHash($password, $hash)) {
+            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
+        }
         return true;
     }
 
