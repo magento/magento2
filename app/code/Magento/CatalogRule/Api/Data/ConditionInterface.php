@@ -5,6 +5,9 @@
  */
 namespace Magento\CatalogRule\Api\Data;
 
+/**
+ * @api
+ */
 interface ConditionInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**#@+
@@ -76,7 +79,7 @@ interface ConditionInterface extends \Magento\Framework\Api\CustomAttributesData
     public function setIsValueParsed($isValueParsed);
 
     /**
-     * @return bool
+     * @return bool|null
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsValueParsed();
@@ -99,7 +102,7 @@ interface ConditionInterface extends \Magento\Framework\Api\CustomAttributesData
     public function setConditions($conditions);
 
     /**
-     * @return \Magento\CatalogRule\Api\Data\ConditionInterface[]
+     * @return \Magento\CatalogRule\Api\Data\ConditionInterface[]|null
      */
     public function getConditions();
 
