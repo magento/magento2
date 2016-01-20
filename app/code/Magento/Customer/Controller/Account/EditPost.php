@@ -134,27 +134,16 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     protected function isAllowedChangeCustomerEmail($customerId)
     {
-        if (!$this->getRequest()->getPost('email')) {
-            $this->messageManager->addError(__('Please enter new email.'));
-            return false;
-        }
         try {
-            $result = $this->customerAccountManagement->validatePasswordById(
+            return $this->customerAccountManagement->validatePasswordById(
                 $customerId,
                 $this->getRequest()->getPost('current_password')
             );
-            if ($result) {
-                return true;
-            }
-
-            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
-
         } catch (AuthenticationException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong while changing the email.'));
         }
-
         return false;
     }
 
