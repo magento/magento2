@@ -11,4 +11,9 @@ interface EsConfigInterface
      * @return array
      */
     public function getStemmerInfo();
+
+    /**
+     * @return array
+     */
+    public function getStopwordsInfo();
 }

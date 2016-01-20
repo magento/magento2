@@ -63,4 +63,12 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->config->getStemmerInfo();
     }
+
+    /**
+     * @return array|mixed|null
+     */
+    public function testGetStopwordsInfo()
+    {
+        $this->config->getStopwordsInfo();
+    }
 }

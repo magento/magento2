@@ -32,14 +32,12 @@ class Term implements FilterInterface
     {
         $filterQuery = [];
         if ($filter->getValue()) {
-            $filterValues =  is_array($filter->getValue()) ? $filter->getValue() : [$filter->getValue()];
-            foreach ($filterValues as $value) {
-                $filterQuery[] = [
-                    'term' => [
-                        $this->fieldMapper->getFieldName($filter->getField()) => $value,
-                    ],
-                ];
-            }
+            $operator = is_array($filter->getValue()) ? 'terms' : 'term';
+            $filterQuery []= [
+                $operator => [
+                    $this->fieldMapper->getFieldName($filter->getField()) => $filter->getValue(),
+                ],
+            ];
         }
         return $filterQuery;
     }

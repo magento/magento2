@@ -87,7 +87,6 @@ class Interval implements IntervalInterface
     public function load($limit, $offset = null, $lower = null, $upper = null)
     {
         $from = $to = [];
-
         if ($lower) {
             $from = ['gte' => $lower - self::DELTA];
         }
@@ -100,7 +99,8 @@ class Interval implements IntervalInterface
             'type' => $this->clientConfig->getEntityType(),
             'body' => [
                 'fields' => [
-                    '_id', $this->fieldName
+                    '_id',
+                    $this->fieldName,
                 ],
                 'query' => [
                     'filtered' => [
@@ -125,17 +125,17 @@ class Interval implements IntervalInterface
                         ],
                     ],
                 ],
-                'size' => $limit
-            ]
+                'sort' => [
+                    $this->fieldName,
+                ],
+                'size' => $limit,
+            ],
         ];
-
         if ($offset) {
             $requestQuery['body']['from'] = $offset;
         }
-
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
-
 
         return $this->arrayValuesToFloat($queryResult['hits']['hits'], $this->fieldName);
     }
@@ -183,11 +183,13 @@ class Interval implements IntervalInterface
                         ],
                     ],
                 ],
+                'sort' => [
+                    $this->fieldName,
+                ],
             ],
         ];
         $queryResult = $this->connectionManager->getConnection()
             ->query($requestQuery);
-
 
         $offset = $queryResult['hits']['total'];
         if (!$offset) {
@@ -235,6 +237,9 @@ class Interval implements IntervalInterface
                             ],
                         ],
                     ],
+                ],
+                'sort' => [
+                    $this->fieldName,
                 ],
             ],
         ];
