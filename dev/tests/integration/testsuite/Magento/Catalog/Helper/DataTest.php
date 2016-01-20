@@ -12,8 +12,6 @@ use Magento\Tax\Model\TaxRuleFixtureFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @magentoDbIsolation enabled
- * @magentoAppIsolation enabled
  */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,6 +83,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
     public function testGetBreadcrumbPath()
     {
