@@ -389,6 +389,16 @@
             </item>
         </argument>
     </exportButton>
+    <modal class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/modal/modal-component</item>
+                <item name="options" xsi:type="array">
+                    <item name="type" xsi:type="string">slide</item>
+                </item>
+            </item>
+        </argument>
+    </modal>
     <columnsControls class="Magento\Ui\Component\Container">
          <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -403,6 +413,13 @@
             </item>
         </argument>
     </listingToolbar>
+    <button class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/button</item>
+            </item>
+        </argument>
+    </button>
     <htmlContent class="Magento\Ui\Component\HtmlContent">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
