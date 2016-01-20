@@ -68,7 +68,7 @@ class PublisherPool implements PublisherInterface
         try {
             $topic = $this->communicationConfig->getTopic($topicName);
         } catch (\Exception $e) {
-            $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] = true;
+            $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] = false;
         }
         $type = $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? self::MODE_SYNC : self::MODE_ASYNC;
         /** @var PublisherInterface $publisher */
