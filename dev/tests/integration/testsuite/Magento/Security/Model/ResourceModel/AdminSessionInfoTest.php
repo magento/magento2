@@ -24,6 +24,7 @@ namespace Magento\Security\Model\ResourceModel\AdminSessionInfo {
                 $session->getResource()->getMainTable()
             );
             $this->_objectManager = null;
+            parent::tearDown();
         }
 
         /**
