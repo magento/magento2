@@ -31,7 +31,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 13. Perform assertions.
  *
  * @group Braintree_(CS)
- * @ZephyrId MAGETWO-46479
+ * @ZephyrId MAGETWO-48162
  */
 class BraintreeSettlementReportTest extends Scenario
 {
