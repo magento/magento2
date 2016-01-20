@@ -8,17 +8,17 @@
 require([
     'jquery',
     'mage/template',
-    'prototype'
-], function(jQuery, mageTemplate){
+], function($, mageTemplate){
 
 setSettings = function(urlTemplate, codeElement, themeElement) {
     var url;
 
-    if (!jQuery('#edit_form').valid()) {
+    if (!$('#edit_form').valid()) {
         return false;
     }
-    codeElement = $F(codeElement);
-    themeElement = $F(themeElement);
+
+    codeElement = $('#' + codeElement).val();
+    themeElement = $('#' + themeElement).val();
 
     url = mageTemplate(urlTemplate, {
         data: {
