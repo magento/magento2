@@ -78,6 +78,7 @@
         </xs:annotation>
         <xs:attribute name="name" type="tableNameType" use="required" />
         <xs:attribute name="entity_column" type="entityColumnType" use="required" />
+        <xs:attribute name="subscription_model" type="subscriptionModelType" />
     </xs:complexType>
 
     <xs:simpleType name="entityColumnType">
@@ -99,6 +100,17 @@
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:pattern value="[a-z_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="subscriptionModelType">
+        <xs:annotation>
+            <xs:documentation>
+                Subscription model can contain only valid PHP class or interface name [a-z_0-9\\].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z_0-9\\]+" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>
