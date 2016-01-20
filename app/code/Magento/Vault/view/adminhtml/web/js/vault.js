@@ -29,6 +29,7 @@ define([
             var self = this;
 
             self.$selector = $('#' + self.selector);
+            $('#' + this.fieldset + ' input:radio:first').prop('checked', true);
             this._super()
                 .observe(['active']);
 
@@ -47,10 +48,6 @@ define([
          */
         changePaymentMethod: function (event, method) {
             this.active(method === this.code);
-
-            if (this.active()) {
-                $('#' + this.fieldset + ' input:radio:first').prop('checked', true);
-            }
 
             return this;
         },
