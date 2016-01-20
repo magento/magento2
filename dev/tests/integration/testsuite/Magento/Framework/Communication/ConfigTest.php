@@ -312,7 +312,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $reader = $objectManager->create(
             'Magento\Framework\Communication\Config\CompositeReader',
             ['readers' => $readersConfig]
-
         );
         /** @var \Magento\Framework\Communication\Config $config */
         $configData = $objectManager->create(
