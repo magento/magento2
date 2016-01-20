@@ -16,8 +16,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPostValue();
-        if ($data) {
+        if ($this->getRequest()->getPostValue()) {
 
             /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
             $ruleRepository = $this->_objectManager->get(
@@ -32,6 +31,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     'adminhtml_controller_catalogrule_prepare_save',
                     ['request' => $this->getRequest()]
                 );
+                $data = $this->getRequest()->getPostValue();
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
                     $model = $ruleRepository->get($id);
