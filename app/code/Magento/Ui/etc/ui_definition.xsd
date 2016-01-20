@@ -64,6 +64,8 @@
             <xs:element name="htmlContent" type="htmlContent" />
             <xs:element type="insertForm" name="insertForm"/>
             <xs:element type="insertListing" name="insertListing"/>
+            <xs:element type="modal" name="modal"/>
+            <xs:element type="button" name="button"/>
         </xs:all>
     </xs:complexType>
     <!-- Custom configuration -->
@@ -89,6 +91,7 @@
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="insertForm" name="insertForm"/>
                     <xs:element type="insertListing" name="insertListing"/>
+                    <xs:element type="modal" name="modal"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
