@@ -25,6 +25,13 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
      */
     private $settlementReportIndex;
 
+    /**
+     * @param $orderId
+     * @param OrderIndex $orderIndex
+     * @param SalesOrderView $salesOrderView
+     * @param BraintreeSettlementReportIndex $braintreeSettlementReportIndex
+     * @throws \Exception
+     */
     public function processAssert(
         $orderId,
         OrderIndex $orderIndex,
@@ -55,7 +62,7 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Transaction is present in settlement report';
+        return 'Transaction is present in settlement report.';
     }
 
     /**

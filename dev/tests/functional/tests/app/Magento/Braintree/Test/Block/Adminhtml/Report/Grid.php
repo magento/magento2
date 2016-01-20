@@ -13,6 +13,7 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 class Grid extends DataGrid
 {
     /**
+     * List of filters for grid
      * @var array
      */
     protected $filters = [
