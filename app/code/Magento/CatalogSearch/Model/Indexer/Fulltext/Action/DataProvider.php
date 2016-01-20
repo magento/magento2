@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -89,6 +90,11 @@ class DataProvider
     private $connection;
 
     /**
+     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     */
+    private $metadata;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -104,7 +110,8 @@ class DataProvider
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttributeCollectionFactory,
         \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -114,6 +121,7 @@ class DataProvider
         $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
         $this->engine = $engineProvider->get();
+        $this->metadata = $metadataPool->getMetadata(ProductInterface::class);
     }
 
     /**
@@ -278,16 +286,17 @@ class DataProvider
         $result = [];
         $selects = [];
         $ifStoreValue = $this->connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
+        $linkField = $this->metadata->getLinkField();
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
                 $selects[] = $this->connection->select()->from(
                     ['t_default' => $tableName],
-                    ['entity_id', 'attribute_id']
+                    [$linkField, 'attribute_id']
                 )->joinLeft(
                     ['t_store' => $tableName],
                     $this->connection->quoteInto(
-                        't_default.entity_id=t_store.entity_id' .
+                        't_default.' . $linkField . '=t_store.' . $linkField .
                         ' AND t_default.attribute_id=t_store.attribute_id' .
                         ' AND t_store.store_id = ?',
                         $storeId
@@ -300,7 +309,7 @@ class DataProvider
                     't_default.attribute_id IN (?)',
                     $attributeIds
                 )->where(
-                    't_default.entity_id IN (?)',
+                    't_default.' . $linkField . ' IN (?)',
                     $productIds
                 );
             }
@@ -310,7 +319,7 @@ class DataProvider
             $select = $this->connection->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
             $query = $this->connection->query($select);
             while ($row = $query->fetch()) {
-                $result[$row['entity_id']][$row['attribute_id']] = $row['value'];
+                $result[$row[$linkField]][$row['attribute_id']] = $row['value'];
             }
         }
 
