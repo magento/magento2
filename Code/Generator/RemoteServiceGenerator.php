@@ -102,7 +102,9 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
                 'visibility' => 'protected',
                 'docblock' => [
                     'shortDescription' => 'Publisher',
-                    'tags' => ['name' => 'var', 'description' => '\Magento\Framework\MessageQueue\PublisherInterface'],
+                    'tags' => [
+                        ['name' => 'var', 'description' => '\Magento\Framework\MessageQueue\PublisherInterface']
+                    ],
                 ],
             ]
         ];
