@@ -99,10 +99,15 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      * Deployment config
      *
      * @var DeploymentConfig $deploymentConfig
-     * @var State $appState
      */
     private $deploymentConfig;
 
+    /**
+     * Constructor
+     *
+     * @param DeploymentConfig $deploymentConfig
+     * @param State $appState
+     */
     public function __construct(DeploymentConfig $deploymentConfig, State $appState)
     {
         $this->deploymentConfig = $deploymentConfig;
