@@ -30,6 +30,7 @@
         <arguments>
             <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
             <argument name="valueHandlerPool" xsi:type="object">VaultPaymentValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">Magento\Vault\Model\Method\NullPaymentProvider</argument>
         </arguments>
     </type>
 
@@ -44,6 +45,7 @@
 
     <type name="Magento\Vault\Model\Ui\TokensConfigProvider">
         <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
             <argument name="paymentTokenRepository" xsi:type="object">Magento\Vault\Model\PaymentTokenRepositoryProxy</argument>
         </arguments>
     </type>
