@@ -103,8 +103,6 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     private $deploymentConfig;
 
     /**
-     * Constructor
-     *
      * @param DeploymentConfig $deploymentConfig
      * @param State $appState
      */
