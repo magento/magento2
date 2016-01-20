@@ -17,7 +17,7 @@
 <?php $columnsLimit = $block->getColumnsLimit() ?: 0; ?>
 <?php $_menu = $block->getHtml('level-top', 'submenu', $columnsLimit) ?>
 
-<nav class="navigation" role="navigation">
+<nav class="navigation" data-action="navigation">
     <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
         <?php /* @escapeNotVerified */ echo $_menu; ?>
     </ul>
