@@ -41,6 +41,7 @@ namespace Magento\Security\Model\AdminSessionsManager {
             );
 
             $this->_auth->setAuthStorage($this->_modelSession);
+            parent::setUp();
         }
 
         protected function tearDown()
@@ -52,6 +53,7 @@ namespace Magento\Security\Model\AdminSessionsManager {
             )->setCurrentScope(
                 null
             );
+            parent::tearDown();
         }
 
         /**

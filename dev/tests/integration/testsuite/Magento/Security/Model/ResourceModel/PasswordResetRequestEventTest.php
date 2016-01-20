@@ -31,6 +31,7 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = null;
         $this->_resourceModel = null;
+        parent::tearDown();
     }
 
     /**
