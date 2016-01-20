@@ -23,10 +23,10 @@
             <data name="configData" xsi:type="string">braintreetwo</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test</data>
-            <!--<constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />-->
-            <!--<constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />-->
-            <!--<constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />-->
-            <!--<constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />-->
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
             <constraint name="Magento\Braintree\Test\Constraint\AssertTransactionIsPresentInSettlementReport" />
         </variation>
     </testCase>
