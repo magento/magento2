@@ -34,7 +34,7 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
     /**
      * Returns rule id field
      *
-     * @return int
+     * @return int|null
      */
     public function getRuleId();
 
@@ -60,7 +60,7 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
     /**
      * Returns rule description
      *
-     * @return string
+     * @return string|null
      */
     public function getDescription();
 
@@ -86,7 +86,7 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
     /**
      * Returns rule condition
      *
-     * @return \Magento\CatalogRule\Api\Data\ConditionInterface
+     * @return \Magento\CatalogRule\Api\Data\ConditionInterface|null
      */
     public function getRuleCondition();
 
@@ -99,7 +99,7 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
     /**
      * Returns stop rule processing flag
      *
-     * @return int
+     * @return int|null
      */
     public function getStopRulesProcessing();
 
@@ -112,7 +112,7 @@ interface RuleInterface extends \Magento\Framework\Api\CustomAttributesDataInter
     /**
      * Returns rule sort order
      *
-     * @return int
+     * @return int|null
      */
     public function getSortOrder();
 
