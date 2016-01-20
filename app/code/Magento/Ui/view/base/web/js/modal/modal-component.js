@@ -24,7 +24,8 @@ define([
             listens: {
                 state: 'onState'
             },
-            modalClass: 'modal-component'
+            modalClass: 'modal-component',
+            onCancel: 'actionCancel'
         },
 
         /**
@@ -40,7 +41,6 @@ define([
                 'closeModal',
                 'toggleModal',
                 'setPrevValues',
-                'actionCancel',
                 'validate');
             this.initializeContent();
 
@@ -78,7 +78,7 @@ define([
          * @returns {Object} Chainable.
          */
         initModalEvents: function () {
-            this.options.keyEventHandlers.escapeKey = this.options.outerClickHandler = this.actionCancel.bind(this);
+            this.options.keyEventHandlers.escapeKey = this.options.outerClickHandler = this[this.onCancel].bind(this);
 
             return this;
         },
@@ -118,7 +118,7 @@ define([
         initModal: function (element) {
             if (!this.modal) {
                 this.overrideModalButtonCallback();
-                this.options.modalCloseBtnHandler = this.actionCancel;
+                this.options.modalCloseBtnHandler = this[this.onCancel].bind(this);
                 this.modal = $(element).modal(this.options);
                 this.initToolbarSection();
 
