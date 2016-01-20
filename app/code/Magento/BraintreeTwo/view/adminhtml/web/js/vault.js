@@ -25,6 +25,12 @@ define([
             var self = this;
 
             self.$selector = $('#' + self.selector);
+            self.$selector.on(
+                'setVaultNotActive',
+                function () {
+                    self.$selector.off('submitOrder.braintreetwo_vault');
+                }
+            );
             this._super();
 
             this.initEventHandlers();
@@ -60,7 +66,7 @@ define([
          * Enable form event listeners
          */
         enableEventListeners: function () {
-            this.$selector.on('submitOrder', this.submitOrder.bind(this));
+            this.$selector.on('submitOrder.braintreetwo_vault', this.submitOrder.bind(this));
         },
 
         /**

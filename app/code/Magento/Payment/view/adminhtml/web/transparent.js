@@ -42,7 +42,10 @@ define([
                 if (method === this.options.gateway) {
                     $('#edit_form')
                         .off('submitOrder')
-                        .on('submitOrder', this._orderSave.bind(this));
+                        .on('submitOrder.' +  this.options.gateway, this._orderSave.bind(this));
+                } else {
+                    $('#edit_form')
+                        .off('submitOrder.' + this.options.gateway);
                 }
             },
                 $editForm = $('#edit_form');
