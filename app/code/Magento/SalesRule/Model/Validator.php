@@ -158,10 +158,10 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * Get rules collection for current object state
      *
-     * @param Address $address
+     * @param Address|null $address
      * @return \Magento\SalesRule\Model\ResourceModel\Rule\Collection
      */
-    protected function _getRules(Address $address)
+    protected function _getRules(Address $address = null)
     {
         $addressId = $this->getAddressId($address);
         $key = $this->getWebsiteId() . '_'
