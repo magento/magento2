@@ -11,7 +11,12 @@ $configuration = [
     '*' => [
         'Magento_Paypal/js/in-context/express-checkout' => [
             'id' => Button::PAYPAL_BUTTON_ID,
-            'path' => $block->getUrl('paypal/express/gettoken'),
+            'path' => $block->getUrl(
+                'paypal/express/gettoken',
+                [
+                    '_secure' => $block->getRequest()->isSecure()
+                ]
+            ),
             'merchantId' => $block->getMerchantId(),
             'button' => $block->isButtonContext(),
             'clientConfig' => [
