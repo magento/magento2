@@ -1,24 +1,12 @@
 1.0.0-beta10
 =============
 * Fixed bugs:
-    * Fixed an issue with accessing to admin login form through unsecure url, when secure urls are enabled
-    * Fixed an issue with possibility to make CSRF attack through GET requests
-    * Fixed an issue with possibility to make XSS attack to the backend
-    * Fixed an issue where possible edit someone else customer addresses
-    * Fixed an issue where possible view order details for certain orders
-    * Fixed an issue where XSS Payload could been saved into Admin Panel
-    * Fixed an issue where CSRF token is not generated on some admin pages 
-    * Fixed an issue with ability to inject XSS into orders
-    * Fixed an issue with ability to inject XSS through the some payment methods
-    * Fixed an issue with abilitu to inject XSS into some headers
-    * Removed a CSRF vulnerability in checkout
-    * Fixed a security issue on user account page
-    * Fixed an issue with upload empty file to custom option
-    * Fixed an issue where possible edit someone else reviews
-    * Fixed a potential security issue with frontend captcha
-    * Fixed a potential vulnerability where possible insert SQL injection
+    * Fixed an issue when selected options aren't displayed in Wish List product details section
+    * Fixed an issue where an imported product with replace behaviour causes an error for multi-store implementations
     * Fixed an issue with BaseURL in static files
-    * USPS January 17, 2016 API Changes
+* Various improvements:
+    * Fixed several security-related issues
+    * Added support of latest USPS API
     
 1.0.0-beta9
 =============
