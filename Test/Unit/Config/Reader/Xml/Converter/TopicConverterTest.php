@@ -45,8 +45,8 @@ class TopicConverterTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->communicationConfigMock = $this->getMock('\Magento\Framework\Communication\ConfigInterface');
-        $wildcardPatternMap =  include(__DIR__ . '/../../../../_files/wildcard_pattern_map.php');
-        $topicsMap =  include(__DIR__ . '/../../../../_files/topic_definitions_map.php');
+        $wildcardPatternMap = include(__DIR__ . '/../../../../_files/wildcard_pattern_map.php');
+        $topicsMap = include(__DIR__ . '/../../../../_files/topic_definitions_map.php');
         $this->validatorMock->expects($this->any())
             ->method('buildWildcardPattern')
             ->willReturnMap($wildcardPatternMap);

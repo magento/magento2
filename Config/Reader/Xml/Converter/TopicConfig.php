@@ -152,7 +152,8 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     {
         $topicDefinitions = $this->communicationConfig->getTopics();
         $wildcardKeys = [];
-        foreach ($topics as $topicName => $topicConfig) {
+        $topicNames = array_keys($topics);
+        foreach ($topicNames as $topicName) {
             if (strpos($topicName, '*') !== false || strpos($topicName, '#') !== false) {
                 $wildcardKeys[] = $topicName;
             }
@@ -183,7 +184,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     private function buildPublishers($topics)
     {
         $output = [];
-        foreach ($topics as $topicName => $topicConfig) {
+        foreach ($topics as $topicConfig) {
             $publisherName = $topicConfig['type'] . '-' . $topicConfig['exchange'];
             $output[$publisherName] = [
                 'name' => $publisherName,
@@ -204,7 +205,8 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     {
         $output = [];
         foreach ($topics as $topicName => $topicConfig) {
-            foreach ($topicConfig['queues'] as $queueName => $queue) {
+            $queueNames = array_keys($topicConfig['queues']);
+            foreach ($queueNames as $queueName) {
                 $name = $topicName . '--' . $topicConfig['exchange']. '--' .$queueName;
                 $output[$name] = [
                     'queue' => $queueName,
@@ -227,7 +229,8 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         $output = [];
         foreach ($topics as $topicName => $topicConfig) {
             $key = $topicConfig['exchange'] . '--' . $topicName;
-            foreach ($topicConfig['queues'] as $queueName => $queueConfig) {
+            $queueNames = array_keys($topicConfig['queues']);
+            foreach ($queueNames as $queueName) {
                 $output[$key][] = $queueName;
                 $output[$key] = array_unique($output[$key]);
             }
