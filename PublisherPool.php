@@ -72,7 +72,10 @@ class PublisherPool implements PublisherInterface
         }
         $type = $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? self::MODE_SYNC : self::MODE_ASYNC;
         /** @var PublisherInterface $publisher */
-        $publisher = $this->getPublisherForConnectionNameAndType($type, $publisherConfig[QueueConfig::PUBLISHER_CONNECTION]);
+        $publisher = $this->getPublisherForConnectionNameAndType(
+            $type,
+            $publisherConfig[QueueConfig::PUBLISHER_CONNECTION]
+        );
         return $publisher->publish($topicName, $data);
 
     }
