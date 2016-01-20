@@ -8,6 +8,11 @@ namespace Magento\Payment\Gateway\Http\Converter;
 use Magento\Payment\Gateway\Http\ConverterException;
 use Magento\Payment\Gateway\Http\ConverterInterface;
 
+/**
+ * Class HtmlFormConverter
+ * @package Magento\Payment\Gateway\Http\Converter
+ * @api
+ */
 class HtmlFormConverter implements ConverterInterface
 {
     /**
