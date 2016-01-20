@@ -116,6 +116,18 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         foreach ($topics as $topicName => $topicConfig) {
             $topic = $this->communicationConfig->getTopic($topicName);
             foreach ($topicConfig['queues'] as $queueName => $queueConfig) {
+                $handlers = [];
+                foreach ($queueConfig['handlers'] as $handler) {
+                    if (!isset($handler[QueueConfig::CONSUMER_CLASS])) {
+                        $handlerExploded = explode('::', $handler);
+                        unset($handler);
+                        $handler[QueueConfig::CONSUMER_CLASS] = $handlerExploded[0];
+                        $handler[QueueConfig::CONSUMER_METHOD] = $handlerExploded[1];
+                    }
+                    $handlers[] = $handler;
+                }
+                $queueConfig['handlers'] = $handlers;
+
                 $output[$queueConfig['consumer']] = [
                     'name' => $queueConfig['consumer'],
                     'queue' => $queueName,

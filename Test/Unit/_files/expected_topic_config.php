@@ -48,7 +48,10 @@ return [
             'name' => 'cons.01',
             'handlers' => [
                 'top.01' => [
-                    'default' => 'Magento\Handler\Class\Name::methodName'
+                    '0' => [
+                        'type' => 'Magento\Handler\Class\Name',
+                        'method' => 'methodName'
+                    ]
                 ]
             ],
             'instance_type' => 'Magento\Consumer\Instance',
@@ -61,11 +64,11 @@ return [
             'name' => 'cons.03',
             'handlers' => [
                 'top.03' => [
-                    'customerCreatedFirst' => [
+                    '0' => [
                         'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
                         'method' => 'save',
                     ],
-                    'customerCreatedSecond' => [
+                    '1' => [
                         'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
                         'method' => 'delete',
                     ],
@@ -81,7 +84,10 @@ return [
             'name' => 'cons.04',
             'handlers' => [
                 'top.04' => [
-                    'default' => 'Magento\Handler\Class\Name::methodName'
+                    '0' => [
+                        'type' => 'Magento\Handler\Class\Name',
+                        'method' => 'methodName'
+                    ]
                 ]
             ],
             'instance_type' => 'Magento\Consumer\Instance',
@@ -94,7 +100,10 @@ return [
             'name' => 'cons.05',
             'handlers' => [
                 'top.04' => [
-                    'default' => 'Magento\Handler\Class\Name::methodName'
+                    '0' => [
+                        'type' => 'Magento\Handler\Class\Name',
+                        'method' => 'methodName'
+                    ]
                 ]
             ],
             'instance_type' => 'Magento\Consumer\Instance',
@@ -107,7 +116,10 @@ return [
             'name' => 'cons.06',
             'handlers' => [
                 'top.04' => [
-                    'default' => 'Magento\Handler\Class\Name::methodName'
+                    '0' => [
+                        'type' => 'Magento\Handler\Class\Name',
+                        'method' => 'methodName'
+                    ]
                 ]
             ],
             'instance_type' => 'Magento\Consumer\Instance',
@@ -120,11 +132,11 @@ return [
             'name' => 'cons.07',
             'handlers' => [
                 'top.03' => [
-                    'customerCreatedFirst' => [
+                    '0' => [
                         'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
                         'method' => 'save',
                     ],
-                    'customerCreatedSecond' => [
+                    '1' => [
                         'type' => 'Magento\Customer\Api\CustomerRepositoryInterface',
                         'method' => 'delete',
                     ],
@@ -140,7 +152,10 @@ return [
             'name' => 'cons.logger',
             'handlers' => [
                 'product.created.local' => [
-                    'default' => 'Magento\Handler\Class\Name::logger'
+                    '0' => [
+                        'type' => 'Magento\Handler\Class\Name',
+                        'method' => 'logger'
+                    ]
                 ]
             ],
             'instance_type' => null,
