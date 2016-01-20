@@ -191,6 +191,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testInitProduct()

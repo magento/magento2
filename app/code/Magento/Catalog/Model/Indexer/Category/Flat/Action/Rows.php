@@ -29,8 +29,8 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         MetadataPool $metadataPool,
-        $skipStaticColumns = [],
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        $skipStaticColumns = []
     ) {
         $this->categoryRepository = $categoryRepository;
         parent::__construct($resource, $storeManager, $resourceHelper, $metadataPool, $skipStaticColumns);
@@ -127,14 +127,16 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         /** @var \Magento\Framework\DB\Select $select */
         $select = $this->connection->select()->from(
             ['cf' => $this->getTableNameByStore($store, $useTempTable)]
-        )->joinLeft(
-            ['ce' => $this->getTableName('catalog_category_entity')],
-            'cf.path = ce.path',
-            []
         )->where(
             "cf.path = {$rootIdExpr} OR cf.path = {$rootCatIdExpr} OR cf.path like {$catIdExpr}"
         )->where(
-            "ce.entity_id IS NULL"
+            'cf.entity_id NOT IN (?)',
+            new \Zend_Db_Expr(
+                $this->connection->select()->from(
+                    ['ce' => $this->getTableName('catalog_category_entity')],
+                    ['entity_id']
+                )
+            )
         );
 
         $sql = $select->deleteFromSelect('cf');

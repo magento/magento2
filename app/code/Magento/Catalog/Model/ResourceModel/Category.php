@@ -532,7 +532,6 @@ class Category extends AbstractResource
         $table = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
-
         $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
@@ -585,20 +584,22 @@ class Category extends AbstractResource
      */
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
+        $linkField = $this->getLinkField();
         $bind = ['attribute_id' => $attribute->getId(), 'value' => $expectedValue];
-        $select = $this->getConnection()->select()->from(
-            $attribute->getBackend()->getTable(),
+        $selectEntities = $this->getConnection()->select()->from(
+            ['ce' => $this->getTable('catalog_category_entity')],
             ['entity_id']
+        )->joinLeft(
+            ['ci' => $attribute->getBackend()->getTable()],
+            "ci.{$linkField} = ce.{$linkField} AND attribute_id = :attribute_id",
+            ['value']
         )->where(
-            'attribute_id = :attribute_id'
+            'ci.value = :value'
         )->where(
-            'value = :value'
-        )->where(
-            'entity_id IN(?)',
+            'ce.entity_id IN (?)',
             $entityIdsFilter
         );
-
-        return $this->getConnection()->fetchCol($select, $bind);
+        return $this->getConnection()->fetchCol($selectEntities, $bind);
     }
 
     /**
@@ -754,6 +755,7 @@ class Category extends AbstractResource
      */
     public function getChildren($category, $recursive = true)
     {
+        $linkField = $this->getLinkField();
         $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
@@ -1001,12 +1003,26 @@ class Category extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->_attributes = [];
-        $this->loadAttributesMetadata($attributes);
+        \Magento\Framework\Profiler::start('EAV:load_entity');
+        /**
+         * Load object base row data
+         */
         $this->entityManager->load(CategoryInterface::class, $object, $entityId);
-        if (!$object->getId()) {
+
+
+        if (!$this->entityManager->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $entityId)) {
             $object->isObjectNew(true);
         }
+
+        $this->loadAttributesMetadata($attributes);
+
+        $this->_loadModelAttributes($object);
+
+        $object->setOrigData();
+
         $this->_afterLoad($object);
+
+        \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
     }
 
@@ -1077,8 +1093,35 @@ class Category extends AbstractResource
     /**
      * {@inheritdoc}
      */
-    protected function evaluateDelete($object, $id, $connection)
+    public function delete($object)
     {
-        $this->entityManager->delete(CategoryInterface::class, $object);
+        try {
+            $this->transactionManager->start($this->getConnection());
+            if (is_numeric($object)) {
+            } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->beforeDelete();
+            }
+            $this->_beforeDelete($object);
+            $this->entityManager->delete(\Magento\Catalog\Api\Data\CategoryInterface::class, $object);
+
+            $this->_afterDelete($object);
+
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->isDeleted(true);
+                $object->afterDelete();
+            }
+            $this->transactionManager->commit();
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->afterDeleteCommit();
+            }
+        } catch (\Exception $e) {
+            $this->transactionManager->rollBack();
+            throw $e;
+        }
+        $this->_eventManager->dispatch(
+            'catalog_category_delete_after_done',
+            ['product' => $object]
+        );
+        return $this;
     }
 }

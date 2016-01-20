@@ -14,6 +14,12 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\Model\Entity\MetadataPool;
 
+/**
+ * Class Url
+ * @package Magento\Catalog\Model\ResourceModel
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -213,8 +219,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [$linkField, 'value' => $valueExpr]
             )->joinLeft(
                 ['t2' => $attributeTable],
-                't1.' . $linkField . ' = t2.' . $linkField
-                    . ' AND t1.attribute_id = t2.attribute_id AND t2.store_id = :store_id',
+                "t1.{$linkField} = t2.{$linkField} AND t1.attribute_id = t2.attribute_id AND t2.store_id = :store_id",
                 []
             )->where(
                 't1.store_id = ?',
@@ -222,7 +227,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             )->where(
                 't1.attribute_id = :attribute_id'
             )->where(
-                't1.' . $linkField . ' IN(?)',
+                "t1.{$linkField} IN(?)",
                 $categoryIds
             );
 
@@ -420,12 +425,11 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $table = $this->getTable('catalog_category_entity_int');
         $select->joinLeft(
             ['d' => $table],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.' . $linkField . ' = main_table.' . $linkField,
+            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = main_table.{$linkField}",
             []
         )->joinLeft(
             ['c' => $table],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $linkField
-                . ' = main_table.' . $linkField,
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = main_table.{$linkField}",
             []
         );
 
