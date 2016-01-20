@@ -105,14 +105,27 @@
                 </div>
                 <!-- /ko -->
                 <!-- ko if: (isVaultEnabled())-->
-                <div class="field-tooltip-content">
+                <div class="field">
                     <input type="checkbox"
                            name="vault[is_enabled]"
                            class="checkbox-inline"
                            data-bind="attr: {'id': getCode() + '_vault_enabler'}, checked: vaultEnabler.isActivePaymentTokenEnabler"/>
                     <label class="label" data-bind="attr: {'for': getCode() + '_vault_enabler'}">
-                        <span><!-- ko i18n: 'Save credit card info for future use.'--><!-- /ko --></span>
+                        <span><!-- ko i18n: 'Save for later use.'--><!-- /ko --></span>
                     </label>
+                    <div class="control _with-tooltip">
+                        <div class="field-tooltip toggle">
+                            <span class="field-tooltip-action action-vault"
+                                  tabindex="0"
+                                  data-toggle="dropdown"
+                                  data-bind="attr: {title: $t('What is this?')}, mageInit: {'dropdown':{'activeClass': '_active'}}">
+                                <span translate="'What is this?'"></span>
+                            </span>
+                            <div class="field-tooltip-content"
+                                 data-target="dropdown"
+                                 translate="'We store you payment information securely on Braintree servers via SSL.'"></div>
+                        </div>
+                    </div>
                 </div>
                 <!-- /ko -->
             </fieldset>
