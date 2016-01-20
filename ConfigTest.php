@@ -90,10 +90,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn($content);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+        $deprecatedConverter = $objectManager->create(
+            'Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\DeprecatedFormat'
+        );
+
+        $topicConverter = $objectManager->create(
+            'Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\TopicConfig',
+            [
+                'communicationConfig' => $this->getCommunicationConfigInstance()
+            ]
+        );
+
         $converter = $objectManager->create(
             'Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter',
             [
-                'communicationConfig' => $this->getCommunicationConfigInstance()
+                'converters' => [
+                    ['converter' => $deprecatedConverter, 'sortOrder' => 10],
+                    ['converter' => $topicConverter, 'sortOrder' => 10]
+                ]
             ]
         );
         $xmlReader = $objectManager->create(
