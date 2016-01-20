@@ -125,6 +125,7 @@
         font-weight: bold;
         padding-left: 20px;
         white-space: nowrap;
+        width: 17rem;
 
         &:before {
             background: @scheduled-changes-scale-from__background-color;
@@ -163,6 +164,7 @@
     .schedule-label {
         color: @scheduled-changes-table-accent__color;
         font-size: 1.2rem;
+        width: 1%;
     }
 
     tr {
@@ -176,6 +178,7 @@
     .schedule-actions {
         padding-right: 0;
         white-space: nowrap;
+        width: 10%;
 
         a {
             + a {
@@ -187,12 +190,15 @@
                 }
             }
         }
+        .action-menu-item {
+            cursor: pointer;
+        }
     }
 }
 
 .limited-text {
     display: inline-block;
-    line-height: 1.2em;
+    line-height: 1.4em;
     max-height: 2.4em; // Exactly 3 lines
     overflow: hidden;
     position: relative;
@@ -207,6 +213,11 @@
         text-align: right;
         top: 1.2em;
         width: 5rem;
+    }
+
+    + .limited-text {
+        line-height: 1.6rem;
+        margin: .8rem 0 0;
     }
 }
 
@@ -250,4 +261,8 @@
     &:before {
         content: ':::::';
     }
+}
+
+.block-nodata {
+    padding: @indent__m;
 }
