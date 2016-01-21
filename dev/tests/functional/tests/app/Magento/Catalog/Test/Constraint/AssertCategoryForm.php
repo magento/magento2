@@ -26,7 +26,8 @@ class AssertCategoryForm extends AbstractAssertForm
      * @var array
      */
     protected $skippedFixtureFields = [
-        'parent_id'
+        'parent_id',
+        'id'
     ];
 
     /**
