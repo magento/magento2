@@ -290,9 +290,13 @@ class DataProvider
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
-                $selects[] = $this->connection->select()->from(
+                $selects[] = $this->connection->select()->join(
+                    ['cpe' => $this->getTable('catalog_product_entity')],
+                    ['entity_id']
+                )->joinInner(
                     ['t_default' => $tableName],
-                    [$linkField, 'attribute_id']
+                    'cpe.' . $linkField . ' = t_default.' . $linkField,
+                    ['attribute_id']
                 )->joinLeft(
                     ['t_store' => $tableName],
                     $this->connection->quoteInto(
@@ -309,7 +313,7 @@ class DataProvider
                     't_default.attribute_id IN (?)',
                     $attributeIds
                 )->where(
-                    't_default.' . $linkField . ' IN (?)',
+                    'cpe.entity_id IN (?)',
                     $productIds
                 );
             }
@@ -319,7 +323,7 @@ class DataProvider
             $select = $this->connection->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
             $query = $this->connection->query($select);
             while ($row = $query->fetch()) {
-                $result[$row[$linkField]][$row['attribute_id']] = $row['value'];
+                $result[$row['entity_id']][$row['attribute_id']] = $row['value'];
             }
         }
 
