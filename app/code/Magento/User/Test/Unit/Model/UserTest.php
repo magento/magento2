@@ -166,7 +166,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $firstName = 'Foo';
         $lastName = 'Bar';
 
-        $changes = __('email') . ', ' . __('password') . __(' and ') . __('username');
+        $changes = __('email') . ', ' . __('password') . ', ' . __('username');
 
         $this->model->setEmail($email);
         $this->model->setOrigData('email', $origEmail);
