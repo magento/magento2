@@ -160,7 +160,11 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->willReturn('matchQuery');
         $this->filterBuilder->expects(($this->any()))
             ->method('build')
-            ->willReturn([]);
+            ->willReturn([
+                'bool' => [
+                    'must' => [],
+                ],
+            ]);
 
         $this->model->buildQuery($request);
     }

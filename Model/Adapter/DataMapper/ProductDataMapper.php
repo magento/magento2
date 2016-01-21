@@ -38,11 +38,6 @@ class ProductDataMapper implements DataMapperInterface
     const MEDIA_ROLE_SWATCH_IMAGE = 'swatch_image';
 
     /**
-     * Entity type for product
-     */
-    const PRODUCT_ENTITY_TYPE = 'product';
-
-    /**
      * @var Builder
      */
     private $builder;
@@ -154,7 +149,7 @@ class ProductDataMapper implements DataMapperInterface
             $this->builder->addField(
                 $this->fieldMapper->getFieldName(
                     $attributeCode,
-                    ['entityType' => self::PRODUCT_ENTITY_TYPE]
+                    $context
                 ),
                 $value
             );
@@ -210,11 +205,11 @@ class ProductDataMapper implements DataMapperInterface
      */
     protected function checkValue($value, $attribute, $storeId)
     {
-        if (is_array($value)) {
-            return array_shift($value);
-        } elseif ($attribute->getBackendType() === 'datetime' || $attribute->getBackendType() === 'timestamp'
+        if (in_array($attribute->getBackendType(), ['datetime', 'timestamp'])
             || $attribute->getFrontendInput() === 'date') {
             return $this->dateFieldType->formatDate($storeId, $value);
+        } elseif ($attribute->getFrontendInput() === 'multiselect') {
+            return str_replace(',', ' ', $value);
         } else {
             return $value;
         }

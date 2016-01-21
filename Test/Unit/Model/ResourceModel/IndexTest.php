@@ -389,10 +389,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * Test getFullProductIndexData method
      *
      * @param string $frontendInput
+     * @param mixed $indexData
      * @return void
      * @dataProvider attributeCodeProvider
      */
-    public function testGetFullProductIndexData($frontendInput)
+    public function testGetFullProductIndexData($frontendInput, $indexData)
     {
         $this->productRepository->expects($this->once())
             ->method('getById')
@@ -447,7 +448,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             $this->model->getFullProductIndexData(
                 1,
                 [
-                    1 => '240-LV04'
+                    1 => $indexData
                 ]
             )
         );
@@ -506,8 +507,24 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     public static function attributeCodeProvider()
     {
         return [
-            ['string'],
-            ['select'],
+            [
+                'string',
+                '240-LV04',
+            ],
+            [
+                'select',
+                '240-LV04',
+            ],
+            [
+                'select',
+                [1, ],
+            ],
+            [
+                'select',
+                [
+                    1 => 1,
+                ],
+            ]
         ];
     }
 }

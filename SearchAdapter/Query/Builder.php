@@ -59,11 +59,7 @@ class Builder
                 'from' => $request->getFrom(),
                 'size' => $request->getSize(),
                 'fields' => ['_id', '_score'],
-                'query' => [
-                    'bool' => [
-                        'minimum_should_match' => 1,
-                    ],
-                ],
+                'query' => [],
             ],
         ];
         return $searchQuery;

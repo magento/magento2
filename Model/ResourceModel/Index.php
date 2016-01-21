@@ -70,17 +70,25 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         $productAttributes = [];
         $attributeCodes = $this->eavConfig->getEntityAttributeCodes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $product = $this->productRepository->getById($productId);
-        $productAttributesWithValues = $product->getData();
-        foreach ($productAttributesWithValues as $attributeCode => $value) {
+        foreach ($attributeCodes as $attributeCode) {
+            $value = $product->getData($attributeCode);
             $attribute = $this->eavConfig->getAttribute(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
                 $attributeCode
             );
             $frontendInput = $attribute->getFrontendInput();
             if (in_array($attribute->getAttributeId(), array_keys($indexData))) {
-                $value = $indexData[$attribute->getAttributeId()];
+                if (is_array($indexData[$attribute->getAttributeId()])) {
+                    if (isset($indexData[$attribute->getAttributeId()][$productId])) {
+                        $value = $indexData[$attribute->getAttributeId()][$productId];
+                    } else {
+                        $value = implode(' ', $indexData[$attribute->getAttributeId()]);
+                    }
+                } else {
+                    $value = $indexData[$attribute->getAttributeId()];
+                }
             }
-            if (in_array($attributeCode, $attributeCodes)) {
+            if ($value) {
                 $productAttributes[$attributeCode] = $value;
                 if ($frontendInput == 'select') {
                     foreach ($attribute->getOptions() as $option) {
