@@ -319,6 +319,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with([]);
         $this->productRepository->expects($this->once())
             ->method('getById')
+            ->with($productId, false, $storeId, true)
             ->willReturn($productMock);
         $this->assertEquals($productMock, $this->model->getProduct());
     }

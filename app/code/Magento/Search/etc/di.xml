@@ -24,6 +24,7 @@
     </type>
     <preference for="Magento\Search\Model\QueryFactoryInterface" type="Magento\Search\Model\QueryFactory" />
     <preference for="Magento\Search\Model\QueryInterface" type="Magento\Search\Model\Query" />
+    <preference for="Magento\Search\Api\SynonymAnalyzerInterface" type="Magento\Search\Model\SynonymAnalyzer" />
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">

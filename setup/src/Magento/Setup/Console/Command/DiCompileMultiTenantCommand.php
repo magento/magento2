@@ -260,6 +260,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns)
             );
         }
+        $this->files['di'][] = $this->directoryList->getPath(
+            \Magento\Framework\App\Filesystem\DirectoryList::CONFIG
+        ) . '/di.xml';
         $this->files['additional'] = [$input->getOption(self::INPUT_KEY_EXTRA_CLASSES_FILE)];
         $repositoryScanner = new Scanner\RepositoryScanner();
         $repositories = $repositoryScanner->collectEntities($this->files['di']);
@@ -374,7 +377,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 $directoryInstancesNamesList->getList($path);
             }
         }
-        $inheritanceScanner = new Scanner\InheritanceInterceptorScanner();
+        $inheritanceScanner = new Scanner\InheritanceInterceptorScanner(
+            new \Magento\Framework\ObjectManager\InterceptableValidator()
+        );
         $this->entities['interceptors'] = $inheritanceScanner->collectEntities(
             get_declared_classes(),
             $this->entities['interceptors']
