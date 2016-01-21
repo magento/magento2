@@ -5,12 +5,10 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Search\Adapter\Mysql\Adapter;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use Magento\Framework\Search\Response\Aggregation\Value;
-use Magento\Framework\Search\Response\QueryResponse;
 
 /**
  * Fulltext Collection
@@ -18,25 +16,12 @@ use Magento\Framework\Search\Response\QueryResponse;
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
-    /** @var  QueryResponse */
-    protected $queryResponse;
-
     /**
      * Catalog search data
      *
      * @var \Magento\Search\Model\QueryFactory
      */
     protected $queryFactory = null;
-
-    /**
-     * @var \Magento\Framework\Search\Request\Builder
-     */
-    private $requestBuilder;
-
-    /**
-     * @var \Magento\Search\Model\SearchEngine
-     */
-    private $searchEngine;
 
     /** @var string */
     private $queryText;
@@ -51,6 +36,26 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
      */
     private $temporaryStorageFactory;
+
+    /**
+     * @var \Magento\Framework\Api\Search\SearchInterface
+     */
+    private $search;
+
+    /**
+     * @var \Magento\Framework\Api\Search\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\Search\SearchResultInterface
+     */
+    private $searchResult;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -73,10 +78,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Search\Model\QueryFactory $catalogSearchData
-     * @param \Magento\Framework\Search\Request\Builder $requestBuilder
-     * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param \Magento\Framework\Api\Search\SearchInterface $search
+     * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param string $searchRequestName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -101,9 +106,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Search\Model\QueryFactory $catalogSearchData,
-        \Magento\Framework\Search\Request\Builder $requestBuilder,
-        \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
+        \Magento\Framework\Api\Search\SearchInterface $search,
+        \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $searchRequestName = 'catalog_view_container'
     ) {
@@ -130,10 +136,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection
         );
-        $this->requestBuilder = $requestBuilder;
-        $this->searchEngine = $searchEngine;
         $this->temporaryStorageFactory = $temporaryStorageFactory;
         $this->searchRequestName = $searchRequestName;
+        $this->search = $search;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->filterBuilder = $filterBuilder;
     }
 
     /**
@@ -145,17 +152,24 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addFieldToFilter($field, $condition = null)
     {
-        if ($this->queryResponse !== null) {
+        if ($this->searchResult !== null) {
             throw new \RuntimeException('Illegal state');
         }
+
         if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
-            $this->requestBuilder->bind($field, $condition);
+            $this->filterBuilder->setField($field);
+            $this->filterBuilder->setValue($condition);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         } else {
             if (!empty($condition['from'])) {
-                $this->requestBuilder->bind("{$field}.from", $condition['from']);
+                $this->filterBuilder->setField("{$field}.from");
+                $this->filterBuilder->setValue($condition['from']);
+                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
             }
             if (!empty($condition['to'])) {
-                $this->requestBuilder->bind("{$field}.to", $condition['to']);
+                $this->filterBuilder->setField("{$field}.to");
+                $this->filterBuilder->setValue($condition['to']);
+                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
             }
         }
         return $this;
@@ -178,9 +192,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _renderFiltersBefore()
     {
-        $this->requestBuilder->bindDimension('scope', $this->getStoreId());
         if ($this->queryText) {
-            $this->requestBuilder->bind('search_term', $this->queryText);
+            $this->filterBuilder->setField('search_term');
+            $this->filterBuilder->setValue($this->queryText);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         }
 
         $priceRangeCalculation = $this->_scopeConfig->getValue(
@@ -188,16 +203,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($priceRangeCalculation) {
-            $this->requestBuilder->bind('price_dynamic_algorithm', $priceRangeCalculation);
+            $this->filterBuilder->setField('price_dynamic_algorithm');
+            $this->filterBuilder->setValue($priceRangeCalculation);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         }
 
-        $this->requestBuilder->setRequestName($this->searchRequestName);
-        $queryRequest = $this->requestBuilder->create();
-
-        $this->queryResponse = $this->searchEngine->search($queryRequest);
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchCriteria->setRequestName($this->searchRequestName);
+        $this->searchResult = $this->search->search($searchCriteria);
 
         $temporaryStorage = $this->temporaryStorageFactory->create();
-        $table = $temporaryStorage->storeDocuments($this->queryResponse->getIterator());
+        $table = $temporaryStorage->storeApiDocuments($this->searchResult->getItems());
 
         $this->getSelect()->joinInner(
             [
@@ -207,7 +223,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             []
         );
 
-        $this->_totalRecords = $this->queryResponse->count();
+        $this->_totalRecords = $this->searchResult->getTotalCount();
 
         if ($this->order && 'relevance' === $this->order['field']) {
             $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
@@ -261,7 +277,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         $this->_renderFilters();
         $result = [];
-        $aggregations = $this->queryResponse->getAggregations();
+        $aggregations = $this->searchResult->getAggregations();
         $bucket = $aggregations->getBucket($field . '_bucket');
         if ($bucket) {
             foreach ($bucket->getValues() as $value) {
