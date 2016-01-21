@@ -42,7 +42,7 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
         $passwordResetRequestEvent = $this->_objectManager->create('Magento\Security\Model\PasswordResetRequestEvent');
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $passwordResetRequestEvent */
         $countBefore = $passwordResetRequestEvent->getCollection()->count();
-        $passwordResetRequestEvent->getResource()->deleteRecordsOlderThen(strtotime('2016-01-20 12:00:00'));
+        $this->_resourceModel->deleteRecordsOlderThen(strtotime('2016-01-20 12:00:00'));
         $countAfter = $passwordResetRequestEvent->getCollection()->count();
         $this->assertLessThan($countBefore, $countAfter);
     }
