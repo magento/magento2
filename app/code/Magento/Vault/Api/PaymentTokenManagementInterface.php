@@ -56,4 +56,13 @@ interface PaymentTokenManagementInterface
      * @return bool
      */
     public function saveTokenWithPaymentLink(PaymentTokenInterface $token, OrderPaymentInterface $payment);
+
+    /**
+     * Add link between payment token and order payment.
+     *
+     * @param int $paymentTokenId Payment token ID.
+     * @param int $orderPaymentId Order payment ID.
+     * @return bool
+     */
+    public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId);
 }

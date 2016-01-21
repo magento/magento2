@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Vault\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
@@ -24,7 +23,7 @@ class SaveCreditCardStep implements TestStepInterface
     /**
      * Payment information.
      *
-     * @var string
+     * @var array
      */
     protected $payment;
 
