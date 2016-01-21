@@ -58,6 +58,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             )->with(
                 __('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME])
             );
+
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }

@@ -49,6 +49,12 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Api\OauthServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_oauthSvcMock;
 
+    /** @var \Magento\Backend\Model\Auth|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_authMock;
+
+    /** @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_userMock;
+
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $_registryMock;
 
@@ -139,6 +145,14 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->_oauthSvcMock = $this->getMockBuilder(
             'Magento\Integration\Api\OauthServiceInterface'
         )->disableOriginalConstructor()->getMock();
+        $this->_authMock = $this->getMockBuilder('Magento\Backend\Model\Auth')
+            ->disableOriginalConstructor()
+            ->setMethods(['getUser'])
+            ->getMock();
+        $this->_userMock = $this->getMockBuilder('Magento\User\Model\User')
+            ->disableOriginalConstructor()
+            ->setMethods(['verifyIdentity'])
+            ->getMock();
         $this->_requestMock = $this->getMockBuilder(
             'Magento\Framework\App\Request\Http'
         )->disableOriginalConstructor()->getMock();
@@ -176,6 +190,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $actionName
      * @return \Magento\Integration\Controller\Adminhtml\Integration
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _createIntegrationController($actionName)
     {
@@ -230,6 +245,21 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->_authMock->expects(
+            $this->any()
+        )->method(
+            'getUser'
+        )->will(
+            $this->returnValue($this->_userMock)
+        );
+        $this->_userMock->expects(
+            $this->any()
+        )->method(
+            'verifyIdentity'
+        )->will(
+            $this->returnValue(true)
+        );
+
         $contextParameters = [
             'view' => $this->_viewMock,
             'objectManager' => $this->_objectManagerMock,
@@ -239,7 +269,8 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             'response' => $this->_responseMock,
             'messageManager' => $this->_messageManager,
             'resultRedirectFactory' => $this->resultRedirectFactory,
-            'resultFactory' => $this->resultFactory
+            'resultFactory' => $this->resultFactory,
+            'auth' => $this->_authMock
         ];
 
         $this->_backendActionCtxMock = $this->_objectManagerHelper->getObject(
