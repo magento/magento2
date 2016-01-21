@@ -287,16 +287,21 @@ class DataProvider
         $selects = [];
         $ifStoreValue = $this->connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
         $linkField = $this->metadata->getLinkField();
+        $productLinkFieldsToEntityIdMap = $this->connection->fetchPairs(
+            $this->connection->select()->from(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                [$linkField, 'entity_id']
+            )->where(
+                'cpe.entity_id IN (?)',
+                $productIds
+            )
+        );
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
-                $selects[] = $this->connection->select()->join(
-                    ['cpe' => $this->getTable('catalog_product_entity')],
-                    ['entity_id']
-                )->joinInner(
+                $selects[] = $this->connection->select()->from(
                     ['t_default' => $tableName],
-                    'cpe.' . $linkField . ' = t_default.' . $linkField,
-                    ['attribute_id']
+                    [$linkField, 'attribute_id']
                 )->joinLeft(
                     ['t_store' => $tableName],
                     $this->connection->quoteInto(
@@ -313,8 +318,8 @@ class DataProvider
                     't_default.attribute_id IN (?)',
                     $attributeIds
                 )->where(
-                    'cpe.entity_id IN (?)',
-                    $productIds
+                    't_default.' . $linkField . ' IN (?)',
+                    array_keys($productLinkFieldsToEntityIdMap)
                 );
             }
         }
@@ -323,7 +328,8 @@ class DataProvider
             $select = $this->connection->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
             $query = $this->connection->query($select);
             while ($row = $query->fetch()) {
-                $result[$row['entity_id']][$row['attribute_id']] = $row['value'];
+                $entityId = $productLinkFieldsToEntityIdMap[$row[$linkField]];
+                $result[$entityId][$row['attribute_id']] = $row['value'];
             }
         }
 
