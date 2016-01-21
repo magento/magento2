@@ -33,8 +33,8 @@ class InlineEdit extends \Magento\Backend\App\Action
     /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
-    /** @var \Magento\Customer\Api\AccountManagementInterface */
-    protected $customerAccountManagement;
+    /** @var \Magento\Customer\Helper\EmailNotification */
+    protected $emailNotification;
 
     /**
      * @param Action\Context $context
@@ -43,7 +43,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Customer\Api\AccountManagementInterface $customerAccountManagement
+     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
      */
     public function __construct(
         Action\Context $context,
@@ -52,14 +52,14 @@ class InlineEdit extends \Magento\Backend\App\Action
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Customer\Api\AccountManagementInterface $customerAccountManagement
+        \Magento\Customer\Helper\EmailNotification $emailNotification
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->customerMapper = $customerMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
-        $this->customerAccountManagement = $customerAccountManagement;
+        $this->emailNotification = $emailNotification;
         parent::__construct($context);
     }
 
@@ -89,8 +89,7 @@ class InlineEdit extends \Magento\Backend\App\Action
             $this->updateCustomer($this->getData($postItems[$customerId], true));
             $this->saveCustomer($this->getCustomer());
 
-            $this->customerAccountManagement
-                ->sendNotificationEmailsIfRequired($currentCustomer, $this->getCustomer());
+            $this->emailNotification->sendNotificationEmailsIfRequired($currentCustomer, $this->getCustomer());
         }
 
         return $resultJson->setData([

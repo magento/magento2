@@ -144,6 +144,11 @@ abstract class Index extends \Magento\Backend\App\Action
     protected $resultJsonFactory;
 
     /**
+     * @var \Magento\Customer\Helper\EmailNotification
+     */
+    protected $emailNotification;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
@@ -169,6 +174,7 @@ abstract class Index extends \Magento\Backend\App\Action
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -197,7 +203,8 @@ abstract class Index extends \Magento\Backend\App\Action
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Customer\Helper\EmailNotification $emailNotification
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
@@ -223,6 +230,7 @@ abstract class Index extends \Magento\Backend\App\Action
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->emailNotification = $emailNotification;
         parent::__construct($context);
     }
 

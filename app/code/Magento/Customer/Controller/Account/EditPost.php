@@ -14,6 +14,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
+use Magento\Customer\Helper\EmailNotification;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,10 +33,11 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     /** @var CustomerExtractor */
     protected $customerExtractor;
 
-    /**
-     * @var Session
-     */
+    /** @var Session */
     protected $session;
+
+    /** @var EmailNotification */
+    protected $emailNotification;
 
     /**
      * @param Context $context
@@ -44,6 +46,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
+     * @param EmailNotification $emailNotification
      */
     public function __construct(
         Context $context,
@@ -51,13 +54,15 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
-        CustomerExtractor $customerExtractor
+        CustomerExtractor $customerExtractor,
+        EmailNotification $emailNotification
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
+        $this->emailNotification = $emailNotification;
         parent::__construct($context);
     }
 
@@ -105,7 +110,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                     $isPasswordChanged = $this->changeCustomerPassword($currentCustomerEmail);
                 }
 
-                $this->customerAccountManagement
+                $this->emailNotification
                     ->sendNotificationEmailsIfRequired($currentCustomer, $customer, $isPasswordChanged);
 
             } catch (AuthenticationException $e) {

@@ -195,21 +195,6 @@ interface AccountManagementInterface
     public function resendConfirmation($email, $websiteId, $redirectUrl = '');
 
     /**
-     * Send emails to customer when his email or/and password is changed
-     *
-     * @api
-     * @param \Magento\Customer\Api\Data\CustomerInterface $origCustomer
-     * @param \Magento\Customer\Api\Data\CustomerInterface $savedCustomer
-     * @param bool $isPasswordChanged
-     * @return \Magento\Customer\Api\Data\CustomerInterface
-     */
-    public function sendNotificationEmailsIfRequired(
-        \Magento\Customer\Api\Data\CustomerInterface $origCustomer,
-        \Magento\Customer\Api\Data\CustomerInterface $savedCustomer,
-        $isPasswordChanged = false
-    );
-
-    /**
      * Check if given email is associated with a customer account in given website.
      *
      * @api
