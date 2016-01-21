@@ -27,7 +27,8 @@ define([
             ' <%- data.finalPrice.formatted %>' +
             '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
-            mediaGalleryInitial: null
+            mediaGalleryInitial: null,
+            onlyMainImg: false
         },
 
         /**
@@ -253,14 +254,44 @@ define([
          * @private
          */
         _changeProductImage: function () {
-            var images = this.options.spConfig.images[this.simpleProduct],
+            var images,
+                initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
+
+            if (this.options.spConfig.images[this.simpleProduct]) {
+                images = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
+            }
+
+            function updateGallery(imagesArr) {
+                var imgToUpdate,
+                    mainImg;
+
+                mainImg = imagesArr.filter(function (img) {
+                    return img.isMain;
+                });
+
+                imgToUpdate = mainImg.length ? mainImg[0] : imagesArr[0];
+
+                !imgToUpdate.type && (imgToUpdate.type = 'image');
+
+                galleryObject.updateDataByIndex(0, imgToUpdate);
+                galleryObject.seek(1);
+            }
 
             if (galleryObject) {
                 if (images) {
-                    galleryObject.updateData(images);
+                    if (this.options.onlyMainImg) {
+                        updateGallery(images);
+                    } else {
+                        images.map(function (img) {
+                            img.type = 'image';
+                        });
+                        galleryObject.updateData(images)
+                    }
                 } else {
-                    galleryObject.updateData(this.options.mediaGalleryInitial);
+                    this.options.onlyMainImg ?
+                        updateGallery(initialImages) :
+                        galleryObject.updateData(this.options.mediaGalleryInitial);
                 }
             }
         },

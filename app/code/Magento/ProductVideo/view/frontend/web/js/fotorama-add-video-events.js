@@ -97,6 +97,7 @@ define([
         },
 
         PV: 'product-video', // [CONST]
+        PVLOADED: 'fotorama__product-video--loaded', // [CONST]
         VID: 'video', // [CONST]
         VI: 'vimeo', // [CONST]
         FTVC: 'fotorama__video-close',
@@ -127,7 +128,7 @@ define([
          * @private
          */
         _checkFullscreen: function () {
-            if ($(this.element).find('.fotorama__fullscreen-icon')) {
+            if (this.element.data('fotorama').fullScreen || false) {
                 this.isFullscreen = true;
             }
         },
@@ -226,11 +227,9 @@ define([
          * @private
          */
         _hideCloseVideo: function () {
-            $(this.element).find('.' + this.FTVC).css({
-                opacity: 0,
-                transform: 'translate3d(95px, -95px, 0)',
-                display: 'none'
-            });
+            $(this.element)
+                .find('.' + this.FTVC)
+                .removeClass('fotorama-show-control');
             $('.' + this.FTAR).removeClass('hidden-video');
         },
 
@@ -239,11 +238,9 @@ define([
          * @private
          */
         _showCloseVideo: function () {
-            $(this.element).find('.' + this.FTVC).css({
-                opacity: 1,
-                transform: 'translate3d(0px, 0px, 0)',
-                display: 'block'
-            });
+            $(this.element)
+                .find('.' + this.FTVC)
+                .addClass('fotorama-show-control');
             $('.' + this.FTAR).addClass('hidden-video');
         },
 
@@ -381,6 +378,10 @@ define([
             thumbsParent = fotorama.activeFrame.$navThumbFrame.parent();
             thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
 
+            fotorama.data.map($.proxy(function (item, i) {
+                !item.type && (item.type = this.options.VideoData[i].mediaType);
+            }, this));
+
             for (t = 0; t < thumbs.length; t++) {
                 tmpVideoData = this.options.VideoData[t];
                 currentItem = thumbs.eq(t);
@@ -389,10 +390,12 @@ define([
                     currentItem.removeClass(iconClass);
                 }
 
-                if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs') {
+                if (tmpVideoData.mediaType === this.VID && fotorama.options.nav === 'thumbs' &&
+                    fotorama.data[t].type ===  this.VID) {
                     currentItem.addClass(iconClass);
                 }
             }
+
             $(this.element).on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
                 $(fotoramaData.activeFrame.$stageFrame).removeAttr('href');
             }, this));
@@ -445,6 +448,10 @@ define([
                 $image = fotorama.data[frameNumber - 1 + number];
 
             if ($image) {
+
+                if ($image.type !== 'video') {
+                    return;
+                }
                 $image = $image.$stageFrame;
             }
 
@@ -524,7 +531,6 @@ define([
 
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
-                    $(this).find('img').hide();
 
                     if (!self.isFullscreen) {
                         self._showCloseVideo();
@@ -566,11 +572,6 @@ define([
                             clearInterval(waitForFroogaloop);
                             fotorama.requestFullScreen();
                             $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
-                            /*$('.fotorama__fullscreen-icon').css({
-                                opacity: '1',
-                                visibility: 'visible',
-                                display: 'block'
-                            });*/
                             this.Base = false;
                         }
                     }, this), 50);
@@ -578,11 +579,6 @@ define([
                     setTimeout($.proxy(function () {
                         fotorama.requestFullScreen();
                         $(this.element).data('fotorama').activeFrame.$stageFrame[0].click();
-                        /*$('.fotorama__fullscreen-icon').css({
-                            opacity: '1',
-                            visibility: 'visible',
-                            display: 'block'
-                        });*/
                         this.Base = false;
                     }, this), 50);
                 }
@@ -598,21 +594,16 @@ define([
          */
         _unloadVideoPlayer: function ($wrapper, current, close) {
             var self = this;
-
+            $wrapper.find('.' + this.PVLOADED).not('.fotorama__active').removeClass(this.PVLOADED);
             $wrapper.find('.' + this.PV).each(function () {
                 var $item = $(this).parent(),
                     cloneVideoDiv,
                     iframeElement = $(this).find('iframe'),
                     currentIndex,
-                    itemIndex,
-                    videoPreview = $item.find('img').not('.fotorama__img--full');
+                    itemIndex;
 
                 if (iframeElement.length === 0) {
                     return;
-                }
-
-                if (!videoPreview.is(':visible') && !self.inFullscreen) {
-                    videoPreview.show();
                 }
 
                 currentIndex = current.activeFrame.$stageFrame.index();
@@ -631,6 +622,7 @@ define([
                 $(this).remove();
                 $item.append(cloneVideoDiv);
                 $item.addClass('video-unplayed');
+
                 if ($('.fotorama-item').data('fotorama').options.arrows) {
                     $('.fotorama__arr--next').show();
                     $('.fotorama__arr--prev').show();
