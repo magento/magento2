@@ -26,13 +26,14 @@ define([
             imports: {
                 onSelectedChange: '${ $.selectionsProvider }:selected',
                 'update_url': '${ $.externalProvider }:update_url',
-                'initialUpdateListing': '${ $.selectionsProvider }:indexField'
+                'indexField': '${ $.selectionsProvider }:indexField'
             },
             exports: {
                 externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
             },
             listens: {
-                value: 'updateExternalFiltersModifier updateSelections'
+                value: 'updateExternalFiltersModifier updateSelections',
+                indexField: 'initialUpdateListing'
             },
             modules: {
                 selections: '${ $.selectionsProvider }'
@@ -128,9 +129,9 @@ define([
 
             updatedExtValue = this.externalValue();
             updatedExtValue.map(function (item) {
-                _.extend(item, this.editableData[item[item['id_field_name']]]);
+                _.extend(item, this.editableData[item[this.indexField]]);
             }, this);
-            this.externalValue(updatedExtValue);
+            this.setExternalValue(updatedExtValue);
         },
 
         /**
@@ -142,27 +143,26 @@ define([
         updateExternalValue: function () {
             var result = $.Deferred(),
                 provider = this.selections(),
-                selections = provider && provider.getSelections(),
-                itemsType = selections && selections.excludeMode ? 'excluded' : 'selected',
-                index = provider && provider.indexField,
-                rows = provider && provider.rows(),
-                canUpdateFromSelection;
+                allSelected,
+                selections,
+                itemsType,
+                rows;
 
             if (!provider) {
                 return result;
             }
 
-            canUpdateFromSelection =
-                itemsType === 'selected' &&
-                _.intersection(_.pluck(rows, index), selections.selected).length ===
-                selections.selected.length;
+            allSelected = provider.allSelected();
+            selections = provider && provider.getSelections();
+            itemsType = selections && selections.excludeMode ? 'excluded' : 'selected';
+            rows = provider && provider.rows();
 
-            if (canUpdateFromSelection) {
-                this.updateFromSelectionData(selections, index, rows);
+            if (this.canUpdateFromClientData(allSelected, selections.selected, rows)) {
+                this.updateFromClientData(selections.selected, rows);
                 this.updateExternalValueByEditableData();
                 result.resolve();
             } else {
-                this.updateFromServerData(selections, index, itemsType).done(function () {
+                this.updateFromServerData(selections, itemsType).done(function () {
                     this.updateExternalValueByEditableData();
                     result.resolve();
                 }.bind(this));
@@ -172,36 +172,77 @@ define([
         },
 
         /**
-         * Updates externalValue, from selectionsProvider data
+         * Check if the selected rows data can be taken from selectionsProvider data
+         * (which only stores data of the current page rows)
+         *  + from already saved data
          *
-         * @param {Object} selections
-         * @param {Number} index
+         * @param {Boolean} allSelected - if all rows are selected
+         * @param {Array} selected - ids of selected rows
          * @param {Object} rows
          */
-        updateFromSelectionData: function (selections, index, rows) {
-            rows = selections.selected && selections.selected.length ?
-                _.filter(rows, function (row) {
-                    return _.contains(selections.selected, row[index]);
-                }) : [];
-            this.setExternalValue(rows);
+        canUpdateFromClientData: function (allSelected, selected, rows) {
+            var alreadySavedSelections = _.pluck(this.value(), this.indexField),
+                rowsOnCurrentPage = _.pluck(rows, this.indexField);
+
+            return !allSelected &&
+                _.intersection(_.union(alreadySavedSelections, rowsOnCurrentPage), selected).length ===
+                selected.length;
+        },
+
+        /**
+         * Updates externalValue, from selectionsProvider data
+         * (which only stores data of the current page rows)
+         *  + from already saved data
+         *  so we can avoid request to server
+         *
+         * @param {Array} selected - ids of selected rows
+         * @param {Object} rows
+         */
+        updateFromClientData: function (selected, rows) {
+            var value,
+                rowIds,
+                valueIds;
+
+            if (!selected || !selected.length) {
+                this.setExternalValue([]);
+
+                return;
+            }
+
+            value = this.value();
+            rowIds = _.pluck(rows, this.indexField);
+            valueIds = _.pluck(value, this.indexField);
+
+            value = _.map(selected, function (item) {
+                if (_.contains(rowIds, item)) {
+                    return _.find(rows, function (row) {
+                        return row[this.indexField] === item;
+                    }, this);
+                } else if (_.contains(valueIds, item)) {
+                    return _.find(value, function (row) {
+                        return row[this.indexField] === item;
+                    }, this);
+                }
+            }, this);
+
+            this.setExternalValue(value);
         },
 
         /**
          * Updates externalValue, from ajax request to grab selected rows data
          *
          * @param {Object} selections
-         * @param {Number} index
          * @param {String} itemsType
          *
          * @returns {Object} request - deferred that will be resolved when ajax is done
          */
-        updateFromServerData: function (selections, index, itemsType) {
+        updateFromServerData: function (selections, itemsType) {
             var filterType = selections && selections.excludeMode ? 'nin' : 'in',
                 selectionsData = {},
                 request;
 
             selectionsData['filters_modifier'] = {};
-            selectionsData['filters_modifier'][index] = {
+            selectionsData['filters_modifier'][this.indexField] = {
                 'condition_type': filterType,
                 value: selections[itemsType]
             };
@@ -248,7 +289,6 @@ define([
          */
         updateExternalFiltersModifier: function (items) {
             var provider,
-                index,
                 filter = {};
 
             if (!this.externalFilterMode) {
@@ -263,10 +303,9 @@ define([
                 return;
             }
 
-            index = provider && provider.indexField;
-            filter[provider.indexField] = {
+            filter[this.indexField] = {
                 'condition_type': this.externalCondition,
-                value: _.pluck(items, index)
+                value: _.pluck(items, this.indexField)
             };
             this.set('externalFiltersModifier', filter);
         },
@@ -298,7 +337,7 @@ define([
             }
 
             this.suppressDataLinks = true;
-            ids = _.pluck(items || [], provider.indexField)
+            ids = _.pluck(items || [], this.indexField)
                 .map(function (item) {
                     return item.toString();
                 });
