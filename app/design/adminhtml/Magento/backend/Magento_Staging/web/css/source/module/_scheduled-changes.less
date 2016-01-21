@@ -74,6 +74,10 @@
             margin-left: @indent__m;
         }
     }
+    
+    .admin__data-grid-outer-wrap {
+        min-height: 0;
+    } 
 
     .block-content {
         border-top: 1px solid @scheduled-changes-block__border-color;
@@ -265,4 +269,18 @@
 
 .block-nodata {
     padding: @indent__m;
+}
+
+//  Create/Edit update form
+.fieldset-schedule {
+    border-bottom: 1px solid @collapsible__border-color;
+
+    .fieldset-wrapper-title {
+        margin: @indent__base 0 @indent__s;
+
+        strong {
+            font-size: 2rem;
+            font-weight: @font-weight__regular;
+        }
+    }
 }
