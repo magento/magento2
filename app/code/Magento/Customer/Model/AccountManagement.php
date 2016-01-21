@@ -72,7 +72,8 @@ class AccountManagement implements AccountManagementInterface
 
     const XML_PATH_CHANGE_EMAIL_TEMPLATE = 'customer/account_information/change_email_template';
 
-    const XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE = 'customer/account_information/change_email_and_password_template';
+    const XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE
+        = 'customer/account_information/change_email_and_password_template';
 
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
