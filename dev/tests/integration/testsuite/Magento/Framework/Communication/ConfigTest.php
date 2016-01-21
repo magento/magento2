@@ -54,15 +54,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage "handler" element must be declared for topic "customerUpdated", because it has
-     */
-    public function testGetTopicsExceptionMissingHandler()
-    {
-        $this->getConfigInstance(__DIR__ . '/_files/communication_missing_handler.xml')->getTopics();
-    }
-
-    /**
-     * @expectedException \LogicException
      * @expectedExceptionMessage Service method specified in the definition of topic "customerRetrieved" is not
      */
     public function testGetTopicsExceptionNotExistingServiceMethod()
