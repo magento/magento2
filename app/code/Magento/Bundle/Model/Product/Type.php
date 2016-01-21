@@ -1001,7 +1001,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $optionSearchData = $this->_bundleOption->create()
             ->getSearchableData(
-                $product->getEntityId(),
+                $product->getId(),
                 $product->getStoreId()
             );
         if ($optionSearchData) {
