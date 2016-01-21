@@ -31,12 +31,10 @@
         </attribute>
         <attribute code="category_ids">
             <field code="is_searchable" locked="true" />
+            <field code="used_for_sort_by" locked="true" />
         </attribute>
         <attribute code="media_gallery">
             <field code="is_searchable" locked="true" />
-        </attribute>
-        <attribute code="category_ids">
-            <field code="used_for_sort_by" locked="true" />
         </attribute>
     </entity>
 </config>
