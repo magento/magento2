@@ -108,6 +108,36 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $table);
     }
 
+    public function testStoreApiDocuments()
+    {
+        $documentId = 312432;
+        $documentValue = 1.235123;
+
+        $attributeValue = $this->getMockBuilder('Magento\Framework\Api\AttributeValue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeValue->expects($this->once())
+            ->method('getValue')
+            ->willReturn($documentValue);
+
+        $document = $this->getMockBuilder('Magento\Framework\Api\Search\Document')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $document->expects($this->once())
+            ->method('getId')
+            ->willReturn($documentId);
+        $document->expects($this->once())
+            ->method('getCustomAttribute')
+            ->with('score')
+            ->willReturn($attributeValue);
+
+        $table = $this->createTemporaryTable();
+
+        $result = $this->model->storeApiDocuments([$document]);
+
+        $this->assertEquals($result, $table);
+    }
+
     /**
      * @return \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject
      */
