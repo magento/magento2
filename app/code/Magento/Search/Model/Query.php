@@ -168,6 +168,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
+     * @deprecated
      */
     public function loadByQuery($text)
     {
@@ -184,7 +185,7 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
-     * Load Query object only by query text (skip 'synonym For')
+     * Load Query object only by query text
      *
      * @param string $text
      * @return $this

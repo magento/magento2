@@ -90,7 +90,7 @@ class Query extends AbstractDb
         if (is_numeric($value)) {
             return parent::load($object, $value);
         } else {
-            $this->loadByQuery($object, $value);
+            $this->loadByQueryText($object, $value);
         }
         return $this;
     }
@@ -101,6 +101,7 @@ class Query extends AbstractDb
      * @param AbstractModel $object
      * @param string $value
      * @return $this
+     * @deprecated
      */
     public function loadByQuery(AbstractModel $object, $value)
     {
@@ -127,6 +128,7 @@ class Query extends AbstractDb
      * @param string $field
      * @param string $value
      * @return Select
+     * @deprecated
      */
     private function getQuerySelect(AbstractModel $object, $field, $value)
     {
