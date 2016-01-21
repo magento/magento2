@@ -26,7 +26,7 @@ define(
         return Component.extend({
 
             defaults: {
-                template: 'Magento_Paypal/payment/payflow-express-in-context',
+                template: 'Magento_Paypal/payment/paypal-express-in-context',
                 clientConfig: {
 
                     /**
