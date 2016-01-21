@@ -247,7 +247,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $errorMessage
     ) {
         $customerId = 1;
-        $customerEmail = 'user1@example.com';
         $password = '1234567';
 
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
