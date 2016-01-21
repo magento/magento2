@@ -112,7 +112,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
                         $product
                     );
 
-                    foreach ($selectionCollection as $selectionItem) {
+                    foreach ($selectionCollection->getItems() as $selectionItem) {
                         if ($holder['optionId'] == $selectionItem->getId()) {
                             /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
                             $baseAmount = $selectionItem->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getAmount();
