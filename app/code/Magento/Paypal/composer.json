@@ -18,6 +18,7 @@
         "magento/module-eav": "100.0.*",
         "magento/framework": "100.0.*",
         "magento/module-ui": "100.0.*",
+        "magento/module-vault": "100.0.*",
         "lib-libxml": "*"
     },
     "suggest": {
