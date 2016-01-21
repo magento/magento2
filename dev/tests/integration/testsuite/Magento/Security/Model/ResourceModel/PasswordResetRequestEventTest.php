@@ -1,7 +1,6 @@
 <?php
 namespace Magento\Security\Model\ResourceModel\PasswordResetRequestEvent;
 
-
 /**
  * Class PasswordResetRequestEventTest
  * @package Magento\Security\Model\ResourceModel\PasswordResetRequestEvent

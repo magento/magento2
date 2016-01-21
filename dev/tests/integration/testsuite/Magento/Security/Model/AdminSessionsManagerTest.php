@@ -1,6 +1,6 @@
 <?php
 
-namespace Magento\Security\Model\AdminSessionsManager {
+namespace Magento\Security\Model {
 
     /**
      * @magentoAppArea adminhtml
@@ -41,7 +41,6 @@ namespace Magento\Security\Model\AdminSessionsManager {
             );
 
             $this->_auth->setAuthStorage($this->_modelSession);
-            parent::setUp();
         }
 
         protected function tearDown()
@@ -57,6 +56,23 @@ namespace Magento\Security\Model\AdminSessionsManager {
         }
 
         /**
+         * Performs user login
+         */
+        protected function _login()
+        {
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Backend\Model\UrlInterface'
+            )->turnOffSecretKey();
+
+            $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Auth');
+            $this->_auth->login(
+                \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+                \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+            );
+            $this->_session = $this->_auth->getAuthStorage();
+        }
+
+        /**
          * Checks is the admin session is created in database
          */
         public function testIsAdminSessionIsCreated()
@@ -68,26 +84,6 @@ namespace Magento\Security\Model\AdminSessionsManager {
             $sessionId = $this->_modelSession->getSessionId();
             $this->_modelSessionInfo->load($sessionId, 'session_id');
             $this->assertGreaterThanOrEqual(1, (int)$this->_modelSessionInfo->getId());
-            $this->_auth->logout();
-        }
-
-        /**
-         *
-         */
-        public function testIsAdminSessionIsUpdating() {
-            $this->_auth->login(
-                \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-                \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-            );
-            $sessionId = $this->_modelSession->getSessionId();
-            $this->_modelSessionInfo->load($sessionId, 'session_id');
-            $this->_modelSession->setUpdatedAt(time() + 200);
-
-            $this->_modelSession->prolong();
-
-            //@TODO: complete this test with mocked time
-            $this->markTestIncomplete();
-
             $this->_auth->logout();
         }
 
