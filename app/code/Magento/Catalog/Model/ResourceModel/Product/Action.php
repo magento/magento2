@@ -144,10 +144,9 @@ class Action extends \Magento\Catalog\Model\ResourceModel\AbstractResource
 
     /**
      * @param int $entityId
-     * @param string $table
      * @return int
      */
-    protected function resolveEntityId($entityId, $table)
+    protected function resolveEntityId($entityId)
     {
         if ($this->getIdFieldName() == $this->getLinkField()) {
             return $entityId;
