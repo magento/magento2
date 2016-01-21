@@ -17,6 +17,8 @@ use Magento\Paypal\Helper\Data as PaypalHelper;
  */
 class ExpressConfigProvider implements ConfigProviderInterface
 {
+    const IN_CONTEXT_BUTTON_ID = 'paypal-express-in-context-button';
+
     /**
      * @var ResolverInterface
      */
@@ -118,13 +120,14 @@ class ExpressConfigProvider implements ConfigProviderInterface
         if ($isInContext) {
             $config['payment']['paypalExpress']['isContextCheckout'] = $isInContext;
             $config['payment']['paypalExpress']['inContextConfig'] = [
+                'inContextId' => self::IN_CONTEXT_BUTTON_ID,
                 'merchantId' => $this->config->getValue('merchant_id'),
                 'path' => $this->urlBuilder->getUrl('paypal/express/gettoken', ['_secure' => true]),
                 'clientConfig' => [
                     'environment' => ((int) $this->config->getValue('sandbox_flag') ? 'sandbox' : 'production'),
                     'locale' => $locale,
                     'button' => [
-                        'paypal-express-in-context-button'
+                        self::IN_CONTEXT_BUTTON_ID
                     ]
                 ],
             ];

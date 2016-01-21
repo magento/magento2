@@ -49,11 +49,19 @@ define(
                                         }
                                     ).done(
                                         function (response) {
-                                            paypalExpressCheckout.checkout.startFlow(response.token);
+                                            if (response && response.token) {
+                                                paypalExpressCheckout.checkout.startFlow(response.token);
+
+                                                return;
+                                            }
+
+                                            paypalExpressCheckout.checkout.closeFlow();
+                                            window.location.reload();
                                         }
                                     ).fail(
                                         function () {
                                             paypalExpressCheckout.checkout.closeFlow();
+                                            window.location.reload();
                                         }
                                     ).always(
                                         function () {
@@ -88,11 +96,18 @@ define(
                     }
                 }, this);
 
-                domObserver.get('#paypal-express-in-context-button', function () {
+                domObserver.get('#' + this.getButtonId(), function () {
                     paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
                 }.bind(this));
 
                 return this;
+            },
+
+            /**
+             * @returns {String}
+             */
+            getButtonId: function () {
+                return this.inContextId;
             }
         });
     }
