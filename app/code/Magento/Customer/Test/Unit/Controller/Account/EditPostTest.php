@@ -171,9 +171,12 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(true);
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
-            ->with('change_password')
+            ->withConsecutive(
+                ['change_email'],
+                ['change_password']
+            )
             ->willReturn(false);
 
         $this->session->expects($this->once())
@@ -249,10 +252,13 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(true);
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
-            ->with('change_password')
-            ->willReturn(true);
+            ->withConsecutive(
+                ['change_email'],
+                ['change_password']
+            )
+            ->willReturnOnConsecutiveCalls(false, true);
         $this->request->expects($this->any())
             ->method('getPostValue')
             ->willReturn(true);
@@ -400,9 +406,12 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(true);
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
-            ->with('change_password')
+            ->withConsecutive(
+                ['change_email'],
+                ['change_password']
+            )
             ->willReturn(false);
         $this->request->expects($this->any())
             ->method('getPostValue')
