@@ -29,8 +29,11 @@ class Data implements DataInterface
      */
     public function __construct(MetadataProcessor $processor, array $data)
     {
+        foreach ($data as $k => $v) {
+            $this->_source[$k] = $v;
+        }
         $this->_data = $processor->process($data);
-        $this->_source = $data;
+//        $this->_source = $data;
     }
 
     /**
