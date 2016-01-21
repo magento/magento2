@@ -2623,7 +2623,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['_wakeup', 'getHasOptions', 'getEntityId', 'getStoreId'])
+            ->setMethods(['_wakeup', 'getHasOptions', 'getId', 'getStoreId'])
             ->getMock();
         $option = $this->getMockBuilder('\Magento\Bundle\Model\Option')
             ->disableOriginalConstructor()
@@ -2631,7 +2631,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $product->expects($this->once())->method('getHasOptions')->willReturn(false);
-        $product->expects($this->once())->method('getEntityId')->willReturn('productId');
+        $product->expects($this->once())->method('getId')->willReturn('productId');
         $product->expects($this->once())->method('getStoreId')->willReturn('storeId');
         $this->bundleOptionFactory->expects($this->once())->method('create')->willReturn($option);
         $option->expects($this->once())->method('getSearchableData')->willReturn(['optionSearchdata']);
