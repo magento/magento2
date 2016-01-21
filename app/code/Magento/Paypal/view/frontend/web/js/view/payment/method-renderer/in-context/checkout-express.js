@@ -27,7 +27,6 @@ define(
 
             defaults: {
                 template: 'Magento_Paypal/payment/payflow-express-in-context',
-                paypalButtonSelector: '#paypal-express-in-context-checkout-main',
                 clientConfig: {
 
                     /**
