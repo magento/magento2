@@ -413,13 +413,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             $changes[] = __('username');
         }
 
-        if (count($changes) > 1) {
-            $last = array_pop($changes);
-            $changes[count($changes) - 1] .= __(' and ') . $last;
-        }
-        $changes = implode(', ', $changes);
-
-        return $changes;
+        return implode(', ', $changes);
     }
 
     /**
