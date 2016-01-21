@@ -211,7 +211,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
         );
 
         if (!empty($tokenDuplicate)) {
-            if ($token->getIsVisible()) {
+            if ($token->getIsVisible() || $tokenDuplicate->getIsVisible()) {
                 $token->setEntityId($tokenDuplicate->getEntityId());
             } else {
                 $token->setPublicHash(
