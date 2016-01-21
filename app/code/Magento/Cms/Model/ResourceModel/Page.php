@@ -222,7 +222,7 @@ class Page extends AbstractDb
             ->where('cp.identifier = ?', $identifier)
             ->where('cps.store_id IN (?)', $store);
 
-        if (!is_null($isActive)) {
+        if ($isActive !== null) {
             $select->where('cp.is_active = ?', $isActive);
         }
 
