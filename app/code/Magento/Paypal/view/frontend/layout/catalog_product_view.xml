@@ -22,16 +22,6 @@
                     <argument name="position" xsi:type="number">1</argument>
                 </arguments>
             </block>
-            <referenceBlock name="addtocart.shortcut.buttons">
-                <block class="Magento\Paypal\Block\Express\InContext\Button"
-                       name="paypal.express-in-context.product-details"
-                       template="Magento_Paypal::express/in-context/shortcut/button.phtml">
-                    <arguments>
-                        <argument name="button_id" xsi:type="string">paypal-express-in-context-product-details</argument>
-                        <argument name="add_to_cart_selector" xsi:type="string">button[type="submit"].action.tocart.primary</argument>
-                    </arguments>
-                </block>
-            </referenceBlock>
         </referenceContainer>
     </body>
 </page>

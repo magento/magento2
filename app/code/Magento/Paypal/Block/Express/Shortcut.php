@@ -223,10 +223,14 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     protected function shouldRender()
     {
         $this->config->setMethod(Config::METHOD_EXPRESS);
-        $isEnabled = (bool)(int) $this->config->getValue('in_context');
+
+        $isInCatalog = $this->getIsInCatalogProduct();
+        $isInContext = (bool)(int) $this->config->getValue('in_context');
+
+        $isEnabled = ($isInContext && $isInCatalog) || !$isInContext;
         $this->config->setMethod($this->_paymentMethodCode);
 
-        return !$isEnabled && $this->_shouldRender;
+        return $isEnabled && $this->_shouldRender;
     }
 
     /**
