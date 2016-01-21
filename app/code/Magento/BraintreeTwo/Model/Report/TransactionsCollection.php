@@ -76,12 +76,9 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      */
     public function getItems()
     {
-        if (empty($this->filtersList)) {
+        if (!$this->fetchCollection()) {
             return [];
         }
-
-        // Fetch all IDs in order to filter
-        $this->collection = $this->braintreeAdapter->search($this->getFilters());
 
         $result = [];
         $counter = 0;
@@ -102,10 +99,28 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     }
 
     /**
+     * Fetch collection from Braintree
+     * @return \Braintree\ResourceCollection|null
+     */
+    protected function fetchCollection() {
+        if (empty($this->filtersList)) {
+            return null;
+        }
+
+        // Fetch all transaction IDs in order to filter
+        if (empty($this->collection)) {
+            $this->collection = $this->braintreeAdapter->search($this->getFilters());
+        }
+
+        return $this->collection;
+    }
+
+    /**
      * Set items list.
      *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $items
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setItems(array $items = null)
     {
@@ -123,6 +138,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     /**
      * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setAggregations($aggregations)
     {
@@ -144,6 +160,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setSearchCriteria(SearchCriteriaInterface $searchCriteria)
     {
@@ -157,7 +174,8 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      */
     public function getTotalCount()
     {
-        return null === $this->collection ? 0 : $this->collection->maximumCount();
+        $collection = $this->fetchCollection();
+        return null === $collection ? 0 : $collection->maximumCount();
     }
 
     /**
@@ -165,6 +183,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @param int $totalCount
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setTotalCount($totalCount)
     {
@@ -190,6 +209,8 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     }
 
     /**
+     * Add filter to list
+     *
      * @param object $filter
      */
     private function addFilterToList($filter)

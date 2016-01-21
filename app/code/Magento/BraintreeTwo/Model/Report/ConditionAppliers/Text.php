@@ -16,8 +16,8 @@ class Text implements ApplierInterface
      * Apply filter condition
      *
      * @param TextNode $field
-     * @param $condition
-     * @param $value
+     * @param string $condition
+     * @param mixed $value
      * @return bool
      */
     public function apply($field, $condition, $value)

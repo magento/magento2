@@ -10,8 +10,12 @@ define([
     'use strict';
 
     return Provider.extend({
+        /**
+         * Reload grid
+         * @returns {exports}
+         */
         reload: function () {
-            if (this.hasFilters()){
+            if (this.hasFilters()) {
                 this._super();
 
                 return this;
@@ -27,6 +31,10 @@ define([
             return this;
         },
 
+        /**
+         * Has filters checker
+         * @returns {boolean}
+         */
         hasFilters: function () {
             var params = this.params,
                 filters = params.filters || {};
