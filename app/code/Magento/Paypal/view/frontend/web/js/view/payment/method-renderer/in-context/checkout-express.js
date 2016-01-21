@@ -44,7 +44,7 @@ define(
                                     $.get(
                                         this.path,
                                         {
-                                            button: 1
+                                            button: 0
                                         }
                                     ).done(
                                         function (response) {
