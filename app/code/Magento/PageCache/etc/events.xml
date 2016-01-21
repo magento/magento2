@@ -33,7 +33,7 @@
     <event name="assign_theme_to_stores_after">
         <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\InvalidateCache" />
     </event>
-    <event name="controller_action_postdispatch_adminhtml_system_currency_saveRates">
+    <event name="controller_action_postdispatch_adminhtml_system_currency_saverates">
         <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\InvalidateCache" />
     </event>
     <event name="controller_action_postdispatch_adminhtml_system_config_save">

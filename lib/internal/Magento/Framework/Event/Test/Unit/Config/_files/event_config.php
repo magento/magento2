@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 return [
-    'event_1' => [
+    'event_one' => [
         'observer_1' => ['instance' => 'instance_1', 'name' => 'observer_1'],
         'observer_5' => ['instance' => 'instance_5', 'name' => 'observer_5'],
     ],
-    'event_2' => [
+    'event_two' => [
         'observer_2' => [
             'instance' => 'instance_2',
             'disabled' => true,

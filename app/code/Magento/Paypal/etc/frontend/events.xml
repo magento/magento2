@@ -9,7 +9,7 @@
     <event name="checkout_submit_all_after">
         <observer name="hss_save_order_after_submit" instance="Magento\Paypal\Observer\SaveOrderAfterSubmitObserver"/>
     </event>
-    <event name="checkout_controller_onepage_saveOrder">
+    <event name="checkout_controller_onepage_saveorder">
         <observer name="hss_save_order_onepage" instance="Magento\Paypal\Observer\SetResponseAfterSaveOrderObserver"/>
     </event>
     <event name="shortcut_buttons_container">
