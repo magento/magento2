@@ -66,7 +66,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
                     $stores = $this->storeManager->getStores();
                     if (count($stores)) {
                         $store = reset($stores);
-                        $categoryId = (int)$this->storeManager->getStore($store->getId())->getRootCategoryId();
+                        $categoryId = (int)$store->getRootCategoryId();
                     }
                 }
             }
