@@ -16,6 +16,11 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     private $model;
 
     /**
+     * @var \Magento\Framework\Api\Filter
+     */
+    private $filter;
+
+    /**
      * setUp method for CollectionTest
      */
     protected function setUp()
@@ -25,7 +30,8 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $storeManager = $this->getStoreManager();
         $universalFactory = $this->getUniversalFactory();
         $scopeConfig = $this->getScopeConfig();
-        $requestBuilder = $this->getRequestBuilder();
+        $criteriaBuilder = $this->getCriteriaBuilder();
+        $filterBuilder = $this->getFilterBuilder();
 
         $this->model = $helper->getObject(
             'Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection',
@@ -33,7 +39,8 @@ class CollectionTest extends PHPUnit_Framework_TestCase
                 'storeManager' => $storeManager,
                 'universalFactory' => $universalFactory,
                 'scopeConfig' => $scopeConfig,
-                'requestBuilder' => $requestBuilder
+                'searchCriteriaBuilder' => $criteriaBuilder,
+                'filterBuilder' => $filterBuilder,
             ]
         );
     }
@@ -133,20 +140,37 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getRequestBuilder()
+    protected function getCriteriaBuilder()
     {
-        $requestBuilder = $this->getMockBuilder('Magento\Framework\Search\Request\Builder')
-            ->setMethods(['bind', 'setRequestName'])
+        $criteriaBuilder = $this->getMockBuilder('Magento\Framework\Api\Search\SearchCriteriaBuilder')
+            ->setMethods(['addFilter', 'create', 'setRequestName'])
             ->disableOriginalConstructor()
             ->getMock();
-        $requestBuilder->expects($this->once())
-            ->method('bind')
-            ->withConsecutive(['price_dynamic_algorithm', 1]);
-        $requestBuilder->expects($this->once())
+        $this->filter = new \Magento\Framework\Api\Filter();
+        $this->filter->setField('price_dynamic_algorithm');
+        $this->filter->setValue(1);
+        $criteriaBuilder->expects($this->once())
+            ->method('addFilter')
+            ->with($this->filter);
+        $criteria = $this->getMock('Magento\Framework\Api\Search\SearchCriteria', [], [], '', false);
+        $criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
+        $criteria->expects($this->once())
             ->method('setRequestName')
             ->withConsecutive(['catalog_view_container'])
             ->willThrowException(new \Exception('setRequestName', 333));
 
-        return $requestBuilder;
+        return $criteriaBuilder;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getFilterBuilder()
+    {
+        $filterBuilder = $this->getMock('Magento\Framework\Api\FilterBuilder', [], [], '', false);
+        $filterBuilder->expects($this->once())->method('setField')->with('price_dynamic_algorithm');
+        $filterBuilder->expects($this->once())->method('setValue')->with(1);
+        $filterBuilder->expects($this->once())->method('create')->willReturn($this->filter);
+        return $filterBuilder;
     }
 }
