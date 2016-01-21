@@ -14,6 +14,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
+use Magento\Customer\Helper\Session\CurrentCustomer;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,10 +33,11 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     /** @var CustomerExtractor */
     protected $customerExtractor;
 
-    /**
-     * @var Session
-     */
+    /** @var Session */
     protected $session;
+
+    /** @var CurrentCustomer */
+    protected $currentCustomer;
 
     /**
      * @param Context $context
@@ -44,6 +46,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
+     * @param CurrentCustomer $currentCustomer
      */
     public function __construct(
         Context $context,
@@ -51,13 +54,15 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
-        CustomerExtractor $customerExtractor
+        CustomerExtractor $customerExtractor,
+        CurrentCustomer $currentCustomer
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
+        $this->currentCustomer = $currentCustomer;
         parent::__construct($context);
     }
 
@@ -89,7 +94,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
 
             // Check if a customer can change email
             if ($this->getRequest()->getParam('change_email')) {
-                if (!$this->isAllowedChangeCustomerEmail($customerId)) {
+                if (!$this->isAllowedChangeCustomerEmail()) {
                     return $resultRedirect->setPath('*/*/edit');
                 }
             } else {
@@ -129,16 +134,12 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Is allowed to change customer email
      *
-     * @param int $customerId
      * @return bool
      */
-    protected function isAllowedChangeCustomerEmail($customerId)
+    protected function isAllowedChangeCustomerEmail()
     {
         try {
-            return $this->customerAccountManagement->validatePasswordById(
-                $customerId,
-                $this->getRequest()->getPost('current_password')
-            );
+            return $this->currentCustomer->validatePassword($this->getRequest()->getPost('current_password'));
         } catch (AuthenticationException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {

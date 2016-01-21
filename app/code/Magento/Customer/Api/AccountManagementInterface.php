@@ -110,17 +110,6 @@ interface AccountManagementInterface
     public function authenticate($email, $password);
 
     /**
-     * Validate password by customer ID.
-     *
-     * @api
-     * @param int $customerId
-     * @param string $password
-     * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function validatePasswordById($customerId, $password);
-
-    /**
      * Change customer password.
      *
      * @api
