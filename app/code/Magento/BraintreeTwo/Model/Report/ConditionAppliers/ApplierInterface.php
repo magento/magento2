@@ -19,9 +19,9 @@ interface ApplierInterface
     /**
      * Apply filter condition
      *
-     * @param $field
-     * @param $condition
-     * @param $value
+     * @param object $field
+     * @param string $condition
+     * @param mixed $value
      * @return bool
      */
     public function apply($field, $condition, $value);

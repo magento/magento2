@@ -60,6 +60,8 @@ class TransactionMap implements DocumentInterface
     }
 
     /**
+     * Get Id
+     *
      * @return string
      */
     public function getId()
@@ -68,8 +70,11 @@ class TransactionMap implements DocumentInterface
     }
 
     /**
+     * Set Id
+     *
      * @param int $id
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setId($id)
     {
@@ -96,6 +101,7 @@ class TransactionMap implements DocumentInterface
      * @param string $attributeCode
      * @param mixed $attributeValue
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -123,6 +129,7 @@ class TransactionMap implements DocumentInterface
      * @param \Magento\Framework\Api\AttributeInterface[] $attributes
      * @return $this
      * @throws \LogicException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -130,6 +137,8 @@ class TransactionMap implements DocumentInterface
     }
 
     /**
+     * Get mapped value
+     *
      * @param string $key
      * @return mixed
      */
@@ -163,7 +172,7 @@ class TransactionMap implements DocumentInterface
     /**
      * Recursive get transaction field value
      *
-     * @param $key
+     * @param string $key
      * @return Transaction|mixed|null
      */
     private function getTransactionFieldValue($key)
@@ -194,7 +203,7 @@ class TransactionMap implements DocumentInterface
                     /** @var DateTime $val */
                     $val = $val->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             }
-        } elseif(is_array($val)) {
+        } elseif (is_array($val)) {
             $val = implode(', ', $val);
         }
 

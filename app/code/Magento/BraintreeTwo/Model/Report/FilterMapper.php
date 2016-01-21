@@ -13,6 +13,9 @@ use Magento\BraintreeTwo\Model\Report\ConditionAppliers\AppliersPool;
  */
 class FilterMapper
 {
+    /**
+     * @var array
+     */
     private $searchFieldsToFiltersMap = [];
 
     /** @var AppliersPool */
@@ -32,6 +35,7 @@ class FilterMapper
 
     /**
      * Init fields map with Braintree filters
+     * @return void
      */
     private function initFieldsToFiltersMap()
     {
@@ -51,6 +55,7 @@ class FilterMapper
     }
 
     /**
+     * Get filter with applied conditions
      * @param string $field
      * @param array $conditionMap
      * @return null|object

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">braintreetwo_report.braintreetwo_report_data_source</item>
@@ -85,64 +85,6 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterRange name="createdAt" class="Magento\Ui\Component\Filters\Type\DateRange">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">createdAt</item>
-                        <item name="label" xsi:type="string" translate="true">Created At</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">braintreetwo_report.braintreetwo_report.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterDate name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">from</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-                <filterDate name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">to</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-            </filterRange>
-            <filterRange name="amount">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">amount</item>
-                        <item name="label" xsi:type="string" translate="true">Amount</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">braintreetwo_report.braintreetwo_report.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">from</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">to</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
             <filterSelect name="status">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\Status</argument>
@@ -207,6 +149,14 @@
                     </item>
                 </argument>
             </filterInput>
+            <filterInput name="merchantAccountId">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">merchantAccountId</item>
+                        <item name="label" xsi:type="string" translate="true">Merchant Account ID</item>
+                    </item>
+                </argument>
+            </filterInput>
         </filters>
     </container>
     <columns name="braintreetwo_report_columns">
@@ -238,188 +188,120 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">id</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
         </selectionsColumn>
         <column name="id">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Transaction ID</item>
                 </item>
             </argument>
         </column>
         <column name="merchantAccountId">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Merchant Account ID</item>
                 </item>
             </argument>
         </column>
         <column name="orderId">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Order ID</item>
                 </item>
             </argument>
         </column>
         <column name="paypalDetails_paymentId">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">PayPal Payment ID</item>
                 </item>
             </argument>
         </column>
         <column name="paymentInstrumentType">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Payment Type</item>
                 </item>
             </argument>
         </column>
         <column name="type">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Type</item>
                 </item>
             </argument>
         </column>
-        <column name="createdAt">
+        <column name="createdAt" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
+                    <item name="sorting" xsi:type="string">desc</item>
+                    <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="label" xsi:type="string" translate="true">Created At</item>
                 </item>
             </argument>
         </column>
-        <column name="amount">
+        <column name="amount" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
+                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="label" xsi:type="string" translate="true">Amount</item>
                 </item>
             </argument>
         </column>
         <column name="processorSettlementResponseCode">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Settlement Code</item>
                 </item>
             </argument>
         </column>
         <column name="status">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
                 </item>
             </argument>
         </column>
         <column name="processorSettlementResponseText">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Settlement Response Text</item>
                 </item>
             </argument>
         </column>
         <column name="refundIds">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Settlement Response Text</item>
+                    <item name="label" xsi:type="string" translate="true">Refund Ids</item>
                 </item>
             </argument>
         </column>
         <column name="settlementBatchId">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Settlement Batch</item>
                 </item>
             </argument>
         </column>
         <column name="currencyIsoCode">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Currency</item>
                 </item>
             </argument>

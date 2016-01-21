@@ -43,7 +43,7 @@ class Index extends Action
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Magento_Cms::settlement_report');
+        $resultPage->setActiveMenu(static::ADMIN_RESOURCE);
         $resultPage
             ->getConfig()
             ->getTitle()

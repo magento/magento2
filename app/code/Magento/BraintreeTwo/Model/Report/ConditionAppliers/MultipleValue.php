@@ -16,8 +16,8 @@ class MultipleValue implements ApplierInterface
      * Apply filter condition
      *
      * @param MultipleValueNode $field
-     * @param $condition
-     * @param $value
+     * @param string $condition
+     * @param mixed $value
      * @return bool
      */
     public function apply($field, $condition, $value)
@@ -30,6 +30,11 @@ class MultipleValue implements ApplierInterface
                 $result = true;
                 break;
             case ApplierInterface::EQ:
+                $field->is($value);
+                $result = true;
+                break;
+            case ApplierInterface::LIKE:
+                $value = trim($value, "% \r\n\t");
                 $field->is($value);
                 $result = true;
                 break;

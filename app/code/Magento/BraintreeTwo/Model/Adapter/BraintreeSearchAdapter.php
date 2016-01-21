@@ -19,6 +19,7 @@ class BraintreeSearchAdapter
 {
     /**
      * @return TextNode
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function id()
     {

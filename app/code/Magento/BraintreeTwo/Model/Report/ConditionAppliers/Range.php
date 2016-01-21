@@ -16,8 +16,8 @@ class Range implements ApplierInterface
      * Apply filter condition
      *
      * @param RangeNode $field
-     * @param $condition
-     * @param $value
+     * @param string $condition
+     * @param mixed $value
      * @return bool
      */
     public function apply($field, $condition, $value)
