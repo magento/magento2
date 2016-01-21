@@ -337,7 +337,7 @@ return [
             "consumer_type" => "sync",
             "handlers" => [
                 "topic.broker.test" => [
-                    "topicBrokerHandler" => [
+                    "0" => [
                         "type" => "Magento\\MysqlMq\\Model\\Processor",
                         "method" => "processMessage"
                     ]
