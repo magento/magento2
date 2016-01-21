@@ -19,7 +19,7 @@ define([
      *  - option-tooltip-thumb
      *  - option-tooltip-value
      */
-    $.widget('custom.SwatchRendererTooltip', {
+    $.widget('mage.SwatchRendererTooltip', {
         options: {
             delay: 200,                             //how much ms before tooltip to show
             tooltipClass: 'swatch-option-tooltip'  //configurable, but remember about css
@@ -141,7 +141,7 @@ define([
      *  - selectorProduct (selector for product container)
      *  - selectorProductPrice (selector for change price)
      */
-    $.widget('custom.SwatchRenderer', {
+    $.widget('mage.SwatchRenderer', {
         options: {
             classes: {
                 attributeClass: 'swatch-attribute',
@@ -166,6 +166,9 @@ define([
             // selector of price wrapper (need to know where set price)
             selectorProductPrice: '[data-role=priceBox]',
 
+            //selector of product images gallery wrapper
+            mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
+
             // number of controls to show (false or zero = show all)
             numberToShow: false,
 
@@ -182,7 +185,10 @@ define([
             mediaCallback: '',
 
             // Cache for BaseProduct images. Needed when option unset
-            mediaGalleryInitial: [{}]
+            mediaGalleryInitial: [{}],
+
+            //
+            onlyMainImg: false
         },
 
         /**
@@ -801,7 +807,8 @@ define([
                 images.push({
                     full: response.large,
                     img: response.medium,
-                    thumb: response.small
+                    thumb: response.small,
+                    isMain: true
                 });
 
                 if (response.hasOwnProperty('gallery')) {
@@ -822,19 +829,53 @@ define([
         },
 
         /**
+         * Check if images to update are initial and set their type
+         * @param {Array} images
+         */
+        _setImageType: function (images) {
+            var initial = this.options.mediaGalleryInitial[0].img;
+
+            if (images[0].img === initial) {
+                images = $.extend(true, [], this.options.mediaGalleryInitial);
+            } else {
+                images.map(function (img) {
+                    img.type = 'image';
+                });
+            }
+
+            return images;
+        },
+
+        /**
          * Update [gallery-placeholder] or [product-image-photo]
          * @param {Array} images
          * @param {jQuery} context
          * @param {Boolean} isProductViewExist
          */
         updateBaseImage: function (images, context, isProductViewExist) {
-            var justAnImage = images[0];
+            var justAnImage = images[0],
+                updateImg,
+                imagesToUpdate,
+                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
+                item;
+
+            if (images) {
+                imagesToUpdate = this._setImageType($.extend(true, [], images));
+            }
 
             if (isProductViewExist) {
-                context
-                    .find('[data-gallery-role=gallery-placeholder]')
-                    .data('gallery')
-                    .updateData(images);
+                if (this.options.onlyMainImg) {
+                    updateImg = imagesToUpdate.filter(function (img) {
+                        return img.isMain;
+                    });
+
+                    item = updateImg.length ? updateImg[0]: imagesToUpdate[0];
+                    gallery.updateDataByIndex(0, item);
+
+                    gallery.seek(1);
+                } else {
+                    gallery.updateData(imagesToUpdate);
+                }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
@@ -888,4 +929,6 @@ define([
             return selectedAttributes;
         }
     });
+
+    return $.mage.SwatchRenderer;
 });

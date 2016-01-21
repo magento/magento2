@@ -13,23 +13,6 @@
 @import 'module/_focus.less';
 @import 'module/_fullscreen.less';
 
-.fotorama_spin {
-    display: none;
-    &.fotorama_spinner {
-        display: block;
-        width: 64px;
-        height: 64px;
-        background-image: url('@{baseDir}../images/loader-1.gif');
-        bottom: 0;
-        left: 0;
-        margin: auto;
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: @z-index-1;
-    }
-}
-
 .fotorama__zoom-in,
 .fotorama__zoom-out {
     display: none;
@@ -221,9 +204,9 @@
     &:extend(.fotorama-focus-overlay);
     box-shadow: none;
     &:after {
-        top: -1px;
         left: -1px;
         padding: 1px;
+        top: -1px;
     }
 }
 
@@ -239,7 +222,7 @@
 }
 
 .fotorama__thumb {
-  background-color: @color-gray92;
+    background-color: @color-gray92;
     height: 100%;
     overflow: hidden;
     position: relative;
@@ -278,8 +261,8 @@
         color: @color-black;
         text-decoration: none;
         &:hover {
-            color: @color-black;
             border-color: fade(@color-black, 0.5);
+            color: @color-black;
         }
     }
 
@@ -419,6 +402,7 @@
         .fotorama-abs-center();
         height: @size-fotorama-block;
         width: @size-fotorama-block;
+
         .ie9 & {
             margin: (-@size-fotorama-block/2) 0 0 (-@size-fotorama-block/2);
         }
@@ -449,12 +433,12 @@
 .fotorama__fullscreen-icon {
     &:extend(.fotorama-sprite);
     background-position: 0 0;
+    display:  none;
     height: @size-fotorama-block;
     right: 0;
     top: 0;
     width: @size-fotorama-block;
     z-index: @z-index-10;
-    display:  none;
 }
 
 .fotorama--fullscreen-icons {
@@ -473,8 +457,8 @@
 
 .fotorama--fullscreen {
     .fotorama__fullscreen-icon {
-        display: inline-block;
         background-position: (-@size-fotorama-block) 0;
+        display: inline-block;
     }
 }
 
@@ -504,35 +488,6 @@
     }
 }
 
-.fotorama__video-close {
-    &:extend(.fotorama-sprite);
-    background-position: -60px -9px;
-    height: @fotorama_close_size;
-    opacity: 0;
-    right: 0;
-    top: 0;
-    width: @fotorama_close_size;
-    z-index: 19;
-    .fotorama__wrap--css2 & {
-        display: none;
-    }
-
-    .fotorama__wrap--css3 & {
-        .fotorama-translate3d(@fotorama-arw-size, -@fotorama-arw-size, 0);
-    }
-
-    .fotorama__wrap--video & {
-        display: block;
-        opacity: 1;
-    }
-
-    .fotorama__wrap--css3 {
-        &.fotorama__wrap--video & {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-}
-
 .fotorama__wrap--no-controls.fotorama__wrap--toggle-arrows {
     .fotorama__arr,
     .fotorama__fullscreen-icon {
@@ -554,9 +509,9 @@
 .fotorama__wrap--toggle-arrows {
     &.fotorama__wrap--video {
         .fotorama__video-close {
-            top: 97px;
-            right: 93px;
             opacity: 1;
+            right: 93px;
+            top: 97px;
         }
     }
 }
@@ -572,9 +527,9 @@
 .fotorama__wrap--toggle-arrows {
     &.fotorama__wrap--video {
         .fotorama__video-close {
-            top: 97px;
-            right: 93px;
             opacity: 1;
+            right: 93px;
+            top: 97px;
         }
     }
 }
@@ -590,9 +545,9 @@
 .fotorama__wrap--toggle-arrows {
     &.fotorama__wrap--video {
         .fotorama__video-close {
-            top: 97px;
-            right: 93px;
             opacity: 1;
+            right: 93px;
+            top: 97px;
         }
     }
 }
@@ -680,18 +635,18 @@
     }
     &.fotorama__shadows--left:before,
     &.fotorama__shadows--right:after {
-        top: 0;
-        bottom: 0;
         background-size: 1px 100%, 5px 100%;
+        bottom: 0;
         height: auto;
+        top: 0;
         width: 10px;
     }
     &.fotorama__shadows--top:before,
     &.fotorama__shadows--bottom:after {
-        left: 0;
-        right:0;
         background-size: 100% 1px, 100% 5px ;
         height:10px;
+        left: 0;
+        right:0;
         width:auto;
     }
     &.fotorama__shadows--left:before {
@@ -816,12 +771,12 @@
     text-align: center;
     .fotorama__img {
         height: auto;
-        width: auto;
         max-height: 100%;
         max-width: 100%;
-        vertical-align: middle;
         transition-duration: @fotorama-fullscreen-zoom-time;
         transition-property: width, height, top, left;
+        vertical-align: middle;
+        width: auto;
     }
 }
 
@@ -836,14 +791,14 @@
 .fotorama__nav-wrap--vertical {
     &.fotorama__nav-wrap {
         display: inline-block;
+        left: 0;
         position: absolute;
         top: 0;
-        left: 0;
     }
 
     .fotorama__nav__shaft {
-        width: 100%;
         background-color: white;
+        width: 100%;
         .fotorama__nav__frame--thumb {
             display: block;
             padding-bottom: inherit !important;
@@ -868,28 +823,32 @@
             top: 0;
         }
         .fotorama__img--full {
+            cursor: default;
             display: block;
-            width: auto;
             height: auto;
+            left: 0;
+            margin: auto;
             max-height: 100%;
             max-width: 100%;
             top: 0;
-            left: 0;
-            vertical-align: middle;
             transition: @fotorama-fullscreen-zoom-time linear;
-            margin: auto;
-            cursor: default;
+            vertical-align: middle;
+            width: auto;
             &:extend(.fotorama-gpu);
             &.fotorama__img--zoommable {
                 cursor: pointer;
-                max-width: none;
                 max-height: none;
+                max-width: none;
                 transition-property: width, height, bottom, right, top, left;
             }
             &.fotorama__img--draggable {
                 cursor: move;
                 transition-property: none;
             }
+        }
+        iframe {
+            left: @fotorama-arw-size;
+            width: calc(~'100% - @{fotorama-arw-size} * 2');
         }
     }
 }
@@ -898,11 +857,11 @@
     .fotorama__thumb__arr--left,
     .fotorama__thumb__arr--right {
         bottom: 0;
+        cursor: pointer;
         position: absolute;
         top: 0;
         width: @fotorama-thumb-arrow;
         z-index: @z-index-10;
-        cursor: pointer;
         .fotorama__thumb--icon {
             .fotorama-abs-center();
             width: 100%;
@@ -925,11 +884,11 @@
 .fotorama__nav-wrap--vertical {
     .fotorama__thumb__arr--left,
     .fotorama__thumb__arr--right {
+        cursor: pointer;
         height: @fotorama-thumb-arrow;
         left: 0;
         position: absolute;
         right: 0;
-        cursor: pointer;
         z-index: @z-index-10;
         .fotorama__thumb--icon {
             .fotorama-rotate(90deg);
@@ -980,16 +939,6 @@
     display: none;
 }
 
-.gallery-placeholder {
-    .loading-mask {
-        padding: 0 0 50%;
-        position: absolute;
-    }
-    .loader img {
-      position: absolute;
-    }
-}
-
 .fotorama__arr,
 .fotorama__thumb__arr {
     .fotorama-button-background();
@@ -1003,3 +952,47 @@
     }
 }
 
+.fotorama__video-close {
+    &:extend(.fotorama-sprite);
+    background-position: (-@fotorama_close_button) 0;
+    height: @fotorama_close_button;
+    opacity: 0;
+    right: 0;
+    top: 0;
+    width: @fotorama_close_button;
+    transition: opacity 0.3s ease-in-out;
+    transform: translate3d((@fotorama_close_button), (-@fotorama_close_button), 0);
+    &.fotorama-show-control {
+        opacity: 1;
+        transform: translate3d(0, -10px, 0);
+    }
+}
+
+// While first time init
+.gallery-placeholder {
+    .loading-mask {
+        padding: 0 0 50%;
+        position: static;
+    }
+    .loader img {
+        position: absolute;
+    }
+}
+
+// Styles for spinner in gallery.
+.fotorama__spinner {
+    background-image: url('@{baseDir}../images/loader-1.gif');
+    bottom: 0;
+    display: none;
+    height: @fotorama-spinner-size;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: @fotorama-spinner-size;
+    z-index: @z-index-1;
+    &.fotorama__spinner--show {
+        display: block;
+    }
+}
