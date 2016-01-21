@@ -32,6 +32,11 @@ class CaptureStrategyCommand implements CommandInterface
     const CAPTURE = 'settlement';
 
     /**
+     * Braintree vault capture command
+     */
+    const VAULT_CAPTURE = 'vault_capture';
+
+    /**
      * Braintree clone transaction command
      */
     const CLONE_TRANSACTION = 'clone';
@@ -112,8 +117,14 @@ class CaptureStrategyCommand implements CommandInterface
             return self::SALE;
         }
 
+        // do capture for authorization transaction
         if (!$this->isExistsCaptureTransaction($payment)) {
             return self::CAPTURE;
+        }
+
+        // process capture for payment via Vault
+        if ($this->isExistsVaultToken($payment)) {
+            return self::VAULT_CAPTURE;
         }
 
         return self::CLONE_TRANSACTION;
@@ -140,5 +151,17 @@ class CaptureStrategyCommand implements CommandInterface
 
         $count = $this->transactionRepository->getList($searchCriteria)->getTotalCount();
         return (boolean) $count;
+    }
+
+    /**
+     * Check if payment was used vault token
+     *
+     * @param OrderPaymentInterface $payment
+     * @return bool
+     */
+    private function isExistsVaultToken(OrderPaymentInterface $payment)
+    {
+        $extensionAttributes = $payment->getExtensionAttributes();
+        return (boolean) $extensionAttributes->getVaultPaymentToken();
     }
 }
