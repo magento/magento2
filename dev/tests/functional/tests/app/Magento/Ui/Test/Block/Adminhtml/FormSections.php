@@ -76,9 +76,11 @@ class FormSections extends AbstractFormContainers
      */
     public function openSection($sectionName)
     {
-        $this->browser->find($this->header)->hover();
         if ($this->isCollapsible($sectionName)) {
             $this->getSectionTitleElement($sectionName)->click();
+        } else {
+            //Scroll to the top of the page so that the page actions header does not overlap any controls
+            $this->browser->find($this->header)->hover();
         }
         return $this;
     }
