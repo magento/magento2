@@ -61,7 +61,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
             } else {
                 $defaultStoreView = $this->storeManager->getDefaultStoreView();
                 if ($defaultStoreView) {
-                    $categoryId = (int)$this->storeManager->getDefaultStoreView()->getRootCategoryId();
+                    $categoryId = (int)$defaultStoreView->getRootCategoryId();
                 } else {
                     $stores = $this->storeManager->getStores();
                     if (count($stores)) {
