@@ -4,16 +4,22 @@
  */
 define(
     [
+        'underscore',
         'jquery',
         'Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract',
         'Magento_Paypal/js/action/set-payment-method',
-        'Magento_Checkout/js/model/payment/additional-validators'
+        'Magento_Checkout/js/model/payment/additional-validators',
+        'Magento_Ui/js/lib/view/utils/dom-observer',
+        'paypalInContextExpressCheckout'
     ],
     function (
+        _,
         $,
         Component,
         setPaymentMethodAction,
-        additionalValidators
+        additionalValidators,
+        domObserver,
+        paypalExpressCheckout
     ) {
         'use strict';
 
@@ -21,32 +27,72 @@ define(
 
             defaults: {
                 template: 'Magento_Paypal/payment/payflow-express-in-context',
-                paypalButtonSelector: '#paypal-express-in-context-checkout-main'
-            },
+                paypalButtonSelector: '#paypal-express-in-context-checkout-main',
+                clientConfig: {
 
-            /**
-             * {Function}
-             */
-            click: function () {
-                $(this.paypalButtonSelector).click();
-            },
+                    /**
+                     * @param {Object} event
+                     */
+                    click: function (event) {
+                        event.preventDefault();
 
-            /**
-             * @returns {Boolean}
-             */
-            continueToPayPal: function () {
-                if (additionalValidators.validate()) {
+                        paypalExpressCheckout.checkout.initXO();
 
-                    this.selectPaymentMethod();
+                        if (additionalValidators.validate()) {
+                            this.selectPaymentMethod();
+                            setPaymentMethodAction(this.messageContainer).done(
+                                function () {
+                                    $.get(
+                                        this.path,
+                                        {
+                                            button: 1
+                                        }
+                                    ).done(
+                                        function (response) {
+                                            paypalExpressCheckout.checkout.startFlow(response.token);
+                                        }
+                                    ).fail(
+                                        function () {
+                                            paypalExpressCheckout.checkout.closeFlow();
+                                        }
+                                    ).always(
+                                        function () {
+                                            $('body').trigger('processStop');
+                                        }
+                                    );
 
-                    setPaymentMethodAction(this.messageContainer).done(
-                        function () {
-                            this.click();
-                        }.bind(this)
-                    );
-
-                    return false;
+                                }.bind(this)
+                            );
+                        }
+                    }
                 }
+            },
+
+            /**
+             * @returns {Object}
+             */
+            initialize: function () {
+                this._super();
+                this.initClient();
+
+                return this;
+            },
+
+            /**
+             * @returns {Object}
+             */
+            initClient: function () {
+                _.each(this.clientConfig, function (fn, name) {
+                    if (typeof fn === 'function') {
+                        this.clientConfig[name] = fn.bind(this);
+                    }
+                }, this);
+
+                domObserver.get('#paypal-express-in-context-button', function () {
+                    paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
+                }.bind(this));
+
+                return this;
             }
         });
     }

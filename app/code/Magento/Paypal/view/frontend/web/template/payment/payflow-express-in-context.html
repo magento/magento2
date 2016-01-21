@@ -32,9 +32,10 @@
         </div>
         <div class="actions-toolbar">
             <div class="primary">
-                <button class="action primary checkout"
+                <button id="paypal-express-in-context-button"
+                        class="action primary checkout"
                         type="submit"
-                        data-bind="click: continueToPayPal, enable: (getCode() == isChecked())"
+                        data-bind="enable: (getCode() == isChecked())"
                         disabled>
                     <span data-bind="i18n: 'Continue to PayPal'"></span>
                 </button>

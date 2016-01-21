@@ -14,18 +14,16 @@ define(
         'use strict';
 
         var isContextCheckout = window.checkoutConfig.payment.paypalExpress.isContextCheckout,
-            paypalExpress,
-            payflowExpress;
-
-            paypalExpress = 'Magento_Paypal/js/view/payment/method-renderer'
-                + (isContextCheckout ? '/in-context/checkout-express' : '/paypal-express');
-            payflowExpress = 'Magento_Paypal/js/view/payment/method-renderer'
-                + (isContextCheckout ? '/in-context/checkout-express' : '/payflow-express');
+            paypalExpress = 'Magento_Paypal/js/view/payment/method-renderer' +
+                (isContextCheckout ? '/in-context/checkout-express' : '/paypal-express'),
+            payflowExpress = 'Magento_Paypal/js/view/payment/method-renderer' +
+                (isContextCheckout ? '/in-context/checkout-express' : '/payflow-express');
 
         rendererList.push(
             {
                 type: 'paypal_express',
-                component: paypalExpress
+                component: paypalExpress,
+                config: window.checkoutConfig.payment.paypalExpress.inContextConfig
             },
             {
                 type: 'paypal_express_bml',
@@ -33,7 +31,8 @@ define(
             },
             {
                 type: 'payflow_express',
-                component: payflowExpress
+                component: payflowExpress,
+                config: window.checkoutConfig.payment.paypalExpress.inContextConfig
             },
             {
                 type: 'payflow_express_bml',
@@ -60,7 +59,10 @@ define(
                 component: 'Magento_Paypal/js/view/payment/method-renderer/paypal-billing-agreement'
             }
         );
-        /** Add view logic here if needed */
+
+        /**
+         * Add view logic here if needed
+         **/
         return Component.extend({});
     }
 );
