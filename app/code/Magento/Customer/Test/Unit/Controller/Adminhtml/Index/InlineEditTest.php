@@ -61,8 +61,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject*/
     protected $logger;
 
-    /** @var \Magento\Customer\Model\AccountManagement | \PHPUnit_Framework_MockObject_MockObject */
-    protected $customerAccountManagement;
+    /** @var \Magento\Customer\Helper\EmailNotification | \PHPUnit_Framework_MockObject_MockObject */
+    protected $emailNotification;
 
     /** @var array */
     protected $items;
@@ -129,7 +129,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         );
         $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);
 
-        $this->customerAccountManagement = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
+        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
             ->disableOriginalConstructor()
             ->setMethods(['sendNotificationEmailsIfRequired'])
             ->getMock();
@@ -153,7 +153,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'addressDataFactory' => $this->addressDataFactory,
                 'addressRepository' => $this->addressRepository,
                 'logger' => $this->logger,
-                'customerAccountManagement' => $this->customerAccountManagement
+                'emailNotification' => $this->emailNotification
             ]
         );
 
@@ -271,7 +271,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->customerData);
 
-        $this->customerAccountManagement->expects($this->once())
+        $this->emailNotification->expects($this->once())
             ->method('sendNotificationEmailsIfRequired')
             ->with($currentCustomerData, $this->customerData)
             ->willReturnSelf();
