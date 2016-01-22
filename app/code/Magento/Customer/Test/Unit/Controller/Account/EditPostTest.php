@@ -17,6 +17,7 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Message\Collection as MessageCollection;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Customer\Helper\EmailNotification;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -59,6 +60,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     protected $customerExtractor;
 
     /**
+     * @var EmailNotification | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $emailNotification;
+
+    /**
      * @var RedirectFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirectFactory;
@@ -97,7 +103,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         $this->customerAccountManagement = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
             ->disableOriginalConstructor()
-            ->setMethods(['sendNotificationEmailsIfRequired', 'validatePasswordById', 'changePassword'])
+            ->setMethods(['validatePasswordById', 'changePassword'])
             ->getMock();
 
         $this->customerRepository = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
@@ -111,13 +117,19 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
+            ->disableOriginalConstructor()
+            ->setMethods(['sendNotificationEmailsIfRequired'])
+            ->getMock();
+
         $this->model = new EditPost(
             $this->context,
             $this->session,
             $this->customerAccountManagement,
             $this->customerRepository,
             $this->validator,
-            $this->customerExtractor
+            $this->customerExtractor,
+            $this->emailNotification
         );
     }
 
@@ -209,7 +221,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with('customer_account_edit', $this->request)
             ->willReturn($newCustomerMock);
 
-        $this->customerAccountManagement->expects($this->once())
+        $this->emailNotification->expects($this->once())
             ->method('sendNotificationEmailsIfRequired')
             ->with($currentCustomerMock, $newCustomerMock, false)
             ->willReturnSelf();
