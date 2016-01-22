@@ -10,30 +10,30 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Model\AbstractModel
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent
      */
-    protected $_resourceModel;
+    protected $resourceModel;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;
+    protected $objectManager;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->_objectManager->create('Magento\Security\Model\PasswordResetRequestEvent');
-        $this->_resourceModel = $this->_model->getResource();
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->model = $this->objectManager->create('Magento\Security\Model\PasswordResetRequestEvent');
+        $this->resourceModel = $this->model->getResource();
     }
 
     protected function tearDown()
     {
-        $this->_objectManager = null;
-        $this->_resourceModel = null;
+        $this->objectManager = null;
+        $this->resourceModel = null;
         parent::tearDown();
     }
 
@@ -55,13 +55,13 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
      * Saving test data to database
      * @return mixed
      */
-    private function _saveTestData()
+    private function saveTestData()
     {
         foreach ($this->getTestData() as $key => $value) {
-            $this->_model->setData($key, $value);
+            $this->model->setData($key, $value);
         }
-        $this->_model->save();
-        return $this->_model->getId();
+        $this->model->save();
+        return $this->model->getId();
     }
 
     /**
@@ -69,8 +69,8 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsModelSavingDataToDatabase()
     {
-        $modelId = $this->_saveTestData();
-        $newModel = $this->_model->load($modelId);
+        $modelId = $this->saveTestData();
+        $newModel = $this->model->load($modelId);
         $testData = $this->getTestData();
         $newModelData = array();
         foreach ($testData as $key => $value)
@@ -86,9 +86,9 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
     public function testDeleteRecordsOlderThen()
     {
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $passwordResetRequestEvent */
-        $countBefore = $this->_model->getCollection()->count();
-        $this->_resourceModel->deleteRecordsOlderThen(strtotime('2016-01-20 12:00:00'));
-        $countAfter = $this->_model->getCollection()->count();
+        $countBefore = $this->model->getCollection()->count();
+        $this->resourceModel->deleteRecordsOlderThen(strtotime('2016-01-20 12:00:00'));
+        $countAfter = $this->model->getCollection()->count();
         $this->assertLessThan($countBefore, $countAfter);
     }
 

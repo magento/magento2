@@ -11,28 +11,28 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Model\AbstractModel
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;
+    protected $objectManager;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->_objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->model = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
     }
 
     protected function tearDown()
     {
-        $session = $this->_objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
         /** @var $session \Magento\Security\Model\AdminSessionInfo */
         $session->getResource()->getConnection()->delete(
             $session->getResource()->getMainTable()
         );
-        $this->_objectManager = null;
+        $this->objectManager = null;
         parent::tearDown();
     }
 
@@ -54,13 +54,13 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @return mixed
      */
-    private function _saveTestData()
+    private function saveTestData()
     {
         foreach ($this->getTestData() as $key => $value) {
-            $this->_model->setData($key, $value);
+            $this->model->setData($key, $value);
         }
-        $this->_model->save();
-        return $this->_model->getId();
+        $this->model->save();
+        return $this->model->getId();
     }
 
     /**
@@ -68,8 +68,8 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsModelSavingDataToDatabase()
     {
-        $modelId = $this->_saveTestData();
-        $newModel = $this->_model->load($modelId);
+        $modelId = $this->saveTestData();
+        $newModel = $this->model->load($modelId);
         $testData = $this->getTestData();
         $newModelData = array();
         foreach ($testData as $key => $value)
@@ -84,7 +84,7 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteSessionsOlderThen()
     {
-        $session = $this->_objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
         /** @var $session \Magento\Security\Model\AdminSessionInfo */
         $session->getResource()->deleteSessionsOlderThen(strtotime('2016-01-20 12:00:00'));
         $collection = $session->getResourceCollection()
@@ -99,7 +99,7 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateStatusByUserId()
     {
-        $session = $this->_objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
         /** @var $session \Magento\Security\Model\AdminSessionInfo */
         $session->getResource()->updateStatusByUserId(
             \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_BY_LOGIN,

@@ -11,17 +11,17 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Backend\Model\Auth
      */
-    protected $_auth;
+    protected $auth;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
      */
-    protected $_modelSession;
+    protected $modelSession;
 
     /**
      * @var \Magento\Security\Model\AdminSessionInfo
      */
-    protected $_modelSessionInfo;
+    protected $modelSessionInfo;
 
     protected function setUp()
     {
@@ -31,46 +31,25 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
-        $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Backend\Model\Auth'
         );
-        $this->_modelSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->modelSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Backend\Model\Auth\Session'
         );
-        $this->_modelSessionInfo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->modelSessionInfo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Security\Model\AdminSessionInfo'
         );
 
-        $this->_auth->setAuthStorage($this->_modelSession);
+        $this->auth->setAuthStorage($this->modelSession);
     }
 
     protected function tearDown()
     {
-        $this->_model = null;
-        $this->_modelSessionsManager  = null;
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
-        )->setCurrentScope(
-            null
-        );
+        $this->auth = null;
+        $this->modelSession  = null;
+        $this->modelSessionInfo  = null;
         parent::tearDown();
-    }
-
-    /**
-     * Performs user login
-     */
-    protected function _login()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
-        )->turnOffSecretKey();
-
-        $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Auth');
-        $this->_auth->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-        );
-        $this->_session = $this->_auth->getAuthStorage();
     }
 
     /**
@@ -78,14 +57,14 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsAdminSessionIsCreated()
     {
-        $this->_auth->login(
+        $this->auth->login(
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
-        $sessionId = $this->_modelSession->getSessionId();
-        $this->_modelSessionInfo->load($sessionId, 'session_id');
-        $this->assertGreaterThanOrEqual(1, (int)$this->_modelSessionInfo->getId());
-        $this->_auth->logout();
+        $sessionId = $this->modelSession->getSessionId();
+        $this->modelSessionInfo->load($sessionId, 'session_id');
+        $this->assertGreaterThanOrEqual(1, (int)$this->modelSessionInfo->getId());
+        $this->auth->logout();
     }
 
 }
