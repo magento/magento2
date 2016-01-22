@@ -84,7 +84,7 @@ class Context
         );
 
         if (is_array($storeCode)) {
-            if(!isset($storeCode['_data']['code'])) {
+            if (!isset($storeCode['_data']['code'])) {
                 throw new \InvalidArgumentException(new Phrase('Invalid store parameter.'));
             }
             $storeCode = $storeCode['_data']['code'];
