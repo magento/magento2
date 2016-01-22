@@ -32,7 +32,7 @@ define([
                 externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
             },
             listens: {
-                value: 'updateExternalFiltersModifier updateSelections',
+                externalValue: 'updateExternalFiltersModifier updateSelections',
                 indexField: 'initialUpdateListing'
             },
             modules: {
@@ -95,7 +95,7 @@ define([
          *
          */
         onSelectedChange: function () {
-            if (!this.dataLinks.imports || this.suppressDataLinks) {
+            if (!this.dataLinks.imports || this.suppressDataLinks || !this.initialExportDone) {
                 this.suppressDataLinks = false;
 
                 return;
@@ -181,7 +181,7 @@ define([
          * @param {Object} rows
          */
         canUpdateFromClientData: function (totalSelected, selected, rows) {
-            var alreadySavedSelectionsIds = _.pluck(this.value(), this.indexField),
+            var alreadySavedSelectionsIds = _.pluck(this.externalValue(), this.indexField),
                 rowsOnCurrentPageIds = _.pluck(rows, this.indexField);
 
             return totalSelected === selected.length &&
@@ -209,7 +209,7 @@ define([
                 return;
             }
 
-            value = this.value();
+            value = this.externalValue();
             rowIds = _.pluck(rows, this.indexField);
             valueIds = _.pluck(value, this.indexField);
 
@@ -270,7 +270,7 @@ define([
          */
         setExternalValue: function (newValue) {
             var keys = this.externalData,
-                value = this.value(),
+                value = this.externalValue(),
                 selectedIds = _.pluck(newValue, this.indexField);
 
             if (keys && !_.isEmpty(keys)) {
@@ -333,6 +333,7 @@ define([
 
             if (!this.dataLinks.exports || this.suppressDataLinks) {
                 this.suppressDataLinks = false;
+                this.initialExportDone = true;
 
                 return;
             }
@@ -352,6 +353,7 @@ define([
                 });
             provider.deselectAll();
             provider.selected(ids || []);
+            this.initialExportDone = true;
         },
 
         /**
@@ -360,7 +362,7 @@ define([
          * by the indexes
          */
         initialUpdateListing: function () {
-            var items = this.value();
+            var items = this.externalValue();
 
             if (this.needInitialListingUpdate && items) {
                 this.updateExternalFiltersModifier(items);
@@ -382,7 +384,13 @@ define([
          *
          */
         save: function () {
-            this.updateExternalValue().done(this.updateValue);
+            this.updateExternalValue().done(
+                function () {
+                    if (!this.realTimeLink) {
+                        this.updateValue();
+                    }
+                }.bind(this)
+            );
         }
     });
 });
