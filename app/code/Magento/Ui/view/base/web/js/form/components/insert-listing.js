@@ -143,8 +143,8 @@ define([
         updateExternalValue: function () {
             var result = $.Deferred(),
                 provider = this.selections(),
-                allSelected,
                 selections,
+                totalSelected,
                 itemsType,
                 rows;
 
@@ -152,12 +152,12 @@ define([
                 return result;
             }
 
-            allSelected = provider.allSelected();
             selections = provider && provider.getSelections();
+            totalSelected = provider.totalSelected();
             itemsType = selections && selections.excludeMode ? 'excluded' : 'selected';
             rows = provider && provider.rows();
 
-            if (this.canUpdateFromClientData(allSelected, selections.selected, rows)) {
+            if (this.canUpdateFromClientData(totalSelected, selections.selected, rows)) {
                 this.updateFromClientData(selections.selected, rows);
                 this.updateExternalValueByEditableData();
                 result.resolve();
@@ -176,16 +176,16 @@ define([
          * (which only stores data of the current page rows)
          *  + from already saved data
          *
-         * @param {Boolean} allSelected - if all rows are selected
+         * @param {Boolean} totalSelected - total rows selected (include rows that were filtered out)
          * @param {Array} selected - ids of selected rows
          * @param {Object} rows
          */
-        canUpdateFromClientData: function (allSelected, selected, rows) {
-            var alreadySavedSelections = _.pluck(this.value(), this.indexField),
-                rowsOnCurrentPage = _.pluck(rows, this.indexField);
+        canUpdateFromClientData: function (totalSelected, selected, rows) {
+            var alreadySavedSelectionsIds = _.pluck(this.value(), this.indexField),
+                rowsOnCurrentPageIds = _.pluck(rows, this.indexField);
 
-            return !allSelected &&
-                _.intersection(_.union(alreadySavedSelections, rowsOnCurrentPage), selected).length ===
+            return totalSelected === selected.length &&
+                _.intersection(_.union(alreadySavedSelectionsIds, rowsOnCurrentPageIds), selected).length ===
                 selected.length;
         },
 
@@ -265,19 +265,28 @@ define([
          * or if externalData is configured with the names of particular columns,
          * filter rows data to have only these columns, and then set to the externalValue
          *
-         * @param {Object} val - rows data
+         * @param {Object} newValue - rows data
          *
          */
-        setExternalValue: function (val) {
-            var keys = this.externalData;
+        setExternalValue: function (newValue) {
+            var keys = this.externalData,
+                value = this.value(),
+                selectedIds = _.pluck(newValue, this.indexField);
 
             if (keys && !_.isEmpty(keys)) {
-                val = _.map(val, function (item) {
+                newValue = _.map(value, function (item) {
                     return _.pick(item, keys);
                 }, this);
             }
 
-            this.set('externalValue', val);
+            if (this.externalFilterMode) {
+                newValue = _.union(newValue, _.filter(value,
+                    function (item) {
+                        return !_.contains(selectedIds, item[this.indexField]);
+                    }, this));
+            }
+
+            this.set('externalValue', newValue);
         },
 
         /**
@@ -341,6 +350,7 @@ define([
                 .map(function (item) {
                     return item.toString();
                 });
+            provider.deselectAll();
             provider.selected(ids || []);
         },
 
