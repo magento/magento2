@@ -66,5 +66,4 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThanOrEqual(1, (int)$this->modelSessionInfo->getId());
         $this->auth->logout();
     }
-
 }
