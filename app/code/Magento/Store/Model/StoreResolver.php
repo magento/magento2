@@ -81,7 +81,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 
         $storeCode = $this->request->getParam(self::PARAM_NAME, $this->storeCookieManager->getStoreCodeFromCookie());
         if (is_array($storeCode)) {
-            if(!isset($storeCode['_data']['code'])) {
+            if (!isset($storeCode['_data']['code'])) {
                 throw new \InvalidArgumentException(__('Invalid store parameter.'));
             }
             $storeCode = $storeCode['_data']['code'];
