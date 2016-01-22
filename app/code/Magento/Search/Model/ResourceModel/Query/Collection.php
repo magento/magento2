@@ -146,7 +146,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $this->getSelect()->where('num_results > 0');
         }
 
-        $this->getSelect()->order(['popularity desc', 'name']);
+        $this->getSelect()->order(['popularity desc']);
 
         return $this;
     }
