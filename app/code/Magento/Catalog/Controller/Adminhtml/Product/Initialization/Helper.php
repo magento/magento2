@@ -167,7 +167,7 @@ class Helper
             }
         }
         $product = $this->productLinks->initializeLinks($product, $links);
-        $productLinks = $product->getProductLinks();
+        $productLinks = [];
         $linkTypes = [
             'related' => $product->getRelatedReadonly(),
             'upsell' => $product->getUpsellReadonly(),
