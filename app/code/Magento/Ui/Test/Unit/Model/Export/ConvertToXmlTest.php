@@ -233,7 +233,7 @@ class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
         $dataProvider = $this->getMockBuilder(
             'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface'
         )
-            ->setMethods(['getSearchResult'])
+            ->setMethods(['getSearchResult', 'setLimit'])
             ->getMockForAbstractClass();
 
         $searchResult = $this->getMockBuilder('Magento\Framework\Api\Search\SearchResultInterface')
@@ -243,17 +243,21 @@ class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
         $this->component->expects($this->any())
             ->method('getName')
             ->willReturn($componentName);
-        $this->component->expects($this->once())
+        $this->component->expects($this->exactly(2))
             ->method('getContext')
             ->willReturn($context);
 
-        $context->expects($this->once())
+        $context->expects($this->exactly(2))
             ->method('getDataProvider')
             ->willReturn($dataProvider);
 
         $dataProvider->expects($this->once())
             ->method('getSearchResult')
             ->willReturn($searchResult);
+
+        $dataProvider->expects($this->once())
+            ->method('setLimit')
+            ->with(0, 0);
 
         if ($document) {
             $searchResult->expects($this->at(0))
