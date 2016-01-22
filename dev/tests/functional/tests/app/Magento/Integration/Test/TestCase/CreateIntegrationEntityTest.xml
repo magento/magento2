@@ -176,5 +176,15 @@
             <constraint name="Magento\Integration\Test\Constraint\AssertEmailValidationErrorGenerated" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
         </variation>
+        <variation name="CreateIntegrationEntityTestVariation17" summary="Incorrect user password entered">
+            <data name="integration/data/name" xsi:type="string">Integration%isolation%</data>
+            <data name="integration/data/email" xsi:type="string">test@example.com</data>
+            <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
+            <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">incorrect password</data>
+            <data name="integration/data/resource_access" xsi:type="string">All</data>
+            <constraint name="Magento\Integration\Test\Constraint\AssertIncorrectUserPassword" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationNotInGrid" />
+        </variation>
     </testCase>
 </config>
