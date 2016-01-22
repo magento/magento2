@@ -87,7 +87,9 @@ define([
          * Initialize modal's content components
          */
         initializeContent: function () {
-            $.async(this.contentSelector, this, this.initModal);
+            $.async({
+                component: this.name
+            }, this.initModal);
         },
 
         /**
