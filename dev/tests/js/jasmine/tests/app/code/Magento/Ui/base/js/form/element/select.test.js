@@ -134,11 +134,6 @@ define([
                 expect(model.setLinks).toHaveBeenCalled();
             });
         });
-        describe('initInput method', function () {
-            it('check for chainable', function () {
-                expect(model.initInput()).toEqual(model);
-            });
-        });
         describe('getOption method', function () {
             it('check existed option', function () {
                 model.indexedOptions = {
@@ -218,33 +213,6 @@ define([
         describe('setOptions method', function () {
             it('check for chainable', function () {
                 expect(model.setOptions([])).toEqual(model);
-            });
-            it('check for default customEntry', function () {
-                var data = [{
-                    value: 'First'
-                }, {
-                    value: 'Second'
-                }];
-
-                spyOn(model, 'setVisible');
-                spyOn(model, 'toggleInput');
-                expect(model.setOptions(data)).toEqual(model);
-                expect(model.setVisible).not.toHaveBeenCalled();
-                expect(model.toggleInput).not.toHaveBeenCalled();
-            });
-            it('check for customEntry', function () {
-                var data = [{
-                    value: 'First'
-                }, {
-                    value: 'Second'
-                }];
-
-                model.customEntry = true;
-                spyOn(model, 'setVisible');
-                spyOn(model, 'toggleInput');
-                expect(model.setOptions(data)).toEqual(model);
-                expect(model.setVisible).toHaveBeenCalled();
-                expect(model.toggleInput).toHaveBeenCalled();
             });
         });
         describe('getPreview method', function () {
