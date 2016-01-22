@@ -91,5 +91,4 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
         $countAfter = $this->model->getCollection()->count();
         $this->assertLessThan($countBefore, $countAfter);
     }
-
 }

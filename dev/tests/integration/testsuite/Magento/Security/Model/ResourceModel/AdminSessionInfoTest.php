@@ -115,5 +115,4 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
         $count = $collection->count();
         $this->assertGreaterThanOrEqual(1, $count);
     }
-
 }
