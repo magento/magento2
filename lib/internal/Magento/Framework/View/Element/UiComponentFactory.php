@@ -135,6 +135,7 @@ class UiComponentFactory extends DataObject
      * @param array $arguments
      * @return UiComponentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function create($identifier, $name = null, array $arguments = [])
     {
