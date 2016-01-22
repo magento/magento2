@@ -208,8 +208,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->transportBuilderMock->expects($this->exactly(2))
             ->method('addTo')
             ->withConsecutive(
-                $this->equalTo($email), $this->equalTo($firstName . ' ' . $lastName),
-                $this->equalTo($origEmail), $this->equalTo($firstName . ' ' . $lastName)
+                $this->equalTo($email),
+                $this->equalTo($firstName . ' ' . $lastName),
+                $this->equalTo($origEmail),
+                $this->equalTo($firstName . ' ' . $lastName)
             )
             ->willReturnSelf();
         $this->transportBuilderMock->expects($this->exactly(2))
