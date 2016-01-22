@@ -100,7 +100,8 @@
         <field name="mergeOnConflict">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Merge with existing</item>
+                    <item name="additionalClasses" xsi:type="string">admin__field-no-label</item>
+                    <item name="description" xsi:type="string" translate="true">Merge with existing</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="default" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
