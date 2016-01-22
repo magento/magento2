@@ -164,24 +164,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-        /*
-        $this->addColumn('grid_actions',
-            array(
-                'header'=>__('Actions'),
-                'width'=>5,
-                'sortable'=>false,
-                'filter'    =>false,
-                'type' => 'action',
-                'actions'   => array(
-                                    array(
-                                        'caption' => __('Remove'),
-                                        'onClick' => 'role.deleteFromRole($role_id);'
-                                    )
-                                )
-            )
-        );
-        */
-
         return parent::_prepareColumns();
     }
 

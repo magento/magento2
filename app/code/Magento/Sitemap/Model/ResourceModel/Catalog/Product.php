@@ -32,9 +32,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_attributesCache = [];
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Backend\Media
+     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
      */
-    protected $_mediaGalleryModel = null;
+    protected $mediaGalleryReadHandler;
 
     /**
      * Init resource model (catalog/category)
@@ -68,14 +68,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_productStatus;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
      */
-    protected $_mediaAttribute;
-
-    /**
-     * @var \Magento\Eav\Model\ConfigFactory
-     */
-    protected $_eavConfigFactory;
+    protected $mediaGalleryResourceModel;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
@@ -89,8 +84,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $mediaAttribute
-     * @param \Magento\Eav\Model\ConfigFactory $eavConfigFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResourceModel
+     * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param string $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -102,8 +97,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $mediaAttribute,
-        \Magento\Eav\Model\ConfigFactory $eavConfigFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResourceModel,
+        \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         $connectionName = null
     ) {
@@ -111,8 +106,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_storeManager = $storeManager;
         $this->_productVisibility = $productVisibility;
         $this->_productStatus = $productStatus;
-        $this->_mediaAttribute = $mediaAttribute;
-        $this->_eavConfigFactory = $eavConfigFactory;
+        $this->mediaGalleryResourceModel = $mediaGalleryResourceModel;
+        $this->mediaGalleryReadHandler = $mediaGalleryReadHandler;
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
         parent::__construct($context, $connectionName);
@@ -391,9 +386,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _getAllProductImages($product, $storeId)
     {
         $product->setStoreId($storeId);
-        $gallery = $this->_mediaAttribute->loadProductGalleryByAttributeId(
+        $gallery = $this->mediaGalleryResourceModel->loadProductGalleryByAttributeId(
             $product,
-            $this->_getMediaGalleryModel()->getAttribute()->getId()
+            $this->mediaGalleryReadHandler->getAttribute()->getId()
         );
 
         $imagesCollection = [];
@@ -410,23 +405,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $imagesCollection;
-    }
-
-    /**
-     * Get media gallery model
-     *
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Media|null
-     */
-    protected function _getMediaGalleryModel()
-    {
-        if ($this->_mediaGalleryModel === null) {
-            /** @var $eavConfig \Magento\Eav\Model\Config */
-            $eavConfig = $this->_eavConfigFactory->create();
-            /** @var $eavConfig \Magento\Eav\Model\Attribute */
-            $mediaGallery = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'media_gallery');
-            $this->_mediaGalleryModel = $mediaGallery->getBackend();
-        }
-        return $this->_mediaGalleryModel;
     }
 
     /**
