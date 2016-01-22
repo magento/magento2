@@ -104,6 +104,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->generator->generate($this->source, $this->outputFileName, true);
 
-        $this->assertFileEquals($this->expectedDir . '/with_context.csv', $this->outputFileName);
+        $expected = explode(PHP_EOL, file_get_contents($this->expectedDir . '/with_context.csv'));
+        $output = file_get_contents($this->outputFileName);
+        foreach ($expected as $line) {
+            if ($line) {
+                $this->assertContains($line, $output);
+            }
+        }
     }
 }

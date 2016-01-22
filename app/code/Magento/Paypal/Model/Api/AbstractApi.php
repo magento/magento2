@@ -5,8 +5,8 @@
  */
 namespace Magento\Paypal\Model\Api;
 
+use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\Method\Logger;
-use Magento\Paypal\Helper\Formatter;
 
 /**
  * Abstract class for Paypal API wrappers
