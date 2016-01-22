@@ -173,7 +173,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         if (!$customerDto->getAddresses()) {
             $customerDto->setAddresses($currentCustomerData->getAddresses());
         }
-        if (!$customerDto->getEmail()) {
+        if (!$this->getRequest()->getParam('change_email')) {
             $customerDto->setEmail($currentCustomerData->getEmail());
         }
 
