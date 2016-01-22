@@ -102,6 +102,7 @@ class DataProvider
      * @param \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         ResourceConnection $resource,
