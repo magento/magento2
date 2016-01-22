@@ -131,6 +131,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $addressDataFactoryMock;
 
     /**
+     * @var \Magento\Customer\Helper\EmailNotification | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $emailNotification;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -201,11 +206,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->managementMock = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
             ->disableOriginalConstructor()
-            ->setMethods(['createAccount', 'sendNotificationEmailsIfRequired'])
+            ->setMethods(['createAccount'])
             ->getMock();
         $this->addressDataFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
+            ->getMock();
+        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
+            ->disableOriginalConstructor()
+            ->setMethods(['sendNotificationEmailsIfRequired'])
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -235,6 +244,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'coreRegistry' => $this->registryMock,
                 'customerAccountManagement' => $this->managementMock,
                 'addressDataFactory' => $this->addressDataFactoryMock,
+                'emailNotification' => $this->emailNotification
             ]
         );
     }
@@ -460,7 +470,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($customerMock)
             ->willReturnSelf();
 
-        $this->managementMock->expects($this->once())
+        $this->emailNotification->expects($this->once())
             ->method('sendNotificationEmailsIfRequired')
             ->with($customerMock, $customerMock)
             ->willReturnSelf();

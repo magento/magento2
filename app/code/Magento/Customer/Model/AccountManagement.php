@@ -68,13 +68,6 @@ class AccountManagement implements AccountManagementInterface
 
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
-    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
-
-    const XML_PATH_CHANGE_EMAIL_TEMPLATE = 'customer/account_information/change_email_template';
-
-    const XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE
-        = 'customer/account_information/change_email_and_password_template';
-
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
@@ -853,115 +846,6 @@ class AccountManagement implements AccountManagementInterface
             $types[$type],
             self::XML_PATH_REGISTER_EMAIL_IDENTITY,
             ['customer' => $customerEmailData, 'back_url' => $backUrl, 'store' => $store],
-            $storeId
-        );
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function sendNotificationEmailsIfRequired(
-        CustomerInterface $origCustomer,
-        CustomerInterface $savedCustomer,
-        $isPasswordChanged = false
-    ) {
-        if ($origCustomer->getEmail() != $savedCustomer->getEmail()) {
-            if ($isPasswordChanged) {
-                $this->sendEmailAndPasswordChangeNotificationEmail($savedCustomer, $origCustomer->getEmail());
-                $this->sendEmailAndPasswordChangeNotificationEmail($savedCustomer, $savedCustomer->getEmail());
-                return $this;
-            }
-
-            $this->sendEmailChangeNotificationEmail($savedCustomer, $origCustomer->getEmail());
-            $this->sendEmailChangeNotificationEmail($savedCustomer, $savedCustomer->getEmail());
-            return $this;
-        }
-
-        if ($isPasswordChanged) {
-            $this->sendPasswordResetNotificationEmail($savedCustomer);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Send email to customer when his email and password is changed
-     *
-     * @param CustomerInterface $customer
-     * @param string $email
-     * @return $this
-     */
-    protected function sendEmailAndPasswordChangeNotificationEmail(CustomerInterface $customer, $email)
-    {
-        $storeId = $customer->getStoreId();
-        if (!$storeId) {
-            $storeId = $this->getWebsiteStoreId($customer);
-        }
-
-        $customerEmailData = $this->getFullCustomerObject($customer);
-
-        $this->sendEmailTemplate(
-            $customer,
-            self::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE,
-            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
-            $storeId,
-            $email
-        );
-
-        return $this;
-    }
-
-    /**
-     * Send email to customer when his email is changed
-     *
-     * @param CustomerInterface $customer
-     * @param string $email
-     * @return $this
-     */
-    protected function sendEmailChangeNotificationEmail(CustomerInterface $customer, $email)
-    {
-        $storeId = $customer->getStoreId();
-        if (!$storeId) {
-            $storeId = $this->getWebsiteStoreId($customer);
-        }
-
-        $customerEmailData = $this->getFullCustomerObject($customer);
-
-        $this->sendEmailTemplate(
-            $customer,
-            self::XML_PATH_CHANGE_EMAIL_TEMPLATE,
-            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
-            $storeId,
-            $email
-        );
-
-        return $this;
-    }
-
-    /**
-     * Send email to customer when his password is reset
-     *
-     * @param CustomerInterface $customer
-     * @return $this
-     */
-    protected function sendPasswordResetNotificationEmail(CustomerInterface $customer)
-    {
-        $storeId = $customer->getStoreId();
-        if (!$storeId) {
-            $storeId = $this->getWebsiteStoreId($customer);
-        }
-
-        $customerEmailData = $this->getFullCustomerObject($customer);
-
-        $this->sendEmailTemplate(
-            $customer,
-            self::XML_PATH_RESET_PASSWORD_TEMPLATE,
-            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
             $storeId
         );
 
