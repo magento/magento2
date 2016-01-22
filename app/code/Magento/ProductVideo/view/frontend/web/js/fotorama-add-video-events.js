@@ -484,6 +484,7 @@ define([
 
                 if ($image.type === 'image') {
                     $image.$navThumbFrame && $image.$navThumbFrame.removeClass(this.TI);
+                    this._hideCloseVideo();
                     return;
                 } else if ($image.$navThumbFrame && $image.type === 'video') {
                     !$image.$navThumbFrame.hasClass(this.TI) && $image.$navThumbFrame.addClass(this.TI);
