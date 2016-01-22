@@ -33,27 +33,45 @@ define(
                 return this;
             },
 
+            /**
+             * @param {Function} handler
+             */
             setPlaceOrderHandler: function(handler) {
                 this.placeOrderHandler = handler;
             },
 
-            setValidateHandler: function(handler) {
+            /**
+             * @param {Function} handler
+             */
+            setValidateHandler: function (handler) {
                 this.validateHandler = handler;
             },
 
-            context: function() {
+            /**
+             * @returns {Object}
+             */
+            context: function () {
                 return this;
             },
 
-            isShowLegend: function() {
+            /**
+             * @returns {Boolean}
+             */
+            isShowLegend: function () {
                 return true;
             },
 
-            getCode: function() {
+            /**
+             * @returns {String}
+             */
+            getCode: function () {
                 return 'payflowpro';
             },
 
-            isActive: function() {
+            /**
+             * @returns {Boolean}
+             */
+            isActive: function () {
                 return true;
             },
 
