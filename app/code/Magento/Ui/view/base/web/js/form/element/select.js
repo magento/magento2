@@ -6,9 +6,8 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    './abstract',
-    'uiLayout'
-], function (_, utils, registry, Abstract, layout) {
+    './abstract'
+], function (_, utils, registry, Abstract) {
     'use strict';
 
     var inputNode = {
@@ -111,14 +110,9 @@ define([
         /**
          * Extends instance with defaults, extends config with formatted values
          *     and options, and invokes initialize method of AbstractElement class.
-         *     If instance's 'customEntry' property is set to true, calls 'initInput'
          */
         initialize: function () {
             this._super();
-
-            if (this.customEntry) {
-                this.initInput();
-            }
 
             if (this.filterBy) {
                 this.initFilter();
@@ -183,17 +177,6 @@ define([
         },
 
         /**
-         * Creates input from template, renders it via renderer.
-         *
-         * @returns {Object} Chainable.
-         */
-        initInput: function () {
-            layout([utils.template(inputNode, this)]);
-
-            return this;
-        },
-
-        /**
          * Matches specfied value with existing options
          * or, if value is not specified, returns value of the first option.
          *
@@ -246,9 +229,7 @@ define([
         },
 
         /**
-         * Sets 'data' to 'options' observable array, if instance has
-         * 'customEntry' property set to true, calls 'setHidden' method
-         *  passing !options.length as a parameter
+         * Sets 'data' to 'options' observable array
          *
          * @param {Array} data
          * @returns {Object} Chainable
@@ -260,12 +241,8 @@ define([
 
             this.options(data);
 
-            if (this.customEntry) {
-                isVisible = !!data.length;
-
-                this.setVisible(isVisible);
-                this.toggleInput(!isVisible);
-            }
+            isVisible = !!data.length;
+            this.setVisible(isVisible);
 
             return this;
         },
