@@ -90,6 +90,38 @@
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
+    <type name="Magento\SalesRule\Model\ResourceModel\Rule">
+        <arguments>
+            <argument name="associatedEntitiesMap" xsi:type="array">
+                <item name="website" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_website</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">website_id</item>
+                </item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_customer_group</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">customer_group_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\ResourceModel\Rule\Collection" shared="false">
+        <arguments>
+            <argument name="associatedEntitiesMap" xsi:type="array">
+                <item name="website" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_website</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">website_id</item>
+                </item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_customer_group</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">customer_group_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Model\Entity\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
