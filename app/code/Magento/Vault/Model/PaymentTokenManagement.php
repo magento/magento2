@@ -7,6 +7,7 @@ namespace Magento\Vault\Model;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data;
@@ -58,12 +59,18 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     protected $searchCriteriaBuilder;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * @param PaymentTokenRepositoryInterface $repository
      * @param PaymentTokenResourceModel $paymentTokenResourceModel
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         PaymentTokenRepositoryInterface $repository,
@@ -71,7 +78,8 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
         PaymentTokenFactory $paymentTokenFactory,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
+        PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory,
+        EncryptorInterface $encryptor
     ) {
         $this->paymentTokenRepository = $repository;
         $this->paymentTokenResourceModel = $paymentTokenResourceModel;
@@ -79,6 +87,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -157,8 +166,15 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
         );
 
         if (!empty($tokenDuplicate)) {
-            $token->setEntityId($tokenDuplicate->getEntityId());
-            $token->setIsVisible($token->getIsActive());
+            if ($token->getIsVisible()) {
+                $token->setEntityId($tokenDuplicate->getEntityId());
+            } else {
+                $token->setPublicHash(
+                    $this->encryptor->getHash(
+                        $token->getPublicHash() . $token->getCreatedAt()
+                    )
+                );
+            }
         }
 
         $this->paymentTokenRepository->save($token);
@@ -175,7 +191,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * @param int $orderPaymentId Order payment ID.
      * @return bool
      */
-    protected function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
+    public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
     {
         return $this->paymentTokenResourceModel->addLinkToOrderPayment($paymentTokenId, $orderPaymentId);
     }
