@@ -320,7 +320,7 @@ class Installer
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
-        $estimatedModules = $this->createModulesConfig($request);
+        $estimatedModules = $this->createModulesConfig($request, true);
         $total = count($script) + 3 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
 
@@ -350,17 +350,16 @@ class Installer
      * Creates modules deployment configuration segment
      *
      * @param \ArrayObject|array $request
+     * @param bool $dryRun
      * @return array
      * @throws \LogicException
      */
-    private function createModulesConfig($request)
+    private function createModulesConfig($request, $dryRun = false)
     {
         $all = array_keys($this->moduleLoader->load());
-        $currentModules = [];
-        if ($this->deploymentConfig->isAvailable()) {
-            $deploymentConfig = $this->deploymentConfigReader->load();
-            $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;
-        }
+        $deploymentConfig = $this->deploymentConfigReader->load();
+        $currentModules = isset($deploymentConfig[ConfigOptionsListConstants::KEY_MODULES])
+            ? $deploymentConfig[ConfigOptionsListConstants::KEY_MODULES] : [] ;
         $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
         $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
         $result = [];
@@ -377,7 +376,9 @@ class Installer
                 $result[$module] = 1;
             }
         }
-        $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
+        if (!$dryRun) {
+            $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
+        }
         return $result;
     }
 
@@ -432,9 +433,9 @@ class Installer
      */
     public function checkInstallationFilePermissions()
     {
-        $results = $this->filePermissions->getMissingWritableDirectoriesForInstallation();
+        $results = $this->filePermissions->getMissingWritablePathsForInstallation();
         if ($results) {
-            $errorMsg = "Missing write permissions to the following directories: '" . implode("' '", $results) . "'";
+            $errorMsg = "Missing write permissions to the following paths: '" . implode("' '", $results) . "'";
             throw new \Exception($errorMsg);
         }
     }
@@ -464,6 +465,7 @@ class Installer
     public function installDeploymentConfig($data)
     {
         $this->checkInstallationFilePermissions();
+        $this->createModulesConfig($data);
         $userData = is_array($data) ? $data : $data->getArrayCopy();
         $this->setupConfigModel->process($userData);
         if ($this->deploymentConfig->isAvailable()) {
@@ -931,17 +933,17 @@ class Installer
     /**
      * Updates modules in deployment configuration
      *
-     * @param bool $keepGeneratedCode Cleanup var/generation and reset ObjectManager
+     * @param bool $keepGeneratedFiles Cleanup generated classes and view files and reset ObjectManager
      * @return void
      */
-    public function updateModulesSequence($keepGeneratedCode = false)
+    public function updateModulesSequence($keepGeneratedFiles = false)
     {
         $this->assertDeploymentConfigExists();
 
         $this->cleanCaches();
 
-        if (!$keepGeneratedCode) {
-            $this->cleanupGeneratedCode();
+        if (!$keepGeneratedFiles) {
+            $this->cleanupGeneratedFiles();
         }
         $this->log->log('Updating modules:');
         $this->createModulesConfig([]);
@@ -1204,10 +1206,10 @@ class Installer
      *
      * @return void
      */
-    private function cleanupGeneratedCode()
+    private function cleanupGeneratedFiles()
     {
         $this->log->log('File system cleanup:');
-        $messages = $this->cleanupFiles->clearCodeGeneratedClasses();
+        $messages = $this->cleanupFiles->clearCodeGeneratedFiles();
 
         // unload Magento autoloader because it may be using compiled definition
         foreach (spl_autoload_functions() as $autoloader) {

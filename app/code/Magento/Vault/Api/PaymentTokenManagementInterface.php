@@ -5,7 +5,7 @@
  */
 namespace Magento\Vault\Api;
 
-use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**
@@ -32,18 +32,37 @@ interface PaymentTokenManagementInterface
     public function getByPaymentId($paymentId);
 
     /**
-     * Get payment token by gateway token Id.
+     * Get payment token by gateway token.
      *
-     * @param int $customerId Customer ID.
      * @param string $token The gateway token.
-     * @return \Magento\Vault\Api\Data\PaymentTokenInterface Payment token interface.
+     * @param string $paymentMethodCode
+     * @param int $customerId Customer ID.
+     * @return PaymentTokenInterface|null Payment token interface.
      */
-    public function getByGatewayToken($customerId, $token);
+    public function getByGatewayToken($token, $paymentMethodCode, $customerId);
+
+    /**
+     * Get payment token by public hash.
+     *
+     * @param string $hash Public hash.
+     * @param int $customerId Customer ID.
+     * @return PaymentTokenInterface|null Payment token interface.
+     */
+    public function getByPublicHash($hash, $customerId);
 
     /**
      * @param PaymentTokenInterface $token
-     * @param Payment $payment
+     * @param OrderPaymentInterface $payment
      * @return bool
      */
-    public function saveTokenWithPaymentLink(PaymentTokenInterface $token, Payment $payment);
+    public function saveTokenWithPaymentLink(PaymentTokenInterface $token, OrderPaymentInterface $payment);
+
+    /**
+     * Add link between payment token and order payment.
+     *
+     * @param int $paymentTokenId Payment token ID.
+     * @param int $orderPaymentId Order payment ID.
+     * @return bool
+     */
+    public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId);
 }

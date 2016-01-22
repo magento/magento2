@@ -12,7 +12,8 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $expectedResult = new \stdClass();
         $bindParams = ['param_one' => 'value_one', 'param_two' => 'value_two'];
         $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['fetchAll'], [], '', false);
-        $select = new \Magento\Framework\DB\Select($adapter);
+        $renderer = $this->getMock('Magento\Framework\DB\Select\SelectRenderer', [], [], '', false);
+        $select = new \Magento\Framework\DB\Select($adapter, $renderer);
         $adapter->expects(
             $this->once()
         )->method(

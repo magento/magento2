@@ -311,6 +311,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     ];
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -327,6 +332,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -345,7 +351,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
-        \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+        \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
@@ -360,6 +367,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->_typeFactory = $_typeFactory;
         $this->_linkTypeProvider = $linkTypeProvider;
         $this->rowCustomizer = $rowCustomizer;
+        $this->metadataPool = $metadataPool;
 
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
@@ -478,10 +486,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (empty($productIds)) {
             return [];
         }
+        $linkField = $this->metadataPool
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
         $select = $this->_connection->select()->from(
             ['mgvte' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value_to_entity')],
             [
-                'mgvte.entity_id',
+                'mgvte.' . $linkField,
                 'mgvte.value_id'
             ]
         )->joinLeft(
@@ -500,14 +511,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 'mgv.disabled'
             ]
         )->where(
-            'mgvte.entity_id IN(?)',
+            'mgvte.' . $linkField . ' IN(?)',
             $productIds
         );
 
         $rowMediaGallery = [];
         $stmt = $this->_connection->query($select);
         while ($mediaRow = $stmt->fetch()) {
-            $rowMediaGallery[$mediaRow['entity_id']][] = [
+            $rowMediaGallery[$mediaRow[$linkField]][] = [
                 '_media_attribute_id' => $mediaRow['attribute_id'],
                 '_media_image' => $mediaRow['filename'],
                 '_media_label' => $mediaRow['label'],

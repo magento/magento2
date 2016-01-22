@@ -72,8 +72,8 @@ class InstallSchema implements InstallSchemaInterface
                 'expiration_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
-                'Expirated At'
+                ['nullable' => true],
+                'Expires At'
             )->addColumn(
                 'gateway_token',
                 Table::TYPE_TEXT,
@@ -88,17 +88,23 @@ class InstallSchema implements InstallSchemaInterface
                 'Details'
             )->addColumn(
                 'is_active',
-                Table::TYPE_SMALLINT,
+                Table::TYPE_BOOLEAN,
                 null,
-                ['unsigned' => true, 'nullable' => true, 'dafault' => 1],
+                ['nullable' => false, 'dafault' => true],
                 'Is active flag'
+            )->addColumn(
+                'is_visible',
+                Table::TYPE_BOOLEAN,
+                null,
+                ['nullable' => false, 'dafault' => true],
+                'Is visible flag'
             )->addIndex(
                 $setup->getIdxName(
                     'vault_payment_token_unique_index',
-                    ['customer_id', 'gateway_token'],
+                    ['payment_method_code', 'customer_id', 'gateway_token'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['customer_id', 'gateway_token'],
+                ['payment_method_code', 'customer_id', 'gateway_token'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addIndex(
                 $setup->getIdxName(
