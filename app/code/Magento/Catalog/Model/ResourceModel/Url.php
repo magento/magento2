@@ -202,13 +202,17 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select->from(
                 $attributeTable,
                 [$linkField, 'value']
+            )->joinLeft(
+                ['e' => $this->getTable('catalog_category_entity')],
+                "e.{$linkField} = t1.{$linkField}",
+                []
             )->where(
                 'attribute_id = :attribute_id'
             )->where(
                 'store_id = ?',
                 0
             )->where(
-                'entity_id IN(?)',
+                'e.entity_id IN(?)',
                 $categoryIds
             );
             $bind['attribute_id'] = $this->_categoryAttributes[$attributeCode]['attribute_id'];
@@ -221,13 +225,17 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['t2' => $attributeTable],
                 "t1.{$linkField} = t2.{$linkField} AND t1.attribute_id = t2.attribute_id AND t2.store_id = :store_id",
                 []
+            )->joinLeft(
+                ['e' => $this->getTable('catalog_category_entity')],
+                "e.{$linkField} = t1.{$linkField}",
+                []
             )->where(
                 't1.store_id = ?',
                 0
             )->where(
                 't1.attribute_id = :attribute_id'
             )->where(
-                "t1.{$linkField} IN(?)",
+                "e.entity_id IN(?)",
                 $categoryIds
             );
 
