@@ -5,10 +5,12 @@
  */
 namespace Magento\Ui\Component\Form\Element;
 
-use Magento\Ui\Component\Wysiwyg\ConfigInterface;
+use Magento\Framework\Data\Form\Element\Editor;
+use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**
  * Class Input
@@ -16,6 +18,16 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 class Wysiwyg extends AbstractElement
 {
     const NAME = 'wysiwyg';
+
+    /**
+     * @var Form
+     */
+    protected $form;
+
+    /**
+     * @var Editor
+     */
+    protected $editor;
 
     /**
      * @param ContextInterface $context
@@ -34,8 +46,8 @@ class Wysiwyg extends AbstractElement
         array $config = []
     ) {
         $wysiwygConfigData = isset($config['wysiwygConfigData']) ? $config['wysiwygConfigData'] : [];
-        $form = $formFactory->create();
-        $editor = $form->addField(
+        $this->form = $formFactory->create();
+        $this->editor = $this->form->addField(
             $context->getNamespace() . '_' . $data['name'],
             'Magento\Framework\Data\Form\Element\Editor',
             [
@@ -43,9 +55,10 @@ class Wysiwyg extends AbstractElement
                 'rows' => 20,
                 'name' => $data['name'],
                 'config' => $wysiwygConfig->getConfig($wysiwygConfigData),
+                'wysiwyg' => isset($config['wysiwyg']) ? $config['wysiwyg'] : null,
             ]
         );
-        $data['config']['content'] = $editor->getElementHtml();
+        $data['config']['content'] = $this->editor->getElementHtml();
 
         parent::__construct($context, $components, $data);
     }

@@ -126,7 +126,10 @@ define([
         setInitialValue: function () {
             this.initialValue = this.getInitialValue();
 
-            this.value(this.initialValue);
+            if (this.value.peek() !== this.initialValue) {
+                this.value(this.initialValue);
+            }
+
             this.on('value', this.onUpdate.bind(this));
 
             return this;
