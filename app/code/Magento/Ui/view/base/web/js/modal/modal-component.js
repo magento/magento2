@@ -25,7 +25,7 @@ define([
                 state: 'onState'
             },
             modalClass: 'modal-component',
-            onCancel: 'actionCancel'
+            onCancel: 'closeModal'
         },
 
         /**
