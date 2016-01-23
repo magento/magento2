@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
+use Magento\Catalog\Api\Data\ProductLinkInterface;
 use \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
 class HelperTest extends \PHPUnit_Framework_TestCase
@@ -194,9 +195,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getBackend')
             ->will($this->returnValue($attributeDateBackEnd));
 
-        $this->productMock->expects($this->any())
-            ->method('getProductLinks')
-            ->willReturn([]);
+        $this->stepLinkDelete();
+
         $attributeNonDateBackEnd->expects($this->any())
             ->method('getType')
             ->will($this->returnValue('non-datetime'));
@@ -350,5 +350,33 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         );
         $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
         $this->assertEquals($expectedResults, $result);
+    }
+
+    /**
+     * @return void
+     */
+    protected function stepLinkDelete()
+    {
+        $linkMock = $this->getMockBuilder(ProductLinkInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLinkType'])
+            ->getMockForAbstractClass();
+
+        $linkMock->expects($this->once())
+            ->method('getLinkType')
+            ->willReturn('upsell');
+
+        $this->productMock->expects($this->any())
+            ->method('getProductLinks')
+            ->willReturn([$linkMock]);
+
+        $this->requestMock->expects($this->at(2))
+            ->method('getPost')
+            ->with('links')
+            ->willReturn(['upsell' => []]);
+
+        $this->productMock->expects($this->any())
+            ->method('setProductLinks')
+            ->with([]);
     }
 }
