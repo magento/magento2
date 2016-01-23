@@ -281,10 +281,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         ];
         $joinType = 'join';
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        $linkFieldId = $this->getProduct()->getData(
-            $linkField
-        );
         if ($this->getProduct() && $this->getProduct()->getId()) {
+            $linkFieldId = $this->getProduct()->getData(
+                $linkField
+            );
             if ($this->_isStrongMode) {
                 $this->getSelect()->where('links.product_id = ?', (int)$linkFieldId);
             } else {
