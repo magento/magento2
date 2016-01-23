@@ -168,6 +168,10 @@ class Helper
         }
         $product = $this->productLinks->initializeLinks($product, $links);
         $productLinks = [];
+        $savedLinksByType = [];
+        foreach ($product->getProductLinks() as $link) {
+            $savedLinksByType[$link->getLinkType()][] = $link;
+        }
         $linkTypes = [
             'related' => $product->getRelatedReadonly(),
             'upsell' => $product->getUpsellReadonly(),
@@ -183,6 +187,13 @@ class Helper
                         ->setLinkType($linkType)
                         ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
                     $productLinks[] = $link;
+                }
+                if (empty($links[$linkType])) {
+                    unset($savedLinksByType[$linkType]);
+                }
+            } else {
+                if (array_key_exists($linkType, $savedLinksByType)) {
+                    $productLinks = array_merge($productLinks, $savedLinksByType[$linkType]);
                 }
             }
         }
