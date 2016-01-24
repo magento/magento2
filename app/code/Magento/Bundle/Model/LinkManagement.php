@@ -264,7 +264,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
         try {
             $selectionModel->save();
-            $resource->addProductRelation($product->getId(), $linkProductModel->getEntityId());
+            $resource->addProductRelation($product->getData($linkField), $linkProductModel->getEntityId());
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
         }
