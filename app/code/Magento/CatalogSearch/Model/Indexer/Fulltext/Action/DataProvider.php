@@ -371,8 +371,11 @@ class DataProvider
             $select = $this->connection->select()->from(
                 ['main' => $this->getTable($relation->getTable())],
                 [$relation->getChildFieldName()]
+            )->join(
+                ['e' => $this->resource->getTableName('catalog_product_entity')],
+                'e.' . $this->metadata->getLinkField() . ' = main.' . $relation->getParentFieldName()
             )->where(
-                $relation->getParentFieldName() . ' = ?',
+                'e.entity_id = ?',
                 $productId
             );
             if ($relation->getWhere() !== null) {
