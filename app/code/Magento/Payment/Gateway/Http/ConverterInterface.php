@@ -5,6 +5,11 @@
  */
 namespace Magento\Payment\Gateway\Http;
 
+/**
+ * Interface ConverterInterface
+ * @package Magento\Payment\Gateway\Http
+ * @api
+ */
 interface ConverterInterface
 {
     /**
