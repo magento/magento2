@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="search_engine_optimization">
+        <container name="url_key_group">
+            <field name="url_key_create_redirect">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Create Permanent Redirect for old URL</item>
+                        <item name="dataType" xsi:type="string">boolean</item>
+                        <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="handleChanges" xsi:type="string">${ $.provider }:data.url_key</item>
+                        </item>
+                        <item name="component" xsi:type="string">Magento_Catalog/js/components/url-key-handle-changes</item>
+                        <item name="sortOrder" xsi:type="number">15</item>
+                    </item>
+                </argument>
+            </field>
+        </container>
+    </fieldset>
+</form>

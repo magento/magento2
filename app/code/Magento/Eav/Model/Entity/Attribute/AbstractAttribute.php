@@ -497,7 +497,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             }
             $backend = $this->_universalFactory->create($this->getBackendModel());
             if (!$backend) {
-                throw new LocalizedException(__('Invalid backend model specified: ' . $this->getBackendModel()));
+                throw new LocalizedException(__('Invalid backend model specified: %1', $this->getBackendModel()));
             }
             $this->_backend = $backend->setAttribute($this);
         }
