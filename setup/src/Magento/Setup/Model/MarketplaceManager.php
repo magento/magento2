@@ -269,17 +269,14 @@ class MarketplaceManager
         if ($directory->isExist($this->pathToAuthFile) && $directory->isReadable($this->pathToAuthFile)) {
             try {
                 $authJsonData = $this->getAuthJson();
-                if (!empty($authJsonData) && isset($authJsonData['http-basic'][$serviceUrl])) {
+                if (isset($authJsonData['http-basic'][$serviceUrl])) {
                     unset($authJsonData['http-basic'][$serviceUrl]);
-                    if (empty($authJsonData['http-basic'])) {
-                        return unlink(getenv('COMPOSER_HOME') . DIRECTORY_SEPARATOR . $this->pathToAuthFile);
+                    $path = DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile;
+                    if ($authJsonData === ['http-basic' => []]) {
+                        return $this->getDirectory()->delete($path);
                     } else {
                         $data = json_encode($authJsonData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
-                        $this->getDirectory()->writeFile(
-                            DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile,
-                            $data
-                        );
-                        return true;
+                        return $data !== false && $this->getDirectory()->writeFile($path, $data);
                     }
                 }
             } catch (\Exception $e) {
