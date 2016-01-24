@@ -49,7 +49,6 @@ class Topmenu extends Template implements IdentityInterface
         TreeFactory $treeFactory,
         array $data = []
     ) {
-        $this->setCacheLifetime(5 * 60); //5 min
         parent::__construct($context, $data);
         $this->_menu = $nodeFactory->create(
             [

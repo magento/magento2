@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Observer;
 
+use Magento\Catalog\Model\Category;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\Event\ObserverInterface;
 
 class AddCatalogToTopmenuItemsObserver implements ObserverInterface
@@ -27,6 +30,16 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
     protected $menuCategoryData;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState
      * @param \Magento\Catalog\Observer\MenuCategoryData $menuCategoryData
@@ -34,11 +47,15 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
     public function __construct(
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState,
-        \Magento\Catalog\Observer\MenuCategoryData $menuCategoryData
+        \Magento\Catalog\Observer\MenuCategoryData $menuCategoryData,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $collectionFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->catalogCategory = $catalogCategory;
         $this->categoryFlatState = $categoryFlatState;
         $this->menuCategoryData = $menuCategoryData;
+        $this->collectionFactory = $collectionFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -50,38 +67,40 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $block = $observer->getEvent()->getBlock();
-        $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG);
-        $this->_addCategoriesToMenu($this->catalogCategory->getStoreCategories(), $observer->getMenu(), $block);
-    }
+        $menuRootNode = $observer->getEvent()->getMenu();
 
-    /**
-     * Recursively adds categories to top menu
-     *
-     * @param \Magento\Framework\Data\Tree\Node\Collection|array $categories
-     * @param \Magento\Framework\Data\Tree\Node $parentCategoryNode
-     * @param \Magento\Theme\Block\Html\Topmenu $block
-     * @return void
-     */
-    protected function _addCategoriesToMenu($categories, $parentCategoryNode, $block)
-    {
-        foreach ($categories as $category) {
-            if (!$category->getIsActive()) {
-                continue;
-            }
-            $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG . '_' . $category->getId());
+        $block->addIdentity(Category::CACHE_TAG);
 
-            $tree = $parentCategoryNode->getTree();
-            $categoryData = $this->menuCategoryData->getMenuCategoryData($category);
-            $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
+        $rootId = $this->storeManager->getStore()->getRootCategoryId();
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
+        $collection = $this->collectionFactory->create()
+            ->setStoreId($this->storeManager->getStore()->getId())
+            ->addAttributeToSelect('name')
+                ->addFieldToFilter('path', ['like' => '1/' . $rootId . '/%']) //load only from store root
+            ->addAttributeToFilter('include_in_menu', 1) //
+            ->addIsActiveFilter()
+            ->addOrder('level', Collection::SORT_ORDER_ASC)
+            ->addOrder('position', Collection::SORT_ORDER_ASC)
+            ->addOrder('parent_id', Collection::SORT_ORDER_ASC)
+            ->addOrder('entity_id', Collection::SORT_ORDER_ASC);
+
+
+        $mapping = [$rootId => $menuRootNode];  // use nodes stack to avoid recursion
+        foreach ($collection as $category) {
+            /** @var Node $parentCategoryNode */
+            $parentCategoryNode = $mapping[$category->getParentId()];
+            $categoryNode = new Node(
+                $this->menuCategoryData->getMenuCategoryData($category),
+                'id',
+                $parentCategoryNode->getTree(),
+                $parentCategoryNode
+            );
             $parentCategoryNode->addChild($categoryNode);
 
-            if ($this->categoryFlatState->isFlatEnabled() && $category->getUseFlatResource()) {
-                $subcategories = (array)$category->getChildrenNodes();
-            } else {
-                $subcategories = $category->getChildren();
-            }
+            $mapping[$category->getId()] = $categoryNode; //add node in stack
 
-            $this->_addCategoriesToMenu($subcategories, $categoryNode, $block);
+            $block->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
         }
     }
 }
