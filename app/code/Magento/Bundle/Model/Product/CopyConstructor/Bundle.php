@@ -5,18 +5,21 @@
  */
 namespace Magento\Bundle\Model\Product\CopyConstructor;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
+
 class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**
      * Duplicating bundle options and selections
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Product $duplicate
+     * @param Product $product
+     * @param Product $duplicate
      * @return void
      */
-    public function build(\Magento\Catalog\Model\Product $product, \Magento\Catalog\Model\Product $duplicate)
+    public function build(Product $product, Product $duplicate)
     {
-        if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+        if ($product->getTypeId() != Type::TYPE_BUNDLE) {
             //do nothing if not bundle
             return;
         }
