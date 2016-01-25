@@ -184,11 +184,16 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     public function getRelationsByChild($childIds)
     {
         $connection = $this->getConnection();
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
-            $this->getTable('catalog_product_relation'),
-            'parent_id'
+            ['relation' => $this->getTable('catalog_product_relation')],
+            []
+        )->join(
+            ['e' => $connection->getTableName('catalog_product_entity')],
+            'e.' . $linkField . ' = relation.parent_id',
+            ['e.entity_id']
         )->where(
-            'child_id IN(?)',
+            'relation.child_id IN(?)',
             $childIds
         );
 
@@ -210,11 +215,15 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
         $result = [];
         if (!empty($parentIds)) {
             $connection = $this->getConnection();
+            $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
             $select = $connection->select()->from(
-                $this->getTable('catalog_product_relation'),
+                ['cpr' => $this->getTable('catalog_product_relation')],
                 'child_id'
+            )->join(
+                ['e' => $this->getConnection()->getTableName('catalog_product_entity')],
+                'e.' . $linkField . ' = cpr.parent_id'
             )->where(
-                'parent_id IN(?)',
+                'e.entity_id IN(?)',
                 $parentIds
             );
             $result = $connection->fetchCol($select);

@@ -192,10 +192,14 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     {
         $connection = $this->getConnection();
         $idxTable = $this->getIdxTable();
-
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
             ['l' => $this->getTable('catalog_product_relation')],
-            'parent_id'
+            []
+        )->joinLeft(
+            ['e' => $this->getConnection()->getTableName('catalog_product_entity')],
+            'e.' . $linkField .' = l.parent_id',
+            ['e.entity_id as parent_id']
         )->join(
             ['cs' => $this->getTable('store')],
             '',
@@ -205,10 +209,10 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             'l.child_id = i.entity_id AND cs.store_id = i.store_id',
             ['attribute_id', 'store_id', 'value']
         )->group(
-            ['l.parent_id', 'i.attribute_id', 'i.store_id', 'i.value']
+            ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value']
         );
         if ($parentIds !== null) {
-            $select->where('l.parent_id IN(?)', $parentIds);
+            $select->where('e.entity_id IN(?)', $parentIds);
         }
 
         /**
