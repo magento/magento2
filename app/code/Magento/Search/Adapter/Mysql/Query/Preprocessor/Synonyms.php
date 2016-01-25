@@ -5,7 +5,7 @@
  */
 namespace Magento\Search\Adapter\Mysql\Query\Preprocessor;
 
-use Magento\Framework\Search\Adapter\Mysql\Query\Preprocessor\PreprocessorInterface;
+use Magento\Framework\Search\Adapter\Synonym\Preprocessor\PreprocessorInterface;
 use Magento\Search\Api\SynonymAnalyzerInterface;
 
 class Synonyms implements PreprocessorInterface
@@ -16,11 +16,11 @@ class Synonyms implements PreprocessorInterface
     private $synonymsAnalyzer;
 
     /**
+     * Constructor
      * @param SynonymAnalyzerInterface $synonymsAnalyzer
      */
-    public function __construct(
-        SynonymAnalyzerInterface $synonymsAnalyzer
-    ) {
+    public function __construct(SynonymAnalyzerInterface $synonymsAnalyzer)
+    {
         $this->synonymsAnalyzer = $synonymsAnalyzer;
     }
 

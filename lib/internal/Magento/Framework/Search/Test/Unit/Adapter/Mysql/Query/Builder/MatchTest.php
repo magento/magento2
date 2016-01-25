@@ -8,16 +8,17 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query\Builder;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class MatchTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder|MockObject
      */
     private $scoreBuilder;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface|MockObject
      */
     private $resolver;
 
@@ -27,12 +28,12 @@ class MatchTest extends \PHPUnit_Framework_TestCase
     private $match;
 
     /**
-     * @var \Magento\Framework\DB\Helper\Mysql\Fulltext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Helper\Mysql\Fulltext|MockObject
      */
     private $fulltextHelper;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Query\Preprocessor\PreprocessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Adapter\Synonym\Preprocessor\PreprocessorInterface|MockObject
      */
     private $preprocessor;
 
@@ -64,12 +65,12 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             [
                 'resolver' => $this->resolver,
                 'fulltextHelper' => $this->fulltextHelper,
-                'preprocessorContainer' => [$this->preprocessor]
+                'preprocessors' => [$this->preprocessor]
             ]
         );
     }
 
-    public function testBuildQuery()
+    public function testBuild()
     {
         /** @var Select|\PHPUnit_Framework_MockObject_MockObject $select */
         $select = $this->getMockBuilder('Magento\Framework\DB\Select')
