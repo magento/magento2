@@ -23,5 +23,12 @@
             <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid" />
         </variation>
+        <variation name="CreateAdminUserRoleEntityTestVariation3">
+            <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
+            <data name="role/data/current_password" xsi:type="string">incorrect password</data>
+            <data name="role/data/resource_access" xsi:type="string">All</data>
+            <constraint name="Magento\User\Test\Constraint\AssertIncorrectUserPassword" />
+            <constraint name="Magento\User\Test\Constraint\AssertRoleNotInGrid" />
+        </variation>
     </testCase>
 </config>
