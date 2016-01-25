@@ -12,6 +12,7 @@ class ResetButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function getButtonData()
     {

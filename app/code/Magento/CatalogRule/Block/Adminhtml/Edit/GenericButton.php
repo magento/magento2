@@ -39,7 +39,7 @@ class GenericButton
     }
 
     /**
-     * Return the current Catalog Rule  Id.
+     * Return the current Catalog Rule Id.
      *
      * @return int|null
      */
@@ -66,7 +66,6 @@ class GenericButton
      *
      * @param string $name
      * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canRender($name)
     {
