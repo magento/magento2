@@ -12,7 +12,7 @@ use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
-use Magento\Framework\Search\Adapter\Mysql\Query\Preprocessor\PreprocessorInterface;
+use Magento\Framework\Search\Adapter\Synonym\Preprocessor\PreprocessorInterface;
 
 class Match implements QueryInterface
 {
@@ -43,25 +43,25 @@ class Match implements QueryInterface
     /**
      * @var PreprocessorInterface[]
      */
-    protected $preprocessorContainer;
+    protected $preprocessors;
 
     /**
      * @param ResolverInterface $resolver
      * @param Fulltext $fulltextHelper
      * @param string $fulltextSearchMode
-     * @param PreprocessorInterface[] $preprocessorContainer
+     * @param PreprocessorInterface[] $preprocessors
      */
     public function __construct(
         ResolverInterface $resolver,
         Fulltext $fulltextHelper,
         $fulltextSearchMode = Fulltext::FULLTEXT_MODE_BOOLEAN,
-        array $preprocessorContainer = []
+        array $preprocessors = []
     ) {
         $this->resolver = $resolver;
         $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
         $this->fulltextHelper = $fulltextHelper;
         $this->fulltextSearchMode = $fulltextSearchMode;
-        $this->preprocessorContainer = $preprocessorContainer;
+        $this->preprocessors = $preprocessors;
     }
 
     /**
@@ -116,7 +116,7 @@ class Match implements QueryInterface
     protected function prepareQuery($queryValue, $conditionType)
     {
         $queryValue = str_replace($this->replaceSymbols, ' ', $queryValue);
-        foreach ($this->preprocessorContainer as $preprocessor) {
+        foreach ($this->preprocessors as $preprocessor) {
             $queryValue = $preprocessor->process($queryValue);
         }
 

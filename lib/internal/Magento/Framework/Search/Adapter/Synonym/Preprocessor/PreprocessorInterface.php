@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Search\Adapter\Mysql\Query\Preprocessor;
+namespace Magento\Framework\Search\Adapter\Synonym\Preprocessor;
 
 interface PreprocessorInterface
 {
