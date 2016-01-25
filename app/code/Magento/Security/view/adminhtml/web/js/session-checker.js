@@ -19,6 +19,7 @@ define(
                     $.ajax({
                         type: 'GET',
                         url: requestUrl,
+
                         /**
                          * @param {Object} response
                          */

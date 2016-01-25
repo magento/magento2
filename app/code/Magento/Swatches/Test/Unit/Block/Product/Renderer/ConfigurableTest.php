@@ -16,9 +16,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var Configurable */
     private $configurable;
 
-    /** @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject */
-    private $context;
-
     /** @var \Magento\Framework\Stdlib\ArrayUtils|\PHPUnit_Framework_MockObject_MockObject */
     private $arrayUtils;
 
@@ -43,6 +40,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $priceCurrency;
 
+    /** @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeData|\PHPUnit_Framework_MockObject_MockObject */
+    private $configurableAttributeData;
+
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     private $product;
 
@@ -60,7 +60,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->context = $this->getMock('\Magento\Catalog\Block\Product\Context', [], [], '', false);
         $this->arrayUtils = $this->getMock('\Magento\Framework\Stdlib\ArrayUtils', [], [], '', false);
         $this->jsonEncoder = $this->getMock('\Magento\Framework\Json\EncoderInterface', [], [], '', false);
         $this->helper = $this->getMock('\Magento\ConfigurableProduct\Helper\Data', [], [], '', false);
@@ -69,21 +68,26 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->catalogProduct = $this->getMock('\Magento\Catalog\Helper\Product', [], [], '', false);
         $this->currentCustomer = $this->getMock('\Magento\Customer\Helper\Session\CurrentCustomer', [], [], '', false);
         $this->priceCurrency = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface', [], [], '', false);
+        $this->configurableAttributeData = $this->getMock(
+            'Magento\ConfigurableProduct\Model\ConfigurableAttributeData',
+            [],
+            [],
+            '',
+            false
+        );
         $this->product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->typeInstance = $this->getMock('\Magento\Catalog\Model\Product\Type\AbstractType', [], [], '', false);
         $this->scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
         $this->imageHelper = $this->getMock('\Magento\Catalog\Helper\Image', [], [], '', false);
         $this->urlBuilder = $this->getMock('\Magento\Framework\UrlInterface');
 
-        $this->context->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfig);
-        $this->context->expects($this->any())->method('getImageHelper')->willReturn($this->imageHelper);
-        $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
-
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->configurable = $objectManager->getObject(
             '\Magento\Swatches\Block\Product\Renderer\Configurable',
             [
-                'context' => $this->context,
+                'scopeConfig' => $this->scopeConfig,
+                'imageHelper' => $this->imageHelper,
+                'urlBuilder' => $this->urlBuilder,
                 'arrayUtils' => $this->arrayUtils,
                 'jsonEncoder' => $this->jsonEncoder,
                 'helper' => $this->helper,
@@ -92,6 +96,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'catalogProduct' => $this->catalogProduct,
                 'currentCustomer' => $this->currentCustomer,
                 'priceCurrency' => $this->priceCurrency,
+                'configurableAttributeData' => $this->configurableAttributeData,
                 'data' => [],
             ]
         );
@@ -146,8 +151,48 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    private function prepareGetJsonSwatchConfig()
+    {
+        $product1 = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $product1->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
+        $product1->expects($this->atLeastOnce())->method('getData')->with('code')->willReturn(1);
+
+        $product2 = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $product2->expects($this->atLeastOnce())->method('isSaleable')->willReturn(true);
+        $product2->expects($this->atLeastOnce())->method('getData')->with('code')->willReturn(3);
+
+        $simpleProducts = [$product1, $product2];
+        $configurableType = $this->getMock(
+            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            [],
+            [],
+            '',
+            false
+        );
+        $configurableType->expects($this->atLeastOnce())->method('getUsedProducts')->with($this->product, null)
+            ->willReturn($simpleProducts);
+        $this->product->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
+
+        $productAttribute1 = $this->getMock('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute', [], [], '', false);
+        $productAttribute1->expects($this->any())->method('getId')->willReturn(1);
+        $productAttribute1->expects($this->any())->method('getAttributeCode')->willReturn('code');
+
+        $attribute1 = $this->getMock(
+            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute',
+            ['getProductAttribute'],
+            [],
+            '',
+            false
+        );
+        $attribute1->expects($this->any())->method('getProductAttribute')->willReturn($productAttribute1);
+
+        $this->helper->expects($this->any())->method('getAllowAttributes')->with($this->product)
+            ->willReturn([$attribute1]);
+    }
+
     public function testGetJsonSwatchConfigNotVisualImageType()
     {
+        $this->prepareGetJsonSwatchConfig();
         $this->configurable->setProduct($this->product);
 
         $this->swatchHelper->expects($this->once())->method('getSwatchAttributesAsArray')
@@ -167,7 +212,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $this->swatchHelper->expects($this->once())->method('loadFirstVariationWithSwatchImage')
-            ->with($this->product, ['code' => 3])
+            ->with($this->product, 'code', 3)
             ->willReturn($this->product);
 
         $this->product->expects($this->exactly(4))->method('getData')
@@ -187,6 +232,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetJsonSwatchConfigVisualImageType()
     {
+        $this->prepareGetJsonSwatchConfig();
         $this->configurable->setProduct($this->product);
 
         $this->swatchHelper->expects($this->once())->method('getSwatchAttributesAsArray')
@@ -206,7 +252,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $this->swatchHelper->expects($this->once())->method('loadFirstVariationWithSwatchImage')
-            ->with($this->product, ['code' => 3])
+            ->with($this->product, 'code', 3)
             ->willReturn($this->product);
 
         $this->swatchMediaHelper->expects($this->exactly(2))->method('getSwatchAttributeImage')
@@ -233,6 +279,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetJsonSwatchConfigWithoutVisualImageType()
     {
+        $this->prepareGetJsonSwatchConfig();
+
         $this->configurable->setProduct($this->product);
 
         $this->swatchHelper->expects($this->once())->method('getSwatchAttributesAsArray')
@@ -252,7 +300,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $this->swatchHelper->expects($this->once())->method('loadFirstVariationWithSwatchImage')
-            ->with($this->product, ['code' => 3])
+            ->with($this->product, 'code', 3)
             ->willReturn($this->product);
 
         $this->swatchMediaHelper->expects($this->exactly(2))->method('getSwatchAttributeImage')
