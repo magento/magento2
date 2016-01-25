@@ -58,6 +58,6 @@ class SearchResultIterator implements \Iterator
      */
     public function valid()
     {
-        return (bool)$this->key();
+        return $this->key() !== null;
     }
 }
