@@ -49,6 +49,7 @@ class Topmenu extends Template implements IdentityInterface
         TreeFactory $treeFactory,
         array $data = []
     ) {
+        $this->setCacheLifetime(30 * 60);
         parent::__construct($context, $data);
         $this->_menu = $nodeFactory->create(
             [
@@ -85,7 +86,6 @@ class Topmenu extends Template implements IdentityInterface
             ['menu' => $this->_menu, 'transportObject' => $transportObject]
         );
         $html = $transportObject->getHtml();
-
         return $html;
     }
 
@@ -344,5 +344,15 @@ class Topmenu extends Template implements IdentityInterface
         $keyInfo = parent::getCacheKeyInfo();
         $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true, '_query' => '']);
         return $keyInfo;
+    }
+
+    /**
+     * Get tags array for saving cache
+     *
+     * @return array
+     */
+    protected function getCacheTags()
+    {
+        return array_merge(parent::getCacheTags(), $this->getIdentities());
     }
 }
