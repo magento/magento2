@@ -74,7 +74,8 @@ class TransactionsCollection extends Collection implements SearchResultInterface
 
         $result = [];
         $counter = 0;
-        $skipCounter = ($this->_curPage - 1) * $this->getPageSize();
+        $pageSize = $this->getPageSize();
+        $skipCounter = ($this->_curPage - 1) * $pageSize;
 
         // To optimize the processing of large searches, data is retrieved from the server lazily.
         foreach ($this->collection as $item) {
@@ -86,7 +87,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
                     $result[] = $entity;
 
                     $counter ++;
-                    if ($counter >= $this->getPageSize()) {
+                    if ($pageSize && $counter >= $pageSize) {
                         break;
                     }
                 }
@@ -108,7 +109,8 @@ class TransactionsCollection extends Collection implements SearchResultInterface
 
         // Fetch all transaction IDs in order to filter
         if (empty($this->collection)) {
-            $this->collection = $this->braintreeAdapter->search($this->getFilters());
+            $filters = $this->getFilters();
+            $this->collection = $this->braintreeAdapter->search($filters);
         }
 
         return $this->collection;
@@ -185,7 +187,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     public function getPageSize()
     {
         $pageSize = parent::getPageSize();
-        return $pageSize ? $pageSize : static::TRANSACTION_MAXIMUM_COUNT;
+        return $pageSize === null ? static::TRANSACTION_MAXIMUM_COUNT : $pageSize;
     }
 
     /**
