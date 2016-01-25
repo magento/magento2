@@ -15,14 +15,23 @@ define([
     return Collection.extend({
         defaults: {
             template: 'ui/modal/modal-component',
+            title: '',
+            subTitle: '',
             options: {
                 title: '',
+                subTitle: '',
                 buttons: [],
                 keyEventHandlers: {}
             },
             valid: true,
+            links: {
+                title: 'options.title',
+                subTitle: 'options.subTitle'
+            },
             listens: {
-                state: 'onState'
+                state: 'onState',
+                title: 'setTitle',
+                'options.subTitle': 'setSubTitle'
             },
             modalClass: 'modal-component',
             onCancel: 'closeModal'
@@ -164,6 +173,32 @@ define([
             } else {
                 this.waitCbk = this.toggleModal;
             }
+        },
+
+        /**
+         * Sets title for modal
+         *
+         * @param {String} title
+         */
+        setTitle: function (title) {
+            if (this.title !== title) {
+                this.title = title;
+            }
+
+            this.modal.modal('setTitle', title);
+        },
+
+        /**
+         * Sets subTitle for modal
+         *
+         * @param {String} subTitle
+         */
+        setSubTitle: function (subTitle) {
+            if (this.subTitle !== subTitle) {
+                this.subTitle = subTitle;
+            }
+
+            this.modal.modal('setSubTitle', subTitle);
         },
 
         /**

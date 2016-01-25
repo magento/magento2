@@ -22,6 +22,7 @@ define([
             showSpinner: true,
             loading: false,
             autoRender: true,
+            visible: true,
             contentSelector: '${$.name}',
             externalData: [],
             params: {
@@ -62,6 +63,7 @@ define([
         initObservable: function () {
             return this._super()
                 .observe([
+                    'visible',
                     'content',
                     'value',
                     'loading'
@@ -121,7 +123,9 @@ define([
                 return this;
             }
 
-            $.async('.' + this.contentSelector, function (el) {
+            $.async({
+                component: this.name
+            }, function (el) {
                 self.contentEl = $(el);
                 self.startRender = true;
                 params = _.extend(params || {}, self.params);
@@ -132,6 +136,71 @@ define([
             });
 
             return this;
+        },
+
+        /** @inheritdoc */
+        destroy: function () {
+            this.destroyInserted()
+                ._super();
+        },
+
+        /**
+         * Destroy inserted components.
+         *
+         * @returns {Object}
+         */
+        destroyInserted: function () {
+            if (this.isRendered) {
+                this.isRendered = false;
+                this.content('');
+
+                if (this.externalSource()) {
+                    this.externalSource().destroy();
+                }
+                this.initExternalLinks();
+            }
+
+            return this;
+        },
+
+        /**
+         * Initialize links on external components.
+         *
+         * @returns {Object}
+         */
+        initExternalLinks: function () {
+            var imports = this.filterExternalLinks(this.imports, this.ns),
+                exports = this.filterExternalLinks(this.exports, this.ns),
+                links = this.filterExternalLinks(this.links, this.ns);
+
+            this.setLinks(links, 'imports')
+                .setLinks(links, 'exports');
+
+            _.each({
+                exports: exports,
+                imports: imports
+            }, this.setLinks, this);
+
+            return this;
+        },
+
+        /**
+         * Filter external links.
+         *
+         * @param {Object} data
+         * @param {String }ns
+         * @returns {Object}
+         */
+        filterExternalLinks: function (data, ns) {
+            var links  = {};
+
+            _.each(data, function (value, key) {
+                if (value.split('.')[0] === ns) {
+                    links[key] = value;
+                }
+            });
+
+            return links;
         },
 
         /**

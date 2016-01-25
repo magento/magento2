@@ -520,7 +520,12 @@ define([
          */
         _dropHandlers: function () {
             this.off();
-            this.source.off(this.name);
+
+            if (_.isFunction(this.source)) {
+                this.source().off(this.name);
+            } else if (this.source) {
+                this.source.off(this.name);
+            }
 
             return this;
         },

@@ -13,6 +13,7 @@ define([
 
     return Insert.extend({
         defaults: {
+            externalListingName: '${ $.ns }.${ $.ns }',
             behaviourType: 'simple',
             externalFilterMode: false,
             externalCondition: 'nin',
@@ -36,7 +37,8 @@ define([
                 indexField: 'initialUpdateListing'
             },
             modules: {
-                selections: '${ $.selectionsProvider }'
+                selections: '${ $.selectionsProvider }',
+                externalListing: '${ $.externalListingName }'
             }
         },
 
@@ -71,6 +73,15 @@ define([
                 .observe([
                     'externalValue'
                 ]);
+        },
+
+        /** @inheritdoc */
+        destroyInserted: function () {
+            if (this.isRendered) {
+                this.externalListing().destroy();
+            }
+
+            return this._super();
         },
 
         /**
@@ -369,6 +380,13 @@ define([
                 this.updateSelections(items);
                 this.needInitialListingUpdate = false;
             }
+        },
+
+        /**
+         * Reload source
+         */
+        reload: function () {
+            this.externalSource().set('params.t', new Date().getTime());
         },
 
         /**
