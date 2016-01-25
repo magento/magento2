@@ -61,6 +61,7 @@
             <xs:element name="component" type="component" />
             <xs:element name="actionsColumn" type="actionsColumn" />
             <xs:element name="selectionsColumn" type="selectionsColumn" />
+            <xs:element name="htmlContent" type="htmlContent" />
             <xs:element type="insertForm" name="insertForm"/>
             <xs:element type="insertListing" name="insertListing"/>
             <xs:element name="htmlContent" type="htmlContent" />
