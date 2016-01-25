@@ -78,9 +78,9 @@ abstract class EntityAbstract
             $this->definedClasses = new DefinedClasses();
         }
 
-        $this->_sourceClassName = $this->_getFullyQualifiedClassName($sourceClassName);
+        $this->_sourceClassName = "\\" . $this->_getFullyQualifiedClassName($sourceClassName);
         if ($resultClassName) {
-            $this->_resultClassName = $this->_getFullyQualifiedClassName($resultClassName);
+            $this->_resultClassName = "\\" . $this->_getFullyQualifiedClassName($resultClassName);
         } elseif ($this->_sourceClassName) {
             $this->_resultClassName = $this->_getDefaultResultClassName($this->_sourceClassName);
         }
@@ -149,8 +149,7 @@ abstract class EntityAbstract
      */
     protected function _getFullyQualifiedClassName($className)
     {
-        $className = ltrim($className, '\\');
-        return $className ? '\\' . $className : '';
+        return ltrim($className, '\\');
     }
 
     /**
@@ -324,7 +323,7 @@ abstract class EntityAbstract
         if ($parameter->isArray()) {
             $parameterInfo['type'] = 'array';
         } elseif ($parameter->getClass()) {
-            $parameterInfo['type'] = $this->_getFullyQualifiedClassName($parameter->getClass()->getName());
+            $parameterInfo['type'] = "\\" . $this->_getFullyQualifiedClassName($parameter->getClass()->getName());
         }
 
         if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {

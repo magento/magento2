@@ -8,7 +8,11 @@ namespace Magento\Framework\Autoload;
 use Composer\Autoload\ClassLoader;
 
 /**
- * Wrapper designed to insulate the autoloader class provided by Composer
+ * Decorator for the autoloader class provided by Composer
+ *
+ * The decorator is necessary to decorate findFile()
+ *
+ * @see ClassLoaderWrapper::findFile()
  */
 class ClassLoaderWrapper implements AutoloaderInterface
 {
@@ -20,6 +24,8 @@ class ClassLoaderWrapper implements AutoloaderInterface
     protected $autoloader;
 
     /**
+     * Constructor
+     *
      * @param ClassLoader $autoloader
      */
     public function __construct(ClassLoader $autoloader)
@@ -69,19 +75,30 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
+     * Decorated findFile()
+     *
+     * Composer remembers that files don't exist even after they are generated. This clears the entry for
+     * $className so we can check the filesystem again for class existence.
+     *
      * {@inheritdoc}
      * @codeCoverageIgnore
      */
     public function findFile($className)
     {
         /**
-         * Composer remembers that files don't exist even after they are generated. This clears the entry for
-         * $className so we can check the filesystem again for class existence.
+         * $className must be FQCN which does not start with a backslash.
          */
         if ($className[0] === '\\') {
-            $className = substr($className, 1);
+            trigger_error($message = 'Invalid FQCN: ' . $className, E_USER_ERROR);
+            throw new \RuntimeException($message);
         }
-        $this->autoloader->addClassMap([$className => null]);
+
+        $classMap = $this->autoloader->getClassMap();
+        $wasNotFoundPreviously = isset($classMap[$className]) && false === $classMap[$className];
+        unset($classMap);
+        if ($wasNotFoundPreviously) {
+            $this->autoloader->addClassMap([$className => null]);
+        }
         return $this->autoloader->findFile($className);
     }
 }
