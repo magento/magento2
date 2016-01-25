@@ -63,7 +63,21 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
                     $synGroupRepository->save($synGroupModel, true);
                     $this->getMessageManager()->addSuccessMessage(__('You saved the synonym group.'));
                 } catch (MergeConflictException $exception) {
-                    $this->getMessageManager()->addErrorMessage($exception->getMessage());
+                    $conflictingSynonyms = $exception->getConflictingSynonyms();
+                    foreach ($conflictingSynonyms as $key => $conflictingSynonym) {
+                        $conflictingSynonyms[$key] = '(' . implode(',', $conflictingSynonym) . ')';
+                    }
+                    $lastConflict = array_pop($conflictingSynonyms);
+                    $conflictingSynonymsMessage = __(
+                        'The terms you entered, (%1), ' .
+                        'belong to %2 existing synonym groups, %3 and %4. ' .
+                        'Select the "Merge existing synonyms" checkbox so the terms can be merged.',
+                        $data['synonyms'],
+                        count($conflictingSynonyms) + 1,
+                        implode(', ', $conflictingSynonyms),
+                        $lastConflict
+                    );
+                    $this->getMessageManager()->addErrorMessage($conflictingSynonymsMessage);
                     $this->_getSession()->setFormData($data);
                     return $resultRedirect->setPath('*/*/edit', ['group_id' => $synGroupModel->getId()]);
                 }
