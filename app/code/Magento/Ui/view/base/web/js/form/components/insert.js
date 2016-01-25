@@ -36,7 +36,6 @@ define([
                 url: '${ $.update_url }',
                 dataType: 'json'
             },
-            visible: true,
             imports: {},
             exports: {},
             listens: {},
