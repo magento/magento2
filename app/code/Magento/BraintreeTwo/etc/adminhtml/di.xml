@@ -32,7 +32,31 @@
                 <item name="customer" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder</item>
                 <item name="payment" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\AddressDataBuilder</item>
+                <item name="vault" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\VaultDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="BraintreeTwoVaultAuthorizeDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\AddressDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider">
+        <arguments>
+            <argument name="tokenUiComponentProviders" xsi:type="array">
+                <item name="braintreetwo" xsi:type="object">Magento\BraintreeTwo\Model\Ui\Adminhtml\TokenUiComponentProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\BraintreeTwo\Controller\Adminhtml\Payment\GetNonce">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
+    </type>
 </config>
