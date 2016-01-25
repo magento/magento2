@@ -31,6 +31,11 @@ class MatchTest extends \PHPUnit_Framework_TestCase
      */
     private $fulltextHelper;
 
+    /**
+     * @var \Magento\Framework\Search\Adapter\Mysql\Query\Preprocessor\PreprocessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $preprocessor;
+
     protected function setUp()
     {
         $helper = new ObjectManager($this);
@@ -49,9 +54,18 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->preprocessor = $this->getMockBuilder('Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms')
+            ->setMethods(['process'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->match = $helper->getObject(
             'Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match',
-            ['resolver' => $this->resolver, 'fulltextHelper' => $this->fulltextHelper]
+            [
+                'resolver' => $this->resolver,
+                'fulltextHelper' => $this->fulltextHelper,
+                'preprocessorContainer' => [$this->preprocessor]
+            ]
         );
     }
 
@@ -62,6 +76,10 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getMatchQuery', 'match', 'where'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->preprocessor->expects($this->once())
+            ->method('process')
+            ->with($this->equalTo('some_value '))
+            ->will($this->returnValue('some_value '));
         $this->fulltextHelper->expects($this->once())
             ->method('getMatchQuery')
             ->with($this->equalTo(['some_field' => 'some_field']), $this->equalTo('-some_value*'))
@@ -102,7 +120,13 @@ class MatchTest extends \PHPUnit_Framework_TestCase
         $this->scoreBuilder->expects($this->once())
             ->method('addCondition');
 
-        $result = $this->match->build($this->scoreBuilder, $select, $query, BoolExpression::QUERY_CONDITION_NOT);
+        $result = $this->match->build(
+            $this->scoreBuilder,
+            $select,
+            $query,
+            BoolExpression::QUERY_CONDITION_NOT,
+            [$this->preprocessor]
+        );
 
         $this->assertEquals($select, $result);
     }
