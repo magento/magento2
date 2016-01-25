@@ -5,6 +5,11 @@
  */
 namespace Magento\Payment\Gateway\Request;
 
+/**
+ * Interface BuilderInterface
+ * @package Magento\Payment\Gateway\Request
+ * @api
+ */
 interface BuilderInterface
 {
     /**
