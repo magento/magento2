@@ -271,27 +271,28 @@ define([
                 });
 
                 imgToUpdate = mainImg.length ? mainImg[0] : imagesArr[0];
-
-                !imgToUpdate.type && (imgToUpdate.type = 'image');
-
                 galleryObject.updateDataByIndex(0, imgToUpdate);
                 galleryObject.seek(1);
             }
 
             if (galleryObject) {
                 if (images) {
+                    images.map(function (img) {
+                        img.type = 'image';
+                    });
+
                     if (this.options.onlyMainImg) {
                         updateGallery(images);
                     } else {
-                        images.map(function (img) {
-                            img.type = 'image';
-                        });
                         galleryObject.updateData(images)
                     }
                 } else {
-                    this.options.onlyMainImg ?
-                        updateGallery(initialImages) :
+                    if (this.options.onlyMainImg) {
+                        updateGallery(initialImages);
+                    } else {
                         galleryObject.updateData(this.options.mediaGalleryInitial);
+                        $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                    }
                 }
             }
         },
