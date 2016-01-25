@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Test\Unit\Model\Config;
+namespace Magento\Integration\Test\Unit\Model\Config\Consolidated;
 
-use Magento\Integration\Model\Config\SchemaLocator;
+use Magento\Integration\Model\Config\Consolidated\SchemaLocator;
 
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,11 +30,14 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSchema()
     {
-        $this->assertEquals($this->moduleDir . '/integration/config.xsd', $this->schemaLocator->getSchema());
+        $this->assertEquals($this->moduleDir . '/integration/integration.xsd', $this->schemaLocator->getSchema());
     }
 
     public function testGetPerFileSchema()
     {
-        $this->assertNull($this->schemaLocator->getPerFileSchema());
+        $this->assertEquals(
+            $this->moduleDir . '/integration/integration_file.xsd',
+            $this->schemaLocator->getPerFileSchema()
+        );
     }
 }

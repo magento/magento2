@@ -3,11 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Model\Config;
+namespace Magento\Integration\Model\Config\Integration;
 
 /**
  * Service config data reader.
  *
+ * @codeCoverageIgnore
  * @deprecated
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
@@ -17,7 +18,10 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = ['/integrations/integration' => 'name'];
+    protected $_idAttributes = [
+        '/integrations/integration' => 'name',
+        '/integrations/integration/resources/resource' => 'name',
+    ];
 
     /**
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
@@ -31,10 +35,10 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Integration\Model\Config\Converter $converter,
-        \Magento\Integration\Model\Config\SchemaLocator $schemaLocator,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
-        $fileName = 'integration/config.xml',
+        $fileName = 'integration/api.xml',
         $idAttributes = [],
         $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'
