@@ -307,34 +307,35 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      */
     protected function _getInactiveItemIds($collection, $storeId)
     {
-        $filter = $collection->getAllIdsSql();
-        $attributeId = $this->_catalogCategory->getIsActiveAttributeId();
+        $linkField = $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
+        $intTable = $this->_coreResource->getTableName('catalog_category_entity_int');
 
-        $meta = $this->metadataPool->getMetadata(CategoryInterface::class);
-        $linkField = $meta->getLinkField();
+        $select = $collection->getAllIdsSql()
+            ->joinInner(
+                ['d' => $intTable],
+                "e.{$linkField} = d.{$linkField}",
+                []
+            )->joinLeft(
+                ['c' => $intTable],
+                "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = d.{$linkField}",
+                []
+            )->where(
+                'd.attribute_id = :attribute_id'
+            )->where(
+                'd.store_id = :zero_store_id'
+            )->where(
+                $this->_conn->getCheckSql('c.value_id > 0', 'c.value', 'd.value') . ' = :cond'
+            );
 
-        $conditionSql = $this->_conn->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
-        $table = $this->_coreResource->getTableName('catalog_category_entity_int');
-        $bind = ['attribute_id' => $attributeId, 'store_id' => $storeId, 'zero_store_id' => 0, 'cond' => 0];
-        $select = $this->_conn->select()->from(
-            ['d' => $table],
-            ['d.' . $linkField]
-        )->where(
-            'd.attribute_id = :attribute_id'
-        )->where(
-            'd.store_id = :zero_store_id'
-        )->where(
-            'd.' . $linkField . ' IN (?)',
-            new \Zend_Db_Expr($filter)
-        )->joinLeft(
-            ['c' => $table],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.' . $linkField . ' = d.' . $linkField,
-            []
-        )->where(
-            $conditionSql . ' = :cond'
+        return $this->_conn->fetchCol(
+            $select,
+            [
+                'attribute_id' => $this->_catalogCategory->getIsActiveAttributeId(),
+                'store_id' => $storeId,
+                'zero_store_id' => 0,
+                'cond' => 0
+            ]
         );
-
-        return $this->_conn->fetchCol($select, $bind);
     }
 
     /**
