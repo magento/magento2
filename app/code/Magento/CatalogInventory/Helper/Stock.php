@@ -6,7 +6,6 @@
 namespace Magento\CatalogInventory\Helper;
 
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\CatalogInventory\Model\Spi\StockResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
@@ -49,29 +48,21 @@ class Stock
     private $stockRegistryProvider;
 
     /**
-     * @var StockResolverInterface
-     */
-    protected $stockResolver;
-
-    /**
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param StatusFactory $stockStatusFactory
      * @param StockRegistryProviderInterface $stockRegistryProvider
-     * @param StockResolverInterface $stockResolver
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         StatusFactory $stockStatusFactory,
-        StockRegistryProviderInterface $stockRegistryProvider,
-        StockResolverInterface $stockResolver
+        StockRegistryProviderInterface $stockRegistryProvider
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
         $this->stockStatusFactory  = $stockStatusFactory;
         $this->stockRegistryProvider = $stockRegistryProvider;
-        $this->stockResolver = $stockResolver;
     }
 
     /**
@@ -84,9 +75,8 @@ class Stock
     public function assignStatusToProduct(Product $product, $stockStatus = null)
     {
         if ($stockStatus === null) {
-            $productId = $product->getId();
-            $stockId = $this->stockResolver->getStockId($productId, $product->getStore()->getWebsiteId());
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $stockId);
+            $websiteId = $product->getStore()->getWebsiteId();
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $websiteId);
             $status = $stockStatus->getStockStatus();
         }
         $product->setIsSalable($status);
@@ -103,8 +93,7 @@ class Stock
         $websiteId = $this->storeManager->getStore($productCollection->getStoreId())->getWebsiteId();
         foreach ($productCollection as $product) {
             $productId = $product->getId();
-            $stockId = $this->stockResolver->getStockId($productId, $websiteId);
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $stockId);
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $websiteId);
             $status = $stockStatus->getStockStatus();
             $product->setIsSalable($status);
         }
