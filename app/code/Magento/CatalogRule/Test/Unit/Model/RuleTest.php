@@ -355,4 +355,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             [['name', 'description'], ['name', 'important_data'], true, true],
         ];
     }
+
+    public function testGetConditionsFieldSetId()
+    {
+        $formName = 'form_name';
+        $this->rule->setId(100);
+        $expectedResult = 'form_namerule_conditions_fieldset_100';
+        $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
+    }
 }
