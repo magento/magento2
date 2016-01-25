@@ -88,6 +88,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectMock->expects($this->once())->method('toOptionArray')->with([$groupsMock], 'id', 'code')
             ->willReturn([]);
 
+        $actionOptionProviderMock = $this->getMock(
+            'Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->model = new \Magento\CatalogRule\Model\Rule\DataProvider(
             'Name',
             'Primary',
@@ -96,7 +104,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->storeMock,
             $this->groupRepositoryMock,
             $this->searchCriteriaBuilderMock,
-            $this->dataObjectMock
+            $this->dataObjectMock,
+            $actionOptionProviderMock
         );
     }
 

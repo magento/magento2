@@ -12,6 +12,7 @@ use Magento\Store\Model\System\Store;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Convert\DataObject;
+use Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider;
 
 /**
  * Class DataProvider
@@ -49,6 +50,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $objectConverter;
 
     /**
+     * @var SimpleActionOptionsProvider
+     */
+    protected $actionOptions;
+
+    /**
      * DataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
@@ -58,9 +64,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param GroupRepositoryInterface $groupRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataObject $objectConverter
+     * @param SimpleActionOptionsProvider $actionOptions
      * @param array $meta
      * @param array $data
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -72,6 +78,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         GroupRepositoryInterface $groupRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DataObject $objectConverter,
+        SimpleActionOptionsProvider $actionOptions,
         array $meta = [],
         array $data = []
     ) {
@@ -80,6 +87,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->store = $store;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->objectConverter = $objectConverter;
+        $this->actionOptions = $actionOptions;
 
         $meta = array_replace_recursive($meta, $this->getMetadata());
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
@@ -91,12 +99,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function getMetadata()
     {
         $customerGroups = $this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems();
-        $applyOptions = [
-            ['label' => __('Apply as percentage of original'), 'value' => 'by_percent'],
-            ['label' => __('Apply as fixed amount'), 'value' => 'by_fixed'],
-            ['label' => __('Adjust final price to this percentage'), 'value' => 'to_percent'],
-            ['label' => __('Adjust final price to discount value'), 'value' => 'to_fixed']
-        ];
 
         return [
             'rule_information' => [
@@ -118,7 +120,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             'actions' => [
                 'fields' => [
                     'simple_action' => [
-                        'options' => $applyOptions
+                        'options' => $this->actionOptions->toOptionArray()
                     ],
                     'stop_rules_processing' => [
                         'options' => [
