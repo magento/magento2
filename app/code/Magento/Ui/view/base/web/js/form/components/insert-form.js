@@ -41,10 +41,10 @@ define([
 
     return Insert.extend({
         defaults: {
-            externalForm: '${ $.ns }.${ $.ns }',
+            externalFormName: '${ $.ns }.${ $.ns }',
             pageActionsSelector: '.page-actions',
             exports: {
-                prefix: '${ $.externalForm }:selectorPrefix'
+                prefix: '${ $.externalFormName }:selectorPrefix'
             },
             imports: {
                 toolbarSection: '${ $.toolbarContainer }:toolbarSection',
@@ -54,13 +54,16 @@ define([
                 ajax: {
                     ajaxSave: true,
                     exports: {
-                        ajaxSave: '${ $.externalForm }:ajaxSave'
+                        ajaxSave: '${ $.externalFormName }:ajaxSave'
                     },
-                    links: {
-                        responseStatus: '${ $.externalForm }:responseStatus',
-                        responseData: '${ $.externalForm }:responseData'
+                    imports: {
+                        responseStatus: '${ $.externalFormName }:responseStatus',
+                        responseData: '${ $.externalFormName }:responseData'
                     }
                 }
+            },
+            modules: {
+                externalForm: '${ $.externalFormName }'
             }
         },
 
@@ -75,6 +78,18 @@ define([
             var defaults = this.constructor.defaults;
 
             utils.extend(defaults, defaults.settings[config.formSubmitType] || {});
+
+            return this._super();
+        },
+
+        /** @inheritdoc*/
+        destroyInserted: function () {
+            if (this.isRendered) {
+                this.externalForm().destroy();
+                this.removeActions();
+                this.responseStatus(undefined);
+                this.responseData = {};
+            }
 
             return this._super();
         },
@@ -97,7 +112,16 @@ define([
          * @param {String} elem
          */
         renderActions: function (elem) {
-            $(this.toolbarSection).append(elem);
+            this.formHeader = $(elem);
+            $(this.toolbarSection).append(this.formHeader);
+        },
+
+        /**
+         * Remove actions tollbar.
+         */
+        removeActions: function () {
+            $(this.formHeader).remove();
+            this.formHeader = $();
         },
 
         /**
