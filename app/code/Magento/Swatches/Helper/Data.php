@@ -155,30 +155,32 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param array $attributes
-     * @return bool|null
+     * @param string $attributeCode
+     * @param string|int $attributeValue
+     * @return \Magento\Catalog\Model\Product|null
      * @throws InputException
      */
-    public function loadFirstVariationWithSwatchImage($product, array $attributes)
+    public function loadFirstVariationWithSwatchImage($product, $attributeCode, $attributeValue)
     {
         $product = $this->createSwatchProduct($product);
         if (!$product) {
-            return false;
+            return null;
         }
 
-        $productCollection = $this->prepareVariationCollection($product, $attributes);
-
+        $products = $product->getTypeInstance()->getUsedProducts($product);
         $variationProduct = null;
-        foreach ($productCollection as $item) {
-            $currentProduct = $this->productRepository->getById($item->getId());
-            $media = $this->getProductMedia($currentProduct);
-            if (! empty($media) && isset($media['swatch_image'])) {
-                $variationProduct = $currentProduct;
+        foreach ($products as $item) {
+            if ($item->getData($attributeCode) != $attributeValue) {
+                continue;
+            }
+            $media = $this->getProductMedia($item);
+            if (!empty($media) && isset($media['swatch_image'])) {
+                $variationProduct = $item;
                 break;
             }
             if ($variationProduct !== false) {
                 if (! empty($media) && isset($media['image'])) {
-                    $variationProduct = $currentProduct;
+                    $variationProduct = $item;
                 } else {
                     $variationProduct = false;
                 }
