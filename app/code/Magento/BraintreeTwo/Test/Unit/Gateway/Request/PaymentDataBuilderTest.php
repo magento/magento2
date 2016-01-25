@@ -6,11 +6,12 @@
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
 
 use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
 /**
  * Class PaymentDataBuilderTest
@@ -45,6 +46,11 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $subjectReaderMock;
 
+    /**
+     * @var OrderAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderMock;
+
     public function setUp()
     {
         $this->paymentDO = $this->getMock(PaymentDataObjectInterface::class);
@@ -57,6 +63,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->orderMock = $this->getMock(OrderAdapterInterface::class);
 
         $this->builder = new PaymentDataBuilder($this->configMock, $this->subjectReaderMock);
     }
@@ -110,6 +117,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             PaymentDataBuilder::AMOUNT  => 10.00,
             PaymentDataBuilder::PAYMENT_METHOD_NONCE  => self::PAYMENT_METHOD_NONCE,
+            PaymentDataBuilder::ORDER_ID => '000000101',
             PaymentDataBuilder::MERCHANT_ACCOUNT_ID  => self::MERCHANT_ACCOUNT_ID,
         ];
 
@@ -131,6 +139,10 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getPayment')
             ->willReturn($this->paymentMock);
 
+        $this->paymentDO->expects(static::once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+
         $this->subjectReaderMock->expects(self::once())
             ->method('readPayment')
             ->with($buildSubject)
@@ -139,6 +151,10 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('readAmount')
             ->with($buildSubject)
             ->willReturn(10.00);
+
+        $this->orderMock->expects(static::once())
+            ->method('getOrderIncrementId')
+            ->willReturn('000000101');
 
         static::assertEquals(
             $expectedResult,
