@@ -274,8 +274,6 @@ class IndexBuilder
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
         $actionStop = $rule->getStopRulesProcessing();
-        $subActionOperator = $rule->getSubIsEnable() ? $rule->getSubSimpleAction() : '';
-        $subActionAmount = $rule->getSubDiscountAmount();
 
         $rows = [];
         try {
@@ -292,8 +290,6 @@ class IndexBuilder
                         'action_amount' => $actionAmount,
                         'action_stop' => $actionStop,
                         'sort_order' => $sortOrder,
-                        'sub_simple_action' => $subActionOperator,
-                        'sub_discount_amount' => $subActionAmount,
                     ];
 
                     if (count($rows) == $this->batchCount) {
@@ -368,8 +364,6 @@ class IndexBuilder
         $sortOrder = (int)$rule->getSortOrder();
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
-        $subActionOperator = $rule->getSubIsEnable() ? $rule->getSubSimpleAction() : '';
-        $subActionAmount = $rule->getSubDiscountAmount();
         $actionStop = $rule->getStopRulesProcessing();
 
         $rows = [];
@@ -391,8 +385,6 @@ class IndexBuilder
                         'action_amount' => $actionAmount,
                         'action_stop' => $actionStop,
                         'sort_order' => $sortOrder,
-                        'sub_simple_action' => $subActionOperator,
-                        'sub_discount_amount' => $subActionAmount,
                     ];
 
                     if (count($rows) == $this->batchCount) {
