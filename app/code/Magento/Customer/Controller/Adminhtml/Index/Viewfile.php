@@ -56,7 +56,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      *
@@ -88,7 +87,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Customer\Helper\EmailNotification $emailNotification,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Url\DecoderInterface $urlDecoder
     ) {
@@ -117,8 +115,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $resultLayoutFactory,
             $resultPageFactory,
             $resultForwardFactory,
-            $resultJsonFactory,
-            $emailNotification
+            $resultJsonFactory
         );
         $this->resultRawFactory = $resultRawFactory;
         $this->urlDecoder  = $urlDecoder;
