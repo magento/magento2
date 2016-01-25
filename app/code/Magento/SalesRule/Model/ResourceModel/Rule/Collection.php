@@ -187,13 +187,17 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                     (int)$customerGroupId
                 ),
                 []
-            )->where(
-                'from_date is null or from_date <= ?',
-                $now
-            )->where(
-                'to_date is null or to_date >= ?',
-                $now
             );
+
+            if ($this->_associatedEntitiesMap['website']['rule_id_field'] == 'rule_id') {
+                $this->getSelect()->where(
+                    'from_date is null or from_date <= ?',
+                    $now
+                )->where(
+                    'to_date is null or to_date >= ?',
+                    $now
+                );
+            }
 
             $this->addIsActiveFilter();
 
