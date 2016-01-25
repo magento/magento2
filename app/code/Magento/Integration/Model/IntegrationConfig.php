@@ -7,12 +7,13 @@
 namespace Magento\Integration\Model;
 
 use Magento\Integration\Model\Cache\TypeIntegration;
-use Magento\Integration\Model\Config\Reader;
+use Magento\Integration\Model\Config\Integration\Reader;
 
 /**
  * Integration Api Config Model.
  *
  * This is a parent class for storing information about Integrations.
+ * @deprecated
  */
 class IntegrationConfig
 {
@@ -24,7 +25,7 @@ class IntegrationConfig
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Integration\Model\Config\Reader
+     * @var \Magento\Integration\Model\Config\Integration\Reader
      */
     protected $_configReader;
 

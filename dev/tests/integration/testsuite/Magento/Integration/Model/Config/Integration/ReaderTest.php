@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  *
  */
-namespace Magento\Integration\Model\Config;
+namespace Magento\Integration\Model\Config\Integration;
 
-use Magento\Integration\Model\Config\Reader as ConfigReader;
+use Magento\Integration\Model\Config\Integration\Reader as ConfigReader;
 
 /**
- * Integration config reader test.
+ * Integration API config reader test.
  */
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_configReader = $objectManager->create(
-            'Magento\Integration\Model\Config\Reader',
+            'Magento\Integration\Model\Config\Integration\Reader',
             ['fileResolver' => $this->_fileResolverMock]
         );
     }
@@ -33,12 +33,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testRead()
     {
         $configFiles = [
-            file_get_contents(realpath(__DIR__ . '/_files/integrationA.xml')),
-            file_get_contents(realpath(__DIR__ . '/_files/integrationB.xml')),
+            file_get_contents(realpath(__DIR__ . '/_files/apiA.xml')),
+            file_get_contents(realpath(__DIR__ . '/_files/apiB.xml')),
         ];
         $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
 
-        $expectedResult = require __DIR__ . '/_files/integration.php';
+        $expectedResult = require __DIR__ . '/_files/api.php';
         $this->assertEquals($expectedResult, $this->_configReader->read(), 'Error happened during config reading.');
     }
 }
