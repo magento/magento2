@@ -1127,6 +1127,4 @@ class AccountManagement implements AccountManagementInterface
     {
         return $this->encryptor->getHash($password);
     }
-
-
 }

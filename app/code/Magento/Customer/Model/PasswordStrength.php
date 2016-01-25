@@ -11,7 +11,6 @@ use Magento\Framework\Exception\InputException;
 use Magento\Customer\Helper\Config as CustomerConfigHelper;
 use Magento\Customer\Api\PasswordStrengthInterface;
 
-
 /**
  * Class PasswordStrength. Works with strength of password
  *
@@ -81,7 +80,7 @@ class PasswordStrength implements PasswordStrengthInterface
     /**
      * Check password for presence of required character sets
      *
-     * @param $password
+     * @param string $password
      * @return int
      */
     protected function makeRequiredCharactersCheck($password)

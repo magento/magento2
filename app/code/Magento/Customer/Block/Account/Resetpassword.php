@@ -20,7 +20,7 @@ class Resetpassword extends \Magento\Framework\View\Element\Template
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Template\Context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param CustomerConfigHelper $customerConfigHelper
      * @param array $data
      */
