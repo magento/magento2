@@ -101,9 +101,46 @@
         <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::div[@id='catalog_category_products']]</selector>
         <strategy>xpath</strategy>
     </category_products>
-    <custom_design>
+    <design>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::select[@name='page_layout']]</selector>
+        <strategy>xpath</strategy>
+        <fields>
+            <use_parent_category_settings>
+                <input>checkbox</input>
+                <selector>input[name='custom_use_parent_settings']</selector>
+            </use_parent_category_settings>
+            <layout>
+                <input>select</input>
+                <selector>select[name='page_layout']</selector>
+            </layout>
+            <layout_update_xml>
+                <input>textarea</input>
+                <selector>textarea[name='custom_layout_update']</selector>
+            </layout_update_xml>
+            <apply_design_to_products>
+                <input>checkbox</input>
+                <selector>input[name='custom_apply_to_products']</selector>
+            </apply_design_to_products>
+        </fields>
+    </design>
+    <schedule_design_update>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='custom_design_to']]</selector>
         <strategy>xpath</strategy>
-    </custom_design>
+        <fields>
+            <schedule_update_from>
+                <input>text</input>
+                <selector>input[name='custom_design_from']</selector>
+            </schedule_update_from>
+            <schedule_update_to>
+                <input>text</input>
+                <selector>input[name='custom_design_to']</selector>
+            </schedule_update_to>
+            <new_theme>
+                <input>select</input>
+                <selector>select[name='custom_design']</selector>
+            </new_theme>
+        </fields>
+    </schedule_design_update>
 </sections>
