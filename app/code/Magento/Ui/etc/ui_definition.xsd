@@ -64,7 +64,6 @@
             <xs:element name="htmlContent" type="htmlContent" />
             <xs:element type="insertForm" name="insertForm"/>
             <xs:element type="insertListing" name="insertListing"/>
-            <xs:element name="htmlContent" type="htmlContent" />
             <xs:element type="modal" name="modal"/>
             <xs:element type="button" name="button"/>
         </xs:all>
