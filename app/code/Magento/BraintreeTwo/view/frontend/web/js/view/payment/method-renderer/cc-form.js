@@ -38,6 +38,7 @@ define(
                 paymentMethodNonce: null,
                 lastBillingAddress: null,
                 validatorManager: validatorManager,
+                code: 'braintreetwo',
 
                 /**
                  * Additional payment data
@@ -143,7 +144,7 @@ define(
              * @returns {String}
              */
             getCode: function () {
-                return 'braintreetwo';
+                return this.code;
             },
 
             /**
