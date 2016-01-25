@@ -244,7 +244,7 @@
                                 <item name="value" xsi:type="string">to_fixed</item>
                                 <item name="actions" xsi:type="array">
                                     <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amountt</item>
+                                        <item name="target" xsi:type="string">catalog_rule_form.catalog_rule_form.actions.discount_amount</item>
                                         <item name="callback" xsi:type="string">setValidation</item>
                                         <item name="params" xsi:type="array">
                                             <item name="0" xsi:type="string">validate-number-range</item>
