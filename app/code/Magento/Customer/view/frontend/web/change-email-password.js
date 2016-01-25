@@ -67,7 +67,7 @@ define([
 
             $(this.options.currentPasswordSelector).attr('data-validate', '{required:true}').prop('disabled', false);
             $(this.options.emailSelector).attr('data-validate', '{required:true}').prop('disabled', false);
-            $(this.options.newPasswordSelector).attr('data-validate', '{required:true, \'validate-password\':true}')
+            $(this.options.newPasswordSelector).attr('data-validate', '{required:true, \'validate-customer-password\':true}')
                 .prop('disabled', false);
             $(this.options.confirmPasswordSelector).attr(
                 'data-validate',

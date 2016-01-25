@@ -59,9 +59,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Config\Share|\PHPUnit_Framework_MockObject_MockObject */
     protected $share;
 
-    /** @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject */
-    protected $string;
-
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerRepository;
 
@@ -103,6 +100,11 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     protected $customerSecure;
 
     /**
+     * @var \Magento\Customer\Api\PasswordStrengthInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $passwordStrength;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -128,7 +130,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->encryptor = $this->getMock('Magento\Framework\Encryption\EncryptorInterface');
         $this->share = $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false);
-        $this->string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
+        $this->passwordStrength = $this->getMock('Magento\Customer\Api\PasswordStrengthInterface');
         $this->customerRepository = $this->getMock('Magento\Customer\Api\CustomerRepositoryInterface');
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->transportBuilder = $this->getMock(
@@ -178,7 +180,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'logger' => $this->logger,
                 'encryptor' => $this->encryptor,
                 'configShare' => $this->share,
-                'stringHelper' => $this->string,
                 'customerRepository' => $this->customerRepository,
                 'scopeConfig' => $this->scopeConfig,
                 'transportBuilder' => $this->transportBuilder,
@@ -188,7 +189,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'dateTime' => $this->dateTime,
                 'customerModel' => $this->customer,
                 'objectFactory' => $this->objectFactory,
-                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter
+                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
+                'passwordStrength' => $this->passwordStrength
             ]
         );
     }
@@ -682,19 +684,13 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
 
-        $this->string->expects($this->any())
-            ->method('strlen')
-            ->willReturnCallback(
-                function ($string) {
-                    return strlen($string);
-                }
-            );
-
+        $this->passwordStrength->expects($this->any())
+            ->method('checkPasswordStrength')
+            ->with($password);
         $this->encryptor->expects($this->once())
             ->method('getHash')
             ->with($password, true)
             ->willReturn($hash);
-
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->disableOriginalConstructor()
             ->getMock();
