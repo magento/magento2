@@ -145,6 +145,9 @@ define([
             return bool;
         },
 
+        /**
+         * @returns {Element}
+         */
         setInitialValue: function () {
             if (_.isEmpty(this.valueMap)) {
                 this.on('value', this.onUpdate.bind(this));
