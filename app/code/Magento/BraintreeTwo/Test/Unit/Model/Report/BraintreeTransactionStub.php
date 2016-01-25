@@ -34,8 +34,7 @@ class BraintreeTransactionStub
     {
         if (array_key_exists($name, $this->_attributes)) {
             return $this->_attributes[$name];
-        }
-        else {
+        } else {
             trigger_error('Undefined property on ' . get_class($this) . ': ' . $name, E_USER_NOTICE);
             return null;
         }

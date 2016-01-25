@@ -34,7 +34,7 @@ define([
 
         /**
          * Has filters checker
-         * @returns {boolean}
+         * @returns {Boolean}
          */
         hasFilters: function () {
             var params = this.params,
