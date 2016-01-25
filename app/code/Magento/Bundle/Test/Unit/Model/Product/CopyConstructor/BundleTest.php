@@ -5,6 +5,7 @@
  */
 namespace Magento\Bundle\Test\Unit\Model\Product\CopyConstructor;
 
+use Magento\Bundle\Api\Data\BundleOptionInterface;
 use Magento\Bundle\Model\Product\CopyConstructor\Bundle;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
@@ -48,6 +49,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributesProduct = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['getBundleProductOptions'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -58,7 +60,14 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributesProduct);
 
-        $bundleOptions = ['option1', 'option2'];
+        $bundleOptions = [
+            $this->getMockBuilder(BundleOptionInterface::class)
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass(),
+            $this->getMockBuilder(BundleOptionInterface::class)
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass()
+        ];
         $extensionAttributesProduct->expects($this->once())
             ->method('getBundleProductOptions')
             ->willReturn($bundleOptions);
@@ -67,6 +76,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributesDuplicate = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['setBundleProductOptions'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
