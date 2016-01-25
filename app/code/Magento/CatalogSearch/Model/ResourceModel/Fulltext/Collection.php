@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
-use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
@@ -16,13 +15,6 @@ use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
-    /**
-     * Catalog search data
-     *
-     * @var \Magento\Search\Model\QueryFactory
-     */
-    protected $queryFactory = null;
-
     /** @var string */
     private $queryText;
 
@@ -53,7 +45,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $searchResult;
 
     /**
-     * @var FilterBuilder
+     * @var \Magento\Framework\Api\FilterBuilder
      */
     private $filterBuilder;
 
@@ -77,11 +69,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\Search\Model\QueryFactory $catalogSearchData
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param \Magento\Framework\Api\Search\SearchInterface $search
      * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param FilterBuilder $filterBuilder
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param string $searchRequestName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -106,15 +97,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Search\Model\QueryFactory $catalogSearchData,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         \Magento\Framework\Api\Search\SearchInterface $search,
         \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder,
-        FilterBuilder $filterBuilder,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $searchRequestName = 'catalog_view_container'
     ) {
-        $this->queryFactory = $catalogSearchData;
         parent::__construct(
             $entityFactory,
             $logger,
