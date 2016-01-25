@@ -167,11 +167,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.0.4') < 0) {
-            $connection->dropColumn($setup->getTable('search_query'), 'synonym_for');
             $connection->dropIndex(
                 $setup->getTable('search_query'),
-                $installer->getIdxName('search_query', ['synonym_for'])
+                $installer->getIdxName('search_query', 'synonym_for')
             );
+            $connection->dropColumn($setup->getTable('search_query'), 'synonym_for');
         }
     }
 }
