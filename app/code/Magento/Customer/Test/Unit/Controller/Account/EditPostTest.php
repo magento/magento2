@@ -161,6 +161,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     public function testGeneralSave()
     {
         $customerId = 1;
+        $currentPassword = '1234567';
 
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
@@ -192,7 +193,17 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
                 ['change_email'],
                 ['change_password']
             )
-            ->willReturn(false);
+            ->willReturnOnConsecutiveCalls(true, true, false);
+
+        $this->request->expects($this->once())
+            ->method('getPost')
+            ->with('current_password')
+            ->willReturn($currentPassword);
+
+        $this->currentCustomerHelper->expects($this->once())
+            ->method('validatePassword')
+            ->with($currentPassword)
+            ->willReturn(true);
 
         $this->customerRepository->expects($this->once())
             ->method('save')
