@@ -57,16 +57,9 @@ class AddInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testAddInventoryData()
     {
-        $stockStatus = true;
-
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['getStockStatus'])
             ->getMock();
-
-        $product->expects($this->once())
-            ->method('getStockStatus')
-            ->will($this->returnValue($stockStatus));
 
         $this->event->expects($this->once())
             ->method('getProduct')
@@ -74,7 +67,7 @@ class AddInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->stockHelper->expects($this->once())
             ->method('assignStatusToProduct')
-            ->with($product, $stockStatus)
+            ->with($product)
             ->will($this->returnSelf());
 
         $this->observer->execute($this->eventObserver);

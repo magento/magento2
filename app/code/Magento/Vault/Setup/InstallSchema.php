@@ -72,8 +72,8 @@ class InstallSchema implements InstallSchemaInterface
                 'expiration_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
-                'Expirated At'
+                ['nullable' => true],
+                'Expires At'
             )->addColumn(
                 'gateway_token',
                 Table::TYPE_TEXT,
