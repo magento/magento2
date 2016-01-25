@@ -91,6 +91,7 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
             [
                 'header' => __('Search Term'),
                 'sortable' => false,
+                'index' => 'query_text',
                 'renderer' => 'Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery'
             ]
         );
