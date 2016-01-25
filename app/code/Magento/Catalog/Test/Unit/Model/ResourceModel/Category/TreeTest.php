@@ -152,6 +152,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('join')->will($this->returnSelf());
+        $select->expects($this->any())->method('joinInner')->will($this->returnSelf());
         $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
 
@@ -185,6 +186,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
 
         $collection = $this->getMock('Magento\Catalog\Model\ResourceModel\Category\Collection', [], [], '', false);
         $collection->expects($this->never())->method('getAllIds')->will($this->returnValue([]));
+        $collection->expects($this->once())->method('getAllIdsSql')->will($this->returnValue($select));
         $collectionFactory = $this->getMock(
             'Magento\Catalog\Model\ResourceModel\Category\Collection\Factory',
             [],
