@@ -111,7 +111,7 @@
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
                         </item>
-                        <item name="dataScope" xsi:type="string">status</item>
+                        <item name="dataScope" xsi:type="string">type</item>
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="label" xsi:type="string" translate="true">Transaction Type</item>
                     </item>
