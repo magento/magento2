@@ -16,9 +16,7 @@ use Magento\Quote\Model\Quote\Address;
  * @method \Magento\SalesRule\Model\Rule setName(string $value)
  * @method string getDescription()
  * @method \Magento\SalesRule\Model\Rule setDescription(string $value)
- * @method string getFromDate()
  * @method \Magento\SalesRule\Model\Rule setFromDate(string $value)
- * @method string getToDate()
  * @method \Magento\SalesRule\Model\Rule setToDate(string $value)
  * @method int getUsesPerCustomer()
  * @method \Magento\SalesRule\Model\Rule setUsesPerCustomer(int $value)
@@ -530,6 +528,22 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         }
 
         return $coupon;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromDate()
+    {
+        return $this->getData('from_date');
+    }
+
+    /**
+     * @return string
+     */
+    public function getToDate()
+    {
+        return $this->getData('to_date');
     }
 
     /**
