@@ -151,6 +151,7 @@ class Rule extends AbstractResource
     public function load(AbstractModel $object, $value, $field = null)
     {
         $this->entityManager->load(RuleInterface::class, $object, $value);
+        $this->unserializeFields($object);
         $this->_afterLoad($object);
         return $this;
     }
