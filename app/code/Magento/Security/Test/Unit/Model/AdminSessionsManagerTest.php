@@ -174,7 +174,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $this->securityConfigMock->expects($this->once())
+        $this->securityConfigMock
             ->method('getCurrentTimestamp')
             ->willReturn($timestamp);
 

@@ -38,6 +38,8 @@ class Payment extends Info implements OrderPaymentInterface
 
     const REVIEW_ACTION_UPDATE = 'update';
 
+    const PARENT_TXN_ID = 'parent_transaction_id';
+
     /**
      * Order model object
      *
@@ -240,7 +242,17 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function getParentTransactionId()
     {
-        return $this->getData('parent_transaction_id');
+        return $this->getData(self::PARENT_TXN_ID);
+    }
+
+    /**
+     * Returns transaction parent
+     *
+     * @return string
+     */
+    public function setParentTransactionId($txnId)
+    {
+        return $this->setData(self::PARENT_TXN_ID, $txnId);
     }
 
     /**
