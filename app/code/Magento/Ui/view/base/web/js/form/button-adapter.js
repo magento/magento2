@@ -37,7 +37,7 @@ define([
             _.each(this.actions, function (action) {
                 callbacks.push({
                     action: registry.async(action.targetName),
-                    args: _.compact([action.actionName, action.params])
+                    args: _.union([action.actionName], action.params)
                 });
             });
 

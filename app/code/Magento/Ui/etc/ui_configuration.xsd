@@ -39,13 +39,13 @@
                     <xs:element name="actionsColumn" type="actionsColumn" />
                     <xs:element name="selectionsColumn" type="selectionsColumn" />
                     <xs:element type="exportButton" name="exportButton"/>
+                    <xs:element type="modalConfiguration" name="modal"/>
                     <xs:element type="insertFormConfiguration" name="insertForm"/>
                     <xs:element type="insertListingConfiguration" name="insertListing"/>
-                    <xs:element type="modalConfiguration" name="modal"/>
                     <xs:element type="columnsControls" name="columnsControls"/>
                     <xs:element type="listingToolbarConfiguration" name="listingToolbar"/>
-                    <xs:element type="htmlContent" name="htmlContent"/>
                     <xs:element type="button" name="button"/>
+                    <xs:element type="htmlContent" name="htmlContent"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
