@@ -189,7 +189,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
             ['relation' => $this->getTable('catalog_product_relation')],
             []
         )->join(
-            ['e' => $connection->getTableName('catalog_product_entity')],
+            ['e' => $this->getTable('catalog_product_entity')],
             'e.' . $linkField . ' = relation.parent_id',
             ['e.entity_id']
         )->where(
@@ -220,7 +220,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
                 ['cpr' => $this->getTable('catalog_product_relation')],
                 'child_id'
             )->join(
-                ['e' => $this->getConnection()->getTableName('catalog_product_entity')],
+                ['e' => $this->getTable('catalog_product_entity')],
                 'e.' . $linkField . ' = cpr.parent_id'
             )->where(
                 'e.entity_id IN(?)',
