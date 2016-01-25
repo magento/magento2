@@ -30,7 +30,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $temporaryStorageFactory;
 
     /**
-     * @var \Magento\Framework\Api\Search\SearchInterface
+     * @var \Magento\Search\Api\SearchInterface
      */
     private $search;
 
@@ -70,7 +70,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
-     * @param \Magento\Framework\Api\Search\SearchInterface $search
+     * @param \Magento\Search\Api\SearchInterface $search
      * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
@@ -98,7 +98,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
-        \Magento\Framework\Api\Search\SearchInterface $search,
+        \Magento\Search\Api\SearchInterface $search,
         \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
