@@ -158,13 +158,13 @@ class MessageEncoder
                     /** Encode parameters according to their positions in method signature */
                     $paramPosition = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_POSITION];
                     if (isset($message[$paramPosition])) {
-                        $convertedMessage[$paramName] = $this->getConverter($direction)
+                        $convertedMessage[$paramName] = $this->getConverter(self::DIRECTION_DECODE)
                             ->convertValue($message[$paramPosition], $paramType);
                     }
                 } else {
                     /** Encode parameters according to their names in method signature */
                     if (isset($message[$paramName])) {
-                        $convertedMessage[$paramName] = $this->getConverter($direction)
+                        $convertedMessage[$paramName] = $this->getConverter(self::DIRECTION_DECODE)
                             ->convertValue($message[$paramName], $paramType);
                     }
                 }
