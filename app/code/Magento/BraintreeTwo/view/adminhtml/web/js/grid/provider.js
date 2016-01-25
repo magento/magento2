@@ -10,6 +10,7 @@ define([
     'use strict';
 
     return Provider.extend({
+
         /**
          * Reload grid
          * @returns {exports}

@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BraintreeTwo\Test\Unit\Model\Report;
 
-use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Model\Adapter\BraintreeSearchAdapter;
 use Magento\BraintreeTwo\Model\Report\ConditionAppliers\ApplierInterface;
 use Magento\BraintreeTwo\Model\Report\ConditionAppliers\AppliersPool;
 use Magento\BraintreeTwo\Model\Report\FilterMapper;
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 
 /**
  * Class FilterMapperTest
@@ -34,46 +32,32 @@ class FilterMapperTest extends \PHPUnit_Framework_TestCase
      */
     private $applierMock;
 
+    /**
+     * Setup
+     */
     protected function setUp()
     {
+        $methods = [
+            'id',
+            'merchantAccountId',
+            'orderId',
+            'paypalPaymentId',
+            'createdUsing',
+            'type',
+            'createdAt',
+            'amount',
+            'status',
+            'settlementBatchId',
+            'paymentInstrumentType',
+        ];
         $this->braintreeSearchAdapterMock = $this->getMockBuilder(BraintreeSearchAdapter::class)
-            ->setMethods([
-                'id',
-                'merchantAccountId',
-                'orderId',
-                'paypalPaymentId',
-                'createdUsing',
-                'type',
-                'createdAt',
-                'amount',
-                'status',
-                'settlementBatchId',
-                'paymentInstrumentType',
-            ])
+            ->setMethods($methods)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('id')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('merchantAccountId')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('orderId')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('paypalPaymentId')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('createdUsing')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('type')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('createdAt')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('amount')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('status')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('settlementBatchId')
-            ->willReturn(new BraintreeSearchNodeStub());
-        $this->braintreeSearchAdapterMock->expects($this->once())->method('paymentInstrumentType')
-            ->willReturn(new BraintreeSearchNodeStub());
+        foreach ($methods as $method) {
+            $this->braintreeSearchAdapterMock->expects($this->once())->method($method)
+                ->willReturn(new BraintreeSearchNodeStub());
+        }
 
         $this->appliersPoolMock = $this->getMockBuilder(AppliersPool::class)
             ->setMethods(['getApplier'])
@@ -86,6 +70,9 @@ class FilterMapperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /**
+     * Positive test
+     */
     public function testGetFilterPositiveApply()
     {
         $this->applierMock->expects($this->exactly(3))
@@ -108,6 +95,9 @@ class FilterMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(BraintreeSearchNodeStub::class, $result);
     }
 
+    /**
+     * Negative test
+     */
     public function testGetFilterNegativeApply()
     {
         $this->applierMock->expects($this->never())
@@ -123,8 +113,3 @@ class FilterMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $result);
     }
 }
-
-class BraintreeSearchNodeStub
-{
-}
-

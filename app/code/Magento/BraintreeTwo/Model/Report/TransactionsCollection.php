@@ -9,6 +9,7 @@ use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -39,11 +40,6 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     private $filterMapper;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var BraintreeAdapter
      */
     private $braintreeAdapter;
@@ -54,20 +50,17 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     private $collection;
 
     /**
-     * @param Collection\EntityFactoryInterface $entityFactory
+     * @param EntityFactoryInterface $entityFactory
      * @param BraintreeAdapter $braintreeAdapter
      * @param FilterMapper $filterMapper
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        Collection\EntityFactoryInterface $entityFactory,
+        EntityFactoryInterface $entityFactory,
         BraintreeAdapter $braintreeAdapter,
-        FilterMapper $filterMapper,
-        StoreManagerInterface $storeManager
+        FilterMapper $filterMapper
     ) {
         parent::__construct($entityFactory);
         $this->filterMapper = $filterMapper;
-        $this->storeManager = $storeManager;
         $this->braintreeAdapter = $braintreeAdapter;
     }
 
@@ -76,21 +69,27 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      */
     public function getItems()
     {
-        if (!$this->fetchCollection()) {
+        if (!$this->fetchIdsCollection()) {
             return [];
         }
 
         $result = [];
         $counter = 0;
+        $skipCounter = ($this->_curPage - 1) * $this->getPageSize();
+
         // To optimize the processing of large searches, data is retrieved from the server lazily.
         foreach ($this->collection as $item) {
-            $entity = $this->_entityFactory->create($this->_itemObjectClass, ['transaction' => $item]);
-            if ($entity) {
-                $result[] = $entity;
+            if ($skipCounter > 0) {
+                $skipCounter --;
+            } else {
+                $entity = $this->_entityFactory->create($this->_itemObjectClass, ['transaction' => $item]);
+                if ($entity) {
+                    $result[] = $entity;
 
-                $counter ++;
-                if ($counter >= self::TRANSACTION_MAXIMUM_COUNT) {
-                    break;
+                    $counter ++;
+                    if ($counter >= $this->getPageSize()) {
+                        break;
+                    }
                 }
             }
         }
@@ -102,7 +101,8 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * Fetch collection from Braintree
      * @return \Braintree\ResourceCollection|null
      */
-    protected function fetchCollection() {
+    protected function fetchIdsCollection()
+    {
         if (empty($this->filtersList)) {
             return null;
         }
@@ -174,8 +174,19 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      */
     public function getTotalCount()
     {
-        $collection = $this->fetchCollection();
+        $collection = $this->fetchIdsCollection();
         return null === $collection ? 0 : $collection->maximumCount();
+    }
+
+    /**
+     * Retrieve collection page size
+     *
+     * @return int
+     */
+    public function getPageSize()
+    {
+        $pageSize = parent::getPageSize();
+        return $pageSize ? $pageSize : static::TRANSACTION_MAXIMUM_COUNT;
     }
 
     /**
@@ -212,6 +223,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      * Add filter to list
      *
      * @param object $filter
+     * @return void
      */
     private function addFilterToList($filter)
     {
