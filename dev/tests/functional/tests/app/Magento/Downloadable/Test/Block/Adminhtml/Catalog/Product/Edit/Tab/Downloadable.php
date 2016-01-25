@@ -115,7 +115,7 @@ class Downloadable extends Tab
      *
      * @return void
      */
-    protected function showContent()
+    private function showContent()
     {
         $isDownloadable = $this->_rootElement->find($this->isDownloadable);
         if (!$isDownloadable->isVisible()) {
