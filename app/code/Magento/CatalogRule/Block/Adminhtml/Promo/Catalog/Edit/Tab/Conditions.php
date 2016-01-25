@@ -136,6 +136,7 @@ class Conditions extends Generic implements TabInterface
     /**
      * @param \Magento\CatalogRule\Api\Data\RuleInterface $model
      * @param string $fieldsetId
+     * @param string $formName
      * @return \Magento\Framework\Data\Form
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -168,7 +169,8 @@ class Conditions extends Generic implements TabInterface
                 'title' => __('Conditions'),
                 'required' => true,
                 'data-form-part' => $formName
-            ])
+            ]
+        )
             ->setRule($model)
             ->setRenderer($this->_conditions);
 

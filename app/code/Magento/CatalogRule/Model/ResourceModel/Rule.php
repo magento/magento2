@@ -311,5 +311,4 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         }
         return $this;
     }
-
 }

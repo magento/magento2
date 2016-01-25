@@ -36,14 +36,13 @@ class Store extends Column
     protected $storeKey;
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param SystemStore $systemStore
      * @param Escaper $escaper
      * @param array $components
      * @param array $data
+     * @param string $storeKey
      */
     public function __construct(
         ContextInterface $context,
