@@ -173,6 +173,11 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
         } catch (AuthenticationException $e) {
             $this->messageManager->addError($e->getMessage());
+        } catch (InputException $e) {
+            $this->messageManager->addError($e->getMessage());
+            foreach ($e->getErrors() as $error) {
+                $this->messageManager->addError($error->getMessage());
+            }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong while changing the password.'));
         }

@@ -140,7 +140,13 @@
         <div class="field password required">
             <label for="password" class="label"><span><?php /* @escapeNotVerified */ echo __('Password') ?></span></label>
             <div class="control">
-                <input type="password" name="password" id="password" title="<?php /* @escapeNotVerified */ echo __('Password') ?>" class="input-text" data-validate="{required:true, 'validate-password':true}" autocomplete="off">
+                <input type="password" name="password" id="password"
+                       title="<?php /* @escapeNotVerified */ echo __('Password') ?>"
+                       class="input-text"
+                       data-password-min-length="<?php echo $block->escapeHtml($block->getMinimumPasswordLength()) ?>"
+                       data-password-min-character-sets="<?php echo $block->escapeHtml($block->getRequiredCharacterClassesNumber()) ?>"
+                       data-validate="{required:true, 'validate-customer-password':true}"
+                       autocomplete="off">
             </div>
         </div>
         <div class="field confirmation required">
