@@ -98,6 +98,21 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataObjectHelperMock;
 
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPoolMock;
+
+    /**
+     * @var \Magento\Framework\Model\Entity\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataMock;
+
+    /**
+     * @var string
+     */
+    protected $linkField = 'product_id';
+
     protected function setUp()
     {
         $helper = new ObjectManager($this);
@@ -122,7 +137,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getTypeInstance', 'getStoreId', 'getTypeId', '__wakeup', 'getId'])
+            ->setMethods(['getTypeInstance', 'getStoreId', 'getTypeId', '__wakeup', 'getId', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->link = $this->getMockBuilder('\Magento\Bundle\Api\Data\LinkInterface')
@@ -142,6 +157,15 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             '\Magento\Bundle\Model\ResourceModel\Option\CollectionFactory', ['create'], [], '', false
         );
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\MetadataPool')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\EntityMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataPoolMock->expects($this->any())->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($this->metadataMock);
 
         $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
@@ -156,6 +180,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
                 'optionCollection' => $this->optionCollectionFactoryMock,
                 'storeManager' => $this->storeManagerMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
+                'metadataPool' => $this->metadataPoolMock
             ]
         );
     }
@@ -185,7 +210,8 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->selectionCollection))
             ->will($this->returnValue([$this->option]));
 
-        $this->option->expects($this->any())->method('getSelections')->will($this->returnValue([$this->product]));
+        $this->option->expects($this->any())->method('getSelections')->willReturn([$this->product]);
+        $this->product->expects($this->any())->method('getData')->willReturn([]);
 
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
@@ -316,11 +342,15 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productLink->expects($this->any())->method('getSku')->will($this->returnValue('linked_product_sku'));
         $productLink->expects($this->any())->method('getOptionId')->will($this->returnValue(1));
 
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(
             \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
         ));
-        $productMock->expects($this->any())->method('getId')->will($this->returnValue('product_id'));
+        $productMock->expects($this->any())
+            ->method('getData')
+            ->with($this->linkField)
+            ->willReturn($this->linkField);
 
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $linkedProductMock->expects($this->any())->method('getId')->will($this->returnValue(13));
@@ -340,7 +370,13 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $option->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $optionsCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
+        $optionsCollectionMock = $this->getMock(
+            '\Magento\Bundle\Model\ResourceModel\Option\Collection',
+            [],
+            [],
+            '',
+            false
+        );
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
             ->with($this->equalTo('1'))
@@ -353,7 +389,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         );
 
         $bundle = $this->getMock('\Magento\Bundle\Model\ResourceModel\Bundle', [], [], '', false);
-        $bundle->expects($this->once())->method('getSelectionsData')->with('product_id')->will($this->returnValue([]));
+        $bundle->expects($this->once())->method('getSelectionsData')->with($this->linkField)->willReturn([]);
         $this->bundleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($bundle));
         $this->model->addChild($productMock, 1, $productLink);
     }
@@ -367,11 +403,15 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productLink->expects($this->any())->method('getSku')->will($this->returnValue('linked_product_sku'));
         $productLink->expects($this->any())->method('getOptionId')->will($this->returnValue(1));
 
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(
             \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
         ));
-        $productMock->expects($this->any())->method('getId')->will($this->returnValue('product_id'));
+        $productMock->expects($this->any())
+            ->method('getData')
+            ->with($this->linkField)
+            ->willReturn($this->linkField);
 
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $linkedProductMock->expects($this->any())->method('getEntityId')->will($this->returnValue(13));
@@ -391,7 +431,13 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $option->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $optionsCollectionMock = $this->getMock('\Magento\Bundle\Model\ResourceModel\Option\Collection', [], [], '', false);
+        $optionsCollectionMock = $this->getMock(
+            '\Magento\Bundle\Model\ResourceModel\Option\Collection',
+            [],
+            [],
+            '',
+            false
+        );
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
             ->with($this->equalTo(1))
@@ -409,7 +455,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         ];
         $bundle = $this->getMock('\Magento\Bundle\Model\ResourceModel\Bundle', [], [], '', false);
         $bundle->expects($this->once())->method('getSelectionsData')
-            ->with('product_id')
+            ->with($this->linkField)
             ->will($this->returnValue($selections));
         $this->bundleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($bundle));
         $this->model->addChild($productMock, 1, $productLink);
@@ -424,11 +470,16 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productLink->expects($this->any())->method('getSku')->will($this->returnValue('linked_product_sku'));
         $productLink->expects($this->any())->method('getOptionId')->will($this->returnValue(1));
 
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(
             \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
         ));
-        $productMock->expects($this->any())->method('getId')->will($this->returnValue('product_id'));
+        $productMock->expects($this->any())
+            ->method('getData')
+            ->with($this->linkField)
+            ->willReturn($this->linkField);
+
 
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $linkedProductMock->expects($this->any())->method('getId')->will($this->returnValue(13));
@@ -468,7 +519,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         ];
         $bundle = $this->getMock('\Magento\Bundle\Model\ResourceModel\Bundle', [], [], '', false);
         $bundle->expects($this->once())->method('getSelectionsData')
-            ->with('product_id')
+            ->with($this->linkField)
             ->will($this->returnValue($selections));
         $this->bundleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($bundle));
 
@@ -491,11 +542,15 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productLink->expects($this->any())->method('getSku')->will($this->returnValue('linked_product_sku'));
         $productLink->expects($this->any())->method('getOptionId')->will($this->returnValue(1));
 
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(
             \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
         ));
-        $productMock->expects($this->any())->method('getId')->will($this->returnValue('product_id'));
+        $productMock->expects($this->any())
+            ->method('getData')
+            ->with($this->linkField)
+            ->willReturn($this->linkField);
 
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $linkedProductMock->expects($this->any())->method('getId')->will($this->returnValue(13));
@@ -535,7 +590,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         ];
         $bundle = $this->getMock('\Magento\Bundle\Model\ResourceModel\Bundle', [], [], '', false);
         $bundle->expects($this->once())->method('getSelectionsData')
-            ->with('product_id')
+            ->with($this->linkField)
             ->will($this->returnValue($selections));
         $this->bundleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($bundle));
 
@@ -572,11 +627,15 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productLink->expects($this->any())->method('getCanChangeQuantity')->will($this->returnValue($canChangeQuantity));
         $productLink->expects($this->any())->method('getIsDefault')->will($this->returnValue($isDefault));
 
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(
             \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
         ));
-        $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($parentProductId));
+        $productMock->expects($this->any())
+            ->method('getData')
+            ->with($this->linkField)
+            ->willReturn($parentProductId);
 
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $linkedProductMock->expects($this->any())->method('getId')->will($this->returnValue($linkProductId));
@@ -866,7 +925,11 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $selection->expects($this->any())->method('getProductId')->willReturn($productId);
 
         $this->option->expects($this->any())->method('getSelections')->will($this->returnValue([$selection]));
-        $this->product->expects($this->any())->method('getId')->will($this->returnValue(3));
+        $this->metadataMock->expects($this->any())->method('getLinkField')->willReturn($this->linkField);
+        $this->product->expects($this->any())
+            ->method('getData')
+            ->with($this->linkField)
+            ->willReturn(3);
 
         $bundle->expects($this->once())->method('dropAllUnneededSelections')->with(3, []);
         $bundle->expects($this->once())->method('removeProductRelations')->with(3, [$productId]);
