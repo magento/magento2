@@ -35,7 +35,7 @@
                 <required_character_classes_number>3</required_character_classes_number>
                 <minimum_password_length>8</minimum_password_length>
                 <lockout_failures>10</lockout_failures>
-                <lockout_threshold>30</lockout_threshold>
+                <lockout_threshold>10</lockout_threshold>
             </password>
             <address>
                 <street_lines>2</street_lines>
