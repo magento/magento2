@@ -40,7 +40,7 @@ class PaymentToken extends AbstractDb
                 'payment_token_id = entity_id',
                 null
             )
-            ->where('order_payment_id = ?', intval($paymentId));
+            ->where('order_payment_id = ?', (int) $paymentId);
         return $connection->fetchRow($select);
     }
 
@@ -102,6 +102,16 @@ class PaymentToken extends AbstractDb
     public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
     {
         $connection = $this->getConnection();
+
+        $select = $connection->select()
+            ->from(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE)
+            ->where('order_payment_id = ?', (int) $orderPaymentId)
+            ->where('payment_token_id =?', (int) $paymentTokenId);
+
+        if (!empty($connection->fetchRow($select))) {
+            return true;
+        }
+
         return 1 === $connection->insert(
             $this->getTable(InstallSchema::ORDER_PAYMENT_TO_PAYMENT_TOKEN_TABLE),
             ['order_payment_id' => (int) $orderPaymentId, 'payment_token_id' => (int) $paymentTokenId]
