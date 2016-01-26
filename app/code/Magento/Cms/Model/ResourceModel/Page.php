@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Cms\Model\ResourceModel;
 
 use Magento\Cms\Model\Page as CmsPage;
@@ -224,7 +222,7 @@ class Page extends AbstractDb
             ->where('cp.identifier = ?', $identifier)
             ->where('cps.store_id IN (?)', $store);
 
-        if (!is_null($isActive)) {
+        if ($isActive !== null) {
             $select->where('cp.is_active = ?', $isActive);
         }
 

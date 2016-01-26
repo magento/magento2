@@ -18,6 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * CMS block model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Block extends AbstractDb
 {

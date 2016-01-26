@@ -264,6 +264,17 @@ define([
         },
 
         /**
+         * Reload source
+         *
+         * @param {bool} state
+         */
+        reload: function (state) {
+            if (!state) {
+                this.externalSource().set('params.t', new Date().getTime());
+            }
+        },
+
+        /**
          * Updates value from external value
          *
          */
