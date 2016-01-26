@@ -7,6 +7,7 @@
 namespace Magento\Framework\Model;
 
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
+
 /**
  * Class Orchestrator
  */
