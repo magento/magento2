@@ -6,6 +6,8 @@
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 
 /**
@@ -28,14 +30,24 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $requestBuilder;
 
     /**
-     * @var \Magento\Search\Model\SearchEngine
+     * @var \Magento\Search\Api\SearchInterface
      */
-    private $searchEngine;
+    private $search;
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
      */
     private $temporaryStorageFactory;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -58,9 +70,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder
-     * @param \Magento\Search\Model\SearchEngine $searchEngine
+     * @param \Magento\Search\Api\SearchInterface $search
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
+     * @param \Zend_Db_Adapter_Abstract|null $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -84,13 +98,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder,
-        \Magento\Search\Model\SearchEngine $searchEngine,
+        \Magento\Search\Api\SearchInterface $search,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder,
         $connection = null
     ) {
         $this->requestBuilder = $requestBuilder;
-        $this->searchEngine = $searchEngine;
+        $this->search = $search;
         $this->temporaryStorageFactory = $temporaryStorageFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->filterBuilder = $filterBuilder;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -136,19 +154,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected function _renderFiltersBefore()
     {
         if ($this->filters) {
-            $this->requestBuilder->bindDimension('scope', $this->getStoreId());
-            $this->requestBuilder->setRequestName('advanced_search_container');
             foreach ($this->filters as $attributes) {
                 foreach ($attributes as $attributeCode => $attributeValue) {
                     $attributeCode = $this->getAttributeCode($attributeCode);
-                    $this->requestBuilder->bindRequestValue($attributeCode, $attributeValue);
+                    $this->filterBuilder->setField($attributeCode);
+                    $this->filterBuilder->setValue($attributeValue);
+                    $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
                 }
             }
-            $queryRequest = $this->requestBuilder->create();
-            $queryResponse = $this->searchEngine->search($queryRequest);
+            $searchCriteria = $this->searchCriteriaBuilder->create();
+            $searchCriteria->setRequestName('advanced_search_container');
+            $searchResult = $this->search->search($searchCriteria);
 
             $temporaryStorage = $this->temporaryStorageFactory->create();
-            $table = $temporaryStorage->storeDocuments($queryResponse->getIterator());
+            $table = $temporaryStorage->storeApiDocuments($searchResult->getItems());
 
             $this->getSelect()->joinInner(
                 [
@@ -158,7 +177,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 []
             );
         }
-        return parent::_renderFiltersBefore();
+        parent::_renderFiltersBefore();
     }
 
     /**
