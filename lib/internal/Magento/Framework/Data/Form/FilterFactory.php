@@ -28,7 +28,7 @@ class FilterFactory
     /**
      * Create filter instance
      *
-     * @param $filterCode
+     * @param string $filterCode
      * @param array $data
      * @return FilterInterface
      */
