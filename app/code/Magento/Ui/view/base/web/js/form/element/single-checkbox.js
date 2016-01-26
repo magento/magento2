@@ -5,8 +5,9 @@
 
 define([
     'Magento_Ui/js/form/element/abstract',
-    'underscore'
-], function (AbstractField, _) {
+    'underscore',
+    'mage/translate'
+], function (AbstractField, _, $t) {
     'use strict';
 
     return AbstractField.extend({
@@ -15,23 +16,19 @@ define([
             checked: false,
             exportedValue: '',
             isMultiple: false,
-            preferCheckbox: true,
+            prefer: 'checkbox', // 'radio' | 'checkbox' | 'toggle'
             valueMap: {},
             keyboard: {},
 
             templates: {
                 radio: 'ui/form/components/single/radio',
-                checkbox: 'ui/form/components/single/checkbox'
+                checkbox: 'ui/form/components/single/checkbox',
+                toggle: 'ui/form/components/single/switcher'
             },
 
             listens: {
                 'checked': 'onCheckedChanged',
-                'value': 'onValueChanged',
-                'exportedValue': 'onExtendedValueChanged'
-            },
-            links: {
-                value: false,
-                exportedValue: '${ $.provider }:${ $.dataScope }'
+                'value': 'onExtendedValueChanged'
             }
         },
 
@@ -39,11 +36,51 @@ define([
          * @returns {Element}
          */
         initialize: function () {
+            return this
+                ._super()
+                .initKeyboardHandlers();
+        },
+
+        /**
+         * @returns {Element}
+         */
+        initConfig: function (config) {
             this._super();
-            this.initKeyboardHandlers();
-            this.elementTmpl = this.isMultiple || this.preferCheckbox ?
-                this.templates.checkbox :
-                this.templates.radio;
+
+            if (!config.elementTmpl) {
+                if (!this.prefer && !this.isMultiple) {
+                    this.elementTmpl = this.templates.radio;
+                } else if (this.prefer === 'radio') {
+                    this.elementTmpl = this.templates.radio;
+                } else if (this.prefer === 'checkbox') {
+                    this.elementTmpl = this.templates.checkbox;
+                } else if (this.prefer === 'toggle') {
+                    this.elementTmpl = this.templates.toggle;
+                } else {
+                    this.elementTmpl = this.templates.checkbox;
+                }
+            }
+
+            if (this.prefer === 'toggle' && _.isEmpty(this.toggleLabels)) {
+                this.toggleLabels = {
+                    'on': $t('Yes'),
+                    'off': $t('No')
+                };
+            }
+
+            if (typeof this.default === 'undefined' || this.default === null) {
+                this.default = '';
+            }
+
+            if (typeof this.value === 'undefined' || this.value === null) {
+                this.initialValue = this.value = this.default;
+            } else {
+                this.initialValue = this.value;
+            }
+
+            if (this.isMultiple && !_.isArray(this.value)) {
+                this.value = []; // needed for correct observable assingment
+            }
 
             return this;
         },
@@ -52,12 +89,8 @@ define([
          * @returns {Element}
          */
         initObservable: function () {
-            if (this.isMultiple && !_.isArray(this.exportedValue) && _.isEmpty(this.exportedValue)) {
-                this.exportedValue = [];
-            }
-
             return this._super()
-                .observe('checked exportedValue');
+                .observe('checked');
         },
 
         /**
@@ -93,25 +126,13 @@ define([
         },
 
         /**
-         * Sets initial value.
-         *
-         * @returns {Element}
-         */
-        setInitialValue: function () {
-            this._super();
-            this.value.notifySubscribers(this.value.peek());
-
-            return this;
-        },
-
-        /**
          * Get true/false key from valueMap by value.
          *
          * @param {*} value
          * @returns {Boolean|undefined}
          */
         getReverseValueMap: function getReverseValueMap(value) {
-            var bool;
+            var bool = false;
 
             _.some(this.valueMap, function (iValue, iBool) {
                 if (iValue === value) {
@@ -125,24 +146,17 @@ define([
         },
 
         /**
-         * Handle value changes for checkbox / radio button.
-         *
-         * @param {*} updatedValue
+         * @returns {Element}
          */
-        onValueChanged: function (updatedValue) {
-            var oldChecked = this.checked.peek(),
-                isMappedUsed = !_.isEmpty(this.valueMap),
-                newChecked = false;
-
-            if (isMappedUsed) {
-                newChecked = this.getReverseValueMap(updatedValue);
-            } else if (typeof updatedValue === 'boolean') {
-                newChecked = updatedValue;
+        setInitialValue: function () {
+            if (_.isEmpty(this.valueMap)) {
+                this.on('value', this.onUpdate.bind(this));
+            } else {
+                this._super();
+                this.checked(this.getReverseValueMap(this.value()));
             }
 
-            if (newChecked !== oldChecked) {
-                this.checked(newChecked);
-            }
+            return this;
         },
 
         /**
@@ -153,13 +167,15 @@ define([
         onExtendedValueChanged: function (newExportedValue) {
             var isMappedUsed = !_.isEmpty(this.valueMap),
                 oldChecked = this.checked.peek(),
-                oldValue = this.value.peek(),
+                oldValue = this.initialValue,
                 newChecked;
 
             if (this.isMultiple) {
                 newChecked = newExportedValue.indexOf(oldValue) !== -1;
             } else if (isMappedUsed) {
                 newChecked = this.getReverseValueMap(newExportedValue);
+            } else if (typeof newExportedValue === 'boolean') {
+                newChecked = newExportedValue;
             } else {
                 newChecked = newExportedValue === oldValue;
             }
@@ -176,7 +192,7 @@ define([
          */
         onCheckedChanged: function (newChecked) {
             var isMappedUsed = !_.isEmpty(this.valueMap),
-                oldValue = this.value.peek(),
+                oldValue = this.initialValue,
                 newValue;
 
             if (isMappedUsed) {
@@ -185,31 +201,34 @@ define([
                 newValue = oldValue;
             }
 
-            //if (isMappedUsed && newValue !== oldValue) {
-            //    this.value(newValue);
-            //}
-
             if (!this.isMultiple && newChecked) {
-                this.exportedValue(newValue);
+                this.value(newValue);
             } else if (!this.isMultiple && !newChecked) {
                 if (typeof newValue === 'boolean') {
-                    this.exportedValue(newChecked);
-                } else if (newValue === this.exportedValue.peek()) {
-                    this.exportedValue('');
+                    this.value(newChecked);
+                } else if (newValue === this.value.peek()) {
+                    this.value('');
                 }
 
                 if (isMappedUsed) {
-                    this.exportedValue(newValue);
+                    this.value(newValue);
                 }
-            } else if (this.isMultiple && newChecked) {
-                if (this.exportedValue.indexOf(newValue) === -1) {
-                    this.exportedValue.push(newValue);
-                }
-            } else if (this.isMultiple && !newChecked) {
-                if (this.exportedValue.indexOf(newValue) !== -1) {
-                    this.exportedValue.splice(this.exportedValue.indexOf(newValue), 1);
-                }
+            } else if (this.isMultiple && newChecked && this.value.indexOf(newValue) === -1) {
+                this.value.push(newValue);
+            } else if (this.isMultiple && !newChecked && this.value.indexOf(newValue) !== -1) {
+                this.value.splice(this.value.indexOf(newValue), 1);
             }
+        },
+
+        /**
+         * @returns {Element}
+         */
+        onUpdate: function () {
+            if (this.hasUnique) {
+                this.setUnique();
+            }
+
+            return this._super();
         }
     });
 });
