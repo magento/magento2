@@ -1162,7 +1162,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             foreach ($skuData as $sku => $attributes) {
                 $linkId = $this->_connection->fetchOne(
                     $this->_connection->select()
-                        ->from($this->_resource->getTable('catalog_product_entity'))
+                        ->from($this->getResource()->getTable('catalog_product_entity'))
                         ->where('sku = ?', $sku)
                         ->columns($metadata->getLinkField())
                 );
@@ -1971,7 +1971,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $productIdsToReindex[] = $row['product_id'];
 
                 $row['website_id'] = $this->stockConfiguration->getDefaultScopeId();
-                $row['stock_id'] = $this->stockRegistry->getStock()->getStockId();
+                $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
 
                 $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
                 $existStockData = $stockItemDo->getData();
