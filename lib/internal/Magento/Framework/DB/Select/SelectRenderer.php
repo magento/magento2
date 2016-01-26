@@ -65,7 +65,7 @@ class SelectRenderer implements RendererInterface
      */
     public function render(Select $select, $sql = '')
     {
-        $sql = Select::SQL_SELECT . ' ';
+        $sql = Select::SQL_SELECT;
         foreach ($this->renderers as $renderer) {
             if (in_array($renderer['part'], [Select::COLUMNS, Select::FROM]) || $select->getPart($renderer['part'])) {
                 $sql = $renderer['renderer']->render($select, $sql);

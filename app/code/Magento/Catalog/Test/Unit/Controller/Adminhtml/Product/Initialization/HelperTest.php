@@ -359,12 +359,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     {
         $linkMock = $this->getMockBuilder(ProductLinkInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLinkType'])
             ->getMockForAbstractClass();
-
-        $linkMock->expects($this->once())
-            ->method('getLinkType')
-            ->willReturn('upsell');
 
         $this->productMock->expects($this->any())
             ->method('getProductLinks')
