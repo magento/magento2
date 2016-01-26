@@ -147,6 +147,7 @@ class Rule extends AbstractResource
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
