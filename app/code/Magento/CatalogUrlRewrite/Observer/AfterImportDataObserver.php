@@ -359,7 +359,11 @@ class AfterImportDataObserver implements ObserverInterface
                 $urlRewrite = $this->generateForCustom($currentUrlRewrite, $category);
             }
             if ($urlRewrite) {
-                $urlRewrites[] = $urlRewrite;
+                if (is_array($urlRewrite)) {
+                    $urlRewrites = array_merge($urlRewrites, $urlRewrite);
+                } else {
+                    $urlRewrites[] = $urlRewrite;
+                }
             }
         }
 
