@@ -9,7 +9,6 @@ use Magento\Backend\Model\Session\Quote;
 use Magento\BraintreeTwo\Gateway\Config\Config as GatewayConfig;
 use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType;
 use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
-use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Block\Form\Cc;
 use Magento\Payment\Model\Config;
@@ -37,9 +36,9 @@ class Form extends Cc
     protected $ccType;
 
     /**
-     * @var ConfigProviderInterface
+     * @var VaultPaymentInterface
      */
-    protected $vaultConfigProvider;
+    protected $vaultService;
 
     /**
      * @param Context $context
@@ -47,7 +46,7 @@ class Form extends Cc
      * @param Quote $sessionQuote
      * @param GatewayConfig $gatewayConfig
      * @param CcType $ccType
-     * @param ConfigProviderInterface $vaultConfigProvider
+     * @param VaultPaymentInterface $vaultService
      * @param array $data
      */
     public function __construct(
@@ -56,14 +55,14 @@ class Form extends Cc
         Quote $sessionQuote,
         GatewayConfig $gatewayConfig,
         CcType $ccType,
-        ConfigProviderInterface $vaultConfigProvider,
+        VaultPaymentInterface $vaultService,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $data);
         $this->sessionQuote = $sessionQuote;
         $this->gatewayConfig = $gatewayConfig;
         $this->ccType = $ccType;
-        $this->vaultConfigProvider = $vaultConfigProvider;
+        $this->vaultService = $vaultService;
     }
 
     /**
@@ -92,8 +91,7 @@ class Form extends Cc
      */
     public function isVaultEnabled()
     {
-        $vault = $this->vaultConfigProvider->getConfig()[VaultPaymentInterface::CODE];
-        return $vault['is_enabled'] && $vault['vault_provider_code'] == ConfigProvider::CODE;
+        return $this->vaultService->isActiveForPayment(ConfigProvider::CODE);
     }
 
     /**
