@@ -54,8 +54,10 @@ class ConsolidatedConfig
                 $this->integrations = unserialize($integrations);
             } else {
                 $this->integrations = $this->configReader->read();
-                $this->configCacheType->save(serialize($this->integrations),
-                    self::CACHE_ID, [TypeConsolidated::CACHE_TAG]
+                $this->configCacheType->save(
+                    serialize($this->integrations),
+                    self::CACHE_ID,
+                    [TypeConsolidated::CACHE_TAG]
                 );
             }
         }

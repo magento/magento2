@@ -150,7 +150,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select->from($this->getTable('authorization_role'))
                 ->where('parent_id > :parent_id')
                 ->where('user_id = :user_id')
-                ->where('user_type = :user_type' );
+                ->where('user_type = :user_type');
 
             $binds = ['parent_id' => 0, 'user_id' => $userId,
                       'user_type' => UserContextInterface::USER_TYPE_ADMIN
