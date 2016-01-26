@@ -185,7 +185,9 @@ define([
                 this.title = title;
             }
 
-            this.modal.modal('setTitle', title);
+            if (this.modal) {
+                this.modal.modal('setTitle', title);
+            }
         },
 
         /**
