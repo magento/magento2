@@ -131,13 +131,7 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-
-
         $blockMock = $this->_getCleanMock('\Magento\Theme\Block\Html\Topmenu');
-
-        $treeMock = $this->_getCleanMock('\Magento\Framework\Data\Tree');
-
-
 
         $eventMock = $this->getMock('\Magento\Framework\Event', ['getBlock'], [], '', false);
         $eventMock->expects($this->once())
