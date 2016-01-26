@@ -18,6 +18,11 @@ class AdminSessionsManager
     const ADMIN_SESSION_LIFETIME = 86400;
 
     /**
+     * Logout reason when current user has been locked out
+     */
+    const LOGOUT_REASON_USER_LOCKED = 10;
+
+    /**
      * @var \Magento\Security\Helper\SecurityConfig
      */
     protected $securityConfig;
@@ -155,6 +160,11 @@ class AdminSessionsManager
                     'Your current session is terminated by another user of this account.'
                 );
                 break;
+            case self::LOGOUT_REASON_USER_LOCKED:
+                $reasonMessage = __(
+                    'Your account is temporarily disabled.'
+                );
+                break;
             default:
                 $reasonMessage = __('Your current session has been expired.');
                 break;
@@ -237,11 +247,11 @@ class AdminSessionsManager
                 'session_id' => $this->authSession->getSessionId(),
                 'user_id' => $this->authSession->getUser()->getId(),
                 'ip' => $this->securityConfig->getRemoteIp(),
+                'updated_at' => $this->securityConfig->getCurrentTimestamp(),
                 'status' => AdminSessionInfo::LOGGED_IN
             ]
         );
         $this->currentSession->save();
-
         return $this;
     }
 
