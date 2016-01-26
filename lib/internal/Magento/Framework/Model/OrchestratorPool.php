@@ -25,7 +25,7 @@ class OrchestratorPool
     /**
      * OrchestratorPool constructor.
      * @param ObjectManager $objectManager
-     * @param $operations
+     * @param string[] $operations
      */
     public function __construct(
         ObjectManager $objectManager,
