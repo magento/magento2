@@ -9,6 +9,7 @@ namespace Magento\User\Controller\Adminhtml\User\Role;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\State\UserLockedException;
 
 class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
@@ -38,13 +39,140 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     const RESOURCE_FORM_DATA_SESSION_KEY = 'resource_form_data';
 
     /**
+     * @var \Magento\Security\Helper\SecurityCookie
+     */
+    protected $securityCookieHelper;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
+     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param \Magento\Authorization\Model\RulesFactory $rulesFactory
+     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param \Magento\Security\Helper\SecurityCookie
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Authorization\Model\RoleFactory $roleFactory,
+        \Magento\User\Model\UserFactory $userFactory,
+        \Magento\Authorization\Model\RulesFactory $rulesFactory,
+        \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Framework\Filter\FilterManager $filterManager,
+        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+    ) {
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $roleFactory,
+            $userFactory,
+            $rulesFactory,
+            $authSession,
+            $filterManager
+        );
+        $this->securityCookieHelper = $securityCookieHelper;
+    }
+
+    /**
+     * Role form submit action to save or create new role
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function execute()
+    {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
+        $rid = $this->getRequest()->getParam('role_id', false);
+        $resource = $this->getRequest()->getParam('resource', false);
+        $roleUsers = $this->getRequest()->getParam('in_role_user', null);
+        parse_str($roleUsers, $roleUsers);
+        $roleUsers = array_keys($roleUsers);
+
+
+
+        $isAll = $this->getRequest()->getParam('all');
+        if ($isAll) {
+            $resource = [$this->_objectManager->get('Magento\Framework\Acl\RootResource')->getId()];
+        }
+
+        $role = $this->_initRole('role_id');
+        if (!$role->getId() && $rid) {
+            $this->messageManager->addError(__('This role no longer exists.'));
+            return $resultRedirect->setPath('adminhtml/*/');
+        }
+
+
+        try {
+            $password = $this->getRequest()->getParam(
+                \Magento\User\Block\Role\Tab\Info::IDENTITY_VERIFICATION_PASSWORD_FIELD
+            );
+            $this->securityCheck($password);
+            $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
+            $role->setName($roleName)
+                ->setPid($this->getRequest()->getParam('parent_id', false))
+                ->setRoleType(RoleGroup::ROLE_TYPE)
+                ->setUserType(UserContextInterface::USER_TYPE_ADMIN);
+            $this->_eventManager->dispatch(
+                'admin_permissions_role_prepare_save',
+                ['object' => $role, 'request' => $this->getRequest()]
+            );
+            $role->save();
+
+            $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
+
+            $this->processPreviousUsers($role);
+
+            foreach ($roleUsers as $nRuid) {
+                $this->addUserToRole($nRuid, $role->getId());
+            }
+            $this->messageManager->addSuccess(__('You saved the role.'));
+        } catch (UserLockedException $e) {
+            $this->_auth->logout();
+            $this->securityCookieHelper->setLogoutReasonCookie(
+                \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+            );
+            return $resultRedirect->setPath('*');
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            return $this->saveDataToSessionAndRedirect($role, $this->getRequest()->getPostValue(), $resultRedirect);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('An error occurred while saving this role.'));
+        }
+
+        return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * @param \Magento\Authorization\Model\Role $role
+     * @return $this
+     * @throws \Exception
+     */
+    protected function processPreviousUsers(\Magento\Authorization\Model\Role $role)
+    {
+        $oldRoleUsers = $this->getRequest()->getParam('in_role_user_old');
+        parse_str($oldRoleUsers, $oldRoleUsers);
+        $oldRoleUsers = array_keys($oldRoleUsers);
+
+        foreach ($oldRoleUsers as $oUid) {
+            $this->deleteUserFromRole($oUid, $role->getId());
+        }
+
+        return $this;
+    }
+
+    /**
      * Assign user to role
      *
      * @param int $userId
      * @param int $roleId
      * @return bool
      */
-    protected function _addUserToRole($userId, $roleId)
+    protected function addUserToRole($userId, $roleId)
     {
         $user = $this->_userFactory->create()->load($userId);
         $user->setRoleId($roleId);
@@ -65,7 +193,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @return bool
      * @throws \Exception
      */
-    protected function _deleteUserFromRole($userId, $roleId)
+    protected function deleteUserFromRole($userId, $roleId)
     {
         try {
             $this->_userFactory->create()->setRoleId($roleId)->setUserId($userId)->deleteFromRole();
@@ -76,87 +204,37 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     }
 
     /**
-     * Role form submit action to save or create new role
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     */
-    public function execute()
-    {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-
-        $rid = $this->getRequest()->getParam('role_id', false);
-        $resource = $this->getRequest()->getParam('resource', false);
-        $roleUsers = $this->getRequest()->getParam('in_role_user', null);
-        parse_str($roleUsers, $roleUsers);
-        $roleUsers = array_keys($roleUsers);
-
-        $oldRoleUsers = $this->getRequest()->getParam('in_role_user_old');
-        parse_str($oldRoleUsers, $oldRoleUsers);
-        $oldRoleUsers = array_keys($oldRoleUsers);
-
-        $isAll = $this->getRequest()->getParam('all');
-        if ($isAll) {
-            $resource = [$this->_objectManager->get('Magento\Framework\Acl\RootResource')->getId()];
-        }
-
-        $role = $this->_initRole('role_id');
-        if (!$role->getId() && $rid) {
-            $this->messageManager->addError(__('This role no longer exists.'));
-            return $resultRedirect->setPath('adminhtml/*/');
-        }
-
-        $password = $this->getRequest()->getParam(
-            \Magento\User\Block\Role\Tab\Info::IDENTITY_VERIFICATION_PASSWORD_FIELD
-        );
-        if (!$this->securityCheck($password)) {
-            return $this->saveDataToSessionAndRedirect($role, $this->getRequest()->getPostValue(), $resultRedirect);
-        }
-
-        try {
-            $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
-            $role->setName($roleName)
-                ->setPid($this->getRequest()->getParam('parent_id', false))
-                ->setRoleType(RoleGroup::ROLE_TYPE)
-                ->setUserType(UserContextInterface::USER_TYPE_ADMIN);
-            $this->_eventManager->dispatch(
-                'admin_permissions_role_prepare_save',
-                ['object' => $role, 'request' => $this->getRequest()]
-            );
-            $role->save();
-
-            $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
-
-            foreach ($oldRoleUsers as $oUid) {
-                $this->_deleteUserFromRole($oUid, $role->getId());
-            }
-
-            foreach ($roleUsers as $nRuid) {
-                $this->_addUserToRole($nRuid, $role->getId());
-            }
-            $this->messageManager->addSuccess(__('You saved the role.'));
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred while saving this role.'));
-        }
-
-        return $resultRedirect->setPath('adminhtml/*/');
-    }
-
-    /**
      * @param string $passwordString
-     * @return bool
+     * @return $this
+     * @throws UserLockedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     protected function securityCheck($passwordString)
     {
-        $isCheckSuccessful = true;
-        if (!$this->performIdentityCheck($passwordString)) {
-            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
-            $isCheckSuccessful = false;
+        $isCheckSuccessful = $this->performIdentityCheck($passwordString);
+
+        $user = $this->_auth->getUser();
+        $this->_eventManager->dispatch(
+            'admin_user_authenticate_after',
+            [
+                'username' => $user->getUserName(),
+                'password' => $passwordString,
+                'user' => $user,
+                'result' => $isCheckSuccessful
+            ]
+        );
+        $user = $user->load($user->getId());
+        if ($user->getLockExpires()) {
+            throw new UserLockedException(__('Your account is temporarily disabled.'));
         }
 
-        return $isCheckSuccessful;
+        if (!$isCheckSuccessful) {
+            throw new \Magento\Framework\Exception\AuthenticationException(
+                __('You have entered an invalid password for current user.')
+            );
+        }
+
+        return $this;
     }
 
     /**
@@ -192,6 +270,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             $this->_getSession()->setData(self::RESOURCE_FORM_DATA_SESSION_KEY, $resource);
         }
         $arguments = $role->getId() ? ['rid' => $role->getId()] : [];
-        return $resultRedirect->setPath('adminhtml/*/editrole', $arguments);
+        return $resultRedirect->setPath('*/*/editrole', $arguments);
     }
 }
