@@ -62,6 +62,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $this->extensionAttributesMock = $this->getMockBuilder(
                 \Magento\Catalog\Api\Data\ProductExtensionInterface::class
             )->disableOriginalConstructor()
+            ->setMethods(['setDownloadableProductSamples', 'setDownloadableProductLinks'])
             ->getMockForAbstractClass();
         $this->sampleFactoryMock = $this->getMockBuilder('\Magento\Downloadable\Api\Data\SampleInterfaceFactory')
             ->disableOriginalConstructor()
