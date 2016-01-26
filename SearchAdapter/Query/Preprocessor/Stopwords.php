@@ -10,6 +10,7 @@ use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 class Stopwords implements PreprocessorInterface
 {
