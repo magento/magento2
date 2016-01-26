@@ -6,7 +6,6 @@
 namespace Magento\Security\Model\Plugin;
 
 use Magento\Security\Model\AdminSessionsManager;
-use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Backend\Controller\Adminhtml\Auth\Login;
 
 /**
@@ -25,47 +24,23 @@ class LoginController
     protected $sessionsManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @var \Magento\Security\Helper\SecurityCookie
      */
-    protected $phpCookieManager;
-
-    /**
-     * @var CookieReaderInterface
-     */
-    protected $cookieReader;
-
-    /**
-     * @var \Magento\Backend\Helper\Data
-     */
-    protected $backendData;
-
-    /**
-     * @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory
-     */
-    protected $cookieMetadataFactory;
+    protected $securityCookieHelper;
 
     /**
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
-     * @param \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager
-     * @param CookieReaderInterface $cookieReader
-     * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
      */
     public function __construct(
         \Magento\Framework\Message\ManagerInterface $messageManager,
         AdminSessionsManager $sessionsManager,
-        \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager,
-        CookieReaderInterface $cookieReader,
-        \Magento\Backend\Helper\Data $backendData,
-        \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
+        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
     ) {
         $this->messageManager = $messageManager;
         $this->sessionsManager = $sessionsManager;
-        $this->phpCookieManager = $phpCookieManager;
-        $this->cookieReader = $cookieReader;
-        $this->backendData = $backendData;
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->securityCookieHelper = $securityCookieHelper;
     }
 
     /**
@@ -76,12 +51,12 @@ class LoginController
      */
     public function beforeExecute(Login $login)
     {
-        $logoutReasonCode = $this->cookieReader->getCookie(AuthSession::LOGOUT_REASON_CODE_COOKIE_NAME, -1);
+        $logoutReasonCode = $this->securityCookieHelper->getLogoutReasonCookie();
         if ($this->isLoginForm($login) && $logoutReasonCode >= 0) {
             $this->messageManager->addError(
                 $this->sessionsManager->getLogoutReasonMessageByStatus($logoutReasonCode)
             );
-            $this->deleteLogoutReasonCookie();
+            $this->securityCookieHelper->deleteLogoutReasonCookie();
         }
     }
 
@@ -94,25 +69,5 @@ class LoginController
     protected function isLoginForm(Login $login)
     {
         return $login->getRequest()->getUri() == $login->getUrl('*');
-    }
-
-    /**
-     * Delete cookie with reason of logout
-     *
-     * @return $this
-     */
-    protected function deleteLogoutReasonCookie()
-    {
-        /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $metaData */
-        $metaData = $this->cookieMetadataFactory->create();
-        $metaData->setPath('/' . $this->backendData->getAreaFrontName())->setDuration(-1);
-
-        $this->phpCookieManager->setPublicCookie(
-            AuthSession::LOGOUT_REASON_CODE_COOKIE_NAME,
-            '',
-            $metaData
-        );
-
-        return $this;
     }
 }

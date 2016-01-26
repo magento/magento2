@@ -5,7 +5,7 @@
  */
 namespace Magento\Vault\Model\Ui;
 
-use Magento\Customer\Model\Session;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Store\Model\StoreManagerInterface;
@@ -36,9 +36,9 @@ final class TokensConfigProvider implements ConfigProviderInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var Session
+     * @var SessionManagerInterface
      */
-    private $customerSession;
+    private $session;
 
     /**
      * @var VaultPaymentInterface
@@ -58,7 +58,7 @@ final class TokensConfigProvider implements ConfigProviderInterface
     /**
      * Constructor
      *
-     * @param Session $customerSession
+     * @param SessionManagerInterface $session
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -67,7 +67,7 @@ final class TokensConfigProvider implements ConfigProviderInterface
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
      */
     public function __construct(
-        Session $customerSession,
+        SessionManagerInterface $session,
         PaymentTokenRepositoryInterface $paymentTokenRepository,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -78,7 +78,7 @@ final class TokensConfigProvider implements ConfigProviderInterface
         $this->paymentTokenRepository = $paymentTokenRepository;
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->customerSession = $customerSession;
+        $this->session = $session;
         $this->vaultPayment = $vaultPayment;
         $this->storeManager = $storeManager;
         $this->tokenUiComponentProviders = $tokenUiComponentProviders;
@@ -93,7 +93,7 @@ final class TokensConfigProvider implements ConfigProviderInterface
     {
         $vaultPayments = [];
 
-        $customerId = $this->customerSession->getCustomerId();
+        $customerId = $this->session->getCustomerId();
         if (!$customerId) {
             return $vaultPayments;
         }
