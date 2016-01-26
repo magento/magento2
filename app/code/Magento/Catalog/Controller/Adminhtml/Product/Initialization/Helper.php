@@ -200,7 +200,7 @@ class Helper
             }
         }
 
-        foreach($savedLinksByType as $links) {
+        foreach ($savedLinksByType as $links) {
             $productLinks = array_merge($productLinks, $links);
         }
         $product->setProductLinks($productLinks);
