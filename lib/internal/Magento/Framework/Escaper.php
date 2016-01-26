@@ -8,7 +8,7 @@ namespace Magento\Framework;
 /**
  * Magento escape methods
  */
-class Escaper
+class Escaper extends \Zend\Escaper\Escaper
 {
     /**
      * Escape html entities
