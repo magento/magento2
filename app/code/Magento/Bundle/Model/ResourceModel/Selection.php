@@ -120,10 +120,11 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             true
         )->from(
             $this->getMainTable(),
-            'parent_product_id'
+            ''
         )->join(
             ['e' => $this->metadataPool->getMetadata(ProductInterface::class)->getEntityTable()],
-            'e.' . $metadata->getLinkField() . ' = ' .  $this->getMainTable() . '.parent_product_id'
+            'e.' . $metadata->getLinkField() . ' = ' .  $this->getMainTable() . '.parent_product_id',
+            ['e.entity_id as parent_product_id']
         )->where(
             'e.entity_id IN(?)',
             $childId
