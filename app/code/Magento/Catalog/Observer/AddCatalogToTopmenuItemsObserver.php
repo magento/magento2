@@ -40,19 +40,19 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
     /**
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState
-     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
         \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver
     ) {
         $this->catalogCategory = $catalogCategory;
-        $this->collectionFactory = $collectionFactory;
+        $this->collectionFactory = $categoryCollectionFactory;
         $this->storeManager = $storeManager;
         $this->layerResolver = $layerResolver;
     }
@@ -70,19 +70,10 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
         $block->addIdentity(Category::CACHE_TAG);
 
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
+        $storeId = $this->storeManager->getStore()->getId();
 
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
-        $collection = $this->collectionFactory->create()
-            ->setStoreId($this->storeManager->getStore()->getId())
-            ->addAttributeToSelect('name')
-            ->addFieldToFilter('path', ['like' => '1/' . $rootId . '/%']) //load only from store root
-            ->addAttributeToFilter('include_in_menu', 1)
-            ->addAttributeToFilter('is_active', 1)
-            ->addUrlRewriteToResult()
-            ->addOrder('level', Collection::SORT_ORDER_ASC)
-            ->addOrder('position', Collection::SORT_ORDER_ASC)
-            ->addOrder('parent_id', Collection::SORT_ORDER_ASC)
-            ->addOrder('entity_id', Collection::SORT_ORDER_ASC);
+        $collection = $this->getCategoryTree($storeId, $rootId);
 
         $currentCategory = $this->getCurrentCategory();
 
@@ -140,5 +131,31 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
             'has_active' => in_array((string)$category->getId(), explode('/', $currentCategory->getPath()), true),
             'is_active' => $category->getId() == $currentCategory->getId()
         ];
+    }
+
+    /**
+     * Get Category Tree
+     *
+     * @param int $storeId
+     * @param int $rootId
+     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function getCategoryTree($storeId, $rootId)
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
+        $collection = $this->collectionFactory->create();
+        $collection->setStoreId($storeId);
+        $collection->addAttributeToSelect('name');
+        $collection->addFieldToFilter('path', ['like' => '1/' . $rootId . '/%']); //load only from store root
+        $collection->addAttributeToFilter('include_in_menu', 1);
+        $collection->addAttributeToFilter('is_active', 1);
+        $collection->addUrlRewriteToResult();
+        $collection->addOrder('level', Collection::SORT_ORDER_ASC);
+        $collection->addOrder('position', Collection::SORT_ORDER_ASC);
+        $collection->addOrder('parent_id', Collection::SORT_ORDER_ASC);
+        $collection->addOrder('entity_id', Collection::SORT_ORDER_ASC);
+
+        return $collection;
     }
 }
