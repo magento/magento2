@@ -31,6 +31,8 @@ class TemporaryStorage
     }
 
     /**
+     * Stores Documents
+     *
      * @param \ArrayIterator|\Magento\Framework\Search\Document[] $documents
      * @return Table
      */
@@ -44,10 +46,12 @@ class TemporaryStorage
             ];
         }
 
-        return $this->createAndPopulateTemporaryTable($data);
+        return $this->populateTemporaryTable($this->createTemporaryTable(), $data);
     }
 
     /**
+     * Stores Api type Documents
+     *
      * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
      */
@@ -61,19 +65,19 @@ class TemporaryStorage
             ];
         }
 
-        return $this->createAndPopulateTemporaryTable($data);
+        return $this->populateTemporaryTable($this->createTemporaryTable(), $data);
     }
 
     /**
-     * Creates and populates temporary table
+     * Populates temporary table
      *
+     * @param Table $table
      * @param array $data
      * @return Table
      * @throws \Zend_Db_Exception
      */
-    private function createAndPopulateTemporaryTable($data)
+    private function populateTemporaryTable(Table $table, $data)
     {
-        $table = $this->createTemporaryTable();
         if (count($data)) {
             $this->getConnection()->insertArray(
                 $table->getName(),
