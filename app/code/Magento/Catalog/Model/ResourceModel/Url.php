@@ -168,6 +168,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _getCategoryAttribute($attributeCode, $categoryIds, $storeId)
     {
         $linkField = $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
+        $identifierFiled = $this->metadataPool->getMetadata(CategoryInterface::class)->getIdentifierField();
 
         $connection = $this->getConnection();
         if (!isset($this->_categoryAttributes[$attributeCode])) {
@@ -200,27 +201,28 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
         } elseif ($this->_categoryAttributes[$attributeCode]['is_global'] || $storeId == 0) {
             $select->from(
-                $attributeTable,
-                [$linkField, 'value']
+                ['t1' =>$this->getTable('catalog_category_entity')],
+                [$identifierFiled]
             )->joinLeft(
-                ['e' => $this->getTable('catalog_category_entity')],
-                "e.{$linkField} = t1.{$linkField}",
-                []
+                ['e' => $attributeTable],
+                "t1.{$linkField} = e.{$linkField}",
+                ['value']
             )->where(
-                'attribute_id = :attribute_id'
-            )->where(
-                'store_id = ?',
-                0
-            )->where(
-                'e.entity_id IN(?)',
+                "t1.{$identifierFiled} IN(?)",
                 $categoryIds
+            )->where(
+                'e.attribute_id = :attribute_id'
+            )->where(
+                'e.store_id = ?',
+                0
             );
+
             $bind['attribute_id'] = $this->_categoryAttributes[$attributeCode]['attribute_id'];
         } else {
             $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
             $select->from(
                 ['t1' => $attributeTable],
-                [$linkField, 'value' => $valueExpr]
+                [$identifierFiled => 'e.'.$identifierFiled, 'value' => $valueExpr]
             )->joinLeft(
                 ['t2' => $attributeTable],
                 "t1.{$linkField} = t2.{$linkField} AND t1.attribute_id = t2.attribute_id AND t2.store_id = :store_id",
@@ -237,7 +239,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             )->where(
                 "e.entity_id IN(?)",
                 $categoryIds
-            );
+            )->group('e.entity_id');
 
             $bind['attribute_id'] = $this->_categoryAttributes[$attributeCode]['attribute_id'];
             $bind['store_id'] = $storeId;
@@ -247,7 +249,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $attributes = [];
         foreach ($rowSet as $row) {
-            $attributes[$row[$linkField]] = $row['value'];
+            $attributes[$row[$identifierFiled]] = $row['value'];
         }
         unset($rowSet);
         foreach ($categoryIds as $categoryId) {
