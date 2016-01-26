@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  *
  */
-namespace Magento\Integration\Model\Consolidated\Config;
+namespace Magento\Integration\Model\Config\Consolidated;
 
 use Magento\Integration\Model\Config\Consolidated\Reader as ConfigReader;
 
