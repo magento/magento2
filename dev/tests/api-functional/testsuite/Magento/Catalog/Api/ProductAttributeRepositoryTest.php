@@ -74,7 +74,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertNotNull($response['items'][0]['attribute_id']);
     }
 
-    public function testGetList_inCondition()
+    public function testGetListWithInCondition()
     {
         $searchCriteria = [
             'searchCriteria' => [
