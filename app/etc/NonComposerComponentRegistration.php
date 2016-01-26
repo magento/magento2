@@ -4,19 +4,38 @@
  * See COPYING.txt for license details.
  */
 
-$pathList[] = dirname(__DIR__) . '/code/*/*/cli_commands.php';
-$pathList[] = dirname(__DIR__) . '/code/*/*/registration.php';
-$pathList[] = dirname(__DIR__) . '/design/*/*/*/registration.php';
-$pathList[] = dirname(__DIR__) . '/i18n/*/*/registration.php';
-$pathList[] = dirname(dirname(__DIR__)) . '/lib/internal/*/*/registration.php';
-$pathList[] = dirname(dirname(__DIR__)) . '/lib/internal/*/*/*/registration.php';
-foreach ($pathList as $path) {
-    // Sorting is disabled intentionally for performance improvement
-    $files = glob($path, GLOB_NOSORT);
-    if ($files === false) {
-        throw new \RuntimeException('glob() returned error while searching in \'' . $path . '\'');
-    }
-    foreach ($files as $file) {
-        include $file;
+namespace Magento\NonComposerComponentRegistration;
+
+use RuntimeException;
+
+/**
+ * Include files from a list of glob patterns
+ *
+ * @throws RuntimeException
+ * @return void
+ */
+function main()
+{
+    $globPatterns = include  __DIR__ . '/include-globlist.php';
+    $baseDir = dirname(__DIR__) . '/';
+
+    foreach ($globPatterns as $globPattern) {
+        // Sorting is disabled intentionally for performance improvement
+        $files = glob($baseDir . $globPattern, GLOB_NOSORT);
+        if ($files === false) {
+            throw new RuntimeException("glob(): error with '$baseDir$globPattern'");
+        }
+        array_map(__NAMESPACE__ . '\file', $files);
     }
 }
+
+/**
+ * Isolated include with it's own variable scope
+ *
+ * @return void
+ */
+function file() {
+    include func_get_arg(0);
+}
+
+main();
