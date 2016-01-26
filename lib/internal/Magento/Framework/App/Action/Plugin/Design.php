@@ -24,7 +24,6 @@ class Design
      * Initialize design
      *
      * @param \Magento\Framework\App\ActionInterface $subject
-     * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      *
      * @return mixed
