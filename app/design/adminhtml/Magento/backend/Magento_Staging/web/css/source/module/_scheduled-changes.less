@@ -126,10 +126,10 @@
     }
 
     .schedule-date {
-        font-weight: bold;
-        padding-left: 20px;
+        font-weight: @font-weight__bold;
+        padding-left: @indent__base;
         white-space: nowrap;
-        width: 17rem;
+        width: 10rem;
 
         &:before {
             background: @scheduled-changes-scale-from__background-color;
@@ -163,6 +163,7 @@
 
     .schedule-time {
         white-space: nowrap;
+        width: 7rem;
     }
 
     .schedule-label {
@@ -188,9 +189,9 @@
             + a {
                 &:before {
                     color: @scheduled-changes-table-accent__color;
-                    content: ' | ';
+                    content: '|';
                     display: inline-block;
-                    margin: 0 .3rem 0 .1rem;
+                    margin: 0 .3rem 0 0.4rem;
                 }
             }
         }
@@ -198,6 +199,10 @@
             cursor: pointer;
         }
     }
+}
+
+.schedule-name {
+    font-weight: @font-weight__bold;
 }
 
 .limited-text {
