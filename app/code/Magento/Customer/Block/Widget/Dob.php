@@ -33,18 +33,16 @@ class Dob extends AbstractWidget
      * @var \Magento\Framework\View\Element\Html\Date
      */
     protected $dateElement;
-
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var \Magento\Framework\Data\Form\FilterFactory
      */
-    protected $localeResolver;
+    private $filterFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param CustomerMetadataInterface $customerMetadata
      * @param \Magento\Framework\View\Element\Html\Date $dateElement
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
@@ -52,11 +50,11 @@ class Dob extends AbstractWidget
         \Magento\Customer\Helper\Address $addressHelper,
         CustomerMetadataInterface $customerMetadata,
         \Magento\Framework\View\Element\Html\Date $dateElement,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Data\Form\FilterFactory $filterFactory,
         array $data = []
     ) {
         $this->dateElement = $dateElement;
-        $this->localeResolver = $localeResolver;
+        $this->filterFactory = $filterFactory;
         parent::__construct($context, $addressHelper, $customerMetadata, $data);
     }
 
@@ -108,12 +106,11 @@ class Dob extends AbstractWidget
         $attributeMetadata = $this->_getAttribute('dob');
         $filterCode = $attributeMetadata->getInputFilter();
         if ($filterCode) {
-            $filterClass = 'Magento\\Framework\\Data\\Form\\Filter\\' . ucfirst($filterCode);
+            $data = [];
             if ($filterCode == 'date') {
-                $filter = new $filterClass($this->getDateFormat(), $this->localeResolver);
-            } else {
-                $filter = new $filterClass();
+                $data['format'] = $this->getDateFormat();
             }
+            $filter = $this->filterFactory->create($filterCode, $data);
             return $filter;
         }
         return false;
