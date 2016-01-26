@@ -65,7 +65,10 @@ define([
             if (productType.type.current === 'downloadable') {
                 weight.change(false);
                 weight.$weightSwitcher().one('change', function () {
-                    $(document).trigger('setTypeProduct', null);
+                    $(document).trigger(
+                        'setTypeProduct',
+                        productType.type.init === 'downloadable' ? 'virtual' : productType.type.init
+                    );
                 });
                 this.show();
             } else {
