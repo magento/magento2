@@ -368,4 +368,35 @@
             </argument>
         </arguments>
     </type>
+
+    <virtualType name="BraintreeTransactionsCollectionFactory" type="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="braintreetwo_report_data_source" xsi:type="string">Magento\BraintreeTwo\Model\Report\TransactionsCollection</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="BraintreeTransactionsReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">BraintreeTransactionsCollectionFactory</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="BraintreeTransactionsDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="reporting" xsi:type="object">BraintreeTransactionsReporting</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\BraintreeTwo\Model\Report\ConditionAppliers\AppliersPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="Braintree\TextNode" xsi:type="object">Magento\BraintreeTwo\Model\Report\ConditionAppliers\Text</item>
+                <item name="Braintree\RangeNode" xsi:type="object">Magento\BraintreeTwo\Model\Report\ConditionAppliers\Range</item>
+                <item name="Braintree\MultipleValueNode" xsi:type="object">Magento\BraintreeTwo\Model\Report\ConditionAppliers\MultipleValue</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
