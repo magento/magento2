@@ -42,7 +42,8 @@ define([
     function loadDeps(node) {
         var loaded = $.Deferred();
 
-        registry.get(node.deps, function () {
+        registry.get(node.deps, function (deps) {
+            node.provider = node.extendProvider ? deps && deps.name : node.provider;
             loaded.resolve(node);
         });
 
@@ -109,12 +110,21 @@ define([
                 nodeName;
 
             node.children = false;
+            node.extendProvider = true;
 
             node = utils.extend({
             }, types.get(type), defaults, node);
 
             nodeName = getNodeName(parent, node, name);
 
+            if (parent && parent.deps) {
+                node.deps = parent.deps;
+            }
+
+            if (node.config && node.config.provider) {
+                node.extendProvider = false;
+            }
+            
             _.extend(node, node.config || {}, {
                 index: node.name || name,
                 name: nodeName,
