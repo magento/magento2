@@ -33,7 +33,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
     private $fulltextHelper;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Synonym\Preprocessor\PreprocessorInterface|MockObject
+     * @var \Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface|MockObject
      */
     private $preprocessor;
 

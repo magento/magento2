@@ -67,7 +67,7 @@
     </type>
     <preference for="Magento\Search\Api\Data\SynonymGroupInterface" type="Magento\Search\Model\SynonymGroup" />
     <preference for="Magento\Search\Api\SynonymGroupRepositoryInterface" type="Magento\Search\Model\SynonymGroupRepository" />
-    <preference for="Magento\Framework\Search\Adapter\Synonym\PreprocessorInterface" type="Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms" />
+    <preference for="Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface" type="Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms" />
     <type name="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match">
         <arguments>
             <argument name="preprocessors" xsi:type="array">

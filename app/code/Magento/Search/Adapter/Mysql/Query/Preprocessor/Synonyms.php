@@ -5,7 +5,7 @@
  */
 namespace Magento\Search\Adapter\Mysql\Query\Preprocessor;
 
-use Magento\Framework\Search\Adapter\Synonym\Preprocessor\PreprocessorInterface;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Search\Api\SynonymAnalyzerInterface;
 
 class Synonyms implements PreprocessorInterface
