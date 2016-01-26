@@ -44,6 +44,7 @@ class Dob extends AbstractWidget
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param CustomerMetadataInterface $customerMetadata
      * @param \Magento\Framework\View\Element\Html\Date $dateElement
+     * @param \Magento\Framework\Data\Form\FilterFactory $filterFactory
      * @param array $data
      */
     public function __construct(
