@@ -16,9 +16,9 @@ define([
     return Element.extend({
         defaults: {
             value: [],
-            maxFileSize: 20000,
+            maxFileSize: false,
             isMultipleFiles: false,
-            allowedExtensions: 'png jpg',
+            allowedExtensions: false,
             previewTmpl: 'ui/form/element/uploader/preview',
             dropZone: '[data-role=drop-zone]',
             isLoading: false,
