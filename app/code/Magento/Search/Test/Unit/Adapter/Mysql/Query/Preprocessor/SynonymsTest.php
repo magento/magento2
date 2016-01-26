@@ -12,38 +12,69 @@ class SynonymsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Search\Api\SynonymAnalyzerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $synAnalyzer;
+    private $synonymAnalyzer;
 
     /**
      * @var \Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms
      */
-    private $synPreprocessor;
+    private $synonymPreprocessor;
 
     protected function setUp()
     {
-        $objectMgr = new ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->synAnalyzer = $this->getMockBuilder('Magento\Search\Model\SynonymAnalyzer')
+        $this->synonymAnalyzer = $this->getMockBuilder('Magento\Search\Model\SynonymAnalyzer')
             ->setMethods(['getSynonymsForPhrase'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->synPreprocessor = $objectMgr->getObject(
+        $this->synonymPreprocessor = $objectManager->getObject(
             'Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms',
             [
-                'synonymsAnalyzer' => $this->synAnalyzer
+                'synonymsAnalyzer' => $this->synonymAnalyzer
             ]
         );
     }
 
-    public function testProcess()
+    /**
+     * Data provider for the test
+     *
+     * @return array
+     */
+    public static function loadProcessDataProvider()
     {
-        $this->synAnalyzer->expects($this->once())
-            ->method('getSynonymsForPhrase')
-            ->with($this->equalTo('big'))
-            ->will($this->returnValue([['big', 'huge']]));
+        return [
+            'oneWord' => [
+                'query' => 'big',
+                'result' => [['big', 'huge']],
+                'newQuery' => 'big huge'
+            ],
+            'twoWords' => [
+                'query' => 'big universe',
+                'result' => [['big', 'huge'], ['universe', 'cosmos']],
+                'newQuery' => 'big huge universe cosmos'
+            ],
+            'noSynonyms' => [
+                'query' => 'no synonyms',
+                'result' => [['no'], ['synonyms']],
+                'newQuery' => 'no synonyms'
+            ]
+        ];
+    }
 
-        $result = $this->synPreprocessor->process('big');
-        $this->assertEquals('big huge', $result);
+    /**
+     * @param string $phrase
+     * @param array $expectedResult
+     * @dataProvider loadProcessDataProvider
+     */
+    public function testProcess($query, $result, $newQuery)
+    {
+        $this->synonymAnalyzer->expects($this->once())
+            ->method('getSynonymsForPhrase')
+            ->with($this->equalTo($query))
+            ->will($this->returnValue($result));
+
+        $result = $this->synonymPreprocessor->process($query);
+        $this->assertEquals($result, $newQuery);
     }
 }
