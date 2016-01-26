@@ -18,6 +18,11 @@ class AdminSessionsManager
     const ADMIN_SESSION_LIFETIME = 86400;
 
     /**
+     * Logout reason when current user has been locked out
+     */
+    const LOGOUT_REASON_USER_LOCKED = 10;
+
+    /**
      * @var \Magento\Security\Helper\SecurityConfig
      */
     protected $securityConfig;
@@ -153,6 +158,11 @@ class AdminSessionsManager
             case AdminSessionInfo::LOGGED_OUT_MANUALLY:
                 $reasonMessage = __(
                     'Your current session is terminated by another user of this account.'
+                );
+                break;
+            case self::LOGOUT_REASON_USER_LOCKED:
+                $reasonMessage = __(
+                    'Your account is temporarily disabled.'
                 );
                 break;
             default:
