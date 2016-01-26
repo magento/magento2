@@ -33,10 +33,11 @@ class Dob extends AbstractWidget
      * @var \Magento\Framework\View\Element\Html\Date
      */
     protected $dateElement;
+
     /**
      * @var \Magento\Framework\Data\Form\FilterFactory
      */
-    private $filterFactory;
+    protected $filterFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
