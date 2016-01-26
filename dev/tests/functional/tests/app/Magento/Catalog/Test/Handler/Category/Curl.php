@@ -251,7 +251,7 @@ class Curl extends AbstractCurl implements CategoryInterface
         $curl->write($url, [], CurlInterface::GET);
         $response = $curl->read();
         $curl->close();
-        preg_match('~<option.*value="(\d+)".*>' . preg_quote($landingName) . '</option>~', $response, $matches);
+        preg_match('~\{"value":"(\d+)","label":"' . preg_quote($landingName) . '"\}~', $response, $matches);
         $id = isset($matches[1]) ? (int)$matches[1] : null;
 
         return $id;
