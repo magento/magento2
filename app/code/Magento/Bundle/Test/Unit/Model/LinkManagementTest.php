@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Class LinkManagementTest
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LinkManagementTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +40,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     protected $linkFactory;
 
     /**
-     * @var \Magento\Bundle\Model\Product\Type\Interceptor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Type\Interceptor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productType;
 
