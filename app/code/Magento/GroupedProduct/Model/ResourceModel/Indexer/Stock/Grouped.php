@@ -68,7 +68,12 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         );
 
         // add limitation of status
-        $productStatusExpr = $this->_addAttributeToSelect($select, 'status', 'e.' . $metadata->getLinkField(), 'cs.store_id');
+        $productStatusExpr = $this->_addAttributeToSelect(
+            $select,
+            'status',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id'
+        );
         $productStatusCond = $connection->quoteInto($productStatusExpr . '=?', ProductStatus::STATUS_ENABLED);
 
         if ($this->_isManageStock()) {
