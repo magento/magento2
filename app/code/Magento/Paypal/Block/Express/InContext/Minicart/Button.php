@@ -42,9 +42,12 @@ class Button extends Template implements ShortcutInterface
     private $config;
 
     /**
-     * @inheritdoc
+     * Constructor
+     *
+     * @param Context $context
      * @param ResolverInterface $localeResolver
-     * @param ConfigFactory $config
+     * @param ConfigFactory $configFactory
+     * @param array $data
      */
     public function __construct(
         Context $context,
@@ -65,6 +68,14 @@ class Button extends Template implements ShortcutInterface
     private function isInContext()
     {
         return (bool)(int) $this->config->getValue('in_context');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function shouldRender()
+    {
+        return $this->isMiniCart && $this->isInContext();
     }
 
     /**
@@ -124,13 +135,5 @@ class Button extends Template implements ShortcutInterface
         $this->isMiniCart = !$isCatalog;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function shouldRender()
-    {
-        return $this->isMiniCart;
     }
 }
