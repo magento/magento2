@@ -62,10 +62,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $isProductInstance = false;
         if ($mainProduct instanceof \Magento\Catalog\Model\Product) {
-            $mainProductId = $mainProduct->getData(
-                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
-            );
-
+            $mainProductId = $mainProduct->getId();
             $isProductInstance = true;
         }
         $old = [];
@@ -91,9 +88,9 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
             $this->getConnection()->insertMultiple($this->getMainTable(), $data);
         }
-
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         // configurable product relations should be added to relation table
-        $this->_catalogProductRelation->processRelations($mainProductId, $productIds);
+        $this->_catalogProductRelation->processRelations($mainProduct->getData($linkField), $productIds);
 
         return $this;
     }
