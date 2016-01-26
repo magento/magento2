@@ -52,9 +52,9 @@ class DobTest extends \PHPUnit_Framework_TestCase
     protected $customerMetadata;
 
     /**
-     * @var \$this->localeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\FilterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $localeResolver;
+    protected $filterFactory;
 
     public function setUp()
     {
@@ -94,7 +94,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
         date_default_timezone_set('America/Los_Angeles');
 
-        $this->localeResolver = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
+        $this->filterFactory = $this->getMockBuilder('Magento\Framework\Data\Form\FilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -103,7 +103,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Customer\Helper\Address', [], [], '', false),
             $this->customerMetadata,
             $this->getMock('Magento\Framework\View\Element\Html\Date', [], [], '', false),
-            $this->localeResolver
+            $this->filterFactory
         );
     }
 
@@ -197,6 +197,31 @@ class DobTest extends \PHPUnit_Framework_TestCase
     public function setDateDataProvider()
     {
         return [[self::DATE, strtotime(self::DATE), self::DATE], [false, false, false]];
+    }
+
+    public function testSetDateWithFilter()
+    {
+        $date = '2014-01-01';
+        $filterCode = 'date';
+
+        $this->attribute->expects($this->once())
+            ->method('getInputFilter')
+            ->willReturn($filterCode);
+
+        $filterMock = $this->getMockBuilder('Magento\Framework\Data\Form\Filter\Date')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filterMock->expects($this->once())
+            ->method('outputFilter')
+            ->with($date)
+            ->willReturn(self::DATE);
+
+        $this->filterFactory->expects($this->once())
+            ->method('create')
+            ->with($filterCode, ['format' => self::DATE_FORMAT])
+            ->willReturn($filterMock);
+
+        $this->_block->setDate($date);
     }
 
     /**
