@@ -45,7 +45,7 @@ class JsonFactory
      * @param array $data
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         return $this->objectManager->create($this->instanceName, $data);
     }
