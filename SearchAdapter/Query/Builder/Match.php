@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\PreprocessorInterface;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 class Match implements QueryInterface
 {
