@@ -8,15 +8,13 @@ define(
         'jquery',
         'uiComponent',
         'paypalInContextExpressCheckout',
-        'Magento_Customer/js/customer-data',
         'domReady!'
     ],
     function (
         _,
         $,
         Component,
-        paypalExpressCheckout,
-        customerData
+        paypalExpressCheckout
     ) {
         'use strict';
 
@@ -36,11 +34,17 @@ define(
                         $.get(
                             this.path,
                             {
-                                button: +this.button
+                                button: 1
                             }
                         ).done(
                             function (response) {
-                                paypalExpressCheckout.checkout.startFlow(response.token);
+                                if (response && response.token) {
+                                    paypalExpressCheckout.checkout.startFlow(response.token);
+
+                                    return;
+                                }
+
+                                paypalExpressCheckout.checkout.closeFlow();
                             }
                         ).fail(
                             function () {
@@ -61,8 +65,7 @@ define(
             initialize: function () {
                 this._super();
 
-                return this.initClient()
-                    .initEvent();
+                return this.initClient();
             },
 
             /**
@@ -76,18 +79,6 @@ define(
                 }, this);
 
                 paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
-
-                return this;
-            },
-
-            /**
-             * @returns {Object}
-             */
-            initEvent: function () {
-                customerData.get('cart')
-                    .subscribe(function () {
-                        $('#' + this.id).trigger('cartUpdate');
-                    }.bind(this));
 
                 return this;
             }
