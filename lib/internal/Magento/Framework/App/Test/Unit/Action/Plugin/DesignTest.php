@@ -14,6 +14,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
         $plugin = new \Magento\Framework\App\Action\Plugin\Design($designLoaderMock);
         $designLoaderMock->expects($this->once())->method('load');
-        $plugin->beforeDispatch($subjectMock,$requestMock);
+        $plugin->beforeDispatch($subjectMock, $requestMock);
     }
 }
