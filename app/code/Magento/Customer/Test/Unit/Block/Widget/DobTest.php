@@ -43,13 +43,18 @@ class DobTest extends \PHPUnit_Framework_TestCase
         '<div><label for="year"><span>yy</span></label><input type="text" id="year" name="Year" value="14"></div>';
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\Data\AttributeMetadataInterface */
-    private $attribute;
+    protected $attribute;
 
     /** @var Dob */
-    private $_block;
+    protected $_block;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\CustomerMetadataInterface */
-    private $customerMetadata;
+    protected $customerMetadata;
+
+    /**
+     * @var \$this->localeResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeResolver;
 
     public function setUp()
     {
@@ -89,11 +94,16 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
         date_default_timezone_set('America/Los_Angeles');
 
+        $this->localeResolver = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_block = new \Magento\Customer\Block\Widget\Dob(
             $context,
             $this->getMock('Magento\Customer\Helper\Address', [], [], '', false),
             $this->customerMetadata,
-            $this->getMock('Magento\Framework\View\Element\Html\Date', [], [], '', false)
+            $this->getMock('Magento\Framework\View\Element\Html\Date', [], [], '', false),
+            $this->localeResolver
         );
     }
 
@@ -178,7 +188,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame($this->_block, $this->_block->setDate($date));
         $this->assertEquals($expectedTime, $this->_block->getTime());
-        $this->assertEquals($expectedDate, $this->_block->getData('date'));
+        $this->assertEquals($expectedDate, $this->_block->getValue());
     }
 
     /**
