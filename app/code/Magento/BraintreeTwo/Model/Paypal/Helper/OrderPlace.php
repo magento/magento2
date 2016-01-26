@@ -16,6 +16,7 @@ use Magento\Checkout\Api\AgreementsValidatorInterface;
 
 /**
  * Class OrderPlace
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderPlace extends AbstractHelper
 {
