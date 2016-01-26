@@ -43,6 +43,8 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\PasswordStrengthInterface;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * Handle various customer account actions
@@ -201,6 +203,13 @@ class AccountManagement implements AccountManagementInterface
     protected $extensibleDataObjectConverter;
 
     /**
+     * AccountManagement Helper
+     *
+     * @var AccountManagementHelper
+     */
+    protected $accountManagementHelper;
+
+    /**
      * @var CustomerModel
      */
     protected $customerModel;
@@ -234,7 +243,7 @@ class AccountManagement implements AccountManagementInterface
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param PasswordStrengthInterface $passwordStrength
-     *
+     * @param AccountManagementHelper $accountManagementHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -260,7 +269,8 @@ class AccountManagement implements AccountManagementInterface
         CustomerModel $customerModel,
         ObjectFactory $objectFactory,
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        PasswordStrengthInterface $passwordStrength
+        PasswordStrengthInterface $passwordStrength,
+        AccountManagementHelper $accountManagementHelper
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -285,6 +295,7 @@ class AccountManagement implements AccountManagementInterface
         $this->objectFactory = $objectFactory;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->passwordStrength = $passwordStrength;
+        $this->accountManagementHelper = $accountManagementHelper;
     }
 
     /**
@@ -367,8 +378,28 @@ class AccountManagement implements AccountManagementInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
 
+        $currentCustomer = $this->customerRegistry->retrieve($customer->getId());
+        if ($this->accountManagementHelper->isCustomerLocked($currentCustomer->getLockExpires())) {
+            throw new UserLockedException(
+                __(
+                    'The account is locked. Please wait and try again or contact %1.',
+                    $this->scopeConfig->getValue('contact/email/recipient_email')
+                )
+            );
+        }
+
         $hash = $this->customerRegistry->retrieveSecureData($customer->getId())->getPasswordHash();
         if (!$this->encryptor->validateHash($password, $hash)) {
+            $this->eventManager->dispatch(
+                'customer_login_failed',
+                [
+                    'credentials' =>
+                        [
+                            'username' => $username,
+                            'password' => $password
+                        ]
+                ]
+            );
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
 
