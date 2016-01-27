@@ -119,7 +119,7 @@ class CheckUserLoginObserver implements ObserverInterface
                     $this->lockoutManager->processLockout($customer);
                     $this->accountManagementHelper->reindexCustomer($customer->getId());
                 } catch (NoSuchEntityException $e) {
-                    $this->messageManager->addError(__('Invalid login or password.'));
+                    //do nothing as customer existance is validated later in authenticate method
                 }
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
