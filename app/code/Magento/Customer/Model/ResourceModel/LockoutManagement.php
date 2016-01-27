@@ -7,8 +7,6 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Backend\App\ConfigInterface;
-use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Customer\Model\Customer as CustomerModel;
 
 class LockoutManagement extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
@@ -25,18 +23,12 @@ class LockoutManagement extends \Magento\Eav\Model\Entity\VersionControl\Abstrac
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry
-     */
-    protected $indexerRegistry;
-
-    /**
      * LockoutManagement constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param ConfigInterface $backendConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param IndexerRegistry $indexerRegistry
      * @param array $data
      */
     public function __construct(
@@ -45,13 +37,11 @@ class LockoutManagement extends \Magento\Eav\Model\Entity\VersionControl\Abstrac
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
         ConfigInterface $backendConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        IndexerRegistry $indexerRegistry,
         $data = []
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
         $this->backendConfig = $backendConfig;
         $this->dateTime = $dateTime;
-        $this->indexerRegistry = $indexerRegistry;
         $this->setType('customer');
         $this->setConnection('customer_read', 'customer_write');
     }
@@ -111,7 +101,6 @@ class LockoutManagement extends \Magento\Eav\Model\Entity\VersionControl\Abstrac
             $update,
             $this->getConnection()->quoteInto("{$this->getIdFieldName()} = ?", $customer->getId())
         );
-        $this->reindexCustomer($customer->getId());
     }
 
     /**
@@ -127,19 +116,6 @@ class LockoutManagement extends \Magento\Eav\Model\Entity\VersionControl\Abstrac
             ['failures_num' => 0, 'first_failure' => null, 'lock_expires' => null],
             $this->getIdFieldName() . ' = (' . $this->getConnection()->quote($customerId) . ')'
         );
-        $this->reindexCustomer($customerId);
         return $this;
-    }
-
-    /**
-     * Reindex specified customer
-     *
-     * @param int $customerId
-     * @return void
-     */
-    protected function reindexCustomer($customerId)
-    {
-        $indexer = $this->indexerRegistry->get(CustomerModel::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexList([$customerId]);
     }
 }

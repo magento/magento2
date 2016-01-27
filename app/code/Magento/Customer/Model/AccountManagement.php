@@ -393,11 +393,8 @@ class AccountManagement implements AccountManagementInterface
             $this->eventManager->dispatch(
                 'customer_login_failed',
                 [
-                    'credentials' =>
-                        [
-                            'username' => $username,
-                            'password' => $password
-                        ]
+                    'username' => $username,
+                    'password' => $password
                 ]
             );
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));

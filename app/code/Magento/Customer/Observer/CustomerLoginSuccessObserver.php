@@ -8,6 +8,7 @@ namespace Magento\Customer\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Model\ResourceModel\LockoutManagement;
+use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * Class CustomerLoginSuccessObserver
@@ -22,12 +23,22 @@ class CustomerLoginSuccessObserver implements ObserverInterface
     protected $lockoutManager;
 
     /**
+     * Account manager
+     *
+     * @var AccountManagementHelper
+     */
+    protected $accountManagementHelper;
+
+    /**
      * @param LockoutManagement $lockoutManager
+     * @param AccountManagementHelper $accountManagementHelper
      */
     public function __construct(
-        LockoutManagement $lockoutManager
+        LockoutManagement $lockoutManager,
+        AccountManagementHelper $accountManagementHelper
     ) {
         $this->lockoutManager = $lockoutManager;
+        $this->accountManagementHelper = $accountManagementHelper;
     }
 
     /**
@@ -38,8 +49,9 @@ class CustomerLoginSuccessObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         /** @var \Magento\Customer\Model\Customer $model */
-        $model = $observer->getEvent()->getData('model');
-        $this->lockoutManager->unlock($model->getId());
+        $customerModel = $observer->getEvent()->getData('model');
+        $this->lockoutManager->unlock($customerModel->getId());
+        $this->accountManagementHelper->reindexCustomer($customerModel->getId());
         return $this;
     }
 }
