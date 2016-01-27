@@ -137,7 +137,7 @@
     <fieldset class="fieldset create account" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>">
         <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Sign-in Information') ?></span></legend><br>
 
-        <div class="field password required">
+        <div class="field password required" data-mage-init='{"passwordStrengthIndicator": {}}'>
             <label for="password" class="label"><span><?php /* @escapeNotVerified */ echo __('Password') ?></span></label>
             <div class="control">
                 <input type="password" name="password" id="password"
@@ -147,7 +147,11 @@
                        data-password-min-character-sets="<?php echo $block->escapeHtml($block->getRequiredCharacterClassesNumber()) ?>"
                        data-validate="{required:true, 'validate-customer-password':true}"
                        autocomplete="off">
+                <div id="password-strength-meter-container">
+                    <p id="password-strength-meter">&nbsp;</p>
+                </div>
             </div>
+
         </div>
         <div class="field confirmation required">
             <label for="password-confirmation" class="label"><span><?php /* @escapeNotVerified */ echo __('Confirm Password') ?></span></label>

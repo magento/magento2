@@ -145,3 +145,4 @@ Translations,Translations
 "Please put your store into maintenance mode and redeploy static files after changing strategy","Please put your store into maintenance mode and redeploy static files after changing strategy"
 "Dictionary (Translation on Storefront side)","Dictionary (Translation on Storefront side)"
 "Embedded (Translation on Admin side)","Embedded (Translation on Admin side)"
+"Minimum length of this field must be equal or greater than %1 symbols. Leading or trailing spaces will be ignored.","Minimum length of this field must be equal or greater than %1 symbols. Leading or trailing spaces will be ignored."
