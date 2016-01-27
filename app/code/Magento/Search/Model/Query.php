@@ -168,19 +168,11 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
-     * @deprecated
+     * @deprecated "synonym for" feature has been removed
      */
     public function loadByQuery($text)
     {
-        $this->_getResource()->loadByQuery($this, $text);
-
-        $synonymFor = $this->getSynonymFor();
-        if (!empty($synonymFor)) {
-            $this->setQueryText($synonymFor);
-        }
-
-        $this->_afterLoad();
-        $this->setOrigData();
+        $this->loadByQueryText($text);
         return $this;
     }
 
