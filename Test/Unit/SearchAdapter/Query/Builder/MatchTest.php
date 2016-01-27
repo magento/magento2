@@ -49,7 +49,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->preprocessorInterface = $this
-            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\PreprocessorInterface')
+            ->getMockBuilder('Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
