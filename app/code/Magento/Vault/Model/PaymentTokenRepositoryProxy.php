@@ -30,7 +30,7 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
     /**
      * @var PaymentTokenRepositoryInterface
      */
-    private $nullRepository;
+    private $defaultRepository;
 
     /**
      * @var ConfigInterface
@@ -45,19 +45,19 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
     /**
      * Constructor
      *
-     * @param PaymentTokenRepositoryInterface $nullRepository
+     * @param PaymentTokenRepositoryInterface $defaultRepository
      * @param ConfigInterface $config
      * @param ObjectManagerInterface $objectManager
      * @param PaymentTokenRepositoryInterface[] $repositories
      */
     public function __construct(
-        PaymentTokenRepositoryInterface $nullRepository,
+        PaymentTokenRepositoryInterface $defaultRepository,
         ConfigInterface $config,
         ObjectManagerInterface $objectManager,
         array $repositories
     ) {
         $this->repositories = $repositories;
-        $this->nullRepository = $nullRepository;
+        $this->defaultRepository = $defaultRepository;
         $this->config = $config;
         $this->objectManager = $objectManager;
     }
@@ -83,7 +83,7 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
 
         return isset($this->repositories[$methodCode])
             ? $this->objectManager->get($this->repositories[$methodCode])
-            : $this->nullRepository;
+            : $this->defaultRepository;
     }
 
     /**
