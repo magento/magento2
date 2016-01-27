@@ -5,10 +5,11 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Validator;
 
-/**
- * Class PaymentNonceResponseValidator
- */
-class PaymentNonceResponseValidator extends GeneralResponseValidator
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
+use Braintree\Transaction;
+
+class RefundValidator extends GeneralResponseValidator
 {
     /**
      * @return array
@@ -20,8 +21,9 @@ class PaymentNonceResponseValidator extends GeneralResponseValidator
             [
                 function ($response) {
                     return [
-                        !empty($response->paymentMethodNonce) && !empty($response->paymentMethodNonce->nonce),
-                        [__('Payment method nonce can\'t be retrieved.')]
+                        $response->transaction !== null
+                        && $response->transaction->status === Transaction::SUBMITTED_FOR_SETTLEMENT,
+                        []
                     ];
                 }
             ]

@@ -171,7 +171,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
             } else {
                 $token->setPublicHash(
                     $this->encryptor->getHash(
-                        $token->getPublicHash() . $token->getCreatedAt()
+                        $token->getPublicHash() . $token->getGatewayToken()
                     )
                 );
             }
