@@ -40,7 +40,7 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         $this->_coreRegistry->register('current_promo_quote_rule', $model);
 
         $this->_initAction();
-        $this->_view->getLayout()->getBlock('promo_quote_edit')->setData('action', $this->getUrl('sales_rule/*/save'));
+//        $this->_view->getLayout()->getBlock('promo_quote_edit')->setData('action', $this->getUrl('sales_rule/*/save'));
 
         $this->_addBreadcrumb($id ? __('Edit Rule') : __('New Rule'), $id ? __('Edit Rule') : __('New Rule'));
 
