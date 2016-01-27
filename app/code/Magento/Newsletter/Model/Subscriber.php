@@ -13,8 +13,8 @@ use Magento\Framework\Exception\MailException;
 /**
  * Subscriber model
  *
- * @method \Magento\Newsletter\Model\Resource\Subscriber _getResource()
- * @method \Magento\Newsletter\Model\Resource\Subscriber getResource()
+ * @method \Magento\Newsletter\Model\ResourceModel\Subscriber _getResource()
+ * @method \Magento\Newsletter\Model\ResourceModel\Subscriber getResource()
  * @method int getStoreId()
  * @method $this setStoreId(int $value)
  * @method string getChangeStatusAt()
@@ -133,7 +133,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -149,7 +149,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -171,7 +171,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\Resource\Subscriber');
+        $this->_init('Magento\Newsletter\Model\ResourceModel\Subscriber');
     }
 
     /**
@@ -789,8 +789,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     public function getSubscriberFullName()
     {
         $name = null;
-        if ($this->hasCustomerFirstname() || $this->hasCustomerLastname()) {
-            $name = $this->getCustomerFirstname() . ' ' . $this->getCustomerLastname();
+        if ($this->hasFirstname() || $this->hasLastname()) {
+            $name = $this->getFirstname() . ' ' . $this->getLastname();
         }
         return $name;
     }

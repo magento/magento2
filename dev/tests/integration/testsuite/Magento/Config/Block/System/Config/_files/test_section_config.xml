@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="Test">
             <label>Test</label>
@@ -20,9 +20,15 @@
                     <label>Test Field</label>
                     <config_path>test_section/test_group/test_field</config_path>
                 </field>
-                <field id="test_field_use_config" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="20">
+                <field id="test_field_use_config_module_1" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="20">
                     <label>Test Field</label>
                     <config_path>test_config_section/test_group_config_node/test_field_value</config_path>
+                    <if_module_enabled>Magento_Config</if_module_enabled>
+                </field>
+                <field id="test_field_use_config_module_0" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" type="text" sortOrder="20">
+                    <label>Test Field</label>
+                    <config_path>test_config_section/test_group_config_node/test_field_value</config_path>
+                    <if_module_enabled>Test_Module</if_module_enabled>
                 </field>
             </group>
         </section>

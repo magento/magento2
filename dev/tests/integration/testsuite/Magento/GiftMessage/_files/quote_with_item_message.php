@@ -14,7 +14,7 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setName(
-    'Simple Product'
+    'Simple Product With Message'
 )->setSku(
     'simple_with_message'
 )->setPrice(

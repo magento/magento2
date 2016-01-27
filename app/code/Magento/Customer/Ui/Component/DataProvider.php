@@ -59,58 +59,15 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * Retrieve custom attributes options
-     *
-     * @return array
-     */
-    public function getCustomAttributesOptions()
-    {
-        $attributes = [];
-        foreach ($this->attributeRepository->getList() as $attributeCode => $attributeData) {
-            if ($attributeData[AttributeMetadataInterface::BACKEND_TYPE] != 'static'
-                && $attributeData[AttributeMetadataInterface::IS_USED_IN_GRID]
-                && $attributeData[AttributeMetadataInterface::OPTIONS]
-            ) {
-                $attributes[$attributeCode] = $attributeData[AttributeMetadataInterface::OPTIONS];
-            }
-        }
-        return $attributes;
-    }
-
-    /**
-     * Retrieve attribute option label by option value
-     *
-     * @param array $attributeData
-     * @param string $value
-     * @return string
-     */
-    protected function getAttributeOptionLabelByValue(array $attributeData, $value)
-    {
-        if (empty($value)) {
-            return $value;
-        }
-        foreach ($attributeData as $option) {
-            if ($option['value'] === $value) {
-                return $option['label'];
-            }
-        }
-        return $value;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getData()
     {
-        $data = $this->searchResultToOutput($this->getSearchResult());
-        $customAttributesOptions = $this->getCustomAttributesOptions();
-        foreach ($customAttributesOptions as $attributeCode => $attributeData) {
+        $data = parent::getData();
+        foreach ($this->attributeRepository->getList() as $attributeCode => $attributeData) {
             foreach ($data['items'] as &$item) {
-                if (isset($item[$attributeCode])) {
-                    $item[$attributeCode] = $this->getAttributeOptionLabelByValue(
-                        $attributeData,
-                        $item[$attributeCode]
-                    );
+                if (isset($item[$attributeCode]) && !empty($attributeData[AttributeMetadataInterface::OPTIONS])) {
+                    $item[$attributeCode] = explode(',', $item[$attributeCode]);
                 }
             }
         }

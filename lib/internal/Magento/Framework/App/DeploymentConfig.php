@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\App;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
+
 /**
  * Application deployment configuration
  */
@@ -40,13 +42,6 @@ class DeploymentConfig
     private $overrideData;
 
     /**
-     * Availability of deployment config file
-     *
-     * @var bool
-     */
-    private $isAvailable;
-
-    /**
      * Constructor
      *
      * Data can be optionally injected in the constructor. This object's public interface is intentionally immutable
@@ -65,7 +60,7 @@ class DeploymentConfig
      *
      * @param string $key
      * @param mixed $defaultValue
-     * @return array|null
+     * @return mixed|null
      */
     public function get($key = null, $defaultValue = null)
     {
@@ -85,7 +80,7 @@ class DeploymentConfig
     {
         $this->data = null;
         $this->load();
-        return $this->isAvailable;
+        return isset($this->flatData[ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE]);
     }
 
     /**
@@ -128,7 +123,6 @@ class DeploymentConfig
     {
         if (null === $this->data) {
             $this->data = $this->reader->load();
-            $this->isAvailable = !empty($this->data);
             if ($this->overrideData) {
                 $this->data = array_replace($this->data, $this->overrideData);
             }

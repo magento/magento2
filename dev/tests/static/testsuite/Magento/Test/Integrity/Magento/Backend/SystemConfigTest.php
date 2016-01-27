@@ -19,8 +19,8 @@ class SystemConfigTest extends \PHPUnit_Framework_TestCase
             function ($configFile) {
                 $dom = new \DOMDocument();
                 $dom->loadXML(file_get_contents($configFile));
-                $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-                    '/app/code/Magento/Config/etc/system_file.xsd';
+                $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+                $schema =  $urnResolver->getRealPath('urn:magento:module:Magento_Config:etc/system_file.xsd');
                 $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
                 if ($errors) {
                     $this->fail('XML-file has validation errors:' . PHP_EOL . implode(PHP_EOL . PHP_EOL, $errors));

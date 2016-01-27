@@ -3,12 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/* @var $block \Magento\Email\Block\Adminhtml\Template\Preview */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?php echo __('Email Preview'); ?></title>
+    <title><?php /* @escapeNotVerified */ echo __('Email Preview'); ?></title>
 </head>
 <body>
     <?php echo $block->getChildHtml('content') ?>

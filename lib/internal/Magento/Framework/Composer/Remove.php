@@ -5,9 +5,7 @@
  */
 namespace Magento\Framework\Composer;
 
-use Composer\Console\Application;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Symfony\Component\Console\Input\ArrayInput;
+use Magento\Composer\MagentoComposerApplication;
 
 /**
  * Class to run composer remove command
@@ -15,50 +13,40 @@ use Symfony\Component\Console\Input\ArrayInput;
 class Remove
 {
     /**
-     * Composer application
+     * Composer application factory
      *
-     * @var Application
+     * @var MagentoComposerApplicationFactory
      */
-    private $composerApp;
-
-    /**
-     * Directory List
-     *
-     * @var DirectoryList
-     */
-    private $directoryList;
+    private $composerApplicationFactory;
 
     /**
      * Constructor
      *
-     * @param Application $composerApp
-     * @param DirectoryList $directoryList
+     * @param MagentoComposerApplicationFactory $composerApplicationFactory
      */
-    public function __construct(Application $composerApp, DirectoryList $directoryList)
-    {
-        $this->composerApp = $composerApp;
-        $this->directoryList = $directoryList;
+    public function __construct(
+        MagentoComposerApplicationFactory $composerApplicationFactory
+    ) {
+        $this->composerApplicationFactory = $composerApplicationFactory;
     }
 
     /**
      * Run 'composer remove'
      *
      * @param array $packages
-     * @return void
+     * @throws \Exception
+     *
+     * @return string
      */
     public function remove(array $packages)
     {
-        $this->composerApp->resetComposer();
-        $this->composerApp->setAutoExit(false);
-        $vendor = include $this->directoryList->getPath(DirectoryList::CONFIG) . '/vendor_path.php';
-        $this->composerApp->run(
-            new ArrayInput(
-                [
-                    'command' => 'remove',
-                    'packages' => $packages,
-                    '--working-dir' => $this->directoryList->getRoot() . '/' . $vendor . '/..'
-                ]
-            )
+        $composerApplication = $this->composerApplicationFactory->create();
+
+        return $composerApplication->runComposerCommand(
+            [
+                'command' => 'remove',
+                'packages' => $packages
+            ]
         );
     }
 }

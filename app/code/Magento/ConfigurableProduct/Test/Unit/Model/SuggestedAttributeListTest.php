@@ -50,14 +50,14 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceHelperMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Helper',
+            'Magento\Catalog\Model\ResourceModel\Helper',
             [],
             [],
             '',
             false
         );
         $this->collectionMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Attribute\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
             [],
             [],
             '',
@@ -92,7 +92,7 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
         );
         $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource'];
         $this->attributeMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             $methods,
             [],
             '',

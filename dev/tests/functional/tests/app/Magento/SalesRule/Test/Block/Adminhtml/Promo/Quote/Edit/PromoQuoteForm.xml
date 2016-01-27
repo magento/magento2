@@ -7,7 +7,7 @@
 -->
 <tabs>
     <rule_information>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Tab\RuleInformation</class>
         <selector>#promo_catalog_edit_tabs_main_section</selector>
         <strategy>css selector</strategy>
         <fields>

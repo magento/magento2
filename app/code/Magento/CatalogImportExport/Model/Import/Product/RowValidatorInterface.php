@@ -47,12 +47,6 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_TIER_DATA_INCOMPLETE = 'tierPriceDataIsIncomplete';
 
-    const ERROR_INVALID_GROUP_PRICE_SITE = 'groupPriceWebsiteInvalid';
-
-    const ERROR_INVALID_GROUP_PRICE_GROUP = 'groupPriceGroupInvalid';
-
-    const ERROR_GROUP_PRICE_DATA_INCOMPLETE = 'groupPriceDataIsIncomplete';
-
     const ERROR_SKU_NOT_FOUND_FOR_DELETE = 'skuNotFoundToDelete';
 
     const ERROR_SUPER_PRODUCTS_SKU_NOT_FOUND = 'superProductsSkuNotFound';
@@ -60,6 +54,28 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
     const ERROR_MEDIA_DATA_INCOMPLETE = 'mediaDataIsIncomplete';
 
     const ERROR_INVALID_WEIGHT = 'invalidWeight';
+
+    const ERROR_EXCEEDED_MAX_LENGTH = 'exceededMaxLength';
+
+    const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
+
+    const ERROR_INVALID_ATTRIBUTE_DECIMAL = 'invalidAttributeDecimal';
+
+    const ERROR_ABSENT_REQUIRED_ATTRIBUTE = 'absentRequiredAttribute';
+
+    const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
+
+    const ERROR_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicatedUniqueAttribute';
+
+    const ERROR_INVALID_VARIATIONS_CUSTOM_OPTIONS = 'invalidVariationsCustomOptions';
+
+    const ERROR_INVALID_MEDIA_URL_OR_PATH = 'invalidMediaUrlPath';
+
+    const ERROR_MEDIA_URL_NOT_ACCESSIBLE = 'mediaUrlNotAvailable';
+
+    const ERROR_MEDIA_PATH_NOT_ACCESSIBLE = 'mediaPathNotAvailable';
+
+    const ERROR_DUPLICATE_URL_KEY = 'duplicatedUrlKey';
 
     /**
      * Value that means all entities (e.g. websites, groups etc.)
@@ -69,7 +85,8 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
     /**
      * Initialize validator
      *
+     * @param \Magento\CatalogImportExport\Model\Import\Product $context
      * @return $this
      */
-    public function init();
+    public function init($context);
 }

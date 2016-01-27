@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model\Indexer\Address;
 
-use Magento\Customer\Model\Resource\Address\Attribute\Collection;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Collection;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 

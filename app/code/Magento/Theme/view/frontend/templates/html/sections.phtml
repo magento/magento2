@@ -18,9 +18,9 @@ $groupCss = $block->getGroupCss();
 $groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"tabs":{"openedState":"active"}}';
 ?>
 <?php if ($detailedInfoGroup = $block->getGroupChildNames($group, 'getChildHtml')):?>
-    <div class="sections <?php echo $groupCss ?>">
+    <div class="sections <?php /* @escapeNotVerified */ echo $groupCss ?>">
         <?php $layout = $block->getLayout(); ?>
-        <div class="section-items <?php echo $groupCss ?>-items" data-mage-init='<?php echo $groupBehavior ?>'>
+        <div class="section-items <?php /* @escapeNotVerified */ echo $groupCss ?>-items" data-mage-init='<?php /* @escapeNotVerified */ echo $groupBehavior ?>'>
             <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
                     $html = $layout->renderElement($name);
@@ -30,10 +30,10 @@ $groupBehavior = $block->getGroupBehaviour() ? $block->getGroupBehaviour() : '{"
                     $alias = $layout->getElementAlias($name);
                     $label = $block->getChildData($alias, 'title');
                 ?>
-                <div class="section-item-title <?php echo $groupCss ?>-item-title" data-role="collapsible">
-                    <a class="<?php echo $groupCss ?>-item-switch" data-toggle="switch" href="#<?php echo $alias; ?>"><?php echo $label; ?></a>
+                <div class="section-item-title <?php /* @escapeNotVerified */ echo $groupCss ?>-item-title" data-role="collapsible">
+                    <a class="<?php /* @escapeNotVerified */ echo $groupCss ?>-item-switch" data-toggle="switch" href="#<?php /* @escapeNotVerified */ echo $alias; ?>"><?php /* @escapeNotVerified */ echo $label; ?></a>
                 </div>
-                <div class="section-item-content <?php echo $groupCss ?>-item-content" id="<?php echo $alias; ?>" data-role="content"><?php echo $html; ?></div>
+                <div class="section-item-content <?php /* @escapeNotVerified */ echo $groupCss ?>-item-content" id="<?php /* @escapeNotVerified */ echo $alias; ?>" data-role="content"><?php /* @escapeNotVerified */ echo $html; ?></div>
             <?php endforeach;?>
         </div>
     </div>

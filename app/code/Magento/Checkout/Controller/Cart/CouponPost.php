@@ -10,7 +10,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
     /**
      * Sales quote repository
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -29,7 +29,8 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -39,7 +40,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Checkout\Model\Cart $cart,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
         parent::__construct(
             $context,

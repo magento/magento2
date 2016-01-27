@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Entity;
 
-class EavAbstractTest extends \PHPUnit_Framework_TestCase
+class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Entity type id
@@ -34,12 +34,12 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_importFactory;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
@@ -60,6 +60,8 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_string = new \Magento\Framework\Stdlib\StringUtils();
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
@@ -70,9 +72,9 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->_resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->_resourceHelper = $this->getMock(
-            'Magento\ImportExport\Model\Resource\Helper',
+            'Magento\ImportExport\Model\ResourceModel\Helper',
             [],
             [],
             '',
@@ -96,6 +98,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
                 $this->_importFactory,
                 $this->_resourceHelper,
                 $this->_resource,
+                $this->getErrorAggregatorObject(),
                 $this->_storeManager,
                 $this->_collectionFactory,
                 $this->_eavConfig,

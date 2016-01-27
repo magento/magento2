@@ -25,17 +25,22 @@
             top: 12px;
 
             .field-tooltip-action {
-                .css(color, @checkout-shipping-policy-action__color);
+                .lib-css(color, @checkout-shipping-policy-action__color);
                 cursor: pointer;
+
                 &:before {
                    display: none;
+                }
+
+                span {
+                    &:extend(.abs-visually-hidden-reset all);
                 }
             }
 
             .field-tooltip-content {
                 &:extend(.abs-add-box-sizing all);
                 &:extend(.abs-checkout-tooltip-content-position-top all);
-                .css(width, @checkout-shipping-policy-tooltip__width);
+                .lib-css(width, @checkout-shipping-policy-tooltip__width);
                 top: @indent__l;
             }
         }
@@ -55,8 +60,9 @@
             top: auto;
 
             .field-tooltip-content {
-                .css(width, @checkout-shipping-policy-tooltip-mobile__width);
+                .lib-css(width, @checkout-shipping-policy-tooltip-mobile__width);
                 right: auto;
+
                 &:before,
                 &:after {
                     right: auto;

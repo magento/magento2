@@ -8,7 +8,7 @@ namespace Magento\Sales\Model;
 
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 
 /**
  * Class OrderNotifier

@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class SectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,34 +24,24 @@ class SectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_authorizationMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_iteratorMock;
-
     protected function setUp()
     {
-        $this->_iteratorMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Iterator\Field',
-            [],
-            [],
-            '',
-            false
-        );
+        $objectManager = new ObjectManager($this);
         $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
         $this->_authorizationMock = $this->getMock('Magento\Framework\AuthorizationInterface');
 
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Section(
-            $this->_storeManagerMock,
-            $this->_iteratorMock,
-            $this->_authorizationMock
+        $this->_model = $objectManager->getObject(
+            'Magento\Config\Model\Config\Structure\Element\Section',
+            [
+                'storeManager' => $this->_storeManagerMock,
+                'authorization' => $this->_authorizationMock,
+            ]
         );
     }
 
     protected function tearDown()
     {
         unset($this->_model);
-        unset($this->_iteratorMock);
         unset($this->_storeManagerMock);
         unset($this->_authorizationMock);
     }

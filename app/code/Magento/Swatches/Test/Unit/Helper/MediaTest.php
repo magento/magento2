@@ -28,7 +28,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image\Factory */
     protected $imageFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Resource\Theme\Collection */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\ResourceModel\Theme\Collection */
     protected $themeCollectionMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Config */
@@ -73,7 +73,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->imageFactoryMock = $this->getMock('\Magento\Framework\Image\Factory', [], [], '', false);
         $this->themeCollectionMock = $this->getMock(
-            '\Magento\Theme\Model\Resource\Theme\Collection',
+            '\Magento\Theme\Model\ResourceModel\Theme\Collection',
             ['loadRegisteredThemes'],
             [],
             '',
@@ -297,7 +297,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $configMock->expects($this->any())->method('getImages')->willReturn($imageConfig);
+        $configMock->expects($this->any())->method('getMediaEntities')->willReturn($imageConfig);
     }
 
     public function testGetAttributeSwatchPath()

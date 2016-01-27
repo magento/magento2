@@ -19,7 +19,7 @@ interface StoreRepositoryInterface
      * Retrieve store by code
      *
      * @param string $code
-     * @return Data\StoreInterface
+     * @return \Magento\Store\Api\Data\StoreInterface
      * @throws NoSuchEntityException
      */
     public function get($code);
@@ -28,7 +28,7 @@ interface StoreRepositoryInterface
      * Retrieve active store by code
      *
      * @param string $code
-     * @return Data\StoreInterface
+     * @return \Magento\Store\Api\Data\StoreInterface
      * @throws NoSuchEntityException
      * @throws StoreIsInactiveException
      */
@@ -38,7 +38,7 @@ interface StoreRepositoryInterface
      * Retrieve active store by id
      *
      * @param int $id
-     * @return Data\StoreInterface
+     * @return \Magento\Store\Api\Data\StoreInterface
      * @throws NoSuchEntityException
      * @throws StoreIsInactiveException
      */
@@ -48,7 +48,7 @@ interface StoreRepositoryInterface
      * Retrieve store by id
      *
      * @param int $id
-     * @return Data\StoreInterface
+     * @return \Magento\Store\Api\Data\StoreInterface
      * @throws NoSuchEntityException
      */
     public function getById($id);
@@ -56,7 +56,7 @@ interface StoreRepositoryInterface
     /**
      * Retrieve list of all stores
      *
-     * @return Data\StoreInterface[]
+     * @return \Magento\Store\Api\Data\StoreInterface[]
      */
     public function getList();
 

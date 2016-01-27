@@ -21,39 +21,39 @@ class Grid extends DataGrid
      */
     protected $filters = [
         'id' => [
-            'selector' => '[name="filters[increment_id]"]',
+            'selector' => '[name="increment_id"]',
         ],
         'status' => [
-            'selector' => '[name="filters[status]"]',
+            'selector' => '[name="status"]',
             'input' => 'select',
         ],
         'purchase_date_from' => [
-            'selector' => '[name="filters[created_at][from]"]',
+            'selector' => '[name="created_at[from]"]',
         ],
         'purchase_date_to' => [
-            'selector' => '[name="filters[created_at][to]"]',
+            'selector' => '[name="created_at[to]"]',
         ],
         'base_grand_total_from' => [
-            'selector' => '[name="filters[base_grand_total][from]"]',
+            'selector' => '[name="base_grand_total[from]"]',
         ],
         'base_grand_total_to' => [
-            'selector' => '[name="filters[base_grand_total][to]"]',
+            'selector' => '[name="base_grand_total[to]"]',
         ],
         'purchased_gran_total_from' => [
-            'selector' => '[name="filters[grand_total][from]"]',
+            'selector' => '[name="grand_total[from]"]',
         ],
         'purchased_gran_total_to' => [
-            'selector' => '[name="filters[grand_total][to]"]',
+            'selector' => '[name="grand_total[to]"]',
         ],
         'purchase_point' => [
-            'selector' => '[name="filters[store_id]"]',
+            'selector' => '[name="store_id"]',
             'input' => 'selectstore'
         ],
         'bill_to_name' => [
-            'selector' => '[name="filters[billing_name]"]'
+            'selector' => '[name="billing_name"]'
         ],
         'ship_to_name' => [
-            'selector' => '[name="filters[shipping_name]"]',
+            'selector' => '[name="shipping_name"]',
         ]
     ];
 
@@ -61,13 +61,6 @@ class Grid extends DataGrid
      * @var string
      */
     protected $createNewOrder = '[data-ui-id="add-button"]';
-
-    /**
-     * Purchase Point Filter selector.
-     *
-     * @var string
-     */
-    protected $purchasePointFilter = '[name="filters[store_id]"]';
 
     /**
      * Order Id td selector.
@@ -101,12 +94,14 @@ class Grid extends DataGrid
     public function getPurchasePointStoreGroups()
     {
         $this->openFilterBlock();
-        $storeGroupElements = $this->_rootElement->find($this->purchasePointFilter)
+
+        $storeGroupElements = $this->_rootElement->find($this->filters['purchase_point']['selector'])
             ->getElements('//option/preceding-sibling::optgroup[1]', Locator::SELECTOR_XPATH);
         $result = [];
 
         foreach ($storeGroupElements as $storeGroupElement) {
-            $result[] = trim($storeGroupElement->getAttribute('label'));
+            // "u" pattern modifier allows to match "&nbsp;" and other similar entities given in invalid encryption
+            $result[] = preg_replace('~^\s*~u', '', $storeGroupElement->getAttribute('label'));
         }
 
         return $result;

@@ -8,12 +8,12 @@
 
 ?>
 <div class="admin__data-grid-export">
-    <label for="<?php echo $block->getId() ?>_export" class="admin__control-support-text">
-        <?php echo __('Export to:') ?>
+    <label for="<?php /* @escapeNotVerified */ echo $block->getId() ?>_export" class="admin__control-support-text">
+        <?php /* @escapeNotVerified */ echo __('Export to:') ?>
     </label>
-    <select name="<?php echo $block->getId() ?>_export" id="<?php echo $block->getId() ?>_export" class="admin__control-select">
+    <select name="<?php /* @escapeNotVerified */ echo $block->getId() ?>_export" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_export" class="admin__control-select">
         <?php foreach ($block->getExportTypes() as $_type): ?>
-            <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
+            <option value="<?php /* @escapeNotVerified */ echo $_type->getUrl() ?>"><?php /* @escapeNotVerified */ echo $_type->getLabel() ?></option>
         <?php endforeach; ?>
     </select>
     <?php echo $block->getExportButtonHtml() ?>

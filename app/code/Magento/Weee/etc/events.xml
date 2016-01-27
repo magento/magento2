@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="catalog_entity_attribute_save_before">
-        <observer name="weee" instance="Magento\Weee\Model\Observer" method="assignBackendModelToAttribute" shared="false" />
+        <observer name="weee" instance="Magento\Weee\Observer\AssignBackendModelToAttributeObserver" />
     </event>
     <event name="catalog_product_option_price_configuration_after">
-        <observer name="weee" instance="Magento\Weee\Model\Observer" method="getPriceConfiguration" shared="false" />
+        <observer name="weee" instance="Magento\Weee\Observer\GetPriceConfigurationObserver"/>
     </event>
     <event name="catalog_product_view_config">
-        <observer name="weee" instance="Magento\Weee\Model\Observer" method="updateProductOptions" shared="true" />
+        <observer name="weee" instance="Magento\Weee\Observer\UpdateProductOptionsObserver" />
     </event>
 </config>

@@ -18,10 +18,11 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\CheckoutAgreements\Model\Resource\Agreement');
+        $this->_init('Magento\CheckoutAgreements\Model\ResourceModel\Agreement');
     }
 
     /**
@@ -174,6 +175,22 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     public function setIsHtml($isHtml)
     {
         return $this->setData(self::IS_HTML, $isHtml);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMode()
+    {
+        return $this->getData(self::MODE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setMode($mode)
+    {
+        return $this->setData(self::MODE, $mode);
     }
 
     /**

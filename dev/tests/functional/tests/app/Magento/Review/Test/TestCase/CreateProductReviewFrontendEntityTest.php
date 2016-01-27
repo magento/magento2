@@ -35,7 +35,7 @@ class CreateProductReviewFrontendEntityTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'MX';
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
     /**
@@ -128,6 +128,7 @@ class CreateProductReviewFrontendEntityTest extends Injectable
             foreach ($ratings as $rating) {
                 $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $rating['title']]);
                 $this->ratingEdit->getPageActions()->delete();
+                $this->ratingEdit->getModalBlock()->acceptAlert();
             }
         }
     }

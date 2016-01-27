@@ -54,6 +54,7 @@ class DeleteAllSalesRuleStep implements TestStepInterface
         while ($this->promoQuoteIndex->getPromoQuoteGrid()->isFirstRowVisible()) {
             $this->promoQuoteIndex->getPromoQuoteGrid()->openFirstRow();
             $this->promoQuoteEdit->getFormPageActions()->delete();
+            $this->promoQuoteEdit->getModalBlock()->acceptAlert();
             $this->promoQuoteIndex->getSystemMessageDialog()->closePopup();
         }
     }

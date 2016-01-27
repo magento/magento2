@@ -29,44 +29,43 @@ class Grid extends DataGrid
      */
     protected $filters = [
         'page_id_from' => [
-            'selector' => '[name="filters[page_id][from]"]',
+            'selector' => '[name="page_id[from]"]',
         ],
         'page_id_to' => [
-            'selector' => '[name="filters[page_id][to]"]',
+            'selector' => '[name="page_id[to]"]',
         ],
         'title' => [
-            'selector' => '[name="filters[title]"]',
+            'selector' => '[name="title"]',
         ],
         'identifier' => [
-            'selector' => '[name="filters[identifier]"]',
+            'selector' => '[name="identifier"]',
         ],
         'page_layout' => [
-            'selector' => '[name="filters[page_layout]"]',
-            'input' => 'select',
+            'selector' => '//label[span[text()="Layout"]]/following-sibling::div',
+            'strategy' => 'xpath',
+            'input' => 'dropdownmultiselect',
         ],
         'store_id' => [
-            'selector' => '[name="filters[store_id]"]',
+            'selector' => '[name="store_id"]',
             'input' => 'selectstore'
         ],
         'is_active' => [
-            'selector' => '[name="filters[is_active]"]',
-            'input' => 'select',
+            'selector' => '//label[span[text()="Status"]]/following-sibling::div',
+            'strategy' => 'xpath',
+            'input' => 'dropdownmultiselect',
         ],
         'creation_time_from' => [
-            'selector' => '[name="filters[creation_time][from]"]',
+            'selector' => '[name="creation_time[from]"]',
         ],
         'creation_time_to' => [
-            'selector' => '[name="filters[creation_time][to]"]',
+            'selector' => '[name="creation_time[to]"]',
         ],
         'update_time_from' => [
-            'selector' => '[name="filters[update_time][from]"]',
+            'selector' => '[name="update_time[from]"]',
         ],
         'update_time_to' => [
-            'selector' => '[name="filters[update_time][to]"]',
-        ],
-        'under_version_control' => [
-            'selector' => '[name="filters[under_version_control]"]',
-        ],
+            'selector' => '[name="update_time[to]"]',
+        ]
     ];
 
     /**
@@ -74,7 +73,7 @@ class Grid extends DataGrid
      *
      * @var string
      */
-    protected $previewCmsPage = "..//a[contains(@class, 'action-menu-item') and text() = 'Preview']";
+    protected $previewCmsPage = '[data-action="item-preview"]';
 
     /**
      * Click on "Edit" link.
@@ -101,7 +100,7 @@ class Grid extends DataGrid
         $rowItem = $this->getRow([$filter['title']]);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->selectAction)->click();
-            $rowItem->find($this->previewCmsPage, Locator::SELECTOR_XPATH)->click();
+            $rowItem->find($this->previewCmsPage)->click();
         } else {
             throw new \Exception('Searched item was not found.');
         }

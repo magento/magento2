@@ -2,51 +2,56 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-define(
-    [
-        'ko',
-        'jquery',
-        'uiComponent',
-        '../model/messageList'
-    ],
-    function (ko, $, Component, messages) {
+define([
+    'ko',
+    'jquery',
+    'uiComponent',
+    '../model/messageList'
+], function (ko, $, Component, globalMessages) {
     'use strict';
 
     return Component.extend({
-        errorList: messages.getAllErrors(),
-        successList: messages.getAllSuccess(),
-
         defaults: {
-            template: 'Magento_Ui/messages'
-        },
-        isHidden: ko.observable(false),
-
-        initialize: function () {
-            this._super();
-            var self = this;
-            this.isHidden.subscribe(function () {
-                if (self.isHidden()) {
-                    setTimeout(function () {
-                        var messageSelector = '[data-role=checkout-messages]';
-                        $(messageSelector).hide('blind', {}, 500)
-                    }, 5000);
-                }
-            });
+            template: 'Magento_Ui/messages',
+            selector: '[data-role=checkout-messages]',
+            isHidden: false,
+            listens: {
+                isHidden: 'onHiddenChange'
+            }
         },
 
-        /**
-         *
-         * @returns {*}
-         */
+        initialize: function (config, messageContainer) {
+            this._super()
+                .initObservable();
+
+            this.messageContainer = messageContainer || config.messageContainer || globalMessages;
+
+            return this;
+        },
+
+        initObservable: function () {
+            this._super()
+                .observe('isHidden');
+
+            return this;
+        },
+
         isVisible: function () {
-            return this.isHidden(this.errorList().length || this.successList().length);
+            return this.isHidden(this.messageContainer.hasMessages());
         },
-        /**
-         * Remove all errors
-         */
+
         removeAll: function () {
-            this.errorList.removeAll();
-            this.successList.removeAll();
+            this.messageContainer.clear();
+        },
+
+        onHiddenChange: function (isHidden) {
+            var self = this;
+            // Hide message block if needed
+            if (isHidden) {
+                setTimeout(function () {
+                    $(self.selector).hide('blind', {}, 500)
+                }, 5000);
+            }
         }
     });
 });

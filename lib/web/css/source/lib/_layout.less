@@ -8,119 +8,119 @@
 //  _____________________________________________
 
 //  Page Width mixin
-.layout-width(
+.lib-layout-width(
     @_layout__min-width: @layout__min-width,
     @_layout__max-width: @layout__max-width,
     @_layout__indent: @layout-indent__width
 ) when not (@responsive = true) {
-    ._layout-width(@_layout__min-width, @_layout__max-width);
+    ._lib-layout-width(@_layout__min-width, @_layout__max-width);
+    .lib-css(padding-left, @layout-indent__width);
+    .lib-css(padding-right, @layout-indent__width);
     margin: 0 auto;
-    .css(padding-left, @layout-indent__width);
-    .css(padding-right, @layout-indent__width);
 }
 
-._layout-width(
+._lib-layout-width(
         @_layout__min-width: @layout__min-width,
         @_layout__max-width: @layout__max-width
     ) when (@_layout__min-width = @_layout__max-width) {
-    .css(width, @_layout__min-width);
+    .lib-css(width, @_layout__min-width);
 }
 
-._layout-width(
+._lib-layout-width(
         @_layout__min-width: @layout__min-width,
         @_layout__max-width: @layout__max-width
     ) when not (@_layout__min-width = @_layout__max-width) {
+    .lib-css(max-width, @_layout__max-width);
+    .lib-css(min-width, @_layout__min-width);
     width: auto;
-    .css(min-width, @_layout__min-width);
-    .css(max-width, @_layout__max-width);
 }
 
-#layout-columns() {
+#lib-layout-columns() {
     & when (@use-flex = true) {
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-wrap(wrap);
         box-sizing: border-box;
-        .vendor-prefix-display(flex);
-        .vendor-prefix-flex-wrap(wrap);
     };
     &:after {
-        content: " ";
+        clear: both;
+        content: ' ';
         display: block;
         height: 0;
-        clear: both;
         overflow: hidden;
         visibility: hidden;
     }
     .main() {
         .@{layout-class-1column} & {
-            .layout-column(1, 2, 100%);
+            .lib-layout-column(1, 2, 100%);
         }
         .@{layout-class-3columns} & {
-            .layout-column(3, 2, @layout-column-main__width-3);
+            .lib-layout-column(3, 2, @layout-column-main__width-3);
         }
         .@{layout-class-2columns__left} & {
-            .layout-column(2, 2, @layout-column-main__width-2-left);
+            .lib-layout-column(2, 2, @layout-column-main__width-2-left);
         }
         .@{layout-class-2columns__right} & {
-            .layout-column(2, 1, @layout-column-main__width-2-right);
+            .lib-layout-column(2, 1, @layout-column-main__width-2-right);
         }
     }
 
     .left() {
         .@{layout-class-3columns} & {
-            .layout-column(3, 1, @layout-column__left-width);
+            .lib-layout-column(3, 1, @layout-column__left-width);
         }
         .@{layout-class-2columns__left} & {
-            .layout-column(2, 1, @layout-column__left-width);
+            .lib-layout-column(2, 1, @layout-column__left-width);
         }
         .@{layout-class-2columns__right} & {
-            .layout-column(2, 1, @layout-column__left-width);
+            .lib-layout-column(2, 1, @layout-column__left-width);
         }
     }
 
     .right() {
         .@{layout-class-3columns} & {
-            .layout-column(3, 3, @layout-column__right-width);
+            .lib-layout-column(3, 3, @layout-column__right-width);
         }
         .@{layout-class-2columns__left} & {
-            .layout-column(2, 2, @layout-column__right-width);
+            .lib-layout-column(2, 2, @layout-column__right-width);
         }
         .@{layout-class-2columns__right} & {
-            .layout-column(2, 2, @layout-column__right-width);
+            .lib-layout-column(2, 2, @layout-column__right-width);
         }
     }
 }
 
-._column-width(@_width, @_check, @_index) when (@_check = false) and (@_index = 1) {
-    .column-width(@_width);
+._lib-column-width(@_width, @_check, @_index) when (@_check = false) and (@_index = 1) {
+    .lib-column-width(@_width);
 }
 
-._column-width(@_width, @_check, @_index) when (@_check = true), (@_width = auto) {
-    .css(width, @_width);
+._lib-column-width(@_width, @_check, @_index) when (@_check = true), (@_width = auto) {
+    .lib-css(width, @_width);
     @_index: 1;
 }
 
-._set-column-width(@_index, @_width) when (@_index > 0) {
+._lib-set-column-width(@_index, @_width) when (@_index > 0) {
     @_checkUnit: isunit(@_width, extract(@_units, @_index));
-    ._column-width(@_width, @_checkUnit, @_index);
-    ._set-column-width(@_index - 1, @_width);
+    ._lib-column-width(@_width, @_checkUnit, @_index);
+    ._lib-set-column-width(@_index - 1, @_width);
 }
 
-.layout-column(@_total-columns, @_order, @_width) {
+.lib-layout-column(@_total-columns, @_order, @_width) {
     @_units: "px","%","em","rem","pt";
-    ._set-column-width(length(@_units), @_width);
-    .flex-degradation(@_total-columns, @_order);
+    ._lib-set-column-width(length(@_units), @_width);
+    .lib-flex-degradation(@_total-columns, @_order);
     & when (@use-flex = true) {
-        .vendor-prefix-order(@_order);
+        .lib-vendor-prefix-order(@_order);
     }
 }
 
-.flex-degradation(@_total-columns, @_order) when (@_order = 1) {
+.lib-flex-degradation(@_total-columns, @_order) when (@_order = 1) {
     float: left;
 }
 
-.flex-degradation(@_total-columns, @_order) when (@_order = @_total-columns) {
+.lib-flex-degradation(@_total-columns, @_order) when (@_order = @_total-columns) {
     float: right;
 }
 
-.flex-degradation(@_total-columns, @_order) when (@_total-columns = 3) and (@_order = 2) {
+.lib-flex-degradation(@_total-columns, @_order) when (@_total-columns = 3) and (@_order = 2) {
     display: inline-block;
 }

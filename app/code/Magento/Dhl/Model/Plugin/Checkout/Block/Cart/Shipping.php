@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Dhl\Model\Plugin\Checkout\Block\Cart;
 
 /**
@@ -27,24 +25,30 @@ class Shipping
     }
 
     /**
-     * @param \Magento\Checkout\Block\Cart\Shipping $subject
+     * @param \Magento\Checkout\Block\Cart\LayoutProcessor $subject
      * @param bool $result
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetStateActive(\Magento\Checkout\Block\Cart\Shipping $subject, $result)
+    public function afterIsStateActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
     {
-        return (bool)$result || (bool)$this->_scopeConfig->getValue('carriers/dhl/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$result || (bool)$this->_scopeConfig->getValue(
+            'carriers/dhl/active',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
-     * @param \Magento\Checkout\Block\Cart\Shipping $subject
+     * @param \Magento\Checkout\Block\Cart\LayoutProcessor $subject
      * @param bool $result
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetCityActive(\Magento\Checkout\Block\Cart\Shipping $subject, $result)
+    public function afterIsCityActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
     {
-        return (bool)$result || (bool)$this->_scopeConfig->getValue('carriers/dhl/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$result || (bool)$this->_scopeConfig->getValue(
+            'carriers/dhl/active',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

@@ -53,7 +53,7 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap([
                 ['Magento\Framework\App\State', $this->stateMock],
-                ['Magento\Framework\App\ObjectManager\ConfigLoader', $this->configLoaderMock]
+                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $this->configLoaderMock]
             ]));
 
         $this->collectionFactory = $this->getMockBuilder('Magento\Indexer\Model\Indexer\CollectionFactory')

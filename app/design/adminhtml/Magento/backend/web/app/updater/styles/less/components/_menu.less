@@ -25,10 +25,20 @@
                     top: -1.6rem;
                 }
             }
+
+            &._active {
+                > a {
+                    &:after {
+                        display: block;
+                    }
+                }
+            }
         }
+
         > a {
             padding-top: 1.3rem;
             padding-bottom: 1.3rem;
+
             &:before {
                 &:extend(.abs-icon all);
                 margin-bottom: .7rem;
@@ -45,6 +55,7 @@
             }
         }
     }
+
     .item-component {
         > a {
             &:before {
@@ -52,6 +63,7 @@
             }
         }
     }
+
     .item-upgrade {
         > a {
             &:before {
@@ -59,10 +71,19 @@
             }
         }
     }
+
     .item-system-config {
         > a {
             &:before {
                 content: @icon-system-config__content;
+            }
+        }
+    }
+
+    .item-tools {
+        > a {
+            &:before {
+                content: @icon-tool__content;
             }
         }
     }

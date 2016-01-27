@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Model\Layout\Update;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\Dom\UrnResolver;
 
 /**
  * Validator for custom layout update
@@ -56,20 +56,22 @@ class Validator extends \Zend_Validate_Abstract
     protected $_domConfigFactory;
 
     /**
-     * @param DirectoryList $dirList
      * @param \Magento\Framework\Config\DomFactory $domConfigFactory
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
     public function __construct(
-        DirectoryList $dirList,
-        \Magento\Framework\Config\DomFactory $domConfigFactory
+        \Magento\Framework\Config\DomFactory $domConfigFactory,
+        UrnResolver $urnResolver
     ) {
         $this->_domConfigFactory = $domConfigFactory;
         $this->_initMessageTemplates();
         $this->_xsdSchemas = [
-            self::LAYOUT_SCHEMA_PAGE_HANDLE => $dirList->getPath(DirectoryList::LIB_INTERNAL)
-                . '/Magento/Framework/View/Layout/etc/page_layout.xsd',
-            self::LAYOUT_SCHEMA_MERGED => $dirList->getPath(DirectoryList::LIB_INTERNAL)
-                . '/Magento/Framework/View/Layout/etc/layout_merged.xsd',
+            self::LAYOUT_SCHEMA_PAGE_HANDLE => $urnResolver->getRealPath(
+                'urn:magento:framework:View/Layout/etc/page_layout.xsd'
+            ),
+            self::LAYOUT_SCHEMA_MERGED => $urnResolver->getRealPath(
+                'urn:magento:framework:View/Layout/etc/layout_merged.xsd'
+            ),
         ];
     }
 
@@ -82,9 +84,15 @@ class Validator extends \Zend_Validate_Abstract
     {
         if (!$this->_messageTemplates) {
             $this->_messageTemplates = [
-                self::HELPER_ARGUMENT_TYPE => (string)new \Magento\Framework\Phrase('Helper arguments should not be used in custom layout updates.'),
-                self::UPDATER_MODEL => (string)new \Magento\Framework\Phrase('Updater model should not be used in custom layout updates.'),
-                self::XML_INVALID => (string)new \Magento\Framework\Phrase('Please correct the XML data and try again. %value%'),
+                self::HELPER_ARGUMENT_TYPE => (string)new \Magento\Framework\Phrase(
+                    'Helper arguments should not be used in custom layout updates.'
+                ),
+                self::UPDATER_MODEL => (string)new \Magento\Framework\Phrase(
+                    'Updater model should not be used in custom layout updates.'
+                ),
+                self::XML_INVALID => (string)new \Magento\Framework\Phrase(
+                    'Please correct the XML data and try again. %value%'
+                ),
             ];
         }
         return $this;

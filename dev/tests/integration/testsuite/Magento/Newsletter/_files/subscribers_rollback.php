@@ -12,7 +12,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var Collection $collection */
-$subscriberCollection =  $objectManager->get(\Magento\Newsletter\Model\Resource\Subscriber\Collection::class);
+$subscriberCollection =  $objectManager->get(\Magento\Newsletter\Model\ResourceModel\Subscriber\Collection::class);
 foreach ($subscriberCollection as $subscriber) {
     /** @var Magento\Newsletter\Model\Subscriber $subscriber */
     $subscriber->delete();

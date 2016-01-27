@@ -45,7 +45,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
         $this->catalogProductLink = $this->getMock(
-            '\Magento\GroupedProduct\Model\Resource\Product\Link',
+            '\Magento\GroupedProduct\Model\ResourceModel\Product\Link',
             [],
             [],
             '',
@@ -88,7 +88,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             'getChildrenIds'
         )->with(
             $parentId,
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         )->will(
             $this->returnValue($childrenIds)
         );
@@ -105,7 +105,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             'getParentIdsByChild'
         )->with(
             $childId,
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         )->will(
             $this->returnValue($parentIds)
         );
@@ -245,10 +245,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setLinkTypeId'
         )->with(
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         );
         $collection = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Link\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
             ['setFlag', 'setIsStrongMode', 'setProduct'],
             [],
             '',
@@ -305,7 +305,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $expectedMsg = "Please specify the quantity of product(s).";
 
         $productCollection = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Link\Product\Collection',
+            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
             [],
             [],
             '',

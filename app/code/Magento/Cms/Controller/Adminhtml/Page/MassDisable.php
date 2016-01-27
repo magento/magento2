@@ -8,7 +8,7 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Cms\Model\Resource\Page\CollectionFactory;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 
 /**
  * Class MassDisable
@@ -52,7 +52,7 @@ class MassDisable extends \Magento\Backend\App\Action
             $item->save();
         }
 
-        $this->messageManager->addSuccess(__('A total of %1 record(s) have been deleted.', $collection->getSize()));
+        $this->messageManager->addSuccess(__('A total of %1 record(s) have been disabled.', $collection->getSize()));
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

@@ -20,21 +20,21 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Newsletter\Model\Resource\Queue\CollectionFactory
+     * @var \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $collectionFactory
+     * @param \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Newsletter\Model\Resource\Queue\CollectionFactory $collectionFactory,
+        \Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory $collectionFactory,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
@@ -71,7 +71,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        /** @var $collection \Magento\Newsletter\Model\Resource\Queue\Collection */
+        /** @var $collection \Magento\Newsletter\Model\ResourceModel\Queue\Collection */
         $collection = $this->_collectionFactory->create()->addTemplateInfo()->addSubscriberFilter(
             $this->_coreRegistry->registry('subscriber')->getId()
         );

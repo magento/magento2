@@ -8,9 +8,7 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Class RegularPrice
@@ -37,42 +35,45 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      */
     protected $values = [];
 
+    /** @var PriceResolverInterface */
+    protected $priceResolver;
+
+    /**
+     * @param \Magento\Framework\Pricing\SaleableInterface $saleableItem
+     * @param float $quantity
+     * @param \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param PriceResolverInterface $priceResolver
+     */
+    public function __construct(
+        \Magento\Framework\Pricing\SaleableInterface $saleableItem,
+        $quantity,
+        \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        PriceResolverInterface $priceResolver
+    ) {
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
+        $this->priceResolver = $priceResolver;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getValue()
     {
-        $selectedConfigurableOption = $this->product->getSelectedConfigurableOption();
-        $productId = $selectedConfigurableOption ? $selectedConfigurableOption->getId() : $this->product->getId();
-        if (!isset($this->values[$productId])) {
-            $price = null;
-            if (!$selectedConfigurableOption) {
-                foreach ($this->getUsedProducts() as $product) {
-                    if ($price === null || $price > $product->getPrice()) {
-                        $price = $product->getPrice();
-                    }
-                }
-            } else {
-                $price = $selectedConfigurableOption->getPrice();
-            }
-
-            $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
-            $this->values[$productId] = $priceInCurrentCurrency ? floatval($priceInCurrentCurrency) : false;
+        if (!isset($this->values[$this->product->getId()])) {
+            $this->values[$this->product->getId()] = $this->priceResolver->resolvePrice($this->product);
         }
 
-        return $this->values[$productId];
+        return $this->values[$this->product->getId()];
     }
+
     /**
      * {@inheritdoc}
      */
     public function getAmount()
     {
-        if (false) {
-            // TODO: need to check simple product assignment
-        } else {
-            $amount = $this->getMinRegularAmount($this->product);
-        }
-        return $amount;
+        return $this->getMinRegularAmount();
     }
 
     /**
@@ -95,7 +96,6 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      */
     protected function doGetMaxRegularAmount()
     {
-        // TODO: think about quantity
         $maxAmount = null;
         foreach ($this->getUsedProducts() as $product) {
             $childPriceAmount = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getAmount();
@@ -112,10 +112,9 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     public function getMinRegularAmount()
     {
         if (null === $this->minRegularAmount) {
-            $this->minRegularAmount = $this->doGetMinRegularAmount() ?: false;
+            $this->minRegularAmount = $this->doGetMinRegularAmount() ?: parent::getAmount();
         }
         return $this->minRegularAmount;
-
     }
 
     /**
@@ -125,7 +124,6 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      */
     protected function doGetMinRegularAmount()
     {
-        // TODO: think about quantity
         $minAmount = null;
         foreach ($this->getUsedProducts() as $product) {
             $childPriceAmount = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getAmount();

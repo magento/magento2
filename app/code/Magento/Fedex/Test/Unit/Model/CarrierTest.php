@@ -126,7 +126,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $storeManager,
                 'configReader' => $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false),
                 'productCollectionFactory' =>
-                    $this->getMock('Magento\Catalog\Model\Resource\Product\CollectionFactory', [], [], '', false),
+                    $this->getMock('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory', [], [], '', false),
                 'data' => []
             ]
         );

@@ -20,7 +20,7 @@ $hints = [
     ),
     'admin' => sprintf(
         '<p>%s</p>',
-        'A unique URL helps keep store and customer info safer.'
+        'A unique URL helps keep your store and customers safer. Use only letters, numbers, and underscore characters.'
     )
 ];
 ?>
@@ -61,7 +61,7 @@ $hints = [
             <input
                 id="baseUrl"
                 class="form-el-input"
-                type="text"
+                type="url"
                 name="base_url"
                 ng-model="config.address.base_url"
                 ng-class="{'invalid': webconfig.base_url.$invalid && webconfig.submitted}"
@@ -101,6 +101,7 @@ $hints = [
                         class="form-el-input"
                         type="text"
                         name="admin"
+                        ng-pattern="/^[a-zA-Z0-9_]+$/"
                         ng-model="config.address.admin"
                         ng-class="{'invalid' : webconfig.admin.$invalid && webconfig.submitted }"
                         ng-init="config.address.admin = '<?php echo $this->autoAdminPath ?>';"
@@ -111,8 +112,8 @@ $hints = [
                         tooltip-append-to-body="true"
                         >
                     <div class="error-container">
-                        <span ng-show="webconfig.admin.$error.required">
-                            Please enter a valid admin URL path.
+                        <span ng-show="webconfig.admin.$error">
+                            Please enter a valid admin URL path. Use only letters, numbers, and underscore characters.
                         </span>
                     </div>
                 </div>
@@ -210,7 +211,7 @@ $hints = [
                     ng-model="config.rewrites.allowed"
                     >
                 <label class="form-label" for="apacheRewrites">
-                    Use Web Server Apache Rewrites
+                    Use Apache Web Server Rewrites
                 </label>
             </div>
         </div>
@@ -280,6 +281,29 @@ $hints = [
             </div>
         </div>
 
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label required">
+                    Session Save
+                </label>
+            </div>
+            <div class="col-m-4">
+                <select
+                    name="session"
+                    class="form-el-select"
+                    ng-model="config.sessionSave.type"
+                    ng-class="{'invalid': webconfig.session.$invalid && webconfig.submitted}"
+                    tooltip-placement="right"
+                    tooltip-html-unsafe="The location of session. You can change this later in Magento Admin."
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true"
+                    >
+                    <?php foreach ($this->sessionSave as $value):?>
+                        <?php echo "<option value=\"" . $value . "\">" . ucfirst($value) . "</option>"; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
     </div>
 
 </fieldset>

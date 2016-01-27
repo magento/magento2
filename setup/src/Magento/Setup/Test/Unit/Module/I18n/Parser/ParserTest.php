@@ -42,10 +42,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      * @param array $jsFiles
      * @param array $phpMap
      * @param array $jsMap
+     * @paran array $phraseFactoryMap
      * @param array $expectedResult
      * @dataProvider addPhraseDataProvider
      */
-    public function testAddPhrase($options, $phpFiles, $jsFiles, $phpMap, $jsMap, $expectedResult)
+    public function testAddPhrase($options, $phpFiles, $jsFiles, $phpMap, $jsMap, $phraseFactoryMap, $expectedResult)
     {
         // 1. Create mocks
         $phpAdapter = new AdapterStub;
@@ -59,16 +60,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $phpAdapter->setValueMap($phpMap);
         $jsAdapter->setValueMap($jsMap);
 
-        $this->factory->expects($this->any())->method('createPhrase')->with()->will($this->returnValueMap([
-            [['phrase' => 'php phrase111', 'translation' => 'php phrase111', 'quote' => "'"], 'php phrase111'],
-            [['phrase' => 'php phrase112', 'translation' => 'php phrase112', 'quote' => '"'], 'php phrase112'],
-            [['phrase' => 'php phrase121', 'translation' => 'php phrase121', 'quote' => "'"], 'php phrase121'],
-            [['phrase' => 'php phrase122', 'translation' => 'php phrase122', 'quote' => '"'], 'php phrase122'],
-            [['phrase' => 'js phrase111', 'translation' => 'js phrase111', 'quote' => "'"], 'js phrase111'],
-            [['phrase' => 'js phrase112', 'translation' => 'js phrase112', 'quote' => '"'], 'js phrase112'],
-            [['phrase' => 'js phrase121', 'translation' => 'js phrase121', 'quote' => "'"], 'js phrase121'],
-            [['phrase' => 'js phrase122', 'translation' => 'js phrase122', 'quote' => '"'], 'js phrase122'],
-        ]));
+        $this->factory->expects($this->any())
+            ->method('createPhrase')
+            ->with()
+            ->willReturnMap($phraseFactoryMap);
 
         //4. Set expectations
         $this->filesCollector->expects($this->any())
@@ -87,15 +82,33 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function addPhraseDataProvider()
     {
+        $phraseMock1 = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseMock2 = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseMock3 = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseMock4 = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseMock5 = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseMock6 = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseMock7 = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseMock8 = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+
+        $phraseMock1->expects($this->any())->method('getCompiledPhrase')->willReturn('php phrase111');
+        $phraseMock2->expects($this->any())->method('getCompiledPhrase')->willReturn('php phrase112');
+        $phraseMock3->expects($this->any())->method('getCompiledPhrase')->willReturn('php phrase121');
+        $phraseMock4->expects($this->any())->method('getCompiledPhrase')->willReturn('php phrase122');
+        $phraseMock5->expects($this->any())->method('getCompiledPhrase')->willReturn('js phrase111');
+        $phraseMock6->expects($this->any())->method('getCompiledPhrase')->willReturn('js phrase112');
+        $phraseMock7->expects($this->any())->method('getCompiledPhrase')->willReturn('js phrase121');
+        $phraseMock8->expects($this->any())->method('getCompiledPhrase')->willReturn('js phrase122');
+
         return [
             [
-                [
+                'options' => [
                     ['type' => 'php', 'paths' => ['php/path/1', 'php/path/2']],
                     ['type' => 'js', 'paths' => ['js/path/1', 'js/path/2']],
                 ],
-                ['php/path1/file11', 'php/path1/file12', 'php/path2/file21'],
-                ['js/path1/file11', 'js/path1/file12', 'js/path2/file21'],
-                [
+                'phpFiles' => ['php/path1/file11', 'php/path1/file12', 'php/path2/file21'],
+                'jsFiles' => ['js/path1/file11', 'js/path1/file12', 'js/path2/file21'],
+                'phpMap' => [
                     'php/path1/file11' => [
                         [
                             'phrase' => 'php phrase111',
@@ -116,7 +129,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
                     ],
                     'php/path2/file21' => []
                 ],
-                [
+                'jsMap' => [
                     'js/path1/file11' => [
                         [
                             'phrase' => 'js phrase111',
@@ -137,16 +150,26 @@ class ParserTest extends \PHPUnit_Framework_TestCase
                     ],
                     'js/path2/file21' => []
                 ],
-                [
-                    'php phrase111' => 'php phrase111',
-                    'php phrase112' => 'php phrase112',
-                    'php phrase121' => 'php phrase121',
-                    'php phrase122' => 'php phrase122',
-                    'js phrase111' => 'js phrase111',
-                    'js phrase112' => 'js phrase112',
-                    'js phrase121' => 'js phrase121',
-                    'js phrase122' => 'js phrase122',
-                ]
+                'phraseFactoryMap' => [
+                    [['phrase' => 'php phrase111', 'translation' => 'php phrase111', 'quote' => "'"], $phraseMock1],
+                    [['phrase' => 'php phrase112', 'translation' => 'php phrase112', 'quote' => '"'], $phraseMock2],
+                    [['phrase' => 'php phrase121', 'translation' => 'php phrase121', 'quote' => "'"], $phraseMock3],
+                    [['phrase' => 'php phrase122', 'translation' => 'php phrase122', 'quote' => '"'], $phraseMock4],
+                    [['phrase' => 'js phrase111', 'translation' => 'js phrase111', 'quote' => "'"], $phraseMock5],
+                    [['phrase' => 'js phrase112', 'translation' => 'js phrase112', 'quote' => '"'], $phraseMock6],
+                    [['phrase' => 'js phrase121', 'translation' => 'js phrase121', 'quote' => "'"], $phraseMock7],
+                    [['phrase' => 'js phrase122', 'translation' => 'js phrase122', 'quote' => '"'], $phraseMock8],
+                ],
+                'expectedResult' => [
+                    'php phrase111' => $phraseMock1,
+                    'php phrase112' => $phraseMock2,
+                    'php phrase121' => $phraseMock3,
+                    'php phrase122' => $phraseMock4,
+                    'js phrase111' => $phraseMock5,
+                    'js phrase112' => $phraseMock6,
+                    'js phrase121' => $phraseMock7,
+                    'js phrase122' => $phraseMock8,
+                ],
             ]
         ];
     }

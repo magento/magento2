@@ -11,7 +11,6 @@ var config = {
             relatedProducts:        'Magento_Catalog/js/related-products',
             upsellProducts:         'Magento_Catalog/js/upsell-products',
             productListToolbarForm: 'Magento_Catalog/js/product/list/toolbar',
-            tierPrice:              'Magento_Catalog/js/tier-price',
             catalogGallery:         'Magento_Catalog/js/gallery',
             priceBox:               'Magento_Catalog/js/price-box',
             priceOptionDate:        'Magento_Catalog/js/price-option-date',

@@ -8,17 +8,12 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 class CategoryProcessor
 {
     /**
-     * Delimiter in import file between categories.
-     */
-    const DELIMITER_CATEGORIES = '|';
-
-    /**
      * Delimiter in category path.
      */
     const DELIMITER_CATEGORY = '/';
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $categoryColFactory;
 
@@ -44,11 +39,11 @@ class CategoryProcessor
     protected $categoryFactory;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory
     ) {
         $this->categoryColFactory = $categoryColFactory;
@@ -66,7 +61,7 @@ class CategoryProcessor
             $collection->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
-            /* @var $collection \Magento\Catalog\Model\Resource\Category\Collection */
+            /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
             foreach ($collection as $category) {
                 $structure = explode(self::DELIMITER_CATEGORY, $category->getPath());
                 $pathSize = count($structure);
@@ -144,13 +139,14 @@ class CategoryProcessor
      * Returns IDs of categories by string path creating nonexistent ones.
      *
      * @param string $categoriesString
+     * @param string $categoriesSeparator
      *
      * @return array
      */
-    public function upsertCategories($categoriesString)
+    public function upsertCategories($categoriesString, $categoriesSeparator)
     {
         $categoriesIds = [];
-        $categories = explode(self::DELIMITER_CATEGORIES, $categoriesString);
+        $categories = explode($categoriesSeparator, $categoriesString);
 
         foreach ($categories as $category) {
             $categoriesIds[] = $this->upsertCategory($category);

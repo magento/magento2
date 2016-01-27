@@ -23,7 +23,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     protected $_optionsBlock;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Option
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option
      */
     protected $_optionResource;
 
@@ -31,7 +31,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_optionResource = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\Option',
+            'Magento\Catalog\Model\ResourceModel\Product\Option',
             [],
             [],
             '',

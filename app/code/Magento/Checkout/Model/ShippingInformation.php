@@ -32,6 +32,22 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     /**
      * {@inheritdoc}
      */
+    public function getBillingAddress()
+    {
+        return $this->getData(self::BILLING_ADDRESS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address)
+    {
+        return $this->setData(self::BILLING_ADDRESS, $address);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getShippingMethodCode()
     {
         return $this->getData(self::SHIPPING_METHOD_CODE);

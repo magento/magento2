@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Indexer\Action;
 
-use Magento\Framework\App\Resource as AppResource;
-use Magento\Framework\App\Resource\SourceProviderInterface;
+use Magento\Framework\App\ResourceConnection as AppResource;
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
@@ -16,7 +16,7 @@ use Magento\Framework\Indexer\FieldsetPool;
 use Magento\Framework\Indexer\HandlerPool;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandlerFactory;
-use Magento\Framework\App\Resource\SourceFactory;
+use Magento\Framework\App\ResourceConnection\SourceFactory;
 use Magento\Framework\Indexer\HandlerInterface;
 
 /**

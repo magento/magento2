@@ -16,6 +16,10 @@
                     </item>
                 </item>
             </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">282.43</item>
+                <item name="subtotal" xsi:type="string">282.43</item>
+            </field>
         </dataset>
 
         <dataset name="downloadable_one_dollar_product_with_no_separated_link">

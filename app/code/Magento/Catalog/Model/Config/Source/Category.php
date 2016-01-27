@@ -15,17 +15,18 @@ class Category implements \Magento\Framework\Option\ArrayInterface
     /**
      * Category collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $_categoryCollectionFactory;
 
     /**
      * Construct
      *
-     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
-    public function __construct(\Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory)
-    {
+    public function __construct(
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+    ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
     }
 
@@ -37,7 +38,7 @@ class Category implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray($addEmpty = true)
     {
-        /** @var \Magento\Catalog\Model\Resource\Category\Collection $collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection = $this->_categoryCollectionFactory->create();
 
         $collection->addAttributeToSelect('name')->addRootLevelFilter()->load();

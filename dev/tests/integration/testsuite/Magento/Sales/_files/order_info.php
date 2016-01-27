@@ -64,7 +64,7 @@ $quote->collectTotals();
 $quote->save();
 
 $quote->setCustomerEmail('admin@example.com');
-$quoteManagement = $objectManager->create('Magento\Quote\Model\QuoteManagement');
+$quoteManagement = $objectManager->create('\Magento\Quote\Api\CartManagementInterface');
 
 $order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 
@@ -75,7 +75,7 @@ $item = $order->getAllItems()[0];
 $invoiceFactory = $objectManager->get('Magento\Sales\Api\InvoiceManagementInterface');
 
 /** @var $invoice \Magento\Sales\Model\Order\Invoice */
-$invoice = $invoiceFactory->prepareInvoice($order->getId(), [$item->getId() => 10]);
+$invoice = $invoiceFactory->prepareInvoice($order, [$item->getId() => 10]);
 $invoice->register();
 $invoice->save();
 

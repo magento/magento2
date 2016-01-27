@@ -82,7 +82,8 @@ class Category extends AbstractHelper
      * @param bool|string $sorted
      * @param bool $asCollection
      * @param bool $toLoad
-     * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\Resource\Category\Collection|array
+     * @return \Magento\Framework\Data\Tree\Node\Collection or
+     * \Magento\Catalog\Model\ResourceModel\Category\Collection or array
      */
     public function getStoreCategories($sorted = false, $asCollection = false, $toLoad = true)
     {

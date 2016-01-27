@@ -24,7 +24,7 @@ class InstallSchema implements InstallSchemaInterface
 
         $installer->startSetup();
 
-        $tableName = \Magento\CatalogUrlRewrite\Model\Resource\Category\Product::TABLE_NAME;
+        $tableName = \Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product::TABLE_NAME;
         $table = $installer->getConnection()
             ->newTable($installer->getTable($tableName))
             ->addColumn(

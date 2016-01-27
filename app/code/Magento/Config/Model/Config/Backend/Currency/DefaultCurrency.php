@@ -33,6 +33,6 @@ class DefaultCurrency extends AbstractCurrency
             );
         }
 
-        return $this;
+        return parent::afterSave();
     }
 }

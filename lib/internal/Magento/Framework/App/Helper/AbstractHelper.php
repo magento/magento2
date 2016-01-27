@@ -120,7 +120,7 @@ abstract class AbstractHelper
      *
      * @param string $moduleName Full module name
      * @return boolean
-     * @deprecated use \Magento\Framework\Module\Manager::isOutputEnabled()
+     * use \Magento\Framework\Module\Manager::isOutputEnabled()
      */
     public function isModuleOutputEnabled($moduleName = null)
     {

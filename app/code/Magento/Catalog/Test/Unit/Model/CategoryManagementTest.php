@@ -13,22 +13,35 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Category\Tree|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryTreeMock;
 
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $categoriesFactoryMock;
+
     protected function setUp()
     {
-        $this->categoryRepositoryMock = $this->getMock('\Magento\Catalog\Api\CategoryRepositoryInterface');
-        $this->categoryTreeMock = $this->getMock('\Magento\Catalog\Model\Category\Tree', [], [], '', false);
+        $this->categoryRepositoryMock = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
+        $this->categoryTreeMock = $this->getMock('Magento\Catalog\Model\Category\Tree', [], [], '', false);
+        $this->categoriesFactoryMock = $this->getMock(
+            'Magento\Catalog\Model\ResourceModel\Category\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->model = new \Magento\Catalog\Model\CategoryManagement(
             $this->categoryRepositoryMock,
-            $this->categoryTreeMock
+            $this->categoryTreeMock,
+            $this->categoriesFactoryMock
         );
     }
 
@@ -170,5 +183,29 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
             ->with($parentId, $afterId)
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
         $this->model->move($categoryId, $parentId, $afterId);
+    }
+
+    public function testGetCount()
+    {
+        $categoriesMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Category\Collection', [], [], '', false);
+
+        $this->categoriesFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($categoriesMock);
+        $categoriesMock
+            ->expects($this->once())
+            ->method('addAttributeToFilter')
+            ->with('parent_id', ['gt' => 0])
+            ->willReturnSelf();
+        $categoriesMock
+            ->expects($this->once())
+            ->method('getSize')
+            ->willReturn('expected');
+
+        $this->assertEquals(
+            'expected',
+            $this->model->getCount()
+        );
     }
 }

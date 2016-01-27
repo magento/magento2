@@ -28,7 +28,7 @@ class CustomerForm extends FormTabs
      *
      * @var string
      */
-    protected $activeFormTab = '#container [data-bind="visible: active"]:not([style="display: none;"])';
+    protected $activeFormTab = '#container [data-area-active="true"]';
 
     /**
      * Field wrapper with label on form.
@@ -61,7 +61,6 @@ class CustomerForm extends FormTabs
     public function fillCustomer(FixtureInterface $customer, $address = null)
     {
         $this->waitForm();
-        $this->waitFields();
 
         $isHasData = ($customer instanceof InjectableFixture) ? $customer->hasData() : true;
         if ($isHasData) {
@@ -120,29 +119,12 @@ class CustomerForm extends FormTabs
 
     /**
      * Wait for User before fill form which calls JS validation on correspondent form.
-     * See details in MAGETWO-31435.
      *
      * @return void
      */
     protected function waitForm()
     {
         $this->waitForElementNotVisible($this->spinner);
-        $this->waitForElementVisible($this->activeFormTab);
-        sleep(10); //@todo MAGETWO-33615
-    }
-
-    /**
-     * Wait for User before fill form which calls JS validation on correspondent fields of form.
-     * See details in MAGETWO-31435.
-     *
-     * @return void
-     */
-    protected function waitFields()
-    {
-        /* Wait for field label is visible in the form */
-        $this->waitForElementVisible($this->fieldLabel, Locator::SELECTOR_XPATH);
-        /* Wait for field's control block is visible in the form */
-        $this->waitForElementVisible($this->fieldWrapperControl, Locator::SELECTOR_XPATH);
     }
 
     /**
@@ -157,5 +139,22 @@ class CustomerForm extends FormTabs
         $this->waitForElementNotVisible($this->tabReadiness);
 
         return $this;
+    }
+
+    /**
+     * Get array of label => js error text.
+     *
+     * @return array
+     */
+    public function getJsErrors()
+    {
+        $tabs = ['account_information', 'addresses'];
+        $jsErrors = [];
+        foreach ($tabs as $tabName) {
+            $tab = $this->getTab($tabName);
+            $this->openTab($tabName);
+            $jsErrors = array_merge($jsErrors, $tab->getJsErrors());
+        }
+        return $jsErrors;
     }
 }

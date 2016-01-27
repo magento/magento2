@@ -29,7 +29,7 @@ class AssertCreditMemoButton extends AbstractConstraint
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
         \PHPUnit_Framework_Assert::assertTrue(
-            $salesOrderView->getPageActions()->isActionButtonVisible('CreditMemo'),
+            $salesOrderView->getPageActions()->isActionButtonVisible('Credit Memo'),
             'Credit memo button is absent on order view page.'
         );
     }

@@ -6,7 +6,7 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <route url="/V1/orders/:id" method="GET">
         <service class="Magento\Sales\Api\OrderRepositoryInterface" method="get"/>
         <resources>
@@ -61,14 +61,20 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/orders/create" method="PUT">
-        <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
+    <route url="/V1/orders/:parent_id" method="PUT">
+        <service class="Magento\Sales\Api\OrderAddressRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/orders/:parent_id" method="PUT">
-        <service class="Magento\Sales\Api\OrderAddressRepositoryInterface" method="save"/>
+    <route url="/V1/orders/items/:id" method="GET">
+        <service class="Magento\Sales\Api\OrderItemRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/orders/items" method="GET">
+        <service class="Magento\Sales\Api\OrderItemRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
@@ -213,12 +219,6 @@
     </route>
     <route url="/V1/shipment/:id/label" method="GET">
         <service class="Magento\Sales\Api\ShipmentManagementInterface" method="getLabel"/>
-        <resources>
-            <resource ref="Magento_Sales::sales" />
-        </resources>
-    </route>
-    <route url="/V1/orders/" method="POST">
-        <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>

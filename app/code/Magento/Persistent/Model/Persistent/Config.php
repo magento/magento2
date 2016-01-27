@@ -5,7 +5,7 @@
  */
 namespace Magento\Persistent\Model\Persistent;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Module\Dir;
 
 /**
  * Persistent Config Model
@@ -56,11 +56,9 @@ class Config
     protected $_persistentFactory;
 
     /**
-     * Filesystem
-     *
-     * @var \Magento\Framework\Filesystem\Directory\Read;
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
      */
-    protected $_modulesDirectory;
+    protected $readFactory;
 
     /**
      * @param \Magento\Framework\Config\DomFactory $domFactory
@@ -68,7 +66,7 @@ class Config
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      */
     public function __construct(
         \Magento\Framework\Config\DomFactory $domFactory,
@@ -76,14 +74,14 @@ class Config
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\App\State $appState,
         \Magento\Persistent\Model\Factory $persistentFactory,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
     ) {
         $this->_domFactory = $domFactory;
         $this->_moduleReader = $moduleReader;
         $this->_layout = $layout;
         $this->_appState = $appState;
         $this->_persistentFactory = $persistentFactory;
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->readFactory = $readFactory;
     }
 
     /**
@@ -91,6 +89,7 @@ class Config
      *
      * @param string $path
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setConfigFilePath($path)
     {
@@ -107,21 +106,26 @@ class Config
     protected function _getConfigDomXPath()
     {
         if ($this->_configDomXPath === null) {
-            $filePath = $this->_modulesDirectory->getRelativePath($this->_configFilePath);
-            $isFile = $this->_modulesDirectory->isFile($filePath);
-            $isReadable = $this->_modulesDirectory->isReadable($filePath);
+            $dir = explode("/", $this->_configFilePath);
+            array_pop($dir);
+            $dir = implode("/", $dir);
+            $directoryRead = $this->readFactory->create($dir);
+            $filePath = $directoryRead->getRelativePath($this->_configFilePath);
+            $isFile = $directoryRead->isFile($filePath);
+            $isReadable = $directoryRead->isReadable($filePath);
             if (!$isFile || !$isReadable) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('We cannot load the configuration from file %1.', $this->_configFilePath)
                 );
             }
-            $xml = $this->_modulesDirectory->readFile($filePath);
+            $xml = $directoryRead->readFile($filePath);
             /** @var \Magento\Framework\Config\Dom $configDom */
             $configDom = $this->_domFactory->createDom(
                 [
                     'xml' => $xml,
                     'idAttributes' => ['config/instances/blocks/reference' => 'id'],
-                    'schemaFile' => $this->_moduleReader->getModuleDir('etc', 'Magento_Persistent') . '/persistent.xsd',
+                    'schemaFile' => $this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Persistent')
+                        . '/persistent.xsd',
                 ]
             );
             $this->_configDomXPath = new \DOMXPath($configDom->getDom());
@@ -134,6 +138,7 @@ class Config
      *
      * @param string $block
      * @return array
+     * @codeCoverageIgnore
      */
     public function getBlockConfigInfo($block)
     {
@@ -146,6 +151,7 @@ class Config
      * Retrieve instances that should be emulated by persistent data
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function collectInstancesToEmulate()
     {

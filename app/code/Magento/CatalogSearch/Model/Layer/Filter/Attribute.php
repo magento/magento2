@@ -57,7 +57,7 @@ class Attribute extends AbstractFilter
             return $this;
         }
         $attribute = $this->getAttributeModel();
-        /** @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection $productCollection */
+        /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
         $productCollection = $this->getLayer()
             ->getProductCollection();
         $productCollection->addFieldToFilter($attribute->getAttributeCode(), $attributeValue);
@@ -79,7 +79,7 @@ class Attribute extends AbstractFilter
     protected function _getItemsData()
     {
         $attribute = $this->getAttributeModel();
-        /** @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection $productCollection */
+        /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
         $productCollection = $this->getLayer()
             ->getProductCollection();
         $optionsFacetedData = $productCollection->getFacetedData($attribute->getAttributeCode());

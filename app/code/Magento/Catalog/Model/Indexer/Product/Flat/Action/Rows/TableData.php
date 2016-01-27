@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class TableData
@@ -23,16 +23,16 @@ class TableData implements \Magento\Catalog\Model\Indexer\Product\Flat\TableData
     protected $_productIndexerHelper;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
     ) {
         $this->_resource = $resource;

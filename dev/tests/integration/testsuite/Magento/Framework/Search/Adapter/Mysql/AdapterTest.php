@@ -71,23 +71,12 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     private function executeQuery()
     {
-        $this->reindexAll();
-
         /** @var \Magento\Framework\Search\Response\QueryResponse $queryRequest */
         $queryRequest = $this->requestBuilder->create();
 
         $queryResponse = $this->adapter->query($queryRequest);
 
         return $queryResponse;
-    }
-
-    private function reindexAll()
-    {
-        /** @var \Magento\Indexer\Model\Indexer $indexer */
-        $indexer = $this->objectManager->get('Magento\Indexer\Model\Indexer\CollectionFactory')
-            ->create()
-            ->getItemByColumnValue('indexer_id', 'catalogsearch_fulltext');
-        $indexer->reindexAll();
     }
 
     /**
@@ -368,5 +357,39 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ['black', 'tshirts', ['from' => '12', 'to' => '20'], 0],
             ['peoples', 'green', ['from' => '12', 'to' => '22'], 2],
         ];
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture current_store catalog/search/search_type 2
+     * @magentoDataFixture Magento/Framework/Search/_files/filterable_attribute.php
+     */
+    public function testCustomFilterableAttribute()
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        $selectOptions = $this->objectManager
+            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
+            ->setAttributeFilter($attribute->getId());
+
+        $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $multiselectOptions */
+        $multiselectOptions = $this->objectManager
+            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
+            ->setAttributeFilter($attribute->getId());
+
+        $this->requestBuilder->bind('select_attribute', $selectOptions->getLastItem()->getId());
+        $this->requestBuilder->bind('multiselect_attribute', $multiselectOptions->getLastItem()->getId());
+        $this->requestBuilder->bind('price.from', 9);
+        $this->requestBuilder->bind('price.to', 12);
+        $this->requestBuilder->bind('category_ids', 2);
+        $this->requestBuilder->setRequestName('filterable_custom_attributes');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(1, $queryResponse->count());
     }
 }

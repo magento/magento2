@@ -11,13 +11,12 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class WidgetForm
- * Widget Instance edit form
+ * Widget Instance edit form.
  */
 class WidgetForm extends FormTabs
 {
     /**
-     * Fill form with tabs
+     * Fill form with tabs.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement|null $element
@@ -25,11 +24,11 @@ class WidgetForm extends FormTabs
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
-        $tabs = $this->getFieldsByTabs($fixture);
+        $tabs = $this->getFixtureFieldsByContainers($fixture);
         $this->fillTabs(['settings' => $tabs['settings']]);
         $key = 0;
         foreach ($tabs as $key => $value) {
-            if (isset($value['widgetOptions'])) {
+            if (isset($value['parameters'])) {
                 break;
             }
         }

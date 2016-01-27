@@ -30,6 +30,20 @@ class Sidebar extends Block
     protected $cartLink = 'a.showcart';
 
     /**
+     * Minicart items quantity
+     *
+     * @var string
+     */
+    protected $productCounter = './/*[@class="counter-number"]';
+
+    /**
+     * Empty minicart message
+     *
+     * @var string
+     */
+    protected $emptyCartMessage = './/*[@id="minicart-content-wrapper"]//*[@class="subtitle empty"]';
+
+    /**
      * Mini cart content selector.
      *
      * @var string
@@ -58,18 +72,11 @@ class Sidebar extends Block
     protected $counterQty = '.minicart-wrapper .counter.qty';
 
     /**
-     * Count product in cart block.
+     * Locator value for Mini Shopping Cart wrapper.
      *
      * @var string
      */
-    protected $counterNumberBlock = '//*[@class="counter-number" and normalize-space(text()) != ""]';
-
-    /**
-     * Count product in cart wrapper.
-     *
-     * @var string
-     */
-    protected $counterNumberWrapper = '/ancestor::*[@class="minicart-wrapper"]';
+    protected $counterNumberWrapper = '.minicart-wrapper';
 
     /**
      * Loading masc.
@@ -106,6 +113,27 @@ class Sidebar extends Block
                 return $counterQty->isVisible() ? true : null;
             }
         );
+    }
+
+    /**
+     * Get empty minicart message
+     *
+     * @return string
+     */
+    public function getEmptyMessage()
+    {
+        $this->_rootElement->find($this->cartLink)->click();
+        return $this->_rootElement->find($this->emptyCartMessage, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * Is minicart items quantity block visible
+     *
+     * @return bool
+     */
+    public function isItemsQtyVisible()
+    {
+        return $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->isVisible();
     }
 
     /**
@@ -157,10 +185,10 @@ class Sidebar extends Block
     public function waitInit()
     {
         $browser = $this->browser;
-        $selector = $this->counterNumberBlock . $this->counterNumberWrapper;
+        $selector = $this->counterNumberWrapper;
         $browser->waitUntil(
             function () use ($browser, $selector) {
-                $counterQty = $browser->find($selector, Locator::SELECTOR_XPATH);
+                $counterQty = $browser->find($selector);
                 return $counterQty->isVisible() ? true : null;
             }
         );

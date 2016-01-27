@@ -13,20 +13,29 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_systemStore;
 
     /**
+     * @var \Magento\CheckoutAgreements\Model\AgreementModeOptions
+     */
+    protected $agreementModeOptions;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Store\Model\System\Store $systemStore
+     * @param \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
+        \Magento\CheckoutAgreements\Model\AgreementModeOptions $agreementModeOptions,
         array $data = []
     ) {
         $this->_systemStore = $systemStore;
+        $this->agreementModeOptions = $agreementModeOptions;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -98,9 +107,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
+        $fieldset->addField(
+            'mode',
+            'select',
+            [
+                'label' => __('Applied'),
+                'title' => __('Applied'),
+                'name' => 'mode',
+                'required' => true,
+                'options' => $this->agreementModeOptions->getOptionsArray()
+            ]
+        );
+
         if (!$this->_storeManager->isSingleStoreMode()) {
             $field = $fieldset->addField(
-                'store_id',
+                'stores',
                 'multiselect',
                 [
                     'name' => 'stores[]',
@@ -116,7 +137,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $field->setRenderer($renderer);
         } else {
             $fieldset->addField(
-                'store_id',
+                'stores',
                 'hidden',
                 ['name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId()]
             );

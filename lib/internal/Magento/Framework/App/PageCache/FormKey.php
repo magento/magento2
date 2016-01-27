@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\App\PageCache;
 
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+
 /**
  * Class Version
  *
@@ -19,17 +24,33 @@ class FormKey
     /**
      * CookieManager
      *
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @var CookieManagerInterface
      */
-    protected $cookieManager;
+    private $cookieManager;
 
     /**
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+     * @var CookieMetadataFactory
+     */
+    private $cookieMetadataFactory;
+
+    /**
+     * @var SessionManagerInterface
+     */
+    private $sessionManager;
+
+    /**
+     * @param CookieManagerInterface $cookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param SessionManagerInterface $sessionManager
      */
     public function __construct(
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+        CookieManagerInterface $cookieManager,
+        CookieMetadataFactory $cookieMetadataFactory,
+        SessionManagerInterface $sessionManager
     ) {
         $this->cookieManager = $cookieManager;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->sessionManager = $sessionManager;
     }
 
     /**
@@ -40,5 +61,33 @@ class FormKey
     public function get()
     {
         return $this->cookieManager->getCookie(self::COOKIE_NAME);
+    }
+
+    /**
+     * @param string $value
+     * @param PublicCookieMetadata $metadata
+     * @return void
+     */
+    public function set($value, PublicCookieMetadata $metadata)
+    {
+        $this->cookieManager->setPublicCookie(
+            self::COOKIE_NAME,
+            $value,
+            $metadata
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function delete()
+    {
+        $this->cookieManager->deleteCookie(
+            self::COOKIE_NAME,
+            $this->cookieMetadataFactory
+                ->createCookieMetadata()
+                ->setPath($this->sessionManager->getCookiePath())
+                ->setDomain($this->sessionManager->getCookieDomain())
+        );
     }
 }

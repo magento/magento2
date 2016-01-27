@@ -8,7 +8,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?php echo __('Newsletter Message Preview'); ?></title>
+    <title><?php /* @escapeNotVerified */ echo __('Newsletter Message Preview'); ?></title>
 </head>
 <body>
     <?php echo $block->getChildHtml('content') ?>

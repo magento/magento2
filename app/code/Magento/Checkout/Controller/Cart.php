@@ -7,7 +7,6 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Shopping cart controller
@@ -46,6 +45,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

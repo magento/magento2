@@ -67,7 +67,7 @@ class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidInvalidMIMEType()
     {
-        $pathToImageFile = BP . '/app/code/Magento/Eav/Test/Unit/Model/Attribute/Data/_files/image.jpg';
+        $pathToImageFile = __DIR__ . '/_files/image.jpg';
         $encodedData = @base64_encode(file_get_contents($pathToImageFile));
 
         $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
@@ -89,7 +89,7 @@ class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidInvalidName()
     {
-        $pathToImageFile = BP . '/app/code/Magento/Eav/Test/Unit/Model/Attribute/Data/_files/image.jpg';
+        $pathToImageFile = __DIR__ . '/_files/image.jpg';
         $encodedData = @base64_encode(file_get_contents($pathToImageFile));
 
         $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
@@ -110,7 +110,7 @@ class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testIsValid()
     {
-        $pathToImageFile = BP . '/app/code/Magento/Eav/Test/Unit/Model/Attribute/Data/_files/image.jpg';
+        $pathToImageFile = __DIR__ . '/_files/image.jpg';
         $encodedData = @base64_encode(file_get_contents($pathToImageFile));
 
         $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')

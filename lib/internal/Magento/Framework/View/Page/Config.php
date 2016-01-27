@@ -38,6 +38,11 @@ class Config
     const BODY_ATTRIBUTE_CLASS = 'class';
 
     /**
+     * Constant html language attribute
+     */
+    const HTML_ATTRIBUTE_LANG = 'lang';
+
+    /**
      * Allowed group of types
      *
      * @var array
@@ -86,6 +91,11 @@ class Config
     protected $favicon;
 
     /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $localeResolver;
+
+    /**
      * @var \Magento\Framework\View\Layout\BuilderInterface
      */
     protected $builder;
@@ -113,19 +123,27 @@ class Config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\Page\FaviconInterface $favicon
      * @param Title $title
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
         View\Asset\Repository $assetRepo,
         View\Asset\GroupedCollection $pageAssets,
         App\Config\ScopeConfigInterface $scopeConfig,
         View\Page\FaviconInterface $favicon,
-        Title $title
+        Title $title,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;
         $this->scopeConfig = $scopeConfig;
         $this->favicon = $favicon;
         $this->title = $title;
+        $this->localeResolver = $localeResolver;
+        $this->setElementAttribute(
+            self::ELEMENT_TYPE_HTML,
+            self::HTML_ATTRIBUTE_LANG,
+            str_replace('_', '-', $this->localeResolver->getLocale())
+        );
     }
 
     /**
@@ -151,8 +169,6 @@ class Config
 
     /**
      * TODO Will be eliminated in MAGETWO-28359
-     *
-     * @deprecated
      * @return void
      */
     public function publicBuild()

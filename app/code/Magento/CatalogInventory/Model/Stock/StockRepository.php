@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Api\Data\StockCollectionInterfaceFactory;
 use Magento\CatalogInventory\Api\Data\StockInterface;
 use Magento\CatalogInventory\Api\StockRepositoryInterface;
-use Magento\CatalogInventory\Model\Resource\Stock as StockResource;
+use Magento\CatalogInventory\Model\ResourceModel\Stock as StockResource;
 use Magento\CatalogInventory\Model\StockFactory;
 use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\QueryBuilderFactory;

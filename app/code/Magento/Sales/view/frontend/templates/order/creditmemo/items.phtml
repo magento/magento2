@@ -9,34 +9,34 @@
 ?>
 <?php $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
-    <a href="<?php echo $block->getPrintAllCreditmemosUrl($_order) ?>"
+    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintAllCreditmemosUrl($_order) ?>"
        onclick="this.target='_blank'"
        class="action print">
-        <span><?php echo __('Print All Refunds') ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Print All Refunds') ?></span>
     </a>
 </div>
 <?php foreach ($_order->getCreditmemosCollection() as $_creditmemo): ?>
 <div class="order-title">
-    <strong><?php echo __('Refund #') ?><?php echo $_creditmemo->getIncrementId(); ?> </strong>
-    <a href="<?php echo $block->getPrintCreditmemoUrl($_creditmemo) ?>"
+    <strong><?php /* @escapeNotVerified */ echo __('Refund #') ?><?php /* @escapeNotVerified */ echo $_creditmemo->getIncrementId(); ?> </strong>
+    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintCreditmemoUrl($_creditmemo) ?>"
        onclick="this.target='_blank'"
        class="action print">
-        <span><?php echo __('Print Refund') ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Print Refund') ?></span>
     </a>
 </div>
 
 <div class="table-wrapper order-items-creditmemo">
-    <table class="data table table-order-items creditmemo" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
-        <caption class="table-caption"><?php echo __('Items Refunded') ?></caption>
+    <table class="data table table-order-items creditmemo" id="my-refund-table-<?php /* @escapeNotVerified */ echo $_creditmemo->getId(); ?>">
+        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Refunded') ?></caption>
         <thead>
             <tr>
-                <th class="col name"><?php echo __('Product Name') ?></th>
-                <th class="col sku"><?php echo __('SKU') ?></th>
-                <th class="col price"><?php echo __('Price') ?></th>
-                <th class="col qty"><?php echo __('Qty') ?></th>
-                <th class="col subtotal"><?php echo __('Subtotal') ?></th>
-                <th class="col discount"><?php echo __('Discount Amount') ?></th>
-                <th class="col total"><?php echo __('Row Total') ?></th>
+                <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
+                <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
+                <th class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                <th class="col subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
+                <th class="col discount"><?php /* @escapeNotVerified */ echo __('Discount Amount') ?></th>
+                <th class="col total"><?php /* @escapeNotVerified */ echo __('Row Total') ?></th>
             </tr>
         </thead>
         <?php $_items = $_creditmemo->getAllItems(); ?>

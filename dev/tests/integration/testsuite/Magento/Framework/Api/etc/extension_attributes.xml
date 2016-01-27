@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Api/etc/extension_attributes.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
         <attribute code="test_stock_item" type="Magento\CatalogInventory\Api\Data\StockItemInterface">
             <resources>
@@ -29,6 +29,17 @@
                   reference_field="product_id"
                     >
                 <field>qty</field>
+            </join>
+        </attribute>
+    </extension_attributes>
+
+    <extension_attributes for="Magento\Wonderland\Api\Data\FakeCustomerInterface">
+        <attribute code="test_group_code" type="string">
+            <join reference_table="customer_group"
+                  join_on_field="group_id"
+                  reference_field="customer_group_id"
+                    >
+                <field>customer_group_code</field>
             </join>
         </attribute>
     </extension_attributes>

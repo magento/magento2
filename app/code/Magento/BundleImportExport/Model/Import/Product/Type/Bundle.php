@@ -63,7 +63,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Instance of application resource.
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -142,20 +142,20 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $params
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $params
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_resource = $resource;
-        $this->connection = $resource->getConnection(\Magento\Framework\App\Resource::DEFAULT_CONNECTION);
+        $this->connection = $resource->getConnection(\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION);
     }
 
     /**
@@ -384,6 +384,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
         $rowData = array_merge($rowData, $this->transformBundleCustomAttributes($rowData));
+        if (isset($rowData['bundle_price_type']) && $rowData['bundle_price_type'] == 'dynamic') {
+            $rowData['price'] = isset($rowData['price']) && $rowData['price'] ? $rowData['price'] : '0.00';
+        }
         return parent::isRowValid($rowData, $rowNum, $isNewProduct);
     }
 
@@ -606,6 +609,23 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             );
         }
         return $this;
+    }
+
+    /**
+     * Initialize attributes parameters for all attributes' sets.
+     *
+     * @return $this
+     */
+    protected function _initAttributes()
+    {
+        parent::_initAttributes();
+        if (isset(self::$attributeCodeToId['price_type']) && $id = self::$attributeCodeToId['price_type']) {
+            self::$commonAttributesCache[$id]['type'] = 'select';
+            self::$commonAttributesCache[$id]['options'] = [
+                self::VALUE_DYNAMIC => BundlePrice::PRICE_TYPE_DYNAMIC,
+                self::VALUE_FIXED => BundlePrice::PRICE_TYPE_FIXED,
+            ];
+        }
     }
 
     /**

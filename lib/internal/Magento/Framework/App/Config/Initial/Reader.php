@@ -55,7 +55,7 @@ class Reader
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
      * @param \Magento\Framework\Config\ConverterInterface $converter
      * @param SchemaLocator $schemaLocator
-     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
+     * @param \Magento\Framework\Config\DomFactory $domFactory
      * @param string $fileName
      * @param string $domDocumentClass
      */
@@ -63,14 +63,13 @@ class Reader
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
         \Magento\Framework\Config\ConverterInterface $converter,
         SchemaLocator $schemaLocator,
-        \Magento\Framework\Config\ValidationStateInterface $validationState,
-        $fileName = 'config.xml',
-        $domDocumentClass = 'Magento\Framework\Config\Dom'
+        \Magento\Framework\Config\DomFactory $domFactory,
+        $fileName = 'config.xml'
     ) {
-        $this->_schemaFile = $validationState->isValidated() ? $schemaLocator->getSchema() : null;
+        $this->_schemaFile = $schemaLocator->getSchema();
         $this->_fileResolver = $fileResolver;
         $this->_converter = $converter;
-        $this->_domDocumentClass = $domDocumentClass;
+        $this->domFactory = $domFactory;
         $this->_fileName = $fileName;
     }
 
@@ -99,9 +98,8 @@ class Reader
         $domDocument = null;
         foreach ($fileList as $file) {
             try {
-                if ($domDocument === null) {
-                    $class = $this->_domDocumentClass;
-                    $domDocument = new $class($file, [], null, $this->_schemaFile);
+                if (!$domDocument) {
+                    $domDocument = $this->domFactory->createDom(['xml' => $file, 'schemaFile' => $this->_schemaFile]);
                 } else {
                     $domDocument->merge($file);
                 }

@@ -15,92 +15,124 @@ define(
     ],
     function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress, postcodeValidator, $t) {
         'use strict';
-        var checkoutConfig = window.checkoutConfig;
-        var validators = [];
-        var observedElements = [];
-        var postcodeElement = null;
+
+        var checkoutConfig = window.checkoutConfig,
+            validators = [],
+            observedElements = [],
+            postcodeElement = null;
 
         return {
             validateAddressTimeout: 0,
             validateDelay: 2000,
 
-            registerValidator: function(carrier, validator) {
+            /**
+             * @param {String} carrier
+             * @param {Object} validator
+             */
+            registerValidator: function (carrier, validator) {
                 if (checkoutConfig.activeCarriers.indexOf(carrier) != -1) {
                     validators.push(validator);
                 }
             },
 
-            validateAddressData: function(address) {
+            /**
+             * @param {Object} address
+             * @return {Boolean}
+             */
+            validateAddressData: function (address) {
                 return validators.some(function(validator) {
                     return validator.validate(address);
                 });
             },
 
-            bindChangeHandlers: function(elements) {
-                var self = this;
-                var observableFields = shippingRatesValidationRules.getObservableFields();
-                $.each(elements, function(index, elem) {
-                    if (elem && observableFields.indexOf(elem.index) != -1) {
+            /**
+             * @param {*} elements
+             * @param {Boolean} force
+             * @param {Number} delay
+             */
+            bindChangeHandlers: function (elements, force, delay) {
+                var self = this,
+                    observableFields = shippingRatesValidationRules.getObservableFields();
+
+                $.each(elements, function (index, elem) {
+                    if (elem && (observableFields.indexOf(elem.index) !== -1 || force)) {
                         if (elem.index !== 'postcode') {
-                            self.bindHandler(elem);
+                            self.bindHandler(elem, delay);
                         }
                     }
 
                     if (elem.index === 'postcode') {
-                        self.bindHandler(elem);
+                        self.bindHandler(elem, delay);
                         postcodeElement = elem;
                     }
                 });
             },
 
-            bindHandler: function(element) {
+            /**
+             * @param {Object} element
+             * @param {Number} delay
+             */
+            bindHandler: function (element, delay) {
                 var self = this;
-                if (element.component.indexOf('/group') != -1) {
-                    $.each(element.elems(), function(index, elem) {
+
+                delay = typeof delay === 'undefined' ? self.validateDelay : delay;
+
+                if (element.component.indexOf('/group') !== -1) {
+                    $.each(element.elems(), function (index, elem) {
                         self.bindHandler(elem);
                     });
                 } else {
-                    element.on('value', function() {
+                    element.on('value', function () {
                         clearTimeout(self.validateAddressTimeout);
-                        self.validateAddressTimeout = setTimeout(function() {
+                        self.validateAddressTimeout = setTimeout(function () {
                             if (self.postcodeValidation()) {
                                 self.validateFields();
                             }
-                        }, self.validateDelay);
+                        }, delay);
                     });
                     observedElements.push(element);
                 }
             },
 
-            postcodeValidation: function() {
+            /**
+             * @return {*}
+             */
+            postcodeValidation: function () {
+                var countryId = $('select[name="country_id"]').val(),
+                    validationResult = postcodeValidator.validate(postcodeElement.value(), countryId),
+                    warnMessage;
+
                 if (postcodeElement == null || postcodeElement.value() == null) {
                     return true;
                 }
 
-                var countryId = $('select[name="shippingAddress[country_id]"]').val();
-                var validationResult = postcodeValidator.validate(postcodeElement.value(), countryId);
+                postcodeElement.warn(null);
 
-                postcodeElement.error(null);
                 if (!validationResult) {
-                    var errorMessage = $t('Invalid Zip/Postal code for current country!');
+                    warnMessage = $t('Provided Zip/Postal Code seems to be invalid.');
+
                     if (postcodeValidator.validatedPostCodeExample.length) {
-                        errorMessage += $t(' Example: ') + postcodeValidator.validatedPostCodeExample.join('; ');
+                        warnMessage += $t(' Example: ') + postcodeValidator.validatedPostCodeExample.join('; ') + '. ';
                     }
-                    postcodeElement.error(errorMessage);
+                    warnMessage += $t('If you believe it is the right one you can ignore this notice.');
+                    postcodeElement.warn(warnMessage);
                 }
+
                 return validationResult;
             },
 
             /**
              * Convert form data to quote address and validate fields for shipping rates
              */
-            validateFields: function() {
+            validateFields: function () {
                 var addressFlat = addressConverter.formDataProviderToFlatData(
-                    this.collectObservedData(),
-                    'shippingAddress'
-                );
+                        this.collectObservedData(),
+                        'shippingAddress'
+                    ),
+                    address;
+
                 if (this.validateAddressData(addressFlat)) {
-                    var address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
+                    address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
                     selectShippingAddress(address);
                 }
             },
@@ -110,11 +142,13 @@ define(
              *
              * @returns {*}
              */
-            collectObservedData: function() {
+            collectObservedData: function () {
                 var observedValues = {};
-                $.each(observedElements, function(index, field) {
+
+                $.each(observedElements, function (index, field) {
                     observedValues[field.dataScope] = field.value();
                 });
+
                 return observedValues;
             }
         };

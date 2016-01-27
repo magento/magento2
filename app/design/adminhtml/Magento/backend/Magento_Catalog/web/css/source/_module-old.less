@@ -1,0 +1,151 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.catalog-category-edit.page-layout-admin-2columns-left {
+    .page-columns:before {
+        display: none;
+    }
+}
+.category-content {
+    .ui-tabs-panel .fieldset {
+        padding-top: 40px;
+
+        .legend {
+            display: none;
+        }
+    }
+}
+
+//
+//    Product Massaction page
+//--------------------------------------
+
+// Attributes
+.attributes-edit-form {
+    .field {
+        &:not(.field-weight) {
+            .addon {
+                display: block;
+                position: relative;
+
+                input[type="text"] {
+                    border-width: 1px;
+                }
+
+                .addafter {
+                    display: block;
+                    border: 0;
+                    height: auto;
+                    width: auto;
+                }
+
+                input:focus ~ .addafter {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+
+    .with-addon .textarea {
+        margin: 0;
+    }
+
+    .attribute-change-checkbox {
+        background: #fff;
+        display: block;
+        margin-top: 5px;
+
+        .label {
+            float: none;
+            padding: 0;
+            width: auto;
+        }
+    }
+
+    .field-price,
+    .field-special_price,
+    .field-gift_wrapping_price,
+    .field-msrp,
+    .field-cost,
+    .field-gift_wrapping_price {
+        .control {
+            .addon > input {
+                padding-left: 23px;
+            }
+
+            .addafter {
+                > strong {
+                    left: 5px;
+                    position: absolute;
+                    top: 3px;
+                }
+            }
+        }
+    }
+
+    .field.type-price,
+    .field-price,
+    .field-special_price,
+    .field-msrp,
+    .field-weight {
+        input:focus + label {
+            box-shadow: none;
+        }
+    }
+
+    .field-special_from_date,
+    .field-special_to_date,
+    .field-news_from_date,
+    .field-news_to_date,
+    .field-custom_design_from,
+    .field-custom_design_to {
+        > .control .input-text {
+            border-width: 1px;
+            width: 130px;
+        }
+    }
+
+    .field-weight {
+        .fields-group-2 {
+            .control {
+                padding-right: 27px;
+
+                .addafter + .addafter {
+                    border-width: 1px 1px 1px 0;
+                    border-style: solid;
+                    height: 31px;
+                    right: 0;
+                    position: absolute;
+                    top: 0;
+                }
+
+                .addafter strong {
+                    line-height: 31px;
+                }
+
+                > input:focus + .addafter + .addafter {
+                    border-color: #007bdb;
+                }
+            }
+        }
+    }
+
+    .fieldset > .addafter {
+        display: none;
+    }
+
+}
+
+// Inventory
+.advanced-inventory-edit {
+    .field.choice {
+        display: block;
+        margin: 3px 0 0;
+
+        .label {
+            padding-top: 1px;
+        }
+    }
+}

@@ -44,7 +44,7 @@ class Authentication
     {
         $loginUrl = $this->customerUrl->getLoginUrl();
 
-        if (!$this->customerSession->authenticate($subject, $loginUrl)) {
+        if (!$this->customerSession->authenticate($loginUrl)) {
             $subject->getActionFlag()->set('', $subject::FLAG_NO_DISPATCH, true);
         }
     }

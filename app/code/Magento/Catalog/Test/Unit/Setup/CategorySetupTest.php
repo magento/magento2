@@ -76,7 +76,6 @@ class CategorySetupTest extends \PHPUnit_Framework_TestCase
                 'thumbnail',
                 'media_gallery',
                 'old_id',
-                'group_price',
                 'tier_price',
                 'color',
                 'news_from_date',

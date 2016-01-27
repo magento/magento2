@@ -9,7 +9,7 @@ namespace Magento\Paypal\Controller\Express\AbstractExpress;
 class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -22,7 +22,7 @@ class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\Abstrac
      * @param \Magento\Framework\Session\Generic $paypalSession
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -33,7 +33,7 @@ class ShippingOptionsCallback extends \Magento\Paypal\Controller\Express\Abstrac
         \Magento\Framework\Session\Generic $paypalSession,
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
         parent::__construct(

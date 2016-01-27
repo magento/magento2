@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action\Rows;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class TableDataTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->_productIndexerHelper = $this->getMock(
             'Magento\Catalog\Helper\Product\Flat\Indexer',
             [],

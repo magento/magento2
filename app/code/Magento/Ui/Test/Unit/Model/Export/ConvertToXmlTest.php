@@ -145,7 +145,10 @@ class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
     {
         $componentName = 'component_name';
 
-        $this->mockComponent($componentName);
+        $document = $this->getMockBuilder('Magento\Framework\Api\Search\DocumentInterface')
+            ->getMockForAbstractClass();
+
+        $this->mockComponent($componentName, $document);
         $this->mockStream();
         $this->mockFilter();
         $this->mockDirectory();
@@ -155,6 +158,9 @@ class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
             ->method('getHeaders')
             ->with($this->component)
             ->willReturn([]);
+        $this->metadataProvider->expects($this->once())
+            ->method('convertDate')
+            ->with($document, $componentName);
 
         $result = $this->model->getXmlFile();
         $this->assertTrue(is_array($result));
@@ -216,8 +222,9 @@ class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $componentName
+     * @param null|object $document
      */
-    protected function mockComponent($componentName)
+    protected function mockComponent($componentName, $document = null)
     {
         $context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
             ->setMethods(['getDataProvider'])
@@ -226,7 +233,7 @@ class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
         $dataProvider = $this->getMockBuilder(
             'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface'
         )
-            ->setMethods(['getSearchResult'])
+            ->setMethods(['getSearchResult', 'setLimit'])
             ->getMockForAbstractClass();
 
         $searchResult = $this->getMockBuilder('Magento\Framework\Api\Search\SearchResultInterface')
@@ -236,11 +243,11 @@ class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
         $this->component->expects($this->any())
             ->method('getName')
             ->willReturn($componentName);
-        $this->component->expects($this->once())
+        $this->component->expects($this->exactly(2))
             ->method('getContext')
             ->willReturn($context);
 
-        $context->expects($this->once())
+        $context->expects($this->exactly(2))
             ->method('getDataProvider')
             ->willReturn($dataProvider);
 
@@ -248,9 +255,22 @@ class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
             ->method('getSearchResult')
             ->willReturn($searchResult);
 
-        $searchResult->expects($this->once())
-            ->method('getItems')
-            ->willReturn([]);
+        $dataProvider->expects($this->once())
+            ->method('setLimit')
+            ->with(0, 0);
+
+        if ($document) {
+            $searchResult->expects($this->at(0))
+                ->method('getItems')
+                ->willReturn([$document]);
+            $searchResult->expects($this->at(1))
+                ->method('getItems')
+                ->willReturn([]);
+        } else {
+            $searchResult->expects($this->at(0))
+                ->method('getItems')
+                ->willReturn([]);
+        }
     }
 
     protected function mockFilter()

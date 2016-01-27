@@ -18,7 +18,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     protected $setRepository;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     protected $attributeCollection;
 
@@ -43,27 +43,28 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     protected $attributeRepository;
 
     /**
-     * @var Resource\Entity\Attribute
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
      */
     protected $attributeResource;
 
     /**
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository
-     * @param Resource\Entity\Attribute\Collection $attributeCollection
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $attributeCollection
      * @param Config $eavConfig
      * @param ConfigFactory $entityTypeFactory
      * @param \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
-     * @param Resource\Entity\Attribute $attributeResource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $attributeResource
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Collection $attributeCollection,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $attributeCollection,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\ConfigFactory $entityTypeFactory,
         \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository,
         \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository,
-        \Magento\Eav\Model\Resource\Entity\Attribute $attributeResource
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute $attributeResource
     ) {
         $this->setRepository = $setRepository;
         $this->attributeCollection = $attributeCollection;

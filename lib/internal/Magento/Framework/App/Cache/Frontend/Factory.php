@@ -10,8 +10,9 @@
 namespace Magento\Framework\App\Cache\Frontend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class Factory
 {
@@ -66,28 +67,28 @@ class Factory
      */
     protected $_backendOptions = [
         'hashed_directory_level' => 1,
-        'hashed_directory_umask' => 0777,
+        'hashed_directory_umask' => DriverInterface::WRITEABLE_DIRECTORY_MODE,
         'file_name_prefix' => 'mage',
     ];
 
     /**
      * Resource
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Filesystem $filesystem
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $enforcedOptions
      * @param array $decorators
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         Filesystem $filesystem,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $enforcedOptions = [],
         array $decorators = []
     ) {

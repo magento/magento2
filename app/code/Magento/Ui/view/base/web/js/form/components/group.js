@@ -4,11 +4,11 @@
  */
 define([
     'underscore',
-    'uiComponent'
-], function (_, Component) {
+    'uiCollection'
+], function (_, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             visible: true,
             label: '',
@@ -88,6 +88,15 @@ define([
          */
         isMultiple: function () {
             return this.elems.getLength() > 1;
+        },
+
+        /**
+         * Returns an array of child components previews.
+         *
+         * @returns {Array}
+         */
+        getPreview: function () {
+            return this.elems.map('getPreview');
         }
     });
 });

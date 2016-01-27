@@ -10,7 +10,7 @@
              module="Magento_Catalog"
              type="flat"
              entity_type="eav_attribute_set"
-             collection="Magento\Catalog\Model\Resource\Product\Link\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection"
              repository_class="Magento\Catalog\Test\Repository\CatalogAttributeSet"
              handler_interface="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface"
              class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">

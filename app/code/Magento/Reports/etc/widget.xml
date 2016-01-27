@@ -6,7 +6,7 @@
  */
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../Magento/Widget/etc/widget.xsd">
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
     <widget id="recently_viewed" class="Magento\Reports\Block\Product\Widget\Viewed"
             placeholder_image="Magento_Reports::images/product_widget_viewed.gif">
         <label translate="true">Recently Viewed Products</label>

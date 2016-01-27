@@ -43,7 +43,7 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->validatorMock = $this->getMock('\Magento\Quote\Model\QuoteAddressValidator', [], [], '', false);
         $this->addressRepository = $this->getMock('\Magento\Customer\Api\AddressRepositoryInterface');
         $logger = $this->getMock('\Psr\Log\LoggerInterface');
@@ -169,7 +169,7 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to save address. Please, check input data.
+     * @expectedExceptionMessage Unable to save address. Please check input data.
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {

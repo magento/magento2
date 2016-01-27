@@ -13,12 +13,12 @@ use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that after click on widget link on frontend system redirects you to Product page defined in widget
+ * Check that after click on widget link on frontend system redirects you to Product page defined in widget.
  */
 class AssertWidgetProductLink extends AbstractConstraint
 {
     /**
-     * Assert that after click on widget link on frontend system redirects you to Product page defined in widget
+     * Assert that after click on widget link on frontend system redirects you to Product page defined in widget.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogProductView $productView
@@ -38,18 +38,18 @@ class AssertWidgetProductLink extends AbstractConstraint
         $adminCache->getMessagesBlock()->waitSuccessMessage();
 
         $cmsIndex->open();
-        $cmsIndex->getTopmenu()->selectCategoryByName($widget->getLayout()[0]['entities']->getName());
-        $cmsIndex->getWidgetView()->clickToWidget($widget, $widget->getWidgetOptions()['anchor_text']);
+        $cmsIndex->getTopmenu()->selectCategoryByName($widget->getWidgetInstance()[0]['entities']->getName());
+        $cmsIndex->getWidgetView()->clickToWidget($widget, $widget->getParameters()['anchor_text']);
         $title = $productView->getTitleBlock()->getTitle();
         \PHPUnit_Framework_Assert::assertEquals(
-            $widget->getWidgetOptions()['entities'][0]->getName(),
+            $widget->getParameters()['entities'][0]->getName(),
             $title,
             'Wrong product title.'
         );
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

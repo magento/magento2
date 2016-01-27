@@ -9,7 +9,7 @@
     <fixture name="review"
              module="Magento_Review"
              type="composite"
-             collection="Magento\Review\Model\Resource\Review\Collection"
+             collection="Magento\Review\Model\ResourceModel\Review\Collection"
              repository_class="Magento\Review\Test\Repository\Review"
              handler_interface="Magento\Review\Test\Handler\Review\ReviewInterface"
              class="Magento\Review\Test\Fixture\Review">

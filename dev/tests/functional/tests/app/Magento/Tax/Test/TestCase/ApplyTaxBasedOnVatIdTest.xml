@@ -19,7 +19,7 @@
             <data name="customerGroup" xsi:type="string">valid_intra_union_group</data>
             <data name="cart/data/subtotal" xsi:type="string">10</data>
             <data name="cart/data/tax_amount" xsi:type="string">2</data>
-            <data name="cart/data/grand_total" xsi:type="string">12</data>
+            <data name="cart/data/grand_total" xsi:type="string">17</data>
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">17</item>
             </data>

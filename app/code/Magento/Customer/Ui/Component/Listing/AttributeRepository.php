@@ -105,17 +105,26 @@ class AttributeRepository
                 AttributeMetadataInterface::IS_VISIBLE_IN_GRID => $attribute->getIsVisibleInGrid(),
                 AttributeMetadataInterface::IS_FILTERABLE_IN_GRID => $management->canBeFilterableInGrid($attribute),
                 AttributeMetadataInterface::IS_SEARCHABLE_IN_GRID => $management->canBeSearchableInGrid($attribute),
+                AttributeMetadataInterface::VALIDATION_RULES => $attribute->getValidationRules(),
+                AttributeMetadataInterface::REQUIRED => $attribute->isRequired(),
+                'entity_type_code' => $entityTypeCode,
             ];
         }
 
         return $attributes;
     }
 
+    /**
+     * Convert options to array
+     *
+     * @param array $options
+     * @return array
+     */
     protected function getOptionArray(array $options)
     {
         /** @var \Magento\Customer\Api\Data\OptionInterface $option */
         foreach ($options as &$option) {
-            $option = ['label' => $option->getLabel(), 'value' => $option->getValue()];
+            $option = ['label' => (string)$option->getLabel(), 'value' => $option->getValue()];
         }
         return $options;
     }

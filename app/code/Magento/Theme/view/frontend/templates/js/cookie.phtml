@@ -8,7 +8,7 @@
 /**
  * Cookie settings initialization script
  *
- * @see \Magento\Framework\View\Element\Js\Cookie
+ * @var $block \Magento\Framework\View\Element\Js\Cookie
  */
 ?>
 
@@ -17,9 +17,10 @@
         "*": {
             "mage/cookies": {
                 "expires": null,
-                "path": "<?php echo $block->getPath()?>",
-                "domain": "<?php echo $block->getDomain()?>",
-                "secure": false
+                "path": "<?php /* @escapeNotVerified */ echo $block->getPath()?>",
+                "domain": "<?php /* @escapeNotVerified */ echo $block->getDomain()?>",
+                "secure": false,
+                "lifetime": "<?php /* @escapeNotVerified */ echo $block->getLifetime()?>"
             }
         }
     }

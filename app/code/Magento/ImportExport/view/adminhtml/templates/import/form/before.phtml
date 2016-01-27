@@ -3,12 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 ?>
 <?php
 /** @var $block \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before */
 ?>
 <script>
-require(['jquery', 'prototype'], function(jQuery){
+require([
+    'jquery',
+    'Magento_Ui/js/modal/alert',
+    'prototype'
+], function(jQuery, alert){
 
 //<![CDATA[
     // Temporary Class will be replaced after refactoring of import/export functionality
@@ -23,19 +29,25 @@ require(['jquery', 'prototype'], function(jQuery){
          * List of existing behavior sets
          * @type {Array}
          */
-        uniqueBehaviors: <?php echo $block->getUniqueBehaviors() ?>,
+        uniqueBehaviors: <?php /* @escapeNotVerified */ echo $block->getUniqueBehaviors() ?>,
 
         /**
          * Behaviour codes for import entities
          * @type {Array}
          */
-        entityBehaviors: <?php echo $block->getEntityBehaviors() ?>,
+        entityBehaviors: <?php /* @escapeNotVerified */ echo $block->getEntityBehaviors() ?>,
+
+        /**
+         * Behaviour notes for import entities
+         * @type {Array}
+         */
+        entityBehaviorsNotes: <?php /* @escapeNotVerified */ echo $block->getEntityBehaviorsNotes() ?>,
 
         /**
          * Base url
          * @type {string}
          */
-        sampleFilesBaseUrl: '<?php echo $block->getUrl('*/*/download/', ['filename' => 'entity-name']) ?>',
+        sampleFilesBaseUrl: '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/download/', ['filename' => 'entity-name']) ?>',
 
         /**
          * Reset selected index
@@ -129,6 +141,25 @@ require(['jquery', 'prototype'], function(jQuery){
                 this.showUploadFile(false);
                 this.showSampleFile(false);
             }
+            this.handleImportBehaviorSelector();
+        },
+
+        /**
+         * Handle value change in behavior selector
+         */
+        handleImportBehaviorSelector: function() {
+            var entity = jQuery('#entity');
+            if (entity && entity.val()) {
+                var notes = this.entityBehaviorsNotes[entity.val()];
+                var requiredBehavior = this.entityBehaviors[entity.val()];
+                var behaviorInput = jQuery('#' + requiredBehavior);
+                var behavior = behaviorInput && behaviorInput.val();
+                if (behavior && notes[behavior]) {
+                    jQuery('#' + requiredBehavior + '-note').html(notes[behavior]);
+                } else {
+                    jQuery('#' + requiredBehavior + '-note').html('');
+                }
+            }
         },
 
         /**
@@ -173,7 +204,11 @@ require(['jquery', 'prototype'], function(jQuery){
          */
         postToFrameProcessResponse: function(response) {
             if ('object' != typeof(response)) {
-                return alert('Invalid response');
+                alert({
+                    content: 'Invalid response'
+                });
+
+                return false;
             }
             $H(response).each(function(pair) {
                 switch (pair.key) {
@@ -204,7 +239,9 @@ require(['jquery', 'prototype'], function(jQuery){
                         });
                         break;
                     default:
-                        alert(pair.key + ': ' + pair.value);
+                        alert({
+                            content: pair.key + ': ' + pair.value
+                        });
                         break;
                 }
             });

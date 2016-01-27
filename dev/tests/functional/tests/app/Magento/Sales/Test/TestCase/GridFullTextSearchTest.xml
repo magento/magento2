@@ -18,6 +18,8 @@
             <data name="fixtureDataSet" xsi:type="string">default</data>
             <data name="pageClass" xsi:type="string">Magento\Sales\Test\Page\Adminhtml\OrderIndex</data>
             <data name="gridRetriever" xsi:type="string">getSalesOrderGrid</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <data name="fieldGetter" xsi:type="string">getId</data>
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
         </variation>
         <variation name="SalesInvoiceGridFullTextSearch">
@@ -32,6 +34,8 @@
             <data name="pageClass" xsi:type="string">Magento\Sales\Test\Page\Adminhtml\InvoiceIndex</data>
             <data name="gridRetriever" xsi:type="string">getInvoicesGrid</data>
             <data name="idColumn" xsi:type="string">Order #</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <data name="fieldGetter" xsi:type="string">getId</data>
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
         </variation>
         <variation name="SalesShipmentGridFullTextSearch">
@@ -46,6 +50,8 @@
             <data name="pageClass" xsi:type="string">Magento\Shipping\Test\Page\Adminhtml\ShipmentIndex</data>
             <data name="gridRetriever" xsi:type="string">getShipmentsGrid</data>
             <data name="idColumn" xsi:type="string">Order</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <data name="fieldGetter" xsi:type="string">getId</data>
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
         </variation>
         <variation name="SalesCreditMemoGridFullTextSearch">
@@ -66,6 +72,8 @@
             <data name="pageClass" xsi:type="string">Magento\Sales\Test\Page\Adminhtml\CreditMemoIndex</data>
             <data name="gridRetriever" xsi:type="string">getCreditMemoGrid</data>
             <data name="idColumn" xsi:type="string">Order</data>
+            <data name="idGetter" xsi:type="string">getId</data>
+            <data name="fieldGetter" xsi:type="string">getId</data>
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
         </variation>
     </testCase>

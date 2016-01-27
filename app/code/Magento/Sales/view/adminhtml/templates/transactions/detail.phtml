@@ -10,29 +10,29 @@
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $block->getButtonsHtml() ?></div>
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php echo __('Transaction Data'); ?></span>
+        <span class="title"><?php /* @escapeNotVerified */ echo __('Transaction Data'); ?></span>
     </div>
     <div id="log_details_fieldset" class="admin__page-section-content log-details">
         <table class="log-info data-table admin__table-secondary">
             <tbody>
             <tr>
-                <th><?php echo __('Transaction ID'); ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Transaction ID'); ?></th>
                 <td><?php echo $block->getTxnIdHtml() ?></td>
             </tr>
             <tr>
-                <th><?php echo __('Parent Transaction ID'); ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Parent Transaction ID'); ?></th>
                 <td>
                     <?php if ($block->getParentTxnIdHtml()): ?>
                     <a href="<?php echo $block->getParentTxnIdUrlHtml() ?>">
                         <?php echo $block->getParentTxnIdHtml(); ?>
                     </a>
                     <?php else : ?>
-                    <?php echo __('N/A'); ?>
+                    <?php /* @escapeNotVerified */ echo __('N/A'); ?>
                     <?php endif; ?>
                 </td>
             </tr>
             <tr>
-                <th><?php echo __('Order ID'); ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Order ID'); ?></th>
                 <td>
                     <a href="<?php echo $block->getOrderIdUrlHtml(); ?>">
                         <?php echo $block->getOrderIncrementIdHtml() ?>
@@ -40,15 +40,15 @@
                 </td>
             </tr>
             <tr>
-                <th><?php echo __('Transaction Type'); ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Transaction Type'); ?></th>
                 <td><?php echo $block->getTxnTypeHtml() ?></td>
             </tr>
             <tr>
-                <th><?php echo __('Is Closed'); ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Is Closed'); ?></th>
                 <td><?php echo $block->getIsClosedHtml(); ?></td>
             </tr>
             <tr>
-                <th><?php echo __('Created At'); ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Created At'); ?></th>
                 <td><?php echo $block->getCreatedAtHtml(); ?></td>
             </tr>
             </tbody>
@@ -58,7 +58,7 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title""><?php echo __('Child Transactions'); ?></span>
+        <span class="title""><?php /* @escapeNotVerified */ echo __('Child Transactions'); ?></span>
     </div>
     <div class="admin__page-section-content log-details-grid">
         <?php echo $block->getChildHtml('child_grid') ?>
@@ -67,7 +67,7 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php echo __('Transaction Details'); ?></span>
+        <span class="title"><?php /* @escapeNotVerified */ echo __('Transaction Details'); ?></span>
     </div>
     <div class="admin__page-section-content log-details-grid">
         <?php echo $block->getChildHtml('detail_grid') ?>

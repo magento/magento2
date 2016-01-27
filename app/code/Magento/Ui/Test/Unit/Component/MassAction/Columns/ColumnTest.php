@@ -45,6 +45,10 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
 
         $this->column = $this->objectManager->getObject(
             'Magento\Ui\Component\MassAction\Columns\Column',

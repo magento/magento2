@@ -57,7 +57,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $helperMock;
 
@@ -87,7 +87,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected $lockValidatorMock;
 
     /**
-     * @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceMock;
 
@@ -151,7 +151,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->getMock();
-        $this->helperMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Helper')
+        $this->helperMock = $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Helper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->universalFactoryMock = $this->getMockBuilder('Magento\Framework\Validator\UniversalFactory')
@@ -179,7 +179,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->dateTimeFormatter = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface');
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\AbstractResource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
             ->setMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
             ->getMockForAbstractClass();
         $this->cacheManager = $this->getMockBuilder('Magento\Framework\App\CacheInterface')

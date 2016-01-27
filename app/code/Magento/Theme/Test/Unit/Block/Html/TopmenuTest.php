@@ -65,7 +65,7 @@ HTML;
 
         $tree = $this->getMock('Magento\Framework\Data\Tree', [], [], '', false);
 
-        $container = $this->getMock('Magento\Catalog\Model\Resource\Category\Tree', [], [], '', false);
+        $container = $this->getMock('Magento\Catalog\Model\ResourceModel\Category\Tree', [], [], '', false);
 
         $children = $this->getMock(
             'Magento\Framework\Data\Tree\Node\Collection',

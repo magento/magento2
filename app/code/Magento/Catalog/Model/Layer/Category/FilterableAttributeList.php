@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Layer\FilterableAttributeListInterface;
 class FilterableAttributeList implements FilterableAttributeListInterface
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -24,11 +24,11 @@ class FilterableAttributeList implements FilterableAttributeListInterface
     /**
      * FilterableAttributeList constructor
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -38,13 +38,13 @@ class FilterableAttributeList implements FilterableAttributeListInterface
     /**
      * Retrieve list of filterable attributes
      *
-     * @return array|\Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return array|\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     public function getList()
     {
-        /** @var $collection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
+        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
         $collection = $this->collectionFactory->create();
-        $collection->setItemObjectClass('Magento\Catalog\Model\Resource\Eav\Attribute')
+        $collection->setItemObjectClass('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->addStoreLabel($this->storeManager->getStore()->getId())
             ->setOrder('position', 'ASC');
         $collection = $this->_prepareAttributeCollection($collection);
@@ -56,8 +56,8 @@ class FilterableAttributeList implements FilterableAttributeListInterface
     /**
      * Add filters to attribute collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Collection $collection
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     protected function _prepareAttributeCollection($collection)
     {

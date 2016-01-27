@@ -461,4 +461,14 @@ class Option extends Widget
     {
         return $this->getUrl('catalog/*/customOptions');
     }
+
+    /**
+     * Return current product id
+     *
+     * @return null|int
+     */
+    public function getCurrentProductId()
+    {
+        return $this->getProduct()->getId();
+    }
 }

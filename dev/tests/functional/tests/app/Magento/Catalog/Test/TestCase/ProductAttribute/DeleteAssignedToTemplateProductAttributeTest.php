@@ -13,7 +13,7 @@ use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
- * 1. Create Product template, based on Default.
+ * 1. Create Attribute set, based on Default.
  * 2. Create product attribute and add to created template.
  *
  * Test Flow:
@@ -64,21 +64,22 @@ class DeleteAssignedToTemplateProductAttributeTest extends Injectable
     /**
      * Run test.
      *
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @return array
      */
-    public function test(CatalogAttributeSet $productTemplate)
+    public function test(CatalogAttributeSet $attributeSet)
     {
         // Precondition
-        $productTemplate->persist();
-        $attribute = $productTemplate->getDataFieldConfig('assigned_attributes')['source']->getAttributes()[0];
+        $attributeSet->persist();
+        $attribute = $attributeSet->getDataFieldConfig('assigned_attributes')['source']->getAttributes()[0];
 
         // Steps
         $filter = ['attribute_code' => $attribute->getAttributeCode()];
         $this->attributeIndex->open();
         $this->attributeIndex->getGrid()->searchAndOpen($filter);
         $this->attributeNew->getPageActions()->delete();
+        $this->attributeNew->getModalBlock()->acceptAlert();
 
-        return ['productTemplate' => $productTemplate, 'attribute' => $attribute];
+        return ['attributeSet' => $attributeSet, 'attribute' => $attribute];
     }
 }

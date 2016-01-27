@@ -27,6 +27,10 @@ angular.module('web-configuration', ['ngStorage'])
             },
             advanced: {
                 expanded: false
+            },
+            sessionSave: {
+                type: 'files',
+                error: false
             }
         };
 

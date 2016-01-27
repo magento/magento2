@@ -23,7 +23,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     protected $mockCmsPage;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Page|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $mockResourcePage;
 
@@ -31,7 +31,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->mockCmsPage = $this->getMock('Magento\Cms\Helper\Page', [], [], '', false, false);
-        $this->mockResourcePage = $this->getMock('Magento\Cms\Model\Resource\Page', [], [], '', false, false);
+        $this->mockResourcePage = $this->getMock('Magento\Cms\Model\ResourceModel\Page', [], [], '', false, false);
 
         $this->linkElement = $this->objectManager->getObject(
             'Magento\Cms\Block\Widget\Page\Link',

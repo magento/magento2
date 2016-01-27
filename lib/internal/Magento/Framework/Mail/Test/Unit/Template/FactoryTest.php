@@ -5,37 +5,70 @@
  */
 namespace Magento\Framework\Mail\Test\Unit\Template;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManagerMock;
+    protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_templateMock;
+    protected $templateMock;
 
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
+
+    /**
+     * @return void
+     */
     public function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface');
-        $this->_templateMock = $this->getMock('\Magento\Framework\Mail\TemplateInterface');
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface');
+        $this->templateMock = $this->getMock('\Magento\Framework\Mail\TemplateInterface');
     }
 
     /**
-     * @covers \Magento\Framework\Mail\Template\Factory::get
-     * @covers \Magento\Framework\Mail\Template\Factory::__construct
+     * @param string $expectedArgument
+     * @param null|string $namespace
+     * @return void
+     * @dataProvider getDataProvider
      */
-    public function testGet()
+    public function testGet($expectedArgument, $namespace)
     {
-        $model = new \Magento\Framework\Mail\Template\Factory($this->_objectManagerMock);
+        $factory = $this->objectManagerHelper->getObject(
+            'Magento\Framework\Mail\Template\Factory',
+            ['objectManager' => $this->objectManagerMock]
+        );
 
-        $this->_objectManagerMock->expects($this->once())
+        $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\Mail\TemplateInterface', ['data' => ['template_id' => 'identifier']])
-            ->will($this->returnValue($this->_templateMock));
+            ->with($expectedArgument, ['data' => ['template_id' => 'identifier']])
+            ->willReturn($this->templateMock);
 
-        $this->assertInstanceOf('\Magento\Framework\Mail\TemplateInterface', $model->get('identifier'));
+        $this->assertInstanceOf('\Magento\Framework\Mail\TemplateInterface', $factory->get('identifier', $namespace));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataProvider()
+    {
+        return [
+            [
+                'expectedArgument' => 'Magento\Framework\Mail\TemplateInterface',
+                'namespace' => null
+            ],
+            [
+                'expectedArgument' => 'Test\Namespace\Implements\TemplateInterface',
+                'namespace' => 'Test\Namespace\Implements\TemplateInterface'
+            ]
+        ];
     }
 }

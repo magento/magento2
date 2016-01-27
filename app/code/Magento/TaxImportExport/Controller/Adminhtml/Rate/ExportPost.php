@@ -65,7 +65,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         unset($title);
 
         $collection = $this->_objectManager->create(
-            'Magento\Tax\Model\Resource\Calculation\Rate\Collection'
+            'Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection'
         )->joinCountryTable()->joinRegionTable();
 
         while ($rate = $collection->fetchItem()) {

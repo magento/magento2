@@ -69,7 +69,6 @@ class AssertBundlePriceType extends AbstractConstraint
         CheckoutCart $checkoutCartView,
         BundleProduct $originalProduct = null
     ) {
-        $customerGroup = 'NOT LOGGED IN';
         $bundleData = $product->getData();
         $this->productPriceType = $originalProduct !== null
             ? $originalProduct->getPriceType()
@@ -79,10 +78,7 @@ class AssertBundlePriceType extends AbstractConstraint
         $checkoutCartView->open();
         $cartItem = $checkoutCartView->getCartBlock()->getCartItem($product);
         $specialPrice = 0;
-        if (isset($bundleData['group_price'])) {
-            $specialPrice =
-                $bundleData['group_price'][array_search($customerGroup, $bundleData['group_price'])]['price'] / 100;
-        }
+
 
         $optionPrice = [];
         $fillData = $product->getCheckoutData();

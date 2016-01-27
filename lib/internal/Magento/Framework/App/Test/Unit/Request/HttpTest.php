@@ -94,7 +94,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOriginalPathInfoWithTestUri()
     {
-        $uri = 'http://test.com/value';
+        $uri = 'http://test.com/value?key=value';
         $this->_model = $this->getModel($uri);
         $this->assertEquals('/value', $this->_model->getOriginalPathInfo());
     }
@@ -348,6 +348,52 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_model->getServer()->set('HTTPS', $serverHttps);
 
         $this->assertSame($isSecure, $this->_model->isSecure());
+    }
+
+    /**
+     * @dataProvider httpSafeMethodProvider
+     * @backupGlobals enabled
+     * @param string $method value of $_SERVER['REQUEST_METHOD']
+     */
+    public function testIsSafeMethodTrue($httpMethod)
+    {
+        $this->_model = $this->getModel();
+        $_SERVER['REQUEST_METHOD'] = $httpMethod;
+        $this->assertEquals(true, $this->_model->IsSafeMethod());
+    }
+
+    /**
+     * @dataProvider httpNotSafeMethodProvider
+     * @backupGlobals enabled
+     * @param string $method value of $_SERVER['REQUEST_METHOD']
+     */
+    public function testIsSafeMethodFalse($httpMethod)
+    {
+        $this->_model = $this->getModel();
+        $_SERVER['REQUEST_METHOD'] = $httpMethod;
+        $this->assertEquals(false, $this->_model->IsSafeMethod());
+    }
+
+    public function httpSafeMethodProvider()
+    {
+        return [
+            'Test 1' => ['GET'],
+            'Test 2' => ['HEAD'],
+            'Test 3' => ['TRACE'],
+            'Test 4' => ['OPTIONS']
+        ];
+    }
+
+    public function httpNotSafeMethodProvider()
+    {
+        return [
+            'Test 1' => ['POST'],
+            'Test 2' => ['PUT'],
+            'Test 3' => ['DELETE'],
+            'Test 4' => ['PATCH'],
+            'Test 5' => ['CONNECT'],
+            'Test 6' => [null]
+        ];
     }
 
     public function isSecureDataProvider()

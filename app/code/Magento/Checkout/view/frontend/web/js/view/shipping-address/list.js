@@ -8,7 +8,7 @@ define([
     'ko',
     'mageUtils',
     'uiComponent',
-    'Magento_Ui/js/core/renderer/layout',
+    'uiLayout',
     'Magento_Customer/js/model/address-list'
 ], function (_, ko, utils, Component, layout, addressList) {
     'use strict';
@@ -44,7 +44,7 @@ define([
             return this;
         },
 
-        initProperties: function () {
+        initConfig: function () {
             this._super();
             // the list of child components that are responsible for address rendering
             this.rendererComponents = [];

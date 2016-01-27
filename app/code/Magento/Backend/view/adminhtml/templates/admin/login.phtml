@@ -10,10 +10,10 @@
 
 <form method="post" action="" id="login-form" data-mage-init='{"form": {}, "validation": {}}' autocomplete="off">
     <fieldset class="admin__fieldset">
-        <legend class="admin__legend"><span><?php echo __('Welcome, please sign in') ?></span></legend><br/>
-        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>" />
+        <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Welcome, please sign in') ?></span></legend><br/>
+        <input name="form_key" type="hidden" value="<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>" />
         <div class="admin__field _required field-username">
-            <label for="username" class="admin__field-label"><span><?php echo __('Username') ?></span></label>
+            <label for="username" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Username') ?></span></label>
             <div class="admin__field-control">
                 <input
                     id="username"
@@ -23,11 +23,11 @@
                     autofocus
                     value=""
                     data-validate="{required:true}"
-                    placeholder="<?php echo __('user name') ?>"/>
+                    placeholder="<?php /* @escapeNotVerified */ echo __('user name') ?>"/>
             </div>
         </div>
         <div class="admin__field _required field-password">
-            <label for="login" class="admin__field-label"><span><?php echo __('Password') ?></span></label>
+            <label for="login" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Password') ?></span></label>
             <div class="admin__field-control">
                 <!-- This is a dummy hidden field to trick firefox from auto filling the password -->
                 <input
@@ -41,7 +41,7 @@
                     type="password"
                     name="login[password]"
                     data-validate="{required:true}"
-                    value="" placeholder="<?php echo __('password') ?>" />
+                    value="" placeholder="<?php /* @escapeNotVerified */ echo __('password') ?>" />
             </div>
         </div>
         <?php echo $block->getChildHtml('form.additional.info'); ?>

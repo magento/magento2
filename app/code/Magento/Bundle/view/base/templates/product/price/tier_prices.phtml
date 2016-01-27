@@ -16,10 +16,10 @@ $tierPriceModel = $block->getPrice();
 $tierPrices = $tierPriceModel->getTierPriceList();
 ?>
 <?php if (count($tierPrices)) : ?>
-    <ul class="<?php echo($block->hasListClass() ? $block->getListClass() : 'prices tier items'); ?>">
+    <ul class="<?php /* @escapeNotVerified */ echo($block->hasListClass() ? $block->getListClass() : 'prices-tier items'); ?>">
         <?php foreach ($tierPrices as $index => $price) : ?>
             <li class="item">
-                <?php echo __(
+                <?php /* @escapeNotVerified */ echo __(
                     'Buy %1 with %2 discount each',
                     $price['price_qty'],
                     '<strong class="benefit">' . $tierPriceModel->getSavePercent($price['price']) . '%</strong>'

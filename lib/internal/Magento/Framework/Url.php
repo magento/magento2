@@ -791,12 +791,26 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             return $routePath;
         }
 
-        if(isset($routeParams['_scope']) && is_object($routeParams['_scope'])) {
+        $isCached = true;
+        $isArray = is_array($routeParams);
+
+        if ($isArray) {
+            array_walk_recursive(
+                $routeParams,
+                function ($item) use (&$isCached) {
+                    if (is_object($item)) {
+                        $isCached = false;
+                    }
+                }
+            );
+        }
+
+        if(!$isCached) {
             return $this->createUrl($routePath, $routeParams);
         }
 
         $cashedParams = $routeParams;
-        if (is_array($cashedParams)) {
+        if ($isArray) {
             ksort($cashedParams);
         }
 
@@ -817,7 +831,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function createUrl($routePath = null, $routeParams = null)
+    private function createUrl($routePath = null, array $routeParams = null)
     {
         $escapeQuery = false;
 

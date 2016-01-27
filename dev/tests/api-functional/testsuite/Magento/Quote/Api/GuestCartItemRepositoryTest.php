@@ -99,7 +99,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . 'items',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -189,7 +189,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . 'items/' . $itemId,
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items/' . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [

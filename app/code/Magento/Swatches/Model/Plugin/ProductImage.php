@@ -119,7 +119,7 @@ class ProductImage
     /**
      * Check if we can replace original image with swatch image on catalog/category/list page
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return bool
      */
     protected function canReplaceImageWithSwatch($attribute)

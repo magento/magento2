@@ -41,14 +41,14 @@ class Remove
     /**
      * Remove product urls from storage
      *
-     * @param \Magento\Catalog\Model\Resource\Category $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Category $subject
      * @param callable $proceed
      * @param CategoryInterface $category
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
-        \Magento\Catalog\Model\Resource\Category $subject,
+        \Magento\Catalog\Model\ResourceModel\Category $subject,
         \Closure $proceed,
         CategoryInterface $category
     ) {

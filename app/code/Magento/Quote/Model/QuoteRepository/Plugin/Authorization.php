@@ -28,14 +28,14 @@ class Authorization
     /**
      * Check if quote is allowed
      *
-     * @param \Magento\Quote\Model\QuoteRepository $subject
+     * @param \Magento\Quote\Api\CartRepositoryInterface $subject
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetActive(
-        \Magento\Quote\Model\QuoteRepository $subject,
+        \Magento\Quote\Api\CartRepositoryInterface $subject,
         \Magento\Quote\Model\Quote $quote
     ) {
         if (!$this->isAllowed($quote)) {
@@ -47,14 +47,14 @@ class Authorization
     /**
      * Check if quote is allowed
      *
-     * @param \Magento\Quote\Model\QuoteRepository $subject
+     * @param \Magento\Quote\Api\CartRepositoryInterface $subject
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetActiveForCustomer(
-        \Magento\Quote\Model\QuoteRepository $subject,
+        \Magento\Quote\Api\CartRepositoryInterface $subject,
         \Magento\Quote\Model\Quote $quote
     ) {
         if (!$this->isAllowed($quote)) {

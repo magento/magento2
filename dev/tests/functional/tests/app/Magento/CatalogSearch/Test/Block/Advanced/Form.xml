@@ -25,9 +25,5 @@
         <price_to>
             <selector>#price_to</selector>
         </price_to>
-        <tax_class_id>
-            <selector>#tax_class_id</selector>
-            <input>select</input>
-        </tax_class_id>
     </fields>
 </mapping>

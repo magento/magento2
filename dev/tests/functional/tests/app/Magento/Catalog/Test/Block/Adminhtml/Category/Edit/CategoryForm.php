@@ -6,38 +6,55 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
-use Magento\Mtf\Factory\Factory;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class CategoryForm
- * Category container block
+ * Category container block.
  */
-class CategoryForm extends FormTabs
+class CategoryForm extends FormSections
 {
     /**
-     * Save button
+     * Default sore switcher block locator.
      *
      * @var string
      */
-    protected $saveButton = '[data-ui-id=category-edit-form-save-button]';
+    protected $storeSwitcherBlock = '.store-switcher';
 
     /**
-     * Category Products grid
+     * Dropdown block locator.
      *
      * @var string
      */
-    protected $productsGridBlock = '#catalog_category_products';
+    protected $dropdownBlock = '.dropdown';
 
     /**
-     * Get Category edit form
+     * Selector for confirm.
      *
-     * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Tab\ProductGrid
+     * @var string
      */
-    public function getCategoryProductsGrid()
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
+     * Fill form with tabs.
+     *
+     * @param FixtureInterface $fixture
+     * @param SimpleElement|null $element
+     * @return FormSections
+     */
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
-        return Factory::getBlockFactory()->getMagentoCatalogAdminhtmlCategoryTabProductGrid(
-            $this->_rootElement->find($this->productsGridBlock)
-        );
+        if ($fixture->hasData('store_id')) {
+            $store = $fixture->getStoreId();
+            $storeSwitcherBlock = $this->browser->find($this->storeSwitcherBlock);
+            $storeSwitcherBlock->find($this->dropdownBlock, Locator::SELECTOR_CSS, 'liselectstore')->setValue($store);
+            $modalElement = $this->browser->find($this->confirmModal);
+            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $modalElement]);
+            $modal->acceptAlert();
+        }
+        return parent::fill($fixture, $element);
     }
 }

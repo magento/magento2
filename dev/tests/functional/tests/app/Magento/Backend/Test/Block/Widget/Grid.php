@@ -189,6 +189,13 @@ abstract class Grid extends Block
     protected $rowPattern = '//tbody/tr[%s]';
 
     /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
      * Get backend abstract block
      *
      * @return \Magento\Backend\Test\Block\Template
@@ -252,6 +259,7 @@ abstract class Grid extends Block
         } else {
             throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
+        $this->waitLoader();
     }
 
     /**
@@ -340,7 +348,10 @@ abstract class Grid extends Block
     {
         $this->_rootElement->find($this->massactionSubmit, Locator::SELECTOR_CSS)->click();
         if ($acceptAlert) {
-            $this->browser->acceptAlert();
+            $element = $this->browser->find($this->confirmModal);
+            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal->acceptAlert();
         }
     }
 
@@ -356,6 +367,10 @@ abstract class Grid extends Block
         $rowTemplate = ($isStrict) ? $this->rowTemplateStrict : $this->rowTemplate;
         $rows = [];
         foreach ($filter as $value) {
+            if (strpos($value, '"') !== false) {
+                $rowTemplate = str_replace('"', '', $rowTemplate);
+                $value = $this->xpathEscape($value);
+            }
             $rows[] = sprintf($rowTemplate, $value);
         }
         $location = sprintf($this->rowPattern, implode(' and ', $rows));
@@ -452,5 +467,31 @@ abstract class Grid extends Block
     public function openFirstRow()
     {
         $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Escape single and/or double quotes in XPath selector by concat()
+     *
+     * @param string $query
+     * @param string $defaultDelim [optional]
+     * @return string
+     */
+    protected function xpathEscape($query, $defaultDelim = '"')
+    {
+        if (strpos($query, $defaultDelim) === false) {
+            return $defaultDelim . $query . $defaultDelim;
+        }
+        preg_match_all("#(?:('+)|[^']+)#", $query, $matches);
+        list($parts, $apos) = $matches;
+        $delim = '';
+        foreach ($parts as $i => &$part) {
+            $delim = $apos[$i] ? '"' : "'";
+            $part = $delim . $part . $delim;
+        }
+        if (count($parts) == 1) {
+            $parts[] = $delim . $delim;
+        }
+
+        return 'concat(' . implode(',', $parts) . ')';
     }
 }

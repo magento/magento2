@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<div class="content-success">
+    <h1 class="jumbo-title">
+        <span class="jumbo-icon icon-success-round"></span>
+        Success
+    </h1>
+    <p>Your store is no longer in maintenance mode.</p>
+    <div ng-hide="rollbackStarted">
+        <p>You {{successPageAction}}:</p>
+        <br/>
+        <ul ng-repeat="package in packages">
+            <li>{{package.name}}</li>
+        </ul>
+    </div>
+    <div ng-show="rollbackStarted">
+        Rollback performed successfully.
+    </div>
+
+    <button
+        class="btn btn-large btn-prime"
+        ng-click="back()"
+        type="button"
+        >Back to Setup Tool</button>
+</div>

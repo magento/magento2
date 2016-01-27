@@ -32,12 +32,12 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected $fileServiceFactory;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\File|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\File\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\File\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceCollection;
 
@@ -51,10 +51,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->fileServiceFactory = $this->getMockBuilder(
             'Magento\Framework\View\Design\Theme\Customization\FileServiceFactory'
         )->disableOriginalConstructor()->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\File')
+        $this->resource = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\File')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceCollection = $this->getMockBuilder('Magento\Theme\Model\Resource\Theme\File\Collection')
+        $this->resourceCollection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\File\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->once())

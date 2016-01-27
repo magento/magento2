@@ -27,7 +27,7 @@ class CctypesTest extends \PHPUnit_Framework_TestCase
         );
 
         $result = $ccTypes->_toHtml();
-        $expected = '<select name="" id="" class="" title="" multiple="multiple" style="height:80px;">'
+        $expected = '<select name="" id="" class="cc-type-select" title="" multiple="multiple">'
             . '<option value="" ></option></select>';
         $this->assertSame($expected, $result);
     }

@@ -14,12 +14,14 @@
     float: left;
     font-size: round(@font-size__base - .1rem, 1);
     margin-top: .7rem;
+
     .admin__action-dropdown {
         margin-left: .5em;
         background-color: @page-main-actions__background-color;
     }
+
     .dropdown {
-        .dropdown(
+        .lib-dropdown(
         @_options-selector: ~".dropdown-menu",
         @_dropdown-list-border: 1px #ada89e solid,
         @_dropdown-list-pointer: false,
@@ -33,32 +35,40 @@
         @_dropdown-list-shadow: @component__box-shadow__base
         );
     }
+
     .dropdown-menu {
         left: 0;
         margin-top: .5em;
         padding-top: .25em;
+
         li {
             border: 0;
             cursor: default;
+
             &:hover {
                 cursor: default;
             }
+
             a,
             span {
                 color: @text__color;
                 display: block;
                 padding: .5rem 1.3rem;
             }
+
             a {
                 text-decoration: none;
+
                 &:hover {
                     background: @color-lighter-gray;
                 }
             }
+
             span {
                 color: @color-gray68;
                 cursor: default;
             }
+
             &.current {
                 span {
                     background: #eee;
@@ -66,21 +76,25 @@
                 }
             }
         }
+
         .store-switcher-store {
             a,
             span {
                 padding-left: 2.6rem;
             }
         }
+
         .store-switcher-store-view {
             a,
             span {
                 padding-left: 3.9rem;
             }
         }
+
         .dropdown-toolbar {
             border-top: 1px solid @color-gray92;
             margin-top: 1rem;
+
             a {
                 &:before {
                     &:extend(.abs-icon all);
@@ -101,20 +115,24 @@
 .store-switcher-alt {
     display: inline-block;
     position: relative;
+
     &.active {
         .dropdown-menu {
             display: block;
         }
     }
+
     .dropdown-menu {
         margin-top: 2px;
         white-space: nowrap;
+
         ul {
             list-style: none;
             margin: 0;
             padding: 0;
         }
     }
+
     strong {
         color: #a6a098;
         display: block;
@@ -123,12 +141,14 @@
         line-height: 1.333;
         padding: 5px 10px;
     }
+
     .store-selected {
         color: #676056;
         cursor: pointer;
         font-size: 12px;
         font-weight: 400;
         line-height: 1.333;
+
         &:after {
             color: #b3b0ad;
             content: '\e02c'; /* arrow down icon */
@@ -140,19 +160,24 @@
             vertical-align: text-top;
         }
     }
+
     .store-switcher-website,
     .store-switcher-store {
         padding: 0;
+
         &:hover {
             background: none;
         }
     }
+
     .store-switcher-store-view {
         padding: 0;
     }
+
     .store-switcher-all,
     .manage-stores {
         padding: 0;
+
         > a {
             color: #676056;
             display: block;
@@ -165,6 +190,7 @@
 
 .store-switcher-website {
     margin: 5px 0 0;
+
     > strong {
         padding-left: 13px;
     }
@@ -172,9 +198,11 @@
 
 .store-switcher-store {
     margin: 1px 0 0;
+
     > strong {
         padding-left: 20px;
     }
+
     > ul {
         margin-top: 1px;
     }
@@ -184,6 +212,7 @@
     &:first-child {
         border-top: 1px solid #e5e5e5;
     }
+
     > a {
         color: #333;
         display: block;
@@ -200,6 +229,7 @@
 .tooltip {
     display: inline-block;
     margin-left: .5em;
+
     .help {
         span,
         a {
@@ -210,22 +240,26 @@
             vertical-align: middle;
             width: 22px;
             z-index: 2;
+
             &:before {
                 &:extend(.abs-icon all);
                 color: @text__color;
                 content: @icon-help__content;
                 font-size: 1.7rem;
             }
+
             span {
-                .visually-hidden();
+                .lib-visually-hidden();
             }
         }
+
         a {
             &:hover {
                 text-decoration: none;
             }
         }
     }
+
     .tooltip-content {
         background: rgba(49, 48, 43, .8);
         background: #000;
@@ -239,6 +273,7 @@
         position: absolute;
         text-shadow: none;
         z-index: 20;
+
         &:before {
             border-bottom: 5px solid #000;
             border-left: 5px solid transparent;
@@ -251,13 +286,16 @@
             top: -5px;
             width: 0;
         }
+
         &.loading {
             position: absolute;
+
             &:before {
                 border-bottom-color: rgba(0, 0, 0, .3);
             }
         }
     }
+
     &:hover > .tooltip-content {
         display: block;
     }

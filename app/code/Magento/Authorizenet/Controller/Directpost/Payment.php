@@ -130,8 +130,8 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
             $order = $this->_objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($incrementId);
             if ($order->getId()) {
                 try {
-                    /** @var \Magento\Quote\Model\QuoteRepository $quoteRepository */
-                    $quoteRepository = $this->_objectManager->create('Magento\Quote\Model\QuoteRepository');
+                    /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
+                    $quoteRepository = $this->_objectManager->create('Magento\Quote\Api\CartRepositoryInterface');
                     /** @var \Magento\Quote\Model\Quote $quote */
                     $quote = $quoteRepository->get($order->getQuoteId());
 

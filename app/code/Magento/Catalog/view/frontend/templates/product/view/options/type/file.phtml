@@ -16,51 +16,51 @@
 <?php $_fileNamed = $_fileName . '_name'; ?>
 <?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
 
-<div class="field file<?php echo $class; ?>">
-    <label class="label" for="<?php echo $_fileName; ?>" id="<?php echo $_fileName; ?>-label">
+<div class="field file<?php /* @escapeNotVerified */ echo $class; ?>">
+    <label class="label" for="<?php /* @noEscape */ echo $_fileName; ?>" id="<?php /* @noEscape */ echo $_fileName; ?>-label">
         <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
-        <?php echo $block->getFormatedPrice() ?>
+        <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
     </label>
     <?php if ($_fileExists): ?>
     <div class="control">
-        <span class="<?php echo $_fileNamed ?>"><?php echo $_fileInfo->getTitle(); ?></span>
-        <a href="javascript:void(0)" class="label" id="change-<?php echo $_fileName ?>" >
-            <?php echo __('Change') ?>
+        <span class="<?php /* @noEscape */ echo $_fileNamed ?>"><?php echo $block->escapeHtml($_fileInfo->getTitle()); ?></span>
+        <a href="javascript:void(0)" class="label" id="change-<?php /* @noEscape */ echo $_fileName ?>" >
+            <?php /* @escapeNotVerified */ echo __('Change') ?>
         </a>
         <?php if (!$_option->getIsRequire()): ?>
-            <input type="checkbox" id="delete-<?php echo $_fileName ?>" />
-            <span class="label"><?php echo __('Delete') ?></span>
+            <input type="checkbox" id="delete-<?php /* @escapeNotVerified */ echo $_fileName ?>" />
+            <span class="label"><?php /* @escapeNotVerified */ echo __('Delete') ?></span>
         <?php endif; ?>
     </div>
     <?php endif; ?>
-    <div class="control" id="input-box-<?php echo $_fileName ?>"
+    <div class="control" id="input-box-<?php /* @escapeNotVerified */ echo $_fileName ?>"
              data-mage-init='{"priceOptionFile":{
-                "fileName":"<?php echo $_fileName ?>",
-                "fileNamed":"<?php echo $_fileNamed ?>",
-                "fieldNameAction":"<?php echo $_fieldNameAction ?>",
-                "changeFileSelector":"#change-<?php echo $_fileName ?>",
-                "deleteFileSelector":"#delete-<?php echo $_fileName ?>"}
+                "fileName":"<?php /* @noEscape */ echo $_fileName ?>",
+                "fileNamed":"<?php /* @noEscape */ echo $_fileNamed ?>",
+                "fieldNameAction":"<?php /* @escapeNotVerified */ echo $_fieldNameAction ?>",
+                "changeFileSelector":"#change-<?php /* @escapeNotVerified */ echo $_fileName ?>",
+                "deleteFileSelector":"#delete-<?php /* @escapeNotVerified */ echo $_fileName ?>"}
              }'
             <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
         <input type="file"
-               name="<?php echo $_fileName; ?>"
-               id="<?php echo $_fileName; ?>"
+               name="<?php /* @escapeNotVerified */ echo $_fileName; ?>"
+               id="<?php /* @escapeNotVerified */ echo $_fileName; ?>"
                class="product-custom-option<?php echo $_option->getIsRequire() ? ' required' : '' ?>"
                <?php echo $_fileExists ? 'disabled="disabled"' : '' ?> />
-        <input type="hidden" name="<?php echo $_fieldNameAction; ?>" value="<?php echo $_fieldValueAction; ?>" />
+        <input type="hidden" name="<?php /* @escapeNotVerified */ echo $_fieldNameAction; ?>" value="<?php /* @escapeNotVerified */ echo $_fieldValueAction; ?>" />
         <?php if ($_option->getFileExtension()): ?>
             <p class="note">
-                <?php echo __('Compatible file extensions to upload')?>: <strong><?php echo $_option->getFileExtension() ?></strong>
+                <?php /* @escapeNotVerified */ echo __('Compatible file extensions to upload')?>: <strong><?php /* @escapeNotVerified */ echo $_option->getFileExtension() ?></strong>
             </p>
         <?php endif; ?>
         <?php if ($_option->getImageSizeX() > 0): ?>
             <p class="note">
-                <?php echo __('Maximum image width')?>: <strong><?php echo $_option->getImageSizeX() ?> <?php echo __('px.')?></strong>
+                <?php /* @escapeNotVerified */ echo __('Maximum image width')?>: <strong><?php /* @escapeNotVerified */ echo $_option->getImageSizeX() ?> <?php /* @escapeNotVerified */ echo __('px.')?></strong>
             </p>
         <?php endif; ?>
         <?php if ($_option->getImageSizeY() > 0): ?>
             <p class="note">
-                <?php echo __('Maximum image height')?>: <strong><?php echo $_option->getImageSizeY() ?> <?php echo __('px.')?></strong>
+                <?php /* @escapeNotVerified */ echo __('Maximum image height')?>: <strong><?php /* @escapeNotVerified */ echo $_option->getImageSizeY() ?> <?php /* @escapeNotVerified */ echo __('px.')?></strong>
             </p>
         <?php endif; ?>
     </div>

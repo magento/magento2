@@ -19,7 +19,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $rating;
 
     /**
-     * @var \Magento\Review\Model\Resource\Rating\Option\Collection
+     * @var \Magento\Review\Model\ResourceModel\Rating\Option\Collection
      */
     protected $ratingOptionCollection;
 
@@ -96,7 +96,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ratingOptionCollection = $this->getMock(
-            '\Magento\Review\Model\Resource\Rating\Option\Collection',
+            '\Magento\Review\Model\ResourceModel\Rating\Option\Collection',
             [],
             [],
             '',

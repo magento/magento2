@@ -19,6 +19,12 @@
     padding-top: @main__indent-top;
 }
 
+.menu-wrapper {
+    .logo-static {
+        pointer-events: none;
+    }
+}
+
 //
 //  Header
 //  _____________________________________________
@@ -26,6 +32,7 @@
 .header {
     .extend__clearer();
     display: none;
+
     .logo {
         float: left;
         height: @logo-icon__height;
@@ -44,6 +51,10 @@
 //  Titles
 //  _____________________________________________
 
+.page-title {
+    margin-bottom: @indent__s;
+}
+
 .page-sub-title {
     font-size: 2rem;
     margin-bottom: 1.3em;
@@ -55,7 +66,18 @@
 
 .accent-box {
     margin-bottom: 2rem;
+
     .btn-prime {
         margin-top: 1.5rem;
+    }
+}
+
+//  Spinner modification for installer
+.spinner {
+    &.side {
+        float: left;
+        font-size: 2.4rem;
+        margin-left: 2rem;
+        margin-top: -5px;
     }
 }

@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_save_after_data_object">
-        <observer name="customer" instance="Magento\Quote\Model\Observer\Backend\CustomerQuote" method="dispatch" />
+        <observer name="customer" instance="Magento\Quote\Observer\Backend\CustomerQuoteObserver" />
     </event>
 </config>

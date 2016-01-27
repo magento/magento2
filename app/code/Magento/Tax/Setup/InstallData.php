@@ -38,13 +38,12 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         /** @var TaxSetup $taxSetup */
-        $taxSetup = $this->taxSetupFactory->create(['setup' => $setup]);
+        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $setup]);
 
         /**
          * Add tax_class_id attribute to the 'eav_attribute' table
          */
-        $catalogInstaller = $taxSetup->getCatalogSetup(['resourceName' => 'catalog_setup']);
-        $catalogInstaller->addAttribute(
+        $taxSetup->addAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
             'tax_class_id',
             [
@@ -57,7 +56,7 @@ class InstallData implements InstallDataInterface
                 'input' => 'select',
                 'class' => '',
                 'source' => 'Magento\Tax\Model\TaxClass\Source\Product',
-                'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
                 'visible' => true,
                 'required' => false,
                 'user_defined' => false,
@@ -66,7 +65,7 @@ class InstallData implements InstallDataInterface
                 'filterable' => false,
                 'comparable' => false,
                 'visible_on_front' => false,
-                'visible_in_advanced_search' => true,
+                'visible_in_advanced_search' => false,
                 'used_in_product_listing' => true,
                 'unique' => false,
                 'apply_to' => implode(',', $taxSetup->getTaxableItems()),

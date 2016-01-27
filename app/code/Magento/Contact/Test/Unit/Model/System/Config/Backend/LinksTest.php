@@ -5,6 +5,8 @@
  */
 namespace Magento\Contact\Test\Unit\Model\System\Config\Backend;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class LinksTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -14,13 +16,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new \Magento\Contact\Model\System\Config\Backend\Links(
-            $this->getMock('\Magento\Framework\Model\Context', [], [], '', false),
-            $this->getMock('\Magento\Framework\Registry', [], [], '', false),
-            $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface', [], '', false),
-            $this->getMockForAbstractClass('\Magento\Framework\Model\Resource\AbstractResource', [], '', false),
-            $this->getMock('\Magento\Framework\Data\Collection\AbstractDb', [], [], '', false)
-        );
+        $this->_model = (new ObjectManager($this))->getObject('Magento\Contact\Model\System\Config\Backend\Links');
     }
 
     public function testGetIdentities()

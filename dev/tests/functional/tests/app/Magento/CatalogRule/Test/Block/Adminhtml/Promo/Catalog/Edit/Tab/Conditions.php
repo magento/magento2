@@ -6,42 +6,41 @@
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 
-use Magento\Mtf\Factory\Factory;
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class Conditions
- * Form Tab for specifying catalog price rule conditions
- *
+ * Form Tab for specifying catalog price rule conditions.
  */
 class Conditions extends Tab
 {
     /**
-     * Rule conditions block selector
+     * Add button.
      *
      * @var string
      */
-    protected $ruleConditions = '#rule_conditions_fieldset';
+    protected $addButton = '.rule-param-new-child a';
 
     /**
-     * Fill condition options
+     * Locator for specific conditions.
      *
-     * @param array $fields
-     * @param SimpleElement|null $element
-     * @return void
+     * @var string
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    protected $conditionFormat = '//*[@id="conditions__1__new_child"]//option[contains(.,"%s")]';
+
+    /**
+     * Check if attribute is available in conditions.
+     *
+     * @param CatalogProductAttribute $attribute
+     * @return bool
+     */
+    public function isAttributeInConditions(CatalogProductAttribute $attribute)
     {
-        $data = $this->dataMapping($fields);
-
-        $conditionsBlock = Factory::getBlockFactory()->getMagentoCatalogRuleConditions(
-            $element->find($this->ruleConditions)
-        );
-        $conditionsBlock->clickAddNew();
-
-        $conditionsBlock->selectCondition($data['condition_type']['value']);
-        $conditionsBlock->clickEllipsis();
-        $conditionsBlock->selectConditionValue($data['condition_value']['value']);
+        $this->_rootElement->find($this->addButton)->click();
+        return $this->_rootElement->find(
+            sprintf($this->conditionFormat, $attribute->getFrontendLabel()),
+            Locator::SELECTOR_XPATH
+        )->isVisible();
     }
 }

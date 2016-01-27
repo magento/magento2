@@ -11,6 +11,7 @@
             <field name="name" xsi:type="string">DefaultName%isolation%</field>
             <field name="is_active" xsi:type="string">Enabled</field>
             <field name="is_html" xsi:type="string">Text</field>
+            <field name="mode" xsi:type="string">Manually</field>
             <field name="stores" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -22,6 +23,7 @@
             <field name="name" xsi:type="string">TermDisabledTextName%isolation%</field>
             <field name="is_active" xsi:type="string">Disabled</field>
             <field name="is_html" xsi:type="string">Text</field>
+            <field name="mode" xsi:type="string">Manually</field>
             <field name="stores" xsi:type="array">
                 <item name="dataset" xsi:type="array">
                     <item name="0" xsi:type="string">default</item>
@@ -36,6 +38,7 @@
             <field name="name" xsi:type="string">TermDisabledHtml%isolation%</field>
             <field name="is_active" xsi:type="string">Disabled</field>
             <field name="is_html" xsi:type="string">HTML</field>
+            <field name="mode" xsi:type="string">Manually</field>
             <field name="stores" xsi:type="array">
                 <item name="dataset" xsi:type="array">
                     <item name="0" xsi:type="string">default</item>
@@ -50,6 +53,7 @@
             <field name="name" xsi:type="string">TermEnabledTextName%isolation%</field>
             <field name="is_active" xsi:type="string">Enabled</field>
             <field name="is_html" xsi:type="string">Text</field>
+            <field name="mode" xsi:type="string">Manually</field>
             <field name="stores" xsi:type="array">
                 <item name="dataset" xsi:type="array">
                     <item name="0" xsi:type="string">default</item>

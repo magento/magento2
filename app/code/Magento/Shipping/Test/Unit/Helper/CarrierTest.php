@@ -87,4 +87,21 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($configValue, $this->helper->getCarrierConfigValue($carrierCode, $configPath));
     }
+
+    public function testIsCountryInEU()
+    {
+        $this->scopeConfig->expects(
+            $this->exactly(2)
+        )->method(
+            'getValue'
+        )->with(
+            'general/country/eu_countries',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )->will(
+            $this->returnValue("GB")
+        );
+
+        $this->assertEquals(true, $this->helper->isCountryInEU("GB"));
+        $this->assertEquals(false, $this->helper->isCountryInEU("US"));
+    }
 }

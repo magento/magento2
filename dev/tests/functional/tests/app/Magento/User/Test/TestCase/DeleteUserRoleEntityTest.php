@@ -122,6 +122,7 @@ class DeleteUserRoleEntityTest extends Injectable
         $this->userRoleIndex->open();
         $this->userRoleIndex->getRoleGrid()->searchAndOpen($filter);
         $this->userRoleEditRole->getPageActions()->delete();
+        $this->userRoleEditRole->getModalBlock()->acceptAlert();
     }
 
     /**

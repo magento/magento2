@@ -37,7 +37,7 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Catalog::catalog_attributes_sets');
-        $resultPage->getConfig()->getTitle()->prepend(__('New Product Template'));
+        $resultPage->getConfig()->getTitle()->prepend(__('New Attribute Set'));
         $resultPage->addContent(
             $resultPage->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add')
         );

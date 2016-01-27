@@ -21,12 +21,12 @@ class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPo
     private $handlers;
 
     /**
-     * @param array $handlers
      * @param TMapFactory $tmapFactory
+     * @param array $handlers
      */
     public function __construct(
-        array $handlers,
-        TMapFactory $tmapFactory
+        TMapFactory $tmapFactory,
+        array $handlers
     ) {
         if (!isset($handlers[self::DEFAULT_HANDLER])) {
             throw new \LogicException('Default handler should be provided.');
@@ -35,7 +35,7 @@ class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPo
         $this->handlers = $tmapFactory->create(
             [
                 'array' => $handlers,
-                'type' => 'Magento\Payment\Gateway\Config\ValueHandlerInterface'
+                'type' => ValueHandlerInterface::class
             ]
         );
     }

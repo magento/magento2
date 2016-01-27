@@ -24,7 +24,7 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         // mock collection of unread notifications
         $notificationList = $this->getMock(
-            'Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread',
+            'Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread',
             ['getSize', 'setCurPage', 'setPageSize'],
             [],
             '',
@@ -52,7 +52,7 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         // 1. Create mocks
-        $notificationList = $this->getMockBuilder('Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread')
+        $notificationList = $this->getMockBuilder('Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread')
             ->disableOriginalConstructor()
             ->getMock();
 

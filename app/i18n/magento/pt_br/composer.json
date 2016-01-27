@@ -1,22 +1,18 @@
 {
     "name": "magento/language-pt_br",
     "description": "Portuguese (Brazil) language",
-    "version": "1.0.0-beta",
+    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "100.0.*"
     },
     "type": "magento2-language",
-    "extra": {
-        "map": [
-            [
-                "*",
-                "magento/pt_br"
-            ]
+    "autoload": {
+        "files": [
+            "registration.php"
         ]
     }
 }

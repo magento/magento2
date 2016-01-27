@@ -39,7 +39,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -58,10 +58,10 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Theme\Model\Resource\Design')
+        $this->resource = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceCollection = $this->getMockBuilder('Magento\Theme\Model\Resource\Design\Collection')
+        $this->resourceCollection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->cacheManager = $this->getMockBuilder('Magento\Framework\App\CacheInterface')->getMock();

@@ -78,22 +78,27 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                         'relations' => [
                             'payment_test_1' => [
                                 'test' => [
-                                    'event' => 'event0',
-                                    'argument' => [],
+                                    [
+                                        'event' => 'event0',
+                                        'argument' => [],
+                                    ]
                                 ],
                             ],
                             'payment_test_2' => [
                                 'test' => [
-                                    'event' => 'event1',
-                                    'argument' => [
-                                    ],
+                                    [
+                                        'event' => 'event1',
+                                        'argument' => [],
+                                    ]
                                 ],
                                 'test-two' => [
-                                    'event' => 'event1',
-                                    'argument' => [
-                                        'argument1' => 'argument1',
-                                        'argument2' => 'argument2',
-                                    ],
+                                    [
+                                        'event' => 'event1',
+                                        'argument' => [
+                                            'argument1' => 'argument1',
+                                            'argument2' => 'argument2',
+                                        ],
+                                    ]
                                 ],
                             ],
                         ],
@@ -122,21 +127,34 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                         'relations' => [
                             'payment_test_1' => [
                                 'test' => [
-                                    'event' => 'event0',
-                                    'argument' => [],
+                                    [
+                                        'event' => 'event0',
+                                        'argument' => [],
+                                    ]
                                 ],
                             ],
                             'payment_test_2' => [
                                 'test' => [
-                                    'event' => 'event1',
-                                    'argument' => [],
+                                    [
+                                        'event' => 'event1',
+                                        'argument' => [],
+                                    ]
                                 ],
                                 'test-two' => [
-                                    'event' => 'event1',
-                                    'argument' => [
-                                        'argument1' => 'argument1',
-                                        'argument2' => 'argument2',
+                                    [
+                                        'event' => 'event1',
+                                        'argument' => [
+                                            'argument1' => 'argument1',
+                                            'argument2' => 'argument2',
+                                        ],
                                     ],
+                                    [
+                                        'event' => 'event2',
+                                        'argument' => [
+                                            'argument1' => 'argument1',
+                                            'argument2' => 'argument2',
+                                        ],
+                                    ]
                                 ],
                             ],
                         ],

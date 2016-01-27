@@ -8,7 +8,7 @@ namespace Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterfaceFactory;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
-use Magento\CatalogInventory\Model\Resource\Stock\Status as StockStatusResource;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
 use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\QueryBuilderFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;

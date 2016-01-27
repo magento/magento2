@@ -4,94 +4,113 @@
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
-.map-popup-wrapper {
-    &.popup {
-        .action {
-            &.close {
-                .css(top, @popup-button-close__position-top);
-            }
-        }
-    }
-}
-
-.map-popup {
-    .popup(
-        @_popup-margin-top: @indent__s,
-        @_popup-margin-left: false,
-        @_popup-content-margin: false,
-        @_popup-position-bottom: false,
-        @_popup-position-right: false,
-        @_popup-position: absolute
-    );
-    .map-info-price {
-        &:extend(.abs-add-clearfix all);
-        margin: 0 0 @indent__base;
-        .price-box {
-            margin: 0 0 @indent__base;
-            .label {
-                &:after {
-                    content: ": ";
+    .map-popup-wrapper {
+        &.popup {
+            .action {
+                &.close {
+                    .lib-css(top, @popup-button-close__position-top);
                 }
             }
         }
     }
-    .action {
-        &.primary {
+
+    .map-popup {
+        .lib-popup(
+            @_popup-margin-top: @indent__s,
+            @_popup-margin-left: false,
+            @_popup-content-margin: false,
+            @_popup-position-bottom: false,
+            @_popup-position-right: false,
+            @_popup-position: absolute
+        );
+        .map-info-price {
+            &:extend(.abs-add-clearfix all);
+            margin: 0 0 @indent__base;
+
+            .price-box {
+                margin: 0 0 @indent__base;
+
+                .label {
+                    &:after {
+                        content: ": ";
+                    }
+                }
+            }
+        }
+
+        .action {
+            &.primary {
+                margin-right: @indent__s;
+            }
+        }
+
+        .map-msrp {
+            margin-bottom: @indent__s;
+        }
+
+        .actual-price {
+            margin: 3px 0 15px;
+        }
+
+        .popup-header {
+            display: none;
+        }
+    }
+
+    .map-old-price {
+        text-decoration: none;
+
+        .price-wrapper {
+            text-decoration: line-through;
+        }
+    }
+
+    .map-old-price,
+    .product-item .map-old-price,
+    .product-info-price .map-show-info {
+        &:not(:last-child) {
             margin-right: @indent__s;
         }
     }
-    .map-msrp {
-        margin-bottom: @indent__s;
-    }
-    .actual-price {
-        margin: 3px 0 15px;
-    }
-    .popup-header {
-        display: none;
-    }
-}
 
-.map-old-price {
-    text-decoration: none;
-    .price-wrapper {
-        text-decoration: line-through;
+    .product-options-bottom .price-box,
+    .product-info-price .price-box {
+        .old-price {
+            .price-container > span {
+                display: inline;
+            }
+        }
     }
-}
 
-.map-old-price,
-.product-item .map-old-price,
-.product-info-price .map-show-info {
-    &:not(:last-child) {
-        margin-right: @indent__s;
-    }
-}
+    .map-form-addtocart {
+        display: inline-block;
+        text-align: center;
 
-.product-options-bottom .price-box,
-.product-info-price .price-box {
-    .old-price {
-        .price-container > span {
-            display: inline;
+        img {
+            display: block;
+            margin: 0 auto;
         }
     }
 }
 
-}
-
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .map-popup {
         max-width: 100%; 
     }
+
     .map-old-price,
     .map-show-info {
         display: inline-block;
+
         &:not(:last-child) {
             margin-bottom: @indent__s;
         }

@@ -27,7 +27,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $regionCollectionFactoryMock;
 
@@ -79,7 +79,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->regionCollectionFactoryMock = $this->getMockBuilder(
-            '\Magento\Directory\Model\Resource\Region\CollectionFactory'
+            '\Magento\Directory\Model\ResourceModel\Region\CollectionFactory'
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -218,7 +218,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $countryId = 'US';
         $regionId = 57;
 
-        $regionCollectionMock = $this->getMockBuilder('\Magento\Directory\Model\Resource\Region\Collection')
+        $regionCollectionMock = $this->getMockBuilder('\Magento\Directory\Model\ResourceModel\Region\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->regionCollectionFactoryMock->expects($this->once())

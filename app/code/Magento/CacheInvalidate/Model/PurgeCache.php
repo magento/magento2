@@ -6,18 +6,21 @@
 namespace Magento\CacheInvalidate\Model;
 
 use Magento\Framework\Cache\InvalidateLogger;
+use Magento\Framework\App\DeploymentConfig;
 
 class PurgeCache
 {
-    /**
-     * @var \Magento\PageCache\Helper\Data
-     */
-    protected $helper;
+    const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\Curl
+     * @var \Magento\PageCache\Model\Cache\Server
      */
-    protected $curlAdapter;
+    protected $cacheServer;
+
+    /**
+     * @var \Magento\CacheInvalidate\Model\SocketFactory
+     */
+    protected $socketAdapterFactory;
 
     /**
      * @var InvalidateLogger
@@ -27,17 +30,17 @@ class PurgeCache
     /**
      * Constructor
      *
-     * @param \Magento\PageCache\Helper\Data $helper
-     * @param \Magento\Framework\HTTP\Adapter\Curl $curlAdapter
+     * @param \Magento\PageCache\Model\Cache\Server $cacheServer
+     * @param \Magento\CacheInvalidate\Model\SocketFactory $socketAdapterFactory
      * @param InvalidateLogger $logger
      */
     public function __construct(
-        \Magento\PageCache\Helper\Data $helper,
-        \Magento\Framework\HTTP\Adapter\Curl $curlAdapter,
+        \Magento\PageCache\Model\Cache\Server $cacheServer,
+        \Magento\CacheInvalidate\Model\SocketFactory $socketAdapterFactory,
         InvalidateLogger $logger
     ) {
-        $this->helper = $helper;
-        $this->curlAdapter = $curlAdapter;
+        $this->cacheServer = $cacheServer;
+        $this->socketAdapterFactory = $socketAdapterFactory;
         $this->logger = $logger;
     }
 
@@ -46,16 +49,31 @@ class PurgeCache
      * to invalidate cache by tags pattern
      *
      * @param string $tagsPattern
-     * @return void
+     * @return bool Return true if successful; otherwise return false
      */
     public function sendPurgeRequest($tagsPattern)
     {
-        $headers = ["X-Magento-Tags-Pattern: {$tagsPattern}"];
-        $this->curlAdapter->setOptions([CURLOPT_CUSTOMREQUEST => 'PURGE']);
-        $this->curlAdapter->write('', $this->helper->getUrl('*'), '1.1', $headers);
-        $this->curlAdapter->read();
-        $this->curlAdapter->close();
+        $socketAdapter = $this->socketAdapterFactory->create();
+        $servers = $this->cacheServer->getUris();
+        $headers = [self::HEADER_X_MAGENTO_TAGS_PATTERN => $tagsPattern];
+        $socketAdapter->setOptions(['timeout' => 10]);
+        foreach ($servers as $server) {
+            try {
+                $socketAdapter->connect($server->getHost(), $server->getPort());
+                $socketAdapter->write(
+                    'PURGE',
+                    $server,
+                    '1.1',
+                    $headers
+                );
+                $socketAdapter->close();
+            } catch (\Exception $e) {
+                $this->logger->critical($e->getMessage(), compact('server', 'tagsPattern'));
+                return false;
+            }
+        }
 
-        $this->logger->execute(compact('tagsPattern'));
+        $this->logger->execute(compact('servers', 'tagsPattern'));
+        return true;
     }
 }

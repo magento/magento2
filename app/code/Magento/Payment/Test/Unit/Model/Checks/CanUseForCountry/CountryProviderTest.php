@@ -33,14 +33,27 @@ class CountryProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->model->getCountry($quoteMock));
     }
 
-    public function testGetCountryForVirtualQuote()
+    public function testGetCountryForVirtualQuoteWhenBillingAddressNotExist()
     {
         $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false, false);
         $quoteMock->expects($this->once())->method('isVirtual')->willReturn(true);
         $addressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false, false);
         $addressMock->expects($this->never())->method('getCountry');
         $quoteMock->expects($this->never())->method('getShippingAddress');
+        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
         $this->directoryMock->expects($this->once())->method('getDefaultCountry')->willReturn(10);
+        $this->assertEquals(10, $this->model->getCountry($quoteMock));
+    }
+
+    public function testGetCountryForVirtualQuoteWhenBillingAddressExist()
+    {
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false, false);
+        $quoteMock->expects($this->once())->method('isVirtual')->willReturn(true);
+        $addressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false, false);
+        $addressMock->expects($this->once())->method('getCountry')->willReturn(10);
+        $quoteMock->expects($this->never())->method('getShippingAddress');
+        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($addressMock);
+        $this->directoryMock->expects($this->never())->method('getDefaultCountry');
         $this->assertEquals(10, $this->model->getCountry($quoteMock));
     }
 }

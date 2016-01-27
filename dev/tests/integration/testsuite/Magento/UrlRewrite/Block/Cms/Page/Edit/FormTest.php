@@ -132,7 +132,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function _getCmsPageWithStoresMock($stores)
     {
         $resourceMock = $this->getMockBuilder(
-            'Magento\Cms\Model\Resource\Page'
+            'Magento\Cms\Model\ResourceModel\Page'
         )->setMethods(
             ['lookupStoreIds']
         )->disableOriginalConstructor()->getMock();

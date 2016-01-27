@@ -8,8 +8,10 @@
 
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Quote\Api\Data\PaymentMethodInterface;
@@ -56,6 +58,8 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     const CHECK_ORDER_TOTAL_MIN_MAX = 'total';
 
     const CHECK_ZERO_TOTAL = 'zero_total';
+
+    const GROUP_OFFLINE = 'offline';
 
     /**
      * @var string
@@ -218,7 +222,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Logger $logger
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -231,7 +235,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -760,15 +764,35 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @param array|\Magento\Framework\DataObject $data
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @api
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
         if (is_array($data)) {
             $this->getInfoInstance()->addData($data);
         } elseif ($data instanceof \Magento\Framework\DataObject) {
             $this->getInfoInstance()->addData($data->getData());
         }
+
+        $this->_eventManager->dispatch(
+            'payment_method_assign_data_' . $this->getCode(),
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
+        $this->_eventManager->dispatch(
+            'payment_method_assign_data',
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
         return $this;
     }
 
@@ -778,12 +802,15 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        $checkResult = new \StdClass();
-        $isActive = $this->isActive($quote ? $quote->getStoreId() : null);
-        $checkResult->isAvailable = $isActive;
-        $checkResult->isDeniedInConfig = !$isActive;
+        if (!$this->isActive($quote ? $quote->getStoreId() : null)) {
+            return false;
+        }
+
+        $checkResult = new DataObject();
+        $checkResult->setData('is_available', true);
+
         // for future use in observers
         $this->_eventManager->dispatch(
             'payment_method_is_active',
@@ -794,7 +821,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
             ]
         );
 
-        return $checkResult->isAvailable;
+        return $checkResult->getData('is_available');
     }
 
     /**

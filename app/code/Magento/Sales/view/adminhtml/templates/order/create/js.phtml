@@ -3,6 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
  ?>
 <script>
 require([
@@ -15,10 +17,10 @@ require([
     Event.observe(window, 'load',  function() {
         if (window.productConfigure) {
             productConfigure.addListType('product_to_add', {
-                urlFetch: '<?php echo $block->getUrl('sales/order_create/configureProductToAdd') ?>'
+                urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('sales/order_create/configureProductToAdd') ?>'
             });
             productConfigure.addListType('quote_items', {
-                urlFetch: '<?php echo $block->getUrl('sales/order_create/configureQuoteItems') ?>'
+                urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('sales/order_create/configureQuoteItems') ?>'
             });
         }
     });

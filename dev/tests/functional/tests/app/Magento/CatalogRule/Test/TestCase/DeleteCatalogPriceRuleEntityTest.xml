@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogRule\Test\TestCase\DeleteCatalogPriceRuleEntityTest" summary="Delete Catalog Price Rule" ticketId="MAGETWO-25211">
-        <variation name="DeleteCatalogPriceRuleEntityTestVariation1">
+        <variation name="CatalogRule_Delete_AdminOnly">
             <data name="catalogPriceRule/dataset" xsi:type="string">active_catalog_price_rule_with_conditions</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid" />

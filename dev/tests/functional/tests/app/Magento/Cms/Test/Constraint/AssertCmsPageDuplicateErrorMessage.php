@@ -24,7 +24,7 @@ class AssertCmsPageDuplicateErrorMessage extends AbstractConstraint
      */
     public function processAssert(CmsPageIndex $cmsIndex)
     {
-        $message = $cmsIndex->getMessagesBlock()->getErrorMessages();
+        $message = $cmsIndex->getMessagesBlock()->getErrorMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_SAVE_MESSAGE,
             $message,

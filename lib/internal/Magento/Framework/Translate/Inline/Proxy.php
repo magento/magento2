@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Translate\Inline;
 
 /**
  * Proxy class for \Magento\Framework\Translate\Inline
  */
-class Proxy extends \Magento\Framework\Translate\Inline
+class Proxy extends \Magento\Framework\Translate\Inline implements
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
@@ -28,7 +28,7 @@ class Proxy extends \Magento\Framework\Translate\Inline
     /**
      * Proxied instance
      *
-     * @var \Magento\DesignEditor\Model\Translate\Inline
+     * @var \Magento\Framework\Translate\Inline
      */
     protected $subject;
 
@@ -85,7 +85,7 @@ class Proxy extends \Magento\Framework\Translate\Inline
     /**
      * Get proxied instance
      *
-     * @return \Magento\DesignEditor\Model\Translate\Inline
+     * @return \Magento\Framework\Translate\Inline
      */
     protected function _getSubject()
     {

@@ -11,10 +11,10 @@ use Magento\Framework\Oauth\ConsumerInterface;
  * Consumer model
  *
  * @author Magento Core Team <core@magentocommerce.com>
- * @method \Magento\Integration\Model\Resource\Oauth\Consumer _getResource()
- * @method \Magento\Integration\Model\Resource\Oauth\Consumer getResource()
- * @method \Magento\Integration\Model\Resource\Oauth\Consumer\Collection getCollection()
- * @method \Magento\Integration\Model\Resource\Oauth\Consumer\Collection getResourceCollection()
+ * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer _getResource()
+ * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer getResource()
+ * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer\Collection getCollection()
+ * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer\Collection getResourceCollection()
  * @method string getName()
  * @method Consumer setName() setName(string $name)
  * @method Consumer setKey() setKey(string $key)
@@ -49,7 +49,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength
      * @param \Magento\Framework\Url\Validator $urlValidator
      * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -59,7 +59,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
         \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $keyLength,
         \Magento\Framework\Url\Validator $urlValidator,
         \Magento\Integration\Helper\Oauth\Data $dataHelper,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -77,7 +77,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Integration\Model\Resource\Oauth\Consumer');
+        $this->_init('Magento\Integration\Model\ResourceModel\Oauth\Consumer');
     }
 
     /**
@@ -87,7 +87,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      */
     public function beforeSave()
     {
-        $this->setUpdatedAt(time());
         $this->validate();
         parent::beforeSave();
         return $this;

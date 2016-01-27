@@ -22,7 +22,7 @@ class Option extends Form
      *
      * @var string
      */
-    protected $searchGridBlock = "ancestor::body//div[contains(@style,'display: block') and @role='dialog']";
+    protected $searchGridBlock = "ancestor::body//aside[contains(@class,'_show') and @data-role='modal']";
 
     /**
      * Added product row

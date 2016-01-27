@@ -9,7 +9,6 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit;
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit;
-use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**
  * General class for tabs on product FormTabs with "Add attribute" button.
@@ -72,6 +71,12 @@ class ProductTab extends Tab
         $addAttributeToggle->click();
         if (!$addAttributeToggle->find($this->newAttributeButton)->isVisible()) {
             $element->find($this->searchAttribute, Locator::SELECTOR_XPATH)->click();
+            $this->browser->waitUntil(
+                function () {
+                    $element = $this->browser->find($this->searchAttribute, Locator::SELECTOR_XPATH);
+                    return $element->isVisible() == true ? true : null;
+                }
+            );
         }
         $element->find($this->newAttributeButton)->click();
     }

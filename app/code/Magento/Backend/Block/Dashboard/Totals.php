@@ -26,13 +26,13 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
+        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
         \Magento\Framework\Module\Manager $moduleManager,
         array $data = []
     ) {
@@ -57,7 +57,7 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
         );
         $period = $this->getRequest()->getParam('period', '24h');
 
-        /* @var $collection \Magento\Reports\Model\Resource\Order\Collection */
+        /* @var $collection \Magento\Reports\Model\ResourceModel\Order\Collection */
         $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(
             $period
         )->calculateTotals(

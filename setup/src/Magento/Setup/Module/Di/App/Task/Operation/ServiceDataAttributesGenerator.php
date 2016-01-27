@@ -17,11 +17,6 @@ use Magento\Setup\Module\Di\Code\Scanner;
 class ServiceDataAttributesGenerator implements OperationInterface
 {
     /**
-     * @var Scanner\DirectoryScanner
-     */
-    private $directoryScanner;
-
-    /**
      * @var Scanner\ServiceDataAttributesScanner
      */
     private $serviceDataAttributesScanner;
@@ -32,18 +27,23 @@ class ServiceDataAttributesGenerator implements OperationInterface
     private $data;
 
     /**
-     * @param Scanner\DirectoryScanner $directoryScanner
-     * @param Scanner\ServiceDataAttributesScanner $repositoryScanner
+     * @var Scanner\ConfigurationScanner
+     */
+    private $configurationScanner;
+
+    /**
+     * @param Scanner\ServiceDataAttributesScanner $serviceDataAttributesScanner
+     * @param Scanner\ConfigurationScanner $configurationScanner
      * @param array $data
      */
     public function __construct(
-        Scanner\DirectoryScanner $directoryScanner,
-        Scanner\ServiceDataAttributesScanner $repositoryScanner,
+        Scanner\ServiceDataAttributesScanner $serviceDataAttributesScanner,
+        \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner $configurationScanner,
         $data = []
     ) {
-        $this->directoryScanner = $directoryScanner;
-        $this->serviceDataAttributesScanner = $repositoryScanner;
+        $this->serviceDataAttributesScanner = $serviceDataAttributesScanner;
         $this->data = $data;
+        $this->configurationScanner = $configurationScanner;
     }
 
     /**
@@ -53,13 +53,8 @@ class ServiceDataAttributesGenerator implements OperationInterface
      */
     public function doOperation()
     {
-        if (array_diff(array_keys($this->data), ['filePatterns', 'path'])
-            !== array_diff(['filePatterns', 'path'], array_keys($this->data))) {
-            return;
-        }
-
-        $files = $this->directoryScanner->scan($this->data['path'], $this->data['filePatterns']);
-        $repositories = $this->serviceDataAttributesScanner->collectEntities($files['extension_attributes']);
+        $files = $this->configurationScanner->scan('extension_attributes.xml');
+        $repositories = $this->serviceDataAttributesScanner->collectEntities($files);
         foreach ($repositories as $entityName) {
             class_exists($entityName);
         }

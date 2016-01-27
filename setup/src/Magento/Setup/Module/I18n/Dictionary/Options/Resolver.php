@@ -5,6 +5,9 @@
  */
 namespace Magento\Setup\Module\I18n\Dictionary\Options;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+
 /**
  * Dictionary generator options resolver
  */
@@ -26,13 +29,23 @@ class Resolver implements ResolverInterface
     protected $withContext;
 
     /**
+     * @var ComponentRegistrar
+     */
+    protected $componentRegistrar;
+
+    /**
      * Resolver construct
      *
+     * @param ComponentRegistrar $componentRegistrar
      * @param string $directory
      * @param bool $withContext
      */
-    public function __construct($directory, $withContext)
-    {
+    public function __construct(
+        ComponentRegistrar $componentRegistrar,
+        $directory,
+        $withContext
+    ) {
+        $this->componentRegistrar = $componentRegistrar;
         $this->directory = $directory;
         $this->withContext = $withContext;
     }
@@ -44,31 +57,37 @@ class Resolver implements ResolverInterface
     {
         if (null === $this->options) {
             if ($this->withContext) {
-                $this->directory = rtrim($this->directory, '\\/');
+                $directory = rtrim($this->directory, '\\/');
+                $this->directory = ($directory == '.' || $directory == '..') ? BP : realpath($directory);
+                $moduleDirs = $this->getComponentDirectories(ComponentRegistrar::MODULE);
+                $themeDirs = $this->getComponentDirectories(ComponentRegistrar::THEME);
+
                 $this->options = [
                     [
                         'type' => 'php',
-                        'paths' => [$this->directory . '/app/code/', $this->directory . '/app/design/'],
+                        'paths' => array_merge($moduleDirs, $themeDirs),
                         'fileMask' => '/\.(php|phtml)$/',
                     ],
                     [
                         'type' => 'html',
-                        'paths' => [$this->directory . '/app/code/', $this->directory . '/app/design/'],
+                        'paths' => array_merge($moduleDirs, $themeDirs),
                         'fileMask' => '/\.html$/',
                     ],
                     [
                         'type' => 'js',
-                        'paths' => [
-                            $this->directory . '/app/code/',
-                            $this->directory . '/app/design/',
-                            $this->directory . '/lib/web/mage/',
-                            $this->directory . '/lib/web/varien/',
-                        ],
+                        'paths' => array_merge(
+                            $moduleDirs,
+                            $themeDirs,
+                            [
+                                $this->directory . '/lib/web/mage/',
+                                $this->directory . '/lib/web/varien/',
+                            ]
+                        ),
                         'fileMask' => '/\.(js|phtml)$/'
                     ],
                     [
                         'type' => 'xml',
-                        'paths' => [$this->directory . '/app/code/', $this->directory . '/app/design/'],
+                        'paths' => array_merge($moduleDirs, $themeDirs),
                         'fileMask' => '/\.xml$/'
                     ],
                 ];
@@ -103,5 +122,20 @@ class Resolver implements ResolverInterface
                 }
             }
         }
+    }
+
+    /**
+     * Get the given type component directories
+     *
+     * @param string $componentType
+     * @return array
+     */
+    private function getComponentDirectories($componentType)
+    {
+        $dirs = [];
+        foreach ($this->componentRegistrar->getPaths($componentType) as $componentDir) {
+            $dirs[] = $componentDir . '/';
+        }
+        return $dirs;
     }
 }

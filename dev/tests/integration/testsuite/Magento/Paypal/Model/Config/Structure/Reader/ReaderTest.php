@@ -62,7 +62,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->fileUtility = \Magento\Framework\App\Utility\Files::init();
 
         $this->validationStateMock = $this->getMockBuilder('Magento\Framework\Config\ValidationStateInterface')
-            ->setMethods(['isValidated'])
+            ->setMethods(['isValidationRequired'])
             ->getMockForAbstractClass();
         $this->schemaLocatorMock = $this->getMockBuilder('Magento\Config\Model\Config\SchemaLocator')
             ->disableOriginalConstructor()
@@ -72,7 +72,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->validationStateMock->expects($this->atLeastOnce())
-            ->method('isValidated')
+            ->method('isValidationRequired')
             ->willReturn(false);
         $this->schemaLocatorMock->expects($this->atLeastOnce())
             ->method('getPerFileSchema')
@@ -116,10 +116,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getActualContent()
     {
-        $files = $this->fileUtility->getFiles(
-            [$this->fileUtility->getPathToSource() . static::ACTUAL],
-            'config.xml'
-        );
+        $files = $this->fileUtility->getFiles([BP . static::ACTUAL], 'config.xml');
 
         return file_get_contents(reset($files));
     }
@@ -129,10 +126,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getExpectedContent()
     {
-        $files = $this->fileUtility->getFiles(
-            [$this->fileUtility->getPathToSource() . static::EXPECTED],
-            'config.xml'
-        );
+        $files = $this->fileUtility->getFiles([BP . static::EXPECTED], 'config.xml');
 
         return file_get_contents(reset($files));
     }

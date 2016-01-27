@@ -15,29 +15,35 @@ use Magento\Framework\App\ScopeInterface as AppScopeInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Store model
  *
- * @method Store setCode(string $value)
- * @method Store setWebsiteId(int $value)
- * @method Store setGroupId(int $value)
- * @method Store setName(string $value)
+ * @method Store setGroupId($value)
  * @method int getSortOrder()
  * @method int getStoreId()
- * @method Store setSortOrder(int $value)
- * @method Store setIsActive(int $value)
+ * @method Store setSortOrder($value)
+ * @method Store setIsActive($value)
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterface, IdentityInterface, StoreInterface
+class Store extends AbstractExtensibleModel implements
+    AppScopeInterface,
+    UrlScopeInterface,
+    IdentityInterface,
+    StoreInterface
 {
+    /**
+     * Store Id key name
+     */
+    const STORE_ID = 'store_id';
+
     /**
      * Entity name
      */
@@ -62,6 +68,10 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
 
     const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
+
+    const XML_PATH_ENABLE_HSTS = 'web/secure/enable_hsts';
+
+    const XML_PATH_ENABLE_UPGRADE_INSECURE = 'web/secure/enable_upgrade_insecure';
 
     const XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
 
@@ -88,14 +98,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
 
     /**#@-*/
 
-    /**#@+
-     * Code constants
-     */
-    const DEFAULT_CODE = 'default';
-
     const ADMIN_CODE = 'admin';
-
-    /**#@-*/
 
     /**
      * Cache tag
@@ -244,7 +247,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     protected $_request;
 
     /**
-     * @var \Magento\Config\Model\Resource\Config\Data
+     * @var \Magento\Config\Model\ResourceModel\Config\Data
      */
     protected $_configDataResource;
 
@@ -307,12 +310,14 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Store\Model\Resource\Store $resource
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Store\Model\ResourceModel\Store $resource
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -333,12 +338,14 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\Resource\Store $resource,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        \Magento\Store\Model\ResourceModel\Store $resource,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Config\Model\Resource\Config\Data $configDataResource,
+        \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -371,7 +378,15 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         $this->_currencyInstalled = $currencyInstalled;
         $this->groupRepository = $groupRepository;
         $this->websiteRepository = $websiteRepository;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -404,7 +419,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\Resource\Store');
+        $this->_init('Magento\Store\Model\ResourceModel\Store');
     }
 
     /**
@@ -471,6 +486,30 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function getCode()
     {
         return $this->_getData('code');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCode($code)
+    {
+        return $this->setData('code', $code);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->_getData('name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
     }
 
     /**
@@ -702,7 +741,7 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
      */
     public function getId()
     {
-        return $this->_getData('store_id');
+        return $this->_getData(self::STORE_ID);
     }
 
     /**
@@ -983,6 +1022,14 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setWebsiteId($websiteId)
+    {
+        return $this->setData('website_id', $websiteId);
+    }
+
+    /**
      * Retrieve group identifier
      *
      * @return string|int|null
@@ -990,6 +1037,24 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function getGroupId()
     {
         return $this->_getData('group_id');
+    }
+
+    /**
+     * Retrieve store group identifier
+     *
+     * @return string|int|null
+     */
+    public function getStoreGroupId()
+    {
+        return $this->getGroupId();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStoreGroupId($storeGroupId)
+    {
+        return $this->setGroupId($storeGroupId);
     }
 
     /**
@@ -1081,16 +1146,6 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function isActive()
     {
         return (bool)$this->_getData('is_active');
-    }
-
-    /**
-     * Retrieve store name
-     *
-     * @return string|null
-     */
-    public function getName()
-    {
-        return $this->_getData('name');
     }
 
     /**
@@ -1187,5 +1242,22 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     {
         $parsedUrl = parse_url($this->getBaseUrl());
         return isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(
+        \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

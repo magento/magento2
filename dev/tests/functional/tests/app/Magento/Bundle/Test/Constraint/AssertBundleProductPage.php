@@ -26,7 +26,7 @@ class AssertBundleProductPage extends AssertProductPage
         $priceView = $this->product->getPriceView();
         $priceBlock = $this->productView->getPriceBlock();
 
-        if ($this->product->hasData('special_price') || $this->product->hasData('group_price')) {
+        if ($this->product->hasData('special_price')) {
             $priceLow = $priceBlock->getPrice();
         } else {
             $priceLow = ($priceView == 'Price Range') ? $priceBlock->getPriceFrom() : $priceBlock->getPrice();

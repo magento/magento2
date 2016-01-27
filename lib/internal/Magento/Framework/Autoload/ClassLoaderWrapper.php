@@ -28,12 +28,7 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * Adds a PSR-4 mapping from a namespace prefix to directories to search in for the corresponding class
-     *
-     * @param string $nsPrefix The namespace prefix of the PSR-4 mapping
-     * @param string|array $paths The path or paths to look in for the given prefix
-     * @param bool $prepend Whether to append the given path or paths to the paths already associated with the prefix
-     * @return void
+     * {@inheritdoc}
      */
     public function addPsr4($nsPrefix, $paths, $prepend = false)
     {
@@ -41,12 +36,7 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * Adds a PSR-0 mapping from a namespace prefix to directories to search in for the corresponding class
-     *
-     * @param string $nsPrefix The namespace prefix of the PSR-0 mapping
-     * @param string|array $paths The path or paths to look in for the given prefix
-     * @param bool $prepend Whether to append the given path or paths to the paths already associated with the prefix
-     * @return void
+     * {@inheritdoc}
      */
     public function addPsr0($nsPrefix, $paths, $prepend = false)
     {
@@ -54,11 +44,7 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * Creates new PSR-0 mappings from the given prefix to the given set of paths, eliminating previous mappings
-     *
-     * @param string $nsPrefix The namespace prefix of the PSR-0 mapping
-     * @param string|array $paths The path or paths to look in for the given prefix
-     * @return void
+     * {@inheritdoc}
      */
     public function setPsr0($nsPrefix, $paths)
     {
@@ -66,11 +52,7 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * Creates new PSR-4 mappings from the given prefix to the given set of paths, eliminating previous mappings
-     *
-     * @param string $nsPrefix The namespace prefix of the PSR-0 mapping
-     * @param string|array $paths The path or paths to look in for the given prefix
-     * @return void
+     * {@inheritdoc}
      */
     public function setPsr4($nsPrefix, $paths)
     {
@@ -78,13 +60,28 @@ class ClassLoaderWrapper implements AutoloaderInterface
     }
 
     /**
-     * Attempts to load a class and returns true if successful.
-     *
-     * @param string $className
-     * @return bool
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function loadClass($className)
     {
         return $this->autoloader->loadClass($className) === true;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function findFile($className)
+    {
+        /**
+         * Composer remembers that files don't exist even after they are generated. This clears the entry for
+         * $className so we can check the filesystem again for class existence.
+         */
+        if ($className[0] === '\\') {
+            $className = substr($className, 1);
+        }
+        $this->autoloader->addClassMap([$className => null]);
+        return $this->autoloader->findFile($className);
     }
 }

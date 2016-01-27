@@ -12,10 +12,10 @@
 <div class="form-buttons">
     <select id="queueList" name="queue">
     <?php foreach ($block->getQueueAsOptions() as $_queue): ?>
-        <option value="<?php echo $_queue['value'] ?>"><?php echo $_queue['label'] ?> #<?php echo $_queue['value'] ?></option>
+        <option value="<?php /* @escapeNotVerified */ echo $_queue['value'] ?>"><?php /* @escapeNotVerified */ echo $_queue['label'] ?> #<?php /* @escapeNotVerified */ echo $_queue['value'] ?></option>
     <?php endforeach; ?>
     </select>
-    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?php echo __('Add to Queue'); ?></span></span></span></button>
+    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?php /* @escapeNotVerified */ echo __('Add to Queue'); ?></span></span></span></button>
 </div>
 <?php endif ?>
 <script>

@@ -38,7 +38,7 @@ class Products extends \Magento\Framework\App\Action\Action
     {
         $loginUrl = $this->_objectManager->get('Magento\Customer\Model\Url')->getLoginUrl();
 
-        if (!$this->_customerSession->authenticate($this, $loginUrl)) {
+        if (!$this->_customerSession->authenticate($loginUrl)) {
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
         return parent::dispatch($request);

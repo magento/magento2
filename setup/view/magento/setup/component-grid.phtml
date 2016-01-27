@@ -1,0 +1,223 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<h2 class="page-title">{{$state.current.header}}</h2>
+<div ng-controller="authDialogController">
+    <div class="message message-error" ng-show="syncError">
+            <span class="message-text">
+                {{ErrorMessage}}
+            </span>
+    </div>
+    <div ng-show="$root.isMarketplaceAuthorized" class="componenet-manager-wrap">
+        <div class="component-manager-title">
+            Magento Marketplace Account
+            <div class="componenet-manager-account">
+                <a ng-click="reset()" href="#" class="sign-in-out">Reset</a>
+            </div>
+        </div>
+        <div class="component-manager-content">
+            <ul class="componenet-manager-items row">
+                <li class="item col-m-4">
+                    <div class="item-title">New Updates</div>
+                    <div class="item-number">{{countOfUpdate}}</div>
+                </li>
+                <li class="item col-m-4">
+                    <div class="item-title">New Purchases</div>
+                    <div class="item-number">{{countOfInstall}}</div>
+                    <div class="item-install">
+                        <button ng-show="!enabledInstall" type="button" class="btn disabled">Install</button>
+                        <button ui-sref="root.install" href="#install-extension-grid"
+                                ng-show="enabledInstall" type="button" class="btn">
+                            Install
+                        </button>
+                    </div>
+                </li>
+                <li class="item col-m-4">
+                    <div ng-hide="isOutOfSync" class="item-title">Last Sync</div>
+                    <div ng-hide="isOutOfSync" class="item-date">
+                        at {{lastSyncTime}} on {{lastSyncDate}}
+                    </div>
+                    <span ng-show="isOutOfSync">No sync history</span>
+                    <button type="button" ng-click="sync()" class="btn">Sync</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div ng-show="!$root.isMarketplaceAuthorized" class="componenet-manager-wrap">
+        <div class="component-manager-title">
+            Magento Marketplace Account
+            <div class="componenet-manager-account">
+                <a href="" ng-click="open()" class="sign-in-out">Sign In</a>
+            </div>
+        </div>
+        <div class="component-manager-content">
+            <a href="" ng-click="open()">Sign in</a> to sync your Magento Marketplace purchases
+        </div>
+    </div>
+
+    <div ng-show="logout===true" id="messages">
+        <div class="messages">
+            <div class="message message-success success">
+                <div data-ui-id="messages-message-success">
+                    You have logged out
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-show="componentsProcessed && total == 0">
+    <label class="form-label">
+        <b>We didn't find any components to update at this time. Please try later.</b><br/>
+    </label>
+</div>
+<div class="admin__data-grid-outer-wrap" ng-show="componentsProcessed && total > 0">
+    <div class="admin__data-grid-header">
+        <div class="admin__data-grid-header-row row row-gutter">
+            <div class="col-xs-3">
+                <div class="admin__control-support-text">
+                    <span>{{total}}</span> records found
+                </div>
+            </div>
+            <div class="col-xs-9 admin__data-grid-pager-wrap">
+                <select id="perPage" class="admin__control-select" ng-model="rowLimit">
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                </select>
+                <label class="admin__control-support-text" for="perPage">per page</label>
+                <div class="admin__data-grid-pager">
+                    <button class="action-previous"
+                            ng-disabled="currentPage == 1"
+                            ng-click="currentPage = currentPage - 1; start = start - rowLimit"
+                            type="button"
+                        >
+                        <span>Previous page</span>
+                    </button>
+                    <input id="pageCurrent" class="admin__control-text" type="number" value="{{currentPage}}">
+                    <label class="admin__control-support-text" for="pageCurrent">
+                        of {{numberOfPages}}
+                    </label>
+                    <button class="action-next"
+                            ng-disabled="currentPage >= numberOfPages"
+                            ng-click="currentPage = currentPage + 1; start = start + rowLimit"
+                            type="button"
+                        >
+                        <span>Next page</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="admin__data-grid-wrap" ng-show="$state.is('root.update')">
+        <table class="data-grid">
+            <thead data-part="head">
+            <tr>
+                <th class="data-grid-th _col-xs">
+                    <span></span>
+                </th>
+                <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
+                && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
+                    <span>Component Name</span>
+                </th>
+                <th ng-click="order('moduleName')" ng-class="{'_ascend' : predicate === 'moduleName'
+                && !reverse,'_descend' : predicate === 'moduleName' && reverse}" class="data-grid-th _sortable">
+                    <span>Module Name</span>
+                </th>
+                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version' &&
+                !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th  _sortable">
+                    <span>Version</span>
+                </th>
+                <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type'
+                && !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th  _sortable">
+                    <span>Type</span>
+                </th>
+                <th ng-click="order('vendor')" ng-class="{'_ascend' : predicate === 'vendor'
+                && !reverse,'_descend' : predicate === 'vendor' && reverse}" class="data-grid-th  _sortable">
+                    <span>Vendor</span>
+                </th>
+                <th class="data-grid-actions-cell data-grid-th">
+                    <span>Actions</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="component in components | orderBy:predicate:reverse
+                | startFrom:(currentPage - 1) * rowLimit | limitTo:rowLimit"
+                >
+                <td class="data-grid-indicator-cell">
+                    <span class="component-indicator"
+                          ng-class="getIndicatorInfo(component, 'icon')"
+                          data-label="{{getIndicatorInfo(component, 'label')}}"
+                        ><span>{{getIndicatorInfo(component, 'label')}}</span>
+                    </span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.name}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.moduleName}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.version}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.type.replace("magento2-", "")}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.vendor}}</span>
+                </td>
+                <td class="data-grid-actions-cell">
+                    <!-- "_active" class should be added when .action-select button clicked to the -->
+                    <!-- wrapper and .action-menu to show actions                                  -->
+                    <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
+                        <button class="action-select"
+                                ng-show="isAvailableUpdatePackage(component.name) || component.uninstall ||
+                                component.enable || component.disable"
+                                ng-click="toggleActiveActionsCell(component)"
+                                ng-blur="closeActiveActionsCell(component)">
+                            <span>Select</span>
+                        </button>
+                        <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(component)}">
+                            <li ng-class="{'hide': !component.disable}"
+                                ng-mousedown="enableDisable('enable', component)">
+                                <a class="action-menu-item">Enable</a>
+                            </li>
+                            <li ng-class="{'hide': !component.enable}"
+                                ng-mousedown="enableDisable('disable', component)">
+                                <a class="action-menu-item">Disable</a>
+                            </li>
+                            <li ng-class="{'hide': !isAvailableUpdatePackage(component.name)}"
+                                ng-mousedown="update(component)">
+                                <a class="action-menu-item">Update</a>
+                            </li>
+                            <li ng-class="{'hide': !component.uninstall}"
+                                ng-mousedown="uninstall(component)">
+                                <a class="action-menu-item">Uninstall</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div ng-show="!isHiddenSpinner || $root.saveAuthProccessed ||
+(!$root.componentsProcessed || !$root.isAuthLoadingComplete)" class="loading-mask ng-scope" data-role="loader">
+    <div class="popup popup-loading">
+        <div class="popup-inner">
+            <img alt="Loading..." src="<?php echo $this->basePath() ?>/pub/images/loader-1.gif">
+            Please wait...
+        </div>
+    </div>
+</div>
+
+<div ng-include="'index.php/marketplace/popup-auth'" style="display: inline-block"></div>

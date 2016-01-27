@@ -1,2 +1,2 @@
-app/code/Magento/Payment/Model/Info.php
-app/code/Magento/Customer/Model/Address/AbstractAddress.php
+module Magento_Payment Model/Info.php
+module Magento_Customer Model/Address/AbstractAddress.php

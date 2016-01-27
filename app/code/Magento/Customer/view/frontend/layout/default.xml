@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="top.links">
             <block class="Magento\Customer\Block\Account\Link" name="my-account-link">
@@ -20,6 +20,8 @@
             </block>
             <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link"
                    template="account/link/authorization.phtml"/>
+        </referenceBlock>
+        <referenceContainer name="content">
             <block class="Magento\Customer\Block\Account\AuthenticationPopup" name="authentication-popup" as="authentication-popup" template="account/authentication-popup.phtml">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
@@ -37,8 +39,6 @@
                     </argument>
                 </arguments>
             </block>
-        </referenceBlock>
-        <referenceContainer name="content">
             <block name="customer.section.config" class="Magento\Customer\Block\SectionConfig"
                    template="Magento_Customer::js/section-config.phtml"/>
             <block name="customer.customer.data"

@@ -20,19 +20,19 @@ class Collection extends \Magento\Framework\Data\Collection
     protected $config;
 
     /**
-     * @var \Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory
+     * @var \Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory
      */
     protected $statesFactory;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Magento\Framework\Indexer\ConfigInterface $config
-     * @param \Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory $statesFactory
+     * @param \Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory $statesFactory
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Magento\Framework\Indexer\ConfigInterface $config,
-        \Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory $statesFactory
+        \Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory $statesFactory
     ) {
         $this->config = $config;
         $this->statesFactory = $statesFactory;

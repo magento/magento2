@@ -7,6 +7,7 @@ namespace Magento\Swatches\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Area;
+use Magento\Catalog\Helper\Image;
 
 /**
  * Helper to move images from tmp to catalog directory
@@ -51,7 +52,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     protected $imageFactory;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\Collection
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
      */
     protected $themeCollection;
 
@@ -71,7 +72,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Image\Factory $imageFactory
-     * @param \Magento\Theme\Model\Resource\Theme\Collection $themeCollection
+     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
      * @param \Magento\Framework\View\ConfigInterface $configInterface
      */
     public function __construct(
@@ -80,7 +81,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Image\Factory $imageFactory,
-        \Magento\Theme\Model\Resource\Theme\Collection $themeCollection,
+        \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection,
         \Magento\Framework\View\ConfigInterface $configInterface
     ) {
         $this->mediaConfig = $mediaConfig;
@@ -254,7 +255,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             ]);
             $imageConfig = array_merge(
                 $imageConfig,
-                $config->getImages('Magento_Catalog')
+                $config->getMediaEntities('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE)
             );
         }
         return $imageConfig;

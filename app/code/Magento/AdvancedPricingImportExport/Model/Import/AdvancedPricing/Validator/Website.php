@@ -6,10 +6,10 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
-use \Magento\Framework\Validator\AbstractValidator;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
-class Website extends AbstractValidator implements RowValidatorInterface
+class Website extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
@@ -34,13 +34,29 @@ class Website extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * Initialize validator
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function init()
+    public function init($context)
     {
-        return $this;
+        return parent::init($context);
+    }
+
+    /**
+     * Validate by website type
+     *
+     * @param array $value
+     * @param string $websiteCode
+     * @return bool
+     */
+    protected function isWebsiteValid($value, $websiteCode)
+    {
+        if (isset($value[$websiteCode]) && !empty($value[$websiteCode])) {
+            if ($value[$websiteCode] != $this->getAllWebsitesValue()
+                && !$this->storeResolver->getWebsiteCodeToId($value[$websiteCode])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -52,18 +68,14 @@ class Website extends AbstractValidator implements RowValidatorInterface
     public function isValid($value)
     {
         $this->_clearMessages();
-        if ($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE] != $this->getAllWebsitesValue() &&
-            $value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE] != $this->getAllWebsitesValue()) {
-            if ((!empty($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE])
-                    && !$this->storeResolver->getWebsiteCodeToId($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE]))
-                || ((!empty($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE]))
-                    && !$this->storeResolver->getWebsiteCodeToId($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE]))
-            ) {
-                $this->_addMessages([self::ERROR_INVALID_WEBSITE]);
-                return false;
-            }
+        $valid = true;
+        if (isset($value[AdvancedPricing::COL_TIER_PRICE]) && !empty($value[AdvancedPricing::COL_TIER_PRICE])) {
+            $valid *= $this->isWebsiteValid($value, AdvancedPricing::COL_TIER_PRICE_WEBSITE);
         }
-        return true;
+        if (!$valid) {
+            $this->_addMessages([self::ERROR_INVALID_WEBSITE]);
+        }
+        return $valid;
     }
 
     /**

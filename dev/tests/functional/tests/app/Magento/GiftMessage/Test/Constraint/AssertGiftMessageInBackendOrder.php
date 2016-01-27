@@ -10,6 +10,7 @@ use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Assert that message from dataset is displayed on order(s) view page on backend.
@@ -34,6 +35,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
      * @param GiftMessage $giftMessage
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
+     * @param FixtureFactory $fixtureFactory
      * @param array $products
      * @param string $orderId
      * @return void
@@ -42,6 +44,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
         GiftMessage $giftMessage,
         SalesOrderView $salesOrderView,
         OrderIndex $orderIndex,
+        FixtureFactory $fixtureFactory,
         array $products,
         $orderId
     ) {
@@ -49,12 +52,20 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
         $actualData = [];
         $orderIndex->open()->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        if ($giftMessage->getAllowGiftMessagesForOrder()) {
-            $expectedData[] = $giftMessage->getData();
-            $actualData[] = $salesOrderView->getGiftOptionsBlock()->getData($giftMessage);
+        if ($giftMessage->getAllowGiftMessagesForOrder() === 'Yes') {
+            $formData = [
+                'sender' => $giftMessage->getSender(),
+                'recipient' => $giftMessage->getRecipient(),
+                'message' => $giftMessage->getMessage()
+            ];
+            $giftMessageForm = $fixtureFactory->createByCode('giftMessage', ['data' => $formData]);
+
+            $expectedData[] = $giftMessageForm->getData();
+            $actualData[] = $salesOrderView->getGiftOptionsBlock()->getData($giftMessageForm);
+
         }
 
-        if ($giftMessage->getAllowGiftOptionsForItems()) {
+        if ($giftMessage->getAllowGiftOptionsForItems() === 'Yes') {
             foreach ($giftMessage->getItems() as $key => $giftMessageItem) {
                 $expectedData[] = $giftMessageItem->getData();
                 $product = $products[$key];

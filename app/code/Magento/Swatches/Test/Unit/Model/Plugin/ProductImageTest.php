@@ -13,13 +13,13 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $swatchesHelperMock;
 
-    /** @var \Magento\Catalog\Model\Resource\Eav\AttributeFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeFactoryMock;
 
     /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $eavConfigMock;
 
-    /** @var \Magento\Catalog\Model\Resource\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeMock;
 
     /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
@@ -42,7 +42,7 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->attributeFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Eav\AttributeFactory',
+            '\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory',
             ['create'],
             [],
             '',
@@ -58,7 +58,7 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->attributeMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Eav\Attribute',
+            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['loadByCode', 'getId', 'getUsedInProductListing', 'getIsFilterable', 'getData'],
             [],
             '',

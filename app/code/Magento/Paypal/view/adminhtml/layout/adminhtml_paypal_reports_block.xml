@@ -5,13 +5,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="adminhtml.paypal.report.grid.container">
             <block class="Magento\Backend\Block\Widget\Grid" name="paypal.report.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">settlementGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Paypal\Model\Resource\Report\Settlement\Row\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Paypal\Model\ResourceModel\Report\Settlement\Row\Collection</argument>
                     <argument name="default_sort" xsi:type="string">row_id</argument>
                     <argument name="default_dir" xsi:type="string">DESC</argument>
                     <argument name="save_parameters_in_session" xsi:type="string">1</argument>
@@ -73,7 +73,7 @@
                             <argument name="header" xsi:type="string" translate="true">Event</argument>
                             <argument name="index" xsi:type="string">transaction_event_code</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Paypal\Model\Resource\Report\Settlement\Options\TransactionEvents"/>
+                            <argument name="options" xsi:type="options" model="Magento\Paypal\Model\ResourceModel\Report\Settlement\Options\TransactionEvents"/>
                             <argument name="header_css_class" xsi:type="string">ol-event</argument>
                             <argument name="column_css_class" xsi:type="string">ol-event</argument>
                         </arguments>

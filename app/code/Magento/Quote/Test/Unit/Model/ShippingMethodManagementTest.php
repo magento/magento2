@@ -57,7 +57,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->methodDataFactoryMock = $this->getMock(
             '\Magento\Quote\Api\Data\ShippingMethodInterfaceFactory',
             [

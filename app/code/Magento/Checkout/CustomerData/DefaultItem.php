@@ -42,6 +42,7 @@ class DefaultItem extends AbstractItem
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Catalog\Helper\Image $imageHelper,
@@ -88,6 +89,7 @@ class DefaultItem extends AbstractItem
      * Get list of all options for product
      *
      * @return array
+     * @codeCoverageIgnore
      */
     protected function getOptionList()
     {
@@ -96,6 +98,7 @@ class DefaultItem extends AbstractItem
 
     /**
      * @return \Magento\Catalog\Model\Product
+     * @codeCoverageIgnore
      */
     protected function getProductForThumbnail()
     {
@@ -104,6 +107,7 @@ class DefaultItem extends AbstractItem
 
     /**
      * @return \Magento\Catalog\Model\Product
+     * @codeCoverageIgnore
      */
     protected function getProduct()
     {

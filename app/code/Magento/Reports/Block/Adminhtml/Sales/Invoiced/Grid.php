@@ -37,8 +37,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     public function getResourceCollectionName()
     {
         return ($this->getFilterData()->getData('report_type')) == 'created_at_invoice'
-            ? 'Magento\Sales\Model\Resource\Report\Invoiced\Collection\Invoiced'
-            : 'Magento\Sales\Model\Resource\Report\Invoiced\Collection\Order';
+            ? 'Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection\Invoiced'
+            : 'Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection\Order';
     }
 
     /**

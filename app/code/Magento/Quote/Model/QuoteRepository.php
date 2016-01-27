@@ -10,7 +10,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
+use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
@@ -42,7 +42,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     protected $storeManager;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Collection
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Collection
      */
     protected $quoteCollection;
 
@@ -59,14 +59,14 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     /**
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
-     * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection
      * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         QuoteFactory $quoteFactory,
         StoreManagerInterface $storeManager,
-        \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection,
+        \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection,
         \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
@@ -78,23 +78,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Create new quote
-     *
-     * @param array $data
-     * @return Quote
-     */
-    public function create(array $data = [])
-    {
-        return $this->quoteFactory->create($data);
-    }
-
-    /**
-     * Get quote by id
-     *
-     * @param int $cartId
-     * @param int[] $sharedStoreIds
-     * @throws NoSuchEntityException
-     * @return \Magento\Quote\Api\Data\CartInterface
+     * {@inheritdoc}
      */
     public function get($cartId, array $sharedStoreIds = [])
     {
@@ -107,12 +91,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get quote by customer Id
-     *
-     * @param int $customerId
-     * @param int[] $sharedStoreIds
-     * @return Quote
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      */
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
@@ -125,12 +104,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get active quote by id
-     *
-     * @param int $cartId
-     * @param int[] $sharedStoreIds
-     * @return Quote
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      */
     public function getActive($cartId, array $sharedStoreIds = [])
     {
@@ -142,12 +116,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get active quote by customer Id
-     *
-     * @param int $customerId
-     * @param int[] $sharedStoreIds
-     * @return Quote
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      */
     public function getActiveForCustomer($customerId, array $sharedStoreIds = [])
     {
@@ -159,12 +128,9 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Save quote
-     *
-     * @param Quote $quote
-     * @return void
+     * {@inheritdoc}
      */
-    public function save(Quote $quote)
+    public function save(\Magento\Quote\Api\Data\CartInterface $quote)
     {
         $quote->save();
         unset($this->quotesById[$quote->getId()]);
@@ -172,12 +138,9 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Delete quote
-     *
-     * @param Quote $quote
-     * @return void
+     * {@inheritdoc}
      */
-    public function delete(Quote $quote)
+    public function delete(\Magento\Quote\Api\Data\CartInterface $quote)
     {
         $quoteId = $quote->getId();
         $customerId = $quote->getCustomerId();

@@ -26,6 +26,7 @@
         transition: opacity .2s linear .1s;
         visibility: hidden;
     }
+
     &::before {
         border-radius: 1px;
         border: 1px solid @color-gray68;
@@ -36,6 +37,7 @@
         min-width: 50px;
         padding: 4px 5px;
     }
+
     &::after {
         border: 1px solid darken(@color-gray68, 8);
         border-width: 1px 0 0 1px;
@@ -46,19 +48,22 @@
         transform: rotate(45deg);
         width: 10px;
     }
+
     &:hover {
         &::before,
         &::after {
             opacity: 1;
-            transition: opacity .2s linear 0;
+            transition: opacity .2s linear;
             visibility: visible;
         }
     }
+
     span {
         display: block;
         height: @component-indicator__size;
         overflow: hidden;
         width: @component-indicator__size;
+
         &:before {
             content: '';
             display: block;
@@ -69,11 +74,14 @@
             width: 100%;
         }
     }
+
     &._on {
         background: @color-success;
     }
+
     &._off {
         background: @color-failed;
+
         span {
             &:before {
                 background: @color-white;
@@ -83,10 +91,13 @@
             }
         }
     }
+
     &._info {
         background: transparent;
+
         span {
             width: 21px;
+
             &:before {
                 color: @color-info;
                 content: @icon-notice-messages__content;

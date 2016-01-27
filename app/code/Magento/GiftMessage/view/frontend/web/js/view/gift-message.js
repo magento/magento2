@@ -3,7 +3,12 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define(['uiComponent', '../model/gift-message', '../model/gift-options', '../action/gift-options'],
+define([
+        'uiComponent',
+        'Magento_GiftMessage/js/model/gift-message',
+        'Magento_GiftMessage/js/model/gift-options',
+        'Magento_GiftMessage/js/action/gift-options'
+    ],
     function (Component, giftMessage, giftOptions, giftOptionsService) {
         "use strict";
         return Component.extend({
@@ -62,13 +67,18 @@ define(['uiComponent', '../model/gift-message', '../model/gift-options', '../act
                     this.resultBlockVisibility(true);
                 }
             },
-            isActive: function() {
-                switch (this.itemId) {
-                    case 'orderLevel':
-                        return this.model.getConfigValue('isOrderLevelGiftOptionsEnabled') == true;
-                    default:
-                        return this.model.getConfigValue('isItemLevelGiftOptionsEnabled') == true;
+            hasActiveOptions: function() {
+                var regionData = this.getRegion('additionalOptions');
+                var options = regionData();
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].isActive()) {
+                        return true;
+                    }
                 }
+                return false;
+            },
+            isActive: function() {
+                return this.model.isGiftMessageAvailable();
             },
             submitOptions: function() {
                 giftOptionsService(this.model);

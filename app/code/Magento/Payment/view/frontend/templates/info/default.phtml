@@ -6,22 +6,25 @@
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
 /**
+ * @var \Magento\Payment\Block\Info $block
  * @see \Magento\Payment\Block\Info
  */
+$specificInfo = $block->getSpecificInformation();
+$title = $block->escapeHtml($block->getMethod()->getTitle());
 ?>
 <dl class="payment-method">
-    <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
-<?php if ($_specificInfo = $block->getSpecificInformation()):?>
+    <dt class="title"><?php /* @noEscape */ echo $title; ?></dt>
+<?php if ($specificInfo):?>
     <dd class="content">
         <table class="data table">
-            <caption class="table-caption"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></caption>
-            <?php foreach ($_specificInfo as $_label => $_value):?>
+            <caption class="table-caption"><?php /* @noEscape */ echo $title; ?></caption>
+            <?php foreach ($specificInfo as $label => $value):?>
                 <tr>
-                    <th scope="row"><?php echo $block->escapeHtml($_label)?></th>
-                    <td><?php echo nl2br(implode("\n", $block->getValueAsArray($_value, true)))?></td>
+                    <th scope="row"><?php echo $block->escapeHtml($label)?></th>
+                    <td>
+                        <?php /* @noEscape */ echo nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true))));?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>

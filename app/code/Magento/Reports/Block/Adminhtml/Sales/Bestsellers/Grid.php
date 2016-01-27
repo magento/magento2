@@ -36,7 +36,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      */
     public function getResourceCollectionName()
     {
-        return 'Magento\Sales\Model\Resource\Report\Bestsellers\Collection';
+        return 'Magento\Sales\Model\ResourceModel\Report\Bestsellers\Collection';
     }
 
     /**

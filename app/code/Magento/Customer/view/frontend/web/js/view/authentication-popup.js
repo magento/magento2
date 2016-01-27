@@ -14,13 +14,15 @@ define(
         'Magento_Customer/js/model/authentication-popup',
         'mage/translate',
         'mage/url',
+        'Magento_Ui/js/modal/alert',
         'mage/validation'
     ],
-    function($, ko, Component, loginAction, customerData, authenticationPopup, $t, url) {
+    function($, ko, Component, loginAction, customerData, authenticationPopup, $t, url, alert) {
         'use strict';
         return Component.extend({
             registerUrl: window.authenticationPopup.customerRegisterUrl,
             forgotPasswordUrl: window.authenticationPopup.customerForgotPasswordUrl,
+            autocomplete: window.checkout.autocomplete,
             modalWindow: null,
             isLoading: ko.observable(false),
 
@@ -39,7 +41,9 @@ define(
 
             /** Init popup login window */
             setModalElement: function (element) {
-                authenticationPopup.createPopUp(element);
+                if (authenticationPopup.modalWindow == null) {
+                    authenticationPopup.createPopUp(element);
+                }
             },
 
             /** Is login form enabled for current customer */
@@ -53,7 +57,9 @@ define(
                 if (this.modalWindow) {
                     $(this.modalWindow).modal('openModal');
                 } else {
-                    alert($t('Guest checkout is disabled.'));
+                    alert({
+                        content: $t('Guest checkout is disabled.')
+                    });
                 }
             },
 

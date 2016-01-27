@@ -5,12 +5,13 @@
  */
 namespace Magento\CatalogInventory\Model;
 
-use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
+use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
 
 /**
  * Class StockManagement
@@ -38,26 +39,37 @@ class StockManagement implements StockManagementInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock
+     * @var ResourceStock
      */
     protected $resource;
 
     /**
+     * @var QtyCounterInterface
+     */
+    private $qtyCounter;
+
+    /**
+     * @param ResourceStock $stockResource
      * @param StockRegistryProviderInterface $stockRegistryProvider
      * @param StockState $stockState
      * @param StockConfigurationInterface $stockConfiguration
      * @param ProductRepositoryInterface $productRepository
+     * @param QtyCounterInterface $qtyCounter
      */
     public function __construct(
+        ResourceStock $stockResource,
         StockRegistryProviderInterface $stockRegistryProvider,
         StockState $stockState,
         StockConfigurationInterface $stockConfiguration,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        QtyCounterInterface $qtyCounter
     ) {
         $this->stockRegistryProvider = $stockRegistryProvider;
         $this->stockState = $stockState;
         $this->stockConfiguration = $stockConfiguration;
         $this->productRepository = $productRepository;
+        $this->qtyCounter = $qtyCounter;
+        $this->resource = $stockResource;
     }
 
     /**
@@ -73,7 +85,7 @@ class StockManagement implements StockManagementInterface
     public function registerProductsSale($items, $websiteId = null)
     {
         //if (!$websiteId) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
+            $websiteId = $this->stockConfiguration->getDefaultScopeId();
         //}
         $this->getResource()->beginTransaction();
         $lockedItems = $this->getResource()->lockProductsStock(array_keys($items), $websiteId);
@@ -108,7 +120,7 @@ class StockManagement implements StockManagementInterface
                 $fullSaveItems[] = $stockItem;
             }
         }
-        $this->getResource()->correctItemsQty($registeredItems, $websiteId, '-');
+        $this->qtyCounter->correctItemsQty($registeredItems, $websiteId, '-');
         $this->getResource()->commit();
         return $fullSaveItems;
     }
@@ -121,9 +133,9 @@ class StockManagement implements StockManagementInterface
     public function revertProductsSale($items, $websiteId = null)
     {
         //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         //}
-        $this->getResource()->correctItemsQty($items, $websiteId, '+');
+        $this->qtyCounter->correctItemsQty($items, $websiteId, '+');
         return true;
     }
 
@@ -132,15 +144,15 @@ class StockManagement implements StockManagementInterface
      *
      * @param int $productId
      * @param float $qty
-     * @param int $websiteId
+     * @param int $scopeId
      * @return bool
      */
-    public function backItemQty($productId, $qty, $websiteId = null)
+    public function backItemQty($productId, $qty, $scopeId = null)
     {
-        //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
+        //if (!$scopeId) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         //}
-        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         if ($stockItem->getItemId() && $this->stockConfiguration->isQty($this->getProductType($productId))) {
             if ($this->canSubtractQty($stockItem)) {
                 $stockItem->setQty($stockItem->getQty() + $qty);
@@ -168,15 +180,10 @@ class StockManagement implements StockManagementInterface
     }
 
     /**
-     * @return \Magento\CatalogInventory\Model\Resource\Stock
+     * @return Stock
      */
     protected function getResource()
     {
-        if (empty($this->resource)) {
-            $this->resource = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\CatalogInventory\Model\Resource\Stock'
-            );
-        }
         return $this->resource;
     }
 

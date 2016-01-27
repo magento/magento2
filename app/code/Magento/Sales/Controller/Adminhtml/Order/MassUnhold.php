@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Component\MassAction\Filter;
-use Magento\Sales\Model\Resource\Order\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 
 class MassUnhold extends AbstractMassAction
 {

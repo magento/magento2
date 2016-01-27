@@ -33,6 +33,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /** @var AccountManagementInterface */
     protected $accountManagement;
 
+    /** @var \Magento\Framework\Data\Form\FormKey */
+    protected $formKey;
+
     protected function setUp()
     {
         parent::setUp();
@@ -45,6 +48,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Api\AccountManagementInterface'
+        );
+
+        $this->formKey = Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Data\Form\FormKey'
         );
     }
 
@@ -289,7 +296,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertEquals('test firstname', $customer->getFirstname());
 
         /**
-         * Addresses should be removed by \Magento\Customer\Model\Resource\Customer::_saveAddresses during _afterSave
+         * Addresses should be removed by
+         * \Magento\Customer\Model\ResourceModel\Customer::_saveAddresses during _afterSave
          * addressOne - updated
          * addressTwo - removed
          * addressThree - removed
@@ -499,6 +507,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testDeleteAction()
     {
         $this->getRequest()->setParam('id', 1);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
+
+        $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_POST);
+
         $this->dispatch('backend/customer/index/delete');
         $this->assertRedirect($this->stringContains('customer/index'));
         $this->assertSessionMessages(
@@ -513,6 +525,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testNotExistingCustomerDeleteAction()
     {
         $this->getRequest()->setParam('id', 2);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
+
+        $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_POST);
+
         $this->dispatch('backend/customer/index/delete');
         $this->assertRedirect($this->stringContains('customer/index'));
         $this->assertSessionMessages(
@@ -541,201 +557,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/customer/index/productReviews');
         $body = $this->getResponse()->getBody();
         $this->assertContains('<div id="reviwGrid"', $body);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/two_customers.php
-     */
-    public function testMassSubscriberAction()
-    {
-        // Pre-condition
-        /** @var \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory */
-        $subscriberFactory = Bootstrap::getObjectManager()->get('Magento\Newsletter\Model\SubscriberFactory');
-        $this->assertNull($subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus());
-        $this->assertNull($subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus());
-        // Setup
-        $this->getRequest()->setPostValue('selected', [1, 2])->setPostValue('namespace', 'customer_listing');
-
-        // Test
-        $this->dispatch('backend/customer/index/massSubscribe');
-
-        // Assertions
-        $this->assertRedirect($this->stringContains('customer/index'));
-        $this->assertSessionMessages(
-            $this->equalTo(['A total of 2 record(s) were updated.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertEquals(
-            Subscriber::STATUS_SUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus()
-        );
-        $this->assertEquals(
-            Subscriber::STATUS_SUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus()
-        );
-    }
-
-    /**
-     * @magentoDbIsolation enabled
-     */
-    public function testMassSubscriberActionNoSelection()
-    {
-        $this->getRequest()->setPostValue('namespace', 'customer_listing');
-        $this->dispatch('backend/customer/index/massSubscribe');
-
-        $this->assertRedirect($this->stringContains('customer/index'));
-        $this->assertSessionMessages(
-            $this->equalTo(['Please select item(s).']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
-        );
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testMassDeleteAction()
-    {
-        $this->getRequest()->setPostValue('selected', [1])->setPostValue('namespace', 'customer_listing');
-        $this->dispatch('backend/customer/index/massDelete');
-        $this->assertSessionMessages(
-            $this->equalTo(['A total of 1 record(s) were deleted.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertRedirect($this->stringContains('customer/index'));
-    }
-
-    /**
-     * Valid group Id but no customer Ids specified
-     * @magentoDbIsolation enabled
-     */
-    public function testMassDeleteActionNoCustomerIds()
-    {
-        $this->getRequest()->setPostValue('namespace', 'customer_listing');
-        $this->dispatch('backend/customer/index/massDelete');
-        $this->assertSessionMessages(
-            $this->equalTo(['Please select item(s).']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
-        );
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testMassAssignGroupAction()
-    {
-        $customer = $this->customerRepository->getById(1);
-        $this->assertEquals(1, $customer->getGroupId());
-
-        $this->getRequest()->setParam('group', 0)->setPostValue('customer', [1]);
-        $this->dispatch('backend/customer/index/massAssignGroup');
-        $this->assertSessionMessages(
-            $this->equalTo(['A total of 1 record(s) were updated.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertRedirect($this->stringContains('customer/index'));
-
-        $customer = $this->customerRepository->getById(1);
-        $this->assertEquals(0, $customer->getGroupId());
-    }
-
-    /**
-     * Valid group Id but no data fixture so no customer exists with customer Id = 1
-     * @magentoDbIsolation enabled
-     */
-    public function testMassAssignGroupActionInvalidCustomerId()
-    {
-        $this->getRequest()->setParam('group', 0)->setPostValue('customer', [1]);
-        $this->dispatch('backend/customer/index/massAssignGroup');
-        $this->assertSessionMessages(
-            $this->equalTo(['No such entity with customerId = 1']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
-        );
-    }
-
-    /**
-     * Valid group Id but no customer Ids specified
-     * @magentoDbIsolation enabled
-     */
-    public function testMassAssignGroupActionNoCustomerIds()
-    {
-        $this->getRequest()->setParam('group', 0);
-        $this->dispatch('backend/customer/index/massAssignGroup');
-        $this->assertSessionMessages(
-            $this->equalTo(['Please select customer(s).']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
-        );
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/two_customers.php
-     */
-    public function testMassAssignGroupActionPartialUpdate()
-    {
-        $this->assertEquals(1, $this->customerRepository->getById(1)->getGroupId());
-        $this->assertEquals(1, $this->customerRepository->getById(2)->getGroupId());
-
-        $this->getRequest()->setParam('group', 0)->setPostValue('customer', [1, 4200, 2]);
-        $this->dispatch('backend/customer/index/massAssignGroup');
-        $this->assertSessionMessages(
-            $this->equalTo(['A total of 2 record(s) were updated.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertSessionMessages(
-            $this->equalTo(['No such entity with customerId = 4200']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
-        );
-
-        $this->assertEquals(0, $this->customerRepository->getById(1)->getGroupId());
-        $this->assertEquals(0, $this->customerRepository->getById(2)->getGroupId());
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/two_customers.php
-     */
-    public function testMassUnsubscriberAction()
-    {
-        // Setup
-        /** @var \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory */
-        $subscriberFactory = Bootstrap::getObjectManager()->get('Magento\Newsletter\Model\SubscriberFactory');
-        $subscriberFactory->create()->subscribeCustomerById(1);
-        $subscriberFactory->create()->subscribeCustomerById(2);
-        $this->getRequest()->setPostValue('selected', [1, 2])->setPostValue('namespace', 'customer_listing');
-
-        // Ensure secret key is disabled (subscription status notification emails turn it off)
-        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
-
-        // Test
-        $this->dispatch('backend/customer/index/massUnsubscribe');
-
-        // Assertions
-        $this->assertRedirect($this->stringContains('customer/index'));
-        $this->assertSessionMessages(
-            $this->equalTo(['A total of 2 record(s) were updated.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertEquals(
-            Subscriber::STATUS_UNSUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomerId(1)->getSubscriberStatus()
-        );
-        $this->assertEquals(
-            Subscriber::STATUS_UNSUBSCRIBED,
-            $subscriberFactory->create()->loadByCustomerId(2)->getSubscriberStatus()
-        );
-    }
-
-    /**
-     * @magentoDbIsolation enabled
-     */
-    public function testMassUnsubscriberActionNoSelection()
-    {
-        $this->getRequest()->setPostValue('namespace', 'customer_listing');
-        $this->dispatch('backend/customer/index/massUnsubscribe');
-
-        $this->assertRedirect($this->stringContains('customer/index'));
-        $this->assertSessionMessages(
-            $this->equalTo(['Please select item(s).']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
-        );
     }
 
     /**

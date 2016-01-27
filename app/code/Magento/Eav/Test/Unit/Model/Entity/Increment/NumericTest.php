@@ -5,18 +5,18 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Increment;
 
-use Magento\Eav\Model\Entity\Increment\Numeric;
+use Magento\Eav\Model\Entity\Increment\NumericValue;
 
 class NumericTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Numeric
+     * @var NumericValue
      */
     private $model;
 
     protected function setUp()
     {
-        $this->model = new \Magento\Eav\Model\Entity\Increment\Numeric();
+        $this->model = new \Magento\Eav\Model\Entity\Increment\NumericValue();
     }
 
     /**

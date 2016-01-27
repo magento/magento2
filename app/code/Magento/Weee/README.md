@@ -18,7 +18,7 @@ Magento_Weee module can be installed automatically (using native Magento install
 Magento installation with existing products with FPT:
 * Disable FPT on the backend
 * Remove all products with FPT
-* Remove all FPT attributes from product templates
+* Remove all FPT attributes from attribute sets
 * Delete all FPT attributes
 * Remove module directory from the code base
 * New Magento installation:

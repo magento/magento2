@@ -40,11 +40,12 @@
 //  ---------------------------------------------
 
 .nav {
+    .extend__clearer();
     background-color: @nav__background-color;
     border-bottom: 1px solid @nav__border-color;
     border-top: 1px solid @nav__border-color;
-    .extend__clearer();
     display: none;
+    margin-bottom: @nav-bar__indent-top;
     padding: @nav-bar-dot__size @nav__indent-right 0 0;
 }
 
@@ -53,10 +54,12 @@
 .nav-bar-outer-actions {
     float: right;
     margin-bottom: @nav-bar-items__indent-bottom;
+
     .btn-wrap {
         float: right;
         margin-left: .5rem;
         margin-right: .5rem;
+
         .btn {
             padding-left: .5rem;
             padding-right: .5rem;
@@ -92,7 +95,7 @@
 
     //  Progress line tunnel
     &:before {
-        .background-gradient( @_background-gradient: true, @_background-gradient-direction: vertical, @_background-gradient-color-start: @color-gray82, @_background-gradient-color-end: @color-gray83 );
+        .lib-background-gradient( @_background-gradient: true, @_background-gradient-direction: vertical, @_background-gradient-color-start: @color-gray82, @_background-gradient-color-end: @color-gray83 );
         border-bottom: 1px solid @nav-bar-bullet-wrap__border-bottom-color;
         border-top: 1px solid @nav-bar-bullet-wrap__border-top-color;
         content: '';
@@ -166,6 +169,7 @@
             //  Active link
             a {
                 color: darken(@nav-bar__color, 30%);
+
                 &:hover {
                     cursor: default;
                 }
@@ -191,6 +195,7 @@
         position: relative;
         text-align: center;
         text-overflow: ellipsis;
+
         &:hover {
             text-decoration: none;
         }
@@ -243,12 +248,14 @@
         padding-left: 1.5rem;
         text-align: center;
     }
+
     .nav-bar {
         display: inline-block;
         float: none;
         margin-right: 0;
         vertical-align: top;
     }
+
     .nav .btn-group,
     .nav-bar-outer-actions {
         display: inline-block;
@@ -258,6 +265,7 @@
         vertical-align: top;
         width: 100%;
     }
+
     .nav-bar-outer-actions {
         padding-right: 0;
         .outer-actions-inner-wrap {
@@ -276,9 +284,11 @@
         padding-left: 0;
         padding-right: 0;
     }
+
     .nav-bar-outer-actions {
         margin-top: 0;
     }
+
     .nav-bar {
         .extend__clearer();
         display: block;
@@ -286,19 +296,24 @@
         margin-left: auto;
         margin-right: auto;
         width: @nav-bar-step__width * 3;
+
         &:before {
             display: none;
         }
+
         > li {
             float: left;
             min-height: 9rem;
+
             &:after {
                 display: none;
             }
+
             &:nth-child(4n) {
                 clear: both;
             }
         }
+
         a {
             line-height: 1.4;
         }
@@ -308,10 +323,12 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
     .nav-bar {
         width: @nav-bar-step__width * .75 * 3;
+
         > li {
             width: @nav-bar-step__width * .75;
         }
     }
+
     .nav .btn-group,
     .nav-bar-outer-actions {
         .btn-wrap-try-again {

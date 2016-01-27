@@ -13,25 +13,28 @@
 & when (@media-common = true) {
 
 .columns {
-    #layout-columns();
+    #lib-layout-columns();
+
     .column.main {
         &:extend(.abs-add-box-sizing all);
-        .vendor-prefix-flex-grow(1);
-        .vendor-prefix-flex-basis(100%);
-        .css(padding-bottom, @indent__xl);
-        .vendor-prefix-order(1);
+        .lib-vendor-prefix-flex-grow(1);
+        .lib-vendor-prefix-flex-basis(100%);
+        .lib-css(padding-bottom, @indent__xl);
+        .lib-vendor-prefix-order(1);
     }
+
     .sidebar-main {
         &:extend(.abs-add-box-sizing all);
-        .vendor-prefix-flex-grow(1);
-        .vendor-prefix-flex-basis(100%);
-        .vendor-prefix-order(1);
+        .lib-vendor-prefix-flex-grow(1);
+        .lib-vendor-prefix-flex-basis(100%);
+        .lib-vendor-prefix-order(1);
     }
+
     .sidebar-additional {
         &:extend(.abs-add-box-sizing all);
-        .vendor-prefix-flex-grow(1);
-        .vendor-prefix-flex-basis(100%);
-        .vendor-prefix-order(2);
+        .lib-vendor-prefix-flex-grow(1);
+        .lib-vendor-prefix-flex-basis(100%);
+        .lib-vendor-prefix-order(2);
     }
 }
 
@@ -54,6 +57,7 @@
         padding-left: @layout__width-xs-indent;
         padding-right: @layout__width-xs-indent;
     }
+
     .page-main {
         .account &,
         .cms-privacy-policy & {
@@ -85,11 +89,13 @@
         max-width: @layout__max-width;
         box-sizing: border-box;
     }
+
     .page-main {
         width: 100%;
-        .vendor-prefix-flex-grow(1);
-        .vendor-prefix-flex-shrink(0);
-        .vendor-prefix-flex-basis(auto);
+
+        .lib-vendor-prefix-flex-grow(1);
+        .lib-vendor-prefix-flex-shrink(0);
+        .lib-vendor-prefix-flex-basis(auto);
         .ie9 & {
             width: auto;
         }
@@ -100,13 +106,13 @@
     }
 
     .column.main {
-        #layout-columns > .main();
+        #lib-layout-columns > .main();
         &:extend(.abs-add-box-sizing-desktop all);
         min-height: 300px;
     }
 
     .sidebar-main {
-        #layout-columns > .left();
+        #lib-layout-columns > .left();
         padding-right: @layout-column-main__sidebar-offset;
         &:extend(.abs-add-box-sizing-desktop all);
     }
@@ -117,7 +123,7 @@
     }
 
     .sidebar-additional {
-        #layout-columns > .right();
+        #lib-layout-columns > .right();
         padding-left: @layout-column__additional-sidebar-offset;
         clear: right;
         &:extend(.abs-add-box-sizing-desktop all);

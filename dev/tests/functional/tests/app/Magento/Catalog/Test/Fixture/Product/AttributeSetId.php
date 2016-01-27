@@ -11,7 +11,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 
 /**
- * Product template entity data source.
+ * Attribute set entity data source.
  *
  *  Data keys:
  *  - dataset

@@ -22,7 +22,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
     /**
      * Product Index Collection
      *
-     * @var \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @var \Magento\Reports\Model\ResourceModel\Product\Index\Collection\AbstractCollection
      */
     protected $_collection;
 
@@ -99,7 +99,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
     /**
      * Retrieve Index Product Collection
      *
-     * @return \Magento\Reports\Model\Resource\Product\Index\Collection\AbstractCollection
+     * @return \Magento\Reports\Model\ResourceModel\Product\Index\Collection\AbstractCollection
      */
     public function getItemsCollection()
     {

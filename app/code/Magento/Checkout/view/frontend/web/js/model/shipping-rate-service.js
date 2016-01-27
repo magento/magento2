@@ -10,24 +10,26 @@ define(
         'Magento_Checkout/js/model/shipping-rate-processor/new-address',
         'Magento_Checkout/js/model/shipping-rate-processor/customer-address'
     ],
-    function(quote, defaultProcessor, customerAddressProcessor) {
-        "use strict";
+    function (quote, defaultProcessor, customerAddressProcessor) {
+        'use strict';
+
         var processors = [];
-        processors['default'] =  defaultProcessor;
+
+        processors.default =  defaultProcessor;
         processors['customer-address'] = customerAddressProcessor;
 
         quote.shippingAddress.subscribe(function () {
             var type = quote.shippingAddress().getType();
-            var rates = [];
+
             if (processors[type]) {
-                rates = processors[type].getRates(quote.shippingAddress());
+                processors[type].getRates(quote.shippingAddress());
             } else {
-                rates = processors['default'].getRates(quote.shippingAddress());
+                processors.default.getRates(quote.shippingAddress());
             }
         });
 
         return {
-            registerProcessor: function(type, processor) {
+            registerProcessor: function (type, processor) {
                 processors[type] = processor;
             }
         }

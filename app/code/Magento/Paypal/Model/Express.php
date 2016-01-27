@@ -193,7 +193,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Exception\LocalizedExceptionFactory $exception
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param Transaction\BuilderInterface $transactionBuilder
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -214,7 +214,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Exception\LocalizedExceptionFactory $exception,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -331,15 +331,12 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * Check whether payment method can be used
-     * @param Quote|null $quote
+     * @param \Magento\Quote\Api\Data\CartInterface|Quote|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        if (parent::isAvailable($quote) && $this->_pro->getConfig()->isMethodAvailable()) {
-            return true;
-        }
-        return false;
+        return parent::isAvailable($quote) && $this->_pro->getConfig()->isMethodAvailable();
     }
 
     /**
@@ -665,8 +662,9 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param array|\Magento\Framework\DataObject $data
      * @return \Magento\Payment\Model\Info
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
         $result = parent::assignData($data);
         $key = ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT;

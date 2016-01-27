@@ -11,7 +11,7 @@
              type="eav"
              entity_type="catalog_product"
              product_type="virtual"
-             collection="Magento\Catalog\Model\Resource\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
              identifier="sku"
              repository_class="Magento\Catalog\Test\Repository\CatalogProductVirtual"
              handler_interface="Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface"
@@ -24,7 +24,7 @@
             </item>
             <item name="input_prefix" xsi:type="string">product</item>
         </data_config>
-        <field name="is_virtual" group="product-details" />
+        <field name="product_has_weight" group="product-details" />
         <field name="category_ids" is_required="0" source="Magento\Catalog\Test\Fixture\Product\CategoryIds" group="product-details" />
         <field name="color" is_required="0" />
         <field name="country_of_manufacture" is_required="0" />
@@ -36,7 +36,6 @@
         <field name="description" is_required="0" group="product-details" />
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
-        <field name="group_price" is_required="0" group="advanced-pricing" repository="Magento\Catalog\Test\Repository\Product\GroupPriceOptions" />
         <field name="has_options" is_required="0" />
         <field name="image" is_required="0" />
         <field name="image_label" is_required="0" />

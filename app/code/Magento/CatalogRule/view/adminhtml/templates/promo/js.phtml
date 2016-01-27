@@ -7,21 +7,19 @@
 <script>
 require(["jquery", "prototype"], function(jQuery){
 
-function hideShowSubproductOptions()
+function changeValidationForDiscountPercent()
 {
-    if ($('rule_sub_is_enable').value == 1) {
-        $('rule_sub_simple_action').up('div.field').show();
-        $('rule_sub_discount_amount').up('div.field').show();
-        $('rule_sub_discount_amount').addClassName('required-entry validate-not-negative-number');
+    if ($('rule_simple_action').value == 'by_percent' || $('rule_simple_action').value == 'to_percent') {
+        $('rule_discount_amount').addClassName('validate-number-range number-range-0.00-100.00');
     } else {
-        $('rule_sub_simple_action').up('div.field').hide();
-        $('rule_sub_discount_amount').up('div.field').hide();
-        $('rule_sub_discount_amount').removeClassName('required-entry').removeClassName('validate-not-negative-number');
+        $('rule_discount_amount').removeClassName('validate-number-range').removeClassName('number-range-0.00-100.00');
     }
 
     return true;
 }
-jQuery(document).ready(hideShowSubproductOptions);
-window.hideShowSubproductOptions = hideShowSubproductOptions;
+
+jQuery(document).ready(changeValidationForDiscountPercent);
+jQuery(document).on('change', '#rule_simple_action', changeValidationForDiscountPercent);
+window.changeValidationForDiscountPercent = changeValidationForDiscountPercent;
 });
 </script>

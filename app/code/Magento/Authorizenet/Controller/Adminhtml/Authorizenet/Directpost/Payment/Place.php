@@ -119,11 +119,11 @@ class Place extends \Magento\Sales\Controller\Adminhtml\Order\Create
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $message = $e->getMessage();
                 if (!empty($message)) {
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                 }
                 $isError = true;
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Order saving error: %1', $e->getMessage()));
+                $this->messageManager->addExceptionMessage($e, __('Order saving error: %1', $e->getMessage()));
                 $isError = true;
             }
 

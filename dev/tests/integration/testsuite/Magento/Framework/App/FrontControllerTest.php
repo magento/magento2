@@ -34,7 +34,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         }
         $_SERVER['HTTP_HOST'] = 'localhost';
         $this->_objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-        $request = $this->_objectManager->create('Magento\Framework\App\Request\Http');
+        $request = $this->_objectManager->get('Magento\Framework\App\Request\Http');
         /* empty action */
         $request->setRequestUri('core/index/index');
         $this->assertInstanceOf('Magento\Framework\Controller\ResultInterface', $this->_model->dispatch($request));

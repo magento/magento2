@@ -16,7 +16,7 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $id = $this->getRequest()->getParam('attribute_id');
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
-            $model = $this->_objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
+            $model = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
 
             // entity type check
             $model->load($id);

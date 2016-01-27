@@ -9,7 +9,7 @@ class Cctypes extends \Magento\Framework\View\Element\Html\Select
 {
     /**
      * All possible credit card types
-     * 
+     *
      * @var array
      */
     protected $ccTypes = [];
@@ -49,13 +49,14 @@ class Cctypes extends \Magento\Framework\View\Element\Html\Select
                 }
             }
         }
-        $this->setExtraParams('multiple="multiple" style="height:80px;"');
+        $this->setClass('cc-type-select');
+        $this->setExtraParams('multiple="multiple"');
         return parent::_toHtml();
     }
 
     /**
      * All possible credit card types
-     * 
+     *
      * @return array
      */
     protected function _getCcTypes()

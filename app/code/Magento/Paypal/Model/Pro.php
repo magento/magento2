@@ -10,6 +10,7 @@ namespace Magento\Paypal\Model;
 
 use Magento\Paypal\Model\Api\AbstractApi;
 use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Paypal\Model\Info;
 
 /**
  * PayPal Website Payments Pro implementation for payment method instances
@@ -128,9 +129,9 @@ class Pro
      * @param int|null $storeId
      * @return $this
      */
-    public function setConfig(\Magento\Paypal\Model\Config $instace, $storeId = null)
+    public function setConfig(\Magento\Paypal\Model\Config $instance, $storeId = null)
     {
-        $this->_config = $instace;
+        $this->_config = $instance;
         if (null !== $storeId) {
             $this->_config->setStoreId($storeId);
         }
@@ -206,14 +207,14 @@ class Pro
         if ($from->getDataUsingMethod(\Magento\Paypal\Model\Info::IS_FRAUD)) {
             $to->setIsTransactionPending(true);
             $to->setIsFraudDetected(true);
-        } elseif ($this->getInfo()->isPaymentReviewRequired($to)) {
+        } elseif (Info::isPaymentReviewRequired($to)) {
             $to->setIsTransactionPending(true);
         }
 
         // give generic info about transaction state
-        if ($this->getInfo()->isPaymentSuccessful($to)) {
+        if (Info::isPaymentSuccessful($to)) {
             $to->setIsTransactionApproved(true);
-        } elseif ($this->getInfo()->isPaymentFailed($to)) {
+        } elseif (Info::isPaymentFailed($to)) {
             $to->setIsTransactionDenied(true);
         }
 
@@ -255,17 +256,17 @@ class Pro
         if (!$authTransactionId) {
             return false;
         }
-        $api = $this->getApi()->setAuthorizationId(
-            $authTransactionId
-        )->setIsCaptureComplete(
-            $payment->getShouldCloseParentTransaction()
-        )->setAmount(
-            $amount
-        )->setCurrencyCode(
-            $payment->getOrder()->getBaseCurrencyCode()
-        )->setInvNum(
-            $payment->getOrder()->getIncrementId()
-        );
+        $api = $this->getApi()
+            ->setAuthorizationId($authTransactionId)
+            ->setIsCaptureComplete($payment->getShouldCloseParentTransaction())
+            ->setAmount($amount);
+
+        $order = $payment->getOrder();
+        $orderIncrementId = $order->getIncrementId();
+        $api->setCurrencyCode($order->getBaseCurrencyCode())
+            ->setInvNum($orderIncrementId)
+            ->setCustref($orderIncrementId)
+            ->setPonum($order->getId());
         // TODO: pass 'NOTE' to API
 
         $api->callDoCapture();
@@ -345,7 +346,7 @@ class Pro
      */
     protected function _isPaymentReviewRequired(\Magento\Payment\Model\InfoInterface $payment)
     {
-        return \Magento\Paypal\Model\Info::isPaymentReviewRequired($payment);
+        return Info::isPaymentReviewRequired($payment);
     }
 
     /**
@@ -362,7 +363,7 @@ class Pro
         // check whether the review is still needed
         $api->callGetTransactionDetails();
         $this->importPaymentInfo($api, $payment);
-        if (!$this->getInfo()->isPaymentReviewRequired($payment)) {
+        if (!Info::isPaymentReviewRequired($payment)) {
             return false;
         }
 

@@ -19,7 +19,6 @@ class Config extends \Magento\Framework\Config\AbstractXml
     const CONSTRAINT_TYPE_ENTITY = 'entity';
 
     const CONSTRAINT_TYPE_PROPERTY = 'property';
-
     /**#@-*/
 
     /**
@@ -34,12 +33,16 @@ class Config extends \Magento\Framework\Config\AbstractXml
 
     /**
      * @param array $configFiles
+     * @param \Magento\Framework\Config\DomFactory $domFactory
      * @param \Magento\Framework\Validator\UniversalFactory $builderFactory
      */
-    public function __construct($configFiles, \Magento\Framework\Validator\UniversalFactory $builderFactory)
-    {
-        parent::__construct($configFiles);
+    public function __construct(
+        $configFiles,
+        \Magento\Framework\Config\DomFactory $domFactory,
+        \Magento\Framework\Validator\UniversalFactory $builderFactory
+    ) {
         $this->_builderFactory = $builderFactory;
+        parent::__construct($configFiles, $domFactory);
     }
 
     /**

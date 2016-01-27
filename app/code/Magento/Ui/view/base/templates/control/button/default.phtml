@@ -13,7 +13,7 @@
  */
 ?>
 <?php echo $block->getBeforeHtml(); ?>
-<button <?php echo $block->getAttributesHtml(), $block->getUiId(); ?>>
-    <span><?php echo $block->getLabel(); ?></span>
+<button <?php /* @escapeNotVerified */ echo $block->getAttributesHtml(), $block->getUiId(); ?>>
+    <span><?php /* @escapeNotVerified */ echo $block->getLabel(); ?></span>
 </button>
 <?php echo $block->getAfterHtml(); ?>

@@ -29,10 +29,7 @@ class ReaderPoolTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Layout\ReaderPool',
             [
                 'readerFactory' => $this->readerFactoryMock,
-                'readers' => [
-                    'move' => 'Magento\Framework\View\Layout\Reader\Move',
-                    'remove' => 'Magento\Framework\View\Layout\Reader\Remove',
-                ]
+                'readers' => ['move' => 'Magento\Framework\View\Layout\Reader\Move']
             ]
         );
     }
@@ -57,25 +54,9 @@ class ReaderPoolTest extends \PHPUnit_Framework_TestCase
         $moveReaderMock->method('getSupportedNodes')
             ->willReturn(['move']);
 
-        /**
-         * @var \Magento\Framework\View\Layout\Reader\Remove|\PHPUnit_Framework_MockObject_MockObject $removeReaderMock
-         */
-        $removeReaderMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Remove')
-            ->disableOriginalConstructor()->getMock();
-        $removeReaderMock->expects($this->exactly(2))->method('interpret')
-            ->with()
-            ->willReturn($this->returnSelf());
-        $removeReaderMock->method('getSupportedNodes')
-            ->willReturn(['remove']);
-
-        $this->readerFactoryMock->expects($this->exactly(2))
+        $this->readerFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValueMap(
-                [
-                    ['Magento\Framework\View\Layout\Reader\Move', [], $moveReaderMock],
-                    ['Magento\Framework\View\Layout\Reader\Remove', [], $removeReaderMock],
-                ]
-            ));
+            ->willReturnMap([['Magento\Framework\View\Layout\Reader\Move', [], $moveReaderMock]]);
 
         $this->pool->interpret($contextMock, $currentElement);
         $this->pool->interpret($contextMock, $currentElement);

@@ -13,12 +13,12 @@ use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that created widget displayed on frontent in Catalog
+ * Check that created widget displayed on frontent in Catalog.
  */
 class AssertWidgetOnFrontendInCatalog extends AbstractConstraint
 {
     /**
-     * Assert that created widget displayed on frontent in Catalog
+     * Assert that created widget displayed on frontent in Catalog.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
@@ -38,15 +38,15 @@ class AssertWidgetOnFrontendInCatalog extends AbstractConstraint
         $adminCache->getMessagesBlock()->waitSuccessMessage();
 
         $cmsIndex->open();
-        if (isset($widget->getLayout()[0]['entities'])) {
-            $categoryName = $widget->getLayout()[0]['entities']->getName();
+        if (isset($widget->getWidgetInstance()[0]['entities'])) {
+            $categoryName = $widget->getWidgetInstance()[0]['entities']->getName();
         } else {
-            $categoryName = $widget->getWidgetOptions()['entities']->getCategoyId()[0];
+            $categoryName = $widget->getParameters()['entities']->getCategoyId()[0];
         }
         if ($widget->getCode() == 'CMS Static Block') {
-            $widgetText = $widget->getWidgetOptions()['entities'][0]->getContent();
+            $widgetText = $widget->getParameters()['entities'][0]->getContent();
         } else {
-            $widgetText = $widget->getWidgetOptions()['anchor_text'];
+            $widgetText = $widget->getParameters()['anchor_text'];
         }
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
         \PHPUnit_Framework_Assert::assertTrue(
@@ -56,12 +56,12 @@ class AssertWidgetOnFrontendInCatalog extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
     public function toString()
     {
-        return "Widget is present on Category page";
+        return "Widget is present on Category page.";
     }
 }

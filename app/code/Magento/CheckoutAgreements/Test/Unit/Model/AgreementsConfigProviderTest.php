@@ -25,10 +25,13 @@ class AgreementsConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $agreementsRepositoryMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $escaperMock;
+
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->agreementsRepositoryMock = $this->getMock(
             '\Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface',
@@ -37,40 +40,88 @@ class AgreementsConfigProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = $objectManager->getObject(
-            'Magento\CheckoutAgreements\Model\AgreementsConfigProvider',
-            [
-                'scopeConfiguration' => $this->scopeConfigMock,
-                'checkoutAgreementsRepository' => $this->agreementsRepositoryMock
-            ]
+        $this->escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
+
+        $this->model = new \Magento\CheckoutAgreements\Model\AgreementsConfigProvider(
+            $this->scopeConfigMock,
+            $this->agreementsRepositoryMock,
+            $this->escaperMock
         );
     }
 
-    /**
-     * @dataProvider getConfigDataProvider
-     * @param bool $isAgreementsEnabled
-     * @param array $agreements
-     * @param array $expectedResult
-     */
-    public function testGetConfig($isAgreementsEnabled, $agreements, $expectedResult)
+    public function testGetConfigIfContentIsHtml()
     {
+        $content = 'content';
+        $checkboxText = 'checkbox_text';
+        $mode = \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO;
+        $agreementId = 100;
+        $expectedResult = [
+            'checkoutAgreements' => [
+                'isEnabled' => 1,
+                'agreements' => [
+                    [
+                        'content' => $content,
+                        'checkboxText' => $checkboxText,
+                        'mode' => $mode,
+                        'agreementId' => $agreementId
+                    ]
+                ]
+            ]
+        ];
+
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
-            ->willReturn($isAgreementsEnabled);
-        $this->agreementsRepositoryMock->expects($this->any())->method('getList')->willReturn($agreements);
+            ->willReturn(true);
+
+        $agreement = $this->getMock('\Magento\CheckoutAgreements\Api\Data\AgreementInterface');
+        $this->agreementsRepositoryMock->expects($this->any())->method('getList')->willReturn([$agreement]);
+
+        $agreement->expects($this->once())->method('getIsHtml')->willReturn(true);
+        $agreement->expects($this->once())->method('getContent')->willReturn($content);
+        $agreement->expects($this->once())->method('getCheckboxText')->willReturn($checkboxText);
+        $agreement->expects($this->once())->method('getMode')->willReturn($mode);
+        $agreement->expects($this->once())->method('getAgreementId')->willReturn($agreementId);
+
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
 
-    /**
-     * @return array
-     */
-    public function getConfigDataProvider()
+    public function testGetConfigIfContentIsNotHtml()
     {
-        return [
-            [true, ['agreement'], ['checkoutAgreementsEnabled' => true]],
-            [true, [], []],
-            [false, [], []]
+        $content = 'content';
+        $escapedContent = 'escaped_content';
+        $checkboxText = 'checkbox_text';
+        $mode = \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO;
+        $agreementId = 100;
+        $expectedResult = [
+            'checkoutAgreements' => [
+                'isEnabled' => 1,
+                'agreements' => [
+                    [
+                        'content' => $escapedContent,
+                        'checkboxText' => $checkboxText,
+                        'mode' => $mode,
+                        'agreementId' => $agreementId
+                    ]
+                ]
+            ]
         ];
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
+
+        $agreement = $this->getMock('\Magento\CheckoutAgreements\Api\Data\AgreementInterface');
+        $this->agreementsRepositoryMock->expects($this->any())->method('getList')->willReturn([$agreement]);
+        $this->escaperMock->expects($this->once())->method('escapeHtml')->with($content)->willReturn($escapedContent);
+
+        $agreement->expects($this->once())->method('getIsHtml')->willReturn(false);
+        $agreement->expects($this->once())->method('getContent')->willReturn($content);
+        $agreement->expects($this->once())->method('getCheckboxText')->willReturn($checkboxText);
+        $agreement->expects($this->once())->method('getMode')->willReturn($mode);
+        $agreement->expects($this->once())->method('getAgreementId')->willReturn($agreementId);
+
+        $this->assertEquals($expectedResult, $this->model->getConfig());
     }
 }

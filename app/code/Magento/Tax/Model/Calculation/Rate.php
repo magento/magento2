@@ -16,8 +16,8 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 /**
  * Tax Rate Model
  *
- * @method \Magento\Tax\Model\Resource\Calculation\Rate _getResource()
- * @method \Magento\Tax\Model\Resource\Calculation\Rate getResource()
+ * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate _getResource()
+ * @method \Magento\Tax\Model\ResourceModel\Calculation\Rate getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateInterface
@@ -72,7 +72,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param Rate\TitleFactory $taxTitleFactory
      * @param Region $directoryRegion
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -85,7 +85,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory,
         Region $directoryRegion,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -110,7 +110,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\Resource\Calculation\Rate');
+        $this->_init('Magento\Tax\Model\ResourceModel\Calculation\Rate');
     }
 
     /**

@@ -31,9 +31,9 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
     {
         $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\Resource\Db\AbstractDb',
+            '\Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [$contextMock],
             '',
             true,
@@ -80,7 +80,13 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             [
                 'Magento\ImportExport\Model\Import',
-                ['data' => ['entity' => 'catalog_product', 'behavior' => 'append']],
+                [
+                    'data' => [
+                        'entity' => 'catalog_product',
+                        'behavior' => 'append',
+                        'validation_strategy' => 'validation-stop-on-errors'
+                    ]
+                ],
                 $importMock
             ],
             ['Magento\Store\Model\StoreManager', [], $storeManagerMock]

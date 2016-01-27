@@ -6,17 +6,63 @@
 
 namespace Magento\Framework\Composer;
 
-use Composer\Factory as ComposerFactory;
 use Composer\Package\Link;
-use Composer\Package\PackageInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
+use Composer\Package\CompletePackageInterface;
 
 /**
  * Class ComposerInformation uses Composer to determine dependency information.
  */
 class ComposerInformation
 {
+    /**
+     * Magento2 theme type
+     */
+    const THEME_PACKAGE_TYPE = 'magento2-theme';
+
+    /**
+     * Magento2 module type
+     */
+    const MODULE_PACKAGE_TYPE = 'magento2-module';
+
+    /**
+     * Magento2 language type
+     */
+    const LANGUAGE_PACKAGE_TYPE = 'magento2-language';
+
+    /**
+     * Magento2 metapackage type
+     */
+    const METAPACKAGE_PACKAGE_TYPE = 'metapackage';
+
+    /**
+     * Magento2 library type
+     */
+    const LIBRARY_PACKAGE_TYPE = 'magento2-library';
+
+    /**
+     * Magento2 component type
+     */
+    const COMPONENT_PACKAGE_TYPE = 'magento2-component';
+
+    /**#@+
+     * Composer command
+     */
+    const COMPOSER_SHOW = 'show';
+    /**#@-*/
+
+    /**#@+
+     * Composer command params and options
+     */
+    const PARAM_COMMAND = 'command';
+    const PARAM_PACKAGE = 'package';
+    const PARAM_AVAILABLE = '--available';
+    /**#@-*/
+
+    /**
+     * @var \Magento\Composer\MagentoComposerApplication
+     */
+    private $application;
+
     /**
      * @var \Composer\Composer
      */
@@ -27,32 +73,27 @@ class ComposerInformation
      */
     private $locker;
 
+    /** @var array */
+    private static $packageTypes = [
+        self::THEME_PACKAGE_TYPE,
+        self::LANGUAGE_PACKAGE_TYPE,
+        self::MODULE_PACKAGE_TYPE,
+        self::LIBRARY_PACKAGE_TYPE,
+        self::COMPONENT_PACKAGE_TYPE,
+        self::METAPACKAGE_PACKAGE_TYPE
+    ];
+
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
-     * @param BufferIoFactory $bufferIoFactory
+     * @param MagentoComposerApplicationFactory $applicationFactory
      * @throws \Exception
      */
     public function __construct(
-        Filesystem $filesystem,
-        BufferIoFactory $bufferIoFactory
+        MagentoComposerApplicationFactory $applicationFactory
     ) {
-        // composer.json is in same directory as vendor
-        $vendorPath = $filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath('vendor_path.php');
-        $vendorDir = require "{$vendorPath}";
-        $composerJson = $filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath()
-            . "/{$vendorDir}/../composer.json";
-
-        $composerJsonRealPath = realpath($composerJson);
-        if ($composerJsonRealPath === false) {
-            throw new \Exception('Composer file not found: ' . $composerJson);
-        }
-
-        putenv('COMPOSER_HOME=' . $filesystem->getDirectoryRead(DirectoryList::COMPOSER_HOME)->getAbsolutePath());
-
-        // Create Composer
-        $this->composer = ComposerFactory::create($bufferIoFactory->create(), $composerJson);
+        $this->application = $applicationFactory->create();
+        $this->composer = $this->application->createComposer();
         $this->locker = $this->composer->getLocker();
     }
 
@@ -66,12 +107,12 @@ class ComposerInformation
     {
         if ($this->isMagentoRoot()) {
             $allPlatformReqs = $this->locker->getPlatformRequirements(true);
-            $requiredPhpVersion =  $allPlatformReqs['php']->getPrettyConstraint();
+            $requiredPhpVersion = $allPlatformReqs['php']->getPrettyConstraint();
         } else {
             $packages = $this->locker->getLockedRepository()->getPackages();
-            /** @var PackageInterface $package */
+            /** @var CompletePackageInterface $package */
             foreach ($packages as $package) {
-                if ($package instanceof PackageInterface) {
+                if ($package instanceof CompletePackageInterface) {
                     $packageName = $package->getPrettyName();
                     if ($packageName === 'magento/product-community-edition') {
                         $phpRequirementLink = $package->getRequires()['php'];
@@ -103,7 +144,7 @@ class ComposerInformation
         $allPlatformReqs = array_keys($this->locker->getPlatformRequirements(true));
 
         if (!$this->isMagentoRoot()) {
-            /** @var \Composer\Package\CompletePackage $package */
+            /** @var CompletePackageInterface $package */
             foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
                 $requires = array_merge($requires, array_keys($package->getDevRequires()));
@@ -119,6 +160,24 @@ class ComposerInformation
     }
 
     /**
+     * Retrieve list of suggested extensions
+     *
+     * Collect suggests from composer.lock file and modules composer.json files
+     *
+     * @return array
+     */
+    public function getSuggestedPackages()
+    {
+        $suggests = [];
+        /** @var \Composer\Package\CompletePackage $package */
+        foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+            $suggests += $package->getSuggests();
+        }
+
+        return array_unique($suggests);
+    }
+
+    /**
      * Collect required packages from root composer.lock file
      *
      * @return array
@@ -126,7 +185,7 @@ class ComposerInformation
     public function getRootRequiredPackages()
     {
         $packages = [];
-        /** @var PackageInterface $package */
+        /** @var CompletePackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             $packages[] = $package->getName();
         }
@@ -141,11 +200,47 @@ class ComposerInformation
     public function getRootRequiredPackageTypesByName()
     {
         $packages = [];
-        /** @var PackageInterface $package */
+        /** @var CompletePackageInterface $package */
         foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
             $packages[$package->getName()] = $package->getType();
         }
         return $packages;
+    }
+
+    /**
+     * Collect all installed Magento packages from composer.lock
+     *
+     * @return array
+     */
+    public function getInstalledMagentoPackages()
+    {
+        $packages = [];
+        /** @var CompletePackageInterface $package */
+        foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+            if ((in_array($package->getType(), self::$packageTypes))
+                && (!$this->isSystemPackage($package->getPrettyName()))) {
+                $packages[$package->getName()] = [
+                    'name' => $package->getName(),
+                    'type' => $package->getType(),
+                    'version' => $package->getPrettyVersion()
+                ];
+            }
+        }
+        return $packages;
+    }
+
+    /**
+     * Checks if the passed packaged is system package
+     *
+     * @param string $packageName
+     * @return bool
+     */
+    public function isSystemPackage($packageName = '')
+    {
+        if (preg_match('/magento\/product-*/', $packageName) == 1) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -157,6 +252,38 @@ class ComposerInformation
     {
         $rootPackage = $this->composer->getPackage();
 
-        return preg_match('/magento\/magento2.e/', $rootPackage->getName());
+        return preg_match('/magento\/magento2...?/', $rootPackage->getName());
+    }
+
+    /**
+     * Check if a package is inside the root composer or not
+     *
+     * @param string $packageName
+     * @return bool
+     */
+    public function isPackageInComposerJson($packageName)
+    {
+        return (in_array($packageName, array_keys($this->composer->getPackage()->getRequires()))
+            || in_array($packageName, array_keys($this->composer->getPackage()->getDevRequires()))
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getPackagesTypes()
+    {
+        return self::$packageTypes;
+    }
+
+    /**
+     * @param string $name
+     * @param string $version
+     * @return array
+     */
+    public function getPackageRequirements($name, $version)
+    {
+        $package = $this->composer->getRepositoryManager()->findPackage($name, $version);
+        return $package->getRequires();
     }
 }

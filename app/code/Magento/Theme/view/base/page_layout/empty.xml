@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_layout.xsd">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
     <container name="root">
         <container name="after.body.start" as="after.body.start" before="-" label="Page Top"/>
         <container name="page.wrapper" as="page_wrapper" htmlTag="div" htmlClass="page-wrapper">
@@ -16,7 +16,7 @@
                     <container name="main" label="Main Content Container" htmlTag="div" htmlClass="column main"/>
                 </container>
             </container>
-            <container name="page.bottom" as="page_bottom" label="Before Page Footer Container" after="main.content" htmlTag="div" htmlClass="page-bottom"/>
+            <container name="page.bottom.container" as="page_bottom_container" label="Before Page Footer Container" after="main.content" htmlTag="div" htmlClass="page-bottom"/>
             <container name="before.body.end" as="before_body_end" after="-" label="Page Bottom"/>
         </container>
     </container>

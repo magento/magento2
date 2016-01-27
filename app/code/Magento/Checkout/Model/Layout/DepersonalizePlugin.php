@@ -25,6 +25,7 @@ class DepersonalizePlugin
     /**
      * @param DepersonalizeChecker $depersonalizeChecker
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @codeCoverageIgnore
      */
     public function __construct(
         DepersonalizeChecker $depersonalizeChecker,

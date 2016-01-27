@@ -11,6 +11,7 @@ use Magento\Framework\Exception\AuthenticationException;
  * Test class for \Magento\Backend\Model\Auth.
  *
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
 class AuthTest extends \PHPUnit_Framework_TestCase
 {

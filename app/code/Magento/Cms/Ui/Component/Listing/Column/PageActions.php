@@ -59,9 +59,9 @@ class PageActions extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
@@ -75,8 +75,8 @@ class PageActions extends Column
                         'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_DELETE, ['page_id' => $item['page_id']]),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete "${ $.$data.title }"'),
-                            'message' => __('Are you sure you wan\'t to delete a "${ $.$data.title }" record?')
+                            'title' => __('Delete ${ $.$data.title }'),
+                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.title } record?')
                         ]
                     ];
                 }
@@ -87,10 +87,12 @@ class PageActions extends Column
                             isset($item['_first_store_id']) ? $item['_first_store_id'] : null,
                             isset($item['store_code']) ? $item['store_code'] : null
                         ),
-                        'label' => __('Preview')
+                        'label' => __('View')
                     ];
                 }
             }
         }
+
+        return $dataSource;
     }
 }

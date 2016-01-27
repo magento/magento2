@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Model\Coupon;
 /**
  * SalesRule Mass Coupon Generator
  *
- * @method \Magento\SalesRule\Model\Resource\Coupon getResource()
+ * @method \Magento\SalesRule\Model\ResourceModel\Coupon getResource()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -65,7 +65,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -76,7 +76,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -94,7 +94,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\SalesRule\Model\Resource\Coupon');
+        $this->_init('Magento\SalesRule\Model\ResourceModel\Coupon');
     }
 
     /**

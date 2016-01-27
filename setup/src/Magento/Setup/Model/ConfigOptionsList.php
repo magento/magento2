@@ -18,20 +18,26 @@ use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Deployment configuration options needed for Setup application
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigOptionsList implements ConfigOptionsListInterface
 {
     /**
      * Generate config data for individual segments
      *
-     * @var ConfigGenerator
+     * @var  ConfigGenerator
      */
     private $configGenerator;
 
-    /**
-     * @var DbValidator
-     */
+    /** @var  DbValidator */
     private $dbValidator;
+
+    /** @var  array */
+    private $validSaveHandlers = [
+        ConfigOptionsListConstants::SESSION_SAVE_FILES,
+        ConfigOptionsListConstants::SESSION_SAVE_DB,
+    ];
 
     /**
      * Constructor
@@ -47,6 +53,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getOptions()
     {
@@ -60,9 +67,9 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new SelectConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                [ConfigOptionsListConstants::SESSION_SAVE_FILES, ConfigOptionsListConstants::SESSION_SAVE_DB],
+                $this->validSaveHandlers,
                 ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE,
-                'Session save location',
+                'Session save handler',
                 ConfigOptionsListConstants::SESSION_SAVE_FILES
             ),
             new SelectConfigOption(
@@ -141,6 +148,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'If specified, then db connection validation will be skipped',
                 '-s'
             ),
+            new TextConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS,
+                'http Cache hosts'
+            ),
         ];
     }
 
@@ -160,6 +173,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $configData[] = $this->configGenerator->createDbConfig($data);
         $configData[] = $this->configGenerator->createResourceConfig();
         $configData[] = $this->configGenerator->createXFrameConfig();
+        $configData[] = $this->configGenerator->createModeConfig();
+        $configData[] = $this->configGenerator->createCacheHostsConfig($data);
         return $configData;
     }
 
@@ -170,35 +185,22 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         $errors = [];
 
-        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])) {
-            try {
-                $this->dbValidator->checkDatabaseTablePrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX]);
-            } catch (\InvalidArgumentException $exception) {
-                $errors[] = $exception->getMessage();
-            }
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
+            $errors = array_merge(
+                $errors,
+                $this->validateHttpCacheHosts($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
+            );
         }
 
-        if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION] &&
-            (
-                $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] !== null
-                || $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST] !== null
-                || $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER] !== null
-                || $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] !== null
-            )
-        ) {
-            try {
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])) {
+            $errors = array_merge(
+                $errors,
+                $this->validateDbPrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])
+            );
+        }
 
-                $options = $this->getDbSettings($options, $deploymentConfig);
-
-                $this->dbValidator->checkDatabaseConnection(
-                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME],
-                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST],
-                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER],
-                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD]
-                );
-            } catch (\Exception $exception) {
-                $errors[] = $exception->getMessage();
-            }
+        if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]) {
+            $errors = array_merge($errors, $this->validateDbSettings($options, $deploymentConfig));
         }
 
         $errors = array_merge(
@@ -264,15 +266,10 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private function validateSessionSave(array $options)
     {
         $errors = [];
-
-        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])) {
-            if ($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]
-                != ConfigOptionsListConstants::SESSION_SAVE_FILES
-                && $options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]
-                != ConfigOptionsListConstants::SESSION_SAVE_DB
-            ) {
-                $errors[] = 'Invalid session save location.';
-            }
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])
+            && !in_array($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE], $this->validSaveHandlers)
+        ) {
+            $errors[] = "Invalid session handler '{$options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]}'";
         }
 
         return $errors;
@@ -290,9 +287,75 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])
             && !$options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]) {
-            $errors[] = 'Invalid encryption key.';
+            $errors[] = 'Invalid encryption key';
         }
 
+        return $errors;
+    }
+
+    /**
+     * Validate http cache hosts
+     *
+     * @param string $option
+     * @return string[]
+     */
+    private function validateHttpCacheHosts($option)
+    {
+        $errors = [];
+        if (!preg_match('/^[\-\w:,.]+$/', $option)
+        ) {
+            $errors[] = "Invalid http cache hosts '{$option}'";
+        }
+        return $errors;
+    }
+
+    /**
+     * Validate Db table prefix
+     *
+     * @param string $option
+     * @return string[]
+     */
+    private function validateDbPrefix($option)
+    {
+        $errors = [];
+        try {
+            $this->dbValidator->checkDatabaseTablePrefix($option);
+        } catch (\InvalidArgumentException $exception) {
+            $errors[] = $exception->getMessage();
+        }
+        return $errors;
+    }
+
+    /**
+     * Validate Db settings
+     *
+     * @param array $options
+     * @param DeploymentConfig $deploymentConfig
+     * @return string[]
+     */
+    private function validateDbSettings(array $options, DeploymentConfig $deploymentConfig)
+    {
+        $errors = [];
+
+        if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] !== null
+            || $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST] !== null
+            || $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER] !== null
+            || $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] !== null
+        ) {
+            try {
+
+                $options = $this->getDbSettings($options, $deploymentConfig);
+
+                $this->dbValidator->checkDatabaseConnection(
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME],
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST],
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER],
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD]
+                );
+            } catch (\Exception $exception) {
+                $errors[] = $exception->getMessage();
+            }
+        }
         return $errors;
     }
 }

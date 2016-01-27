@@ -34,7 +34,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false);
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false, false);
         $this->_groupFactoryMock = $this->getMock(
             'Magento\Authorization\Model\Acl\Role\GroupFactory',
             ['create'],

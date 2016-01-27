@@ -8,6 +8,7 @@ namespace Magento\Test\Legacy;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Tests to find obsolete install/upgrade schema/data scripts
@@ -16,6 +17,12 @@ class InstallUpgradeTest extends \PHPUnit_Framework_TestCase
 {
     public function testForOldInstallUpgradeScripts()
     {
+        $scriptPattern = [];
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $scriptPattern[] = $moduleDir . '/sql';
+            $scriptPattern[] = $moduleDir . '/data';
+        }
         $invoker = new AggregateInvoker($this);
         $invoker(
             /**
@@ -52,7 +59,7 @@ class InstallUpgradeTest extends \PHPUnit_Framework_TestCase
                 );
             },
             $this->convertArray(
-                Files::init()->getFiles([BP . '/app/code/*/*/sql', BP . '/app/code/*/*/data'], '*.php')
+                Files::init()->getFiles($scriptPattern, '*.php')
             )
         );
     }

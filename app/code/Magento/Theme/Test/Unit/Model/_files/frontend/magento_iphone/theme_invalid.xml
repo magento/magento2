@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/Config/etc/theme.xsd">
+<design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/theme.xsd">
     <package code="default">
         <title>Default</title>
         <theme version="2.0.0.1" code="iphone">

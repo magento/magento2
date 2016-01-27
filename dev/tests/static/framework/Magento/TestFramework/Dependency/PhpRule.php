@@ -7,8 +7,25 @@
  */
 namespace Magento\TestFramework\Dependency;
 
-class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
+use Magento\Framework\App\Utility\Files;
+use Magento\TestFramework\Dependency\RuleInterface;
+
+class PhpRule implements RuleInterface
 {
+    /**
+     * List of filepaths for DI files
+     *
+     * @var array
+     */
+    private $diFiles;
+
+    /**
+     * Map from plugin classes to the subjects they modify
+     *
+     * @var array
+     */
+    private $pluginMap;
+
     /**
      * List of routers
      *
@@ -47,12 +64,14 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
      *
      * @param array $mapRouters
      * @param array $mapLayoutBlocks
+     * @param array $pluginMap
      */
-    public function __construct(array $mapRouters, array $mapLayoutBlocks)
+    public function __construct(array $mapRouters, array $mapLayoutBlocks, array $pluginMap = [])
     {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
         $this->_namespaces = implode('|', \Magento\Framework\App\Utility\Files::init()->getNamespaces());
+        $this->pluginMap = $pluginMap ?: null;
     }
 
     /**
@@ -72,7 +91,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
 
         $pattern = '~\b(?<class>(?<module>(' . implode(
             '_|',
-            \Magento\Framework\App\Utility\Files::init()->getNamespaces()
+            Files::init()->getNamespaces()
         ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
         $dependenciesInfo = [];
@@ -83,10 +102,16 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
                 if ($currentModule == $referenceModule) {
                     continue;
                 }
+                $dependencyClass = trim($matches['class'][$i]);
+                $currentClass = $this->getClassFromFilepath($file, $currentModule);
+                $dependencyType = $this->isPluginDependency($currentClass, $dependencyClass)
+                    ? RuleInterface::TYPE_SOFT
+                    : RuleInterface::TYPE_HARD;
+
                 $dependenciesInfo[] = [
                     'module' => $referenceModule,
-                    'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                    'source' => trim($matches['class'][$i]),
+                    'type' => $dependencyType,
+                    'source' => $dependencyClass,
                 ];
             }
         }
@@ -101,6 +126,84 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
 
         return $dependenciesInfo;
     }
+
+    /**
+     * Get class name from filename based on class/file naming conventions
+     *
+     * @param string $filepath
+     * @param string $module
+     * @return string
+     */
+    private function getClassFromFilepath($filepath, $module)
+    {
+        $class = strstr($filepath, str_replace(['_', '\\', '/'], DIRECTORY_SEPARATOR, $module));
+        $class = str_replace(DIRECTORY_SEPARATOR, '\\', strstr($class, '.php', true));
+        return $class;
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    private function loadDiFiles()
+    {
+        if (!$this->diFiles) {
+            $this->diFiles = Files::init()->getDiConfigs();
+        }
+        return $this->diFiles;
+    }
+
+    /**
+     * Generate an array of plugin info
+     *
+     * @return array
+     */
+    private function loadPluginMap()
+    {
+        if (!$this->pluginMap) {
+            foreach ($this->loadDiFiles() as $filepath) {
+                $dom = new \DOMDocument();
+                $dom->loadXML(file_get_contents($filepath));
+                $typeNodes = $dom->getElementsByTagName('type');
+                /** @var \DOMElement $type */
+                foreach ($typeNodes as $type) {
+                    /** @var \DOMElement $plugin */
+                    foreach ($type->getElementsByTagName('plugin') as $plugin) {
+                        $subject = $type->getAttribute('name');
+                        $pluginType = $plugin->getAttribute('type');
+                        $this->pluginMap[$pluginType] = $subject;
+                    }
+                }
+            }
+        }
+        return $this->pluginMap;
+    }
+
+    /**
+     * Determine whether a the dependency relation is because of a plugin
+     *
+     * True IFF the dependent is a plugin for some class in the same module as the dependency.
+     *
+     * @param string $dependent
+     * @param string $dependency
+     * @return bool
+     */
+    private function isPluginDependency($dependent, $dependency)
+    {
+        $pluginMap = $this->loadPluginMap();
+        $subject = isset($pluginMap[$dependent])
+            ? $pluginMap[$dependent]
+            : null;
+        if ($subject === $dependency) {
+            return true;
+        } else if ($subject) {
+            $subjectModule = substr($subject, 0, strpos($subject, '\\', 9)); // (strlen('Magento\\') + 1) === 9
+            return strpos($dependency, $subjectModule) === 0;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * Check get URL method
@@ -128,7 +231,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
                     foreach ($modules as $module) {
                         $dependencies[] = [
                             'module' => $module,
-                            'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                            'type' => RuleInterface::TYPE_HARD,
                             'source' => $item['source'],
                         ];
                     }
@@ -166,7 +269,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
             $module = isset($check['module']) ? $check['module'] : null;
             if ($module) {
                 $result[$module] = [
-                    'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                    'type' => RuleInterface::TYPE_HARD,
                     'source' => $match['source'],
                 ];
             }

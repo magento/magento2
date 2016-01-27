@@ -11,15 +11,6 @@ class LocaleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Target locale is system default locale.
-     */
-    public function testLocaleIsSystemDefaultLocaleException()
-    {
-        new Locale('en_US');
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Target locale must match the following format: "aa_AA".
      */
     public function testWrongLocaleFormatException()

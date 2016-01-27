@@ -77,5 +77,6 @@ class DeleteCmsPageUrlRewriteEntityTest extends Injectable
         $this->urlRewriteIndex->open();
         $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen(['request_path' => $urlRewrite->getRequestPath()]);
         $this->urlRewriteEdit->getPageMainActions()->delete();
+        $this->urlRewriteEdit->getModalBlock()->acceptAlert();
     }
 }

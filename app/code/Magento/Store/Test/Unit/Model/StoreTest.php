@@ -71,9 +71,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad($key, $field)
     {
-        /** @var \Magento\Store\Model\Resource\Store $resource */
+        /** @var \Magento\Store\Model\ResourceModel\Store $resource */
         $resource = $this->getMock(
-            '\Magento\Store\Model\Resource\Store',
+            '\Magento\Store\Model\ResourceModel\Store',
             ['load', 'getIdFieldName', '__wakeup'],
             [],
             '',

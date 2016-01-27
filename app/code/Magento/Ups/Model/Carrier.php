@@ -187,28 +187,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     }
 
     /**
-     * Get RateRequest object
-     * @return RateRequest
-     */
-    public function getRequest()
-    {
-        return $this->_request;
-    }
-
-    /**
-     * Extends the behavior of the parent function
-     * @return bool
-     */
-    public function canCollectRates()
-    {
-        $request = $this->getRequest();
-
-        return
-            parent::canCollectRates()
-            && (int)$request->getData('package_weight') < (int)$this->getConfigData('min_package_weight');
-    }
-
-    /**
      * Collect and get rates/errors
      *
      * @param RateRequest $request

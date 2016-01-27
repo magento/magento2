@@ -5,13 +5,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="sales_transactions.grid.container">
             <block class="Magento\Backend\Block\Widget\Grid" name="sales.transactions.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">sales_transactions_grid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Sales\Model\Resource\Transaction\Grid\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Sales\Model\ResourceModel\Transaction\Grid\Collection</argument>
                     <argument name="use_ajax" xsi:type="string">true</argument>
                     <argument name="default_sort" xsi:type="string">created_at</argument>
                     <argument name="default_dir" xsi:type="string">DESC</argument>
@@ -76,8 +76,8 @@
                             <argument name="header" xsi:type="string" translate="true">Payment Method</argument>
                             <argument name="type" xsi:type="string">options</argument>
                             <argument name="index" xsi:type="string">method</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Payment\Model\Resource\Grid\TypeList"/>
-                            <argument name="option_groups" xsi:type="options" model="Magento\Payment\Model\Resource\Grid\GroupList"/>
+                            <argument name="options" xsi:type="options" model="Magento\Payment\Model\ResourceModel\Grid\TypeList"/>
+                            <argument name="option_groups" xsi:type="options" model="Magento\Payment\Model\ResourceModel\Grid\GroupList"/>
                             <argument name="header_css_class" xsi:type="string">col-method</argument>
                             <argument name="column_css_class" xsi:type="string">col-method</argument>
                         </arguments>
@@ -88,7 +88,7 @@
                             <argument name="type" xsi:type="string">options</argument>
                             <argument name="index" xsi:type="string">txn_type</argument>
                             <argument name="id" xsi:type="string">txn_type</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Sales\Model\Resource\Transaction\Grid\TypeList"/>
+                            <argument name="options" xsi:type="options" model="Magento\Sales\Model\ResourceModel\Transaction\Grid\TypeList"/>
                             <argument name="header_css_class" xsi:type="string">col-transaction-type</argument>
                             <argument name="column_css_class" xsi:type="string">col-transaction-type</argument>
                         </arguments>

@@ -16,7 +16,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $collectionFactoryMock;
 
@@ -28,7 +28,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory', ['create'], [], '', false);
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory', ['create'], [], '', false);
 
         $this->storeManagerMock = $this->getMock(
             '\Magento\Store\Model\StoreManagerInterface', [], [], '', false
@@ -53,7 +53,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
 
         $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\Collection', [], [], '', false
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection', [], [], '', false
         );
         $this->collectionFactoryMock
             ->expects($this->once())
@@ -63,7 +63,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
         $collectionMock
             ->expects($this->once())
             ->method('setItemObjectClass')
-            ->with('Magento\Catalog\Model\Resource\Eav\Attribute')
+            ->with('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
             ->will($this->returnSelf());
         $collectionMock
             ->expects($this->once())

@@ -20,7 +20,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleableItem;
 

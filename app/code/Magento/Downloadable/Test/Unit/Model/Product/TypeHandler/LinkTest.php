@@ -12,9 +12,18 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class LinkTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPoolMock;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataMock;
+
+    /**
+     * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit_Framework_MockObject_MockObject
      */
     private $linkResource;
 
@@ -35,15 +44,22 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->linkResource = $this->getMockBuilder('\Magento\Downloadable\Model\Resource\Link')
+        $this->linkResource = $this->getMockBuilder('\Magento\Downloadable\Model\ResourceModel\Link')
             ->disableOriginalConstructor()
             ->setMethods(['deleteItems'])
             ->getMock();
+        $this->metadataPoolMock = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $this->metadataMock->expects($this->any())->method('getLinkField')->willReturn('id');
+        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $this->target = $objectManagerHelper->getObject(
             'Magento\Downloadable\Model\Product\TypeHandler\Link',
             [
                 'linkFactory' => $this->linkFactory,
                 'linkResource' => $this->linkResource,
+                'metadataPool' => $this->metadataPoolMock
             ]
         );
     }
@@ -228,7 +244,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $link->expects($this->once())
             ->method('setProductId')
-            ->with($product->getId())
+            ->with($product->getData('id'))
             ->will($this->returnSelf());
         $link->expects($this->once())
             ->method('setStoreId')
@@ -295,6 +311,10 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())
             ->method('getLinksPurchasedSeparately')
             ->will($this->returnValue(true));
+        $product->expects($this->any())
+            ->method('getData')
+            ->with('id')
+            ->willReturn($id);
         return $product;
     }
 }

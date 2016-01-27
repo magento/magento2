@@ -33,13 +33,15 @@
     .checkout-index-index {
         .modal-popup {
             .form-shipping-address {
-                .css(max-width, @checkout-shipping-address__max-width);
+                .lib-css(max-width, @checkout-shipping-address__max-width);
             }
+
             .modal-footer {
                 .action-save-address {
                     float: right;
                     margin: 0 0 0 @indent__s;
                 }
+
                 .action-hide-popup {
                     &:extend(.abs-action-button-as-link all);
                 }
@@ -52,8 +54,8 @@
     .checkout-index-index {
         .modal-popup {
             .modal-inner-wrap {
-                .css(margin-left, -(@checkout-modal-popup__width/2));
-                .css(width, @checkout-modal-popup__width);
+                .lib-css(margin-left, -(@checkout-modal-popup__width/2));
+                .lib-css(width, @checkout-modal-popup__width);
                 left: 50%;
             }
         }

@@ -32,7 +32,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 CustomerInterface::DEFAULT_BILLING,
                 CustomerInterface::DEFAULT_SHIPPING,
                 'confirmation',
-                'sendemail',
+                'sendemail_store_id',
             ];
 
             $customerData = $this->_extractData(
@@ -227,6 +227,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     ['customer' => $customer, 'request' => $request]
                 );
                 $customer->setAddresses($addresses);
+                $customer->setStoreId($customerData['sendemail_store_id']);
 
                 // Save customer
                 if ($isExistingCustomer) {

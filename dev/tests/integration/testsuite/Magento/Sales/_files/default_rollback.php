@@ -12,13 +12,13 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $order \Magento\Sales\Model\Order */
-$orderCollection = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Resource\Order\Collection');
+$orderCollection = Bootstrap::getObjectManager()->create('Magento\Sales\Model\ResourceModel\Order\Collection');
 foreach ($orderCollection as $order) {
     $order->delete();
 }
 
 /** @var $product \Magento\Catalog\Model\Product */
-$productCollection = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Resource\Product\Collection');
+$productCollection = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\ResourceModel\Product\Collection');
 foreach ($productCollection as $product) {
     $product->delete();
 }

@@ -6,6 +6,9 @@
  */
 namespace Magento\GroupedProduct\Api;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductLinkManagementV1';

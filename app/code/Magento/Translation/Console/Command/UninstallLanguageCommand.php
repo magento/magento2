@@ -137,7 +137,7 @@ class UninstallLanguageCommand extends Command
                 $output->writeln('<info>You are removing language package without a code backup.</info>');
             }
 
-            $this->remove->remove($packagesToRemove);
+            $output->writeln($this->remove->remove($packagesToRemove));
             $this->cache->clean();
         } else {
             $output->writeln('<info>Nothing is removed.</info>');

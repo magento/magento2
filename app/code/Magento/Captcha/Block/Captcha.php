@@ -32,6 +32,7 @@ class Captcha extends \Magento\Framework\View\Element\Template
     ) {
         $this->_captchaData = $captchaData;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

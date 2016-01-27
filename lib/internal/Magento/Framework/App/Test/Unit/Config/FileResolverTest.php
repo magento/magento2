@@ -76,13 +76,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetPrimary($filename, $fileList)
     {
         $scope = 'primary';
-        $directory = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Read',
-            ['search', 'getRelativePath'],
-            [],
-            '',
-            false
-        );
+        $directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         $directory->expects(
             $this->once()
         )->method(
@@ -92,6 +86,10 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($fileList)
         );
+        $i = 1;
+        foreach ($fileList as $file) {
+            $directory->expects($this->at($i++))->method('getAbsolutePath')->willReturn($file);
+        }
         $this->filesystem->expects(
             $this->once()
         )->method(
@@ -106,7 +104,6 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            $directory,
             $fileList
         )->will(
             $this->returnValue(true)

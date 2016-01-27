@@ -5,9 +5,10 @@
 define([
     'Magento_Paypal/js/rules/payflow/bml/disable'
 ], function (disable) {
-    "use strict";
+    'use strict';
+
     return function ($target, $owner, data) {
-        if ($target.find(data.enableExpress).val() == "0") {
+        if ($target.find(data.enableExpress).val() === '0') {
             disable($target, $owner, data);
         }
     };

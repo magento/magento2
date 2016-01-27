@@ -18,29 +18,30 @@
     <div class="control">
         <div class="nested options-list">
             <?php if ($block->showSingle()): ?>
-                <?php echo $block->getSelectionQtyTitlePrice($_selections[0]) ?>
+                <?php /* @escapeNotVerified */ echo $block->getSelectionQtyTitlePrice($_selections[0]) ?>
                 <input type="hidden"
-                       class="bundle-option-<?php echo $_option->getId() ?>  product bundle option"
-                       name="bundle_option[<?php echo $_option->getId() ?>]"
-                       value="<?php echo $_selections[0]->getSelectionId() ?>"/>
+                       class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>  product bundle option"
+                       name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                       value="<?php /* @escapeNotVerified */ echo $_selections[0]->getSelectionId() ?>"/>
             <?php else:?>
                 <?php foreach($_selections as $_selection): ?>
                     <div class="field choice">
-                        <input class="bundle-option-<?php echo $_option->getId() ?> checkbox product bundle option change-container-classname"
-                               id="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>"
+                        <input class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> checkbox product bundle option change-container-classname"
+                               id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
                                type="checkbox"
                                <?php if ($_option->getRequired()) echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $_option->getId() . ']&quot;]:checked\'}"'?>
-                               name="bundle_option[<?php echo $_option->getId() ?>][<?php echo $_selection->getId() ?>]"
+                               name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][<?php /* @escapeNotVerified */ echo $_selection->getId() ?>]"
+                               data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][<?php /* @escapeNotVerified */ echo $_selection->getId() ?>]"
                                <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>
                                <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>
-                               value="<?php echo $_selection->getSelectionId() ?>"/>
+                               value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"/>
                         <label class="label"
-                               for="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>">
-                            <span><?php echo $block->getSelectionQtyTitlePrice($_selection) ?></span>
+                               for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>">
+                            <span><?php /* @escapeNotVerified */ echo $block->getSelectionQtyTitlePrice($_selection) ?></span>
                         </label>
                     </div>
                 <?php endforeach; ?>
-                <div id="bundle-option-<?php echo $_option->getId() ?>-container"></div>
+                <div id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-container"></div>
             <?php endif; ?>
         </div>
     </div>

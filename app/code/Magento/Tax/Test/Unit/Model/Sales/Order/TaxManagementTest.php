@@ -71,14 +71,14 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
         $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
         $this->taxItemResourceMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Tax\Item',
+            'Magento\Sales\Model\ResourceModel\Order\Tax\Item',
             [],
             [],
             '',
             false
         );
         $this->taxItemFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Tax\ItemFactory',
+            'Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory',
             ['create'],
             [],
             '',

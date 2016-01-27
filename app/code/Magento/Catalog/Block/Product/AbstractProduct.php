@@ -229,11 +229,12 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * to get correct values in different products lists.
      * E.g. crosssells, upsells, new products, recently viewed
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
-    protected function _addProductAttributesAndPrices(\Magento\Catalog\Model\Resource\Product\Collection $collection)
-    {
+    protected function _addProductAttributesAndPrices(
+        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+    ) {
         return $collection
             ->addMinimalPrice()
             ->addFinalPrice()

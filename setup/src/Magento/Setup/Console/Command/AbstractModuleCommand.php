@@ -84,15 +84,14 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
         /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
         $cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
         $cleanupFiles->clearCodeGeneratedClasses();
-        $output->writeln('<info>Generated classes cleared successfully.</info>');
+        $output->writeln('<info>Generated classes cleared successfully. Please re-run Magento compile command</info>');
         if ($input->getOption(self::INPUT_KEY_CLEAR_STATIC_CONTENT)) {
             $cleanupFiles->clearMaterializedViewFiles();
             $output->writeln('<info>Generated static view files cleared successfully.</info>');
         } else {
             $output->writeln(
-                '<error>Alert: Generated static view files were not cleared.'
-                . ' You can clear them using the --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
-                . ' Failure to clear static view files might cause display issues in the Admin and storefront.</error>'
+                '<info>Info: Some modules might require static view files to be cleared. Use the optional --' .
+                self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option to clear them.</info>'
             );
         }
     }

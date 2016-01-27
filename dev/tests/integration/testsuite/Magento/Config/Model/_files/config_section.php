@@ -17,7 +17,7 @@ return [
             ],
             'debug' => [
                 'fields' => [
-                    'template_hints' => ['value' => '1'],
+                    'template_hints_storefront' => ['value' => '1'],
                     'template_hints_blocks' => ['value' => '0'],
                 ],
             ],
@@ -28,7 +28,10 @@ return [
                 'dev/log/file' => 'fileName.log',
                 'dev/log/exception_file' => 'exceptionFileName.log',
             ],
-            'dev/debug' => ['dev/debug/template_hints' => '1', 'dev/debug/template_hints_blocks' => '0'],
+            'dev/debug' => [
+                'dev/debug/template_hints_storefront' => '1',
+                'dev/debug/template_hints_blocks' => '0',
+            ],
         ],
     ]
 ];

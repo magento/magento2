@@ -6,13 +6,12 @@
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-
+$product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(10)
     ->setAttributeSetId(4)
     ->setName('Simple Product')
     ->setSku('simple1')
-    ->setIsObjectNew(true)
     ->setTaxClassId('none')
     ->setDescription('description')
     ->setShortDescription('short description')
@@ -31,12 +30,12 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->save();
 
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(11)
     ->setAttributeSetId(4)
     ->setName('Simple Product2')
     ->setSku('simple2')
-    ->setIsObjectNew()
     ->setTaxClassId('none')
     ->setDescription('description')
     ->setShortDescription('short description')
@@ -55,12 +54,12 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->save();
 
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(12)
     ->setAttributeSetId(4)
     ->setName('Simple Product 3')
     ->setSku('simple3')
-    ->setIsObjectNew()
     ->setTaxClassId('none')
     ->setDescription('description')
     ->setShortDescription('short description')

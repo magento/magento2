@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\TemplateEngine\Xhtml;
 
-use Magento\Ui\Component\Layout\Generator\Structure;
+use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;

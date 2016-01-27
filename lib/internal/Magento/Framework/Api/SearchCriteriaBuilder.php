@@ -19,17 +19,25 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     protected $_filterGroupBuilder;
 
     /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    protected $filterBuilder;
+
+    /**
      * @param ObjectFactory $objectFactory
      * @param FilterGroupBuilder $filterGroupBuilder
+     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
-        FilterGroupBuilder $filterGroupBuilder
+        FilterGroupBuilder $filterGroupBuilder,
+        FilterBuilder $filterBuilder
     ) {
         parent::__construct(
             $objectFactory
         );
         $this->_filterGroupBuilder = $filterGroupBuilder;
+        $this->filterBuilder = $filterBuilder;
     }
 
     /**
@@ -55,6 +63,23 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     public function addFilters(array $filter)
     {
         $this->data[SearchCriteria::FILTER_GROUPS][] = $this->_filterGroupBuilder->setFilters($filter)->create();
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     * @param mixed $value
+     * @param string $conditionType
+     * @return $this
+     */
+    public function addFilter($field, $value, $conditionType = 'eq')
+    {
+        $this->addFilters([
+            $this->filterBuilder->setField($field)
+                ->setValue($value)
+                ->setConditionType($conditionType)
+                ->create()
+        ]);
         return $this;
     }
 

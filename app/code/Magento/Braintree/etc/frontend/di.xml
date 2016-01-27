@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -18,6 +18,13 @@
             <argument name="configProviders" xsi:type="array">
                 <item name="braintree_config_provider" xsi:type="object">Magento\Braintree\Model\ConfigProvider</item>
                 <item name="braintree_paypal_config_provider" xsi:type="object">Magento\Braintree\Model\ConfigProvider\PayPal</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="braintree" xsi:type="string">/braintree/</item>
             </argument>
         </arguments>
     </type>

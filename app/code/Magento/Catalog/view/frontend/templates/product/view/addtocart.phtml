@@ -12,17 +12,17 @@
 <?php $buttonTitle = __('Add to Cart'); ?>
 <?php if ($_product->isSaleable()): ?>
 <div class="box-tocart">
-    <fieldset class="fieldset">
+    <div class="fieldset">
         <?php if ($block->shouldRenderQuantity()): ?>
         <div class="field qty">
-            <label class="label" for="qty"><span><?php echo __('Qty') ?></span></label>
+            <label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></label>
             <div class="control">
                 <input type="number"
                        name="qty"
                        id="qty"
                        maxlength="12"
-                       value="<?php echo $block->getProductDefaultQty() * 1 ?>"
-                       title="<?php echo __('Qty') ?>" class="input-text qty"
+                       value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
+                       title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty"
                        data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
                        />
             </div>
@@ -30,14 +30,14 @@
         <?php endif; ?>
         <div class="actions">
             <button type="submit"
-                    title="<?php echo $buttonTitle ?>"
+                    title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
                     class="action primary tocart"
                     id="product-addtocart-button">
-                <span><?php echo $buttonTitle ?></span>
+                <span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
             </button>
             <?php echo $block->getChildHtml('', true) ?>
         </div>
-    </fieldset>
+    </div>
 </div>
 <?php endif; ?>
 <?php if ($block->isRedirectToCartEnabled()) : ?>

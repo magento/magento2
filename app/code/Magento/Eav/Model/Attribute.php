@@ -44,6 +44,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @param Website|int $website
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setWebsite($website)
     {
@@ -144,6 +145,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return is attribute value required
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getIsRequired()
     {
@@ -154,6 +156,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return is visible attribute flag
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getIsVisible()
     {
@@ -164,6 +167,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return default value for attribute
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getDefaultValue()
     {
@@ -174,6 +178,7 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * Return count of lines for multiply line attribute
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getMultilineCount()
     {

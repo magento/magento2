@@ -50,6 +50,13 @@ class View extends AbstractConfigureBlock
     protected $qty = '#qty';
 
     /**
+     * Add to cart form id.
+     *
+     * @var string
+     */
+    protected $addToCartForm = '#product_addtocart_form';
+
+    /**
      * 'Check out with PayPal' button.
      *
      * @var string
@@ -141,6 +148,41 @@ class View extends AbstractConfigureBlock
     protected $successMessage = '[data-ui-id$=message-success]';
 
     /**
+     * Product media gallery selector.
+     *
+     * @var string
+     */
+    protected $mediaGallery = '[data-gallery-role="gallery"] img';
+
+    /**
+     * Locator for page with ajax loading state.
+     *
+     * @var string
+     */
+    protected $ajaxLoading = 'body.ajax-loading';
+
+    /**
+     * Full image selector
+     *
+     * @var string
+     */
+    protected $fullImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img--full';
+
+    /**
+     * Full image close selector
+     *
+     * @var string
+     */
+    protected $fullImageClose = '[data-gallery-role="fotorama__fullscreen-icon"]';
+
+    /**
+     * Base image selector
+     *
+     * @var string
+     */
+    protected $baseImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img';
+
+    /**
      * Get block price.
      *
      * @return Price
@@ -209,7 +251,7 @@ class View extends AbstractConfigureBlock
     public function setQty($qty)
     {
         $this->_rootElement->find($this->qty)->setValue($qty);
-        $this->_rootElement->click();
+        $this->_rootElement->find($this->addToCartForm)->click();
     }
 
     /**
@@ -291,9 +333,11 @@ class View extends AbstractConfigureBlock
         $dataConfig = $product->getDataConfig();
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
 
-        return $this->hasRender($typeId)
-            ? $this->callRender($typeId, 'getOptions', ['product' => $product])
-            : $this->getCustomOptionsBlock()->getOptions($product);
+        return $this->hasRender($typeId) ? $this->callRender(
+            $typeId,
+            'getOptions',
+            ['product' => $product]
+        ) : $this->getCustomOptionsBlock()->getOptions($product);
     }
 
     /**
@@ -392,5 +436,86 @@ class View extends AbstractConfigureBlock
     public function selectTab($name)
     {
         $this->_rootElement->find(sprintf($this->tabSelector, $name), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Wait loading block.
+     *
+     * @return void
+     */
+    public function waitLoader()
+    {
+        $this->waitForElementNotVisible($this->ajaxLoading);
+    }
+
+    /**
+     * Check id media gallery is visible for the product.
+     *
+     * @return bool
+     */
+    public function isGalleryVisible()
+    {
+        return $this->_rootElement->find($this->mediaGallery)->isVisible();
+    }
+
+    /**
+     * Check is full image into gallery is visible for the product.
+     *
+     * @return bool
+     */
+    public function isFullImageVisible()
+    {
+        return $this->browser->find($this->fullImage)->isVisible();
+    }
+
+    /**
+     * Get full image source from media gallery into product
+     *
+     * @return string
+     */
+    public function getFullImageSource()
+    {
+        return $this->browser->find($this->fullImage)->getAttribute('src');
+    }
+
+    /**
+     * Check is base image into gallery is visible for the product.
+     *
+     * @return bool
+     */
+    public function isBaseImageVisible()
+    {
+        return $this->_rootElement->find($this->baseImage)->isVisible();
+    }
+
+    /**
+     * Get full image source from media gallery into product
+     *
+     * @return string
+     */
+    public function getBaseImageSource()
+    {
+        return $this->_rootElement->find($this->baseImage)->getAttribute('src');
+    }
+
+    /**
+     * Click link.
+     *
+     * @return void
+     */
+    public function clickBaseImage()
+    {
+        $this->_rootElement->find($this->baseImage, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementVisible($this->fullImage);
+    }
+
+    /**
+     * Click link.
+     *
+     * @return void
+     */
+    public function closeFullImage()
+    {
+        $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS)->click();
     }
 }

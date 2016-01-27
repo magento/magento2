@@ -163,6 +163,9 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
         $attributesByCode = [];
         $attributesCodes = [];
         foreach ($attributes as $attribute) {
+            if (!$attribute->getIsVisible()) {
+                continue;
+            }
             $attributeCode = $attribute->getAttributeCode();
             $attributesByCode[$attributeCode] = $attribute;
             $attributesCodes[] = $attributeCode;

@@ -92,7 +92,7 @@
 // ----------------------------------------------
 
 .shipment-track {
-    .table(@table__width, 0);
+    .lib-table(@table__width, 0);
 
     thead,
     tbody {
@@ -119,7 +119,7 @@
 // ----------------------------------------------
 
 .email-items {
-    .table(@table__width, 0);
+    .lib-table(@table__width, 0);
     border: @table__border-width @table__border-style @table__border-color;
 
     thead,
@@ -237,6 +237,6 @@
 
 .email-non-inline() {
     .email-items {
-        .table-overflow();
+        .lib-table-overflow();
     }
 }

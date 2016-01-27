@@ -10,7 +10,6 @@ angular.module('landing', ['ngStorage'])
         '$location',
         '$localStorage',
         function ($scope, $location, $localStorage) {
-            $localStorage.$reset();
             $scope.selectLanguage = function () {
                 $localStorage.lang = $scope.modelLanguage;
                 window.location = 'index.php/' + $scope.modelLanguage + '/index';

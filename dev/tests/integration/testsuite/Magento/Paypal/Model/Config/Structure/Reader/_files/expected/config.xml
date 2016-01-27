@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config/etc/system_file.xsd">
     <system>
         <section id="payment">
             <group id="paypal_notice" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -599,16 +599,30 @@
                             </depends>
                         </field>
                         <field id="api_wizard" translate="button_label attribute sandbox_button_label" sortOrder="70" showInDefault="1" showInWebsite="1">
-                            <button_label>Get Credentials from PayPal</button_label>
-                            <button_url>
-                                <![CDATA[https://www.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run]]>
-                            </button_url>
+                            <attribute type="button_label">Get Credentials from PayPal</attribute>
+                            <attribute type="button_url">
+                                <![CDATA[https://www.paypal.com/webapps/merchantboarding/webflow/externalpartnerflow]]>
+                            </attribute>
+
                             <attribute type="sandbox_button_label">Sandbox Credentials</attribute>
                             <attribute type="sandbox_button_url">
-                                <![CDATA[https://www.sandbox.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run]]>
+                                <![CDATA[https://www.sandbox.paypal.com/webapps/merchantboarding/webflow/externalpartnerflow]]>
                             </attribute>
+
+                            <!-- partnerId -->
+                            <attribute type="partner_id">NB9WWHYEMVUMS</attribute>
+                            <!-- partnerLogoUrl -->
+                            <attribute type="partner_logo_url">Magento_Backend/web/images/logo-magento.png</attribute>
+                            <!-- receiveCredentials -->
+                            <attribute type="receive_credentials">FALSE</attribute>
+                            <!-- showPermissions -->
+                            <attribute type="show_permissions">FALSE</attribute>
+                            <!-- displayMode -->
+                            <attribute type="display_mode">embedded</attribute>
+                            <!-- productIntentID -->
+                            <attribute type="product_intent_id">pp_express</attribute>
+
                             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\ApiWizard</frontend_model>
-                            <label/>
                             <attribute type="shared">1</attribute>
                         </field>
                         <field id="sandbox_flag" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1">
@@ -1164,7 +1178,7 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
                         <requires>
-                            <group id="pphs_required_settings"/>
+                            <group id="pphs_required_settings_pphs"/>
                         </requires>
                         <frontend_class>paypal-enabler paypal-ec-separate</frontend_class>
                     </field>
@@ -1967,6 +1981,9 @@
                             <label>Website Payments Pro Hosted Solution and Express Checkout</label>
                         </group>
                         <field id="pphs_enable">
+                            <requires>
+                                <group id="pphs_required_settings_pphs"/>
+                            </requires>
                             <frontend_class>paypal-enabler</frontend_class>
                         </field>
                     </group>

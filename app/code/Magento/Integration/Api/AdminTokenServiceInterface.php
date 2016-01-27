@@ -6,10 +6,6 @@
 
 namespace Magento\Integration\Api;
 
-use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\LocalizedException;
-
 /**
  * Interface providing token generation for Admins
  *
@@ -23,9 +19,9 @@ interface AdminTokenServiceInterface
      * @param string $username
      * @param string $password
      * @return string Token created
-     * @throws InputException For invalid input
-     * @throws AuthenticationException
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\InputException For invalid input
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createAdminAccessToken($username, $password);
 

@@ -5,11 +5,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_login">
-        <observer name="wishlist" instance="Magento\Wishlist\Model\Observer" method="customerLogin" />
+        <observer name="wishlist" instance="Magento\Wishlist\Observer\CustomerLogin" />
     </event>
     <event name="customer_logout">
-        <observer name="wishlist" instance="Magento\Wishlist\Model\Observer" method="customerLogout" />
+        <observer name="wishlist" instance="Magento\Wishlist\Observer\CustomerLogout" />
     </event>
 </config>

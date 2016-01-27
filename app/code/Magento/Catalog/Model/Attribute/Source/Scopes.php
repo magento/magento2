@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Attribute\Source;
 
-use \Magento\Catalog\Model\Resource\Eav\Attribute;
+use \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 
 class Scopes implements \Magento\Framework\Data\OptionSourceInterface
 {
@@ -16,15 +16,15 @@ class Scopes implements \Magento\Framework\Data\OptionSourceInterface
     {
         return [
             [
-                'value' => Attribute::SCOPE_STORE,
+                'value' => ScopedAttributeInterface::SCOPE_STORE,
                 'label' => __('Store View'),
             ],
             [
-                'value' => Attribute::SCOPE_WEBSITE,
+                'value' => ScopedAttributeInterface::SCOPE_WEBSITE,
                 'label' => __('Web Site'),
             ],
             [
-                'value' => Attribute::SCOPE_GLOBAL,
+                'value' => ScopedAttributeInterface::SCOPE_GLOBAL,
                 'label' => __('Global'),
             ],
         ];

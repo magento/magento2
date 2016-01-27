@@ -10,8 +10,8 @@ use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Shipment\Track getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track getResource()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -44,7 +44,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentRepository
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
      */
     protected $shipmentRepository;
 
@@ -54,8 +54,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -66,8 +66,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -91,7 +91,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Shipment\Track');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment\Track');
     }
 
     /**

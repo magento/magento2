@@ -8,106 +8,33 @@
 
 ?>
 <?php /** @var $block \Magento\Checkout\Block\Cart\Shipping */ ?>
-<div class="block shipping" id="block-shipping" data-mage-init='{"collapsible":{"openedState": "active", "saveState": false}}'>
+
+<div id="block-shipping" class="block shipping" data-mage-init='{"collapsible":{"openedState": "active", "saveState": true}}'>
     <div class="title" data-role="title">
-        <strong id="block-shipping-heading" role="heading" aria-level="2"><?php echo __('Estimate Shipping and Tax') ?></strong>
+        <strong id="block-shipping-heading" role="heading" aria-level="2">
+            <?php /* @escapeNotVerified */ echo $block->getQuote()->isVirtual() ? __('Estimate Tax') : __('Estimate Shipping and Tax') ?>
+        </strong>
     </div>
-    <div class="content" data-role="content" aria-labelledby="block-shipping-heading">
-    <form action="<?php echo $block->getUrl('checkout/cart/estimatePost') ?>" method="post" id="shipping-zip-form">
-        <fieldset class="fieldset estimate">
-            <legend class="legend">
-                <span><?php echo __('Estimate Shipping and Tax') ?></span>
-            </legend><br>
-            <p class="field note"><?php echo __('Enter your destination to get a shipping estimate.') ?></p>
-            <div class="field country">
-                <label for="country" class="label"><span><?php echo __('Country') ?></span></label>
-                <div class="control">
-                    <?php echo $block->getDirectoryBlock()->getCountryHtmlSelect($block->getEstimateCountryId()) ?>
-                </div>
-            </div>
-            <?php //if($block->getStateActive()): ?>
-            <div class="field region<?php if ($block->isStateProvinceRequired()) echo ' required' ?>">
-                <label for="region_id" class="label"><span><?php echo __('State/Province') ?></span></label>
-                <div class="control">
-                    <select id="region_id" name="region_id" title="<?php echo __('State/Province') ?>" <?php if ($block->isStateProvinceRequired()):?> data-validate="{'validate-select':true}" <?php endif;?> >
-                        <option value=""><?php echo __('Please select a region, state or province.') ?></option>
-                    </select>
-                   <input type="text" id="region" name="region" value="<?php echo $block->escapeHtml($block->getEstimateRegion()) ?>"  title="<?php echo __('State/Province') ?>" class="input-text" />
-                </div>
-            </div>
-            <?php //endif; ?>
-            <?php if($block->getCityActive()): ?>
-            <div class="field city<?php if ($block->isCityRequired()) echo ' required' ?>">
-                <label for="city" class="label"><span><?php echo __('City') ?></span></label>
-                <div class="control">
-                    <input class="input-text" <?php if ($block->isCityRequired()):?> data-validate="{'required-entry':true}"<?php endif;?> id="city" type="text" name="estimate_city" value="<?php echo $block->escapeHtml($block->getEstimateCity()) ?>" />
-                </div>
-            </div>
-            <?php endif; ?>
-            <div class="field postcode<?php if ($block->isZipCodeRequired()) echo ' required' ?>">
-                <label for="postcode" class="label"><span><?php echo __('Zip/Postal Code') ?></span></label>
-                <div class="control">
-                    <input class="input-text" data-validate="{<?php if ($block->isZipCodeRequired()):?> 'required-entry':true,<?php endif;?>'validate-zip-international':true}" type="text" id="postcode" name="estimate_postcode" value="<?php echo $block->escapeHtml($block->getEstimatePostcode()) ?>" />
-                </div>
-            </div>
-            <div class="actions-toolbar">
-                <div class="primary">
-                    <button type="submit" class="action quote primary"><span><?php echo __('Get a Quote') ?></span></button>
-                </div>
-            </div>
-        </fieldset>
-    </form>
-    <script type="text/x-magento-init">
-        {
-            "#shipping-zip-form": {
-                "validation": {}
-            },
-            "#country": {
-                "regionUpdater": {
-                    "optionalRegionAllowed": <?php echo ($block->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
-                    "regionListId": "#region_id",
-                    "regionInputId": "#region",
-                    "postcodeId": "#postcode",
-                    "form": "#shipping-zip-form",
-                    "regionJson": <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
-                    "defaultRegion": "<?php echo $block->getEstimateRegionId() ?>",
-                    "countriesWithOptionalZip": <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>,
-                    "isMultipleCountriesAllowed": <?php echo $block->isMultipleCountriesAllowed() ? 'true' : 'false'; ?>
+    <div id="block-summary" data-bind="scope:'block-summary'" class="content" data-role="content" aria-labelledby="block-shipping-heading">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <script type="text/x-magento-init">
+            {
+                "#block-summary": {
+                    "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
                 }
             }
-        }
-    </script>
-    <?php if (($_shippingRateGroups = $block->getEstimateRates())): ?>
-    <form id="co-shipping-method-form" action="<?php echo $block->getUrl('checkout/cart/estimateUpdatePost') ?>" method="post">
-        <fieldset class="fieldset rates">
-            <dl class="items methods">
-                <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
-                    <dt class="item-title"><span><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></span></dt>
-                    <dd class="item-options">
-                    <?php foreach ($_rates as $_rate): ?>
-                        <div
-                            class="<?php if ($_rate->getErrorMessage()): echo ' message error'; else: echo 'field choice item'; endif; ?>">
-                           <?php if ($_rate->getErrorMessage()): ?>
-                                <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
-                           <?php else: ?>
-                                <input name="estimate_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$block->getAddressShippingMethod()) echo ' checked="checked"' ?> class="radio" />
-                                <label class="label" for="s_method_<?php echo $_rate->getCode() ?>">
-                                    <?php echo $block->escapeHtml($_rate->getMethodTitle()) ?>
-                                    <?php echo $block->getShippingPriceHtml($_rate) ?>
-                                </label>
-                           <?php endif ?>
-                        </div>
-                    <?php endforeach; ?>
-                    </dd>
-                <?php endforeach; ?>
-            </dl>
-            <div class="actions-toolbar">
-                <div class="primary">
-                    <button type="submit" class="action primary update" name="do" value="<?php echo __('Update Total') ?>"><span><?php echo __('Update Total') ?></span></button>
-                </div>
-            </div>
-        </fieldset>
-    </form>
-    <?php endif; ?>
+        </script>
+        <script>
+            window.checkoutConfig = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($block->getCheckoutConfig()); ?>;
+            window.customerData = window.checkoutConfig.customerData;
+            window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+            require([
+                'mage/url',
+                'Magento_Ui/js/block-loader'
+            ], function(url, blockLoader) {
+                blockLoader("<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/loader-1.gif'); ?>");
+                return url.setBaseUrl('<?php /* @escapeNotVerified */ echo $block->getBaseUrl();?>');
+            })
+        </script>
     </div>
 </div>

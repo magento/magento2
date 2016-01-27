@@ -103,7 +103,7 @@ class MassgeneratorTest extends \PHPUnit_Framework_TestCase
 
         $salesRuleCouponMock = $this->getMock('Magento\SalesRule\Helper\Coupon', ['getCharset'], [], '', false);
         $resourceMock = $this->getMock(
-            'Magento\SalesRule\Model\Resource\Coupon',
+            'Magento\SalesRule\Model\ResourceModel\Coupon',
             ['exists', '__wakeup', 'getIdFieldName'],
             [],
             '',
@@ -182,7 +182,7 @@ class MassgeneratorTest extends \PHPUnit_Framework_TestCase
 
         $salesRuleCouponMock = $this->getMock('Magento\SalesRule\Helper\Coupon', ['getCharset'], [], '', false);
         $resourceMock = $this->getMock(
-            'Magento\SalesRule\Model\Resource\Coupon',
+            'Magento\SalesRule\Model\ResourceModel\Coupon',
             ['exists', '__wakeup', 'getIdFieldName'],
             [],
             '',

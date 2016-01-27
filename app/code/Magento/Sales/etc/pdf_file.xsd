@@ -8,7 +8,7 @@
  */
 -->
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:redefine schemaLocation="pdf.xsd">
+    <xs:redefine schemaLocation="urn:magento:module:Magento_Sales:etc/pdf.xsd">
         <xs:complexType name="totalItemType">
             <xs:complexContent>
                 <xs:restriction base="totalItemType">

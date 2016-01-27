@@ -22,7 +22,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $countryCollectionMock;
 
@@ -34,7 +34,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->countryCollectionMock = $this->getMockBuilder(
-            '\Magento\Directory\Model\Resource\Country\Collection'
+            '\Magento\Directory\Model\ResourceModel\Country\Collection'
         )->disableOriginalConstructor()
             ->getMock();
 

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <system>
             <currency>
@@ -44,6 +44,7 @@
                 <language>en</language>
                 <code>en_US</code>
                 <timezone>America/Los_Angeles</timezone>
+                <weight_unit>lbs</weight_unit>
             </locale>
         </general>
     </default>

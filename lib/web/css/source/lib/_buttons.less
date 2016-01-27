@@ -11,34 +11,37 @@
 //  Button with solid or pictire background
 //  ---------------------------------------------
 
-.button(
-    @_button-font-family: @button__font-family,              // button font family
-    @_button-font-size: @button__font-size,                  // button font size
-    @_button-font-weight: @button__font-weight,              // button font weight
-    @_button-cursor: @button__cursor,                        // button cursor
-    @_button-display: @button__display,                      // button display
-    @_button-disabled-opacity: @button__disabled__opacity,    // button disabled opacity
-    @_button-line-height: @button__line-height,              // button line height
-    @_button-width: @button__width,                          // button width
-    @_button-margin: @button__margin,                        // margins of the button
-    @_button-padding: @button__padding,                      // paddings of the button
-    @_button-color: @button__color,                          // text color of the button
-    @_button-background: @button__background,                // background of the button
-    @_button-border: @button__border,                        // border of the button
-    @_button-color-hover: @button__hover__color,              // text color of the hovered button
-    @_button-background-hover: @button__hover__background,    // background of the hovered button
-    @_button-border-hover: @button__hover__border,            // border of the hovered button
-    @_button-color-active: @button__active__color,            // text color of the active button
-    @_button-background-active: @button__active__background,  // background of the active button
-    @_button-border-active: @button__active__border,          // border of the active button
-    @_button-gradient: @button__gradient,                    // does the button have gradient background
-    @_button-gradient-direction: @button__gradient-direction,                    // gradient direction the button
-    @_button-gradient-color-start: @button__gradient-color-start,                // gradient background start color
-    @_button-gradient-color-end: @button__gradient-color-end,                    // gradient background end color
-    @_button-gradient-color-start-hover: @button__hover__gradient-color-start,    // gradient background start color of the hovered button
-    @_button-gradient-color-end-hover: @button__hover__gradient-color-end,    // gradient background start color of the hovered button
-    @_button-gradient-color-start-active: @button__active__gradient-color-start,  // gradient background start color of the active button
-    @_button-gradient-color-end-active: @button__active__gradient-color-end,       // gradient background start color of the active button
+.lib-button(
+    @_button-font-family: @button__font-family,
+    @_button-font-size: @button__font-size,
+    @_button-font-weight: @button__font-weight,
+    @_button-cursor: @button__cursor,
+    @_button-display: @button__display,
+    @_button-disabled-opacity: @button__disabled__opacity,
+    @_button-line-height: @button__line-height,
+    @_button-width: @button__width,
+    @_button-margin: @button__margin,
+    @_button-padding: @button__padding,
+    @_button-color: @button__color,
+    @_button-background: @button__background,
+    @_button-border: @button__border,
+
+    @_button-color-hover: @button__hover__color,
+    @_button-background-hover: @button__hover__background,
+    @_button-border-hover: @button__hover__border,
+    @_button-color-active: @button__active__color,
+    @_button-background-active: @button__active__background,
+    @_button-border-active: @button__active__border,
+
+    @_button-gradient: @button__gradient,
+    @_button-gradient-direction: @button__gradient-direction,
+    @_button-gradient-color-start: @button__gradient-color-start,
+    @_button-gradient-color-end: @button__gradient-color-end,
+    @_button-gradient-color-start-hover: @button__hover__gradient-color-start,
+    @_button-gradient-color-end-hover: @button__hover__gradient-color-end,
+    @_button-gradient-color-start-active: @button__active__gradient-color-start,
+    @_button-gradient-color-end-active: @button__active__gradient-color-end,
+
     @_button-icon-use: @button-icon__use,
     @_button-font-content: @button-icon__content,
     @_button-icon-font: @button-icon__font,
@@ -53,27 +56,28 @@
     @_button-icon-font-text-hide: @button-icon__text-hide
 ) {
     background-image: none; // Reset unusual Firefox-on-Android default style
-    .css(background, @_button-background);
-    .background-gradient(
+    .lib-css(background, @_button-background);
+    .lib-background-gradient(
         @_button-gradient-color-start,
         @_button-gradient-color-end,
         @_button-gradient-direction,
         @_button-gradient
     );
-    .css(padding, @_button-padding);
-    .css(width, @_button-width);
-    .css(color, @_button-color);
-    .css(border, @_button-border);
-    .css(cursor, @_button-cursor);
-    .css(display, @_button-display);
-    .css(font-family, @_button-font-family);
-    .font-size(@_button-font-size);
-    .css(font-weight, @_button-font-weight);
-    .line-height(@_button-line-height);
+    .lib-css(border, @_button-border);
+    .lib-css(color, @_button-color);
+    .lib-css(cursor, @_button-cursor);
+    .lib-css(display, @_button-display);
+    .lib-css(font-family, @_button-font-family);
+    .lib-css(font-weight, @_button-font-weight);
+    .lib-css(margin, @_button-margin);
+    .lib-css(padding, @_button-padding);
+    .lib-css(width, @_button-width);
+    .lib-font-size(@_button-font-size);
+    .lib-line-height(@_button-line-height);
     box-sizing: border-box;
-    .css(margin, @_button-margin);
     vertical-align: middle;
-    ._button-icon (
+
+    ._lib-button-icon (
         @_button-icon-use: @_button-icon-use,
         @_icon-font-content: @_button-font-content,
         @_icon-font: @_button-icon-font,
@@ -87,35 +91,38 @@
         @_icon-font-position: @_button-icon-font-position,
         @_icon-font-text-hide: @_button-icon-font-text-hide
     );
+
     &:focus,
     &:active {
-        .css(background, @_button-background-active);
-        .background-gradient(
+        .lib-css(background, @_button-background-active);
+        .lib-background-gradient(
             @_button-gradient-color-start-active,
             @_button-gradient-color-end-active,
             @_button-gradient-direction,
             @_button-gradient
         );
-        .css(border, @_button-border-active);
-        .css(color, @_button-color-active);
+        .lib-css(border, @_button-border-active);
+        .lib-css(color, @_button-color-active);
     }
+
     &:hover {
-        .css(background, @_button-background-hover);
-        .background-gradient(
+        .lib-css(background, @_button-background-hover);
+        .lib-background-gradient(
             @_button-gradient-color-start-hover,
             @_button-gradient-color-end-hover,
             @_button-gradient-direction,
             @_button-gradient
         );
-        .css(border, @_button-border-hover);
-        .css(color, @_button-color-hover);
+        .lib-css(border, @_button-border-hover);
+        .lib-css(color, @_button-color-hover);
     }
+
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
+        .lib-css(opacity, @_button-disabled-opacity);
         cursor: default;
         pointer-events: none; // Disabling of clicks
-        .css(opacity, @_button-disabled-opacity);
     }
 }
 
@@ -123,53 +130,54 @@
 //  Button size
 //  ---------------------------------------------
 
-.button-size(
+.lib-button-size(
     @_button-line-height: @button__line-height,
     @_button-padding: @button__padding
 ){
-    .line-height(@_button-line-height);
-    .css(padding, @_button-padding);
+    .lib-line-height(@_button-line-height);
+    .lib-css(padding, @_button-padding);
 }
 
 //
 //  Large buttons
 //  ---------------------------------------------
 
-.button-l(
+.lib-button-l(
     @_button-l-font-size: @button__font-size__l,
     @_button-l-height: @button__line-height__l,
     @_button-l-padding: @button__padding__l
 ) {
-    .button-size(
+    .lib-button-size(
         @_button-line-height: @_button-l-height,
         @_button-padding: @_button-l-padding
     );
-    .font-size(@_button-l-font-size);
+    .lib-font-size(@_button-l-font-size);
 }
 
 //
 //  Small buttons
 //  ---------------------------------------------
 
-.button-s(
+.lib-button-s(
     @_button-s-font-size: @button__font-size__s,
     @_button-s-height: @button__line-height__s,
     @_button-s-padding: @button__padding__s
 ) {
-    .button-size(
+    .lib-button-size(
         @_button-line-height: @_button-s-height,
         @_button-padding: @_button-s-padding
     );
-    .font-size(@_button-s-font-size);
+    .lib-font-size(@_button-s-font-size);
 }
 
 //
 //  Link as button
 //  ---------------------------------------------
 
-.link-as-button() {
-    .css(display, @button__display);
+.lib-link-as-button() {
+    .lib-css(display, @button__display);
     text-decoration: none;
+
     &:hover,
     &:active,
     &:focus {
@@ -181,7 +189,7 @@
 //  Button as link
 //  ---------------------------------------------
 
-.button-as-link(
+.lib-button-as-link(
     @_link-color: @link__color,
     @_link-color-hover: @link__hover__color,
     @_line-height: @line-height__base,
@@ -189,30 +197,33 @@
     @_margin: 0,
     @_padding: 0
 ) {
+    .lib-css(line-height, @_line-height);
+    .lib-css(margin, @_margin);
+    .lib-css(padding, @_padding);
+    .lib-link();
     background: none;
     border: 0;
     display: inline;
-    .css(line-height, @_line-height);
-    .css(margin, @_margin);
-    .css(padding, @_padding);
-    .link();
+
     &:hover {
-        .css(color, @_link-color-hover);
+        .lib-css(color, @_link-color-hover);
     }
+
     &:hover,
     &:active,
     &:focus {
         background: none;
         border: 0;
     }
+
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        .css(color, @_link-color);
-        text-decoration: underline;
+        .lib-css(color, @_link-color);
+        .lib-css(opacity, @_disabled_opacity);
         cursor: default;
         pointer-events: none; // Disabling of clicks
-        .css(opacity, @_disabled_opacity);
+        text-decoration: underline;
     }
 }
 
@@ -220,41 +231,44 @@
 //  Responsive
 //  ---------------------------------------------
 
-.button-responsive() {
+.lib-button-responsive() {
     width: 100%;
 }
 
 //
-//    Button reset
+//  Button reset
 //  ---------------------------------------------
 
-.button-reset() {
+.lib-button-reset() {
     background-image: none; // Reset unusual Firefox-on-Android default style
     background: none;
+    -moz-box-sizing: content-box; // Hack: fix Firefox button line-height problem
     border: 0;
+    box-shadow: none;
+    line-height: inherit;
     margin: 0;
     padding: 0;
-    -moz-box-sizing: content-box; // hack: fix Firefox button line-height problem
-    box-shadow: none;
-    text-shadow: none;
     text-decoration: none;
-    line-height: inherit;
-    .css(font-weight, @font-weight__regular);
+    text-shadow: none;
+    .lib-css(font-weight, @font-weight__regular);
+
     &:focus,
     &:active {
         background: none;
         border: none;
     }
+
     &:hover {
         background: none;
         border: none;
     }
+
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
         cursor: not-allowed;
         pointer-events: none; // Disabling of clicks
-        .css(opacity, @button__disabled__opacity);
+        .lib-css(opacity, @button__disabled__opacity);
     }
 }
 
@@ -262,7 +276,7 @@
 //  Button primary
 //  ---------------------------------------------
 
-.button-primary(
+.lib-button-primary(
     @_button-line-height: @button-primary__line-height,
     @_button-width: @button-primary__width,
     @_button-margin: @button-primary__margin,
@@ -285,7 +299,7 @@
     @_button-gradient: @button-primary__gradient,
     @_button-gradient-direction: @button-primary__gradient-direction
 ) {
-    .button(
+    .lib-button(
         @_button-line-height: @_button-line-height,
         @_button-width: @_button-width,
         @_button-margin: @_button-margin,
@@ -314,7 +328,7 @@
 //  Button revert secondary color
 //  ---------------------------------------------
 
-.button-revert-secondary-color(
+.lib-button-revert-secondary-color(
     @_button-color: @button__color,
     @_button-background: @button__background,
     @_button-border: @button__border,
@@ -327,19 +341,21 @@
     @_button-background-active: @button__active__background,
     @_button-border-active: @button__active__border
 ) {
-    .css(background, @_button-background);
-    .css(color, @_button-color);
-    .css(border, @_button-border);
+    .lib-css(background, @_button-background);
+    .lib-css(border, @_button-border);
+    .lib-css(color, @_button-color);
+
     &:focus,
     &:active {
-        .css(background, @_button-background-active);
-        .css(color, @_button-color-active);
-        .css(border, @_button-border-active);
+        .lib-css(background, @_button-background-active);
+        .lib-css(border, @_button-border-active);
+        .lib-css(color, @_button-color-active);
     }
+
     &:hover {
-        .css(background, @_button-background-hover);
-        .css(color, @_button-color-hover);
-        .css(border, @_button-border-hover);
+        .lib-css(background, @_button-background-hover);
+        .lib-css(border, @_button-border-hover);
+        .lib-css(color, @_button-color-hover);
     }
 }
 
@@ -347,13 +363,13 @@
 //  Button revert secondary size
 //  ---------------------------------------------
 
-.button-revert-secondary-size(
+.lib-button-revert-secondary-size(
     @_button-font-size: @button__font-size,
     @_button-line-height: @button__line-height,
     @_button-padding: @button__padding
 ) {
-    .font-size(@_button-font-size);
-    .button-size(
+    .lib-font-size(@_button-font-size);
+    .lib-button-size(
         @_button-line-height: @_button-line-height,
         @_button-padding: @_button-padding
     )
@@ -363,7 +379,7 @@
 //  Inner buttons mixins
 //  ---------------------------------------------
 
-._button-icon (
+._lib-button-icon (
     @_button-icon-use: @button-icon__use,
     @_icon-font-content: @button-icon__content,
     @_icon-font: @button-icon__font,
@@ -377,7 +393,7 @@
     @_icon-font-position: @button-icon__position,
     @_icon-font-text-hide: @button-icon__text-hide
 ) when (@_button-icon-use = true) {
-    .button-icon (
+    .lib-button-icon (
         @_icon-font-content: @_icon-font-content,
         @_icon-font: @_icon-font,
         @_icon-font-size: @_icon-font-size,
@@ -392,7 +408,7 @@
     );
 }
 
-.button-icon (
+.lib-button-icon (
     @_icon-font-content,
     @_icon-font: @button-icon__font,
     @_icon-font-size: @button-icon__font-size,
@@ -405,7 +421,7 @@
     @_icon-font-position: @button-icon__position,
     @_icon-font-text-hide: @button-icon__text-hide
 ) {
-    .icon-font(
+    .lib-icon-font(
         @_icon-font-content: @_icon-font-content,
         @_icon-font: @_icon-font,
         @_icon-font-size: @_icon-font-size,

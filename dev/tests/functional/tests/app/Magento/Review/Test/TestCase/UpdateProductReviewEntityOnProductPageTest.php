@@ -178,6 +178,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
         foreach ($this->reviewInitial->getRatings() as $rating) {
             $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $rating['title']]);
             $this->ratingEdit->getPageActions()->delete();
+            $this->ratingEdit->getModalBlock()->acceptAlert();
         }
     }
 }

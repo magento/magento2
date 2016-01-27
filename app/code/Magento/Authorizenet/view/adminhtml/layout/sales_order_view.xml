@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="payment_additional_info">
             <block class="Magento\Authorizenet\Block\Adminhtml\Order\View\Info\FraudDetails" name="authorizenet_fraud_details" template="Magento_Authorizenet::order/view/info/fraud_details.phtml" />

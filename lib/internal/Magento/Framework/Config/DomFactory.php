@@ -24,8 +24,9 @@ class DomFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManger
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManger)
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManger
+    ) {
         $this->_objectManager = $objectManger;
     }
 

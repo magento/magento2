@@ -27,6 +27,16 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->categoryRepositoryMock = $this->getMock('\Magento\Catalog\Model\CategoryRepository', [], [], '', false);
+        $productResource = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
+        $productRepositoryMock = $this->getMockBuilder('Magento\Catalog\Api\ProductRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $categoryLinkRepository = $this->getMockBuilder('Magento\Catalog\Api\CategoryLinkRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $indexerRegistry = $this->getMockBuilder('Magento\Framework\Indexer\IndexerRegistry')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productLinkFactoryMock = $this->getMock(
             '\Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory',
             ['create'],
@@ -36,7 +46,11 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->model = new \Magento\Catalog\Model\CategoryLinkManagement(
             $this->categoryRepositoryMock,
-            $this->productLinkFactoryMock
+            $productRepositoryMock,
+            $productResource,
+            $categoryLinkRepository,
+            $this->productLinkFactoryMock,
+            $indexerRegistry
         );
     }
 
@@ -44,7 +58,7 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
     {
         $categoryId = 42;
         $productId = 55;
-        $productsPosition = [$productId => 25];
+        $position = 25;
         $productSku = 'testSku';
         $categoryProductLinkMock = $this->getMock('\Magento\Catalog\Api\Data\CategoryProductLinkInterface');
         $categoryMock = $this->getMock(
@@ -56,13 +70,14 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
         );
         $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $productMock->expects($this->once())->method('getSku')->willReturn($productSku);
+        $productMock->expects($this->once())->method('getData')->with('cat_index_position')->willReturn($position);
         $items = [$productId => $productMock];
-        $productsMock = $this->getMock('\Magento\Framework\Data\Collection\AbstractDb', [], [], '', false);
+        $productsMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
-        $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productsPosition);
         $categoryMock->expects($this->once())->method('getProductCollection')->willReturn($productsMock);
         $categoryMock->expects($this->once())->method('getId')->willReturn($categoryId);
+        $productsMock->expects($this->once())->method('addFieldToSelect')->with('position')->willReturnSelf();
         $productsMock->expects($this->once())->method('getItems')->willReturn($items);
         $this->productLinkFactoryMock->expects($this->once())->method('create')->willReturn($categoryProductLinkMock);
         $categoryProductLinkMock->expects($this->once())
@@ -71,7 +86,7 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $categoryProductLinkMock->expects($this->once())
             ->method('setPosition')
-            ->with(25)
+            ->with($position)
             ->willReturnSelf();
         $categoryProductLinkMock->expects($this->once())
             ->method('setCategoryId')

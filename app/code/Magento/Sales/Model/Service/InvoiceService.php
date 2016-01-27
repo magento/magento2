@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model\Service;
 
 use Magento\Sales\Api\InvoiceManagementInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Class InvoiceService
@@ -102,8 +103,8 @@ class InvoiceService implements InvoiceManagementInterface
         $this->criteriaBuilder->addFilters(
             [$this->filterBuilder->setField('parent_id')->setValue($id)->setConditionType('eq')->create()]
         );
-        $criteria = $this->criteriaBuilder->create();
-        return $this->commentRepository->getList($criteria);
+        $searchCriteria = $this->criteriaBuilder->create();
+        return $this->commentRepository->getList($searchCriteria);
     }
 
     /**
@@ -124,11 +125,13 @@ class InvoiceService implements InvoiceManagementInterface
     }
 
     /**
-     * @inheritdoc
+     * @param Order $order
+     * @param array $qtys
+     * @return \Magento\Sales\Model\Order\Invoice
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function prepareInvoice($orderId, array $qtys = [])
+    public function prepareInvoice(Order $order, array $qtys = [])
     {
-        $order = $this->orderRepository->get($orderId);
         $invoice = $this->orderConverter->toInvoice($order);
         $totalQty = 0;
         foreach ($order->getAllItems() as $orderItem) {

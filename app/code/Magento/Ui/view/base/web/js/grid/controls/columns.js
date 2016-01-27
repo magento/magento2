@@ -6,21 +6,20 @@ define([
     'underscore',
     'mageUtils',
     'mage/translate',
-    'Magento_Ui/js/lib/collapsible'
-], function (_, utils, $t, Collapsible) {
+    'uiCollection'
+], function (_, utils, $t, Collection) {
     'use strict';
 
-    return Collapsible.extend({
+    return Collection.extend({
         defaults: {
             template: 'ui/grid/controls/columns',
             minVisible: 1,
             maxVisible: 30,
             viewportSize: 18,
-            columnsData: {
-                container: 'elems'
-            },
+            displayArea: 'dataGridActions',
+            columnsProvider: 'ns = ${ $.ns }, componentType = columns',
             imports: {
-                addColumns: '${ $.columnsData.provider }:${ $.columnsData.container }'
+                addColumns: '${ $.columnsProvider }:elems'
             },
             templates: {
                 headerMsg: $t('${ $.visible } out of ${ $.total } visible')
@@ -44,7 +43,7 @@ define([
          * @returns {Columns} Chainable.
          */
         cancel: function () {
-            this.elems.each('applyState', 'saved', 'visible');
+            this.elems.each('applyState', '', 'visible');
 
             return this;
         },
@@ -86,7 +85,7 @@ define([
         isDisabled: function (elem) {
             var visible = this.countVisible();
 
-            return elem.visible() ?
+            return elem.visible ?
                     visible === this.minVisible :
                     visible === this.maxVisible;
         },

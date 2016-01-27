@@ -9,7 +9,7 @@ namespace Magento\Shipping\Test\Unit\Model;
 use \Magento\Shipping\Model\ShipmentNotifier;
 
 use Magento\Framework\Exception\MailException;
-use Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 
 /**
  * Class ShipmentNotifierTest
@@ -44,7 +44,7 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->historyCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory',
+            'Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory',
             ['create'],
             [],
             '',
@@ -78,7 +78,7 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
     public function testNotifySuccess()
     {
         $historyCollection = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\History\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Status\History\Collection',
             ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified'],
             [],
             '',

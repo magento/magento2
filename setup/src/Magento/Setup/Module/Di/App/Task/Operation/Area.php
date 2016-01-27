@@ -76,8 +76,13 @@ class Area implements OperationInterface
         }
 
         $definitionsCollection = new DefinitionsCollection();
-        foreach ($this->data as $path) {
-            $definitionsCollection->addCollection($this->getDefinitionsCollection($path));
+        foreach ($this->data as $paths) {
+            if (!is_array($paths)) {
+                $paths = (array)$paths;
+            }
+            foreach ($paths as $path) {
+                $definitionsCollection->addCollection($this->getDefinitionsCollection($path));
+            }
         }
 
         $areaCodes = array_merge([App\Area::AREA_GLOBAL], $this->areaList->getCodes());

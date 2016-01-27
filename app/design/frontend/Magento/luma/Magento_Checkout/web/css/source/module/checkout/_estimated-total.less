@@ -16,14 +16,14 @@
     .opc-estimated-wrapper {
         &:extend(.abs-no-display-desktop all);
         &:extend(.abs-add-clearfix all);
-        .css(background, @checkout-step-content-mobile__background);
-        .css(border-bottom, @checkout-step-title__border);
-        .css(border-top, @checkout-step-title__border);
-        .css(margin, -21px -(@checkout-step-content-mobile__margin-s) @checkout-step-content-mobile__margin-s);
+        .lib-css(background, @checkout-step-content-mobile__background);
+        .lib-css(border-bottom, @checkout-step-title__border);
+        .lib-css(border-top, @checkout-step-title__border);
+        .lib-css(margin, -21px -(@checkout-step-content-mobile__margin-s) @checkout-step-content-mobile__margin-s);
         padding: 18px 15px;
 
         .estimated-block {
-            .css(font-size, @checkout-step-title-mobile__font-size);
+            .lib-css(font-size, @checkout-step-title-mobile__font-size);
             float: left;
             font-weight: @font-weight__bold;
 
@@ -37,9 +37,10 @@
             button {
                 // todo ui: Change .action.showcart to .action-showcart
                 &.action.showcart {
-                    .button-reset();
+                    .lib-button-reset();
+
                     &:before {
-                        .css(color, @primary__color);
+                        .lib-css(color, @primary__color);
                     }
                 }
             }

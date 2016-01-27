@@ -37,8 +37,8 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
         $customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
         $customerSession->setCustomerData($customerData);
 
-        /** @var \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection */
-        $quoteCollection = $this->_objectManager->get('Magento\Quote\Model\Resource\Quote\Collection');
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection */
+        $quoteCollection = $this->_objectManager->get('Magento\Quote\Model\ResourceModel\Quote\Collection');
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $quoteCollection->getLastItem();
 

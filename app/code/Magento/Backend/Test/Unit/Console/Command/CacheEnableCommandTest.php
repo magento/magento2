@@ -14,7 +14,7 @@ class CacheEnableCommandTest extends AbstractCacheSetCommandTest
     public function setUp()
     {
         parent::setUp();
-        $this->command = new CacheEnableCommand($this->cacheManager);
+        $this->command = new CacheEnableCommand($this->cacheManagerMock);
     }
 
     /**
@@ -26,9 +26,15 @@ class CacheEnableCommandTest extends AbstractCacheSetCommandTest
      */
     public function testExecute($param, $enable, $result, $output)
     {
-        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
-        $this->cacheManager->expects($this->once())->method('setEnabled')->with($enable, true)->willReturn($result);
-        $this->cacheManager->expects($result === [] ? $this->never() : $this->once())->method('clean')->with($enable);
+        $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
+        $this->cacheManagerMock->expects($this->once())
+            ->method('setEnabled')
+            ->with($enable, true)
+            ->willReturn($result);
+        $cleanInvocationCount = $result === [] ? 0 : 1;
+        $this->cacheManagerMock->expects($this->exactly($cleanInvocationCount))
+            ->method('clean')
+            ->with($enable);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);

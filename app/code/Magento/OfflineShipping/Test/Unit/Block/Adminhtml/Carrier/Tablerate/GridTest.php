@@ -54,7 +54,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->collectionFactoryMock =
-            $this->getMockBuilder('\Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\CollectionFactory')
+            $this->getMockBuilder('\Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CollectionFactory')
             ->disableOriginalConstructor()
             ->getMock();
 

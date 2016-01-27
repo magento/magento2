@@ -6,13 +6,10 @@
 
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Setup\CategorySetup',
-    ['resourceName' => 'catalog_setup']
-);
-/** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
+/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $attribute->setData(
     [
@@ -34,7 +31,8 @@ $attribute->setData(
         'used_in_product_listing' => 0,
         'used_for_sort_by' => 0,
         'frontend_label' => ['Multiselect Attribute'],
-        'backend_type' => 'int',
+        'backend_type' => 'varchar',
+        'backend_model' => 'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend',
         'option' => [
             'value' => [
                 'option_1' => ['Option 1'],

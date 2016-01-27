@@ -6,8 +6,28 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-class Index extends \Magento\Customer\Controller\Account
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
+
+class Index extends \Magento\Customer\Controller\AbstractAccount
 {
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     */
+    public function __construct(
+        Context $context,
+        PageFactory $resultPageFactory
+    ) {
+        $this->resultPageFactory = $resultPageFactory;
+        parent::__construct($context);
+    }
+
     /**
      * Default customer account page
      *

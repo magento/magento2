@@ -205,6 +205,9 @@ class Block implements Layout\GeneratorInterface
         if (!empty($attributes['group'])) {
             $structure->addToParentGroup($elementName, $attributes['group']);
         }
+        if (!empty($attributes['display'])) {
+            $structure->setAttribute($elementName, 'display', $attributes['display']);
+        }
 
         // create block
         $className = $attributes['class'];

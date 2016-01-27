@@ -33,17 +33,18 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      * There must be column names in the first line
      *
      * @param string $file
-     * @param \Magento\Framework\Filesystem\Directory\Write $directory
+     * @param \Magento\Framework\Filesystem\Directory\Read $directory
      * @param string $delimiter
      * @param string $enclosure
      * @throws \LogicException
      */
     public function __construct(
         $file,
-        \Magento\Framework\Filesystem\Directory\Write $directory,
+        \Magento\Framework\Filesystem\Directory\Read $directory,
         $delimiter = ',',
         $enclosure = '"'
     ) {
+        register_shutdown_function([$this, 'destruct']);
         try {
             $this->_file = $directory->openFile($directory->getRelativePath($file), 'r');
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
@@ -58,8 +59,10 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 
     /**
      * Close file handle
+     *
+     * @return void
      */
-    public function __destruct()
+    public function destruct()
     {
         if (is_object($this->_file)) {
             $this->_file->close();
@@ -73,7 +76,18 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      */
     protected function _getNextRow()
     {
-        return $this->_file->readCsv(0, $this->_delimiter, $this->_enclosure);
+        $parsed = $this->_file->readCsv(0, $this->_delimiter, $this->_enclosure);
+        if (is_array($parsed) && count($parsed) != $this->_colQty) {
+            foreach ($parsed as $element) {
+                if (strpos($element, "'") !== false) {
+                    $this->_foundWrongQuoteFlag = true;
+                    break;
+                }
+            }
+        } else {
+            $this->_foundWrongQuoteFlag = false;
+        }
+        return $parsed;
     }
 
     /**

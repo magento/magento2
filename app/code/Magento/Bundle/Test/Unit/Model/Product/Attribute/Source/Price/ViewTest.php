@@ -15,12 +15,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $option;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $optionFactory;
 
@@ -31,9 +31,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->option = $this->getMock('Magento\Eav\Model\Resource\Entity\Attribute\Option', [], [], '', false);
+        $this->option = $this->getMock('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option', [], [], '', false);
         $this->optionFactory = $this->getMock(
-            'Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory',
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory',
             ['create'],
             [],
             '',

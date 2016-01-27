@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  \Magento\Catalog\Model\Resource\Product\Collection|MockObject */
+    /** @var  \Magento\Catalog\Model\ResourceModel\Product\Collection|MockObject */
     private $productCollection;
 
     /** @var \Magento\Catalog\Model\Layer|MockObject */
@@ -28,7 +28,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|MockObject */
     private $scopeConfig;
 
-    /** @var \Magento\Catalog\Model\Resource\Layer\Filter\Price|MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price|MockObject */
     private $resource;
 
     /**
@@ -38,7 +38,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productCollection = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Collection')
+        $this->productCollection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['getMaxPrice'])
             ->getMock();
@@ -57,7 +57,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Layer\Filter\Price')
+        $this->resource = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Layer\Filter\Price')
             ->disableOriginalConstructor()
             ->setMethods(['getCount'])
             ->getMock();

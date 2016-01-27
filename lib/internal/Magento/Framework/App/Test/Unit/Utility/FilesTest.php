@@ -5,62 +5,59 @@
  */
 namespace Magento\Framework\App\Test\Unit\Utility;
 
-use \Magento\Framework\App\Utility\Files;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class FilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
      */
-    private static $baseDir;
+    private $dirSearch;
 
-    public static function setUpBeforeClass()
+    /**
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
+    protected function setUp()
     {
-        self::$baseDir = __DIR__ . '/_files/foo';
-        Files::setInstance(new Files(self::$baseDir));
+        $this->componentRegistrar = new ComponentRegistrar();
+        $this->dirSearch = $this->getMock('Magento\Framework\Component\DirSearch', [], [], '', false);
+        $themePackageList = $this->getMock('Magento\Framework\View\Design\Theme\ThemePackageList', [], [], '', false);
+        Files::setInstance(new Files($this->componentRegistrar, $this->dirSearch, $themePackageList));
     }
 
-    public static function tearDownAfterClass()
+    protected function tearDown()
     {
         Files::setInstance();
     }
 
-    public function testReadLists()
+    public function testGetConfigFiles()
     {
-        $result = Files::init()->readLists(__DIR__ . '/_files/*good.txt');
+        $this->dirSearch->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::MODULE, '/etc/some.file')
+            ->willReturn(['/one/some.file', '/two/some.file', 'some.other.file']);
 
-        // the braces
-        $this->assertContains(self::$baseDir . '/one.txt', $result);
-        $this->assertContains(self::$baseDir . '/two.txt', $result);
-
-        // directory is returned as-is, without expanding contents recursively
-        $this->assertContains(self::$baseDir . '/bar', $result);
-
-        // the * wildcard
-        $this->assertContains(self::$baseDir . '/baz/one.txt', $result);
-        $this->assertContains(self::$baseDir . '/baz/two.txt', $result);
+        $expected = ['/one/some.file', '/two/some.file'];
+        $actual = Files::init()->getConfigFiles('some.file', ['some.other.file'], false);
+        $this->assertSame($expected, $actual);
+        // Check that the result is cached (collectFiles() is called only once)
+        $this->assertSame($expected, $actual);
     }
 
-    public function testReadListsWrongPattern()
+    public function testGetLayoutConfigFiles()
     {
-        $this->assertSame([], Files::init()->readLists(__DIR__ . '/_files/no_good.txt'));
-    }
+        $this->dirSearch->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::THEME, '/etc/some.file')
+            ->willReturn(['/one/some.file', '/two/some.file']);
 
-    public function testReadListsCorruptedDir()
-    {
-        $result = Files::init()->readLists(__DIR__ . '/_files/list_corrupted_dir.txt');
-
-        foreach ($result as $path) {
-            $this->assertNotContains('bar/unknown', $path);
-        }
-    }
-
-    public function testReadListsCorruptedFile()
-    {
-        $result = Files::init()->readLists(__DIR__ . '/_files/list_corrupted_file.txt');
-
-        foreach ($result as $path) {
-            $this->assertNotContains('unknown.txt', $path);
-        }
+        $expected = ['/one/some.file', '/two/some.file'];
+        $actual = Files::init()->getLayoutConfigFiles('some.file', false);
+        $this->assertSame($expected, $actual);
+        // Check that the result is cached (collectFiles() is called only once)
+        $this->assertSame($expected, $actual);
     }
 }

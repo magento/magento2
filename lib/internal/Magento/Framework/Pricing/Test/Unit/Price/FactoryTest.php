@@ -38,7 +38,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $quantity = 2.2;
         $className = 'Magento\Framework\Pricing\Price\PriceInterface';
         $priceMock = $this->getMock($className);
-        $saleableItem = $this->getMock('Magento\Framework\Pricing\Object\SaleableInterface');
+        $saleableItem = $this->getMock('Magento\Framework\Pricing\SaleableInterface');
         $arguments = [];
 
         $argumentsResult = array_merge($arguments, ['saleableItem' => $saleableItem, 'quantity' => $quantity]);
@@ -62,7 +62,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $quantity = 2.2;
         $className = 'Magento\Framework\Pricing\PriceInfo\Base';
         $priceMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
-        $saleableItem = $this->getMock('Magento\Framework\Pricing\Object\SaleableInterface');
+        $saleableItem = $this->getMock('Magento\Framework\Pricing\SaleableInterface');
         $arguments = [];
 
         $argumentsResult = array_merge($arguments, ['saleableItem' => $saleableItem, 'quantity' => $quantity]);

@@ -17,17 +17,17 @@ abstract class AbstractHelper
     protected $_modulePrefix;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
      * Initialize resource helper instance
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, $modulePrefix)
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix)
     {
         $this->_resource = $resource;
         $this->_modulePrefix = (string)$modulePrefix;

@@ -20,16 +20,18 @@
                 &:extend(.abs-field-tooltip all);
             }
         }
+
         &._error {
             .control {
                 input,
                 select,
                 textarea {
-                    .css(border-color, @checkout-field-validation__border-color);
+                    .lib-css(border-color, @checkout-field-validation__border-color);
                 }
             }
         }
     }
+
     .opc-wrapper {
         .fieldset {
             > .field {
@@ -52,8 +54,10 @@
             > .field {
                 &.required {
                     position: relative;
+
                     > label {
                         padding-right: 25px;
+
                         &:after {
                             margin-left: @indent__s;
                             position: absolute;

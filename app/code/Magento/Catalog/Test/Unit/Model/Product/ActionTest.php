@@ -38,7 +38,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     protected $eavConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eavAttribute;
 
@@ -58,7 +58,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMock(
-            '\Magento\Framework\Model\Resource\AbstractResource',
+            '\Magento\Framework\Model\ResourceModel\AbstractResource',
             [
                 'updateAttributes',
                 'getConnection',
@@ -95,7 +95,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->eavAttribute = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Eav\Attribute',
+            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['__wakeup', 'isIndexable'],
             [],
             '',

@@ -42,8 +42,7 @@ $model2->save();
 
 /** @var \Magento\Customer\Setup\CustomerSetup $setupResource */
 $setupResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Customer\Setup\CustomerSetup',
-    ['resourceName' => 'customer_setup']
+    'Magento\Customer\Setup\CustomerSetup'
 );
 
 $data = [['form_code' => 'customer_address_edit', 'attribute_id' => $model->getAttributeId()]];

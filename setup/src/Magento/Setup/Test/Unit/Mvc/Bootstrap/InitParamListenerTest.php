@@ -61,6 +61,10 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
             );
         $mvcApplication->expects($this->any())->method('getServiceManager')->willReturn($serviceManager);
 
+        $eventManager = $this->getMockForAbstractClass('Zend\EventManager\EventManagerInterface');
+        $mvcApplication->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $eventManager->expects($this->any())->method('attach');
+
         $this->listener->onBootstrap($mvcEvent);
     }
 

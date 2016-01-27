@@ -5,35 +5,32 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_data_object_login">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="synchronizePersistentOnLogin" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SynchronizePersistentOnLoginObserver" />
     </event>
     <event name="customer_logout">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="synchronizePersistentOnLogout" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SynchronizePersistentOnLogoutObserver" />
     </event>
     <event name="layout_generate_blocks_after">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\ApplyPersistentData" method="execute" />
-    </event>
-    <event name="checkout_allow_guest">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\DisableGuestCheckout" method="execute" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\ApplyPersistentDataObserver" />
     </event>
     <event name="customer_customer_authenticated">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\CustomerAuthenticatedEvent" method="execute" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\CustomerAuthenticatedEventObserver" />
     </event>
     <event name="sales_quote_save_before">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\SetQuotePersistentData" method="execute" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetQuotePersistentDataObserver" />
     </event>
     <event name="custom_quote_process">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\SetLoadPersistentQuote" method="execute" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\SetLoadPersistentQuoteObserver" />
     </event>
     <event name="customer_register_success">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\RemovePersistentCookie" method="execute" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\RemovePersistentCookieObserver" />
     </event>
     <event name="render_block">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\ApplyBlockPersistentData" method="execute" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\ApplyBlockPersistentDataObserver" />
     </event>
     <event name="update_customer_cookies">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer\UpdateCustomerCookies" method="execute" />
+        <observer name="persistent" instance="Magento\Persistent\Observer\UpdateCustomerCookiesObserver" />
     </event>
 </config>

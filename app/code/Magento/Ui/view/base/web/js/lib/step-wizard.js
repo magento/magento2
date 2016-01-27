@@ -2,24 +2,29 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+// jscs:disable jsDoc
 define([
-    "uiRegistry",
-    "uiComponent",
-    "jquery",
-    "underscore",
-    "ko",
-    "mage/backend/notification"
+    'uiRegistry',
+    'uiComponent',
+    'jquery',
+    'underscore',
+    'ko',
+    'mage/backend/notification'
 ], function (uiRegistry, Component, $, _, ko) {
-    "use strict";
+    'use strict';
 
-    ko.utils.domNodeDisposal.cleanExternalData = _.wrap(ko.utils.domNodeDisposal.cleanExternalData,
-        function(func, node) {
+    var Wizard;
+
+    ko.utils.domNodeDisposal.cleanExternalData = _.wrap(
+        ko.utils.domNodeDisposal.cleanExternalData,
+        function (func, node) {
             if (!$(node).closest('[data-type=skipKO]').length) {
                 func(node);
             }
-    });
+        }
+    );
 
-    var Wizard = function (steps) {
+    Wizard = function (steps) {
         this.steps = steps;
         this.index = 0;
         this.data = {};
@@ -44,19 +49,26 @@ define([
         };
         this.next = function () {
             this.move(this.index + 1);
+
             return this.getStep().name;
         };
         this.prev = function () {
             this.move(this.index - 1);
+
             return this.getStep().name;
         };
-        this.preventSwitch = function(newIndex) {
+        this.preventSwitch = function (newIndex) {
             return newIndex < 0 || (newIndex - this.index) > 1;
         };
         this._next = function (newIndex) {
             newIndex = _.isNumber(newIndex) ? newIndex : this.index + 1;
+
             try {
                 this.getStep().force(this);
+
+                if (newIndex >= steps.length) {
+                    return false;
+                }
             } catch (e) {
                 this.setNotificationMessage(e.message, true);
 
@@ -64,6 +76,7 @@ define([
             }
             this.cleanErrorNotificationMessage();
             this.index = newIndex;
+            this.cleanNotificationMessage();
             this.render();
         };
         this._prev = function (newIndex) {
@@ -87,6 +100,7 @@ define([
         this.showNotificationMessage = function () {
             if (!_.isEmpty(this.getStep())) {
                 this.hideNotificationMessage();
+
                 if (this.getStep().notificationMessage.text !== null) {
                     this.notifyMessage(
                         this.getStep().notificationMessage.text,
@@ -105,7 +119,8 @@ define([
             }
         };
         this.setNotificationMessage = function (text, error) {
-            error = typeof error !== 'undefined';
+            error = error !== undefined;
+
             if (!_.isEmpty(this.getStep())) {
                 this.getStep().notificationMessage.text = text;
                 this.getStep().notificationMessage.error = error;
@@ -117,11 +132,13 @@ define([
         };
         this.render = function () {
             this.hideNotificationMessage();
-            if (!_.isEmpty(this.getStep())) {
-                this.getStep().render(this);
-            }
+            this.getStep().render(this);
         };
-        this.render();
+        this.init = function () {
+            this.updateLabels(this.getStep());
+            this.render();
+        };
+        this.init();
     };
 
     return Component.extend({
@@ -183,7 +200,7 @@ define([
         showSpecificStep: function () {
             var index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),
                 stepName = this.wizard.move(index);
-            
+
             this.selectedStep(stepName);
         }
     });

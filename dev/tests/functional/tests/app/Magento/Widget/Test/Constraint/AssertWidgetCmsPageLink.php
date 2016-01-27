@@ -13,13 +13,13 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Check that created widget displayed on frontent on Home page and on Advanced Search and
- * after click on widget link on frontend system redirects you to cms page
+ * after click on widget link on frontend system redirects you to cms page.
  */
 class AssertWidgetCmsPageLink extends AbstractConstraint
 {
     /**
      * Assert that created widget displayed on frontent on Home page and on Advanced Search and
-     * after click on widget link on frontend system redirects you to cms page
+     * after click on widget link on frontend system redirects you to cms page.
      *
      * @param CmsIndex $cmsIndex
      * @param Widget $widget
@@ -37,15 +37,15 @@ class AssertWidgetCmsPageLink extends AbstractConstraint
         $adminCache->getMessagesBlock()->waitSuccessMessage();
 
         $cmsIndex->open();
-        $widgetText = $widget->getWidgetOptions()['anchor_text'];
+        $widgetText = $widget->getParameters()['anchor_text'];
         \PHPUnit_Framework_Assert::assertTrue(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget with type CmsPageLink is absent on Home page.'
         );
 
-        $title = isset($widget->getWidgetOptions()['node']) ?
-            $widget->getWidgetOptions()['entities'][0]->getLabel() :
-            $widget->getWidgetOptions()['entities'][0]->getContentHeading();
+        $title = isset($widget->getParameters()['node']) ?
+            $widget->getParameters()['entities'][0]->getLabel() :
+            $widget->getParameters()['entities'][0]->getContentHeading();
         $cmsIndex->getWidgetView()->clickToWidget($widget, $widgetText);
         $pageTitle = $cmsIndex->getCmsPageBlock()->getPageTitle();
         \PHPUnit_Framework_Assert::assertEquals(
@@ -54,7 +54,7 @@ class AssertWidgetCmsPageLink extends AbstractConstraint
             'Wrong page title on Cms page.'
         );
 
-        $cmsIndex->getSearchBlock()->clickAdvancedSearchButton();
+        $cmsIndex->getFooterBlock()->openAdvancedSearch();
         \PHPUnit_Framework_Assert::assertTrue(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget with type CmsPageLink is absent on Advanced Search page.'
@@ -62,7 +62,7 @@ class AssertWidgetCmsPageLink extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

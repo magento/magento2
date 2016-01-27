@@ -35,7 +35,12 @@ class CustomAttribute extends DataSource
             /** @var CatalogProductAttribute $data */
             $data = $fixtureFactory->createByCode('catalogProductAttribute', ['dataset' => $data['dataset']]);
         }
-        $this->data['value'] = $this->getDefaultAttributeValue($data);
+        if (is_array($data) && isset($data['value'])) {
+            $this->data['value'] = $data['value'];
+            $data = $data['attribute'];
+        } else {
+            $this->data['value'] = $this->getDefaultAttributeValue($data);
+        }
         $this->data['code'] = $data->hasData('attribute_code') == false
             ? $this->createAttributeCode($data)
             : $data->getAttributeCode();

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Error;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Error processor
@@ -453,11 +454,11 @@ class Processor
         $this->_setReportData($reportData);
 
         if (!file_exists($this->_reportDir)) {
-            @mkdir($this->_reportDir, 0777, true);
+            @mkdir($this->_reportDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
 
         @file_put_contents($this->_reportFile, serialize($reportData));
-        @chmod($this->_reportFile, 0777);
+        @chmod($this->_reportFile, DriverInterface::WRITEABLE_FILE_MODE);
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);

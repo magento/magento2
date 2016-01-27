@@ -16,7 +16,8 @@ class Preview extends \Magento\Email\Controller\Adminhtml\Email\Template
     public function execute()
     {
         try {
-            $this->_view->loadLayout('systemPreview');
+            $this->_view->loadLayout();
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Email Preview'));
             $this->_view->renderLayout();
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred. The email template can not be opened for preview.'));

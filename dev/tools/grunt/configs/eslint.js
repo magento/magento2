@@ -19,7 +19,7 @@ module.exports = {
             configFile: 'dev/tests/static/testsuite/Magento/Test/Js/_files/eslint/.eslintrc',
             reset: true,
             outputFile: 'dev/tests/static/eslint-error-report.xml',
-            format: 'checkstyle',
+            format: 'junit',
             quiet: true
         },
         src: ''

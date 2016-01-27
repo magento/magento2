@@ -10,7 +10,7 @@
 namespace Magento\Framework\Pricing\PriceInfo;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Price info model factory

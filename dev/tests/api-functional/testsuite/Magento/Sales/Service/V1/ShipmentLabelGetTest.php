@@ -32,7 +32,7 @@ class ShipmentLabelGetTest extends WebapiAbstract
     public function testShipmentGet()
     {
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\Resource\Order\Shipment\Collection');
+        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Shipment\Collection');
         $shipment = $shipmentCollection->getFirstItem();
         $shipment->setShippingLabel('test_shipping_label');
         $shipment->save();

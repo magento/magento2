@@ -18,9 +18,9 @@ $defaultSet->load($defaultSetId);
 $defaultGroupId = $defaultSet->getDefaultGroupId();
 $optionData = ['value' => ['option_1' => [0 => 'Fixture Option']], 'order' => ['option_1' => 1]];
 
-/** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Eav\Attribute'
+    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
 );
 $attribute->setAttributeCode(
     'select_attribute'

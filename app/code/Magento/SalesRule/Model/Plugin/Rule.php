@@ -13,7 +13,7 @@ class Rule
      * @return \Magento\SalesRule\Model\Rule
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundLoadCouponCode(
+    public function aroundLoadRelations(
         \Magento\SalesRule\Model\Rule $subject,
         \Closure $proceed
     ) {

@@ -21,18 +21,18 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
     protected $_dataHelper = null;
 
     /**
-     * @var \Magento\Reports\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
+        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -40,7 +40,7 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * @return array|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection|\Magento\Eav\Model\Entity\Collection\Abstract
+     * @return array|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|\Magento\Eav\Model\Entity\Collection\Abstract
      */
     public function getCollection()
     {

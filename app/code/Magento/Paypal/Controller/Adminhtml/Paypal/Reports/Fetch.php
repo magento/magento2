@@ -34,20 +34,18 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
                     $fetched = $reports->fetchAndSave(
                         \Magento\Paypal\Model\Report\Settlement::createConnection($config)
                     );
-                    $this->messageManager->addSuccess(
+                    $this->messageManager->addSuccessMessage(
                         __('We fetched %1 report rows from "%2@%3."', $fetched, $config['username'], $config['hostname'])
                     );
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addExceptionMessage(
+                        $e,
                         __('We can\'t fetch reports from "%1@%2."', $config['username'], $config['hostname'])
                     );
-                    $this->_logger->critical($e);
                 }
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_logger->critical($e);
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

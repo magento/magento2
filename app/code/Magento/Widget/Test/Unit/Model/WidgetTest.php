@@ -75,14 +75,6 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->widget->getWidgetByClassType('type2'));
     }
 
-    public function testGetWidgetDeclarationTypeWithBackslashes()
-    {
-        $this->assertContains(
-            'Magento\\\\Widget\\\\Backslashed\\\\ClassName',
-            $this->widget->getWidgetDeclaration('Magento\Widget\Backslashed\ClassName')
-        );
-    }
-
     public function testGetConfigAsObject()
     {
         $configFile = __DIR__ . '/_files/mappedConfigArrayAll.php';

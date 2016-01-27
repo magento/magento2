@@ -7,20 +7,10 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfigFiles
 {
-    /**
-     * Returns directory (modules, library internal stc.) constant which contains XSD file
-     *
-     * @return string
-     */
-    protected function getDirectoryConstant()
-    {
-        return DirectoryList::LIB_INTERNAL;
-    }
-
     /**
      * Returns the reader class name that will be instantiated via ObjectManager
      *
@@ -32,24 +22,23 @@ class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfi
     }
 
     /**
-     * Returns a string that represents the path to the config file, starting in the app directory.
-     *
-     * Format is glob, so * is allowed.
+     * Returns a string that represents the path to the config file
      *
      * @return string
      */
     protected function _getConfigFilePathGlob()
     {
-        return '/*/*/view/*/layouts.xml';
+        return 'view/*/layouts.xml';
     }
 
     /**
-     * Returns a path to the per file XSD file, relative to the library directory.
+     * Returns an absolute path to the XSD file corresponding to the XML files specified in _getConfigFilePathGlob
      *
      * @return string
      */
     protected function _getXsdPath()
     {
-        return '/Magento/Framework/View/PageLayout/etc/layouts.xsd';
+        return $this->componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
+            . '/View/PageLayout/etc/layouts.xsd';
     }
 }

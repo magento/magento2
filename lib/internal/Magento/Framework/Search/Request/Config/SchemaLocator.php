@@ -10,6 +10,14 @@ namespace Magento\Framework\Search\Request\Config;
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
+    {
+        $this->urnResolver = $urnResolver;
+    }
+
     /**
      * Get path to merged config schema
      *
@@ -17,7 +25,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return realpath(__DIR__ . '/../../etc/search_request_merged.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request_merged.xsd');
     }
 
     /**
@@ -27,6 +35,6 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return realpath(__DIR__ . '/../../etc/search_request.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request.xsd');
     }
 }

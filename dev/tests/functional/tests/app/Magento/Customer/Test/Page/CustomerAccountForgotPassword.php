@@ -11,36 +11,41 @@ use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Page\Page;
 
 /**
+ * Customer forgot password page.
  */
 class CustomerAccountForgotPassword extends Page
 {
     /**
-     * URL for reset customer password
+     * URL for reset customer password.
      */
     const MCA = 'customer/account/forgotpassword';
 
     /**
+     * Forgot password form.
+     *
      * @var string
      */
     protected $forgotPasswordForm = '#form-validate';
 
     /**
-     * Custom constructor
+     * Init page. Set page url.
+     *
+     * @return void
      */
-    protected function _init()
+    protected function initUrl()
     {
-        $this->_url = $_ENV['app_frontend_url'] . self::MCA;
+        $this->url = $_ENV['app_frontend_url'] . self::MCA;
     }
 
     /**
-     * Get Customer Forgot Password form
+     * Get Customer Forgot Password form.
      *
      * @return \Magento\Customer\Test\Block\Form\ForgotPassword
      */
     public function getForgotPasswordForm()
     {
         return Factory::getBlockFactory()->getMagentoCustomerFormForgotPassword(
-            $this->_browser->find(
+            $this->browser->find(
                 $this->forgotPasswordForm,
                 Locator::SELECTOR_CSS
             )

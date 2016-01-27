@@ -30,25 +30,11 @@ class Shipping extends Form
     protected $openForm = '.title';
 
     /**
-     * Get quote selector.
-     *
-     * @var string
-     */
-    protected $getQuote = '.action.quote';
-
-    /**
-     * Update total selector.
-     *
-     * @var string
-     */
-    protected $updateTotalSelector = '.action.update';
-
-    /**
      * Selector to access the shipping carrier method.
      *
      * @var string
      */
-    protected $shippingMethod = '//span[text()="%s"]/following::*//*[contains(text(), "%s")]';
+    protected $shippingMethod = '//span[text()="%s"]/following::label[contains(., "%s")]/../input';
 
     /**
      * From with shipping available shipping methods.
@@ -59,10 +45,18 @@ class Shipping extends Form
 
     /**
      * Fields that are used in estimation shipping form.
+     * Indexes of this array should be numeric, they are used in compare() method.
      *
      * @var array
      */
     protected $estimationFields = ['country_id', 'region_id', 'region', 'postcode'];
+
+    /**
+     * Block wait element.
+     *
+     * @var string
+     */
+    protected $blockWaitElement = '._block-content-loading';
 
     /**
      * Open estimate shipping and tax form.
@@ -77,20 +71,11 @@ class Shipping extends Form
     }
 
     /**
-     * Click Get quote button.
-     *
-     * @return void
-     */
-    public function clickGetQuote()
-    {
-        $this->_rootElement->find($this->getQuote)->click();
-    }
-
-    /**
      * Select shipping method.
      *
      * @param array $shipping
      * @return void
+     * @throws \Exception
      */
     public function selectShippingMethod(array $shipping)
     {
@@ -98,8 +83,13 @@ class Shipping extends Form
         if (!$this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible()) {
             $this->openEstimateShippingAndTax();
         }
-        $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
-        $this->_rootElement->find($this->updateTotalSelector, Locator::SELECTOR_CSS)->click();
+
+        $element = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+        if (!$element->isDisabled()) {
+            $element->click();
+        } else {
+            throw new \Exception("Unable to set value to field '$selector' as it's disabled.");
+        }
     }
 
     /**
@@ -113,8 +103,28 @@ class Shipping extends Form
         $this->openEstimateShippingAndTax();
         $data = $address->getData();
         $mapping = $this->dataMapping(array_intersect_key($data, array_flip($this->estimationFields)));
-        $this->_fill($mapping, $this->_rootElement);
-        $this->clickGetQuote();
+        // sort array according to $this->estimationFields elements order
+        uksort($mapping, function ($a, $b) {
+            $a = array_search($a, $this->estimationFields);
+            $b = array_search($b, $this->estimationFields);
+            switch (true) {
+                case false !== $a && false !== $b:
+                    return $a - $b;
+                case false !== $a:
+                    return -1;
+                case false !== $b:
+                    return 1;
+                default:
+                    return 0;
+            }
+        });
+
+        // Test environment may become unstable when form fields are filled in a default manner.
+        // Imitating behavior closer to the real user.
+        foreach ($mapping as $field) {
+            $this->_fill([$field], $this->_rootElement);
+            $this->waitForUpdatedShippingMethods();
+        }
     }
 
     /**
@@ -135,5 +145,17 @@ class Shipping extends Form
         $selector = sprintf($this->shippingMethod, $carrier, $method);
 
         return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Wait for shipping methods block to update contents asynchronously.
+     *
+     * @return void
+     */
+    public function waitForUpdatedShippingMethods()
+    {
+        // Code under test uses JavaScript delay at this point as well.
+        sleep(1);
+        $this->waitForElementNotVisible($this->blockWaitElement);
     }
 }

@@ -49,7 +49,7 @@ class FormPageActions extends PageActions
      *
      * @var string
      */
-    protected $deleteButton = '#delete';
+    protected $deleteButton = '.delete';
 
     /**
      * Magento loader
@@ -110,7 +110,6 @@ class FormPageActions extends PageActions
     public function delete()
     {
         $this->_rootElement->find($this->deleteButton)->click();
-        $this->browser->acceptAlert();
     }
 
     /**

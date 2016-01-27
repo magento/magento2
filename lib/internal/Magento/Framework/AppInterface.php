@@ -15,11 +15,6 @@ interface AppInterface
     const DISTRO_LOCALE_CODE = 'en_US';
 
     /**
-     * Magento version
-     */
-    const VERSION = '1.0.0-beta';
-
-    /**
      * Launch application
      *
      * @return \Magento\Framework\App\ResponseInterface

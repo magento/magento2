@@ -8,13 +8,11 @@
  * Products generation to test base data
  */
 
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 $testCases = include __DIR__ . '/_algorithm_base_data.php';
 
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Setup\CategorySetup',
-    ['resourceName' => 'catalog_setup']
-);
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2
  */
@@ -67,6 +65,8 @@ foreach ($testCases as $index => $testCase) {
         true
     )->setPosition(
         $position
+    )->setUrlKey(
+        'category_' . $categoryId
     )->save();
 
     foreach ($testCase[0] as $price) {
@@ -74,10 +74,10 @@ foreach ($testCases as $index => $testCase) {
             'Magento\Catalog\Model\Product'
         );
         $productId = $lastProductId + 1;
-        $product->setTypeId(
-            \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-        )->setId(
+        $product->setId(
             $productId
+        )->setTypeId(
+            \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
         )->setAttributeSetId(
             $installer->getAttributeSetId('catalog_product', 'Default')
         )->setStoreId(
@@ -90,6 +90,11 @@ foreach ($testCases as $index => $testCase) {
             'simple-' . $productId
         )->setPrice(
             $price
+        )->setStockData(
+            [
+                'qty' => 100,
+                'is_in_stock' => 1,
+            ]
         )->setWeight(
             18
         )->setCategoryIds(

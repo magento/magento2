@@ -37,6 +37,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         'gender' => [
             'Male' => 1,
             'Female' => 2,
+            'Not Specified' => 3
         ],
         'region_id' => [
             'California' => 12,
@@ -94,7 +95,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         }
 
         $curl = new CurlTransport();
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
         // After caching My Account page we cannot check by success message
@@ -131,7 +132,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         ];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
 
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data, CurlInterface::POST);
         $response = $curl->read();
         $curl->close();
 
@@ -185,7 +186,7 @@ class Curl extends AbstractCurl implements CustomerInterface
 
         $url = $_ENV['app_backend_url'] . 'customer/index/save/id/' . $curlData['customer']['entity_id'];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $curlData);
+        $curl->write($url, $curlData);
         $response = $curl->read();
         $curl->close();
 
@@ -226,22 +227,5 @@ class Curl extends AbstractCurl implements CustomerInterface
         $curlData['address'] = $address;
 
         return $curlData;
-    }
-
-    /**
-     * Encoded filter parameters
-     *
-     * @param array $filter
-     * @return string
-     */
-    protected function encodeFilter(array $filter)
-    {
-        $result = [];
-        foreach ($filter as $name => $value) {
-            $result[] = "{$name}={$value}";
-        }
-        $result = implode('&', $result);
-
-        return base64_encode($result);
     }
 }

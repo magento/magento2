@@ -30,7 +30,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -49,7 +49,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->resource = $this->getMockBuilder('Magento\Customer\Model\Resource\Visitor')
+        $this->resource = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Visitor')
             ->setMethods([
                 'beginTransaction',
                 '__sleep',

@@ -11,7 +11,7 @@ namespace Magento\Sales\Model\Order;
 class Config
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Status\Collection
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\Collection
      */
     protected $collection;
 
@@ -33,7 +33,7 @@ class Config
     protected $orderStatusFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Status\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory
      */
     protected $orderStatusCollectionFactory;
 
@@ -55,12 +55,12 @@ class Config
      * Constructor
      *
      * @param \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory
-     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollectionFactory
      * @param \Magento\Framework\App\State $state
      */
     public function __construct(
         \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory,
-        \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $orderStatusCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollectionFactory,
         \Magento\Framework\App\State $state
     ) {
         $this->orderStatusFactory = $orderStatusFactory;
@@ -69,7 +69,7 @@ class Config
     }
 
     /**
-     * @return \Magento\Sales\Model\Resource\Order\Status\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Status\Collection
      */
     protected function _getCollection()
     {

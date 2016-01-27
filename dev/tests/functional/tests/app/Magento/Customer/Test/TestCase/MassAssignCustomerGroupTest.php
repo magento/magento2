@@ -37,6 +37,7 @@ class MassAssignCustomerGroupTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
+    const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
     /**
@@ -91,7 +92,8 @@ class MassAssignCustomerGroupTest extends Injectable
         $this->customerIndex->open();
         $this->customerIndex->getCustomerGridBlock()->massaction(
             [['email' => $customer->getEmail()]],
-            [$this->customersGridActions => $customerGroup->getCustomerGroupCode()]
+            [$this->customersGridActions => $customerGroup->getCustomerGroupCode()],
+            true
         );
     }
 }

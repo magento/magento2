@@ -7,18 +7,14 @@
 namespace Magento\Framework\Api\ExtensionAttribute;
 
 use Magento\Framework\Api\ExtensionAttribute\Config;
-use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter as Converter;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
-use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
-use Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * Join processor allows to join extension attributes during collections loading.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
 {
@@ -29,47 +25,33 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      */
     protected $objectManager;
 
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var JoinDataInterfaceFactory
-     */
-    private $extensionAttributeJoinDataFactory;
-
-    /**
-     * @var TypeProcessor
-     */
+    /** @var TypeProcessor */
     private $typeProcessor;
 
-    /**
-     * @var ExtensionAttributesFactory
-     */
+    /** @var ExtensionAttributesFactory */
     private $extensionAttributesFactory;
+
+    /** @var JoinProcessorHelper */
+    private $joinProcessorHelper;
 
     /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param Config $config
-     * @param JoinDataInterfaceFactory $extensionAttributeJoinDataFactory
      * @param TypeProcessor $typeProcessor
      * @param ExtensionAttributesFactory $extensionAttributesFactory
+     * @param JoinProcessorHelper $joinProcessorHelper
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        Config $config,
-        JoinDataInterfaceFactory $extensionAttributeJoinDataFactory,
         TypeProcessor $typeProcessor,
-        ExtensionAttributesFactory $extensionAttributesFactory
+        ExtensionAttributesFactory $extensionAttributesFactory,
+        JoinProcessorHelper $joinProcessorHelper
     ) {
         $this->objectManager = $objectManager;
-        $this->config = $config;
-        $this->extensionAttributeJoinDataFactory = $extensionAttributeJoinDataFactory;
         $this->typeProcessor = $typeProcessor;
         $this->extensionAttributesFactory = $extensionAttributesFactory;
+        $this->joinProcessorHelper = $joinProcessorHelper;
     }
 
     /**
@@ -79,48 +61,20 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     {
         $extensibleEntityClass = $extensibleEntityClass ?: $collection->getItemObjectClass();
         $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
+
         foreach ($joinDirectives as $attributeCode => $directive) {
             /** @var JoinDataInterface $joinData */
-            $joinData = $this->extensionAttributeJoinDataFactory->create();
+            $joinData = $this->joinProcessorHelper->getJoinDataInterface();
             $joinData->setAttributeCode($attributeCode)
                 ->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
                 ->setReferenceTableAlias($this->getReferenceTableAlias($attributeCode))
                 ->setReferenceField($directive[Converter::JOIN_REFERENCE_FIELD])
                 ->setJoinField($directive[Converter::JOIN_ON_FIELD]);
             $joinData->setSelectFields(
-                $this->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_FIELDS])
+                $this->joinProcessorHelper->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_FIELDS])
             );
             $collection->joinExtensionAttribute($joinData, $this);
         }
-    }
-
-    /**
-     * Generate a list of select fields with mapping of client facing attribute names to field names used in SQL select.
-     *
-     * @param string $attributeCode
-     * @param array $selectFields
-     * @return array
-     */
-    private function getSelectFieldsMap($attributeCode, $selectFields)
-    {
-        $referenceTableAlias = $this->getReferenceTableAlias($attributeCode);
-        $useFieldInAlias = (count($selectFields) > 1);
-        $selectFieldsAliases = [];
-        foreach ($selectFields as $selectField) {
-            $internalFieldName = $selectField[Converter::JOIN_FIELD_COLUMN]
-                ? $selectField[Converter::JOIN_FIELD_COLUMN]
-                : $selectField[Converter::JOIN_FIELD];
-            $setterName = 'set'
-                . ucfirst(SimpleDataObjectConverter::snakeCaseToCamelCase($selectField[Converter::JOIN_FIELD]));
-            $selectFieldsAliases[] = [
-                JoinDataInterface::SELECT_FIELD_EXTERNAL_ALIAS => $attributeCode
-                    . ($useFieldInAlias ? '.' . $selectField[Converter::JOIN_FIELD] : ''),
-                JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS => $referenceTableAlias . '_' . $internalFieldName,
-                JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX => $referenceTableAlias . '.' . $internalFieldName,
-                JoinDataInterface::SELECT_FIELD_SETTER => $setterName
-            ];
-        }
-        return $selectFieldsAliases;
     }
 
     /**
@@ -180,7 +134,9 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
         $extensibleEntityClass
     ) {
         $attributeType = $directive[Converter::DATA_TYPE];
-        $selectFields = $this->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_FIELDS]);
+        $selectFields = $this->joinProcessorHelper
+            ->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_FIELDS]);
+
         foreach ($selectFields as $selectField) {
             $internalAlias = $selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS];
             if (isset($data[$internalAlias])) {
@@ -223,7 +179,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
         $extensibleInterfaceName = $this->extensionAttributesFactory
             ->getExtensibleInterfaceName($extensibleEntityClass);
         $extensibleInterfaceName = ltrim($extensibleInterfaceName, '\\');
-        $config = $this->config->get();
+        $config = $this->joinProcessorHelper->getConfigData();
         if (!isset($config[$extensibleInterfaceName])) {
             return [];
         }

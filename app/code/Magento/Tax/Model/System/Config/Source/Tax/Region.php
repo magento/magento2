@@ -8,14 +8,14 @@ namespace Magento\Tax\Model\System\Config\Source\Tax;
 class Region implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     protected $_regionsFactory;
 
     /**
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionsFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionsFactory
      */
-    public function __construct(\Magento\Directory\Model\Resource\Region\CollectionFactory $regionsFactory)
+    public function __construct(\Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionsFactory)
     {
         $this->_regionsFactory = $regionsFactory;
     }
@@ -29,7 +29,7 @@ class Region implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray($noEmpty = false, $country = null)
     {
-        /** @var $region \Magento\Directory\Model\Resource\Region\Collection */
+        /** @var $region \Magento\Directory\Model\ResourceModel\Region\Collection */
         $regionCollection = $this->_regionsFactory->create();
         $options = $regionCollection->addCountryFilter($country)->toOptionArray();
 

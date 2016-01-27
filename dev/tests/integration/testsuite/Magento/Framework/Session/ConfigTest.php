@@ -12,29 +12,19 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\Session\Config
-     */
+    /** @var \Magento\Framework\Session\Config */
     protected $_model;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $_cacheLimiter = 'private_no_expire';
 
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
+    /** @var \Magento\TestFramework\ObjectManager */
     protected $_objectManager;
 
-    /**
-     * @var string Default value for session.save_path setting
-     */
+    /** @var string Default value for session.save_path setting */
     protected $defaultSavePath;
 
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject */
     protected $deploymentConfigMock;
 
     protected function setUp()
@@ -48,7 +38,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->deploymentConfigMock->expects($this->at(0))
             ->method('get')
-            ->with(Config::PARAM_SESSION_SAVE_METHOD, 'files')
+            ->with($this->equalTo(Config::PARAM_SESSION_SAVE_METHOD), $this->anything())
             ->will($this->returnValue('files'));
         $this->deploymentConfigMock->expects($this->at(1))
             ->method('get')
@@ -67,12 +57,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->get('Magento\Framework\Filesystem\DirectoryList')
             ->getPath(DirectoryList::SESSION);
     }
-
-    protected function tearDown()
-    {
-        $this->_objectManager->removeSharedInstance('Magento\Framework\Session\Config');
-    }
-
+    
     /**
      * @magentoAppIsolation enabled
      */
@@ -82,8 +67,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Filesystem'
         );
+        $path = ini_get('session.save_path') ?:
+            $filesystem->getDirectoryRead(DirectoryList::SESSION)->getAbsolutePath();
+
         $this->assertEquals(
-            $filesystem->getDirectoryRead(DirectoryList::SESSION)->getAbsolutePath(),
+            $path,
             $this->_model->getSavePath()
         );
         $this->assertEquals(

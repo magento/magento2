@@ -108,7 +108,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->with('new-request-path', OptionProvider::TEMPORARY);
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Redirect', ['request' => $this->request]);
+            ->with('Magento\Framework\App\Action\Redirect');
 
         $this->router->match($this->request);
     }
@@ -189,7 +189,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('new-target-path'));
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Redirect', ['request' => $this->request]);
+            ->with('Magento\Framework\App\Action\Redirect');
 
         $this->router->match($this->request);
     }
@@ -207,7 +207,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->url->expects($this->once())->method('getUrl')->with('', ['_direct' => 'target-path'])->willReturn('a');
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Redirect', ['request' => $this->request]);
+            ->with('Magento\Framework\App\Action\Redirect');
 
         $this->router->match($this->request);
     }
@@ -229,7 +229,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->url->expects($this->never())->method('getUrl');
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Redirect', ['request' => $this->request]);
+            ->with('Magento\Framework\App\Action\Redirect');
 
         $this->router->match($this->request);
     }
@@ -258,7 +258,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())->method('setAlias')
             ->with(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, 'request-path');
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Forward', ['request' => $this->request]);
+            ->with('Magento\Framework\App\Action\Forward');
 
         $this->router->match($this->request);
     }

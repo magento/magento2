@@ -49,7 +49,7 @@ class TotalsConverter
             /** @var \Magento\Quote\Model\Cart\TotalSegment $total */
             $total = $this->factory->create();
             $total->setData($pureData);
-            $data[] = $total;
+            $data[$addressTotal->getCode()] = $total;
         }
         return $data;
     }

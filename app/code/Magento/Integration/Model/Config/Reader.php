@@ -26,13 +26,14 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
+     * @param string $filename
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
         \Magento\Integration\Model\Config\Converter $converter,
         \Magento\Integration\Model\Config\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
-        $fileName = 'integration\config.xml',
+        $fileName = 'integration/config.xml',
         $idAttributes = [],
         $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'

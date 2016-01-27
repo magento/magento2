@@ -10,7 +10,7 @@
              module="Magento_User"
              type="flat"
              entity_type="authorization_role"
-             collection="Magento\User\Model\Resource\Role\User\Collection"
+             collection="Magento\User\Model\ResourceModel\Role\User\Collection"
              repository_class="Magento\User\Test\Repository\Role"
              handler_interface="Magento\User\Test\Handler\Role\RoleInterface"
              class="Magento\User\Test\Fixture\Role">

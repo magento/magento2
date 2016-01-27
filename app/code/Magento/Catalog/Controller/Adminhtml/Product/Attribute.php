@@ -73,9 +73,10 @@ abstract class Attribute extends \Magento\Backend\App\Action
     }
 
     /**
+     * @param \Magento\Framework\Phrase|null $title
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function createActionPage()
+    protected function createActionPage($title = null)
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
@@ -91,6 +92,9 @@ abstract class Attribute extends \Magento\Backend\App\Action
             $resultPage->addBreadcrumb(__('Catalog'), __('Catalog'))
                 ->addBreadcrumb(__('Manage Product Attributes'), __('Manage Product Attributes'))
                 ->setActiveMenu('Magento_Catalog::catalog_attributes_attributes');
+            if (!empty($title)) {
+                $resultPage->addBreadcrumb($title, $title);
+            }
         }
         $resultPage->getConfig()->getTitle()->prepend(__('Product Attributes'));
         return $resultPage;

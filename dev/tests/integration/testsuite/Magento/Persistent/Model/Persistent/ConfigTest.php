@@ -23,12 +23,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\App\Filesystem\DirectoryList',
-            [
-                'root' => DirectoryList::ROOT,
-                'config' => [
-                    DirectoryList::MODULES => [DirectoryList::PATH => dirname(__DIR__)],
-                ]
-            ]
+            ['root' => DirectoryList::ROOT]
         );
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\Filesystem',

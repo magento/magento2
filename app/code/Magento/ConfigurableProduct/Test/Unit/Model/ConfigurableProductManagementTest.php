@@ -6,6 +6,9 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
+use Magento\ConfigurableProduct\Model\ConfigurableProductManagement;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
+
 class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -14,12 +17,12 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $attributeRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Model\ProductVariationsBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productVariationBuilder;
 
@@ -32,6 +35,11 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $option;
+
+    /**
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productsFactoryMock;
 
     protected function setUp()
     {
@@ -51,8 +59,19 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->productsFactoryMock = $this->getMock(
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
 
-        $this->model = new \Magento\ConfigurableProduct\Model\ConfigurableProductManagement($this->attributeRepository, $this->productVariationBuilder);
+        $this->model = new ConfigurableProductManagement(
+            $this->attributeRepository,
+            $this->productVariationBuilder,
+            $this->productsFactoryMock
+        );
     }
 
     public function testGenerateVariation()
@@ -61,7 +80,7 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
         $attributeOption = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Option', [], [], '', false);
         $attributeOption->expects($this->once())->method('getData')->willReturn(['key' => 'value']);
 
-        $attribute = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $attribute->expects($this->any())->method('getOptions')->willReturn([$attributeOption]);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn(10);
 
@@ -85,5 +104,67 @@ class ConfigurableProductManagementTest extends \PHPUnit_Framework_TestCase
 
         $expected = ['someObject'];
         $this->assertEquals($expected, $this->model->generateVariation($this->product, [$this->option]));
+    }
+
+    public function testGetEnabledCount()
+    {
+        $statusEnabled = 1;
+        $productsMock = $this->getMock(
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->productsFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($productsMock);
+        $productsMock
+            ->expects($this->once())
+            ->method('addAttributeToFilter')
+            ->with('status', $statusEnabled)
+            ->willReturnSelf();
+        $productsMock
+            ->expects($this->once())
+            ->method('getSize')
+            ->willReturn('expected');
+
+        $this->assertEquals(
+            'expected',
+            $this->model->getCount($statusEnabled)
+        );
+    }
+
+    public function testGetDisabledCount()
+    {
+        $statusDisabled = 2;
+        $productsMock = $this->getMock(
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->productsFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($productsMock);
+        $productsMock
+            ->expects($this->once())
+            ->method('addAttributeToFilter')
+            ->with('status', $statusDisabled)
+            ->willReturnSelf();
+        $productsMock
+            ->expects($this->once())
+            ->method('getSize')
+            ->willReturn('expected');
+
+        $this->assertEquals(
+            'expected',
+            $this->model->getCount($statusDisabled)
+        );
     }
 }

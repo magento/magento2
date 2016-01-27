@@ -43,7 +43,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->_initialConfigMock = $this->getMock('Magento\Framework\App\Config\Initial', [], [], '', false);
         $this->_collectionFactory = $this->getMock(
-            'Magento\Store\Model\Resource\Config\Collection\ScopedFactory',
+            'Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory',
             ['create'],
             [],
             '',

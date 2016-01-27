@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
             <block class="Magento\UrlRewrite\Block\GridContainer" name="adminhtml.block.url_rewrite.grid.container">
                 <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.block.url_rewrite.grid" as="grid">
                     <arguments>
                         <argument name="id" xsi:type="string">urlrewriteGrid</argument>
-                        <argument name="dataSource" xsi:type="object">Magento\UrlRewrite\Model\Resource\UrlRewriteCollection</argument>
+                        <argument name="dataSource" xsi:type="object">Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection</argument>
                         <argument name="default_sort" xsi:type="string">url_rewrite_id</argument>
                     </arguments>
                     <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.url_rewrite.grid.columnSet">

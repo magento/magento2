@@ -24,7 +24,7 @@ class AssertCustomVariableSuccessSaveMessage extends AbstractConstraint
      */
     public function processAssert(SystemVariableIndex $systemVariableIndexPage)
     {
-        $actualMessage = $systemVariableIndexPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $systemVariableIndexPage->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_SAVE_MESSAGE,
             $actualMessage,

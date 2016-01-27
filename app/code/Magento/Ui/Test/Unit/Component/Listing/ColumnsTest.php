@@ -42,6 +42,10 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
     }
 
     /**
@@ -97,6 +101,7 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             'js_config' => ['extends' => 'test_config_extends'],
             'config' => ['dataType' => 'test_type', 'sortable' => true]
         ];
+        $saveUrl = 'module/controller/save';
 
         $this->contextMock->expects($this->once())
             ->method('getDataProvider')
@@ -130,7 +135,28 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
                 'data' => $data
             ]
         );
-
+        $columns->setData(
+            'config',
+            [
+                'test_config_data' => 'test_config_value',
+                'editorConfig' => [
+                    'clientConfig' => [
+                        'saveUrl' => $saveUrl,
+                    ]
+                ]
+            ]
+        );
         $columns->prepare();
+        $this->assertEquals(
+            [
+                'test_config_data' => 'test_config_value',
+                'editorConfig' => [
+                    'clientConfig' => [
+                        'saveUrl' => $saveUrl,
+                    ]
+                ]
+            ],
+            $columns->getData('config')
+        );
     }
 }

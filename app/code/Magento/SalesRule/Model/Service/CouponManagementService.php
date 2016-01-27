@@ -24,7 +24,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
     protected $ruleFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -46,7 +46,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
     /**
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
-     * @param \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $collectionFactory
+     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $collectionFactory
      * @param \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator
      * @param \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel
      * @param \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory $couponMassDeleteResultFactory
@@ -54,7 +54,7 @@ class CouponManagementService implements \Magento\SalesRule\Api\CouponManagement
     public function __construct(
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
-        \Magento\SalesRule\Model\Resource\Coupon\CollectionFactory $collectionFactory,
+        \Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory $collectionFactory,
         \Magento\SalesRule\Model\Coupon\Massgenerator $couponGenerator,
         \Magento\SalesRule\Model\Spi\CouponResourceInterface $resourceModel,
         \Magento\SalesRule\Api\Data\CouponMassDeleteResultInterfaceFactory $couponMassDeleteResultFactory

@@ -5,12 +5,13 @@
  */
 namespace Magento\Paypal\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * PayPal module observer
  */
-class AddBillingAgreementToSessionObserver
+class AddBillingAgreementToSessionObserver implements ObserverInterface
 {
     /**
      * @var \Magento\Paypal\Model\Billing\AgreementFactory
@@ -40,7 +41,7 @@ class AddBillingAgreementToSessionObserver
      * @param EventObserver $observer
      * @return void
      */
-    public function invoke(EventObserver $observer)
+    public function execute(EventObserver $observer)
     {
         /** @var \Magento\Sales\Model\Order\Payment $orderPayment */
         $orderPayment = $observer->getEvent()->getPayment();
@@ -52,6 +53,7 @@ class AddBillingAgreementToSessionObserver
             if ($agreement->isValid()) {
                 $message = __('Created billing agreement #%1.', $agreement->getReferenceId());
                 $order->addRelatedObject($agreement);
+                $agreement->addOrderRelation($order);
                 $this->checkoutSession->setLastBillingAgreementReferenceId($agreement->getReferenceId());
                 $agreementCreated = true;
             } else {

@@ -38,9 +38,9 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
         // Set locale options
         $systemConfig->open();
         $systemConfig->getPageActions()->selectStore($store->getGroupId() . "/" . $store->getName());
-        $configGroup = $systemConfig->getForm()->getGroup('Locale Options');
-        $configGroup->open();
-        $configGroup->setValue('select-groups-locale-fields-code-value', $locale);
+        $systemConfig->getModalBlock()->acceptAlert();
+        $configGroup = $systemConfig->getForm()->getGroup('general', 'locale', 'code');
+        $configGroup->setValue('general', 'locale', 'code', $locale);
         $systemConfig->getPageActions()->save();
         $systemConfig->getMessagesBlock()->waitSuccessMessage();
 

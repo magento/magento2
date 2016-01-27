@@ -8,8 +8,8 @@ namespace Magento\Review\Model\Rating;
 /**
  * Ratings entity model
  *
- * @method \Magento\Review\Model\Resource\Rating\Entity _getResource()
- * @method \Magento\Review\Model\Resource\Rating\Entity getResource()
+ * @method \Magento\Review\Model\ResourceModel\Rating\Entity _getResource()
+ * @method \Magento\Review\Model\ResourceModel\Rating\Entity getResource()
  * @method string getEntityCode()
  * @method \Magento\Review\Model\Rating\Entity setEntityCode(string $value)
  *
@@ -23,7 +23,7 @@ class Entity extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Resource\Rating\Entity');
+        $this->_init('Magento\Review\Model\ResourceModel\Rating\Entity');
     }
 
     /**

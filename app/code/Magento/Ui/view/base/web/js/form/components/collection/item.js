@@ -54,7 +54,7 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        initProperties: function () {
+        initConfig: function () {
             this._super();
 
             this.displayed = [];
@@ -69,12 +69,11 @@ define([
          * @return {Object} - reference to instance
          */
         initObservable: function () {
-            this._super();
-
-            this.observe({
-                'noPreview': true,
-                'indexed': {}
-            });
+            this._super()
+                .observe({
+                    noPreview: true,
+                    indexed: {}
+                });
 
             return this;
         },
@@ -105,6 +104,27 @@ define([
             indexed[elem.index] = elem;
 
             this.indexed(indexed);
+
+            return this;
+        },
+
+        /**
+         * Destroys current instance along with all of its' children.
+         * Overrides base method to clear data when this method is called.
+         */
+        destroy: function () {
+            this._super();
+            this._clearData();
+        },
+
+        /**
+         * Clears all data associated with component.
+         * @private
+         *
+         * @returns {Item} Chainable.
+         */
+        _clearData: function () {
+            this.source.remove(this.dataScope);
 
             return this;
         },
@@ -157,7 +177,7 @@ define([
             items = items.map(function (index) {
                 var elem = elems[index];
 
-                preview = elem && elem.visible() ? elem.delegate('getPreview') : '';
+                preview = elem && elem.visible() ? elem.getPreview() : '';
 
                 preview = Array.isArray(preview) ?
                     _.compact(preview).join(', ') :

@@ -14,7 +14,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected $plugin;
 
     /**}
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subject;
 
@@ -36,11 +36,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->plugin = $objectManager->getObject('Magento\SalesRule\Model\Plugin\Rule');
     }
 
-    public function testLoadCouponCode()
+    public function testLoadRelations()
     {
         $this->assertEquals(
             $this->subject,
-            $this->plugin->aroundLoadCouponCode($this->subject, $this->genericClosure)
+            $this->plugin->aroundLoadRelations($this->subject, $this->genericClosure)
         );
     }
 }

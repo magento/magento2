@@ -343,4 +343,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->factory->expects($this->once())->method('create')->will($this->returnValue($imageProcessor));
         $this->assertSame($imageProcessor, $this->image->getImageProcessor());
     }
+
+    public function testIsBaseFilePlaceholder()
+    {
+        $this->assertFalse($this->image->isBaseFilePlaceholder());
+    }
 }

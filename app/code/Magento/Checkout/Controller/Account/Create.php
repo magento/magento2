@@ -30,6 +30,7 @@ class Create extends \Magento\Framework\App\Action\Action
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Api\OrderCustomerManagementInterface $orderCustomerService
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

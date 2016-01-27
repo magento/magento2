@@ -12,7 +12,7 @@ use Magento\Framework\DB\Ddl\Table;
 class GridStructureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -35,7 +35,7 @@ class GridStructureTest extends \PHPUnit_Framework_TestCase
     {
         $this->connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->flatScopeResolver = $this->getMockBuilder('Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver')
@@ -110,9 +110,9 @@ class GridStructureTest extends \PHPUnit_Framework_TestCase
             ->method('getIdxName')
             ->with($tableName, ['field'], AdapterInterface::INDEX_TYPE_FULLTEXT)
             ->willReturn($idxName);
-        $this->connection->expects($this->once())
+        $table->expects($this->once())
             ->method('addIndex')
-            ->with($tableName, $idxName, ['field'], AdapterInterface::INDEX_TYPE_FULLTEXT);
+            ->with($idxName, ['field'], ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]);
         $this->object->create($index, $fields);
     }
 }

@@ -27,7 +27,7 @@ class AssertReviewCreationSuccessMessage extends AbstractConstraint
      */
     public function processAssert(CatalogProductView $catalogProductView)
     {
-        $actualMessage = $catalogProductView->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $catalogProductView->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

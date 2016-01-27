@@ -29,6 +29,13 @@ class Item extends Sidebar
     protected $editItem = '.action.edit';
 
     /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
      * Remove product item from mini cart
      *
      * @return void
@@ -36,7 +43,11 @@ class Item extends Sidebar
     public function removeItemFromMiniCart()
     {
         $this->_rootElement->find($this->removeItem)->click();
-        $this->browser->acceptAlert();
+        $element = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal->acceptAlert();
+        $modal->waitModalWindowToDisappear();
     }
 
     /**

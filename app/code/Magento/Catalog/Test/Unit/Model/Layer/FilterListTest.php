@@ -44,7 +44,7 @@ class FilterListTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Layer\Category\FilterableAttributeList', [], [], '', false
         );
         $this->attributeMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false
+            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false
         );
         $filters = [
             FilterList::CATEGORY_FILTER => 'CategoryFilterClass',

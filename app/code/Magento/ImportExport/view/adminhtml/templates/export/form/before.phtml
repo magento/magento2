@@ -5,7 +5,10 @@
  */
 ?>
 <script>
-require(['prototype'], function(){
+require([
+    'Magento_Ui/js/modal/alert',
+    'prototype'
+], function(alert){
 
 //<![CDATA[
     // Temporary Class will be replaced after refactoring of import/export functionality
@@ -41,7 +44,7 @@ require(['prototype'], function(){
          */
         getFilter: function() {
             if ($('entity') && $F('entity')) {
-                var url    = "<?php echo $block->getUrl('*/*/getFilter') ?>";
+                var url    = "<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/getFilter') ?>";
                 var entity = $F('entity');
                 if (entity != this.previousGridEntity) {
                     this.previousGridEntity = entity;
@@ -81,7 +84,9 @@ require(['prototype'], function(){
             form.submit();
             form.action   = oldAction;
         } else {
-            alert('Invalid data');
+            alert({
+                content: 'Invalid data'
+            });
         }
     };
 

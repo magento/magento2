@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Field;
 
-use Magento\Catalog\Model\Resource\Product\Attribute\Collection as AttributeCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 use Magento\Framework\Search\Adapter\Mysql\Field\FieldFactory;
 use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;

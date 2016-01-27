@@ -7,6 +7,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfigFiles
 {
     /**
@@ -20,24 +22,23 @@ class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConf
     }
 
     /**
-     * Returns a string that represents the path to the config file, starting in the app directory.
-     *
-     * Format is glob, so * is allowed.
+     * Returns a string that represents the path to the config file
      *
      * @return string
      */
     protected function _getConfigFilePathGlob()
     {
-        return '/*/*/etc/widget.xml';
+        return 'etc/widget.xml';
     }
 
     /**
-     * Returns a path to the per file XSD file, relative to the modules directory.
+     * Returns an absolute path to the XSD file corresponding to the XML files specified in _getConfigFilePathGlob
      *
      * @return string
      */
     protected function _getXsdPath()
     {
-        return '/Magento/Widget/etc/widget_file.xsd';
+        return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Widget')
+            . '/etc/widget_file.xsd';
     }
 }

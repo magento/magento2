@@ -7,7 +7,7 @@
 namespace Magento\Framework\Pricing\Render;
 
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Template;
@@ -171,22 +171,16 @@ class Amount extends Template implements AmountRenderInterface
      */
     protected function _toHtml()
     {
-        $adjustmentRenders = $this->getApplicableAdjustmentRenders();
+        $adjustmentRenders = $this->getAdjustmentRenders();
         if ($adjustmentRenders) {
-            $this->adjustmentsHtml = $this->getAdjustments($adjustmentRenders);
+            $adjustmentHtml = $this->getAdjustments($adjustmentRenders);
+            if (!$this->hasSkipAdjustments() ||
+                ($this->hasSkipAdjustments() && $this->getSkipAdjustments() == false)) {
+                $this->adjustmentsHtml = $adjustmentHtml;
+            }
         }
         $html = parent::_toHtml();
         return $html;
-    }
-
-    /**
-     * Collect correspondent Price Adjustment Renders
-     *
-     * @return AdjustmentRenderInterface[]
-     */
-    protected function getApplicableAdjustmentRenders()
-    {
-        return (!$this->hasSkipAdjustments()) ? $this->getAdjustmentRenders() : [];
     }
 
     /**
@@ -207,9 +201,11 @@ class Amount extends Template implements AmountRenderInterface
         $data = $this->getData();
         $adjustments = [];
         foreach ($adjustmentRenders as $adjustmentRender) {
-            $html = $adjustmentRender->render($this, $data);
-            if (trim($html)) {
-                $adjustments[$adjustmentRender->getAdjustmentCode()] = $html;
+            if ($this->getAmount()->getAdjustmentAmount($adjustmentRender->getAdjustmentCode()) !== false) {
+                $html = $adjustmentRender->render($this, $data);
+                if (trim($html)) {
+                    $adjustments[$adjustmentRender->getAdjustmentCode()] = $html;
+                }
             }
         }
         return $adjustments;

@@ -10,7 +10,7 @@
              module="Magento_CatalogSearch"
              type="flat"
              entity_type="search_query"
-             collection="Magento\Search\Model\Resource\Query\Collection"
+             collection="Magento\Search\Model\ResourceModel\Query\Collection"
              repository_class="Magento\CatalogSearch\Test\Repository\CatalogSearchQuery"
              handler_interface="Magento\CatalogSearch\Test\Handler\CatalogSearchQuery\CatalogSearchQueryInterface"
              class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery">

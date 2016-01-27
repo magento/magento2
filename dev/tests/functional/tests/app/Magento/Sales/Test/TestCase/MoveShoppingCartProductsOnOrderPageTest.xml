@@ -12,8 +12,8 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
         </variation>
         <variation name="MoveShoppingCartProductsOnOrderPageTestVariation2" firstConstraint="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInItemsOrderedGrid" method="test">
-            <data name="product" xsi:type="string">configurableProduct::default</data>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInItemsOrderedGrid" />
+            <data name="product" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
         </variation>
     </testCase>
 </config>

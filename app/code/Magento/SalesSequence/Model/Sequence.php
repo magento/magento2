@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesSequence\Model;
 
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Sequence\SequenceInterface;
 
 /**

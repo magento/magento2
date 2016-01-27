@@ -8,10 +8,6 @@ namespace Magento\Checkout\Controller\Onepage;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
-/**
- * @deprecated
- * @removeCandidate
- */
 class SaveOrder extends \Magento\Checkout\Controller\Onepage
 {
     /**
@@ -33,7 +29,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
 
         $result = new DataObject();
         try {
-            $agreementsValidator = $this->_objectManager->get('Magento\Checkout\Model\Agreements\AgreementsValidator');
+            $agreementsValidator = $this->_objectManager->get('Magento\CheckoutAgreements\Model\AgreementsValidator');
             if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
                 $result->setData('success', false);
                 $result->setData('error', true);

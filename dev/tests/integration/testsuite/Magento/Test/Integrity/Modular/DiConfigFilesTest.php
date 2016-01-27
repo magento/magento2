@@ -35,10 +35,11 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
         $filesystem = $objectManager->get('Magento\Framework\Filesystem');
         $configDirectory = $filesystem->getDirectoryRead(DirectoryList::CONFIG);
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
-        self::$_primaryFiles = $fileIteratorFactory->create(
-            $configDirectory,
-            $configDirectory->search('{*/di.xml,di.xml}')
-        );
+        $search = [];
+        foreach ($configDirectory->search('{*/di.xml,di.xml}') as $path) {
+            $search[] = $configDirectory->getAbsolutePath($path);
+        }
+        self::$_primaryFiles = $fileIteratorFactory->create($search);
         //init module global configs
         /** @var $modulesReader \Magento\Framework\Module\Dir\Reader */
         $modulesReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -67,7 +68,12 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
-        if (!@$dom->schemaValidate($schemaLocator->getSchema())) {
+
+        libxml_use_internal_errors(true);
+        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaLocator->getSchema());
+        libxml_use_internal_errors(false);
+
+        if (!empty($result)) {
             $this->fail('File ' . $xml . ' has invalid xml structure.');
         }
     }
@@ -86,7 +92,7 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         $output = [];
         foreach ($common as $path => $file) {
-            $output[$path] = [$file];
+            $output[substr($path, strlen(BP))] = [$file];
         }
 
         return $output;
@@ -102,7 +108,7 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
         $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
         $fileResolverMock->expects($this->any())->method('read')->will($this->returnValue($files));
         $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
+        $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
 
         /** @var \Magento\Framework\ObjectManager\Config\SchemaLocator $schemaLocator */
         $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

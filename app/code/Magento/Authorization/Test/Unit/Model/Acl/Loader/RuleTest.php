@@ -24,7 +24,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false);
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false, false);
         $this->_rootResourceMock = new \Magento\Framework\Acl\RootResource('Magento_Backend::all');
         $this->_model = new \Magento\Authorization\Model\Acl\Loader\Rule(
             $this->_rootResourceMock,

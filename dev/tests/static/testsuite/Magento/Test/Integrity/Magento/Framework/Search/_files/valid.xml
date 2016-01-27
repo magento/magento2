@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../lib/internal/Magento/Framework/Search/etc/search_request.xsd">
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_request.xsd">
     <request query="sugegsted_search_container_1" index="product_1">
         <dimensions>
             <dimension name="scope" value="default"/>

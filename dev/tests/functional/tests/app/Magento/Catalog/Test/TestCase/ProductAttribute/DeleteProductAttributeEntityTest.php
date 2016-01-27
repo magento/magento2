@@ -53,5 +53,6 @@ class DeleteProductAttributeEntityTest extends Injectable
         $attributeIndex->open();
         $attributeIndex->getGrid()->searchAndOpen(['frontend_label' => $attribute->getFrontendLabel()]);
         $attributeNew->getPageActions()->delete();
+        $attributeNew->getModalBlock()->acceptAlert();
     }
 }

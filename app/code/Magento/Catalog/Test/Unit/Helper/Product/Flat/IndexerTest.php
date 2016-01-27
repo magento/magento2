@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Helper\Product\Flat;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 class IndexerTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +44,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
 
         $this->_resourceMock = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',
@@ -66,7 +66,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $attributeConfigMock = $this->getMock('Magento\Catalog\Model\Attribute\Config', [], [], '', false);
 
         $resourceConfigFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\ConfigFactory',
+            'Magento\Catalog\Model\ResourceModel\ConfigFactory',
             ['create'],
             [],
             '',

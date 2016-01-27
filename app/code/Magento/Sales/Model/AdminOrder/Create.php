@@ -200,12 +200,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $customerMapper;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Quote\Model\QuoteManagement
+     * @var \Magento\Quote\Api\CartManagementInterface
      */
     protected $quoteManagement;
 
@@ -218,6 +218,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @var \Magento\Sales\Api\OrderManagementInterface
      */
     protected $orderManagement;
+
+    /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    protected $quoteFactory;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -239,13 +244,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param Item\Updater $quoteItemUpdater
      * @param \Magento\Framework\DataObject\Factory $objectFactory
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
-     * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
+     * @param \Magento\Quote\Api\CartManagementInterface $quoteManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -269,13 +275,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Quote\Model\Quote\Item\Updater $quoteItemUpdater,
         \Magento\Framework\DataObject\Factory $objectFactory,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
-        \Magento\Quote\Model\QuoteManagement $quoteManagement,
+        \Magento\Quote\Api\CartManagementInterface $quoteManagement,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = []
     ) {
         $this->_objectManager = $objectManager;
@@ -304,6 +311,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->quoteManagement = $quoteManagement;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->orderManagement = $orderManagement;
+        $this->quoteFactory = $quoteFactory;
         parent::__construct($data);
     }
 
@@ -681,7 +689,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             return $this->_cart;
         }
 
-        $this->_cart = $this->quoteRepository->create();
+        $this->_cart = $this->quoteFactory->create();
 
         $customerId = (int)$this->getSession()->getCustomerId();
         if ($customerId) {

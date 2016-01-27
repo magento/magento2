@@ -37,11 +37,11 @@
     <xs:simpleType name="nameIdentifier">
         <xs:annotation>
             <xs:documentation>
-                Name identifier can contain only [A-Za-z_].
+                Name identifier can contain only [A-Za-z_0-9].
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Za-z_]+" />
+            <xs:pattern value="[A-Za-z_0-9]+" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

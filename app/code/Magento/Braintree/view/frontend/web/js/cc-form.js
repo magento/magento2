@@ -7,8 +7,9 @@ define([
     "jquery",
     "braintree",
     'mage/translate',
+    'Magento_Ui/js/modal/alert',
     "jquery/ui"
-], function($, braintree, $t) {
+], function($, braintree, $t, alert) {
     "use strict";
 
     $.widget('mage.braintreeForm', {
@@ -92,7 +93,9 @@ define([
                                 var form = $(self.options.formSelector)[0];
                                 form.submit();
                             } else {
-                                alert($t("An error occured with payment processing."));
+                                alert({
+                                    content: $t("An error occured with payment processing.")
+                                });
                             }
                         }
                     );

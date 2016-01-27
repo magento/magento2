@@ -69,7 +69,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->messageFactoryMock = $this->getMock(
             'Magento\GiftMessage\Model\MessageFactory',
             [
@@ -147,7 +147,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Gift Messages is not applicable for empty cart
+     * @expectedExceptionMessage Gift Messages are not applicable for empty cart
      */
     public function testSaveWithInputException()
     {
@@ -158,7 +158,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift Messages is not applicable for virtual products
+     * @expectedExceptionMessage Gift Messages are not applicable for virtual products
      */
     public function testSaveWithInvalidTransitionException()
     {
@@ -180,6 +180,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setMessage')
             ->with($this->quoteMock, 'quote', $this->messageMock)
             ->will($this->returnValue($this->giftMessageManagerMock));
+        $this->messageMock->expects($this->once())->method('getMessage')->willReturn('message');
 
         $this->assertTrue($this->cartRepository->save($this->cartId, $this->messageMock));
     }

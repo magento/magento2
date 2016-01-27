@@ -14,7 +14,7 @@ use Magento\Tax\Test\Fixture\TaxClass as FixtureTaxClass;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Taz class data source.
+ * Tax class data source.
  *
  * Data keys:
  *  - dataset
@@ -90,7 +90,7 @@ class TaxClass extends DataSource
         $config = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->create('Magento\Mtf\Config\DataInterface');
         $curl = new BackendDecorator(new CurlTransport(), $config);
         $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], []);
+        $curl->write($url, [], CurlInterface::GET);
         $response = $curl->read();
         $curl->close();
 

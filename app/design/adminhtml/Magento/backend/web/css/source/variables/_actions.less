@@ -13,16 +13,18 @@
 
 @action__padding-top: round(((@field-control__height -
     (@field-control__font-size * @field-control__line-height) -
-    ((unit(@field-control__border-width) / @font-size-unit-ratio) * 2)) / 2), 1);
+    ((unit(@field-control__border-width) / @font-size-unit-ratio) * 2)) / 2 + .1), 1);
 
 @action__padding-bottom: @field-control__padding-top;
-@action__height: 3.3rem;
+@action__height: 3.2rem;
 
 @action__active__border-color: @color-blue-pure; // Not the same as @button__hover__border-color
 @action__hover__background-color: @color-blue-clear-sky;
 @action__hover__border-color: darken(@action__border-color, 15%);
 
 @action__outer-indent: .7rem;
+
+@action-select__disabled__color: @text__color;
 
 //  Actions menu
 @action-menu__hover__background-color: @color-gray89;

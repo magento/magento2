@@ -41,7 +41,7 @@ class Vault
     protected $customerFactory;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     protected $countryFactory;
 
@@ -86,7 +86,7 @@ class Vault
      * @param BraintreeCustomer $braintreeCustomer
      * @param BraintreeCreditCard $braintreeCreditCard
      * @param BraintreePaymentMethod $braintreePaymentMethod
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -100,7 +100,7 @@ class Vault
         BraintreeCustomer $braintreeCustomer,
         BraintreeCreditCard $braintreeCreditCard,
         BraintreePaymentMethod $braintreePaymentMethod,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryFactory
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryFactory
     ) {
         $this->config = $config;
         $this->braintreeHelper = $braintreeHelper;

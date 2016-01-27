@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Ui\DataProvider;
 class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     protected $collection;
 
@@ -35,7 +35,7 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     public function getCollection()
     {

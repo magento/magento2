@@ -27,8 +27,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $quote->load('test01', 'reserved_order_id');
 
         /** Execute SUT */
-        /** @var \Magento\Quote\Model\QuoteManagement $model */
-        $model = $objectManager->create('\Magento\Quote\Model\QuoteManagement');
+        /** @var \Magento\Quote\Api\CartManagementInterface $model */
+        $model = $objectManager->create('\Magento\Quote\Api\CartManagementInterface');
         $order = $model->submit($quote);
 
         /** Check if SUT caused expected effects */

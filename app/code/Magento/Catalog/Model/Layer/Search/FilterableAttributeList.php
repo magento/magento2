@@ -9,8 +9,8 @@ namespace Magento\Catalog\Model\Layer\Search;
 class FilterableAttributeList extends \Magento\Catalog\Model\Layer\Category\FilterableAttributeList
 {
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Collection $collection
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     protected function _prepareAttributeCollection($collection)
     {

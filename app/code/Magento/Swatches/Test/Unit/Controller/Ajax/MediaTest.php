@@ -23,7 +23,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $productMock;
 
-    /** @var \Magento\Catalog\Model\Resource\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
     protected $attributeMock;
 
     /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
@@ -64,7 +64,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $this->attributeMock = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $this->attributeMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->contextMock = $this->getMock('\Magento\Framework\App\Action\Context', [], [], '', false);
 
         $this->requestMock = $this->getMock('\Magento\Framework\App\Request', ['getParam'], [], '', false);

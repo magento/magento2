@@ -117,6 +117,11 @@ class UpdateCustomOrderStatusTest extends Injectable
         // Preconditions:
         $orderStatusInitial->persist();
         if ($orderExist == 'Yes') {
+            $config = $fixtureFactory->createByCode('configData', [
+                'dataset' => 'checkmo_custom_new_order_status',
+                'data' => ['payment/checkmo/order_status' => ['value' => $orderStatusInitial->getStatus()]]
+            ]);
+            $config->persist();
             $order->persist();
         }
         // Steps:
@@ -154,6 +159,10 @@ class UpdateCustomOrderStatusTest extends Injectable
             $this->orderIndex->open()->getSalesOrderGrid()->massaction([['id' => $this->order->getId()]], 'Cancel');
             $filter = ['label' => $this->orderStatus->getLabel(), 'status' => $this->orderStatusInitial->getStatus()];
             $this->orderStatusIndex->open()->getOrderStatusGrid()->searchAndUnassign($filter);
+            $this->objectManager->create(
+                'Magento\Config\Test\TestStep\SetupConfigurationStep',
+                ['configData' => 'checkmo_custom_new_order_status_rollback']
+            )->run();
         }
     }
 }

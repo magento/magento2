@@ -90,5 +90,6 @@ class DeleteProductRatingEntityTest extends Injectable
         $this->ratingIndex->open();
         $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $productRating->getRatingCode()]);
         $this->ratingEdit->getPageActions()->delete();
+        $this->ratingEdit->getModalBlock()->acceptAlert();
     }
 }

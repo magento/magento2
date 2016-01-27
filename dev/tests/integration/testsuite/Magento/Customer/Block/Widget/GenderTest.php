@@ -7,6 +7,9 @@ namespace Magento\Customer\Block\Widget;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @magentoAppArea frontend
+ */
 class GenderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Gender */
@@ -49,5 +52,6 @@ class GenderTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<span>Gender</span>', $html);
         $this->assertContains('<option value="1">Male</option>', $html);
         $this->assertContains('<option value="2">Female</option>', $html);
+        $this->assertContains('<option value="3">Not Specified</option>', $html);
     }
 }

@@ -34,6 +34,7 @@ abstract class AbstractSource implements
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+     * @codeCoverageIgnore
      */
     public function setAttribute($attribute)
     {
@@ -45,6 +46,7 @@ abstract class AbstractSource implements
      * Get attribute instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @codeCoverageIgnore
      */
     public function getAttribute()
     {
@@ -96,6 +98,7 @@ abstract class AbstractSource implements
      * @param string $dir direction
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function addValueSortToCollection($collection, $dir = \Magento\Framework\Data\Collection::SORT_ORDER_DESC)
     {
@@ -105,6 +108,7 @@ abstract class AbstractSource implements
     /**
      * Retrieve flat column definition
      *
+     * @codeCoverageIgnore
      * @return array
      */
     public function getFlatColumns()
@@ -116,6 +120,7 @@ abstract class AbstractSource implements
      * Retrieve Indexes(s) for Flat
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getFlatIndexes()
     {
@@ -128,6 +133,7 @@ abstract class AbstractSource implements
      * @param int $store
      * @return \Magento\Framework\DB\Select|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function getFlatUpdateSelect($store)
     {
@@ -139,6 +145,7 @@ abstract class AbstractSource implements
      *
      * @param string|int $value
      * @return string|bool
+     * @codeCoverageIgnore
      */
     public function getIndexOptionText($value)
     {
@@ -149,6 +156,7 @@ abstract class AbstractSource implements
      * Get options as array
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function toOptionArray()
     {

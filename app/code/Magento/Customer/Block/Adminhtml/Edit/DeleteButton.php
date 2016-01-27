@@ -47,9 +47,11 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
             $data = [
                 'label' => __('Delete Customer'),
                 'class' => 'delete',
-                'on_click' => 'deleteConfirm(\'' . __(
-                    'Are you sure you want to do this?'
-                ) . '\', \'' . $this->getDeleteUrl() . '\')',
+                'id' => 'customer-edit-delete-button',
+                'data_attribute' => [
+                    'url' => $this->getDeleteUrl()
+                ],
+                'on_click' => '',
                 'sort_order' => 20,
             ];
         }

@@ -21,7 +21,7 @@ interface TypeInterface
     /**
      * Get Collection of Tax Rules that are assigned to this tax class
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getAssignedToRules();
 

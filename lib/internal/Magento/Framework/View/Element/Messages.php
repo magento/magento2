@@ -81,12 +81,18 @@ class Messages extends Template
     protected $messageManager;
 
     /**
+     * @var Message\InterpretationStrategyInterface
+     */
+    private $interpretationStrategy;
+
+    /**
      * Constructor
      *
      * @param Template\Context $context
      * @param \Magento\Framework\Message\Factory $messageFactory
      * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param Message\InterpretationStrategyInterface $interpretationStrategy
      * @param array $data
      */
     public function __construct(
@@ -94,12 +100,14 @@ class Messages extends Template
         \Magento\Framework\Message\Factory $messageFactory,
         \Magento\Framework\Message\CollectionFactory $collectionFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        Message\InterpretationStrategyInterface $interpretationStrategy,
         array $data = []
     ) {
         $this->messageFactory = $messageFactory;
         $this->collectionFactory = $collectionFactory;
         $this->messageManager = $messageManager;
         parent::__construct($context, $data);
+        $this->interpretationStrategy = $interpretationStrategy;
     }
 
     /**
@@ -270,7 +278,7 @@ class Messages extends Template
                     $html .= '<' . $this->secondLevelTagName . ' class="message ' . 'message-' . $type . ' ' . $type .
                         '">';
                     $html .= '<' . $this->contentWrapTagName . $this->getUiId('message', $type) . '>';
-                    $html .= $message->getText();
+                    $html .= $this->interpretationStrategy->interpret($message);
                     $html .= '</' . $this->contentWrapTagName . '>';
                     $html .= '</' . $this->secondLevelTagName . '>';
                 }

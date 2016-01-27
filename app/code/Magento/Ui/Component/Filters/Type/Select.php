@@ -9,6 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\Select as ElementSelect;
+use Magento\Ui\Component\Filters\FilterModifier;
 
 /**
  * Class Select
@@ -35,6 +36,7 @@ class Select extends AbstractFilter
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param FilterModifier $filterModifier
      * @param OptionSourceInterface|null $optionsProvider
      * @param array $components
      * @param array $data
@@ -43,12 +45,13 @@ class Select extends AbstractFilter
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
+        FilterModifier $filterModifier,
         OptionSourceInterface $optionsProvider = null,
         array $components = [],
         array $data = []
     ) {
         $this->optionsProvider = $optionsProvider;
-        parent::__construct($context, $uiComponentFactory, $filterBuilder, $components, $data);
+        parent::__construct($context, $uiComponentFactory, $filterBuilder, $filterModifier, $components, $data);
     }
 
     /**
@@ -93,9 +96,10 @@ class Select extends AbstractFilter
     {
         if (isset($this->filterData[$this->getName()])) {
             $value = $this->filterData[$this->getName()];
+            $conditionType = is_array($value) ? 'in' : 'eq';
 
             if (!empty($value) || is_numeric($value)) {
-                $filter = $this->filterBuilder->setConditionType('eq')
+                $filter = $this->filterBuilder->setConditionType($conditionType)
                     ->setField($this->getName())
                     ->setValue($value)
                     ->create();

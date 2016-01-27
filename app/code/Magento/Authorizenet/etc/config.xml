@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
             <authorizenet_directpost>
@@ -30,6 +30,8 @@
                 <place_order_url>authorizenet/directpost_payment/place</place_order_url>
                 <cgi_url_test_mode>https://test.authorize.net/gateway/transact.dll</cgi_url_test_mode>
                 <cgi_url>https://secure.authorize.net/gateway/transact.dll</cgi_url>
+                <cgi_url_td_test_mode>https://apitest.authorize.net/xml/v1/request.api</cgi_url_td_test_mode>
+                <cgi_url_td>https://api2.authorize.net/xml/v1/request.api</cgi_url_td>
             </authorizenet_directpost>
         </payment>
     </default>

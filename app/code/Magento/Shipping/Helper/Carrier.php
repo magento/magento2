@@ -16,6 +16,11 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_CARRIERS_ROOT = 'carriers';
 
     /**
+     * Config path to UE country list
+     */
+    const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
+
+    /**
      * Locale interface
      *
      * @var \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -140,5 +145,26 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
             return $conversionList[$key][1];
         }
         return '';
+    }
+
+    /**
+     * Check whether specified country is in EU countries list
+     *
+     * @param string $countryCode
+     * @param null|int $storeId
+     * @return bool
+     */
+    public function isCountryInEU($countryCode, $storeId = null)
+    {
+        $euCountries = explode(
+            ',',
+            $this->scopeConfig->getValue(
+                self::XML_PATH_EU_COUNTRIES_LIST,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
+        );
+
+        return in_array($countryCode, $euCountries);
     }
 }

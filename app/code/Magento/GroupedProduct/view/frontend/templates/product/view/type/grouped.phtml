@@ -20,12 +20,12 @@
 
 <div class="table-wrapper grouped">
     <table class="table data grouped" id="super-product-table">
-        <caption class="table-caption"><?php echo __('Grouped product items') ?></caption>
+        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Grouped product items') ?></caption>
         <thead>
         <tr>
-            <th class="col item" scope="col"><?php echo __('Product Name') ?></th>
+            <th class="col item" scope="col"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
             <?php if ($_product->isSaleable()): ?>
-                <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
+                <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
             <?php endif; ?>
         </tr>
         </thead>
@@ -38,7 +38,7 @@
                     <strong class="product-item-name"><?php echo $block->escapeHtml($_item->getName()) ?></strong>
                     <?php if ($block->getCanShowProductPrice($_product)): ?>
                         <?php if ($block->getCanShowProductPrice($_item)): ?>
-                            <?php echo $block->getProductPrice($_item) ?>
+                            <?php /* @escapeNotVerified */ echo $block->getProductPrice($_item) ?>
                         <?php endif; ?>
                      <?php endif; ?>
                 </td>
@@ -46,17 +46,18 @@
                 <td data-th="<?php echo $block->escapeHtml(__('Qty')); ?>" class="col qty">
                 <?php if ($_item->isSaleable()) : ?>
                     <div class="control qty">
-                        <input type="number" name="super_group[<?php echo $_item->getId() ?>]"
+                        <input type="number" name="super_group[<?php /* @escapeNotVerified */ echo $_item->getId() ?>]"
+                               data-selector="super_group[<?php /* @escapeNotVerified */ echo $_item->getId() ?>]"
                                maxlength="12"
-                               value="<?php echo $_item->getQty() * 1 ?>"
-                               title="<?php echo __('Qty') ?>"
+                               value="<?php /* @escapeNotVerified */ echo $_item->getQty() * 1 ?>"
+                               title="<?php /* @escapeNotVerified */ echo __('Qty') ?>"
                                class="input-text qty"
                                data-validate="{'validate-grouped-qty':'#super-product-table'}"
                                data-errors-message-box="#validation-message-box"/>
                     </div>
                 <?php else: ?>
-                    <div class="stock unavailable" title="<?php echo __('Availability') ?>">
-                        <span><?php echo __('Out of stock') ?></span>
+                    <div class="stock unavailable" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
+                        <span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span>
                     </div>
                 <?php endif; ?>
                 </td>
@@ -84,7 +85,7 @@
             <tr>
                 <td class="unavailable"
                     colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>">
-                    <?php echo __('No options of this product are available.') ?>
+                    <?php /* @escapeNotVerified */ echo __('No options of this product are available.') ?>
                 </td>
             </tr>
         </tbody>

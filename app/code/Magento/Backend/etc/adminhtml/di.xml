@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Backend\Model\Authorization\RoleLocator" />
     <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Backend\Model\Locale\Resolver" />
     <preference for="Magento\Framework\App\Action\Context" type="Magento\Backend\App\Action\Context" />
@@ -15,6 +15,11 @@
     <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <preference for="Magento\Framework\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
     <preference for="Magento\Framework\View\Layout\GeneratorPool" type="Magento\Backend\Model\View\Layout\GeneratorPool" />
+    <type name="Magento\Framework\Stdlib\DateTime\Timezone">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="layoutReaderPool" xsi:type="object">pageConfigRenderPool</argument>
@@ -122,9 +127,10 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Response\XFrameOptPlugin">
+    <type name="Magento\Framework\App\Response\HeaderProvider\XFrameOptions">
         <arguments>
-            <argument name="xFrameOpt" xsi:type="const">Magento\Framework\App\Response\XFrameOptPlugin::BACKEND_X_FRAME_OPT</argument>
+            <argument name="xFrameOpt" xsi:type="const">Magento\Framework\App\Response\HeaderProvider\XFrameOptions::BACKEND_X_FRAME_OPT</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Backend\Model\AdminPathConfig" />
 </config>

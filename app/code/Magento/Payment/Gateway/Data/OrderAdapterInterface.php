@@ -7,6 +7,7 @@ namespace Magento\Payment\Gateway\Data;
 
 /**
  * Interface OrderAdapterInterface
+ * @api
  */
 interface OrderAdapterInterface
 {
@@ -34,14 +35,14 @@ interface OrderAdapterInterface
     /**
      * Returns billing address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getBillingAddress();
 
     /**
      * Returns shipping address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getShippingAddress();
 

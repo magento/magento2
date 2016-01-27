@@ -8,5 +8,5 @@
 
 ?>
 <?php foreach ($block->getChildHtmlList() as $_html): ?>
-    <?php echo $_html ?>
+    <?php /* @escapeNotVerified */ echo $_html ?>
 <?php endforeach; ?>

@@ -467,20 +467,20 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $body = "\$collection = \$this->" . $this->_getSourceCollectionFactoryPropertyName() . "->create();\n"
         . "\$this->extensionAttributesJoinProcessor->process(\$collection);\n"
-        . "foreach (\$criteria->getFilterGroups() as \$filterGroup) {\n"
+        . "foreach (\$searchCriteria->getFilterGroups() as \$filterGroup) {\n"
         . "    foreach (\$filterGroup->getFilters() as \$filter) {\n"
         . "        \$condition = \$filter->getConditionType() ? \$filter->getConditionType() : 'eq';\n"
         . "        \$collection->addFieldToFilter(\$filter->getField(), [\$condition => \$filter->getValue()]);\n"
         . "    }\n"
         . "}\n"
-        . "\$collection->setCurPage(\$criteria->getCurrentPage());\n"
-        . "\$collection->setPageSize(\$criteria->getPageSize());\n"
+        . "\$collection->setCurPage(\$searchCriteria->getCurrentPage());\n"
+        . "\$collection->setPageSize(\$searchCriteria->getPageSize());\n"
         . "return \$collection;\n";
         return [
             'name' => 'getList',
             'parameters' => [
                 [
-                    'name' => 'criteria',
+                    'name' => 'searchCriteria',
                     'type' => self::SEARCH_CRITERIA,
                 ],
             ],
@@ -490,7 +490,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => self::SEARCH_CRITERIA . '  $criteria',
+                        'description' => self::SEARCH_CRITERIA . ' $searchCriteria',
                     ],
                     [
                         'name' => 'return',

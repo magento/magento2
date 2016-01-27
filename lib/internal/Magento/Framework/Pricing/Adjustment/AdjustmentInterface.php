@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Pricing\Adjustment;
 
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Interface AdjustmentInterface

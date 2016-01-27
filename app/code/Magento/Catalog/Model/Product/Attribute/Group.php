@@ -13,18 +13,20 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
     /**
      * Attribute collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_attributeCollectionFactory;
 
     /**
+     * Group constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Filter\Translit $translitFilter
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -32,8 +34,9 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Filter\Translit $translitFilter,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -43,6 +46,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
             $registry,
             $extensionFactory,
             $customAttributeFactory,
+            $translitFilter,
             $resource,
             $resourceCollection,
             $data
@@ -57,7 +61,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
     public function hasSystemAttributes()
     {
         $result = false;
-        /** @var $attributesCollection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
+        /** @var $attributesCollection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
         $attributesCollection = $this->_attributeCollectionFactory->create();
         $attributesCollection->setAttributeGroupFilter($this->getId());
         foreach ($attributesCollection as $attribute) {

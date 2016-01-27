@@ -10,8 +10,8 @@ use Magento\Sales\Api\Data\InvoiceCommentInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment getResource()
  */
 class Comment extends AbstractModel implements InvoiceCommentInterface
 {
@@ -33,7 +33,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -44,7 +44,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -67,7 +67,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Invoice\Comment');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Invoice\Comment');
     }
 
     /**

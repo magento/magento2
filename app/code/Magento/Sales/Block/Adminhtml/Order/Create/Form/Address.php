@@ -160,8 +160,8 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
                 ->setConditionType('eq')
                 ->create();
             $this->searchCriteriaBuilder->addFilters([$filter]);
-            $criteria = $this->searchCriteriaBuilder->create();
-            $result = $this->addressService->getList($criteria);
+            $searchCriteria = $this->searchCriteriaBuilder->create();
+            $result = $this->addressService->getList($searchCriteria);
             return $result->getItems();
         }
         return [];

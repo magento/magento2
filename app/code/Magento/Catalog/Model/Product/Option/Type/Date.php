@@ -114,7 +114,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             }
         } else {
             $this->setUserValue(null);
-            return $this;
         }
 
         return $this;
@@ -191,19 +190,25 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
                     \IntlDateFormatter::MEDIUM,
-                    \IntlDateFormatter::NONE
+                    \IntlDateFormatter::NONE,
+                    null,
+                    'UTC'
                 );
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
                 $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
                     \IntlDateFormatter::SHORT,
-                    \IntlDateFormatter::SHORT
+                    \IntlDateFormatter::SHORT,
+                    null,
+                    'UTC'
                 );
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
                 $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
                     \IntlDateFormatter::NONE,
-                    \IntlDateFormatter::SHORT
+                    \IntlDateFormatter::SHORT,
+                    null,
+                    'UTC'
                 );
             } else {
                 $result = $optionValue;
@@ -336,6 +341,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     {
         $requestOptions = $this->getRequest()->getOptions();
         if (!isset($requestOptions[$this->getOption()->getId()])) {
+            $requestOptions[$this->getOption()->getId()] = [];
+        }
+        if (!is_array($requestOptions[$this->getOption()->getId()])) {
             $requestOptions[$this->getOption()->getId()] = [];
         }
         $requestOptions[$this->getOption()->getId()]['date_internal'] = $internalValue;

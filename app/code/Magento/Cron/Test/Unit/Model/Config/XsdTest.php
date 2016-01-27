@@ -7,11 +7,18 @@ namespace Magento\Cron\Test\Unit\Model\Config;
 
 class XsdTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
     protected $_xsdFile;
 
     public function setUp()
     {
-        $this->_xsdFile = __DIR__ . "/../../../../../../../../app/code/Magento/Cron/etc/crontab.xsd";
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->_xsdFile = $urnResolver->getRealPath('urn:magento:module:Magento_Cron:etc/crontab.xsd');
     }
 
     /**
@@ -23,9 +30,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->load(__DIR__ . "/_files/{$xmlFile}");
         libxml_use_internal_errors(true);
-        $result = $dom->schemaValidate($this->_xsdFile);
+        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $this->_xsdFile);
         libxml_use_internal_errors(false);
-        $this->assertTrue($result);
+        $this->assertEmpty($result, 'Validation failed with errors: ' . join(', ', $result));
     }
 
     /**
@@ -46,16 +53,11 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->load(__DIR__ . "/_files/{$xmlFile}");
         libxml_use_internal_errors(true);
-        $dom->schemaValidate($this->_xsdFile);
-        $errors = libxml_get_errors();
 
-        $actualErrors = [];
-        foreach ($errors as $error) {
-            $actualErrors[] = $error->message;
-        }
+        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $this->_xsdFile);
 
         libxml_use_internal_errors(false);
-        $this->assertEquals($expectedErrors, $actualErrors);
+        $this->assertEquals($expectedErrors, $result);
     }
 
     /**
@@ -67,33 +69,35 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             [
                 'crontab_invalid.xml',
                 [
-                    "Element 'job', attribute 'wrongName': The attribute 'wrongName' is not allowed.\n",
-                    "Element 'job', attribute 'wrongInstance': The attribute 'wrongInstance' is not allowed.\n",
-                    "Element 'job', attribute 'wrongMethod': The attribute 'wrongMethod' is not allowed.\n",
-                    "Element 'job': The attribute 'name' is required but missing.\n",
-                    "Element 'job': The attribute 'instance' is required but missing.\n",
-                    "Element 'job': The attribute 'method' is required but missing.\n",
+                    "Element 'job', attribute 'wrongName': The attribute 'wrongName' is not allowed.\nLine: 10\n",
+                    "Element 'job', attribute 'wrongInstance': " .
+                        "The attribute 'wrongInstance' is not allowed.\nLine: 10\n",
+                    "Element 'job', attribute 'wrongMethod': The attribute 'wrongMethod' is not allowed.\nLine: 10\n",
+                    "Element 'job': The attribute 'name' is required but missing.\nLine: 10\n",
+                    "Element 'job': The attribute 'instance' is required but missing.\nLine: 10\n",
+                    "Element 'job': The attribute 'method' is required but missing.\nLine: 10\n",
                     "Element 'wrongSchedule': This element is not expected." .
-                        " Expected is one of ( schedule, config_path ).\n"
+                        " Expected is one of ( schedule, config_path ).\nLine: 11\n"
                 ],
             ],
             [
                 'crontab_invalid_duplicates.xml',
                 [
-                    "Element 'job': Duplicate key-sequence ['job1'] in unique identity-constraint 'uniqueJobName'.\n"
+                    "Element 'job': Duplicate key-sequence ['job1'] in " .
+                        "unique identity-constraint 'uniqueJobName'.\nLine: 13\n"
                 ]
             ],
             [
                 'crontab_invalid_without_name.xml',
-                ["Element 'job': The attribute 'name' is required but missing.\n"]
+                ["Element 'job': The attribute 'name' is required but missing.\nLine: 10\n"]
             ],
             [
                 'crontab_invalid_without_instance.xml',
-                ["Element 'job': The attribute 'instance' is required but missing.\n"]
+                ["Element 'job': The attribute 'instance' is required but missing.\nLine: 10\n"]
             ],
             [
                 'crontab_invalid_without_method.xml',
-                ["Element 'job': The attribute 'method' is required but missing.\n"]
+                ["Element 'job': The attribute 'method' is required but missing.\nLine: 10\n"]
             ]
         ];
     }

@@ -13,18 +13,18 @@ namespace Magento\User\Block;
 class User extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
-     * @var \Magento\User\Model\Resource\User
+     * @var \Magento\User\Model\ResourceModel\User
      */
     protected $_resourceModel;
 
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\User\Model\Resource\User $resourceModel
+     * @param \Magento\User\Model\ResourceModel\User $resourceModel
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
-        \Magento\User\Model\Resource\User $resourceModel,
+        \Magento\User\Model\ResourceModel\User $resourceModel,
         array $data = []
     ) {
         parent::__construct($context, $data);

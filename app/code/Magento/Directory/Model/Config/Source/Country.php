@@ -10,14 +10,14 @@ class Country implements \Magento\Framework\Option\ArrayInterface
     /**
      * Countries
      *
-     * @var \Magento\Directory\Model\Resource\Country\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected $_countryCollection;
 
     /**
-     * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
+     * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
      */
-    public function __construct(\Magento\Directory\Model\Resource\Country\Collection $countryCollection)
+    public function __construct(\Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection)
     {
         $this->_countryCollection = $countryCollection;
     }

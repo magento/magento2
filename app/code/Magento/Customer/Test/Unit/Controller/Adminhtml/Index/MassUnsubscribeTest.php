@@ -51,12 +51,12 @@ class MassUnsubscribeTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Customer\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Customer\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerCollectionMock;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Customer\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerCollectionFactoryMock;
 
@@ -98,11 +98,12 @@ class MassUnsubscribeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
-        $this->customerCollectionMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer\Collection')
+        $this->customerCollectionMock =
+            $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerCollectionFactoryMock =
-            $this->getMockBuilder('Magento\Customer\Model\Resource\Customer\CollectionFactory')
+            $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\CollectionFactory')
                 ->disableOriginalConstructor()
                 ->setMethods(['create'])
                 ->getMock();

@@ -63,9 +63,7 @@ abstract class AbstractAdapter implements AdapterInterface
     protected function _addPhrase($phrase, $line = '')
     {
         if (!$phrase) {
-            throw new \InvalidArgumentException(
-                sprintf('Phrase cannot be empty. File: "%s" Line: "%s"', $this->_file, $line)
-            );
+            return;
         }
         if (!isset($this->_phrases[$phrase])) {
             $enclosureCharacter = $this->getEnclosureCharacter($phrase);

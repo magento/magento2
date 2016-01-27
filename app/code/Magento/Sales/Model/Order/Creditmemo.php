@@ -18,8 +18,8 @@ use Magento\Sales\Model\EntityInterface;
 /**
  * Order creditmemo model
  *
- * @method \Magento\Sales\Model\Resource\Order\Creditmemo _getResource()
- * @method \Magento\Sales\Model\Resource\Order\Creditmemo getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo _getResource()
+ * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo getResource()
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
  * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
  * @method string getCustomerNote()
@@ -86,7 +86,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory
      */
     protected $_cmItemCollectionFactory;
 
@@ -106,7 +106,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $_commentFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory
      */
     protected $_commentCollectionFactory;
 
@@ -122,13 +122,13 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param AttributeValueFactory $customAttributeFactory
      * @param Creditmemo\Config $creditmemoConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Creditmemo\CommentFactory $commentFactory
-     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -140,13 +140,13 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\Creditmemo\Config $creditmemoConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory,
-        \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -176,7 +176,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Creditmemo');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Creditmemo');
     }
 
     /**
@@ -569,7 +569,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
 
     /**
      * @param bool $reload
-     * @return \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\Collection
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCommentsCollection($reload = false)
@@ -596,7 +596,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * Get creditmemos collection filtered by $filter
      *
      * @param array|null $filter
-     * @return \Magento\Sales\Model\Resource\Order\Creditmemo\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection
      */
     public function getFilteredCollectionItems($filter = null)
     {

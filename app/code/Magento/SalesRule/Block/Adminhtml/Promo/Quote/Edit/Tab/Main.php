@@ -318,7 +318,7 @@ class Main extends Generic implements TabInterface
         $this->setChild(
             'form_after',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Element\Dependence'
+                'Magento\SalesRule\Block\Widget\Form\Element\Dependence'
             )->addFieldMap(
                 $couponTypeFiled->getHtmlId(),
                 $couponTypeFiled->getName()

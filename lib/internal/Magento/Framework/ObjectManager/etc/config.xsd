@@ -9,7 +9,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xs:redefine schemaLocation="../../Data/etc/argument/types.xsd">
+    <xs:redefine schemaLocation="urn:magento:framework:Data/etc/argument/types.xsd">
         <xs:complexType name="argumentType" abstract="true" mixed="false">
             <xs:complexContent>
                 <xs:extension base="argumentType" />

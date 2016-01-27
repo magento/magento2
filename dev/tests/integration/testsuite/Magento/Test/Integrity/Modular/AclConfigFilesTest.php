@@ -5,7 +5,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,12 +24,8 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
-        $this->_schemeFile = $filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)
-            ->getAbsolutePath('Magento/Framework/Acl/etc/acl.xsd');
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->_schemeFile = $urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl.xsd');
     }
 
     /**
@@ -40,7 +35,10 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testAclConfigFile($file)
     {
-        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);
         $result = $domConfig->validate($this->_schemeFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {

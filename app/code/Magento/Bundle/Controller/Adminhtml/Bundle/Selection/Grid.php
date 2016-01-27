@@ -13,13 +13,16 @@ class Grid extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+        $index = $this->getRequest()->getParam('index');
+        if (!preg_match('/^[a-z0-9_.]*$/i', $index)) {
+            throw new \InvalidArgumentException('Invalid parameter "index"');
+        }
+
         return $this->getResponse()->setBody(
             $this->_view->getLayout()->createBlock(
                 'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid',
                 'adminhtml.catalog.product.edit.tab.bundle.option.search.grid'
-            )->setIndex(
-                $this->getRequest()->getParam('index')
-            )->toHtml()
+            )->setIndex($index)->toHtml()
         );
     }
 }

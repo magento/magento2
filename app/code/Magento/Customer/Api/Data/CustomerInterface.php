@@ -16,6 +16,7 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     const ID = 'id';
     const CONFIRMATION = 'confirmation';
     const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
     const CREATED_IN = 'created_in';
     const DOB = 'dob';
     const EMAIL = 'email';
@@ -136,6 +137,23 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * @return $this
      */
     public function setCreatedAt($createdAt);
+
+    /**
+     * Get updated at time
+     *
+     * @api
+     * @return string|null
+     */
+    public function getUpdatedAt();
+
+    /**
+     * Set updated at time
+     *
+     * @api
+     * @param string $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt($updatedAt);
 
     /**
      * Get created in area

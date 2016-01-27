@@ -11,19 +11,16 @@ use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Class Curl
- * Create new downloadable product via curl
+ * Create new downloadable product via curl.
  */
 class Curl extends ProductCurl implements DownloadableProductInterface
 {
     /**
-     * Constructor
-     *
+     * @constructor
      * @param DataInterface $configuration
      * @param EventManagerInterface $eventManager
      */
@@ -45,16 +42,15 @@ class Curl extends ProductCurl implements DownloadableProductInterface
     }
 
     /**
-     * Prepare POST data for creating product request
+     * Prepare POST data for creating product request.
      *
      * @param FixtureInterface $fixture
-     * @param string|null $prefix [optional]
      * @return array
      */
-    protected function prepareData(FixtureInterface $fixture, $prefix = null)
+    public function prepareData(FixtureInterface $fixture)
     {
         /** @var DownloadableProduct $fixture */
-        $fixtureData = parent::prepareData($fixture, $prefix);
+        $fixtureData = parent::prepareData($fixture);
         $downloadableData = [
             'downloadable_sample' => $fixture->getDownloadableSample(),
             'downloadable_links' => $fixture->getDownloadableLinks()
@@ -71,7 +67,7 @@ class Curl extends ProductCurl implements DownloadableProductInterface
             }
 
             $sampleTitle = $downloadableData['downloadable_sample']['title'];
-            $data['samples_title'] = $prefix ? [$prefix => $sampleTitle] : $sampleTitle;
+            $data['samples_title'] = ['product' => $sampleTitle];
 
             unset($data['downloadable_sample']);
         }
@@ -94,7 +90,7 @@ class Curl extends ProductCurl implements DownloadableProductInterface
                 'links_title' => $downloadableData['downloadable_links']['title'],
                 'links_purchased_separately' => $downloadableData['downloadable_links']['links_purchased_separately']
             ];
-            $data = array_merge($data, $prefix ? [$prefix => $links] : $links);
+            $data = array_merge($data, ['product' => $links]);
 
             unset($downloadableData['downloadable_links']);
         }
@@ -104,7 +100,7 @@ class Curl extends ProductCurl implements DownloadableProductInterface
     }
 
     /**
-     * Create product via curl
+     * Create product via curl.
      *
      * @param array $data
      * @param array $config
@@ -116,7 +112,7 @@ class Curl extends ProductCurl implements DownloadableProductInterface
         $url = $this->getUrl($config);
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 

@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * Interface ContextInterface
@@ -136,4 +137,18 @@ interface ContextInterface
      * @return  string
      */
     public function getUrl($route = '', $params = []);
+
+    /**
+     * Get component processor
+     *
+     * @return Processor
+     */
+    public function getProcessor();
+
+    /**
+     * Get Ui Component Factory
+     *
+     * @return UiComponentFactory
+     */
+    public function getUiComponentFactory();
 }

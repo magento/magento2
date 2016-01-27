@@ -24,7 +24,7 @@ class AssertImpossibleDeleteYourOwnAccount extends AbstractConstraint
      */
     public function processAssert(UserEdit $userEdit)
     {
-        $errorMessage = $userEdit->getMessagesBlock()->getErrorMessages();
+        $errorMessage = $userEdit->getMessagesBlock()->getErrorMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_MESSAGE,
             $errorMessage,

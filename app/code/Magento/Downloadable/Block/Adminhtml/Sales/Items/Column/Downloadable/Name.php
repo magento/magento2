@@ -28,7 +28,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
     protected $_purchasedFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
      */
     protected $_itemsFactory;
 
@@ -39,7 +39,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
-     * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
      */
     public function __construct(
@@ -49,7 +49,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
-        \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
+        \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory,
         array $data = []
     ) {
         $this->_purchasedFactory = $purchasedFactory;

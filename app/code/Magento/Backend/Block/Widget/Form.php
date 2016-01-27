@@ -187,7 +187,7 @@ class Form extends \Magento\Backend\Block\Widget
                     $fieldType,
                     [
                         'name' => $attribute->getAttributeCode(),
-                        'label' => $attribute->getFrontend()->getLabel(),
+                        'label' => $attribute->getFrontend()->getLocalizedLabel(),
                         'class' => $attribute->getFrontend()->getClass(),
                         'required' => $attribute->getIsRequired(),
                         'note' => $attribute->getNote()

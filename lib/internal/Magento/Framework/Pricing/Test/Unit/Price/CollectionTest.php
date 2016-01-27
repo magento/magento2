@@ -30,7 +30,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $priceMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleableItemMock;
 
@@ -53,11 +53,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             [
                 'regular_price' => 'RegularPrice',
                 'special_price' => 'SpecialPrice',
-                'group_price' => 'GroupPrice',
             ]
         );
 
-        $this->saleableItemMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\Object\SaleableInterface');
+        $this->saleableItemMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
         $this->priceMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\Price\PriceInterface');
         $this->factoryMock = $this->getMock('Magento\Framework\Pricing\Price\Factory', [], [], '', false);
 

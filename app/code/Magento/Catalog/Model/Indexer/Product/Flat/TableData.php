@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class TableData
@@ -18,14 +18,14 @@ class TableData implements TableDataInterface
     protected $_connection;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
         $this->_resource = $resource;
     }

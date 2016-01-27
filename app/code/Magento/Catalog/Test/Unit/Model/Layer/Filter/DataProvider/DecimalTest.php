@@ -17,7 +17,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Catalog\Model\Layer\Filter\FilterInterface|MockObject */
     private $filter;
 
-    /** @var  \Magento\Catalog\Model\Resource\Layer\Filter\Decimal|MockObject */
+    /** @var  \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal|MockObject */
     private $resource;
 
     /**
@@ -31,7 +31,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Layer\Filter\Decimal')
+        $this->resource = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal')
             ->disableOriginalConstructor()
             ->setMethods(['getMinMax', 'getCount'])
             ->getMock();

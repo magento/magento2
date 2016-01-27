@@ -20,6 +20,9 @@ class XsdValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $this->_validator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
         $this->_xsdSchema = realpath(__DIR__ . '/_files/valid.xsd');
     }
@@ -36,8 +39,8 @@ class XsdValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $xmlFile = realpath(__DIR__ . '/_files/invalid.xml');
         $expected = [
-            "Element 'block', attribute 'type': The attribute 'type' is not allowed.",
-            "Element 'actions': This element is not expected. Expected is ( property ).",
+            "Element 'block', attribute 'type': The attribute 'type' is not allowed.\nLine: 9\n",
+            "Element 'actions': This element is not expected. Expected is ( property ).\nLine: 10\n",
         ];
         $xmlString = file_get_contents($xmlFile);
 

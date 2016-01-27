@@ -8,7 +8,7 @@
 //  _____________________________________________
 
 //  Rating-vote mixin
-.mixin-rating-vote(
+.lib-rating-vote(
     @_icon-count: @rating-icon__count,
     @_icon-content: @rating-icon__content,
     @_icon-font: @rating-icon__font,
@@ -18,23 +18,26 @@
     @_icon-color-active: @rating-icon__active__color
 ) {
     overflow: hidden;
+
     &:before {
-        ._rating-icon-defalt(
+        ._lib-rating-icon-defalt(
             @_icon-font,
             @_icon-font-size,
             @_icon-letter-spacing,
             @_icon-color
         );
-        .mixin-rating-icons-content(
+        .lib-rating-icons-content(
             @_icon-count,
             @_icon-content
         );
+        display: block;
         position: absolute;
         z-index: 1;
-        display: block;
     }
+
     input[type="radio"] {
-        .visually-hidden();
+        .lib-visually-hidden();
+
         &:focus,
         &:checked {
             + label {
@@ -44,15 +47,18 @@
             }
         }
     }
+
     label {
-        position: absolute;
-        display: block;
         cursor: pointer;
+        display: block;
+        position: absolute;
+
         span {
-            .visually-hidden();
+            .lib-visually-hidden();
         }
+
         &:before {
-            ._rating-icon-defalt(
+            ._lib-rating-icon-defalt(
                 @_icon-font,
                 @_icon-font-size,
                 @_icon-letter-spacing,
@@ -60,10 +66,12 @@
             );
             opacity: 0;
         }
+
         &:hover {
             &:before {
                 opacity: 1;
             }
+
             ~ label {
                 &:before {
                     opacity: 0;
@@ -71,14 +79,15 @@
             }
         }
     }
-    ._rating-iteration(
+
+    ._lib-rating-iteration(
         @_icon-content,
         @_icon-count
     );
 }
 
 //  Rating-summary mixin
-.mixin-rating-summary(
+.lib-rating-summary(
     @_icon-count: @rating-icon__count,
     @_icon-content: @rating-icon__content,
     @_icon-font: @rating-icon__font,
@@ -88,18 +97,23 @@
     @_icon-color-active: @rating-icon__active__color,
     @_label-hide: @rating-label__hide
 ) {
-    white-space: nowrap;
     overflow: hidden;
-    ._rating-label-hide(@_label-hide);
+    white-space: nowrap;
+    ._lib-rating-label-hide(@_label-hide);
+
     .rating-result {
-        .css(width, (@_icon-font-size * @_icon-count) + ceil(@_icon-letter-spacing * (@_icon-count - 1)));
+        .lib-css(width, (@_icon-font-size * @_icon-count) + ceil(@_icon-letter-spacing * (@_icon-count - 1)));
+        display: inline-block;
+        position: relative;
+        vertical-align: middle;
+
         &:before {
+            left: 0;
             position: absolute;
             top: 0;
-            left: 0;
             width: 100%;
             z-index: 1;
-            ._rating-summary-icon-default(
+            ._lib-rating-summary-icon-default(
                 @_icon-font,
                 @_icon-font-size,
                 @_icon-letter-spacing,
@@ -109,17 +123,14 @@
             );
         }
 
-        //width: @_width;
-        display: inline-block;
-        vertical-align: middle;
-        position: relative;
         > span {
             display: block;
             overflow: hidden;
+
             &:before {
                 position: relative;
                 z-index: 2;
-                ._rating-summary-icon-default(
+                ._lib-rating-summary-icon-default(
                     @_icon-font,
                     @_icon-font-size,
                     @_icon-letter-spacing,
@@ -130,61 +141,63 @@
             }
 
             span {
-                .visually-hidden();
+                .lib-visually-hidden();
             }
         }
     }
 }
 
-.mixin-rating-summary-label-hide() {
+.lib-rating-summary-label-hide() {
     .label {
-        .visually-hidden();
+        .lib-visually-hidden();
     }
 }
 
 //  Internal use mixins
-._rating-label-hide(@_label-hide) when (@_label-hide = true) {
-    .mixin-rating-summary-label-hide();
+._lib-rating-label-hide(@_label-hide) when (@_label-hide = true) {
+    .lib-rating-summary-label-hide();
 }
 
-._rating-iteration(
+._lib-rating-iteration(
     @_icon-content,
     @_icon-count
 ) {
     .loopingClass (@_index) when (@_index > 0) {
         .rating-@{_index} {
             z-index: @_icon-count - (@_index - 2);
+
             &:before {
-               .mixin-rating-icons-content(@_index, @_icon-content);
+               .lib-rating-icons-content(@_index, @_icon-content);
             }
         }
-        //  next iteration
+        //  Next iteration
         .loopingClass(@_index - 1);
     }
+
     .loopingClass (0) {}
     .loopingClass (@_icon-count);
 }
 
-._rating-icon-defalt(
+._lib-rating-icon-defalt(
     @_icon-font,
     @_icon-font-size,
     @_icon-letter-spacing,
     @_icon-color
 ) {
-    .css(color, @_icon-color);
-    .css(font-family, @_icon-font);
+    .lib-css(color, @_icon-color);
+    .lib-css(font-family, @_icon-font);
+    .lib-css(font-size, @_icon-font-size);
+    .lib-css(height, @_icon-font-size);
+    .lib-css(letter-spacing, @_icon-letter-spacing);
+    .lib-css(line-height, @_icon-font-size);
     font-style: normal;
-    .css(font-size, @_icon-font-size);
-    .css(line-height, @_icon-font-size);
-    .css(letter-spacing, @_icon-letter-spacing);
-    .css(height, @_icon-font-size);
-    speak: none;
     font-weight: normal;
-    -webkit-font-smoothing: antialiased;
+    speak: none;
     vertical-align: top;
+    -webkit-font-smoothing: antialiased;
 }
 
-._rating-summary-icon-default(
+._lib-rating-summary-icon-default(
     @_icon-font,
     @_icon-font-size,
     @_icon-letter-spacing,
@@ -192,24 +205,24 @@
     @_icon-content,
     @_icon-color
 ) {
-    .css(color, @_icon-color);
-    display: block;
-    .css(font-family, @_icon-font);
-    .mixin-rating-icons-content(@_icon-count, @_icon-content);
-    font-style: normal;
-    .css(font-size, @_icon-font-size);
-    .css(height, @_icon-font-size);
-    .css(line-height, @_icon-font-size);
-    .css(letter-spacing, @_icon-letter-spacing);
-    speak: none;
-    font-weight: normal;
     -webkit-font-smoothing: antialiased;
+    .lib-css(color, @_icon-color);
+    .lib-css(font-family, @_icon-font);
+    .lib-css(font-size, @_icon-font-size);
+    .lib-css(height, @_icon-font-size);
+    .lib-css(letter-spacing, @_icon-letter-spacing);
+    .lib-css(line-height, @_icon-font-size);
+    .lib-rating-icons-content(@_icon-count, @_icon-content);
+    display: block;
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
 }
 
-.mixin-rating-icons-content(
+.lib-rating-icons-content(
     @_icon-count: @rating-icon__count,
     @_icon-content: @rating-icon__content
 ) when (@_icon-count > 0) {
-    .mixin-rating-icons-content((@_icon-count - 1),@_icon-content);
+    .lib-rating-icons-content((@_icon-count - 1),@_icon-content);
     content+_: @_icon-content;
 }

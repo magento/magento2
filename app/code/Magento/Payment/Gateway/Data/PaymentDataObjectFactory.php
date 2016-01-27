@@ -9,7 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Payment;
 
-class PaymentDataObjectFactory
+class PaymentDataObjectFactory implements PaymentDataObjectFactoryInterface
 {
     /**
      * Object Manager instance
@@ -49,7 +49,7 @@ class PaymentDataObjectFactory
      * Creates Payment Data Object
      *
      * @param InfoInterface $paymentInfo
-     * @return PaymentDataObject
+     * @return PaymentDataObjectInterface
      */
     public function create(InfoInterface $paymentInfo)
     {

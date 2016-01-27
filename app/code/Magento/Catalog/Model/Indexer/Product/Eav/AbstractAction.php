@@ -18,22 +18,22 @@ abstract class AbstractAction
     protected $_types;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Indexer\Eav\SourceFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory
      */
     protected $_eavSourceFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Indexer\Eav\DecimalFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory
      */
     protected $_eavDecimalFactory;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Indexer\Eav\SourceFactory $eavSourceFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory $eavSourceFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
-        \Magento\Catalog\Model\Resource\Product\Indexer\Eav\SourceFactory $eavSourceFactory
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory $eavSourceFactory
     ) {
         $this->_eavDecimalFactory = $eavDecimalFactory;
         $this->_eavSourceFactory = $eavSourceFactory;
@@ -50,7 +50,7 @@ abstract class AbstractAction
     /**
      * Retrieve array of EAV type indexers
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav[]
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\AbstractEav[]
      */
     public function getIndexers()
     {
@@ -68,7 +68,7 @@ abstract class AbstractAction
      * Retrieve indexer instance by type
      *
      * @param string $type
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\AbstractEav
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getIndexer($type)

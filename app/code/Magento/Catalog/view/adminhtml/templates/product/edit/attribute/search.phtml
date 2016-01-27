@@ -11,17 +11,17 @@
 <div id="product-attribute-search-container" class="suggest-expandable attribute-selector">
     <div class="action-dropdown">
         <button type="button" class="action-toggle action-choose" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
-            <span><?php echo __('Add Attribute') ?></span>
+            <span><?php /* @escapeNotVerified */ echo __('Add Attribute') ?></span>
         </button>
         <div class="dropdown-menu">
             <input data-role="product-attribute-search"
                    data-group="<?php echo $block->escapeHtml($block->getGroupCode()); ?>"
                    class="search" type="text"
-                   placeholder="start typing to search attribute"/>
+                   placeholder="<?php /* @noEscape */ echo __('start typing to search attribute'); ?>" />
         </div>
     </div>
 
-<script data-template-for="product-attribute-search-<?php echo $block->getGroupId(); ?>" type="text/x-magento-template">
+<script data-template-for="product-attribute-search-<?php /* @escapeNotVerified */ echo $block->getGroupId(); ?>" type="text/x-magento-template">
     <ul data-mage-init='{"menu":[]}'>
         <% if (data.items.length) { %>
         <% _.each(data.items, function(value){ %>
@@ -29,7 +29,7 @@
         <% }); %>
         <% } else { %><span class="mage-suggest-no-records"><%- data.noRecordsText %></span><% } %>
     </ul>
-    <div class="actions"><?php echo $block->getAttributeCreate()?></div>
+    <div class="actions"><?php /* @escapeNotVerified */ echo $block->getAttributeCreate()?></div>
 </script>
 
 <script>
@@ -51,19 +51,19 @@
             });
         });
 
-        $suggest.mage('suggest', <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
+        $suggest.mage('suggest', <?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
             .on('suggestselect', function (e, ui) {
                 $(this).val('');
                 var templateId = $('#attribute_set_id').val();
                 if (ui.item.id) {
                     $.ajax({
-                        url: '<?php echo $block->getAddAttributeUrl()?>',
+                        url: '<?php /* @escapeNotVerified */ echo $block->getAddAttributeUrl()?>',
                         type: 'POST',
                         dataType: 'json',
                         data: {attribute_id: ui.item.id, template_id: templateId, group: $(this).data('group')},
                         showLoader: true
                     }).done(function() {
-                        setTimeout(function() { //do defered
+                        setTimeout(function() { //do deferred
                             $('[data-form=edit-product]').trigger('changeAttributeSet', {id: templateId});
                         }, 10);
                     });

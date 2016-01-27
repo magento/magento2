@@ -126,12 +126,13 @@ define('globalNavigationScroll', [
     menuItems.on('click', function (e) {
 
         var submenu = $(this).children(subMenuClass),
-            delta;
+            delta,
+            logo = $('.logo')[0].offsetHeight;
 
         submenuHeight = submenu.height();
 
-        if (submenuHeight > menuHeight && menuHeight > winHeight) {
-            menu.height(submenuHeight - $('.logo')[0].offsetHeight);
+        if (submenuHeight > menuHeight && menuHeight + logo > winHeight) {
+            menu.height(submenuHeight - logo);
             delta = -menu.position().top;
             window.scrollTo(0, 0);
             positionMenu();

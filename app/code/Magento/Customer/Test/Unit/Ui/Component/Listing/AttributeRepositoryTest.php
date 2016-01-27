@@ -118,6 +118,12 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects($this->once())
             ->method('getIsVisibleInGrid')
             ->willReturn(true);
+        $this->attribute->expects($this->once())
+            ->method('getValidationRules')
+            ->willReturn([]);
+        $this->attribute->expects($this->once())
+            ->method('isRequired')
+            ->willReturn(false);
         $this->option->expects($this->once())
             ->method('getLabel')
             ->willReturn('Label');
@@ -145,6 +151,9 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
                     'is_visible_in_grid' => true,
                     'is_filterable_in_grid' => true,
                     'is_searchable_in_grid' => true,
+                    'validation_rules' => [],
+                    'required'=> false,
+                    'entity_type_code' => 'customer_address',
                 ]
             ],
             $this->component->getList()

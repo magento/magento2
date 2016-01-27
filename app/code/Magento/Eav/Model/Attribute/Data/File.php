@@ -44,6 +44,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param \Magento\Framework\Filesystem $filesystem
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -262,6 +263,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param array|string $value
      * @return $this
      *
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function restoreValue($value)

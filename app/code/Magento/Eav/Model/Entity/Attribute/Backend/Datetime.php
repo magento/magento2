@@ -17,6 +17,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
     {

@@ -6,10 +6,7 @@
 
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Setup\CategorySetup',
-    ['resourceName' => 'catalog_setup']
-);
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 
 $attributesData = [
     [
@@ -24,9 +21,9 @@ $attributesData = [
 
 foreach ($attributesData as $data) {
 
-    /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+    /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
     $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-        'Magento\Catalog\Model\Resource\Eav\Attribute'
+        'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
     );
     $attributeData = array_merge(
         [

@@ -82,6 +82,7 @@ class DeleteUsedInConfigurableProductAttributeTest extends Injectable
         $this->attributeIndex->open();
         $this->attributeIndex->getGrid()->searchAndOpen(['attribute_code' => $attribute->getAttributeCode()]);
         $this->attributeNew->getPageActions()->delete();
+        $this->attributeNew->getModalBlock()->acceptAlert();
 
         return ['attribute' => $attribute];
     }

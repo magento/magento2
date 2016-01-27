@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogSearch\Test\Block\Advanced;
 
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Mtf\Block\Form as ParentForm;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
@@ -46,6 +47,13 @@ class Form extends ParentForm
     protected $labelSelector = 'label';
 
     /**
+     * Selector for custom attribute.
+     *
+     * @var string
+     */
+    protected $customAttributeSelector = 'div[class*="%s"]';
+
+    /**
      * Submit search form.
      *
      * @return void
@@ -73,25 +81,22 @@ class Form extends ParentForm
 
         // Mapping
         $mapping = $this->dataMapping($data);
-        $this->_fill($mapping, $element);
+        $attributeType = $attributeCode = '';
+        if ($fixture->hasData('custom_attribute')) {
+            /** @var CatalogProductAttribute $attribute */
+            $attribute = $fixture->getDataFieldConfig('custom_attribute')['source']->getAttribute();
+            $attributeType = $attribute->getFrontendInput();
+            $attributeCode = $attribute->getAttributeCode();
+        }
+        if ($this->hasRender($attributeType)) {
+            $element = $this->_rootElement->find(sprintf($this->customAttributeSelector, $attributeCode));
+            $arguments = ['fixture' => $fixture, 'element' => $element, 'mapping' => $mapping];
+            $this->callRender($attributeType, 'fill', $arguments);
+        } else {
+            $this->_fill($mapping, $element);
+        }
 
         return $this;
-    }
-
-    /**
-     * Fill form with custom fields.
-     * (for End To End Tests)
-     *
-     * @param FixtureInterface $fixture
-     * @param array $fields
-     * @param SimpleElement $element
-     */
-    public function fillCustom(FixtureInterface $fixture, array $fields, SimpleElement $element = null)
-    {
-        $data = $fixture->getData('fields');
-        $dataForMapping = array_intersect_key($data, array_flip($fields));
-        $mapping = $this->dataMapping($dataForMapping);
-        $this->_fill($mapping, $element);
     }
 
     /**

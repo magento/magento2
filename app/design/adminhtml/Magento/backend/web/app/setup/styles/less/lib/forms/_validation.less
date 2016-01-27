@@ -29,12 +29,11 @@
 .error-container {
     background-color: @validation-message__failed__background-color;
     border: 1px solid @validation-message__failed__border-color;
-    border-radius: @form-el__border-radius;
     color: @color-brownie;
     display: none;
     font-size: @small__font-size;
     margin-top: .2rem;
-    padding: @form-el__padding-top * (1 + @font-size-gap) @form-el__padding-side * (1 + @font-size-gap) @form-el__padding-bottom * (1 + @font-size-gap);
+    padding: .8rem @indent__s .9rem;
 }
 
 //  Check results
@@ -42,8 +41,8 @@
 .check-result-message {
     margin-left: .5em;
     min-height: @btn__height__base;
-    .vendor-box-align(center);
-    .vendor-prefix-display(flex);
+    .lib-vendor-box-align(center);
+    .lib-vendor-prefix-display(flex);
 }
 
 .check-result-text {

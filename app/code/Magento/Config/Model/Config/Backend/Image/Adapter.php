@@ -22,8 +22,9 @@ class Adapter extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -31,12 +32,13 @@ class Adapter extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\Image\AdapterFactory $imageFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
         $this->_imageFactory = $imageFactory;
     }
 
@@ -51,7 +53,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
         try {
             $this->_imageFactory->create($this->getValue());
         } catch (\Exception $e) {
-            $message = __('The specified image adapter cannot be used because of: ' . $e->getMessage());
+            $message = __('The specified image adapter cannot be used because of: %1', $e->getMessage());
             throw new \Magento\Framework\Exception\LocalizedException($message);
         }
 

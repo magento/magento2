@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesSequence\Model;
 
-use Magento\SalesSequence\Model\Resource\Meta as ResourceSequenceMeta;
+use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceSequenceMeta;
 
 /**
  * Class Manager

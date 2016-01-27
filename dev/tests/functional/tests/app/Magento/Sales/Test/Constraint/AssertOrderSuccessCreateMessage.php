@@ -33,7 +33,7 @@ class AssertOrderSuccessCreateMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
-            $salesOrderView->getMessagesBlock()->getSuccessMessages(),
+            $salesOrderView->getMessagesBlock()->getSuccessMessage(),
             'Wrong success message is displayed.'
         );
     }

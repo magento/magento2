@@ -7,36 +7,62 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'uiComponent',
+    'rjsResolver',
+    'uiLayout',
     'Magento_Ui/js/modal/alert',
-    'mage/translate'
-], function ($, _, utils, Component, alert, $t) {
+    'mage/translate',
+    'uiElement'
+], function ($, _, utils, resolver, layout, alert, $t, Element) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
+            firstLoad: true,
+            storageConfig: {
+                component: 'Magento_Ui/js/grid/data-storage',
+                provider: '${ $.storageConfig.name }',
+                name: '${ $.name }_storage',
+                updateUrl: '${ $.update_url }'
+            },
             listens: {
-                params: 'reload'
+                params: 'onParamsChange'
             }
         },
 
         /**
-         * initialize provider
+         * Initializes provider component.
+         *
+         * @returns {Provider} Chainable.
          */
         initialize: function () {
-            utils.limit(this, 'reload', 200);
+            utils.limit(this, 'onParamsChange', 5);
             _.bindAll(this, 'onReload');
 
-            return this._super();
+            this._super()
+                .initStorage()
+                .clearData();
+
+            return this;
         },
 
         /**
-         * initialize config
+         * Initializes storage component.
+         *
+         * @returns {Provider} Chainable.
          */
-        initConfig: function () {
-            this._super();
+        initStorage: function () {
+            layout([this.storageConfig]);
 
-            _.extend(this.data, {
+            return this;
+        },
+
+        /**
+         * Clears provider's data properties.
+         *
+         * @returns {Provider} Chainable.
+         */
+        clearData: function () {
+            this.setData({
                 items: [],
                 totalRecords: 0
             });
@@ -45,34 +71,83 @@ define([
         },
 
         /**
-         * reload data from server
+         * Overrides current data with a provided one.
+         *
+         * @param {Object} data - New data object.
+         * @returns {Provider} Chainable.
          */
-        reload: function () {
-            this.trigger('reload');
-            $.ajax({
-                url: this.update_url,
-                method: 'GET',
-                data: this.get('params'),
-                dataType: 'json'
-            })
-                .error(this.onError)
-                .done(this.onReload);
+        setData: function (data) {
+            data = this.processData(data);
+
+            this.set('data', data);
+
+            return this;
         },
 
         /**
-         * alert with error message
+         * Processes data before applying it.
+         *
+         * @param {Object} data - Data to be processed.
+         * @returns {Object}
          */
-        onError: function () {
+        processData: function (data) {
+            var items = data.items;
+
+            _.each(items, function (record, index) {
+                record._rowIndex = index;
+            });
+
+            return data;
+        },
+
+        /**
+         * Reloads data with current parameters.
+         *
+         * @returns {Promise} Reload promise object.
+         */
+        reload: function (options) {
+            var request = this.storage().getData(this.params, options);
+
+            this.trigger('reload');
+
+            request
+                .done(this.onReload)
+                .fail(this.onError);
+
+            return request;
+        },
+
+        /**
+         * Handles changes of 'params' object.
+         */
+        onParamsChange: function () {
+            this.firstLoad ?
+                resolver(this.reload, this) :
+                this.reload();
+        },
+
+        /**
+         * Handles reload error.
+         */
+        onError: function (xhr) {
+            if (xhr.statusText === 'abort') {
+                return;
+            }
+
             alert({
-                content: $t('Something go wrong')
+                content: $t('Something went wrong.')
             });
         },
 
         /**
-         * set data and triggered reloaded
+         * Handles successful data reload.
+         *
+         * @param {Object} data - Retrieved data object.
          */
         onReload: function (data) {
-            this.set('data', data)
+            this.firstLoad = false;
+
+            this.setData(data)
                 .trigger('reloaded');
         }
     });

@@ -5,13 +5,13 @@
  */
 namespace Magento\ProductAlert\Model;
 
-use Magento\ProductAlert\Model\Resource\Price\Customer\Collection;
+use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
 
 /**
  * ProductAlert for changed price model
  *
- * @method \Magento\ProductAlert\Model\Resource\Price _getResource()
- * @method \Magento\ProductAlert\Model\Resource\Price getResource()
+ * @method \Magento\ProductAlert\Model\ResourceModel\Price _getResource()
+ * @method \Magento\ProductAlert\Model\ResourceModel\Price getResource()
  * @method int getCustomerId()
  * @method \Magento\ProductAlert\Model\Price setCustomerId(int $value)
  * @method int getProductId()
@@ -34,23 +34,23 @@ use Magento\ProductAlert\Model\Resource\Price\Customer\Collection;
 class Price extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * @var \Magento\ProductAlert\Model\Resource\Price\Customer\CollectionFactory
+     * @var \Magento\ProductAlert\Model\ResourceModel\Price\Customer\CollectionFactory
      */
     protected $_customerColFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\ProductAlert\Model\Resource\Price\Customer\CollectionFactory $customerColFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\ProductAlert\Model\ResourceModel\Price\Customer\CollectionFactory $customerColFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\ProductAlert\Model\Resource\Price\Customer\CollectionFactory $customerColFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\ProductAlert\Model\ResourceModel\Price\Customer\CollectionFactory $customerColFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -63,7 +63,7 @@ class Price extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\Resource\Price');
+        $this->_init('Magento\ProductAlert\Model\ResourceModel\Price');
     }
 
     /**

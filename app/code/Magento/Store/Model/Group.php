@@ -7,17 +7,17 @@
 /**
  * Store group model
  *
- * @method \Magento\Store\Model\Resource\Group _getResource()
- * @method \Magento\Store\Model\Resource\Group getResource()
- * @method \Magento\Store\Model\Store setWebsiteId(int $value)
- * @method \Magento\Store\Model\Store setName(string $value)
- * @method \Magento\Store\Model\Store setRootCategoryId(int $value)
- * @method \Magento\Store\Model\Store setDefaultStoreId(int $value)
+ * @method \Magento\Store\Model\ResourceModel\Group _getResource()
+ * @method \Magento\Store\Model\ResourceModel\Group getResource()
  */
 namespace Magento\Store\Model;
 
-
-class Group extends \Magento\Framework\Model\AbstractModel implements
+/**
+ * Class Group
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,
     \Magento\Store\Api\Data\GroupInterface
 {
@@ -43,7 +43,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Group Store collection array
      *
-     * @var \Magento\Store\Model\Resource\Store\Collection[]
+     * @var \Magento\Store\Model\ResourceModel\Store\Collection[]
      */
     protected $_stores;
 
@@ -81,7 +81,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements
     private $_isReadOnly = false;
 
     /**
-     * @var \Magento\Config\Model\Resource\Config\Data
+     * @var \Magento\Config\Model\ResourceModel\Config\Data
      */
     protected $_configDataResource;
 
@@ -98,27 +98,40 @@ class Group extends \Magento\Framework\Model\AbstractModel implements
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
      * @param \Magento\Store\Model\Store $store
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Config\Model\Resource\Config\Data $configDataResource,
-        \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;
         $this->_storeManager = $storeManager;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -128,7 +141,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\Resource\Group');
+        $this->_init('Magento\Store\Model\ResourceModel\Group');
     }
 
     /**
@@ -175,7 +188,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Retrieve new (not loaded) Store collection object with group filter
      *
-     * @return \Magento\Store\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
     public function getStoreCollection()
     {
@@ -185,7 +198,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Retrieve website store objects
      *
-     * @return \Magento\Store\Model\Resource\Store\Collection[]
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection[]
      */
     public function getStores()
     {
@@ -335,6 +348,14 @@ class Group extends \Magento\Framework\Model\AbstractModel implements
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setDefaultStoreId($defaultStoreId)
+    {
+        return $this->setData('default_store_id', $defaultStoreId);
+    }
+
+    /**
      * @return mixed
      */
     public function getRootCategoryId()
@@ -343,11 +364,27 @@ class Group extends \Magento\Framework\Model\AbstractModel implements
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setRootCategoryId($rootCategoryId)
+    {
+        return $this->setData('root_category_id', $rootCategoryId);
+    }
+
+    /**
      * @return mixed
      */
     public function getWebsiteId()
     {
         return $this->_getData('website_id');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setWebsiteId($websiteId)
+    {
+        return $this->setData('website_id', $websiteId);
     }
 
     /**
@@ -392,5 +429,30 @@ class Group extends \Magento\Framework\Model\AbstractModel implements
     public function getName()
     {
         return $this->getData('name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(
+        \Magento\Store\Api\Data\GroupExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

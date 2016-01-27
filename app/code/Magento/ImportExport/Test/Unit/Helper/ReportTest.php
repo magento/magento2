@@ -141,7 +141,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
         $product->expects($this->any())->method('setParameters')->willReturn('');
         $entityFactory->expects($this->any())->method('create')->willReturn($product);
-        $importData = $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false);
+        $importData = $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false);
         $csvFactory = $this->getMock('Magento\ImportExport\Model\Export\Adapter\CsvFactory', [], [], '', false);
         $httpFactory = $this->getMock('Magento\Framework\HTTP\Adapter\FileTransferFactory', [], [], '', false);
         $uploaderFactory = $this->getMock('Magento\MediaStorage\Model\File\UploaderFactory', [], [], '', false);

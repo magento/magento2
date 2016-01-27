@@ -82,7 +82,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('some searchable text'))
             ->will($this->returnValue("'some searchable text'"));
 
-        $resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())

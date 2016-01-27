@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Search/etc/search_request_merged.xsd">
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_request_merged.xsd">
     <request query="one_match" index="catalogsearch_fulltext">
         <dimensions>
             <dimension name="scope" value="default"/>
@@ -16,7 +16,7 @@
             </query>
 
             <query xsi:type="matchQuery" name="fulltext_search_query" value="$fulltext_search_query$" boost="5">
-                <match field="data_index" boost="2"/>
+                <match field="data_index"/>
             </query>
         </queries>
         <from>10</from>
@@ -32,7 +32,7 @@
             </query>
 
             <query xsi:type="matchQuery" name="fulltext_search_query" value="$fulltext_search_query$" boost="5">
-                <match field="data_index" boost="2"/>
+                <match field="data_index"/>
             </query>
         </queries>
         <aggregations>
@@ -83,13 +83,13 @@
                 <queryReference clause="must" ref="filtered_query_filter_rm"/>
             </query>
             <query xsi:type="matchQuery" name="fulltext_search_query" value="$fulltext_search_query$" boost="5">
-                <match field="data_index" boost="2"/>
+                <match field="data_index"/>
             </query>
             <query xsi:type="filteredQuery" name="filtered_query">
                 <filterReference clause="must" ref="pid"/>
             </query>
             <query xsi:type="filteredQuery" name="filtered_query_rm">
-                <queryReference ref="fulltext_search_query_rm"/>
+                <queryReference clause= "must" ref="fulltext_search_query_rm"/>
             </query>
             <query xsi:type="filteredQuery" name="filtered_query_filter_rm">
                 <filterReference clause="must" ref="bool_filter_rm"/>
@@ -303,10 +303,10 @@
                 <queryReference clause="should" ref="query_filter"/>
             </query>
             <query xsi:type="matchQuery" name="name_query" value="$name_query$">
-                <match field="data_index" boost="1"/>
+                <match field="data_index"/>
             </query>
             <query xsi:type="matchQuery" name="description_query" value="$description$">
-                <match field="data_index" boost="1"/>
+                <match field="data_index"/>
             </query>
             <query xsi:type="filteredQuery" name="query_filter">
                 <filterReference clause="must" ref="filter"/>
@@ -319,6 +319,51 @@
             <filter name="price_filter" xsi:type="rangeFilter" field="price" from="$request.from_price$" to="$request.to_price$"/>
         </filters>
         <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="filterable_custom_attributes" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="filterable_custom_attributes" boost="1">
+                <queryReference clause="must" ref="category"/>
+                <queryReference clause="must" ref="price"/>
+                <queryReference clause="must" ref="select_attribute"/>
+                <queryReference clause="must" ref="multiselect_attribute"/>
+            </query>
+            <query xsi:type="filteredQuery" name="category">
+                <filterReference clause="must" ref="category_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="price">
+                <filterReference clause="must" ref="price_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="select_attribute">
+                <filterReference clause="must" ref="select_attribute_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="multiselect_attribute">
+                <filterReference clause="must" ref="multiselect_attribute_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_ids$"/>
+            <filter xsi:type="rangeFilter" name="price_filter" field="price" from="$price.from$" to="$price.to$"/>
+            <filter xsi:type="termFilter" name="select_attribute_filter" field="select_attribute" value="$select_attribute$"/>
+            <filter xsi:type="termFilter" name="multiselect_attribute_filter" field="multiselect_attribute" value="$multiselect_attribute$"/>
+        </filters>
+        <aggregations>
+            <bucket name="price_bucket" field="price" xsi:type="dynamicBucket" method="$price_dynamic_algorithm$">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket name="category_bucket" field="category_ids" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+        </aggregations>
+        <from>0</from>
         <size>10</size>
     </request>
 </requests>

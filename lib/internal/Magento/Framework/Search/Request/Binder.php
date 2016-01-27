@@ -81,6 +81,7 @@ class Binder
                         } else {
                             $data[$key] = $bindValue;
                         }
+                        $data['is_bind'] = true;
                     }
                 }
             }

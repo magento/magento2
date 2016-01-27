@@ -103,6 +103,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Enhanced',
                     ],
                     [
+                        'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Proxy',
+                        'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Proxy',
+                    ],
+                    [
                         'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy',
                         'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy',
                     ],
@@ -151,6 +155,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item' => true,
             'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Enhanced' => true,
             'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Enhanced' => true,
+            'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Proxy' => true,
             'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy' => false,
             'virtual_custom_item' => true,
         ];
@@ -195,7 +200,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [
                 // the following model has only inherited plugins
                 true,
-                'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Enhanced',
+                'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Proxy',
+                ['Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer'],
+            ],
+            [
+                // the following model has only inherited plugins
+                true,
+                'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Proxy',
                 ['Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer'],
             ],
             [

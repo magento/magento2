@@ -221,7 +221,6 @@
             <field name="store_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
-            <field name="shipping_method" xsi:type="string">flatrate_flatrate</field>
             <field name="payment_auth_expiration" xsi:type="array">
                 <item name="method" xsi:type="string">checkmo</item>
             </field>

@@ -26,7 +26,7 @@ class AssertCartPriceRuleForm extends AbstractConstraint
         'actions_serialized',
         'from_date',
         'to_date',
-        'id'
+        'rule_id'
     ];
 
     /**

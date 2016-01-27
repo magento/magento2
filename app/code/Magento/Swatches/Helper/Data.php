@@ -8,10 +8,10 @@ namespace Magento\Swatches\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Swatches\Model\Swatch;
-use Magento\Catalog\Model\Resource\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Exception\InputException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Resource\Product\Collection as ProductCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 
 /**
  * Class Helper Data
@@ -39,7 +39,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $productCollectionFactory;
 
@@ -59,7 +59,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $storeManager;
 
     /**
-     * @var \Magento\Swatches\Model\Resource\Swatch\CollectionFactory
+     * @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory
      */
     protected $swatchCollectionFactory;
 
@@ -83,20 +83,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param Context $context
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Swatches\Model\Resource\Swatch\CollectionFactory $swatchCollectionFactory
+     * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $swatchCollectionFactory
      * @param \Magento\Catalog\Helper\Image $imageHelper
      */
     public function __construct(
         Context $context,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable,
         ProductRepositoryInterface $productRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Swatches\Model\Resource\Swatch\CollectionFactory $swatchCollectionFactory,
+        \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $swatchCollectionFactory,
         \Magento\Catalog\Helper\Image $imageHelper
     ) {
         $this->productCollectionFactory   = $productCollectionFactory;
@@ -155,30 +155,32 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param array $attributes
-     * @return bool|null
+     * @param string $attributeCode
+     * @param string|int $attributeValue
+     * @return \Magento\Catalog\Model\Product|null
      * @throws InputException
      */
-    public function loadFirstVariationWithSwatchImage($product, array $attributes)
+    public function loadFirstVariationWithSwatchImage($product, $attributeCode, $attributeValue)
     {
         $product = $this->createSwatchProduct($product);
         if (!$product) {
-            return false;
+            return null;
         }
 
-        $productCollection = $this->prepareVariationCollection($product, $attributes);
-
+        $products = $product->getTypeInstance()->getUsedProducts($product);
         $variationProduct = null;
-        foreach ($productCollection as $item) {
-            $currentProduct = $this->productRepository->getById($item->getId());
-            $media = $this->getProductMedia($currentProduct);
-            if (! empty($media) && isset($media['swatch_image'])) {
-                $variationProduct = $currentProduct;
+        foreach ($products as $item) {
+            if ($item->getData($attributeCode) != $attributeValue) {
+                continue;
+            }
+            $media = $this->getProductMedia($item);
+            if (!empty($media) && isset($media['swatch_image'])) {
+                $variationProduct = $item;
                 break;
             }
             if ($variationProduct !== false) {
                 if (! empty($media) && isset($media['image'])) {
-                    $variationProduct = $currentProduct;
+                    $variationProduct = $item;
                 } else {
                     $variationProduct = false;
                 }
@@ -387,9 +389,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return [
             'large' => $this->imageHelper->init($product, 'product_page_image_large')
+                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                 ->setImageFile($imageFile)
                 ->getUrl(),
             'medium' => $this->imageHelper->init($product, 'product_page_image_medium')
+                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                 ->setImageFile($imageFile)
                 ->getUrl(),
             'small' => $this->imageHelper->init($product, 'product_page_image_small')
@@ -402,7 +406,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve collection of Swatch attributes
      *
      * @param Product $product
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute[]
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
      */
     public function getSwatchAttributes(Product $product)
     {
@@ -420,7 +424,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve collection of Eav Attributes from Configurable product
      *
      * @param Product $product
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute[]
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
      */
     public function getAttributesFromConfigurable(Product $product)
     {
@@ -430,7 +434,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $configurableAttributes = $typeInstance->getConfigurableAttributes($product);
             /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
             foreach ($configurableAttributes as $configurableAttribute) {
-                /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
+                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
                 $attribute = $configurableAttribute->getProductAttribute();
                 $result[] = $attribute;
             }
@@ -468,7 +472,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getSwatchesByOptionsId(array $optionIds)
     {
-        /** @var \Magento\Swatches\Model\Resource\Swatch\Collection $swatchCollection */
+        /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection $swatchCollection */
         $swatchCollection = $this->swatchCollectionFactory->create();
         $swatchCollection->addFilterByOptionsIds($optionIds);
 

@@ -3,16 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 ?>
 <div class="entry-edit fieldset" id="import_validation_container" style="display:none;">
     <div class="entry-edit-head legend">
         <span class="icon-head head-edit-form fieldset-legend"
-            id="import_validation_container_header"><?php echo __('Validation Results'); ?></span>
+            id="import_validation_container_header"><?php /* @escapeNotVerified */ echo __('Validation Results'); ?></span>
     </div><br>
     <div id="import_validation_messages" class="fieldset"><!-- --></div>
 </div>
 <script>
-require(['jquery', 'prototype'], function(jQuery){
+require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype'], function(jQuery){
 //<![CDATA[
     varienImport.resetSelectIndex('entity'); // forced resetting entity selector after page refresh
 //]]>

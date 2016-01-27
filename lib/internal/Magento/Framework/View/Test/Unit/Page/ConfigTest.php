@@ -9,10 +9,13 @@
  */
 namespace Magento\Framework\View\Test\Unit\Page;
 
+use Magento\Framework\Locale\Resolver;
+use Magento\Framework\View\Page\Config;
+
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\View\Page\Config
+     * @var Config
      */
     protected $model;
 
@@ -66,6 +69,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->remoteAsset = $this->getMock('\Magento\Framework\View\Asset\Remote', [], [], '', false);
         $this->title = $this->getMock('Magento\Framework\View\Page\Title', [], [], '', false);
+        $locale = $this->getMockForAbstractClass('Magento\Framework\Locale\ResolverInterface', [], '', false);
+        $locale->expects($this->any())
+            ->method('getLocale')
+            ->willReturn(Resolver::DEFAULT_LOCALE);
         $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
                 'Magento\Framework\View\Page\Config',
@@ -73,7 +80,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     'assetRepo' => $this->assetRepo,
                     'pageAssets' => $this->pageAssets,
                     'scopeConfig' => $this->scopeConfig,
-                    'favicon' => $this->favicon
+                    'favicon' => $this->favicon,
+                    'localeResolver' => $locale,
                 ]
             );
     }
@@ -339,15 +347,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'test',
             ],
             [
-                'html',
-                'context',
-                'value'
-            ],
-            [
                 'body',
                 'class',
                 'value'
-            ]
+            ],
+            [
+                Config::ELEMENT_TYPE_HTML,
+                Config::HTML_ATTRIBUTE_LANG,
+                str_replace('_', '-', Resolver::DEFAULT_LOCALE)
+            ],
         ];
     }
 
@@ -387,15 +395,29 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $elementType
-     * @param string $attribute
-     * @param string $value
+     * @param string $attributes
      *
-     * @dataProvider elementAttributeDataProvider
+     * @dataProvider elementAttributesDataProvider
      */
-    public function testElementAttributes($elementType, $attribute, $value)
+    public function testElementAttributes($elementType, $attributes)
     {
-        $this->model->setElementAttribute($elementType, $attribute, $value);
-        $this->assertEquals([$attribute => $value], $this->model->getElementAttributes($elementType));
+        foreach ($attributes as $attribute => $value) {
+            $this->model->setElementAttribute($elementType, $attribute, $value);
+        }
+        $this->assertEquals($attributes, $this->model->getElementAttributes($elementType));
+    }
+
+    public function elementAttributesDataProvider()
+    {
+        return [
+            [
+                'html',
+                [
+                    'context' => 'value',
+                    Config::HTML_ATTRIBUTE_LANG => str_replace('_', '-', Resolver::DEFAULT_LOCALE)
+                ],
+            ],
+        ];
     }
 
     /**

@@ -104,6 +104,17 @@ class Db extends AbstractBackup
     }
 
     /**
+     * Get database size
+     *
+     * @return int
+     */
+    public function getDBSize()
+    {
+        $backupDb = $this->_backupFactory->createBackupDbModel();
+        return $backupDb->getDBBackupSize();
+    }
+
+    /**
      * Get Backup Type
      *
      * @return string

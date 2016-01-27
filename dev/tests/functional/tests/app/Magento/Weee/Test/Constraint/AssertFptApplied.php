@@ -120,7 +120,7 @@ class AssertFptApplied extends AbstractConstraint
         // Get prices with fpt on cart page
         $actualPrices = $this->getCartPrice($product, $actualPrices);
 
-        return $actualPrices;
+        return array_filter($actualPrices);
     }
 
     /**
@@ -181,6 +181,8 @@ class AssertFptApplied extends AbstractConstraint
         $actualPrices['cart_item_subtotal_fpt'] = $productWeeeItem->getSubtotalFptBlock()->getFpt();
         $actualPrices['cart_item_subtotal_fpt_total'] = $productWeeeItem->getSubtotalFptBlock()->getFptTotal();
         $actualPrices['grand_total'] = $this->checkoutCart->getTotalsBlock()->getGrandTotal();
+        $actualPrices['grand_total_excl_tax'] = $this->checkoutCart->getTotalsBlock()->getGrandTotalExcludingTax();
+        $actualPrices['grand_total_incl_tax'] = $this->checkoutCart->getTotalsBlock()->getGrandTotalIncludingTax();
         $actualPrices['total_fpt'] = $this->checkoutCart->getWeeeTotalsBlock()->getFptBlock()->getTotalFpt();
 
         return $actualPrices;

@@ -9,10 +9,8 @@
 ?>
 
 <?php $_divId = 'tree-div_' . time() ?>
-<div id="<?php echo $_divId ?>" class="tree"></div>
-<!--[if IE]>
-<script id="ie-deferred-loader" defer="defer" src=""></script>
-<![endif]-->
+<div id="<?php /* @escapeNotVerified */ echo $_divId ?>" class="tree"></div>
+<script id="ie-deferred-loader" defer="defer" src="//:"></script>
 <script>
     require([
         'jquery',
@@ -75,7 +73,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 jQuery(function()
 {
     var categoryLoader = new Ext.tree.TreeLoader({
-       dataUrl: '<?php echo $block->getLoadTreeUrl() ?>'
+       dataUrl: '<?php /* @escapeNotVerified */ echo $block->getLoadTreeUrl() ?>'
     });
 
     categoryLoader.createNode = function(config) {
@@ -154,29 +152,29 @@ jQuery(function()
         varienWindowOnload();
     });
 
-    tree = new Ext.tree.TreePanel.Enhanced('<?php echo $_divId ?>', {
+    tree = new Ext.tree.TreePanel.Enhanced('<?php /* @escapeNotVerified */ echo $_divId ?>', {
         animate:          false,
         loader:           categoryLoader,
         enableDD:         false,
         containerScroll:  true,
         selModel:         new Ext.tree.CheckNodeMultiSelectionModel(),
-        rootVisible:      '<?php echo $block->getRoot()->getIsVisible() ?>',
-        useAjax:          <?php echo $block->getUseAjax() ?>,
+        rootVisible:      '<?php /* @escapeNotVerified */ echo $block->getRoot()->getIsVisible() ?>',
+        useAjax:          <?php /* @escapeNotVerified */ echo $block->getUseAjax() ?>,
         currentNodeId:    <?php echo (int) $block->getCategoryId() ?>,
         addNodeTo:        false,
         rootUIProvider:   Ext.tree.CheckboxNodeUI
     });
 
     tree.on('check', function(node, checked) {
-        <?php echo $block->getJsFormObject() ?>.updateElement.value = this.getChecked().join(', ');
+        <?php /* @escapeNotVerified */ echo $block->getJsFormObject() ?>.updateElement.value = this.getChecked().join(', ');
         varienElementMethods.setHasChanges(node.getUI().checkbox);
     }, tree);
 
     // set the root node
     var parameters = {
-        text:        '<?php echo htmlentities($block->getRoot()->getName()) ?>',
+        text:        '<?php /* @escapeNotVerified */ echo htmlentities($block->getRoot()->getName()) ?>',
         draggable:   false,
-        checked:'<?php echo $block->getRoot()->getChecked() ?>',
+        checked:'<?php /* @escapeNotVerified */ echo $block->getRoot()->getChecked() ?>',
         uiProvider: Ext.tree.CheckboxNodeUI,
         allowDrop:   <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
         id:          <?php echo (int) $block->getRoot()->getId() ?>,
@@ -184,7 +182,7 @@ jQuery(function()
         category_id: <?php echo (int) $block->getCategoryId() ?>
     };
 
-    tree.loadTree({parameters:parameters, data:<?php echo $block->getTreeJson() ?>},true);
+    tree.loadTree({parameters:parameters, data:<?php /* @escapeNotVerified */ echo $block->getTreeJson() ?>},true);
 
 });
 //]]>

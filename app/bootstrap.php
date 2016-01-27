@@ -31,9 +31,15 @@ HTML;
 require_once __DIR__ . '/autoload.php';
 require_once BP . '/app/functions.php';
 
-if (!empty($_SERVER['MAGE_PROFILER'])) {
-    \Magento\Framework\Profiler::applyConfig($_SERVER['MAGE_PROFILER'], BP, !empty($_REQUEST['isAjax']));
+if (!empty($_SERVER['MAGE_PROFILER'])
+    && isset($_SERVER['HTTP_ACCEPT'])
+    && strpos($_SERVER['HTTP_ACCEPT'], 'text/html') !== false
+) {
+    \Magento\Framework\Profiler::applyConfig(
+        $_SERVER['MAGE_PROFILER'],
+        BP,
+        !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+    );
 }
-if (ini_get('date.timezone') == '') {
-    date_default_timezone_set('UTC');
-}
+
+date_default_timezone_set('UTC');

@@ -11,10 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
-use Magento\Cron\Model\Observer;
+use Magento\Cron\Observer\ProcessCronQueueObserver;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Shell\ComplexParameter;
 
@@ -82,16 +81,16 @@ class CronCommand extends Command
         $objectManager = $this->objectManagerFactory->create($omParams);
 
         $params[self::INPUT_KEY_GROUP] = $input->getOption(self::INPUT_KEY_GROUP);
-        $params[Observer::STANDALONE_PROCESS_STARTED] = '0';
+        $params[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED] = '0';
         $bootstrap = $input->getOption(Cli::INPUT_KEY_BOOTSTRAP);
         if ($bootstrap) {
             $bootstrapProcessor = new ComplexParameter(Cli::INPUT_KEY_BOOTSTRAP);
             $bootstrapOptionValues = $bootstrapProcessor->getFromString(
                 '--' . Cli::INPUT_KEY_BOOTSTRAP . '=' . $bootstrap
             );
-            $bootstrapOptionValue = $bootstrapOptionValues[Observer::STANDALONE_PROCESS_STARTED];
+            $bootstrapOptionValue = $bootstrapOptionValues[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED];
             if ($bootstrapOptionValue) {
-                $params[Observer::STANDALONE_PROCESS_STARTED] = $bootstrapOptionValue;
+                $params[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED] = $bootstrapOptionValue;
             }
         }
         /** @var \Magento\Framework\App\Cron $cronObserver */

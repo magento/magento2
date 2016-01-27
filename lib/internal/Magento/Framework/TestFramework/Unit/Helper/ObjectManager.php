@@ -17,7 +17,7 @@ class ObjectManager
      * @var array
      */
     protected $_specialCases = [
-        'Magento\Framework\Model\Resource\AbstractResource' => '_getResourceModelMock',
+        'Magento\Framework\Model\ResourceModel\AbstractResource' => '_getResourceModelMock',
         'Magento\Framework\TranslateInterface' => '_getTranslatorMock',
     ];
 
@@ -86,7 +86,7 @@ class ObjectManager
     protected function _getResourceModelMock()
     {
         $resourceMock = $this->_testObject->getMock(
-            'Magento\Framework\Module\Resource',
+            'Magento\Framework\Module\ModuleResource',
             ['getIdFieldName', '__sleep', '__wakeup'],
             [],
             '',
@@ -146,7 +146,7 @@ class ObjectManager
     /**
      * Get class instance
      *
-     * @param $className
+     * @param string $className
      * @param array $arguments
      * @return object
      */

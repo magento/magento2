@@ -14,21 +14,38 @@
 $weeeSeparator = $openBrace = $closeBrace = '';
 $openBrace = '(';
 $closeBrace = ')';
+$taxDisplay = $block->getTaxDisplayConfig();
+$priceDisplay = $block->isPriceIncludesTax();
 ?>
-<?php if ($block->showInclDescr()): // incl. + weee ?>
+
+<?php if ($block->showInclDescr() || $block->showExclDescrIncl()): // incl. + weee ||  excl. + weee + final ?>
     <?php foreach ($block->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
-        <span class="weee"
-              data-price-type="weee"
-              data-label="<?php echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute); ?>"><?php echo $block->renderWeeeTaxAttribute($weeeTaxAttribute); ?></span>
+        <?php if ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX): ?>
+            <span class="weee"
+                  data-price-type="weee"
+                  data-label="<?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute) ?>">
+                            <?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeWithTax($weeeTaxAttribute); ?></span>
+        <?php elseif ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX): ?>
+            <span class="weee"
+                  data-price-type="weee"
+                  data-label="<?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute) ?>">
+                            <?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeWithoutTax($weeeTaxAttribute); ?></span>
+        <?php elseif ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH): ?>
+            <span class="weee"
+                  data-price-type="weee"
+                  data-label="<?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute) . ' Incl. Tax'  ?>">
+                            <?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeWithTax($weeeTaxAttribute); ?></span>
+            <span class="weee"
+                  data-price-type="weee"
+                  data-label="<?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute) . ' Excl. Tax' ?>">
+                            <?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeWithoutTax($weeeTaxAttribute); ?></span>
+        <?php endif; ?>
     <?php endforeach; ?>
-<?php elseif ($block->showExclDescrIncl()): // excl. + weee + final ?>
-    <?php foreach ($block->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
-        <span class="weee"
-              data-price-type="weee"
-              data-label="<?php echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute); ?>"><?php echo $block->renderWeeeTaxAttribute($weeeTaxAttribute); ?></span>
-    <?php endforeach; ?>
+<?php endif; ?>
+
+<?php if ($block->showExclDescrIncl()): // excl. + weee + final ?>
     <span class="price-final_price"
           data-price-type="weeePrice"
-          data-price-amount="<?php echo $block->getRawFinalAmount(); ?>"
-          data-label="<?php echo __('Final Price'); ?>"><?php echo $block->getFinalAmount(); ?></span>
+          data-price-amount="<?php /* @escapeNotVerified */ echo $block->getRawFinalAmount(); ?>"
+          data-label="<?php /* @escapeNotVerified */ echo __('Final Price'); ?>"><?php /* @escapeNotVerified */ echo $block->getFinalAmount(); ?></span>
 <?php endif; ?>

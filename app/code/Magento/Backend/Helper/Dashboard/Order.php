@@ -11,17 +11,17 @@ namespace Magento\Backend\Helper\Dashboard;
 class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Order\Collection
+     * @var \Magento\Reports\Model\ResourceModel\Order\Collection
      */
     protected $_orderCollection;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Reports\Model\Resource\Order\Collection $orderCollection
+     * @param \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Reports\Model\Resource\Order\Collection $orderCollection
+        \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection
     ) {
         $this->_orderCollection = $orderCollection;
         parent::__construct(

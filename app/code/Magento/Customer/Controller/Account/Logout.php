@@ -6,8 +6,28 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-class Logout extends \Magento\Customer\Controller\Account
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
+
+class Logout extends \Magento\Customer\Controller\AbstractAccount
 {
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @param Context $context
+     * @param Session $customerSession
+     */
+    public function __construct(
+        Context $context,
+        Session $customerSession
+    ) {
+        $this->session = $customerSession;
+        parent::__construct($context);
+    }
+
     /**
      * Customer logout action
      *
@@ -15,8 +35,8 @@ class Logout extends \Magento\Customer\Controller\Account
      */
     public function execute()
     {
-        $lastCustomerId = $this->_getSession()->getId();
-        $this->_getSession()->logout()->setBeforeAuthUrl($this->_redirect->getRefererUrl())
+        $lastCustomerId = $this->session->getId();
+        $this->session->logout()->setBeforeAuthUrl($this->_redirect->getRefererUrl())
             ->setLastCustomerId($lastCustomerId);
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 
 /**
@@ -22,13 +24,22 @@ class Theme implements RuleInterface
     protected $rule;
 
     /**
+     * Component registrar
+     *
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
      * Constructors
      *
      * @param RuleInterface $rule
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(RuleInterface $rule)
+    public function __construct(RuleInterface $rule, ComponentRegistrarInterface $componentRegistrar)
     {
         $this->rule = $rule;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -50,8 +61,11 @@ class Theme implements RuleInterface
         $theme = $params['theme'];
         unset($params['theme']);
         while ($theme) {
-            if ($theme->getThemePath()) {
-                $params['theme_path'] = $theme->getThemePath();
+            if ($theme->getFullPath()) {
+                $params['theme_dir'] = $this->componentRegistrar->getPath(
+                    ComponentRegistrar::THEME,
+                    $theme->getFullPath()
+                );
                 $result = array_merge($result, $this->rule->getPatternDirs($params));
             }
             $theme = $theme->getParentTheme();

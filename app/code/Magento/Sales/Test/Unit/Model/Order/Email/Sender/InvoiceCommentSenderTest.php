@@ -31,7 +31,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         );
 
         $this->invoiceResource = $this->getMock(
-            '\Magento\Sales\Model\Resource\Order\Invoice',
+            '\Magento\Sales\Model\ResourceModel\Order\Invoice',
             [],
             [],
             '',

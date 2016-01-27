@@ -25,6 +25,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param \Magento\Checkout\Model\Session $session
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,

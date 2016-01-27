@@ -5,11 +5,27 @@
  */
 namespace Magento\Test\Integrity\Theme;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class XmlFilesTest extends \PHPUnit_Framework_TestCase
 {
-    const NO_VIEW_XML_FILES_MARKER = 'no-view-xml';
+    /**
+     * @var \Magento\Framework\Config\ValidationStateInterface
+     */
+    protected $validationStateMock;
+
+    public function setUp()
+    {
+        $this->validationStateMock = $this->getMock(
+            'Magento\Framework\Config\ValidationStateInterface',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+    }
 
     /**
      * @param string $file
@@ -17,13 +33,17 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        if ($file === self::NO_VIEW_XML_FILES_MARKER) {
-            $this->markTestSkipped('No view.xml files in themes.');
-        }
-        $this->_validateConfigFile(
-            $file,
-            $this->getPath(DirectoryList::LIB_INTERNAL) . '/Magento/Framework/Config/etc/view.xsd'
+        $domConfig = new \Magento\Framework\Config\Dom(
+            file_get_contents($file),
+            $this->validationStateMock
         );
+        $errors = [];
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $result = $domConfig->validate(
+            $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
+            $errors
+        );
+        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
     }
 
     /**
@@ -32,11 +52,14 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function viewConfigFileDataProvider()
     {
         $result = [];
-        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/view.xml');
+        /** @var \Magento\Framework\Component\DirSearch $componentDirSearch */
+        $componentDirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\Component\DirSearch');
+        $files = $componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'etc/view.xml');
         foreach ($files as $file) {
             $result[substr($file, strlen(BP))] = [$file];
         }
-        return $result === [] ? [[self::NO_VIEW_XML_FILES_MARKER]] : $result;
+        return $result;
     }
 
     /**
@@ -54,8 +77,10 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function themeConfigFileExistsDataProvider()
     {
         $result = [];
-        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/*', GLOB_ONLYDIR);
-        foreach ($files as $themeDir) {
+        /** @var \Magento\Framework\Component\ComponentRegistrar $componentRegistrar */
+        $componentRegistrar = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('\Magento\Framework\Component\ComponentRegistrar');
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
             $result[substr($themeDir, strlen(BP))] = [$themeDir];
         }
         return $result;
@@ -67,10 +92,10 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testThemeConfigFileSchema($file)
     {
-        $this->_validateConfigFile(
-            $file,
-            $this->getPath(DirectoryList::LIB_INTERNAL) . '/Magento/Framework/Config/etc/theme.xsd'
-        );
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file), $this->validationStateMock);
+        $errors = [];
+        $result = $domConfig->validate('urn:magento:framework:Config/etc/theme.xsd', $errors);
+        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
     }
 
     /**
@@ -93,44 +118,13 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function themeConfigFileDataProvider()
     {
         $result = [];
-        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/*/theme.xml');
+        /** @var \Magento\Framework\Component\DirSearch $componentDirSearch */
+        $componentDirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\Component\DirSearch');
+        $files = $componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'theme.xml');
         foreach ($files as $file) {
             $result[substr($file, strlen(BP))] = [$file];
         }
         return $result;
-    }
-
-    /**
-     * Perform test whether a configuration file is valid
-     *
-     * @param string $file
-     * @param string $schemaFile
-     * @throws \PHPUnit_Framework_AssertionFailedError if file is invalid
-     */
-    protected function _validateConfigFile($file, $schemaFile)
-    {
-        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
-        $errors = [];
-        $result = $domConfig->validate($schemaFile, $errors);
-        $message = "Invalid XML-file: {$file}\n";
-        foreach ($errors as $error) {
-            $message .= "{$error->message} Line: {$error->line}\n";
-        }
-        $this->assertTrue($result, $message);
-    }
-
-    /**
-     * Get directory path by code
-     *
-     * @param string $code
-     * @return string
-     */
-    protected function getPath($code)
-    {
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
-        return $filesystem->getDirectoryRead($code)->getAbsolutePath();
     }
 }

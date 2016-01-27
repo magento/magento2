@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 ?>
-<p><?php echo __('You have signed out and will go to our homepage in 5 seconds.') ?></p>
+<p><?php /* @escapeNotVerified */ echo __('You have signed out and will go to our homepage in 5 seconds.') ?></p>
 <script>
 require([
 	"jquery",
 	"mage/mage"
 ], function($){
 
-   	$($.mage.redirect("<?php echo $block->getUrl() ?>", "assign", 5000));
+   	$($.mage.redirect("<?php /* @escapeNotVerified */ echo $block->getUrl() ?>", "assign", 5000));
 
 });
 </script>

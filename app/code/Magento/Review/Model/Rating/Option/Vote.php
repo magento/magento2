@@ -18,6 +18,6 @@ class Vote extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Resource\Rating\Option\Vote');
+        $this->_init('Magento\Review\Model\ResourceModel\Rating\Option\Vote');
     }
 }

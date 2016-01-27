@@ -55,6 +55,7 @@ class DeleteAllTaxRulesStep implements TestStepInterface
         while ($this->taxRuleIndexPage->getTaxRuleGrid()->isFirstRowVisible()) {
             $this->taxRuleIndexPage->getTaxRuleGrid()->openFirstRow();
             $this->taxRuleNewPage->getFormPageActions()->delete();
+            $this->taxRuleNewPage->getModalBlock()->acceptAlert();
         }
     }
 }

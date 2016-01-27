@@ -27,7 +27,7 @@ class Main extends AbstractMain
     protected function _prepareForm()
     {
         parent::_prepareForm();
-        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attributeObject */
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attributeObject */
         $attributeObject = $this->getAttributeObject();
         /* @var $form \Magento\Framework\Data\Form */
         $form = $this->getForm();

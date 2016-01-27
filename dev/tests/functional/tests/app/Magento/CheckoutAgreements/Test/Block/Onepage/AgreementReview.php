@@ -6,7 +6,7 @@
 
 namespace Magento\CheckoutAgreements\Test\Block\Onepage;
 
-use Magento\Checkout\Test\Block\Onepage\Review;
+use Magento\Checkout\Test\Block\Onepage\Payment;
 use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 use Magento\Mtf\Client\Locator;
 
@@ -14,7 +14,7 @@ use Magento\Mtf\Client\Locator;
  * Class AgreementReview
  * One page checkout order review block
  */
-class AgreementReview extends Review
+class AgreementReview extends Payment
 {
     /**
      * Notification agreements locator
@@ -28,14 +28,14 @@ class AgreementReview extends Review
      *
      * @var string
      */
-    protected $agreement = './/div[contains(@id, "checkout-review-submit")]//label[.="%s"]';
+    protected $agreement = '//label[.="%s"]';
 
     /**
      * Agreement checkbox locator
      *
      * @var string
      */
-    protected $agreementCheckbox = 'input[name^=checkoutAgreements]';
+    protected $agreementCheckbox = '//label[contains(., "%s")]//../input';
 
     /**
      * Get notification massage
@@ -51,11 +51,16 @@ class AgreementReview extends Review
      * Set agreement
      *
      * @param string $value
+     * @param CheckoutAgreement $agreement
      * @return void
      */
-    public function setAgreement($value)
+    public function setAgreement($value, CheckoutAgreement $agreement)
     {
-        $this->_rootElement->find($this->agreementCheckbox, Locator::SELECTOR_CSS, 'checkbox')->setValue($value);
+        $this->getSelectedPaymentMethodBlock()->_rootElement->find(
+            sprintf($this->agreementCheckbox, $agreement->getCheckboxText()),
+            Locator::SELECTOR_XPATH,
+            'checkbox'
+        )->setValue($value);
     }
 
     /**

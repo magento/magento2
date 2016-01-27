@@ -77,7 +77,7 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCa
         $this->_event->setPayment($payment);
         $this->_agreementFactory->expects($this->never())->method('create');
         $this->_checkoutSession->expects($this->once())->method('__call')->with('unsLastBillingAgreementReferenceId');
-        $this->_model->invoke($this->_observer);
+        $this->_model->execute($this->_observer);
     }
 
     /**
@@ -122,6 +122,7 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCa
             )->will(
                 $this->returnValue('agreement reference id')
             );
+            $agreement->expects($this->once())->method('addOrderRelation')->with($order);
             $order->expects(new MethodInvokedAtIndex(0))->method('addRelatedObject')->with($agreement);
             $this->_checkoutSession->expects(
                 $this->once()
@@ -165,7 +166,7 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit_Framework_TestCa
         );
         $this->_event->setPayment($payment);
         $this->_agreementFactory->expects($this->once())->method('create')->will($this->returnValue($agreement));
-        $this->_model->invoke($this->_observer);
+        $this->_model->execute($this->_observer);
     }
 
     public function addBillingAgreementToSessionDataProvider()

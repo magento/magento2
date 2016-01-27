@@ -55,6 +55,7 @@ class DeleteAllWidgetsStep implements TestStepInterface
             $this->widgetInstanceIndex->getWidgetGrid()->openFirstRow();
             $this->widgetInstanceEdit->getTemplateBlock()->waitLoader();
             $this->widgetInstanceEdit->getPageActionsBlock()->delete();
+            $this->widgetInstanceEdit->getModalBlock()->acceptAlert();
             $this->widgetInstanceIndex->getSystemMessageDialog()->closePopup();
         }
     }

@@ -10,7 +10,7 @@ namespace Magento\Framework\Setup;
  */
 interface ModuleDataSetupInterface extends SetupInterface
 {
-    const DEFAULT_SETUP_CONNECTION = 'core_setup';
+    const DEFAULT_SETUP_CONNECTION = 'default_setup';
 
     const VERSION_COMPARE_EQUAL = 0;
 

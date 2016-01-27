@@ -3,32 +3,34 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 ?>
-<div class="fieldset additional-cache-management">
-    <div class="legend">
-        <span><?php echo __('Additional Cache Management') ?></span>
-    </div>
-    <div class="field">
-        <button onclick="setLocation('<?php echo $block->getCleanImagesUrl() ?>')" type="button">
-            <?php echo __('Flush Catalog Images Cache') ?>
+<div class="additional-cache-management">
+    <h2>
+        <span><?php /* @escapeNotVerified */ echo __('Additional Cache Management') ?></span>
+    </h2>
+    <p>
+        <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanImagesUrl() ?>')" type="button">
+            <?php /* @escapeNotVerified */ echo __('Flush Catalog Images Cache') ?>
         </button>
-        <label class="label"><?php echo __('Pregenerated product images files') ?></label>
-    </div>
-    <div class="field">
-        <button onclick="setLocation('<?php echo $block->getCleanMediaUrl() ?>')" type="button">
-            <?php echo __('Flush JavaScript/CSS Cache') ?>
+        <span><?php /* @escapeNotVerified */ echo __('Pregenerated product images files') ?></span>
+    </p>
+    <p>
+        <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanMediaUrl() ?>')" type="button">
+            <?php /* @escapeNotVerified */ echo __('Flush JavaScript/CSS Cache') ?>
         </button>
-        <label class="label"><?php echo __('Themes JavaScript and CSS files combined to one file.') ?></label>
-    </div>
+        <span><?php /* @escapeNotVerified */ echo __('Themes JavaScript and CSS files combined to one file') ?></span>
+    </p>
     <?php
     if (!$block->isInProductionMode()):
         ?>
-        <div class="field">
-            <button onclick="setLocation('<?php echo $block->getCleanStaticFilesUrl() ?>')" type="button">
-                <?php echo __('Flush Static Files Cache') ?>
+        <p>
+            <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanStaticFilesUrl() ?>')" type="button">
+                <?php /* @escapeNotVerified */ echo __('Flush Static Files Cache') ?>
             </button>
-            <label class="label"><?php echo __('Preprocessed view files and static files') ?></label>
-        </div>
+            <span><?php /* @escapeNotVerified */ echo __('Preprocessed view files and static files') ?></span>
+        </p>
     <?php
     endif;
     ?>

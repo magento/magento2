@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="carriers">
             <group id="ups" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -16,6 +16,10 @@
                 </field>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled for Checkout</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="active_rma" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled for RMA</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="allowed_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -100,7 +104,7 @@
                     <source_model>Magento\Ups\Model\Config\Source\Type</source_model>
                 </field>
                 <field id="is_account_live" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Live account</label>
+                    <label>Live Account</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="unit_of_measure" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">

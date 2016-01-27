@@ -18,14 +18,14 @@ class TemporaryStorage
     const FIELD_SCORE = 'score';
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     private $resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
         $this->resource = $resource;
     }
@@ -45,7 +45,7 @@ class TemporaryStorage
         }
 
         $table = $this->createTemporaryTable();
-        if (!empty($data)) {
+        if (count($data)) {
             $this->getConnection()->insertArray(
                 $table->getName(),
                 [
@@ -85,8 +85,9 @@ class TemporaryStorage
     private function createTemporaryTable()
     {
         $connection = $this->getConnection();
-        $table = $connection->newTable($this->resource->getTableName(self::TEMPORARY_TABLE_PREFIX . time()));
-        $connection->dropTable($table->getName());
+        $tableName = $this->resource->getTableName(str_replace('.', '_', uniqid(self::TEMPORARY_TABLE_PREFIX, true)));
+        $table = $connection->newTable($tableName);
+        $connection->dropTemporaryTable($table->getName());
         $table->addColumn(
             self::FIELD_ENTITY_ID,
             Table::TYPE_INTEGER,

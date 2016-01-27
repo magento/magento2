@@ -22,6 +22,13 @@ class PageActions extends FormPageActions
     protected $forceSignIn = '#invalidate';
 
     /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
      * Click on 'Force Sign-In' button.
      *
      * @return void
@@ -29,6 +36,9 @@ class PageActions extends FormPageActions
     public function forceSignIn()
     {
         $this->_rootElement->find($this->forceSignIn)->click();
-        $this->browser->acceptAlert();
+        $element = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal->acceptAlert();
     }
 }

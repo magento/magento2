@@ -28,7 +28,7 @@ class AssertCategorySaveMessage extends AbstractConstraint
      */
     public function processAssert(CatalogCategoryEdit $catalogCategoryEdit)
     {
-        $actualMessage = $catalogCategoryEdit->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $catalogCategoryEdit->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

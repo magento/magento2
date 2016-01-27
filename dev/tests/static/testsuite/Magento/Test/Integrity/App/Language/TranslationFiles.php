@@ -5,6 +5,7 @@
  */
 namespace Magento\Test\Integrity\App\Language;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\Driver\File;
 
 class TranslationFiles extends \PHPUnit_Framework_TestCase
@@ -24,12 +25,13 @@ class TranslationFiles extends \PHPUnit_Framework_TestCase
      */
     public function getLocalePlacePath()
     {
-        $pathToSource = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $pathToSource = BP;
         $places = [];
-        foreach (glob("{$pathToSource}/app/code/*/*", GLOB_ONLYDIR) as $modulePath) {
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
             $places[basename($modulePath)] = ['placePath' => $modulePath];
         }
-        foreach (glob("{$pathToSource}/app/design/*/*/*", GLOB_ONLYDIR) as $themePath) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
             $placeName = basename(dirname(dirname($themePath))) . '_' . basename($themePath);
             $places[$placeName] = ['placePath' => $themePath];
         }

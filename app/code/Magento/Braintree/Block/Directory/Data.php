@@ -27,8 +27,8 @@ class Data extends \Magento\Directory\Block\Data
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Braintree\Helper\Data $braintreeHelper
      * @param \Magento\Braintree\Model\System\Config\Source\Country $countrySource
      * @param \Magento\Braintree\Model\Config\Cc $config
@@ -41,8 +41,8 @@ class Data extends \Magento\Directory\Block\Data
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Braintree\Helper\Data $braintreeHelper,
         \Magento\Braintree\Model\System\Config\Source\Country $countrySource,
         \Magento\Braintree\Model\Config\Cc $config,
@@ -97,7 +97,7 @@ class Data extends \Magento\Directory\Block\Data
     /**
      * Loads country collection
      *
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     public function getCountryCollection()
     {
