@@ -4,13 +4,10 @@
  * See COPYING.txt for license details.
  */
 
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+
 /** @var \Magento\TestFramework\ObjectManager $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-$objectManager->removeSharedInstance('Magento\Catalog\Model\ProductRepository');
-$objectManager->removeSharedInstance('Magento\Catalog\Model\CategoryLinkRepository');
-$objectManager->removeSharedInstance('Magento\Catalog\Model\Product\Option\Repository');
-$objectManager->removeSharedInstance('Magento\Catalog\Model\Product\Option\SaveHandler');
 
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = $objectManager->create('Magento\Catalog\Api\CategoryLinkManagementInterface');
@@ -149,7 +146,11 @@ foreach ($oldOptions as $option) {
     $options[] = $option;
 }
 
-$product->setOptions($options)->save();
+$product->setOptions($options);
+
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
+$productRepositoryFactory = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+$productRepositoryFactory->save($product);
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),

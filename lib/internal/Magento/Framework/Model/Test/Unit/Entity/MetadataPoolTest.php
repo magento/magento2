@@ -68,6 +68,7 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
         $sequence = $this->getMockBuilder(
             'Magento\Framework\DB\Sequence\SequenceInterface'
         )->disableOriginalConstructor();
+
         $defaults = [
             'connectionName' => 'default',
             'eavEntityType' => null,
@@ -75,8 +76,10 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
             'sequence' => $sequence,
             'fields' => null
         ];
+
         $finalMetadata = $metadata;
         $finalMetadata[$entityType]['connectionName'] = 'default';
+
         $this->entityMetadataFactoryMock->expects($this->once())
             ->method('create')
             ->with(array_merge($defaults, $metadata[$entityType]))
