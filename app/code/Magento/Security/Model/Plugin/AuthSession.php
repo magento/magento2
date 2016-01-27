@@ -15,11 +15,6 @@ use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 class AuthSession
 {
     /**
-     * Cookie name
-     */
-    const LOGOUT_REASON_CODE_COOKIE_NAME = 'loggedOutReasonCode';
-
-    /**
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
@@ -35,50 +30,26 @@ class AuthSession
     protected $sessionsManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @var \Magento\Security\Helper\SecurityCookie
      */
-    protected $phpCookieManager;
-
-    /**
-     * @var CookieReaderInterface
-     */
-    protected $cookieReader;
-
-    /**
-     * @var \Magento\Backend\Helper\Data
-     */
-    protected $backendData;
-
-    /**
-     * @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory
-     */
-    protected $cookieMetadataFactory;
+    protected $securityCookieHelper;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
-     * @param \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager
-     * @param CookieReaderInterface $cookieReader
-     * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         AdminSessionsManager $sessionsManager,
-        \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager,
-        CookieReaderInterface $cookieReader,
-        \Magento\Backend\Helper\Data $backendData,
-        \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
+        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
     ) {
         $this->request = $request;
         $this->messageManager = $messageManager;
         $this->sessionsManager = $sessionsManager;
-        $this->phpCookieManager = $phpCookieManager;
-        $this->cookieReader = $cookieReader;
-        $this->backendData = $backendData;
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->securityCookieHelper = $securityCookieHelper;
     }
 
     /**
@@ -110,7 +81,7 @@ class AuthSession
     protected function addUserLogoutNotification()
     {
         if ($this->isAjaxRequest()) {
-            $this->setLogoutReasonCookie(
+            $this->securityCookieHelper->setLogoutReasonCookie(
                 $this->sessionsManager->getCurrentSession()->getStatus()
             );
         } else {
@@ -118,27 +89,6 @@ class AuthSession
                 $this->sessionsManager->getLogoutReasonMessage()
             );
         }
-
-        return $this;
-    }
-
-    /**
-     * Set logout reason cookie
-     *
-     * @param int $status
-     * @return $this
-     */
-    protected function setLogoutReasonCookie($status)
-    {
-        /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $metaData */
-        $metaData = $this->cookieMetadataFactory->create();
-        $metaData->setPath('/' . $this->backendData->getAreaFrontName());
-
-        $this->phpCookieManager->setPublicCookie(
-            self::LOGOUT_REASON_CODE_COOKIE_NAME,
-            (int) $status,
-            $metaData
-        );
 
         return $this;
     }

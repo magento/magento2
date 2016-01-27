@@ -16,32 +16,23 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Security\Model\Plugin\AuthSession */
     protected $model;
 
+    /** @var \Magento\Framework\App\RequestInterface */
+    protected $requestMock;
+
+    /** @var \Magento\Framework\Message\ManagerInterface */
+    protected $messageManagerMock;
+
     /** @var \Magento\Security\Model\AdminSessionsManager */
     protected $adminSessionsManagerMock;
 
-    /** @var \Magento\Framework\App\RequestInterface */
-    protected $requestMock;
+    /** @var \Magento\Security\Helper\SecurityCookie */
+    protected $securityCookieHelperMock;
 
     /** @var \Magento\Backend\Model\Auth\Session */
     protected $authSessionMock;
 
     /** @var \Magento\Security\Model\AdminSessionInfo */
     protected $currentSessionMock;
-
-    /** @var \Magento\Framework\Message\ManagerInterface */
-    protected $messageManagerMock;
-
-    /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory */
-    protected $cookieMetadataFactoryMock;
-
-    /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata */
-    protected $cookieMetadataMock;
-
-    /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata */
-    protected $backendDataMock;
-
-    /** @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager */
-    protected $phpCookieManagerMock;
 
     /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
@@ -54,6 +45,21 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
+        $this->requestMock = $this->getMockForAbstractClass(
+            '\Magento\Framework\App\RequestInterface',
+            ['getParam', 'getModuleName', 'getActionName'],
+            '',
+            false
+        );
+
+        $this->messageManagerMock = $this->getMock(
+            '\Magento\Framework\Message\ManagerInterface',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->adminSessionsManagerMock = $this->getMock(
             '\Magento\Security\Model\AdminSessionsManager',
             ['getCurrentSession', 'processProlong', 'getLogoutReasonMessage'],
@@ -62,9 +68,10 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->requestMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\App\RequestInterface',
-            ['getParam', 'getModuleName', 'getActionName'],
+        $this->securityCookieHelperMock = $this->getMock(
+            '\Magento\Security\Helper\SecurityCookie',
+            ['setLogoutReasonCookie'],
+            [],
             '',
             false
         );
@@ -85,55 +92,13 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->messageManagerMock = $this->getMock(
-            '\Magento\Framework\Message\ManagerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->cookieMetadataFactoryMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-
-        $this->cookieMetadataMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
-            ['setPath'],
-            [],
-            '',
-            false
-        );
-
-        $this->backendDataMock = $this->getMock(
-            '\Magento\Backend\Helper\Data',
-            ['getAreaFrontName'],
-            [],
-            '',
-            false
-        );
-
-        $this->phpCookieManagerMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\PhpCookieManager',
-            ['setPublicCookie'],
-            [],
-            '',
-            false
-        );
-
         $this->model = $this->objectManager->getObject(
             '\Magento\Security\Model\Plugin\AuthSession',
             [
-                'sessionsManager' => $this->adminSessionsManagerMock,
                 'request' => $this->requestMock,
                 'messageManager' => $this->messageManagerMock,
-                'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
-                'backendData' => $this->backendDataMock,
-                'phpCookieManager' => $this->phpCookieManagerMock
+                'sessionsManager' => $this->adminSessionsManagerMock,
+                'securityCookieHelper' => $this->securityCookieHelperMock
             ]
         );
 
@@ -162,7 +127,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             return $result;
         };
 
-        $this->currentSessionMock->expects($this->any())
+        $this->currentSessionMock->expects($this->once())
             ->method('isActive')
             ->willReturn(false);
 
@@ -191,7 +156,6 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
     public function testAroundProlongSessionIsNotActiveAndIsAjaxRequest()
     {
         $result = 'result';
-        $frontName = 'FrontName';
         $status = 1;
 
         $proceed = function () use ($result) {
@@ -214,26 +178,9 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             ->method('getStatus')
             ->willReturn($status);
 
-        $this->cookieMetadataFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->cookieMetadataMock);
-
-        $this->backendDataMock->expects($this->once())
-            ->method('getAreaFrontName')
-            ->willReturn($frontName);
-
-        $this->cookieMetadataMock->expects($this->once())
-            ->method('setPath')
-            ->with('/' . $frontName)
-            ->willReturnSelf();
-
-        $this->phpCookieManagerMock->expects($this->once())
-            ->method('setPublicCookie')
-            ->with(
-                \Magento\Security\Model\Plugin\AuthSession::LOGOUT_REASON_CODE_COOKIE_NAME,
-                $status,
-                $this->cookieMetadataMock
-            )
+        $this->securityCookieHelperMock->expects($this->once())
+            ->method('setLogoutReasonCookie')
+            ->with($status)
             ->willReturnSelf();
 
         $this->model->aroundProlong($this->authSessionMock, $proceed);
