@@ -69,7 +69,7 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                 'Created At'
             )->addColumn(
-                'expiration_at',
+                'expires_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => true],
