@@ -1,7 +1,7 @@
 <?php
 /**
  * Glob patterns relative to this files parent directory, used by
- * NonComposerComponentRegistration.php to generate a list of includes.
+ * registration.php to generate a list of includes.
  */
 return [
     'code/*/*/cli_commands.php',

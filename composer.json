@@ -237,7 +237,7 @@
             ]
         },
         "files": [
-            "app/etc/NonComposerComponentRegistration.php"
+            "app/registration.php"
         ],
         "exclude-from-classmap": [
             "**/dev/**",

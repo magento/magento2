@@ -1,5 +1,7 @@
 <?php
 /**
+ * Register components (via a list of glob patterns)
+ *
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -16,8 +18,8 @@ use RuntimeException;
  */
 function main()
 {
-    $globPatterns = include  __DIR__ . '/include-globlist.php';
-    $baseDir = dirname(__DIR__) . '/';
+    $globPatterns = require __DIR__ . '/etc/registration_globlist.php';
+    $baseDir = __DIR__ . '/';
 
     foreach ($globPatterns as $globPattern) {
         // Sorting is disabled intentionally for performance improvement
