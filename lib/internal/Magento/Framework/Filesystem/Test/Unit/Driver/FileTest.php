@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
 use \Magento\Framework\Filesystem\Driver\File;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
-
     /** @var string Result of file_get_contents() function */
     public static $fileGetContents;
 
