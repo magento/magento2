@@ -9,7 +9,7 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 class MatchTest extends \PHPUnit_Framework_TestCase
 {
