@@ -6,7 +6,7 @@
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+    \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
      * Core registry
@@ -39,6 +39,30 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $this->_rendererFieldset = $rendererFieldset;
         $this->_conditions = $conditions;
         parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTabClass()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTabUrl()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
     }
 
     /**
@@ -106,7 +130,13 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $fieldset->addField(
             'conditions',
             'text',
-            ['name' => 'conditions', 'label' => __('Conditions'), 'title' => __('Conditions')]
+            [
+                'name' => 'conditions',
+                'label' => __('Conditions'),
+                'title' => __('Conditions'),
+                'required' => true,
+                'data-form-part' => 'sales_rule_form'
+            ]
         )->setRule(
             $model
         )->setRenderer(
