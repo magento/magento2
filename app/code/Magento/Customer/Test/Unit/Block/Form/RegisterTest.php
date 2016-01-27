@@ -42,11 +42,8 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */
     private $_customerUrl;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\AccountManagementInterface */
-    private $_accountManagementInterface;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Config */
-    private $_customerConfigHelper;
+    protected $customerConfigHelper;
 
     /** @var Register */
     private $_block;
@@ -64,14 +61,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_accountManagementInterface = $this->getMockForAbstractClass('Magento\Customer\Api\AccountManagementInterface', [], '', false);
-        $this->_customerConfigHelper = $this->getMock(
-            'Magento\Customer\Helper\Config',
-            ['getMinimumPasswordLength', 'getRequiredCharacterClassesNumber'],
-            [],
-            '',
-            false
-        );
+        $this->customerConfigHelper = $this->getMock('Magento\Customer\Helper\Config', [], [], '', false);
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
 
@@ -85,8 +75,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             $this->_moduleManager,
             $this->_customerSession,
             $this->_customerUrl,
-            $this->_accountManagementInterface,
-            $this->_customerConfigHelper
+            $this->customerConfigHelper
         );
     }
 
