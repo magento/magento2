@@ -18,6 +18,9 @@ use Magento\Vault\Controller\CardsManagement;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\PaymentTokenRepositoryProxy;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeleteAction extends CardsManagement
 {
     const WRONG_REQUEST = 1;

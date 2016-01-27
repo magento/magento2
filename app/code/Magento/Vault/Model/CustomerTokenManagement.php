@@ -31,6 +31,13 @@ class CustomerTokenManagement
      */
     private $storeManager;
 
+    /**
+     * CustomerTokenManagement constructor.
+     * @param VaultPaymentInterface $vaultPayment
+     * @param PaymentTokenManagement $tokenManagement
+     * @param Session $session
+     * @param StoreManagerInterface $storeManager
+     */
     public function __construct(
         VaultPaymentInterface $vaultPayment,
         PaymentTokenManagement $tokenManagement,
