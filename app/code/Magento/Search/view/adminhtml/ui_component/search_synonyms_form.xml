@@ -92,7 +92,7 @@
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Comma-separated list of synonyms. The terms entered (separated by commas) will be used as an “OR” search query to search your entire store. For example, if you enter “shoes,footwear”,  the search results will include any product or content with term “shoes" or "footwear.”</item>
+                        <item name="description" xsi:type="string" translate="true">Comma-separated list of synonyms. The terms entered (separated by commas) will be used as an “OR” search query to search your entire store. For example, if you enter “shoes,footwear”, and user were to search for "shoes", the search results will include any product or content with term “shoes" or "footwear.”</item>
                     </item>
                 </item>
             </argument>
