@@ -165,13 +165,13 @@
                     <comment>Please enter a number 1 or greater in this field.</comment>
                     <validate>required-entry validate-digits validate-digits-range digits-range-1-</validate>
                 </field>
-                <field id="failed_attempts_login" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Number of Unsuccessful Attempts to Login</label>
+                <field id="lockout_failures" translate="label comment" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Maximum Login Failures to Lockout Account</label>
                     <comment>Use 0 to disable account locking.</comment>
                     <frontend_class>required-entry validate-digits</frontend_class>
                 </field>
-                <field id="lock_timeout" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Lock Timeout (minutes)</label>
+                <field id="lockout_threshold" translate="label" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Lockout Time (minutes)</label>
                     <comment>Account will be unlocked after provided time.</comment>
                     <frontend_class>required-entry validate-digits</frontend_class>
                 </field>

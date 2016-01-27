@@ -71,6 +71,11 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
      */
     protected $messageManager;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfig;
+
     protected function setUp()
     {
         $this->prepareContext();
@@ -100,13 +105,17 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->getMockForAbstractClass();
+
         $this->controller = new LoginPost(
             $this->context,
             $this->session,
             $this->accountManagement,
             $this->url,
             $this->formkeyValidator,
-            $this->accountRedirect
+            $this->accountRedirect,
+            $this->scopeConfig
         );
     }
 
