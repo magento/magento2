@@ -9,6 +9,10 @@
 
 & when (@media-common = true) {
 
+#password-strength-meter-container {
+    background-color: silver;
+}
+
 .login-container {
     .block {
         &-new-customer {
@@ -171,6 +175,31 @@
     .box-actions {
         margin-top: @indent__xs;
     }
+}
+
+.password-strength-meter-0 {
+    background-color: red;
+    width: 0%;
+}
+
+.password-strength-meter-1 {
+    background-color: orange;
+    width: 25%;
+}
+
+.password-strength-meter-2 {
+    background-color: yellow;
+    width: 50%;
+}
+
+.password-strength-meter-3 {
+    background-color: yellowgreen;
+    width: 75%;
+}
+
+.password-strength-meter-4 {
+    background-color: green;
+    width: 100%;
 }
 
 .control.captcha-image {
