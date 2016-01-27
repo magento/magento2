@@ -95,6 +95,7 @@ class VaultDetailsHandler implements HandlerInterface
         /** @var PaymentTokenInterface $paymentToken */
         $paymentToken = $this->paymentTokenFactory->create();
         $paymentToken->setGatewayToken($token);
+        $paymentToken->setExpiresAt($this->getExpirationDate($transaction));
 
         $paymentToken->setTokenDetails($this->convertDetailsToJSON([
             'type' => $this->getCreditCardType($transaction->creditCardDetails->cardType),
@@ -103,6 +104,26 @@ class VaultDetailsHandler implements HandlerInterface
         ]));
 
         return $paymentToken;
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @return string
+     */
+    private function getExpirationDate(Transaction $transaction)
+    {
+        $expDate = new \DateTime(
+            $transaction->creditCardDetails->expirationYear
+            . '-'
+            . $transaction->creditCardDetails->expirationMonth
+            . '-'
+            . '01'
+            . ' '
+            . '00:00:00',
+            new \DateTimeZone('UTC')
+        );
+        $expDate->add(new \DateInterval('P1M'));
+        return $expDate->format('Y-m-d 00:00:00');
     }
 
     /**

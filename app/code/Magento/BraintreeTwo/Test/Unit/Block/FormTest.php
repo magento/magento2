@@ -55,9 +55,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
     private $ccType;
 
     /**
-     * @var VaultConfigProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var VaultPaymentInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $vaultConfigProvider;
+    private $vaultService;
 
 
     protected function setUp()
@@ -66,10 +66,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->initSessionQuoteMock();
         $this->initGatewayConfigMock();
 
-        $this->vaultConfigProvider = $this->getMockBuilder(VaultConfigProvider::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getConfig'])
-            ->getMock();
+        $this->vaultService = $this->getMock(VaultPaymentInterface::class);
 
         $managerHelper = new ObjectManager($this);
         $this->block = $managerHelper->getObject(Form::class, [
@@ -77,7 +74,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'sessionQuote' => $this->sessionQuote,
             'gatewayConfig' => $this->gatewayConfig,
             'ccType' => $this->ccType,
-            'vaultConfigProvider' => $this->vaultConfigProvider
+            'vaultService' => $this->vaultService
         ]);
     }
 
@@ -121,59 +118,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @param array $config
-     * @param bool $expected
-     * @covers \Magento\BraintreeTwo\Block\Form::isVaultEnabled
-     * @dataProvider vaultConfigProvider
-     */
-    public function testIsVaultEnabled(array $config, $expected)
+    public function testIsVaultEnabled()
     {
-        $this->vaultConfigProvider->expects(static::once())
-            ->method('getConfig')
-            ->willReturn([
-                VaultPaymentInterface::CODE => $config
-            ]);
+        $this->vaultService->expects(static::once())
+            ->method('isActiveForPayment')
+            ->with(ConfigProvider::CODE)
+            ->willReturn(true);
 
-        static::assertEquals($expected, $this->block->isVaultEnabled());
-    }
-
-    /**
-     * Get variations to test vault config
-     * @return array
-     */
-    public function vaultConfigProvider()
-    {
-        return [
-            [
-                'config' => [
-                    'vault_provider_code' => ConfigProvider::CODE,
-                    'is_enabled' => true,
-                ],
-                'expected' => true
-            ],
-            [
-                'config' => [
-                    'vault_provider_code' => ConfigProvider::CODE,
-                    'is_enabled' => false,
-                ],
-                'expected' => false
-            ],
-            [
-                'config' => [
-                    'vault_provider_code' => 'test payment 1',
-                    'is_enabled' => true,
-                ],
-                'expected' => false
-            ],
-            [
-                'config' => [
-                    'vault_provider_code' => 'test payment 2',
-                    'is_enabled' => false,
-                ],
-                'expected' => false
-            ],
-        ];
+        static::assertTrue($this->block->isVaultEnabled());
     }
 
     /**
