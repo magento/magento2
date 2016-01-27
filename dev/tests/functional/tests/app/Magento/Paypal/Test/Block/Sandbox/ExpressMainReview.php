@@ -21,13 +21,6 @@ class ExpressMainReview extends Block
     protected $expressReview = '#memberReview';
 
     /**
-     * Old Express Review Block selector.
-     *
-     * @var string
-     */
-    protected $expressOldReview = '#stdpage';
-
-    /**
      * Determines whether new review block or old is shown.
      *
      * @return \Magento\Paypal\Test\Block\Sandbox\ExpressReview|\Magento\Paypal\Test\Block\Sandbox\ExpressOldReview
