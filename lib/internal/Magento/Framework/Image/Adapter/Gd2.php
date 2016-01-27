@@ -60,7 +60,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         if ($this->_isMemoryLimitReached()) {
             throw new \OverflowException('Memory limit has been reached.');
         }
-        $this->_imageDestroy();
+        $this->imageDestroy();
         $this->_imageHandler = call_user_func($this->_getCallback('create'), $this->_fileName);
     }
 
@@ -152,7 +152,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 }
                 $this->_fillBackgroundColor($newImage);
                 imagecopy($newImage, $this->_imageHandler, 0, 0, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight);
-                $this->_imageDestroy();
+                $this->imageDestroy();
                 $this->_imageHandler = $newImage;
             }
         }
@@ -363,7 +363,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 $this->_imageSrcHeight
             );
         }
-        $this->_imageDestroy();
+        $this->imageDestroy();
         $this->_imageHandler = $newImage;
         $this->refreshImageDimensions();
         $this->_resized = true;
@@ -378,7 +378,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     public function rotate($angle)
     {
         $rotatedImage = imagerotate($this->_imageHandler, $angle, $this->imageBackgroundColor);
-        $this->_imageDestroy();
+        $this->imageDestroy();
         $this->_imageHandler = $rotatedImage;
         $this->refreshImageDimensions();
     }
@@ -600,7 +600,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $newWidth,
             $newHeight
         );
-        $this->_imageDestroy();
+        $this->imageDestroy();
         $this->_imageHandler = $canvas;
         $this->refreshImageDimensions();
         return true;
@@ -637,7 +637,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     public function __destruct()
     {
-        $this->_imageDestroy();
+        $this->imageDestroy();
     }
 
     /**
@@ -645,7 +645,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @return void
      */
-    private function _imageDestroy()
+    private function imageDestroy()
     {
         if (is_resource($this->_imageHandler)) {
             imagedestroy($this->_imageHandler);
@@ -770,7 +770,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         imagesavealpha($image, true);
 
         imagefill($image, 0, 0, $colorWhite);
-        $this->_imageDestroy();
+        $this->imageDestroy();
         $this->_imageHandler = $image;
     }
 }
