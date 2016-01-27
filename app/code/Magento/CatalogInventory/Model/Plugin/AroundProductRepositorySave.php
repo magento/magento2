@@ -15,7 +15,7 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 
-class AfterProductRepositorySave
+class AroundProductRepositorySave
 {
     /**
      * @var StockRegistryInterface
@@ -48,19 +48,34 @@ class AfterProductRepositorySave
     }
 
     /**
-     * @param ProductRepositoryInterface $subject
-     * @param ProductInterface $product
-     * @return ProductInterface
-     * @throws LocalizedException
+     * Save stock item information from received product
+     *
+     * Pay attention that in this code we mostly work with original product object to process stock item data,
+     * not with received result (saved product) because it is already contains new empty stock item object.
+     * It is a reason why this plugin cannot be rewritten to after plugin
+     *
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $subject
+     * @param callable $proceed
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param bool $saveOptions
+     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function afterSave(
-        ProductRepositoryInterface $subject,
-        ProductInterface $product
+    public function aroundSave(
+        \Magento\Catalog\Api\ProductRepositoryInterface $subject,
+        \Closure $proceed,
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        $saveOptions = false
     ) {
+        /**
+         * @var \Magento\Catalog\Api\Data\ProductInterface $result
+         */
+        $result = $proceed($product, $saveOptions);
+
         /* @var StockItemInterface $stockItem */
         $stockItem = $this->getStockItemToBeUpdated($product);
-        if ($stockItem === null) {
-            return $product;
+        if (null === $stockItem) {
+            return $result;
         }
 
         // set fields that the customer should not care about

@@ -13,14 +13,14 @@ use Magento\CatalogInventory\Api\Data\StockInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Model\Plugin\AfterProductRepositorySave;
+use Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Unit test for Magento\CatalogInventory\Model\Plugin\AfterProductRepositorySave
+ * Unit test for Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AfterProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
+class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductInterface
@@ -63,7 +63,7 @@ class AfterProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
     private $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Plugin\AfterProductRepositorySave
+     * @var \Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave
      */
     private $plugin;
 
@@ -81,7 +81,7 @@ class AfterProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getDefaultScopeId'])
             ->getMockForAbstractClass();
 
-        $this->plugin = new AfterProductRepositorySave(
+        $this->plugin = new AroundProductRepositorySave(
             $this->stockRegistry,
             $this->storeManager,
             $this->stockConfiguration
