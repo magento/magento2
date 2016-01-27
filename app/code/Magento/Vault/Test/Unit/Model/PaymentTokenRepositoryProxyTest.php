@@ -36,11 +36,6 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
     private $nullRepositoryMock;
 
     /**
-     * @var VaultPaymentInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $vaultPaymentMock;
-
-    /**
      * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configMock;
