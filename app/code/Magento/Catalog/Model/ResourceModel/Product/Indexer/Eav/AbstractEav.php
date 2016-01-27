@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Catalog Product Eav Attributes abstract indexer resource model
  *
@@ -25,6 +27,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string $connectionName
      */
@@ -32,11 +35,12 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         $connectionName = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $connectionName);
     }
 
     /**
@@ -157,11 +161,17 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
         $select = $connection->select()->from($idxTable, null);
 
+        $select->joinLeft(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.entity_id = {$idxTable}.entity_id",
+            []
+        );
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $condition = $connection->quoteInto('=?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
         $this->_addAttributeToSelect(
             $select,
             'visibility',
-            $idxTable . '.entity_id',
+            "cpe.{$linkField}",
             $idxTable . '.store_id',
             $condition
         );
@@ -182,10 +192,14 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     {
         $connection = $this->getConnection();
         $idxTable = $this->getIdxTable();
-
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
             ['l' => $this->getTable('catalog_product_relation')],
-            'parent_id'
+            []
+        )->joinLeft(
+            ['e' => $this->getTable('catalog_product_entity')],
+            'e.' . $linkField .' = l.parent_id',
+            ['e.entity_id as parent_id']
         )->join(
             ['cs' => $this->getTable('store')],
             '',
@@ -195,10 +209,10 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             'l.child_id = i.entity_id AND cs.store_id = i.store_id',
             ['attribute_id', 'store_id', 'value']
         )->group(
-            ['l.parent_id', 'i.attribute_id', 'i.store_id', 'i.value']
+            ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value']
         );
         if ($parentIds !== null) {
-            $select->where('l.parent_id IN(?)', $parentIds);
+            $select->where('e.entity_id IN(?)', $parentIds);
         }
 
         /**
