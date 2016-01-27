@@ -70,6 +70,9 @@
                 <item name="sale" xsi:type="string">BraintreeTwoPayPalSaleCommand</item>
                 <item name="capture" xsi:type="string">BraintreeTwoPayPalCaptureStrategyCommand</item>
                 <item name="settlement" xsi:type="string">BraintreeTwoCaptureCommand</item>
+                <item name="void" xsi:type="string">BraintreeTwoVoidCommand</item>
+                <item name="refund" xsi:type="string">BraintreeTwoRefundCommand</item>
+                <item name="cancel" xsi:type="string">BraintreeTwoVoidCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -171,6 +174,11 @@
         </arguments>
     </type>
     <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionRefund">
+        <arguments>
+            <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionVoid">
         <arguments>
             <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
         </arguments>
@@ -309,6 +317,8 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="default" xsi:type="string">BraintreeTwoPayPalConfigValueHandler</item>
+                <item name="can_void" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
+                <item name="can_cancel" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
             </argument>
         </arguments>
     </virtualType>
@@ -334,7 +344,7 @@
         <arguments>
             <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionRefund</argument>
             <argument name="requestBuilder" xsi:type="object">Magento\BraintreeTwo\Gateway\Request\RefundDataBuilder</argument>
-            <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\RefundValidator</argument>
+            <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\GeneralResponseValidator</argument>
             <argument name="handler" xsi:type="object">Magento\BraintreeTwo\Gateway\Response\RefundHandler</argument>
             <argument name="transferFactory" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\TransferFactory</argument>
         </arguments>
@@ -369,13 +379,6 @@
             <argument name="config" xsi:type="object">Magento\BraintreeTwo\Gateway\Config\PayPal\Config</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Vault\Model\PaymentTokenRepositoryProxy">
-        <arguments>
-            <argument name="repositories" xsi:type="array">
-                <item name="braintreetwo" xsi:type="string">Magento\Vault\Model\PaymentTokenRepository</item>
-            </argument>
-        </arguments>
-    </type>
 
     <virtualType name="BraintreeTransactionsCollectionFactory" type="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
