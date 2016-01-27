@@ -9,6 +9,8 @@ use Magento\Customer\Helper\Config as CustomerConfigHelper;
 
 /**
  * Customer register form block
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Register extends \Magento\Directory\Block\Data
 {
@@ -28,11 +30,6 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerUrl;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface
-     */
-    protected $_accountManagement;
-
-    /**
      * @var CustomerConfigHelper
      */
     protected $customerConfigHelper;
@@ -49,7 +46,6 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagementInterface
      * @param CustomerConfigHelper $customerConfigHelper
      * @param array $data
      *
@@ -65,14 +61,12 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Customer\Api\AccountManagementInterface $accountManagementInterface,
         CustomerConfigHelper $customerConfigHelper,
         array $data = []
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
-        $this->_accountManagement = $accountManagementInterface;
         $this->customerConfigHelper = $customerConfigHelper;
         parent::__construct(
             $context,
