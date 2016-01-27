@@ -49,7 +49,7 @@ class Query extends AbstractDb
     }
 
     /**
-     * Custom load model only by query text (skip synonym for)
+     * Custom load model only by query text
      *
      * @param AbstractModel $object
      * @param string $value
@@ -101,43 +101,12 @@ class Query extends AbstractDb
      * @param AbstractModel $object
      * @param string $value
      * @return $this
-     * @deprecated
+     * @deprecated "synonym for" feature has been removed
      */
     public function loadByQuery(AbstractModel $object, $value)
     {
-        $connection = $this->getConnection();
-        $select = $connection->select();
-
-        $synonymSelect = $this->getQuerySelect($object, 'query_text', $value);
-        $querySelect = $this->getQuerySelect($object, 'synonym_for', $value);
-
-        $select->union(["($synonymSelect)", "($querySelect)"], Select::SQL_UNION_ALL)
-            ->limit(1);
-
-        $data = $this->getConnection()->fetchRow($select);
-        if ($data) {
-            $object->setData($data);
-            $this->_afterLoad($object);
-        }
-
+        $this->loadByQueryText($object, $value);
         return $this;
-    }
-
-    /**
-     * @param AbstractModel $object
-     * @param string $field
-     * @param string $value
-     * @return Select
-     * @deprecated
-     */
-    private function getQuerySelect(AbstractModel $object, $field, $value)
-    {
-        $select = $this->getConnection()->select();
-        $select->from($this->getMainTable())
-            ->where($field . ' = ?', $value)
-            ->where('store_id = ?', $object->getStoreId())
-            ->limit(1);
-        return $select;
     }
 
     /**
