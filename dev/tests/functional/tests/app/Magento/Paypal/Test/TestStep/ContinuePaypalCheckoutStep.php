@@ -63,7 +63,7 @@ class ContinuePaypalCheckoutStep implements TestStepInterface
      */
     public function run()
     {
-        $this->expressReview->getExpressLoginBlock()->waitForFormLoaded();
+        $this->expressReview->getExpressMainLoginBlock()->waitForFormLoaded();
         if ($this->expressReview->getExpressMainLoginBlock()->isVisible()) {
             $this->expressReview->getExpressMainLoginBlock()->getLoginBlock()->fill($this->sandboxCustomer);
             $this->expressReview->getExpressMainLoginBlock()->getLoginBlock()->sandboxLogin();
