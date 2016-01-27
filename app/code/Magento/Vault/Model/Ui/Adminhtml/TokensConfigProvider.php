@@ -19,6 +19,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
 /**
  * Class ConfigProvider
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class TokensConfigProvider
 {
@@ -138,7 +139,7 @@ final class TokensConfigProvider
         $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
             ->create();
 
-        foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $index => $token) {
+        foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $token) {
             $result[] = $componentProvider->getComponentForToken($token);
         }
 
