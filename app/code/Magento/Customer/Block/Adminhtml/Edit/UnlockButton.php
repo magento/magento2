@@ -40,9 +40,9 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
         CustomerRegistry $customerRegistry,
         AccountManagementHelper $accountManagementHelper
     ) {
+        parent::__construct($context, $registry);
         $this->customerRegistry = $customerRegistry;
         $this->accountManagementHelper = $accountManagementHelper;
-        parent::__construct($context, $registry);
     }
     /**
      * @return array

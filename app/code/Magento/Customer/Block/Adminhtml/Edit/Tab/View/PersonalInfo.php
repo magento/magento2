@@ -455,11 +455,10 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     public function getAccountLock()
     {
         $customerModel = $this->customerRegistry->retrieve($this->getCustomerId());
+        $customerStatus = __('Unlocked');
         if ($this->accountManagementHelper->isCustomerLocked($customerModel->getLockExpires())) {
-            return __('Locked');
-        } else {
-            return __('Unlocked');
+            $customerStatus = __('Locked');
         }
-
+        return $customerStatus;
     }
 }
