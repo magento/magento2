@@ -104,7 +104,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['select', 'getIfNullSql'])
+            ->setMethods(['select', 'getIfNullSql', 'quote'])
             ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
@@ -170,9 +170,25 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
-    public function testProcessCategoryIds()
+    /**
+     * @return array
+     */
+    public function processCategoryIdsDataProvider()
     {
-        $expectedResult = 'category_ids_index.category_id = FilterValue';
+        return [
+            ['5', 'category_ids_index.category_id = 5'],
+            [3, 'category_ids_index.category_id = 3'],
+            ["' and 1 = 0", 'category_ids_index.category_id = 0'],
+        ];
+    }
+
+    /**
+     * @param string|int $categoryId
+     * @param string $expectedResult
+     * @dataProvider processCategoryIdsDataProvider
+     */
+    public function testProcessCategoryIds($categoryId, $expectedResult)
+    {
         $isNegation = false;
         $query = 'SELECT category_ids FROM catalog_product_entity';
 
@@ -182,7 +198,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
         $this->filter->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue('FilterValue'));
+            ->will($this->returnValue($categoryId));
 
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
@@ -249,6 +265,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
         ->willReturn($fieldValue);
 
+        $this->connection->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);
         $actualResult = $this->target->process($this->filter, $isNegation, 'This filter is not depends on used query');
         $this->assertSame($expected, $this->removeWhitespaces($actualResult));
     }

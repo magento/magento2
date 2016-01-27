@@ -39,8 +39,8 @@ $ccType = $block->getInfoData('cc_type');
             <div id="<?php /* @noEscape */ echo $code; ?>_cc_number" class="admin__control-text hosted-control">
                 <span class="icon-type"></span>
             </div>
-            <div class="hosted-error admin__field-error">
-                <?php echo $block->escapeHtml(__('Please enter valid Credit Card Number')); ?>
+            <div class="hosted-error">
+                <?php echo $block->escapeHtml(__('Please, enter valid Credit Card Number')); ?>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@ $ccType = $block->getInfoData('cc_type');
                 <div id="<?php /* @noEscape */ echo $code; ?>_cc_exp_year"
                      class="admin__control-text hosted-control hosted-date"></div>
 
-                <div class="hosted-error admin__field-error"><?php echo $block->escapeHtml(__('Please enter valid Expiration Date')); ?></div>
+                <div class="hosted-error"><?php echo $block->escapeHtml(__('Please, enter valid Expiration Date')); ?></div>
             </div>
         </div>
     </div>
@@ -70,10 +70,22 @@ $ccType = $block->getInfoData('cc_type');
                 <div id="<?php /* @noEscape */ echo $code; ?>_cc_cid"
                      class="admin__control-text hosted-control hosted-cid"></div>
 
-                <div class="hosted-error admin__field-error">
-                    <?php echo $block->escapeHtml(__('Please enter valid Card Verification Number')); ?>
+                <div class="hosted-error">
+                    <?php echo $block->escapeHtml(__('Please, enter valid Card Verification Number')); ?>
                 </div>
             </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if($block->isVaultEnabled()): ?>
+        <div class="field-tooltip-content">
+            <input type="checkbox"
+                   id="<?php /* @noEscape */ echo $code; ?>_vault"
+                   name="payment[is_active_payment_token_enabler]"
+                   class="admin__control-checkbox"/>
+            <label class="label" for="<?php /* @noEscape */ echo $code; ?>_vault">
+                <span><?php echo $block->escapeHtml('Save for later use.'); ?></span>
+            </label>
         </div>
     <?php endif; ?>
 
