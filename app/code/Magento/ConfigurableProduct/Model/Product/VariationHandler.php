@@ -38,6 +38,7 @@ class VariationHandler
      * @var \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes
      */
     protected $variationMediaAttributes;
+
     /**
      * @var MetadataPool
      */
@@ -51,6 +52,7 @@ class VariationHandler
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param VariationMediaAttributes $variationMediaAttributes
      * @param \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Type\Configurable $configurableProduct,

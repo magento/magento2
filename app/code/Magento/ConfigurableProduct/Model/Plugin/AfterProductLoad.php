@@ -1,14 +1,16 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableProduct\Model\Plugin;
+
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Class AfterProductLoad
+ */
 class AfterProductLoad
 {
     /**
@@ -20,6 +22,7 @@ class AfterProductLoad
      * @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory
      */
     protected $optionValueFactory;
+
     /**
      * @var MetadataPool
      */
@@ -28,6 +31,7 @@ class AfterProductLoad
     /**
      * @param \Magento\Catalog\Api\Data\ProductExtensionFactory $productExtensionFactory
      * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Api\Data\ProductExtensionFactory $productExtensionFactory,
