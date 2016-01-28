@@ -25,11 +25,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $filters = [];
 
     /**
-     * @var \Magento\CatalogSearch\Model\Advanced\Request\Builder
-     */
-    private $requestBuilder;
-
-    /**
      * @var \Magento\Search\Api\SearchInterface
      */
     private $search;
@@ -69,7 +64,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder
      * @param \Magento\Search\Api\SearchInterface $search
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -97,14 +91,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder,
         \Magento\Search\Api\SearchInterface $search,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         $connection = null
     ) {
-        $this->requestBuilder = $requestBuilder;
         $this->search = $search;
         $this->temporaryStorageFactory = $temporaryStorageFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -157,9 +149,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             foreach ($this->filters as $attributes) {
                 foreach ($attributes as $attributeCode => $attributeValue) {
                     $attributeCode = $this->getAttributeCode($attributeCode);
-                    $this->filterBuilder->setField($attributeCode);
-                    $this->filterBuilder->setValue($attributeValue);
-                    $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+                    $this->addAttributeToSearch($attributeCode, $attributeValue);
                 }
             }
             $searchCriteria = $this->searchCriteriaBuilder->create();
@@ -192,5 +182,38 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         return $attributeCode;
+    }
+
+    /**
+     * Create a filter and add it to the SearchCriteriaBuilder.
+     *
+     * @param string $attributeCode
+     * @param array|string $attributeValue
+     * @return void
+     */
+    private function addAttributeToSearch($attributeCode, $attributeValue)
+    {
+        if (isset($attributeValue['from']) || isset($attributeValue['to'])) {
+            if (isset($attributeValue['from']) && '' !== $attributeValue['from']) {
+                $this->filterBuilder->setField("{$attributeCode}.from")->setValue($attributeValue['from']);
+                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+            }
+            if (isset($attributeValue['to']) && '' !== $attributeValue['to']) {
+                $this->filterBuilder->setField("{$attributeCode}.to")->setValue($attributeValue['to']);
+                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+            }
+        } elseif (!is_array($attributeValue)) {
+            $this->filterBuilder->setField($attributeCode)->setValue($attributeValue);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        } elseif (isset($attributeValue['like'])) {
+            $this->filterBuilder->setField($attributeCode)->setValue($attributeValue['like']);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        } elseif (isset($attributeValue['in'])) {
+            $this->filterBuilder->setField($attributeCode)->setValue( $attributeValue['in']);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        } elseif (isset($attributeValue['in_set'])) {
+            $this->filterBuilder->setField($attributeCode)->setValue($attributeValue['in_set']);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        }
     }
 }
