@@ -28,8 +28,9 @@ define([
         return node.type || parent && parent.childType;
     }
 
-    function getDataScope(parentScope, node) {
-        var dataScope = node.dataScope;
+    function getDataScope(parent, node) {
+        var dataScope = node.dataScope,
+            parentScope = parent && parent.dataScope;
 
         return !utils.isEmpty(parentScope) ?
             !utils.isEmpty(dataScope) ?
@@ -104,8 +105,7 @@ define([
             var defaults    = parent && parent.childDefaults || {},
                 children    = node.children,
                 type        = getNodeType(parent, node),
-                parentScope,
-                dataScope,
+                dataScope   = getDataScope(parent, node),
                 nodeName;
 
             node.children = false;
@@ -115,20 +115,12 @@ define([
 
             nodeName = getNodeName(parent, node, name);
 
-            if (node.config && typeof node.config.parentScope !== 'undefined') {
-                parentScope = node.config.parentScope;
-            } else {
-                parentScope = parent && parent.dataScope || '';
-            }
-
-            dataScope = getDataScope(parentScope, node);
-
             _.extend(node, node.config || {}, {
                 index: node.name || name,
                 name: nodeName,
                 dataScope: dataScope,
                 parentName: utils.getPart(nodeName, -2),
-                parentScope: parentScope
+                parentScope: utils.getPart(dataScope, -2)
             });
 
             node.children = children;
