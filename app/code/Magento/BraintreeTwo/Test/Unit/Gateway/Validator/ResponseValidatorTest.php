@@ -6,6 +6,7 @@
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Validator;
 
 use Braintree\Transaction;
+use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use Magento\BraintreeTwo\Gateway\Validator\ResponseValidator;
@@ -92,11 +93,12 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
      *
      * @param array $validationSubject
      * @param bool $isValid
+     * @param Phrase[] $messages
      * @return void
      *
      * @dataProvider dataProviderTestValidate
      */
-    public function testValidate(array $validationSubject, $isValid)
+    public function testValidate(array $validationSubject, $isValid, $messages)
     {
         /** @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
         $resultMock = $this->getMock(ResultInterface::class);
@@ -110,7 +112,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with([
                 'isValid' => $isValid,
-                'failsDescription' => ['Transaction has been declined. Please try again later.']
+                'failsDescription' => $messages
             ])
             ->willReturn($resultMock);
 
@@ -145,6 +147,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'isValid' => true,
+                []
             ],
             [
                 'validationSubject' => [
@@ -152,7 +155,11 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
                         'object' => $successFalse
                     ]
                 ],
-                'isValid' => false
+                'isValid' => false,
+                [
+                    __('Braintree error response.'),
+                    __('Wrong transaction status')
+                ]
             ],
             [
                 'validationSubject' => [
@@ -160,7 +167,10 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
                         'object' => $transactionDeclined
                     ]
                 ],
-                'isValid' => false
+                'isValid' => false,
+                [
+                    __('Wrong transaction status')
+                ]
             ]
         ];
     }
