@@ -903,6 +903,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/category_with_position.php
      */
     public function testProductDuplicateCategories()
     {
@@ -931,7 +932,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
-        $this->_model->importData();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -949,10 +949,25 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($category !== null);
 
         $category->setName(
-            'Category11'
+            'Category1-updated'
         )->save();
 
         $this->_model->importData();
+
+
+        //Magento\CatalogImportExport\Model\Import;
+        $categoryProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\CatalogImportExport\Model\ImportProduct\CategoryProcessor'
+        );
+
+        $errorProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator'
+        );
+        $errorProcessor->getAllErrors();
+
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
 
         $categoryAfter = $this->loadCategoryByName('Category 1');
         $this->assertTrue($categoryAfter === null);
