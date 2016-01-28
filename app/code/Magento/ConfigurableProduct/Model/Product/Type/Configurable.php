@@ -134,6 +134,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected $extensionAttributesJoinProcessor;
 
+    /**
+     * @var MetadataPool
+     */
     private $metadataPool;
 
     /**
@@ -156,7 +159,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     *
+     * @param MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

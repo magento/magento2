@@ -29,14 +29,23 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_IS_USE_DEFAULT = 'is_use_default';
     const KEY_VALUES = 'values';
     const KEY_PRODUCT_ID = 'product_id';
+    /**#@-
+
     /**
      * @var MetadataPool
      */
     private $metadataPool;
 
-    /**#@-*/
-
-
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param MetadataPool $metadataPool
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -48,11 +57,16 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
         array $data = []
     ) {
         $this->metadataPool = $metadataPool;
-        parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $resource,
-            $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
-
-
 
     /**
      * Initialize resource model
