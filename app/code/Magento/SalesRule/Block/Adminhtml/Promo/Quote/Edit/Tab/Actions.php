@@ -6,7 +6,7 @@
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+    \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
      * Core registry
@@ -24,6 +24,11 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_sourceYesno;
+
+    /**
+     * @var string
+     */
+    protected $_nameInLayout = 'actions_apply_to';
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -47,6 +52,30 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $this->_ruleActions = $ruleActions;
         $this->_sourceYesno = $sourceYesno;
         parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTabClass()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTabUrl()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
     }
 
     /**
@@ -95,72 +124,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
-        $fieldset = $form->addFieldset(
-            'action_fieldset',
-            ['legend' => __('Pricing Structure Rules')]
-        );
-
-        $fieldset->addField(
-            'simple_action',
-            'select',
-            [
-                'label' => __('Apply'),
-                'name' => 'simple_action',
-                'options' => [
-                    \Magento\SalesRule\Model\Rule::BY_PERCENT_ACTION => __('Percent of product price discount'),
-                    \Magento\SalesRule\Model\Rule::BY_FIXED_ACTION => __('Fixed amount discount'),
-                    \Magento\SalesRule\Model\Rule::CART_FIXED_ACTION => __('Fixed amount discount for whole cart'),
-                    \Magento\SalesRule\Model\Rule::BUY_X_GET_Y_ACTION => __('Buy X get Y free (discount amount is Y)'),
-                ]
-            ]
-        );
-        $fieldset->addField(
-            'discount_amount',
-            'text',
-            [
-                'name' => 'discount_amount',
-                'required' => true,
-                'class' => 'validate-not-negative-number',
-                'label' => __('Discount Amount')
-            ]
-        );
-        $model->setDiscountAmount($model->getDiscountAmount() * 1);
-
-        $fieldset->addField(
-            'discount_qty',
-            'text',
-            ['name' => 'discount_qty', 'label' => __('Maximum Qty Discount is Applied To')]
-        );
-        $model->setDiscountQty($model->getDiscountQty() * 1);
-
-        $fieldset->addField(
-            'discount_step',
-            'text',
-            ['name' => 'discount_step', 'label' => __('Discount Qty Step (Buy X)')]
-        );
-
-        $fieldset->addField(
-            'apply_to_shipping',
-            'select',
-            [
-                'label' => __('Apply to Shipping Amount'),
-                'title' => __('Apply to Shipping Amount'),
-                'name' => 'apply_to_shipping',
-                'values' => $this->_sourceYesno->toOptionArray()
-            ]
-        );
-
-        $fieldset->addField(
-            'stop_rules_processing',
-            'select',
-            [
-                'label' => __('Discard subsequent rules'),
-                'title' => __('Discard subsequent rules'),
-                'name' => 'stop_rules_processing',
-                'options' => ['1' => __('Yes'), '0' => __('No')]
-            ]
-        );
-
         $renderer = $this->_rendererFieldset->setTemplate(
             'Magento_CatalogRule::promo/fieldset.phtml'
         )->setNewChildUrl(
@@ -182,7 +145,13 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $fieldset->addField(
             'actions',
             'text',
-            ['name' => 'actions', 'label' => __('Apply To'), 'title' => __('Apply To'), 'required' => true]
+            [
+                'name' => 'apply_to',
+                'label' => __('Apply To'),
+                'title' => __('Apply To'),
+                'required' => true,
+                'data-form-part' => 'sales_rule_form'
+            ]
         )->setRule(
             $model
         )->setRenderer(
