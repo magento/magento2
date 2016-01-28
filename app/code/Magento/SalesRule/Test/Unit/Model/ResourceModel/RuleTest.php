@@ -61,11 +61,25 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $associatedEntitiesMap = [
+            'customer_group' => [
+                'associations_table' => 'salesrule_customer_group',
+                'rule_id_field' => 'rule_id',
+                'entity_id_field' => 'customer_group_id'
+            ],
+            'website' => [
+                'associations_table' => 'salesrule_website',
+                'rule_id_field' => 'rule_id',
+                'entity_id_field' => 'website_id'
+            ],
+        ];
+
         $this->model = $objectManager->getObject(
             'Magento\SalesRule\Model\ResourceModel\Rule',
             [
                 'context' => $context,
-                'connectionName' => $connectionName
+                'connectionName' => $connectionName,
+                'associatedEntitiesMap' => $associatedEntitiesMap
             ]
         );
     }
