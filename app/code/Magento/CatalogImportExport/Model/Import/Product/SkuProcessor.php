@@ -98,7 +98,7 @@ class SkuProcessor
      */
     public function setNewSkuData($sku, $key, $data)
     {
-        if ($this->newSkus[$sku]) {
+        if (isset($this->newSkus[$sku])) {
             $this->newSkus[$sku][$key] = $data;
         }
         return $this;
