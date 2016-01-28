@@ -184,7 +184,7 @@
         "magento/language-nl_nl": "100.0.3",
         "magento/language-pt_br": "100.0.3",
         "magento/language-zh_hans_cn": "100.0.3",
-        "magento/framework": "100.0.3",
+        "magento/framework": "100.0.4",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "colinmollenhour/cache-backend-redis": "1.8",
         "colinmollenhour/credis": "1.5",
