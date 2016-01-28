@@ -49,8 +49,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $objectConverter;
 
     /**
+     * @var \Magento\SalesRule\Model\RuleFactory
+     */
+    protected $salesRuleFactory;
+
+    /**
      * DataProvider constructor.
-     * @param string $name
+     *
+*@param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
@@ -58,6 +64,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param GroupRepositoryInterface $groupRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataObject $objectConverter
+     * @param \Magento\SalesRule\Model\RuleFactory $salesRuleFactory
      * @param array $meta
      * @param array $data
      *
@@ -72,6 +79,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         GroupRepositoryInterface $groupRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DataObject $objectConverter,
+        \Magento\SalesRule\Model\RuleFactory $salesRuleFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -81,6 +89,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->objectConverter = $objectConverter;
+        $this->salesRuleFactory = $salesRuleFactory;
         $this->initMeta();
     }
 
@@ -97,6 +106,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ['label' => __('Adjust final price to discount value'), 'value' => 'to_fixed']
         ];
 
+        $couponTypesOptions = [];
+        $couponTypes = $this->salesRuleFactory->create()->getCouponTypes();
+        foreach ($couponTypes as $key => $couponType) {
+            $couponTypesOptions[] = [
+                'label' => $couponType,
+                'value' => $key,
+            ];
+        }
         $this->meta = [
             'rule_information' => [
                 'fields' => [
@@ -111,7 +128,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     ],
                     'customer_group_ids' => [
                         'options' => $this->objectConverter->toOptionArray($customerGroups, 'id', 'code')
-                    ]
+                    ],
+                    'coupon_type' => [
+                        'options' => $couponTypesOptions
+                    ],
+                    'is_rss' => [
+                        'options' => [
+                            ['label' => __('Yes'), 'value' => '1'],
+                            ['label' => __('No'), 'value' => '0']
+                        ]
+                    ],
                 ]
             ],
             'actions' => [
