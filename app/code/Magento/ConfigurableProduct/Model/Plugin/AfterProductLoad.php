@@ -6,6 +6,8 @@
  */
 
 namespace Magento\ConfigurableProduct\Model\Plugin;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 class AfterProductLoad
 {
@@ -18,6 +20,10 @@ class AfterProductLoad
      * @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory
      */
     protected $optionValueFactory;
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductExtensionFactory $productExtensionFactory
@@ -25,10 +31,12 @@ class AfterProductLoad
      */
     public function __construct(
         \Magento\Catalog\Api\Data\ProductExtensionFactory $productExtensionFactory,
-        \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory
+        \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory,
+        MetadataPool $metadataPool
     ) {
         $this->productExtensionFactory = $productExtensionFactory;
         $this->optionValueFactory = $optionValueFactory;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -88,9 +96,10 @@ class AfterProductLoad
      */
     protected function getLinkedProducts(\Magento\Catalog\Model\Product $product)
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $typeInstance */
         $typeInstance = $product->getTypeInstance();
-        $childrenIds = $typeInstance->getChildrenIds($product->getId());
+        $childrenIds = $typeInstance->getChildrenIds($product->getData($metadata->getLinkField()));
 
         if (isset($childrenIds[0])) {
             return $childrenIds[0];

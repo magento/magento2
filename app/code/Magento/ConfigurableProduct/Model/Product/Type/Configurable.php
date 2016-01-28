@@ -6,6 +6,8 @@
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Configurable product type implementation
@@ -132,6 +134,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected $extensionAttributesJoinProcessor;
 
+    private $metadataPool;
+
     /**
      * @codingStandardsIgnoreStart/End
      *
@@ -172,7 +176,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        MetadataPool $metadataPool
     ) {
         $this->_typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -182,6 +187,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_scopeConfig = $scopeConfig;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->metadataPool = $metadataPool;
 
         parent::__construct(
             $catalogProductOption,
@@ -407,10 +413,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getUsedProductIds($product)
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         if (!$product->hasData($this->_usedProductIds)) {
             $usedProductIds = [];
             foreach ($this->getUsedProducts($product) as $product) {
-                $usedProductIds[] = $product->getId();
+                $usedProductIds[] = $product->getData($metadata->getLinkField());
             }
             $product->setData($this->_usedProductIds, $usedProductIds);
         }
@@ -537,6 +544,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         /* Save attributes information */
         $data = $product->getConfigurableAttributesData();
         if ($data) {
+            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
             foreach ($data as $attributeData) {
                 /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
                 $configurableAttribute = $this->_configurableAttributeFactory->create();
@@ -561,7 +570,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $configurableAttribute
                     ->addData($attributeData)
                     ->setStoreId($product->getStoreId())
-                    ->setProductId($product->getId())
+                    ->setProductId($product->getData($metadata->getLinkField()))
                     ->save();
             }
             /** @var $configurableAttributesCollection \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection  */
@@ -640,8 +649,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $productCollection->addAttributeToFilter($attributeId, $attributeValue);
             }
             $productObject = $productCollection->getFirstItem();
-            if ($productObject->getId()) {
-                return $this->productRepository->getById($productObject->getId());
+            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+            $productLinkFieldId = $productObject->getData($metadata->getLinkField());
+            if ($productLinkFieldId) {
+                return $this->productRepository->getById($productLinkFieldId);
             }
 
             foreach ($this->getUsedProducts($product) as $productObject) {
@@ -713,6 +724,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
         $attributes = $buyRequest->getSuperAttribute();
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         if ($attributes || !$this->_isStrictProcessMode($processMode)) {
             if (!$this->_isStrictProcessMode($processMode)) {
                 if (is_array($attributes)) {
@@ -749,9 +761,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
 
                 if ($subProduct) {
+                    $subProductLinkFieldId = $subProduct->getData($metadata->getLinkField());
                     $product->addCustomOption('attributes', serialize($attributes));
-                    $product->addCustomOption('product_qty_' . $subProduct->getId(), 1, $subProduct);
-                    $product->addCustomOption('simple_product', $subProduct->getId(), $subProduct);
+                    $product->addCustomOption('product_qty_' . $subProductLinkFieldId, 1, $subProduct);
+                    $product->addCustomOption('simple_product', $subProductLinkFieldId, $subProduct);
 
                     $_result = $subProduct->getTypeInstance()->processConfiguration(
                         $buyRequest,
@@ -779,12 +792,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         }
                     }
 
-                    $_result[0]->setParentProductId(
-                        $product->getId()
-                    )->addCustomOption(
-                        'parent_product_id',
-                        $product->getId()
-                    );
+                    $productLinkFieldId = $product->getData($metadata->getLinkField());
+                    $_result[0]->setParentProductId($productLinkFieldId)
+                        ->addCustomOption('parent_product_id', $productLinkFieldId);
                     if ($this->_isStrictProcessMode($processMode)) {
                         $_result[0]->setCartQty(1);
                     }
