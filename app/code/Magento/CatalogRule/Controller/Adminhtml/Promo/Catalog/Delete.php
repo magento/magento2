@@ -19,7 +19,7 @@ class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         if ($id) {
             try {
                 /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
-                $ruleRepository = $this->_objectManager->create(
+                $ruleRepository = $this->_objectManager->get(
                     'Magento\CatalogRule\Api\CatalogRuleRepositoryInterface'
                 );
                 $ruleRepository->deleteById($id);
