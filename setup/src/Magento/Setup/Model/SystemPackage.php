@@ -71,7 +71,7 @@ class SystemPackage
             $versions = [];
             $systemPackageInfo = $this->infoCommand->run($systemPackage);
             if (!$systemPackageInfo) {
-                throw new \RuntimeException('System package not found');
+                throw new \RuntimeException("We cannot retrieve information on $systemPackage.");
             }
 
             $versions = $this->getSystemPackageVersions($systemPackageInfo, $versions);

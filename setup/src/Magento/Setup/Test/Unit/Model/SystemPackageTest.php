@@ -207,7 +207,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage System package not found
+     * @expectedExceptionMessage We cannot retrieve information on magento/product-community-edition.
      */
     public function testGetPackageVersionsFailed()
     {
