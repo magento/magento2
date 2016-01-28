@@ -7,6 +7,8 @@ namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Variation Handler
@@ -36,6 +38,10 @@ class VariationHandler
      * @var \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes
      */
     protected $variationMediaAttributes;
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @param Type\Configurable $configurableProduct
@@ -53,7 +59,8 @@ class VariationHandler
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes $variationMediaAttributes,
-        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
+        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor,
+        MetadataPool $metadataPool
     ) {
         $this->configurableProduct = $configurableProduct;
         $this->attributeSetFactory = $attributeSetFactory;
@@ -62,6 +69,7 @@ class VariationHandler
         $this->stockConfiguration = $stockConfiguration;
         $this->variationMediaAttributes = $variationMediaAttributes;
         $this->mediaGalleryProcessor = $mediaGalleryProcessor;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -77,6 +85,7 @@ class VariationHandler
         $this->prepareAttributeSetToBeBaseForNewVariations($parentProduct);
         $generatedProductIds = [];
         $productsData = $this->duplicateImagesForVariations($productsData);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
             if (isset($simpleProductData['configurable_attribute'])) {
@@ -93,7 +102,7 @@ class VariationHandler
             );
             $newSimpleProduct->save();
 
-            $generatedProductIds[] = $newSimpleProduct->getId();
+            $generatedProductIds[] = $newSimpleProduct->getData($metadata->getLinkField());
         }
         return $generatedProductIds;
     }

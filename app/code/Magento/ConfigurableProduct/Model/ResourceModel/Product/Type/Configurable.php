@@ -22,7 +22,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -61,8 +61,9 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function saveProducts($mainProduct, $productIds)
     {
         $isProductInstance = false;
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         if ($mainProduct instanceof \Magento\Catalog\Model\Product) {
-            $mainProductId = $mainProduct->getId();
+            $mainProductId = $mainProduct->getData($metadata->getLinkField());
             $isProductInstance = true;
         }
         $old = [];
@@ -108,12 +109,14 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getChildrenIds($parentId, $required = true)
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkColumn = $this->getConnection()->quoteIdentifier($metadata->getLinkField());
         $select = $this->getConnection()->select()->from(
             ['l' => $this->getMainTable()],
             ['product_id', 'parent_id']
         )->join(
             ['e' => $this->getTable('catalog_product_entity')],
-            'e.entity_id = l.product_id AND e.required_options = 0',
+            'e.' . $linkColumn . ' = l.product_id AND e.required_options = 0',
             []
         )->where(
             'parent_id IN (?)',
@@ -162,6 +165,8 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getConfigurableOptions($product, $attributes)
     {
         $attributesOptionsData = [];
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $productLinkFieldId = $product->getData($metadata->getLinkField());
         foreach ($attributes as $superAttribute) {
             $select = $this->getConnection()->select()->from(
                 ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
@@ -217,7 +222,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 []
             )->where(
                 'super_attribute.product_id = ?',
-                $product->getId()
+                $productLinkFieldId
             );
 
             $attributesOptionsData[$superAttribute->getAttributeId()] = $this->getConnection()->fetchAll($select);

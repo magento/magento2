@@ -16,6 +16,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Store\Model\Store;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -61,6 +62,10 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
      */
     private $configurableTypeResource;
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -80,7 +85,8 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory,
-        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource
+        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource,
+        MetadataPool $metadataPool
     ) {
         $this->productRepository = $productRepository;
         $this->optionValueFactory = $optionValueFactory;
@@ -90,6 +96,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $this->productAttributeRepository = $productAttributeRepository;
         $this->configurableAttributeFactory = $configurableAttributeFactory;
         $this->configurableTypeResource = $configurableTypeResource;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -170,13 +177,14 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      */
     public function save($sku, OptionInterface $option)
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
         $configurableAttribute = $this->configurableAttributeFactory->create();
         if ($option->getId()) {
             /** @var Product $product */
             $product = $this->getProduct($sku);
             $configurableAttribute->load($option->getId());
-            if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getId()) {
+            if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getData($metadata->getLinkField())) {
                 throw new NoSuchEntityException(
                     __(
                         'Option with id "%1" not found',
