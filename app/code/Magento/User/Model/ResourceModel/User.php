@@ -546,7 +546,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $userId = (int)$user->getId();
         $table = $this->getTable('admin_passwords');
 
-        // purge expired passwords, except that should retain
+        // purge expired passwords, except those which should be retained
         $retainPasswordIds = $this->getConnection()->fetchCol(
             $this->getConnection()
                 ->select()
@@ -563,7 +563,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         $this->getConnection()->delete($table, $where);
 
-        // now get all remained passwords
+        // get all remaining passwords
         return $this->getConnection()->fetchCol(
             $this->getConnection()
                 ->select()

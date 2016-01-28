@@ -12,9 +12,6 @@
     <event name="controller_action_predispatch">
         <observer name="magento_user" instance="Magento\User\Observer\Backend\ForceAdminPasswordChangeObserver" />
     </event>
-    <event name="admin_user_save_before">
-        <observer name="magento_user" instance="Magento\User\Observer\Backend\CheckAdminPasswordChangeObserver" />
-    </event>
     <event name="admin_user_save_after">
         <observer name="magento_user" instance="Magento\User\Observer\Backend\TrackAdminNewPasswordObserver" />
     </event>
