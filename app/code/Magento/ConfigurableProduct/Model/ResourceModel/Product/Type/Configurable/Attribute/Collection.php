@@ -51,6 +51,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
+
     /**
      * @var MetadataPool
      */
@@ -65,6 +66,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $resource
+     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */

@@ -76,6 +76,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param ConfigurableType\AttributeFactory $configurableAttributeFactory
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -184,7 +185,9 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             /** @var Product $product */
             $product = $this->getProduct($sku);
             $configurableAttribute->load($option->getId());
-            if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getData($metadata->getLinkField())) {
+            if (!$configurableAttribute->getId()
+                || $configurableAttribute->getProductId() != $product->getData($metadata->getLinkField())
+            ) {
                 throw new NoSuchEntityException(
                     __(
                         'Option with id "%1" not found',
