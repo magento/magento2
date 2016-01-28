@@ -464,6 +464,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'counter' => 1,
+                'message' => 'LocalizedException',
+                'exception' => '\Magento\Framework\Exception\LocalizedException',
+            ],
+            [
+                'counter' => 1,
                 'message' => 'Exception',
                 'exception' => '\Exception',
             ],
