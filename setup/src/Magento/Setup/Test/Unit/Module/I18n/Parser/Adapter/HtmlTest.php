@@ -39,18 +39,68 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
             [
                 'phrase' => 'Phrase 1',
                 'file' => $this->_testFile,
-                'line' => null,
-                'quote' => Phrase::QUOTE_SINGLE,
+                'line' => '',
+                'quote' => '\'',
             ],
             [
                 'phrase' => 'Phrase 2 with %a_lot of extra info for the brilliant %customer_name.',
                 'file' => $this->_testFile,
-                'line' => null,
-                'quote' => Phrase::QUOTE_DOUBLE
+                'line' => '',
+                'quote' => '"',
+            ],
+            [
+                'phrase' => 'This is test data',
+                'file' => $this->_testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                'phrase' => 'This is test data at right side of attr',
+                'file' => $this->_testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                'phrase' => 'This is \\\' test \\\' data',
+                'file' => $this->_testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                'phrase' => 'This is \\" test \\" data',
+                'file' => $this->_testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                'phrase' => 'This is test data with a quote after',
+                'file' => $this->_testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                'phrase' => 'This is test data with space after ',
+                'file' => $this->_testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                'phrase' => '\\\'',
+                'file' => $this->_testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                'phrase' => '\\\\\\\\ ',
+                'file' => $this->_testFile,
+                'line' => '',
+                'quote' => '',
             ],
         ];
 
         $this->_adapter->parse($this->_testFile);
+
+        $phrases = $this->_adapter->getPhrases();
 
         $this->assertEquals($expectedResult, $this->_adapter->getPhrases());
     }
