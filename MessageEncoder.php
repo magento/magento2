@@ -26,12 +26,12 @@ class MessageEncoder
     /**
      * @var \Magento\Framework\Webapi\ServiceOutputProcessor
      */
-    private $dataObjectEncoder;
+    private $serviceOutputProcessor;
 
     /**
      * @var \Magento\Framework\Webapi\ServiceInputProcessor
      */
-    private $dataObjectDecoder;
+    private $serviceInputProcessor;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
@@ -49,19 +49,19 @@ class MessageEncoder
      * @param QueueConfig $queueConfig
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
-     * @param \Magento\Framework\Webapi\ServiceOutputProcessor $dataObjectEncoder
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor $dataObjectDecoder
+     * @param \Magento\Framework\Webapi\ServiceOutputProcessor $serviceOutputProcessor
+     * @param \Magento\Framework\Webapi\ServiceInputProcessor $serviceInputProcessor
      */
     public function __construct(
         QueueConfig $queueConfig,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Json\DecoderInterface $jsonDecoder,
-        \Magento\Framework\Webapi\ServiceOutputProcessor $dataObjectEncoder,
-        \Magento\Framework\Webapi\ServiceInputProcessor $dataObjectDecoder
+        \Magento\Framework\Webapi\ServiceOutputProcessor $serviceOutputProcessor,
+        \Magento\Framework\Webapi\ServiceInputProcessor $serviceInputProcessor
     ) {
         $this->queueConfig = $queueConfig;
-        $this->dataObjectEncoder = $dataObjectEncoder;
-        $this->dataObjectDecoder = $dataObjectDecoder;
+        $this->serviceOutputProcessor = $serviceOutputProcessor;
+        $this->serviceInputProcessor = $serviceInputProcessor;
         $this->jsonEncoder = $jsonEncoder;
         $this->jsonDecoder = $jsonDecoder;
     }
@@ -155,16 +155,16 @@ class MessageEncoder
                 $paramName = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_NAME];
                 $paramType = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_TYPE];
                 if ($isIndexedArray) {
-                    /** Encode parameters according to their positions in method signature */
+                    /** Convert parameters according to their positions in method signature */
                     $paramPosition = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_POSITION];
                     if (isset($message[$paramPosition])) {
-                        $convertedMessage[$paramName] = $this->getConverter(self::DIRECTION_DECODE)
+                        $convertedMessage[$paramName] = $this->serviceInputProcessor
                             ->convertValue($message[$paramPosition], $paramType);
                     }
                 } else {
-                    /** Encode parameters according to their names in method signature */
+                    /** Convert parameters according to their names in method signature */
                     if (isset($message[$paramName])) {
-                        $convertedMessage[$paramName] = $this->getConverter(self::DIRECTION_DECODE)
+                        $convertedMessage[$paramName] = $this->serviceInputProcessor
                             ->convertValue($message[$paramName], $paramType);
                     }
                 }
@@ -197,6 +197,6 @@ class MessageEncoder
      */
     protected function getConverter($direction)
     {
-        return ($direction == self::DIRECTION_ENCODE) ? $this->dataObjectEncoder : $this->dataObjectDecoder;
+        return ($direction == self::DIRECTION_ENCODE) ? $this->serviceOutputProcessor : $this->serviceInputProcessor;
     }
 }
