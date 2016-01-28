@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Catalog Product Eav Decimal Attributes Indexer resource model
  *
@@ -44,22 +46,28 @@ class Decimal extends AbstractEav
             return $this;
         }
 
+        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productValueExpression = $connection->getCheckSql('pds.value_id > 0', 'pds.value', 'pdd.value');
+
         $select = $connection->select()->from(
             ['pdd' => $this->getTable('catalog_product_entity_decimal')],
-            [$this->getProductIdFieldName(), 'attribute_id']
+            []
         )->join(
             ['cs' => $this->getTable('store')],
             '',
-            ['store_id']
+            []
         )->joinLeft(
             ['pds' => $this->getTable('catalog_product_entity_decimal')],
             sprintf(
                 'pds.%s = pdd.%s AND pds.attribute_id = pdd.attribute_id'.' AND pds.store_id=cs.store_id',
-                $this->getProductIdFieldName(),
-                $this->getProductIdFieldName()
+                $productIdField,
+                $productIdField
             ),
-            ['value' => $productValueExpression]
+            []
+        )->joinLeft(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.{$productIdField} = pdd.{$productIdField}",
+            []
         )->where(
             'pdd.store_id=?',
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
@@ -71,6 +79,13 @@ class Decimal extends AbstractEav
             $attrIds
         )->where(
             "{$productValueExpression} IS NOT NULL"
+        )->columns(
+            [
+                'cpe.entity_id',
+                'pdd.attribute_id',
+                'cs.store_id',
+                'value' => $productValueExpression,
+            ]
         );
 
         $statusCond = $connection->quoteInto(
@@ -82,17 +97,14 @@ class Decimal extends AbstractEav
             'status',
             sprintf(
                 'pdd.%s',
-                $this->getProductIdFieldName()
+                $productIdField
             ),
             'cs.store_id',
             $statusCond
         );
 
         if ($entityIds !== null) {
-            $select->where(
-                sprintf('pdd.%s IN(?)', $this->getProductIdFieldName()),
-                $entityIds
-            );
+            $select->where('cpe.entity_id IN(?)', $entityIds);
         }
 
         /**
@@ -102,7 +114,7 @@ class Decimal extends AbstractEav
             'prepare_catalog_product_index_select',
             [
                 'select' => $select,
-                'entity_field' => new \Zend_Db_Expr(sprintf('pdd.%s', $this->getProductIdFieldName())),
+                'entity_field' => new \Zend_Db_Expr('cpe.entity_id'),
                 'website_field' => new \Zend_Db_Expr('cs.website_id'),
                 'store_field' => new \Zend_Db_Expr('cs.store_id')
             ]
