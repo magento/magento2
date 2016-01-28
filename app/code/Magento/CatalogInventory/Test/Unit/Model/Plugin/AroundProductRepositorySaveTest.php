@@ -23,9 +23,19 @@ use Magento\Store\Model\StoreManagerInterface;
 class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Closure
+     */
+    private $closure;
+
+    /**
      * @var ProductInterface
      */
     private $product;
+
+    /**
+     * @var ProductInterface
+     */
+    private $savedProduct;
 
     /**
      * @var ProductExtension|\PHPUnit_Framework_MockObject_MockObject
@@ -87,6 +97,14 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             $this->stockConfiguration
         );
 
+        $this->savedProduct = $savedProduct = $this->getMockBuilder(ProductInterface::class)
+            ->setMethods(['getExtensionAttributes', 'getStoreId'])
+            ->getMockForAbstractClass();
+
+        $this->closure = function () use ($savedProduct) {
+            return $savedProduct;
+        };
+
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->setMethods(['get'])
             ->getMockForAbstractClass();
@@ -119,9 +137,9 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->stockItem->expects($this->never())->method('setWebsiteId');
 
         // expect that there are no changes to the existing stock item information
-        $result = $this->plugin->afterSave($this->productRepository, $this->product);
+        $result = $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
         $this->assertEquals(
-            $this->product,
+            $this->savedProduct,
             $result
         );
     }
@@ -155,7 +173,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $newProductMock,
-            $this->plugin->afterSave($this->productRepository, $this->product)
+            $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product)
         );
     }
 
@@ -216,7 +234,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $newProductMock,
-            $this->plugin->afterSave($this->productRepository, $this->product)
+            $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product)
         );
     }
 
@@ -251,7 +269,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->willReturn($this->stockItem);
 
-        $this->plugin->afterSave($this->productRepository, $this->product);
+        $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
     }
 
     /**
@@ -290,7 +308,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getItemId')
             ->willReturn($stockItemId);
 
-        $this->plugin->afterSave($this->productRepository, $this->product);
+        $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
     }
 
     /**
@@ -340,6 +358,6 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->willReturn($storedStockItem);
 
-        $this->plugin->afterSave($this->productRepository, $this->product);
+        $this->plugin->aroundSave($this->productRepository, $this->closure, $this->product);
     }
 }
