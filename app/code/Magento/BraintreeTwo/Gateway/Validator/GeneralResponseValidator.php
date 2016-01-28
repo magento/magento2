@@ -63,7 +63,7 @@ class GeneralResponseValidator extends AbstractValidator
                 return [
                     property_exists($response, 'success') && $response->success === true
                     && !(property_exists($response, 'errors') && $response->errors->deepSize() > 0),
-                    [__('Transaction has been declined. Please try again later.')]
+                    [__('Braintree error response.')]
                 ];
             }
         ];

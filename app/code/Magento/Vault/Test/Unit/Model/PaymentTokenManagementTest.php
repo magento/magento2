@@ -391,7 +391,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
         $newEntityId = 1;
         $paymentId = 1;
         $customerId = 1;
-        $createdAt = '30-02-2017';
+        $gatewayToken = 'xs4vf3';
         $publicHash = 'existing-token';
         $duplicateTokenData = [
             'entity_id' => $entityId
@@ -414,19 +414,19 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(['data' => $duplicateTokenData])
             ->willReturn($duplicateToken);
-        $tokenMock->expects(static::once())
+        $tokenMock->expects(static::atLeastOnce())
             ->method('getIsVisible')
             ->willReturn(false);
-        $tokenMock->expects(static::once())
+        $tokenMock->expects(static::atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $tokenMock->expects(static::once())
-            ->method('getCreatedAt')
-            ->willReturn($createdAt);
+        $tokenMock->expects(static::atLeastOnce())
+            ->method('getGatewayToken')
+            ->willReturn($gatewayToken);
 
         $this->encryptorMock->expects(static::once())
             ->method('getHash')
-            ->with($publicHash . $createdAt)
+            ->with($publicHash . $gatewayToken)
             ->willReturn($newHash);
         $tokenMock->expects(static::once())
             ->method('setPublicHash')
@@ -435,11 +435,11 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
         $this->paymentTokenRepositoryMock->expects(self::once())
             ->method('save')
             ->with($tokenMock);
-        $tokenMock->expects(static::once())
+        $tokenMock->expects(static::atLeastOnce())
             ->method('getEntityId')
             ->willReturn($newEntityId);
 
-        $paymentMock->expects(self::once())
+        $paymentMock->expects(self::atLeastOnce())
             ->method('getEntityId')
             ->willReturn($paymentId);
         $this->paymentTokenResourceModelMock->expects(static::once())

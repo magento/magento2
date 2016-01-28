@@ -16,7 +16,6 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
-use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\BraintreeTwo\Gateway\Config\Config;
@@ -59,10 +58,6 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory|MockObject
      */
     private $paymentExtensionFactory;
-    /**
-     * @var VaultPaymentInterface|MockObject
-     */
-    private $vaultPayment;
 
     /**
      * @var SubjectReader|MockObject
@@ -102,8 +97,6 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__wakeup'])
             ->getMock();
 
-        $this->vaultPayment = $this->getMock(VaultPaymentInterface::class);
-
         $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -130,7 +123,6 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($mapperArray);
 
         $this->paymentHandler = new VaultDetailsHandler(
-            $this->vaultPayment,
             $this->paymentTokenFactory,
             $this->paymentExtensionFactory,
             $this->config,
@@ -143,10 +135,6 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testHandle()
     {
-        $this->vaultPayment->expects(self::once())
-            ->method('isActiveForPayment')
-            ->willReturn(true);
-
         $this->paymentExtension->expects(self::once())
             ->method('setVaultPaymentToken')
             ->with($this->paymentToken);
