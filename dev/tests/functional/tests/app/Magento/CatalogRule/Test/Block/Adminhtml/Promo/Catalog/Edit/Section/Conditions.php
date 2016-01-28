@@ -3,17 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab;
+namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Mtf\Client\Locator;
-use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
- * Form Tab for specifying catalog price rule conditions.
+ * Form section for specifying catalog price rule conditions.
  */
-class Conditions extends Tab
+class Conditions extends Section
 {
     /**
      * Add button.
