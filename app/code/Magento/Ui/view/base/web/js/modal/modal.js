@@ -44,6 +44,7 @@ define([
         options: {
             type: 'popup',
             title: '',
+            subTitle: '',
             modalClass: '',
             focus: '[data-role="closeBtn"]',
             autoOpen: false,
@@ -56,6 +57,8 @@ define([
             innerScrollClass: '_inner-scroll',
             responsive: false,
             innerScroll: false,
+            modalTitle: '[data-role="title"]',
+            modalSubTitle: '[data-role="subTitle"]',
             modalBlock: '[data-role="modal"]',
             modalCloseBtn: '[data-role="closeBtn"]',
             modalContent: '[data-role="content"]',
@@ -172,6 +175,29 @@ define([
             if (this.keyEventHandlers.hasOwnProperty(key)) {
                 this.keyEventHandlers[key].apply(this, arguments);
             }
+        },
+
+        /**
+         * Set title for modal.
+         *
+         * @param {String} title
+         */
+        setTitle: function (title) {
+            var $title = $(this.options.modalTitle),
+                $subTitle = this.modal.find(this.options.modalSubTitle);
+
+            $title.text(title);
+            $title.append($subTitle);
+        },
+
+        /**
+         * Set sub title for modal.
+         *
+         * @param {String} subTitle
+         */
+        setSubTitle: function (subTitle) {
+            this.options.subTitle = subTitle;
+            this.modal.find(this.options.modalSubTitle).html(subTitle);
         },
 
         /**

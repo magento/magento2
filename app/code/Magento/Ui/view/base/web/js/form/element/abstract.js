@@ -154,7 +154,7 @@ define([
             }
 
             _.extend(this.additionalClasses, {
-                required: this.required,
+                _required: this.required,
                 _error: this.error,
                 _warn: this.warn,
                 _disabled: this.disabled

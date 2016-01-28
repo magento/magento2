@@ -90,10 +90,9 @@ define([
         initAdapter: function () {
             adapter.on({
                 'reset': this.reset.bind(this),
-                'overload': this.overload.bind(this),
-                'save': this.save.bind(this, true),
-                'saveAndContinue': this.save.bind(this, false),
-                'saveAndApply': this.saveAndApply.bind(this, true)
+                'save': this.save.bind(this, true, {}),
+                'saveAndContinue': this.save.bind(this, false, {}),
+                'saveAndApply': this.saveAndApply.bind(this, true, {})
             }, this.selectorPrefix, this.eventPrefix);
 
             return this;
@@ -107,7 +106,6 @@ define([
         destroyAdapter: function () {
             adapter.off([
                 'reset',
-                'overload',
                 'save',
                 'saveAndContinue'
             ], this.eventPrefix);
@@ -130,13 +128,29 @@ define([
          * Validate and save form.
          *
          * @param {String} redirect
+         * @param {Object} data
          */
-        save: function (redirect) {
+        save: function (redirect, data) {
             this.validate();
 
             if (!this.source.get('params.invalid')) {
-                this.submit(redirect);
+                this.setAdditionalData(data)
+                    .submit(redirect);
             }
+        },
+
+        /**
+         * Set additional data to source before form submit and after validation.
+         *
+         * @param {Object} data
+         * @returns {Object}
+         */
+        setAdditionalData: function (data) {
+            _.each(data, function (value, name) {
+                this.source.set('data.' + name, value);
+            }, this);
+
+            return this;
         },
 
         /**
@@ -174,6 +188,7 @@ define([
             this.source.trigger('data.validate');
         },
 
+
         /**
          * Trigger reset form data.
          */
@@ -182,12 +197,8 @@ define([
         },
 
         /**
-         * Trigger overload form data.
+         * Save form and apply data
          */
-        overload: function () {
-            this.source.trigger('data.overload');
-        },
-
         saveAndApply: function (redirect) {
             this.validate();
 
@@ -195,6 +206,13 @@ define([
                 this.source.set('data.auto_apply', 1);
                 this.submit(redirect);
             }
+        },
+
+        /**
+         * Trigger overload form data.
+         */
+        overload: function () {
+            this.source.trigger('data.overload');
         }
     });
 });
