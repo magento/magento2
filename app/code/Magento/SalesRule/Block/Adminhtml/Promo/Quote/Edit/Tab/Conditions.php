@@ -21,6 +21,11 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_conditions;
 
     /**
+     * @var string
+     */
+    protected $_nameInLayout = 'conditions_apply_to';
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
