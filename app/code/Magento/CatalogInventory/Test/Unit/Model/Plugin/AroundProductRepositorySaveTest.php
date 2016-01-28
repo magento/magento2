@@ -122,7 +122,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
     }
 
-    public function testAfterSaveWhenProductHasNoStockItemNeedingToBeUpdated()
+    public function testAroundSaveWhenProductHasNoStockItemNeedingToBeUpdated()
     {
         // pretend we have no extension attributes at all
         $this->product->expects($this->once())
@@ -144,7 +144,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterSaveWhenProductHasNoPersistentStockItemInfo()
+    public function testAroundSaveWhenProductHasNoPersistentStockItemInfo()
     {
         // pretend we do have extension attributes, but none for 'stock_item'
         $this->product->expects($this->once())
@@ -177,7 +177,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterSave()
+    public function testAroundSave()
     {
         $productId = 5494;
         $websiteId = 1;
@@ -242,7 +242,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid stock id: 100500. Only default stock with id 50 allowed
      */
-    public function testAfterSaveWithInvalidStockId()
+    public function testAroundSaveWithInvalidStockId()
     {
         $stockId = 100500;
         $defaultScopeId = 100;
@@ -276,7 +276,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid stock item id: 0. Should be null or numeric value greater than 0
      */
-    public function testAfterSaveWithInvalidStockItemId()
+    public function testAroundSaveWithInvalidStockItemId()
     {
         $stockId = 80;
         $stockItemId = 0;
@@ -315,7 +315,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid stock item id: 35. Assigned stock item id is 40
      */
-    public function testAfterSaveWithNotAssignedStockItemId()
+    public function testAroundSaveWithNotAssignedStockItemId()
     {
         $stockId = 80;
         $stockItemId = 35;
