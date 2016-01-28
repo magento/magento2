@@ -13,7 +13,6 @@ use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -94,12 +93,8 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
 
             try {
                 $this->customerRepository->save($customer);
-            } catch (AuthenticationException $e) {
-                $this->messageManager->addError($e->getMessage());
-            } catch (InputException $e) {
-                $this->messageManager->addException($e, __('Invalid input'));
             } catch (LocalizedException $e) {
-                $this->messageManager->addException($e, __('Invalid input'));
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
