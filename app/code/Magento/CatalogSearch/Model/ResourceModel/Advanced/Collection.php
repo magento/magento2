@@ -213,8 +213,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Add attributes that have a range (from,to) to the SearchCriteriaBuilder.
      *
-     * @param $attributeCode
-     * @param $attributeValue
+     * @param string $attributeCode
+     * @param array|string $attributeValue
+     * @return void
      */
     private function addRangeAttributeToSearch($attributeCode, $attributeValue)
     {
