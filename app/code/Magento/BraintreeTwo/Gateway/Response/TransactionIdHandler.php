@@ -57,6 +57,7 @@ class TransactionIdHandler implements HandlerInterface
     /**
      * @param Payment $orderPayment
      * @param \Braintree\Transaction $transaction
+     * @return void
      */
     protected function setTransactionId(Payment $orderPayment, \Braintree\Transaction $transaction)
     {

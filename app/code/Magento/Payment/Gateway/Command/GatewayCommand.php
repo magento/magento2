@@ -19,6 +19,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class GatewayCommand
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GatewayCommand implements CommandInterface
 {
@@ -80,7 +81,7 @@ class GatewayCommand implements CommandInterface
      * Executes command basing on business object
      *
      * @param array $commandSubject
-     * @return null
+     * @return void
      * @throws CommandException
      */
     public function execute(array $commandSubject)
@@ -113,6 +114,7 @@ class GatewayCommand implements CommandInterface
 
     /**
      * @param Phrase[] $fails
+     * @return void
      */
     private function logExceptions(array $fails)
     {

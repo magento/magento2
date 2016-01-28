@@ -39,6 +39,6 @@ class CanVoidHandler implements ValueHandlerInterface
         $paymentDO = $this->subjectReader->readPayment($subject);
 
         $payment = $paymentDO->getPayment();
-        return !$payment instanceof Payment|| !(bool)$payment->getAmountPaid();
+        return !$payment instanceof Payment || !(bool)$payment->getAmountPaid();
     }
 }
