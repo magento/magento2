@@ -99,7 +99,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             } catch (InputException $e) {
                 $this->messageManager->addException($e, __('Invalid input'));
             } catch (LocalizedException $e) {
-                $this->messageManager->addException($e, $e->getMessage());
+                $this->messageManager->addException($e, __('Invalid input'));
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
