@@ -140,7 +140,7 @@ class SecurityManager
      * @throws UserLockedException
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    public function adminSecurityCheck(\Magento\User\Model\User $user, $passwordString)
+    public function adminIdentityCheck(\Magento\User\Model\User $user, $passwordString)
     {
         $isCheckSuccessful = $this->performIdentityCheck($user ,$passwordString);
         $this->eventManager->dispatch(
@@ -167,6 +167,8 @@ class SecurityManager
     }
 
     /**
+     * Identity check
+     *
      * @param \Magento\User\Model\User $user
      * @param string $passwordString
      * @return bool

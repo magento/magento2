@@ -11,31 +11,6 @@ use Magento\Framework\Exception\State\UserLockedException;
 class Save extends \Magento\User\Controller\Adminhtml\User
 {
     /**
-     * Session keys for Info form data
-     */
-    const USER_EDIT_FORM_DATA_SESSION_KEY = 'user_edit_form_data';
-
-    /**
-     * Session keys for Users form data
-     */
-    const IN_ROLE_USER_FORM_DATA_SESSION_KEY = 'in_role_user_form_data';
-
-    /**
-     * Session keys for original Users form data
-     */
-    const IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY = 'in_role_old_user_form_data';
-
-    /**
-     * Session keys for Use all resources flag form data
-     */
-    const RESOURCE_ALL_FORM_DATA_SESSION_KEY = 'resource_all_form_data';
-
-    /**
-     * Session keys for Resource form data
-     */
-    const RESOURCE_FORM_DATA_SESSION_KEY = 'resource_form_data';
-
-    /**
      * Backend auth session
      *
      * @var \Magento\Backend\Model\Auth\Session
@@ -123,7 +98,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             if (!($isCurrentUserPasswordValid)) {
                 throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
-            $this->securityManager->adminSecurityCheck($currentUser, $data[$currentUserPasswordField]);
+            $this->securityManager->adminIdentityCheck($currentUser, $data[$currentUserPasswordField]);
             $model->save();
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);

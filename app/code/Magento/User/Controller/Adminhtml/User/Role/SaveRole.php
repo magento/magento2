@@ -112,13 +112,12 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             return $resultRedirect->setPath('adminhtml/*/');
         }
 
-
         try {
             $password = $this->getRequest()->getParam(
                 \Magento\User\Block\Role\Tab\Info::IDENTITY_VERIFICATION_PASSWORD_FIELD
             );
             $user = $this->_auth->getUser();
-            $this->securityManager->adminSecurityCheck($user, $password);
+            $this->securityManager->adminIdentityCheck($user, $password);
             $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
             $role->setName($roleName)
                 ->setPid($this->getRequest()->getParam('parent_id', false))
