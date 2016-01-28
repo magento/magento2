@@ -7,6 +7,9 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * @method Attribute _getResource()
@@ -26,7 +29,30 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     const KEY_IS_USE_DEFAULT = 'is_use_default';
     const KEY_VALUES = 'values';
     const KEY_PRODUCT_ID = 'product_id';
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
     /**#@-*/
+
+
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
+        MetadataPool $metadataPool,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        $this->metadataPool = $metadataPool;
+        parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $resource,
+            $resourceCollection, $data);
+    }
+
+
 
     /**
      * Initialize resource model
@@ -82,7 +108,12 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function loadByProductAndAttribute($product, $attribute)
     {
-        $id = $this->_getResource()->getIdByProductIdAndAttributeId($this, $product->getId(), $attribute->getId());
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $id = $this->_getResource()->getIdByProductIdAndAttributeId(
+            $this,
+            $product->getData($metadata->getLinkField()),
+            $attribute->getId()
+        );
         if ($id) {
             $this->load($id);
         }
@@ -96,7 +127,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function deleteByProduct($product)
     {
-        $this->_getResource()->deleteAttributesByProductId($product->getId());
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $this->_getResource()->deleteAttributesByProductId($product->getData($metadata->getLinkField()));
     }
 
     /**
