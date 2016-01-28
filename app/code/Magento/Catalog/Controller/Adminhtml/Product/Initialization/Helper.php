@@ -167,7 +167,13 @@ class Helper
             }
         }
         $product = $this->productLinks->initializeLinks($product, $links);
-        $productLinks = $product->getProductLinks();
+        $productLinks = [];
+        $savedLinksByType = [];
+        foreach ($product->getProductLinks() as $link) {
+            $savedLinksByType[$link->getLinkType()][] = $link;
+        }
+        $this->dropRelationProductsCache($product);
+
         $linkTypes = [
             'related' => $product->getRelatedReadonly(),
             'upsell' => $product->getUpsellReadonly(),
@@ -184,7 +190,18 @@ class Helper
                         ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
                     $productLinks[] = $link;
                 }
+            } else {
+                if (array_key_exists($linkType, $savedLinksByType)) {
+                    $productLinks = array_merge($productLinks, $savedLinksByType[$linkType]);
+                }
             }
+            if (isset($savedLinksByType[$linkType])) {
+                unset($savedLinksByType[$linkType]);
+            }
+        }
+
+        foreach ($savedLinksByType as $links) {
+            $productLinks = array_merge($productLinks, $links);
         }
         $product->setProductLinks($productLinks);
 
@@ -240,5 +257,19 @@ class Helper
         }
 
         return $options;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return void
+     */
+    private function dropRelationProductsCache(\Magento\Catalog\Model\Product $product)
+    {
+        $product->unsetData('up_sell_products');
+        $product->unsetData('up_sell_products_ids');
+        $product->unsetData('related_products');
+        $product->unsetData('related_products_ids');
+        $product->unsetData('cross_sell_products');
+        $product->unsetData('cross_sell_products_ids');
     }
 }
