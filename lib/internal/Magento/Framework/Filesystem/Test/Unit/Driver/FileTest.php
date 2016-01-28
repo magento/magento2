@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
-use \Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\Driver\File;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {

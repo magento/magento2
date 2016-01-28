@@ -52,7 +52,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getLabel()
     {
-        return  __('Export VCL for Varnish %1', $this->getVarnishVersion());;
+        return  __('Export VCL for Varnish %1', $this->getVarnishVersion());
     }
 
     /**
