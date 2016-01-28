@@ -194,14 +194,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private function addAttributeToSearch($attributeCode, $attributeValue)
     {
         if (isset($attributeValue['from']) || isset($attributeValue['to'])) {
-            if (isset($attributeValue['from']) && '' !== $attributeValue['from']) {
-                $this->filterBuilder->setField("{$attributeCode}.from")->setValue($attributeValue['from']);
-                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
-            }
-            if (isset($attributeValue['to']) && '' !== $attributeValue['to']) {
-                $this->filterBuilder->setField("{$attributeCode}.to")->setValue($attributeValue['to']);
-                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
-            }
+            $this->addRangeAttributeToSearch($attributeCode, $attributeValue);
         } elseif (!is_array($attributeValue)) {
             $this->filterBuilder->setField($attributeCode)->setValue($attributeValue);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
@@ -209,10 +202,28 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->filterBuilder->setField($attributeCode)->setValue($attributeValue['like']);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         } elseif (isset($attributeValue['in'])) {
-            $this->filterBuilder->setField($attributeCode)->setValue( $attributeValue['in']);
+            $this->filterBuilder->setField($attributeCode)->setValue($attributeValue['in']);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         } elseif (isset($attributeValue['in_set'])) {
             $this->filterBuilder->setField($attributeCode)->setValue($attributeValue['in_set']);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        }
+    }
+
+    /**
+     * Add attributes that have a range (from,to) to the SearchCriteriaBuilder.
+     *
+     * @param $attributeCode
+     * @param $attributeValue
+     */
+    private function addRangeAttributeToSearch($attributeCode, $attributeValue)
+    {
+        if (isset($attributeValue['from']) && '' !== $attributeValue['from']) {
+            $this->filterBuilder->setField("{$attributeCode}.from")->setValue($attributeValue['from']);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        }
+        if (isset($attributeValue['to']) && '' !== $attributeValue['to']) {
+            $this->filterBuilder->setField("{$attributeCode}.to")->setValue($attributeValue['to']);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         }
     }
