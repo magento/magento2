@@ -7,14 +7,39 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:include schemaLocation="urn:magento:framework-message-queue:etc/queue_base.xsd" />
+    <xs:include schemaLocation="urn:magento:framework-message-queue:etc/queue_base_deprecated.xsd" />
     <xs:element name="config">
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element name="publisher" type="publisherType"/>
-                <xs:element name="topic" type="topicType"/>
-                <xs:element name="consumer" type="consumerType"/>
-                <xs:element name="bind" type="bindType"/>
                 <xs:element name="broker" type="brokerType"/>
+                <xs:element name="publisher" type="publisherType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            @deprecated
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="topic" type="topicType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            @deprecated
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="consumer" type="consumerType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            @deprecated
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="bind" type="bindType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            @deprecated
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
             </xs:choice>
         </xs:complexType>
         <xs:unique name="consumer-unique-name">
