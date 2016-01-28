@@ -11,13 +11,6 @@ use Magento\Framework\Exception\State\UserLockedException;
 class Save extends \Magento\User\Controller\Adminhtml\User
 {
     /**
-     * Backend auth session
-     *
-     * @var \Magento\Backend\Model\Auth\Session
-     */
-    protected $_authSession;
-
-    /**
      * @var \Magento\Security\Helper\SecurityCookie
      */
     protected $securityCookieHelper;
@@ -31,7 +24,6 @@ class Save extends \Magento\User\Controller\Adminhtml\User
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\User\Model\UserFactory $userFactory
-     * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
      * @param \Magento\Security\Model\SecurityManager $securityManager
      */
@@ -39,12 +31,10 @@ class Save extends \Magento\User\Controller\Adminhtml\User
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\User\Model\UserFactory $userFactory,
-        \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
         \Magento\Security\Model\SecurityManager $securityManager
     ) {
         parent::__construct($context, $coreRegistry, $userFactory);
-        $this->_authSession = $authSession;
         $this->securityCookieHelper = $securityCookieHelper;
         $this->securityManager = $securityManager;
     }
