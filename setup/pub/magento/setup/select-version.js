@@ -5,7 +5,7 @@
 
 'use strict';
 angular.module('select-version', ['ngStorage'])
-    .controller('selectVersionController', ['$scope', '$http', '$localStorage', function ($scope, $http, $localStorage) {
+    .controller('selectVersionController', ['$scope', '$http', '$localStorage', '$sce', function ($scope, $http, $localStorage, $sce) {
         $scope.packages = [{
             name: '',
             version: ''
@@ -13,6 +13,7 @@ angular.module('select-version', ['ngStorage'])
         $scope.upgradeReadyForNext = false;
         $scope.upgradeProcessed = false;
         $scope.upgradeProcessError = false;
+        $scope.upgradeProcessErrorMessage = '';
         $scope.componentsReadyForNext = true;
         $scope.componentsProcessed = false;
         $scope.componentsProcessError = false;
@@ -54,6 +55,7 @@ angular.module('select-version', ['ngStorage'])
 
                 } else {
                     $scope.upgradeProcessError = true;
+                    $scope.upgradeProcessErrorMessage = $sce.trustAsHtml(data.error);
                 }
                 $scope.upgradeProcessed = true;
             })

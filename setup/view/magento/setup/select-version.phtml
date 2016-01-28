@@ -39,9 +39,7 @@
         <span class="message-text">Checking for a new version...</span>
     </div>
     <div class="message message-error" ng-show="upgradeProcessError">
-            <span class="message-text">
-                Sorry, we can't take that action right now.
-            </span>
+            <span class="message-text" ng-bind-html="upgradeProcessErrorMessage"></span>
     </div>
     <div class="row" ng-show="upgradeProcessed && !upgradeProcessError">
         <div class="col-m-3">
