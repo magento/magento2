@@ -146,7 +146,7 @@ define([
         },
 
         /**
-         * @return {exports}
+         * @returns {Element}
          */
         setInitialValue: function () {
             if (_.isEmpty(this.valueMap)) {

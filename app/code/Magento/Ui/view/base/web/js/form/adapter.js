@@ -12,7 +12,7 @@ define([
         'reset':            '#reset',
         'save':             '#save',
         'saveAndContinue':  '#save_and_continue',
-        'saveAndApply': '#save_and_apply'
+        'saveAndApply':     '#save_and_apply'
         },
         selectorPrefix = '',
         eventPrefix;

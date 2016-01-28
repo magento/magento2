@@ -13,6 +13,7 @@ define([
 
     return Insert.extend({
         defaults: {
+            externalListingName: '${ $.ns }.${ $.ns }',
             behaviourType: 'simple',
             externalFilterMode: false,
             externalCondition: 'nin',
@@ -25,16 +26,19 @@ define([
             },
             imports: {
                 onSelectedChange: '${ $.selectionsProvider }:selected',
-                'update_url': '${ $.externalProvider }:update_url'
+                'update_url': '${ $.externalProvider }:update_url',
+                'indexField': '${ $.selectionsProvider }:indexField'
             },
             exports: {
                 externalFiltersModifier: '${ $.externalProvider }:params.filters_modifier'
             },
             listens: {
-                value: 'updateExternalFiltersModifier updateSelections'
+                externalValue: 'updateExternalFiltersModifier updateSelections',
+                indexField: 'initialUpdateListing'
             },
             modules: {
-                selections: '${ $.selectionsProvider }'
+                selections: '${ $.selectionsProvider }',
+                externalListing: '${ $.externalListingName }'
             }
         },
 
@@ -71,6 +75,15 @@ define([
                 ]);
         },
 
+        /** @inheritdoc */
+        destroyInserted: function () {
+            if (this.isRendered) {
+                this.externalListing().destroy();
+            }
+
+            return this._super();
+        },
+
         /**
          * Store data from edited record
          *
@@ -89,10 +102,11 @@ define([
         /**
          * Updates externalValue every time row is selected,
          * if it is configured by 'dataLinks.imports'
+         * Also suppress dataLinks so import/export of selections will not activate each other in circle
          *
          */
         onSelectedChange: function () {
-            if (!this.dataLinks.imports || this.suppressDataLinks) {
+            if (!this.dataLinks.imports || this.suppressDataLinks || !this.initialExportDone) {
                 this.suppressDataLinks = false;
 
                 return;
@@ -126,9 +140,9 @@ define([
 
             updatedExtValue = this.externalValue();
             updatedExtValue.map(function (item) {
-                _.extend(item, this.editableData[item[item['id_field_name']]]);
+                _.extend(item, this.editableData[item[this.indexField]]);
             }, this);
-            this.externalValue(updatedExtValue);
+            this.setExternalValue(updatedExtValue);
         },
 
         /**
@@ -140,27 +154,26 @@ define([
         updateExternalValue: function () {
             var result = $.Deferred(),
                 provider = this.selections(),
-                selections = provider && provider.getSelections(),
-                itemsType = selections && selections.excludeMode ? 'excluded' : 'selected',
-                index = provider && provider.indexField,
-                rows = provider && provider.rows(),
-                canUpdateFromSelection;
+                selections,
+                totalSelected,
+                itemsType,
+                rows;
 
             if (!provider) {
                 return result;
             }
 
-            canUpdateFromSelection =
-                itemsType === 'selected' &&
-                _.intersection(_.pluck(rows, index), selections.selected).length ===
-                selections.selected.length;
+            selections = provider && provider.getSelections();
+            totalSelected = provider.totalSelected();
+            itemsType = selections && selections.excludeMode ? 'excluded' : 'selected';
+            rows = provider && provider.rows();
 
-            if (canUpdateFromSelection) {
-                this.updateFromSelectionData(selections, index, rows);
+            if (this.canUpdateFromClientData(totalSelected, selections.selected, rows)) {
+                this.updateFromClientData(selections.selected, rows);
                 this.updateExternalValueByEditableData();
                 result.resolve();
             } else {
-                this.updateFromServerData(selections, index, itemsType).done(function () {
+                this.updateFromServerData(selections, itemsType).done(function () {
                     this.updateExternalValueByEditableData();
                     result.resolve();
                 }.bind(this));
@@ -170,51 +183,121 @@ define([
         },
 
         /**
-         * Updates externalValue, from selectionsProvider data
+         * Check if the selected rows data can be taken from selectionsProvider data
+         * (which only stores data of the current page rows)
+         *  + from already saved data
          *
-         * @param {Object} selections
-         * @param {Number} index
+         * @param {Boolean} totalSelected - total rows selected (include rows that were filtered out)
+         * @param {Array} selected - ids of selected rows
          * @param {Object} rows
          */
-        updateFromSelectionData: function (selections, index, rows) {
-            rows = selections.selected && selections.selected.length ?
-                _.filter(rows, function (row) {
-                    return _.contains(selections.selected, row[index]);
-                }) : [];
-            this.set('externalValue', rows);
+        canUpdateFromClientData: function (totalSelected, selected, rows) {
+            var alreadySavedSelectionsIds = _.pluck(this.externalValue(), this.indexField),
+                rowsOnCurrentPageIds = _.pluck(rows, this.indexField);
+
+            return totalSelected === selected.length &&
+                _.intersection(_.union(alreadySavedSelectionsIds, rowsOnCurrentPageIds), selected).length ===
+                selected.length;
+        },
+
+        /**
+         * Updates externalValue, from selectionsProvider data
+         * (which only stores data of the current page rows)
+         *  + from already saved data
+         *  so we can avoid request to server
+         *
+         * @param {Array} selected - ids of selected rows
+         * @param {Object} rows
+         */
+        updateFromClientData: function (selected, rows) {
+            var value,
+                rowIds,
+                valueIds;
+
+            if (!selected || !selected.length) {
+                this.setExternalValue([]);
+
+                return;
+            }
+
+            value = this.externalValue();
+            rowIds = _.pluck(rows, this.indexField);
+            valueIds = _.pluck(value, this.indexField);
+
+            value = _.map(selected, function (item) {
+                if (_.contains(rowIds, item)) {
+                    return _.find(rows, function (row) {
+                        return row[this.indexField] === item;
+                    }, this);
+                } else if (_.contains(valueIds, item)) {
+                    return _.find(value, function (row) {
+                        return row[this.indexField] === item;
+                    }, this);
+                }
+            }, this);
+
+            this.setExternalValue(value);
         },
 
         /**
          * Updates externalValue, from ajax request to grab selected rows data
          *
          * @param {Object} selections
-         * @param {Number} index
          * @param {String} itemsType
          *
          * @returns {Object} request - deferred that will be resolved when ajax is done
          */
-        updateFromServerData: function (selections, index, itemsType) {
+        updateFromServerData: function (selections, itemsType) {
             var filterType = selections && selections.excludeMode ? 'nin' : 'in',
                 selectionsData = {},
                 request;
 
             selectionsData['filters_modifier'] = {};
-            selectionsData['filters_modifier'][index] = {
+            selectionsData['filters_modifier'][this.indexField] = {
                 'condition_type': filterType,
                 value: selections[itemsType]
             };
-
             _.extend(selectionsData, this.params || {}, selections.params);
+            selectionsData.filters = {};
 
             request = this.requestData(selectionsData);
             request
                 .done(function (data) {
-                    this.set('externalValue', data.items || data);
+                    this.setExternalValue(data.items || data);
                     this.loading(false);
                 }.bind(this))
                 .fail(this.onError);
 
             return request;
+        },
+
+        /**
+         * Set listing rows data to the externalValue,
+         * or if externalData is configured with the names of particular columns,
+         * filter rows data to have only these columns, and then set to the externalValue
+         *
+         * @param {Object} newValue - rows data
+         *
+         */
+        setExternalValue: function (newValue) {
+            var keys = this.externalData,
+                value = this.externalValue(),
+                selectedIds = _.pluck(newValue, this.indexField);
+
+            if (keys && !_.isEmpty(keys)) {
+                newValue = _.map(value, function (item) {
+                    return _.pick(item, keys);
+                }, this);
+            }
+
+            if (this.externalFilterMode) {
+                newValue = _.union(newValue, _.filter(value,
+                    function (item) {
+                        return !_.contains(selectedIds, item[this.indexField]);
+                    }, this));
+            }
+
+            this.set('externalValue', newValue);
         },
 
         /**
@@ -226,7 +309,6 @@ define([
          */
         updateExternalFiltersModifier: function (items) {
             var provider,
-                index,
                 filter = {};
 
             if (!this.externalFilterMode) {
@@ -234,10 +316,16 @@ define([
             }
 
             provider = this.selections();
-            index = provider && provider.indexField;
-            filter[provider.indexField] = {
+
+            if (!provider) {
+                this.needInitialListingUpdate = true;
+
+                return;
+            }
+
+            filter[this.indexField] = {
                 'condition_type': this.externalCondition,
-                value: _.pluck(items, index)
+                value: _.pluck(items, this.indexField)
             };
             this.set('externalFiltersModifier', filter);
         },
@@ -246,21 +334,59 @@ define([
          * Updates grid selections
          * every time, when extenalValue is updated,
          * so grid is re-selected according to externalValue updated
+         * Also suppress dataLinks so import/export of selections will not activate each other in circle
          *
+         * @param {Object} items
          */
-        updateSelections: function () {
-            var provider = this.selections(),
+        updateSelections: function (items) {
+            var provider,
                 ids;
 
             if (!this.dataLinks.exports || this.suppressDataLinks) {
                 this.suppressDataLinks = false;
+                this.initialExportDone = true;
+
+                return;
+            }
+
+            provider = this.selections();
+
+            if (!provider) {
+                this.needInitialListingUpdate = true;
 
                 return;
             }
 
             this.suppressDataLinks = true;
-            ids = _.pluck(this.value() || [], provider.indexField);
+            ids = _.pluck(items || [], this.indexField)
+                .map(function (item) {
+                    return item.toString();
+                });
+            provider.deselectAll();
             provider.selected(ids || []);
+            this.initialExportDone = true;
+        },
+
+        /**
+         * initial update of the listing
+         * with rows that must be checked/filtered
+         * by the indexes
+         */
+        initialUpdateListing: function () {
+            var items = this.externalValue();
+
+            if (this.needInitialListingUpdate && items) {
+                this.updateExternalFiltersModifier(items);
+                this.updateSelections(items);
+                this.needInitialListingUpdate = false;
+            }
+        },
+
+        /**
+         * Reload source
+         */
+        reload: function () {
+            this.externalSource().set('params.t', new Date().getTime());
         },
 
         /**
@@ -287,7 +413,13 @@ define([
          *
          */
         save: function () {
-            this.updateExternalValue().done(this.updateValue);
+            this.updateExternalValue().done(
+                function () {
+                    if (!this.realTimeLink) {
+                        this.updateValue();
+                    }
+                }.bind(this)
+            );
         }
     });
 });
