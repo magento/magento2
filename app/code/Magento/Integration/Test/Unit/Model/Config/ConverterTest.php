@@ -15,18 +15,18 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Converter
      */
-    protected $_model;
+    protected $model;
 
     public function setUp()
     {
-        $this->_model = new Converter();
+        $this->model = new Converter();
     }
 
     public function testConvert()
     {
         $inputData = new \DOMDocument();
-        $inputData->load(__DIR__ . '/_files/integration.xml');
+        $inputData->load(__DIR__ . '/_files/config.xml');
         $expectedResult = require __DIR__ . '/_files/integration.php';
-        $this->assertEquals($expectedResult, $this->_model->convert($inputData));
+        $this->assertEquals($expectedResult, $this->model->convert($inputData));
     }
 }
