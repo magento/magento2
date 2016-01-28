@@ -6,9 +6,74 @@
 namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\State\UserLockedException;
 
 class Save extends \Magento\User\Controller\Adminhtml\User
 {
+    /**
+     * Session keys for Info form data
+     */
+    const USER_EDIT_FORM_DATA_SESSION_KEY = 'user_edit_form_data';
+
+    /**
+     * Session keys for Users form data
+     */
+    const IN_ROLE_USER_FORM_DATA_SESSION_KEY = 'in_role_user_form_data';
+
+    /**
+     * Session keys for original Users form data
+     */
+    const IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY = 'in_role_old_user_form_data';
+
+    /**
+     * Session keys for Use all resources flag form data
+     */
+    const RESOURCE_ALL_FORM_DATA_SESSION_KEY = 'resource_all_form_data';
+
+    /**
+     * Session keys for Resource form data
+     */
+    const RESOURCE_FORM_DATA_SESSION_KEY = 'resource_form_data';
+
+    /**
+     * Backend auth session
+     *
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    protected $_authSession;
+
+    /**
+     * @var \Magento\Security\Helper\SecurityCookie
+     */
+    protected $securityCookieHelper;
+
+    /**
+     * @var \Magento\Security\Model\SecurityManager
+     */
+    protected $securityManager;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+     * @param \Magento\Security\Model\SecurityManager $securityManager
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\User\Model\UserFactory $userFactory,
+        \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
+        \Magento\Security\Model\SecurityManager $securityManager
+    ) {
+        parent::__construct($context, $coreRegistry, $userFactory);
+        $this->_authSession = $authSession;
+        $this->securityCookieHelper = $securityCookieHelper;
+        $this->securityManager = $securityManager;
+    }
+
     /**
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -55,13 +120,23 @@ class Save extends \Magento\User\Controller\Adminhtml\User
         $isCurrentUserPasswordValid = isset($data[$currentUserPasswordField])
             && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
         try {
-            if (!($isCurrentUserPasswordValid && $currentUser->verifyIdentity($data[$currentUserPasswordField]))) {
+            if (!($isCurrentUserPasswordValid)) {
                 throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
+            $this->securityManager->adminSecurityCheck($currentUser, $data[$currentUserPasswordField]);
             $model->save();
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
+        } catch (UserLockedException $e) {
+            $this->_auth->logout();
+            $this->securityCookieHelper->setLogoutReasonCookie(
+                \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+            );
+            $this->_redirect('adminhtml/*/');
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            $this->redirectToEdit($model, $data);
         } catch (\Magento\Framework\Validator\Exception $e) {
             $messages = $e->getMessages();
             $this->messageManager->addMessages($messages);
