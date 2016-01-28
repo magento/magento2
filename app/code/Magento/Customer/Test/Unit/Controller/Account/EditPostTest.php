@@ -454,16 +454,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'counter' => 1,
-                'message' => 'AuthenticationException',
-                'exception' => '\Magento\Framework\Exception\AuthenticationException',
-            ],
-            [
-                'counter' => 1,
-                'message' => 'InputException',
-                'exception' => '\Magento\Framework\Exception\InputException',
-            ],
-            [
-                'counter' => 1,
                 'message' => 'LocalizedException',
                 'exception' => '\Magento\Framework\Exception\LocalizedException',
             ],
