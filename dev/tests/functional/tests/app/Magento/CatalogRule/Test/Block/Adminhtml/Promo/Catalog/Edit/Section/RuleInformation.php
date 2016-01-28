@@ -3,16 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab;
+namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section;
 
 use Magento\Customer\Test\Fixture\CustomerGroup;
-use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
- * Rule Information tab.
+ * Rule Information section.
  */
-class RuleInformation extends Tab
+class RuleInformation extends Section
 {
     /**
      * Locator for Customer Group element.
