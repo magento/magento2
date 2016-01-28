@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bbb650af8e8638c3749c06861d2c42ea",
-    "content-hash": "5551914f65cd4a5f604467136dbe8a93",
+    "hash": "14cde9a911c97dfb8b8d65aa2fc37a9f",
+    "content-hash": "3ca6f21142f50665ed50595bfb546c41",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -53,6 +53,83 @@
             ],
             "description": "Braintree PHP Client Library",
             "time": "2015-11-19 19:14:47"
+        },
+        {
+            "name": "colinmollenhour/credis",
+            "version": "1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/colinmollenhour/credis.git",
+                "reference": "409edfd0ea81f5cb74afbdb86df54890c207b5e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/409edfd0ea81f5cb74afbdb86df54890c207b5e4",
+                "reference": "409edfd0ea81f5cb74afbdb86df54890c207b5e4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Client.php",
+                    "Cluster.php",
+                    "Sentinel.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Colin Mollenhour",
+                    "email": "colin@mollenhour.com"
+                }
+            ],
+            "description": "Credis is a lightweight interface to the Redis key-value store which wraps the phpredis library when available for better performance.",
+            "homepage": "https://github.com/colinmollenhour/credis",
+            "time": "2015-11-28 01:20:04"
+        },
+        {
+            "name": "colinmollenhour/php-redis-session-abstract",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
+                "reference": "1308ddc08e2adbe303f7f8b8ead9beb5f2f2adf9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/1308ddc08e2adbe303f7f8b8ead9beb5f2f2adf9",
+                "reference": "1308ddc08e2adbe303f7f8b8ead9beb5f2f2adf9",
+                "shasum": ""
+            },
+            "require": {
+                "colinmollenhour/credis": "1.6",
+                "magento/zendframework1": "1.12.16",
+                "php": "~5.5.0|~5.6.0|~7.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Cm\\RedisSession\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Colin Mollenhour"
+                }
+            ],
+            "description": "A Redis-based session handler with optimistic locking",
+            "homepage": "https://github.com/colinmollenhour/php-redis-session-abstract",
+            "time": "2016-01-14 16:04:27"
         },
         {
             "name": "composer/composer",
@@ -199,8 +276,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/composer/zipball/1be267e71debac6e0d9fae4e5144f6095cffbe89",
-                "reference": "1be267e71debac6e0d9fae4e5144f6095cffbe89",
-                "shasum": ""
+                "reference": null,
+                "shasum": "79156c3e7317af1ff64a482ba90ec81c66b82c73"
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
@@ -216,13 +293,11 @@
                     "Magento\\Composer\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
-            "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2015-10-01 14:39:10"
+            "description": "Magento composer library helps to instantiate Composer application and run composer commands."
         },
         {
             "name": "magento/magento-composer-installer",
@@ -306,12 +381,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "c9d607bfd9454bc18b9deff737ccd5d044e2ab10"
+                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/zf1/zipball/c9d607bfd9454bc18b9deff737ccd5d044e2ab10",
-                "reference": "c9d607bfd9454bc18b9deff737ccd5d044e2ab10",
+                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f",
                 "shasum": ""
             },
             "require": {
@@ -345,7 +420,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-10-29 14:34:55"
+            "time": "2015-09-30 13:04:03"
         },
         {
             "name": "monolog/monolog",
