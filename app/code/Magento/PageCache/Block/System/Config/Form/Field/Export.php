@@ -48,7 +48,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getLabel()
     {
