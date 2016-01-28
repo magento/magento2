@@ -44,6 +44,11 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     protected $securityCookieHelper;
 
     /**
+     * @var \Magento\Security\Model\SecurityManager
+     */
+    protected $securityManager;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
@@ -51,7 +56,8 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param \Magento\Authorization\Model\RulesFactory $rulesFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Security\Helper\SecurityCookie
+     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+     * \Magento\Security\Model\SecurityManager $securityManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -61,7 +67,8 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         \Magento\Authorization\Model\RulesFactory $rulesFactory,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+        \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
+        \Magento\Security\Model\SecurityManager $securityManager
     ) {
         parent::__construct(
             $context,
@@ -73,6 +80,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             $filterManager
         );
         $this->securityCookieHelper = $securityCookieHelper;
+        $this->securityManager = $securityManager;
     }
 
     /**
@@ -104,12 +112,12 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             return $resultRedirect->setPath('adminhtml/*/');
         }
 
-
         try {
             $password = $this->getRequest()->getParam(
                 \Magento\User\Block\Role\Tab\Info::IDENTITY_VERIFICATION_PASSWORD_FIELD
             );
-            $this->securityCheck($password);
+            $user = $this->_auth->getUser();
+            $this->securityManager->adminIdentityCheck($user, $password);
             $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
             $role->setName($roleName)
                 ->setPid($this->getRequest()->getParam('parent_id', false))
@@ -201,55 +209,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             throw $e;
         }
         return true;
-    }
-
-    /**
-     * @param string $passwordString
-     * @return $this
-     * @throws UserLockedException
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     */
-    protected function securityCheck($passwordString)
-    {
-        $isCheckSuccessful = $this->performIdentityCheck($passwordString);
-
-        $user = $this->_auth->getUser();
-        $this->_eventManager->dispatch(
-            'admin_user_authenticate_after',
-            [
-                'username' => $user->getUserName(),
-                'password' => $passwordString,
-                'user' => $user,
-                'result' => $isCheckSuccessful
-            ]
-        );
-        $user = $user->load($user->getId());
-        if ($user->getLockExpires()) {
-            throw new UserLockedException(__('Your account is temporarily disabled.'));
-        }
-
-        if (!$isCheckSuccessful) {
-            throw new \Magento\Framework\Exception\AuthenticationException(
-                __('You have entered an invalid password for current user.')
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $passwordString
-     * @return bool
-     */
-    protected function performIdentityCheck($passwordString)
-    {
-        try {
-            $result = $this->_authSession->getUser()->verifyIdentity($passwordString);
-        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $result = false;
-        }
-
-        return $result;
     }
 
     /**

@@ -6,6 +6,7 @@
 namespace Magento\Security\Model;
 
 use Magento\Framework\Exception\SecurityViolationException;
+use Magento\Framework\Exception\State\UserLockedException;
 
 /**
  * Security Control Manager Model
@@ -38,10 +39,16 @@ class SecurityManager
     protected $securityCheckers;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * SecurityManager constructor.
      * @param \Magento\Security\Helper\SecurityConfig $securityConfig
      * @param \Magento\Security\Model\PasswordResetRequestEventFactory $passwordResetRequestEventModelFactory
      * @param ResourceModel\PasswordResetRequestEvent\CollectionFactory $passwordResetRequestEventCollectionFactory
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param array $securityCheckers
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -49,12 +56,14 @@ class SecurityManager
         \Magento\Security\Helper\SecurityConfig $securityConfig,
         \Magento\Security\Model\PasswordResetRequestEventFactory $passwordResetRequestEventModelFactory,
         ResourceModel\PasswordResetRequestEvent\CollectionFactory $passwordResetRequestEventCollectionFactory,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         $securityCheckers = []
     ) {
         $this->securityConfig = $securityConfig;
         $this->passwordResetRequestEventModelFactory = $passwordResetRequestEventModelFactory;
         $this->passwordResetRequestEventCollectionFactory = $passwordResetRequestEventCollectionFactory;
         $this->securityCheckers = $securityCheckers;
+        $this->eventManager = $eventManager;
 
         foreach ($this->securityCheckers as $checker) {
             if (!($checker instanceof \Magento\Security\Model\SecurityChecker\SecurityCheckerInterface)) {
@@ -120,5 +129,58 @@ class SecurityManager
             ->save();
 
         return $passwordResetRequestEventModel;
+    }
+
+    /**
+     * Security check for admin user
+     *
+     * @param \Magento\User\Model\User $user
+     * @param string $passwordString
+     * @return $this
+     * @throws UserLockedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    public function adminIdentityCheck(\Magento\User\Model\User $user, $passwordString)
+    {
+        $isCheckSuccessful = $this->performIdentityCheck($user ,$passwordString);
+        $this->eventManager->dispatch(
+            'admin_user_authenticate_after',
+            [
+                'username' => $user->getUserName(),
+                'password' => $passwordString,
+                'user' => $user,
+                'result' => $isCheckSuccessful
+            ]
+        );
+        $user = $user->load($user->getId());
+        if ($user->getLockExpires()) {
+            throw new UserLockedException(__('Your account is temporarily disabled.'));
+        }
+
+        if (!$isCheckSuccessful) {
+            throw new \Magento\Framework\Exception\AuthenticationException(
+                __('You have entered an invalid password for current user.')
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Identity check
+     *
+     * @param \Magento\User\Model\User $user
+     * @param string $passwordString
+     * @return bool
+     */
+    protected function performIdentityCheck(\Magento\User\Model\User $user, $passwordString)
+    {
+        try {
+            $result = $user->verifyIdentity($passwordString);
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $result = false;
+        }
+
+        return $result;
     }
 }

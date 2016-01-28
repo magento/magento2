@@ -34,6 +34,11 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
+
+    /**
      * Init mocks for tests
      * @return void
      */
@@ -89,12 +94,23 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->eventManagerMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Event\ManagerInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['dispatch']
+        );
+
         $this->model = $this->objectManager->getObject(
             '\Magento\Security\Model\SecurityManager',
             [
                 'securityConfig' => $this->securityConfigMock,
                 'passwordResetRequestEventModelFactory' => $this->passwordResetRequestEventFactoryMock,
                 'passwordResetRequestEventCollectionFactory' => $this->passwordResetRequestEventCollectionFactoryMock,
+                'eventManager' => $this->eventManagerMock,
                 'securityCheckers' => [$securityChecker]
             ]
         );
@@ -122,6 +138,7 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             $this->securityConfigMock,
             $this->passwordResetRequestEventFactoryMock,
             $this->passwordResetRequestEventCollectionFactoryMock,
+            $this->eventManagerMock,
             [$securityChecker]
         );
     }
@@ -188,5 +205,44 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->model->cleanExpiredRecords();
+    }
+
+    /**
+     * Test for adminIdentityCheck method
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws \Magento\Framework\Exception\State\UserLockedException
+     */
+    public function testAdminIdentityCheck()
+    {
+        $userMock = $this->getMock(
+            'Magento\User\Model\User',
+            ['verifyIdentity', 'getUserName', 'load', 'getId', 'getLockExpires'],
+            [],
+            '',
+            false
+        );
+        $password = 'qwerty1';
+        $userName = 'John Doe';
+
+        $userMock->expects($this->once())
+            ->method('verifyIdentity')
+            ->with($password)
+            ->will($this->returnValue(true));
+        $userMock->expects($this->once())
+            ->method('getUserName')
+            ->will($this->returnValue($userName));
+        $userMock->expects($this->once())
+            ->method('load')
+            ->will($this->returnSelf());
+        $userMock->expects($this->once())
+            ->method('getLockExpires')
+            ->will($this->returnValue(false));
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->willReturnSelf();
+
+        $this->model->adminIdentityCheck($userMock, $password);
     }
 }
