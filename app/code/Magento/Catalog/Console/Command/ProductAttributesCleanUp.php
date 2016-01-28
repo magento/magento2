@@ -8,7 +8,12 @@ namespace Magento\Catalog\Console\Command;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Class ProductAttributesCleanUp
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Command
 {
     /**
@@ -32,21 +37,29 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     protected $appState;
 
     /**
+     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     */
+    protected $metadata;
+
+    /**
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\App\State $appState
+        \Magento\Framework\App\State $appState,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->productAttributeRepository = $productAttributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->attributeResource = $attributeResource;
         $this->appState = $appState;
+        $this->metadata = $metadataPool->getMetadata(ProductInterface::class);
         parent::__construct();
     }
 
@@ -125,9 +138,14 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
      */
     private function getAffectedAttributeIds(AdapterInterface $connection, $attributeTableName)
     {
+        $linkField = $this->metadata->getLinkField();
         $select = $connection->select()->reset();
         $select->from(['e' => $this->attributeResource->getTable('catalog_product_entity')], 'ei.value_id');
-        $select->join(['ei' => $attributeTableName], 'ei.entity_id = e.entity_id AND ei.store_id != 0', '');
+        $select->join(
+            ['ei' => $attributeTableName],
+            'ei.' . $linkField . ' = e.' . $linkField . ' AND ei.store_id != 0',
+            ''
+        );
         $select->join(['s' => $this->attributeResource->getTable('store')], 's.store_id = ei.store_id', '');
         $select->join(['sg' => $this->attributeResource->getTable('store_group')], 'sg.group_id = s.group_id', '');
         $select->joinLeft(
