@@ -5,10 +5,8 @@
  */
 namespace Magento\Paypal\Block\Payflow\Customer;
 
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\Framework\View\Element\Template;
 use Magento\Paypal\Model\Config;
-use Magento\Paypal\Model\Payflowpro;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Block\AbstractCardRenderer;
 
