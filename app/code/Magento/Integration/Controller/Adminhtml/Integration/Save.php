@@ -24,6 +24,11 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
     protected $securityCookieHelper;
 
     /**
+     * @var \Magento\Security\Model\SecurityManager
+     */
+    protected $securityManager;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Psr\Log\LoggerInterface $logger
@@ -34,6 +39,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
      * @param \Magento\Security\Helper\SecurityCookie
+     * @param \Magento\Security\Model\SecurityManager $securityManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -46,7 +52,8 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Escaper $escaper,
         \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection,
-        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+        \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
+        \Magento\Security\Model\SecurityManager $securityManager
     ) {
         parent::__construct(
             $context,
@@ -60,6 +67,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $integrationCollection
         );
         $this->securityCookieHelper = $securityCookieHelper;
+        $this->securityManager = $securityManager;
     }
 
     /**
@@ -82,7 +90,11 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                     throw new LocalizedException(__('Cannot edit integrations created via config file.'));
                 }
             }
-            $this->performSecurityCheck();
+            $password = $this->getRequest()->getParam(
+                \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD
+            );
+            $user = $this->_auth->getUser();
+            $this->securityManager->adminSecurityCheck($user, $password);
             $this->processData($integrationData);
         } catch (UserLockedException $e) {
             $this->_auth->logout();
@@ -143,43 +155,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
         } else {
             $this->_redirect('*/*/new');
         }
-    }
-
-    /**
-     * Perform security checks
-     *
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     * @return $this
-     */
-    protected function performSecurityCheck()
-    {
-        $passwordString = $this->getRequest()->getParam(
-            \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD
-        );
-        $isCheckSuccessful = $this->_auth->getUser()->verifyIdentity($passwordString);
-
-        $user = $this->_auth->getUser();
-        $this->_eventManager->dispatch(
-            'admin_user_authenticate_after',
-            [
-                'username' => $user->getUserName(),
-                'password' => $passwordString,
-                'user' => $user,
-                'result' => $isCheckSuccessful
-            ]
-        );
-        $user = $user->load($user->getId());
-        if ($user->getLockExpires()) {
-            throw new UserLockedException(__('Your account is temporarily disabled.'));
-        }
-
-        if (!$isCheckSuccessful) {
-            throw new \Magento\Framework\Exception\AuthenticationException(
-                __('You have entered an invalid password for current user.')
-            );
-        }
-
-        return $this;
     }
 
     /**
