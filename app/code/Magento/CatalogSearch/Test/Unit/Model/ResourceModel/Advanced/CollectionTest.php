@@ -5,10 +5,13 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Advanced;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
-use Magento\Framework\Api\Filter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Tests Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
+ */
 class CollectionTest extends BaseCollectionTest
 {
     /**
@@ -37,12 +40,18 @@ class CollectionTest extends BaseCollectionTest
     private $search;
 
     /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavConfig;
+
+    /**
      * setUp method for CollectionTest
      */
     protected function setUp()
     {
         $helper = new ObjectManagerHelper($this);
 
+        $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $storeManager = $this->getStoreManager();
         $universalFactory = $this->getUniversalFactory();
         $this->criteriaBuilder = $this->getCriteriaBuilder();
@@ -59,6 +68,7 @@ class CollectionTest extends BaseCollectionTest
         $this->advancedCollection = $helper->getObject(
             'Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection',
             [
+                'eavConfig' => $this->eavConfig,
                 'storeManager' => $storeManager,
                 'universalFactory' => $universalFactory,
                 'searchCriteriaBuilder' => $this->criteriaBuilder,
@@ -74,20 +84,25 @@ class CollectionTest extends BaseCollectionTest
         $this->advancedCollection->loadWithFilter();
     }
 
-    public function testLoadWithFilterWithFilters()
+    /**
+     * Test a search using 'like' condition
+     */
+    public function testLike()
     {
-        $firstFilter = new Filter();
-        $firstFilter->setField('attr_code_1');
-        $firstFilter->setValue('attr_value_1');
+        $attributeCode = 'description';
+        $attributeCodeId = 42;
+        $attribute = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
+        $attribute->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
+        $this->eavConfig->expects($this->once())->method('getAttribute')->with(Product::ENTITY, $attributeCodeId)
+            ->willReturn($attribute);
+        $filtersData = ['catalog_product_entity_text' => [$attributeCodeId => ['like' => 'search text']]];
+        $this->filterBuilder->expects($this->once())->method('setField')->with($attributeCode)
+            ->willReturn($this->filterBuilder);
+        $this->filterBuilder->expects($this->once())->method('setValue')->with('search text')
+            ->willReturn($this->filterBuilder);
 
-        $secondFilter = new Filter();
-        $secondFilter->setField('attr_code_2');
-        $secondFilter->setValue('attr_value_2');
-
-        $this->filterBuilder->expects($this->exactly(2))->method('setField');
-        $this->filterBuilder->expects($this->exactly(2))->method('setValue');
-        $this->filterBuilder->expects($this->at(2))->method('create')->willReturn($firstFilter);
-        $this->filterBuilder->expects($this->at(5))->method('create')->willReturn($secondFilter);
+        $filter = $this->getMock('Magento\Framework\Api\Filter');
+        $this->filterBuilder->expects($this->once())->method('create')->willReturn($filter);
 
         $criteria = $this->getMock('Magento\Framework\Api\Search\SearchCriteria', [], [], '', false);
         $this->criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
@@ -105,14 +120,15 @@ class CollectionTest extends BaseCollectionTest
         );
         $temporaryStorage->expects($this->once())->method('storeApiDocuments')->willReturn($tempTable);
         $this->temporaryStorageFactory->expects($this->once())->method('create')->willReturn($temporaryStorage);
-
         $searchResult = $this->getMock('Magento\Framework\Api\Search\SearchResultInterface', [], [], '', false);
         $this->search->expects($this->once())->method('search')->willReturn($searchResult);
 
-        $this->advancedCollection->addFieldsToFilter(
-            [['attr_code_1' => 'attr_value_1'], ['attr_code_2' => 'attr_value_2']]
-        )->loadWithFilter();
-        $this->advancedCollection->getData();
+        // addFieldsToFilter will load filters,
+        //   then loadWithFilter will trigger _renderFiltersBefore code in Advanced/Collection
+        $this->assertSame(
+            $this->advancedCollection,
+            $this->advancedCollection->addFieldsToFilter($filtersData)->loadWithFilter()
+        );
     }
 
     /**
