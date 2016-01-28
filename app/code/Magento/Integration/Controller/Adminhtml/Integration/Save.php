@@ -94,7 +94,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                 \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD
             );
             $user = $this->_auth->getUser();
-            $this->securityManager->adminSecurityCheck($user, $password);
+            $this->securityManager->adminIdentityCheck($user, $password);
             $this->processData($integrationData);
         } catch (UserLockedException $e) {
             $this->_auth->logout();

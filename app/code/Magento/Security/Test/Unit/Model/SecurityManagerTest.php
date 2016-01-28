@@ -207,7 +207,14 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
         $this->model->cleanExpiredRecords();
     }
 
-    public function testAdminSecurityCheck()
+    /**
+     * Test for adminIdentityCheck method
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws \Magento\Framework\Exception\State\UserLockedException
+     */
+    public function testAdminIdentityCheck()
     {
         $userMock = $this->getMock(
             'Magento\User\Model\User',
@@ -236,6 +243,6 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
             ->willReturnSelf();
 
-        $this->model->adminSecurityCheck($userMock, $password);
+        $this->model->adminIdentityCheck($userMock, $password);
     }
 }
