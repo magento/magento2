@@ -1862,7 +1862,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _productLimitationPrice($joinLeft = false)
     {
         $filters = $this->_productLimitationFilters;
-        if (empty($filters['use_price_index'])) {
+        if (!$this->isUsePriceIndex()) {
             return $this;
         }
 
@@ -1912,6 +1912,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper->prepareColumnsList($select);
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUsePriceIndex()
+    {
+        return !empty($this->_productLimitationFilters['use_price_index']);
     }
 
     /**
