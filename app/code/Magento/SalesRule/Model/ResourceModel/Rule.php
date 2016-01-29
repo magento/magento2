@@ -85,6 +85,21 @@ class Rule extends AbstractResource
     }
 
     /**
+     * Add customer group ids and website ids to rule data after load
+     *
+     * @param AbstractModel $object
+     * @return $this
+     */
+    protected function _afterLoad(AbstractModel $object)
+    {
+        $this->loadCustomerGroupIds($object);
+        $this->loadWebsiteIds($object);
+
+        parent::_afterLoad($object);
+        return $this;
+    }
+
+    /**
      * @param AbstractModel $object
      * @return void
      */
@@ -140,6 +155,52 @@ class Rule extends AbstractResource
         $this->unserializeFields($object);
         $this->_afterLoad($object);
         return $this;
+    }
+
+    /**
+     * Bind sales rule to customer group(s) and website(s).
+     * Save rule's associated store labels.
+     * Save product attributes used in rule.
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function _afterSave(AbstractModel $object)
+    {
+        if ($object->hasStoreLabels()) {
+            $this->saveStoreLabels($object->getId(), $object->getStoreLabels());
+        }
+
+        if ($object->hasWebsiteIds()) {
+            $websiteIds = $object->getWebsiteIds();
+            if (!is_array($websiteIds)) {
+                $websiteIds = explode(',', (string)$websiteIds);
+            }
+            $this->bindRuleToEntity($object->getId(), $websiteIds, 'website');
+        }
+
+        if ($object->hasCustomerGroupIds()) {
+            $customerGroupIds = $object->getCustomerGroupIds();
+            if (!is_array($customerGroupIds)) {
+                $customerGroupIds = explode(',', (string)$customerGroupIds);
+            }
+            $this->bindRuleToEntity($object->getId(), $customerGroupIds, 'customer_group');
+        }
+
+        // Save product attributes used in rule
+        $ruleProductAttributes = array_merge(
+            $this->getProductAttributes(serialize($object->getConditions()->asArray())),
+            $this->getProductAttributes(serialize($object->getActions()->asArray()))
+        );
+        if (count($ruleProductAttributes)) {
+            $this->setActualProductAttributes($object, $ruleProductAttributes);
+        }
+
+        // Update auto geterated specific coupons if exists
+        if ($object->getUseAutoGeneration() && $object->hasDataChanges()) {
+            $this->_resourceCoupon->updateSpecificCoupons($object);
+        }
+        return parent::_afterSave($object);
     }
 
     /**
