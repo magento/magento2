@@ -14,7 +14,6 @@ define([
         defaults: {
             template: 'ui/form/components/single/field',
             checked: false,
-            exportedValue: '',
             isMultiple: false,
             prefer: 'checkbox', // 'radio' | 'checkbox' | 'toggle'
             valueMap: {},
@@ -73,7 +72,8 @@ define([
             }
 
             if (typeof this.value === 'undefined' || this.value === null) {
-                this.initialValue = this.value = this.default;
+                this.value = _.isEmpty(this.valueMap) ? this.default : this.valueMap.false;
+                this.initialValue = this.value;
             } else {
                 this.initialValue = this.value;
             }
@@ -89,7 +89,8 @@ define([
          * @returns {Element}
          */
         initObservable: function () {
-            return this._super()
+            return this
+                ._super()
                 .observe('checked');
         },
 
