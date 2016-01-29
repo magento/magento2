@@ -200,7 +200,9 @@ define([
                 this.subTitle = subTitle;
             }
 
-            this.modal.modal('setSubTitle', subTitle);
+            if (this.modal) {
+                this.modal.modal('setSubTitle', subTitle);
+            }
         },
 
         /**
@@ -253,7 +255,7 @@ define([
          */
         gatherValues: function (applied, elem) {
             if (typeof elem.value === 'function') {
-                applied[elem.index] = elem.value();
+                applied[elem.name] = elem.value();
             } else if (elem.elems) {
                 elem.elems().forEach(this.gatherValues.bind(this, applied), this);
             }
@@ -267,7 +269,7 @@ define([
         setPrevValues: function (elem) {
             if (typeof elem.value === 'function') {
                 this.modal.focus();
-                elem.value(this.applied[elem.index]);
+                elem.value(this.applied[elem.name]);
             } else if (elem.elems) {
                 elem.elems().forEach(this.setPrevValues, this);
             }
