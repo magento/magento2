@@ -150,6 +150,7 @@
         "magento/module-sales-sequence": "100.0.2",
         "magento/module-sample-data": "100.0.2",
         "magento/module-search": "100.0.2",
+        "magento/module-security": "100.0.0",
         "magento/module-send-friend": "100.0.2",
         "magento/module-shipping": "100.0.2",
         "magento/module-sitemap": "100.0.2",
