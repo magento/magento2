@@ -169,6 +169,46 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $rootResourceId
+     * @param array $savedData
+     * @param bool $expectedValue
+     * @dataProvider isEverythingAllowedWithSavedFromDataProvider
+     */
+    public function testIsEverythingAllowedWithSavedFromData($rootResourceId, $savedData, $expectedValue)
+    {
+        $this->registry->expects($this->once())
+            ->method('registry')->with(IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE)
+            ->willReturn($savedData);
+
+        $this->rootResource->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($rootResourceId));
+
+        $this->webapiBlock = $this->getWebapiBlock();
+
+        $this->assertEquals($expectedValue, $this->webapiBlock->isEverythingAllowed());
+    }
+
+    /**
+     * @return array
+     */
+    public function isEverythingAllowedWithSavedFromDataProvider()
+    {
+        return [
+            'root resource in array' => [
+                2,
+                ['all_resources' => 0, 'resource'=>[2, 3]],
+                true
+            ],
+            'root resource not in array' => [
+                2,
+                ['all_resources' => 1],
+                true
+            ]
+        ];
+    }
+
+    /**
      * @param array $integrationData
      * @param array $selectedResources
      * @return \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi
