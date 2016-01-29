@@ -109,7 +109,8 @@ class SetModeCommand extends Command
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
     }
 }

@@ -48,6 +48,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
 
         $indexers = $this->getIndexers($input);
 
+        $returnValue = 0;
         foreach ($indexers as $indexer) {
             try {
                 $previousStatus = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
@@ -63,13 +64,17 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
                 }
             } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage() . PHP_EOL);
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue = 255;
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . " indexer process unknown error:" . PHP_EOL);
                 $output->writeln($e->getMessage() . PHP_EOL);
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue = 255;
             }
         }
 
-        return $this;
+        return $returnValue;
     }
 
     /**

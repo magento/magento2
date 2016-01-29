@@ -115,8 +115,10 @@ class BackupCommand extends AbstractSetupCommand
         if (!$this->deploymentConfig->isAvailable()
             && ($input->getOption(self::INPUT_KEY_MEDIA) || $input->getOption(self::INPUT_KEY_DB))) {
             $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
-            return;
+            // We need exit code higher than 0 here as an indication
+            return 255;
         }
+        $returnValue = 0;
         try {
             $inputOptionProvided = false;
             $output->writeln('<info>Enabling maintenance mode</info>');
@@ -143,10 +145,12 @@ class BackupCommand extends AbstractSetupCommand
             }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $returnValue = 255;
         } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
         }
+        return $returnValue;
     }
 
     /**

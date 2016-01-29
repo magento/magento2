@@ -198,7 +198,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             $output->writeln(
                 '<error>You cannot run this command because the Magento application is not installed.</error>'
             );
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
 
         $modules = $input->getArgument(self::INPUT_KEY_MODULES);
@@ -206,14 +207,16 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $messages = $this->validate($modules);
         if (!empty($messages)) {
             $output->writeln($messages);
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
 
         // check dependencies
         $dependencyMessages = $this->checkDependencies($modules);
         if (!empty($dependencyMessages)) {
             $output->writeln($dependencyMessages);
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
 
         $helper = $this->getHelper('question');
@@ -257,6 +260,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
     }
 
