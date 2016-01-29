@@ -165,4 +165,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->collection->addCategoriesFilter([$conditionType => $values]);
     }
+
+    public function testIsUsePriceIndex()
+    {
+        $this->assertFalse($this->collection->isUsePriceIndex());
+    }
 }
