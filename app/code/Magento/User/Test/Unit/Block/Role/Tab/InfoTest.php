@@ -29,6 +29,9 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getData'])
             ->getMock();
+
+        $roleMock->expects($this->any())->method('getData')->willReturn(['test_data' => 1]);
+
         $this->model = $objectManager->getObject(
             'Magento\User\Block\Role\Tab\Info',
             [

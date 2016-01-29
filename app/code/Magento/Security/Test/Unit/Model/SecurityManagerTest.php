@@ -210,12 +210,14 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for adminIdentityCheck method
      *
-     * @return void
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     * @throws \Magento\Framework\Exception\State\UserLockedException
+     * @param bool $verifyIdentityResult
+     * @param bool $lockExpires
+     * @dataProvider dataProviderAdminIdentityCheck
      */
-    public function testAdminIdentityCheck()
+    public function testAdminIdentityCheck($verifyIdentityResult, $lockExpires)
     {
+        $password = 'qwerty1';
+        $userName = 'John Doe';
         $userMock = $this->getMock(
             'Magento\User\Model\User',
             ['verifyIdentity', 'getUserName', 'load', 'getId', 'getLockExpires'],
@@ -223,13 +225,10 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $password = 'qwerty1';
-        $userName = 'John Doe';
-
         $userMock->expects($this->once())
             ->method('verifyIdentity')
             ->with($password)
-            ->will($this->returnValue(true));
+            ->willReturn($verifyIdentityResult);
         $userMock->expects($this->once())
             ->method('getUserName')
             ->will($this->returnValue($userName));
@@ -238,11 +237,52 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $userMock->expects($this->once())
             ->method('getLockExpires')
-            ->will($this->returnValue(false));
+            ->willReturn($lockExpires);
+
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'admin_user_authenticate_after',
+                [
+                    'username' => $userName,
+                    'password' => $password,
+                    'user' => $userMock,
+                    'result' => $verifyIdentityResult
+                ]
+            )
+            ->willReturnSelf();
+
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->willReturnSelf();
 
+        if ($lockExpires) {
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\State\UserLockedException',
+                __('Your account is temporarily disabled.')
+            );
+        }
+
+        if (!$verifyIdentityResult) {
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\AuthenticationException',
+                __('You have entered an invalid password for current user.')
+            );
+        }
+
         $this->model->adminIdentityCheck($userMock, $password);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderAdminIdentityCheck()
+    {
+        return [
+            ['verifyIdentityResult' => true, 'lockExpires' => false],
+            ['verifyIdentityResult' => false, 'lockExpires' => false],
+            ['verifyIdentityResult' => true, 'lockExpires' => true],
+            ['verifyIdentityResult' => false, 'lockExpires' => true]
+        ];
     }
 }
