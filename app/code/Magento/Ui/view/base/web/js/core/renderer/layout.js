@@ -110,7 +110,11 @@ define([
                 nodeName;
 
             node.children = false;
-            node.extendProvider = node.config && node.config.provider || node.provider;
+            node.extendProvider = true;
+
+            if (node.config && node.config.provider || node.provider) {
+                node.extendProvider = false;
+            }
 
             node = utils.extend({
             }, types.get(type), defaults, node);
