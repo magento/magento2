@@ -64,10 +64,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $items = $this->collection->getItems();
         /** @var \Magento\Cms\Model\Page $page */
         foreach ($items as $page) {
-            $data = $this->dataPersistor->get('cms_page');
-            if (!empty($data)) {
-                $page->setData($data);
-            }
+            $this->loadedData[$page->getId()] = $page->getData();
+        }
+
+        $data = $this->dataPersistor->get('cms_page');
+        if (!empty($data)) {
+            $page = $this->collection->getNewEmptyItem();
+            $page->setData($data);
             $this->loadedData[$page->getId()] = $page->getData();
         }
 
