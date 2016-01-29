@@ -71,18 +71,32 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             foreach($attributes as $attribute) {
                 foreach ($products as $product) {
                     $attributeValue = $product->getData($attribute['attribute_code']);
-                    $product->setMediaGalleryEntries($this->galleryManagement->getList($product->getSku()));
-                    $images = $product->getMediaGalleryImages();
-                    foreach ($images as $image) {
-                        $result[$attribute['attribute_code'].'_'.$attributeValue][] = [
-                            'mediaType' => $image->getMediaType(),
-                            'videoUrl' => $image->getVideoUrl(),
-                            'isBase' => $product->getImage() == $image->getFile(),
-                        ];
+                    if ($attributeValue) {
+                        $key = $attribute['attribute_code'] . '_' . $attributeValue;
+                        $result[$key] = $this->getProductGallery($product);
                     }
                 }
             }
         }
         return $this->jsonEncoder->encode($result);
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return array
+     */
+    private function getProductGallery($product)
+    {
+        $result = [];
+        $product->setMediaGalleryEntries($this->galleryManagement->getList($product->getSku()));
+        $images = $product->getMediaGalleryImages();
+        foreach ($images as $image) {
+            $result[] = [
+                'mediaType' => $image->getMediaType(),
+                'videoUrl' => $image->getVideoUrl(),
+                'isBase' => $product->getImage() == $image->getFile(),
+            ];
+        }
+        return $result;
     }
 }
