@@ -65,7 +65,7 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
     /**
      * @return string
      */
-    public function getUnlockUrl()
+    protected function getUnlockUrl()
     {
         return $this->getUrl('customer/locks/unlock', ['customer_id' => $this->getCustomerId()]);
     }
