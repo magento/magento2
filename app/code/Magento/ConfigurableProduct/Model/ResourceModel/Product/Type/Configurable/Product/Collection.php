@@ -122,11 +122,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         parent::_initSelect();
 
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $linkColumn = $this->getConnection()->quoteIdentifier($metadata->getLinkField());
         $this->getSelect()->join(
             ['link_table' => $this->_linkTable],
-            'link_table.product_id = e.' . $linkColumn,
+            'link_table.product_id = e.entity_id',
             ['parent_id']
         );
 
