@@ -109,14 +109,12 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $linkColumn = $this->getConnection()->quoteIdentifier($metadata->getLinkField());
         $select = $this->getConnection()->select()->from(
             ['l' => $this->getMainTable()],
             ['product_id', 'parent_id']
         )->join(
             ['e' => $this->getTable('catalog_product_entity')],
-            'e.' . $linkColumn . ' = l.product_id AND e.required_options = 0',
+            'e.entity_id = l.product_id AND e.required_options = 0',
             []
         )->where(
             'parent_id IN (?)',
@@ -132,7 +130,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Retrieve parent ids array by requered child
+     * Retrieve parent ids array by required child
      *
      * @param int|array $childId
      * @return string[]

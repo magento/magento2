@@ -416,11 +416,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getUsedProductIds($product)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         if (!$product->hasData($this->_usedProductIds)) {
             $usedProductIds = [];
             foreach ($this->getUsedProducts($product) as $product) {
-                $usedProductIds[] = $product->getData($metadata->getLinkField());
+                $usedProductIds[] = $product->getId();
             }
             $product->setData($this->_usedProductIds, $usedProductIds);
         }
