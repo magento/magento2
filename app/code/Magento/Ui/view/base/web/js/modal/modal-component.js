@@ -200,7 +200,9 @@ define([
                 this.subTitle = subTitle;
             }
 
-            this.modal.modal('setSubTitle', subTitle);
+            if (this.modal) {
+                this.modal.modal('setSubTitle', subTitle);
+            }
         },
 
         /**
