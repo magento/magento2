@@ -115,22 +115,25 @@ define([
             value: [],
             filterOptions: false,
             chipsEnabled: true,
+            itemsQuantity: '',
             filterInputValue: '',
             filterOptionsFocus: false,
             multiselectFocus: false,
-            mode: 'simple',
+            multiple: true,
+            selectType: 'tree',
             lastSelectable: false,
+            showFilteredQuantity: true,
             showCheckbox: true,
             levelsVisibility: true,
             openLevelsAction: true,
             showOpenLevelsActionIcon: true,
             optgroupLabels: false,
             closeBtn: true,
-            showTree: false,
             labelsDecoration: false,
             disableLabel: false,
             closeBtnLabel: $t('Done'),
             optgroupTmpl: 'ui/grid/filters/elements/ui-select-optgroup',
+            quantityPlaceholder: $t('options'),
             selectedPlaceholders: {
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
@@ -152,7 +155,8 @@ define([
                     lastSelectable: true,
                     optgroupLabels: true,
                     openLevelsAction: false,
-                    labelsDecoration: true
+                    labelsDecoration: true,
+                    showOpenLevelsActionIcon: false
                 }
             }
         },
@@ -167,11 +171,19 @@ define([
         initConfig: function (config) {
             var result = parseOptions(config.options),
                 defaults = this.constructor.defaults,
-                mode = config.mode || defaults.mode;
+                mode = _.isBoolean(config.multiple) ? config.multiple : defaults.multiple,
+                type = config.selectType || defaults.selectType,
+                showOpenLevelsActionIcon = _.isBoolean(config.showOpenLevelsActionIcon) ?
+                    config.showOpenLevelsActionIcon :
+                    defaults.showOpenLevelsActionIcon,
+                openLevelsAction = _.isBoolean(config.openLevelsAction) ?
+                    config.openLevelsAction :
+                    defaults.openLevelsAction;
 
             defaults.levelsVisibility = defaults.levelsVisibility || config.lastSelectable;
-            defaults.showOpenLevelsActionIcon = defaults.showOpenLevelsActionIcon && config.openLevelsAction;
+            defaults.showOpenLevelsActionIcon = showOpenLevelsActionIcon && openLevelsAction;
             _.extend(defaults, result, defaults.presets[mode]);
+            _.extend(defaults, result, defaults.presets[type]);
             this._super();
 
             return this;
@@ -190,7 +202,14 @@ define([
          * Check tree mode
          */
         isTree: function () {
-            return this.hasChildList() && !this.optgroupMode;
+            return this.hasChildList() && this.selectType !== 'optgroup';
+        },
+
+        addLastElement: function (data) {
+            if (!data.hasOwnProperty(this.separator)) {
+                !this.cacheOptions.lastOptions ? this.cacheOptions.lastOptions = [] : false;
+                this.cacheOptions.lastOptions.push(data);
+            }
         },
 
         /**
@@ -208,11 +227,13 @@ define([
          */
         initObservable: function () {
             this._super();
-            this.observe(['listVisible',
+            this.observe([
+                'listVisible',
                 'hoverElIndex',
                 'placeholder',
                 'multiselectFocus',
                 'options',
+                'itemsQuantity',
                 'filterInputValue',
                 'filterOptionsFocus'
             ]);
@@ -247,9 +268,9 @@ define([
 
             if (!data.visible) {
                 data.visible = ko.observable(!!data.hasOwnProperty(this.separator) &&
-                _.isBoolean(this.levelsVisibility) &&
-                this.levelsVisibility ||
-                data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility, 10) >= curLevel);
+                    _.isBoolean(this.levelsVisibility) &&
+                    this.levelsVisibility ||
+                    data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility, 10) >= curLevel);
 
             }
 
@@ -333,6 +354,7 @@ define([
 
             if (value === '') {
                 this.options(this.cacheOptions.tree);
+                this._setItemsQuantity(false);
 
                 return false;
             }
@@ -350,10 +372,18 @@ define([
 
                 if (!value.length) {
                     this.options(this.cacheOptions.plain);
+                    this._setItemsQuantity(this.cacheOptions.plain.length - 1);
                 } else {
                     this.options(array);
+                    this._setItemsQuantity(array.length - 1);
                 }
                 this.cleanHoveredElement();
+            }
+        },
+
+        _setItemsQuantity: function (data) {
+            if (this.showFilteredQuantity) {
+                data ? this.itemsQuantity(data + ' ' + this.quantityPlaceholder) : this.itemsQuantity('');
             }
         },
 
@@ -418,7 +448,7 @@ define([
             var index = this.getOptionIndex(data),
                 status = this.hoverElIndex() === index;
 
-            if (this.optgroupMode && data.hasOwnProperty(this.separator)) {
+            if (this.selectType === 'optgroup' && data.hasOwnProperty(this.separator)) {
                 return false;
             }
 
@@ -473,7 +503,7 @@ define([
                 return this;
             }
 
-            if (this.simpleMode && !isSelected) {
+            if (!this.multiple && !isSelected) {
                 this.value(data.value);
                 this.listVisible(false);
             } else if (!isSelected) {
@@ -670,7 +700,6 @@ define([
          */
         keydownSwitcher: function (data, event) {
             var keyName = keyCodes[event.keyCode];
-
 
             if (this.isTabKey(event)) {
                 if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions) {

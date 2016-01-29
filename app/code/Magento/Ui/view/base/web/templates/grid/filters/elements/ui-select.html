@@ -7,16 +7,16 @@
 
 <!-- ko ifnot: disableLabel -->
 <label
-    class="admin__form-field-label"
-    data-bind="attr: {for: uid}
+        class="admin__form-field-label"
+        data-bind="attr: {for: uid}
 ">
     <span data-bind="text: label"></span>
 </label>
 <!-- /ko -->
 <div
-    class="admin__action-multiselect-wrap action-select-wrap"
-    tabindex="0"
-    data-bind="
+        class="admin__action-multiselect-wrap action-select-wrap"
+        tabindex="0"
+        data-bind="
         attr: {
             id: uid
         },
@@ -33,8 +33,8 @@
 ">
     <!-- ko ifnot: chipsEnabled -->
     <div
-        class="action-select admin__action-multiselect"
-        data-bind="
+            class="action-select admin__action-multiselect"
+            data-bind="
             css: {_active: multiselectFocus},
             click: function(data, event) {
                 toggleListVisible(data, event)
@@ -47,8 +47,8 @@
     <!-- /ko -->
     <!-- ko if: chipsEnabled -->
     <div
-        class="action-select admin__action-multiselect"
-        data-bind="
+            class="action-select admin__action-multiselect"
+            data-bind="
             css: {_active: multiselectFocus},
             click: function(data, event) {
                 toggleListVisible(data, event)
@@ -89,19 +89,23 @@
                 class="admin__control-text admin__action-multiselect-search"
                 type="text"
                 data-bind="
-                    event: {
-                        keydown: filterOptionsKeydown
-                    },
-                    attr: {id: uid+2}
-                    valueUpdate: 'afterkeydown',
-                    value: filterInputValue,
-                    hasFocus: filterOptionsFocus
+                event: {
+                    keydown: filterOptionsKeydown
+                },
+                attr: {id: uid+2}
+                valueUpdate: 'afterkeydown',
+                value: filterInputValue,
+                hasFocus: filterOptionsFocus
                 ">
             <label
                 class="admin__action-multiselect-search-label"
                 data-bind="attr: {for: uid+2}
             ">
             </label>
+            <div
+                data-bind="text: itemsQuantity
+            ">
+            </div>
         </div>
         <!-- /ko -->
         <ul class="admin__action-multiselect-menu-inner admin__action-multiselect-menu-inner-root"
@@ -119,7 +123,10 @@
                             _selected: $parent.isSelected(option.value),
                             _hover: $parent.isHovered(option, $element),
                             _expended: $parent.getLevelVisibility($data),
-                            _unclickable: $parent.isLabelDecoration($data)
+                            _unclickable: function ($parent, $data) {
+                                $parent.isLabelDecoration($data);
+                                $parent.addLastElement($data);
+                            }
                         },
                         click: function(data, event){
                             $parent.toggleOptionSelected($data, $index(), event);
@@ -128,7 +135,7 @@
                 ">
                     <!-- ko if: $data.optgroup && $parent.showOpenLevelsActionIcon-->
                     <div class="admin__action-multiselect-dropdown"
-                        data-bind="
+                         data-bind="
                             click: function(event){
                                 $parent.openChildLevel($data, $element, event);
                             },
@@ -144,8 +151,8 @@
                         data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
                     <!-- /ko-->
                     <label
-                        class="admin__action-multiselect-label"
-                        data-bind="text: option.label">
+                            class="admin__action-multiselect-label"
+                            data-bind="text: option.label">
                     </label>
                 </div>
                 <!-- ko if: $data.optgroup -->
@@ -158,8 +165,8 @@
         <!-- ko if: $data.closeBtn -->
         <div class="admin__action-multiselect-actions-wrap">
             <button class="action-default"
-                type="button"
-                data-bind="click: outerClick">
+                    type="button"
+                    data-bind="click: outerClick">
                 <span data-bind="text: closeBtnLabel"></span>
             </button>
         </div>
