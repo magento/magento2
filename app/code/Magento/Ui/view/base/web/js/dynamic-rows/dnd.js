@@ -179,12 +179,27 @@ define([
          */
         setPosition: function (depElem, depElementCtx, dragData) {
             var prevElem = depElem.prev(),
+                nextElem = depElem.next(),
                 depElemPosition = parseInt(depElementCtx.position, 10),
                 prevElemCtx,
                 prevElemPosition;
 
+            if (prevElem[0] === dragData.originRow[0]) {
+                dragData.instanceCtx.position = depElemPosition;
+                depElementCtx.position = depElemPosition -1;
+
+                return false;
+            }
+
             if (!prevElem.length) {
                 depElemPosition = --depElemPosition ? depElemPosition : 1;
+                dragData.instanceCtx.position = depElemPosition;
+
+                return false;
+            }
+
+            if (!nextElem.length) {
+                depElemPosition = ++depElemPosition;
                 dragData.instanceCtx.position = depElemPosition;
 
                 return false;

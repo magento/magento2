@@ -66,6 +66,49 @@ define([
         },
 
         /**
+         * Reset data to initial value.
+         * Call method reset on child elements.
+         */
+        reset: function () {
+            var elems = this.elems();
+
+            _.each(elems, function (elem) {
+
+                if ((this.name + '.' + this.positionProvider) === elem.name || this.dataScope === elem.dataScope) {
+                    return false;
+                }
+
+                if (_.isFunction(elem.reset) ) {
+                    elem.reset();
+                }
+            }, this);
+
+            return this;
+        },
+
+        /**
+         * Clear data
+         *
+         * @returns {Collection} Chainable.
+         */
+        clear: function () {
+            var elems = this.elems();
+
+            _.each(elems, function (elem) {
+
+                if ((this.name + '.' + this.positionProvider) === elem.name || this.dataScope === elem.dataScope) {
+                    return false;
+                }
+
+                if (_.isFunction(elem.clear) ) {
+                    elem.clear();
+                }
+            }, this);
+
+            return this;
+        },
+
+        /**
          * Get label for collapsible header
          *
          * @param {String} label

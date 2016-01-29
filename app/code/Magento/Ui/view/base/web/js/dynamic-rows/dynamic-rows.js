@@ -17,7 +17,8 @@ define([
     return uiCollection.extend({
         defaults: {
             defaultRecord: false,
-            renderColumnsHeader: true,
+            columnsHeader: true,
+            columnsHeaderAfterRender: false,
             labels: [],
             recordTemplate: 'record',
             collapsibleHeader: false,
@@ -71,6 +72,7 @@ define([
             this._super()
                 .initChildren()
                 .initDnd()
+                .isColumnsHeader()
                 .initDefaultRecord();
 
             return this;
@@ -86,6 +88,7 @@ define([
                 .track('childTemplate')
                 .observe([
                     'recordData',
+                    'columnsHeader',
                     'visible',
                     'disabled',
                     'labels'
@@ -105,6 +108,28 @@ define([
             }
 
             return this;
+        },
+
+        /**
+         * Check columnsHeaderAfterRender property,
+         * and set listener on elems if needed
+         *
+         * @returns {Object} Chainable.
+         */
+        isColumnsHeader: function () {
+            if (this.columnsHeaderAfterRender) {
+                this.on('elems', this.renderColumnsHeader.bind(this));
+            }
+
+            return this;
+        },
+
+        renderColumnsHeader: function () {
+            if (this.elems().length) {
+                this.columnsHeader(true);
+            } else {
+                this.columnsHeader(false);
+            }
         },
 
         /**
@@ -254,8 +279,10 @@ define([
          * @param {String} recordName - record name
          */
         onUpdateRecordTemplate: function (recordName) {
-            this.recordTemplate = recordName;
-            this.reload();
+            if (recordName) {
+                this.recordTemplate = recordName;
+                this.reload();
+            }
         },
 
         /**
@@ -284,6 +311,20 @@ define([
             }, this);
             this.recordIterator = 0;
             this.initChildren(false, true);
+        },
+
+        /**
+         * Reset data to initial value.
+         * Call method reset on child elements.
+         */
+        reset: function () {
+            var elems = this.elems();
+
+            _.each(elems, function (elem) {
+                if (_.isFunction(elem.reset)) {
+                    elem.reset();
+                }
+            });
         },
 
         /**

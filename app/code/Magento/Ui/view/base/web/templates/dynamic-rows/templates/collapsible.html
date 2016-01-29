@@ -12,44 +12,44 @@
     <div class="admin__field-control" data-role="grid-wrapper">
         <table class="admin__dynamic-rows admin__control-collapsible" data-role="grid">
 
-            <thead if="element.renderColumnsHeader">
-                <tr data-bind="foreach: {data: labels, as: 'label'}">
-                    <th text="label.config.label"
-                        css="$parent.setClasses(label.config)">
-                    </th>
-                </tr>
+            <thead if="element.columnsHeader">
+            <tr data-bind="foreach: {data: labels, as: 'label'}">
+                <th text="label.config.label"
+                    css="$parent.setClasses(label.config)">
+                </th>
+            </tr>
             </thead>
 
             <tbody data-bind="foreach: elems">
-                <tr class="data-row" data-bind="foreach: {data: elems, as: 'elem'}">
-                    <td css="$parents[1].setClasses(elem)" if="elem.template">
-                        <div class="fieldset-wrapper admin__collapsible-block-wrapper"
-                             collapsible="openClass: '_show', closeOnOuter: false">
-                            <div class="fieldset-wrapper-title" toggleCollapsible>
+            <tr class="data-row" data-bind="foreach: {data: elems, as: 'elem'}">
+                <td css="$parents[1].setClasses(elem)" if="elem.template">
+                    <div class="fieldset-wrapper admin__collapsible-block-wrapper"
+                         collapsible="openClass: '_show', closeOnOuter: false">
+                        <div class="fieldset-wrapper-title" toggleCollapsible>
 
-                                <div class="admin__collapsible-title">
-                                    <render args="name: $parents[1].dndConfig.template, data: $parents[1].dnd"
-                                            if="$parents[1].dndConfig.enabled" />
+                            <div class="admin__collapsible-title">
+                                <render args="name: $parents[1].dndConfig.template, data: $parents[1].dnd"
+                                        if="$parents[1].dndConfig.enabled" />
 
-                                    <span text="$parent.getLabel(elem)" />
-                                </div>
-
-                                <button class="action-delete"
-                                        type="button"
-                                        title="'Delete'"
-                                        click="function(){
-                                            $parents[1].deleteRecord($parent.index)
-                                        }">
-                                    <span text="'Delete'"/>
-                                </button>
+                                <span text="$parent.getLabel(elem)" />
                             </div>
 
-                            <div class="admin__collapsible-content"
-                                 css="{_show: $collapsible.opened()}"
-                                 template="elem.template"></div>
+                            <button class="action-delete"
+                                    type="button"
+                                    title="'Delete'"
+                                    click="function(){
+                                            $parents[1].deleteRecord($parent.index)
+                                        }">
+                                <span text="'Delete'"/>
+                            </button>
                         </div>
-                    </td>
-                </tr>
+
+                        <div class="admin__collapsible-content"
+                             css="{_show: $collapsible.opened()}"
+                             template="elem.template"></div>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
 

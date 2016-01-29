@@ -125,9 +125,27 @@ define([
         },
 
         /**
+         * Clear data. Call method "clear"
+         * in child components
+         *
+         * @returns {Object} Chainable.
+         */
+        clear: function () {
+            var elems = this.elems();
+
+            _.each(elems, function (elem) {
+                if (_.isFunction(elem.clear)) {
+                    elem.clear();
+                }
+            }, this);
+
+            return this;
+        },
+
+        /**
          * Checks if specified child exists in collection.
          *
-         * @param {Sring} index - Index of a child.
+         * @param {String} index - Index of a child.
          * @returns {Boolean}
          */
         hasChild: function (index) {
