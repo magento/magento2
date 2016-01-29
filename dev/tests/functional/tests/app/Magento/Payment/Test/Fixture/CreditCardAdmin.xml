@@ -6,12 +6,13 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="credit_card"
+    <fixture name="credit_card_admin"
              module="Magento_Payment"
              type="virtual"
-             entity_type="credit_card"
-             repository_class="Magento\Payment\Test\Repository\CreditCard"
-             class="Magento\Payment\Test\Fixture\CreditCard">
+             entity_type="credit_card_admin"
+             repository_class="Magento\Payment\Test\Repository\CreditCardAdmin"
+             class="Magento\Payment\Test\Fixture\CreditCardAdmin">
+        <field name="cc_type" />
         <field name="cc_number" />
         <field name="cc_exp_month" />
         <field name="cc_exp_year" />

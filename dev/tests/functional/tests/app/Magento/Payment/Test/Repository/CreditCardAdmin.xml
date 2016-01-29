@@ -6,8 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Payment\Test\Repository\CreditCard">
+    <repository class="Magento\Payment\Test\Repository\CreditCardAdmin">
         <dataset name="visa_default">
+            <field name="cc_type" xsi:type="string">Visa</field>
             <field name="cc_number" xsi:type="string">4111111111111111</field>
             <field name="cc_exp_month" xsi:type="string">01 - January</field>
             <field name="cc_exp_year" xsi:type="string">2020</field>
@@ -15,6 +16,7 @@
         </dataset>
 
         <dataset name="visa_direct">
+            <field name="cc_type" xsi:type="string">Visa</field>
             <field name="cc_number" xsi:type="string">4617747819866651</field>
             <field name="cc_exp_month" xsi:type="string">01 - January</field>
             <field name="cc_exp_year" xsi:type="string">2020</field>
