@@ -75,13 +75,15 @@ class CronRunCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->checkRun()) {
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
             $this->status->add($e->getMessage());
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
 
         try {
@@ -106,6 +108,13 @@ class CronRunCommand extends AbstractSetupCommand
         } finally {
             $this->status->toggleUpdateInProgress(false);
         }
+
+        if ($this->status->isUpdateError()) {
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
+        }
+
+        return 0;
     }
 
     /**

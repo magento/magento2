@@ -101,6 +101,8 @@ class DevTestsRunCommand extends Command
             foreach ($failures as $message) {
                 $output->writeln(' - ' . $message);
             }
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         } else {
             $output->writeln('PASSED (' . count($runCommands) . ')');
         }
