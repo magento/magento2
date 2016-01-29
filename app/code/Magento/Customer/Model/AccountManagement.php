@@ -367,28 +367,7 @@ class AccountManagement implements AccountManagementInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
 
-        $currentCustomer = $this->customerRegistry->retrieve($customer->getId());
-        if ($currentCustomer->isCustomerLocked()) {
-            throw new UserLockedException(
-                __(
-                    'The account is locked. Please wait and try again or contact %1.',
-                    $this->scopeConfig->getValue('contact/email/recipient_email')
-                )
-            );
-        }
-
-        $hash = $this->customerRegistry->retrieveSecureData($customer->getId())->getPasswordHash();
-        if (!$this->encryptor->validateHash($password, $hash)) {
-            $this->eventManager->dispatch(
-                'customer_login_failed',
-                [
-                    'username' => $username,
-                    'password' => $password
-                ]
-            );
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
-
+        $this->validatePasswordByCustomer($customer, $password);
         if ($customer->getConfirmation() && $this->isConfirmationRequired($customer)) {
             throw new EmailNotConfirmedException(__('This account is not confirmed.'));
         }
@@ -678,19 +657,49 @@ class AccountManagement implements AccountManagementInterface
     /**
      * Validate customer password.
      *
-     * @param CustomerModel $customer
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $password
      * @return bool true on success
      * @throws InvalidEmailOrPasswordException
+     * @throws UserLockedException
      */
-    private function validatePasswordByCustomer($customer, $password)
+    private function validatePasswordByCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer, $password)
     {
+        $this->ifCustomerLocked($customer);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $hash = $customerSecure->getPasswordHash();
         if (!$this->encryptor->validateHash($password, $hash)) {
+            $this->eventManager->dispatch(
+                'customer_password_invalid',
+                [
+                    'username' => $customer->getEmail(),
+                    'password' => $password
+                ]
+            );
             throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
         }
+
         return true;
+    }
+
+    /**
+     * Check if customer is locked and throw exception
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @throws NoSuchEntityException
+     * @throws UserLockedException
+     */
+    protected function ifCustomerLocked(\Magento\Customer\Api\Data\CustomerInterface $customer)
+    {
+        $currentCustomer = $this->customerRegistry->retrieve($customer->getId());
+        if ($this->accountManagementHelper->isCustomerLocked($currentCustomer->getLockExpires())) {
+            throw new UserLockedException(
+                __(
+                    'The account is locked. Please wait and try again or contact %1.',
+                    $this->scopeConfig->getValue('contact/email/recipient_email')
+                )
+            );
+        }
     }
 
     /**

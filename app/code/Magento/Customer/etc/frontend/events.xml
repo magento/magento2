@@ -29,7 +29,7 @@
         <observer name="customer_password" instance="Magento\Customer\Observer\UpgradeCustomerPasswordObserver" />
         <observer name="customer_unlock" instance="Magento\Customer\Observer\CustomerLoginSuccessObserver" />
     </event>
-    <event name="customer_login_failed">
-        <observer name="customer_lock" instance="Magento\Customer\Observer\CustomerLoginFailedObserver" />
+    <event name="customer_password_invalid">
+        <observer name="customer_lock" instance="Magento\Customer\Observer\CustomerInvalidPasswordObserver" />
     </event>
 </config>

@@ -13,7 +13,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 /**
  * Class CustomerLoginFailedObserver
  */
-class CustomerLoginFailedObserver implements ObserverInterface
+class CustomerInvalidPasswordObserver implements ObserverInterface
 {
     /**
      * Account manager

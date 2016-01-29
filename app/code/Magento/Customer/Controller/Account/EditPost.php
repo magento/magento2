@@ -14,6 +14,8 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,12 +40,18 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     protected $session;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Context $context,
@@ -51,13 +59,15 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
-        CustomerExtractor $customerExtractor
+        CustomerExtractor $customerExtractor,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -139,6 +149,13 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $customerId,
                 $this->getRequest()->getPost('current_password')
             );
+        } catch (UserLockedException $e) {
+            $message = __(
+                'The account is locked. Please wait and try again or contact %1.',
+                $this->scopeConfig->getValue('contact/email/recipient_email')
+            );
+            $this->messageManager->addError($message);
+            $this->session->logout();
         } catch (AuthenticationException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
@@ -171,6 +188,13 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
 
         try {
             $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
+        } catch (UserLockedException $e) {
+            $message = __(
+                'The account is locked. Please wait and try again or contact %1.',
+                $this->scopeConfig->getValue('contact/email/recipient_email')
+            );
+            $this->messageManager->addError($message);
+            $this->session->logout();
         } catch (AuthenticationException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (InputException $e) {
