@@ -110,6 +110,7 @@ class DeprecatedFormat implements \Magento\Framework\Config\ConverterInterface
                     ConfigInterface::TOPIC_SCHEMA_TYPE => null,
                     ConfigInterface::TOPIC_SCHEMA_VALUE => null
                 ],
+                'is_synchronous' => false,
                 ConfigInterface::TOPIC_PUBLISHER => $publisherName
             ];
         }

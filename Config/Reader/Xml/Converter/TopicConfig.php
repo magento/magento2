@@ -98,6 +98,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
                     'schema_type' => isset($topicDefinition['response']) ? QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT : null,
                     'schema_value' => $topicDefinition['response']
                 ],
+                'is_synchronous' => $topicDefinition[CommunicationConfig::TOPIC_IS_SYNCHRONOUS],
                 'publisher' => $topicConfig['type'] . '-' . $topicConfig['exchange']
             ];
         }
