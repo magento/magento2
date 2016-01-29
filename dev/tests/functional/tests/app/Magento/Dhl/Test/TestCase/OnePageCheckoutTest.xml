@@ -12,10 +12,10 @@
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataset" xsi:type="string">customer_DE</data>
             <data name="address/dataset" xsi:type="string">DE_address</data>
-            <data name="shippingAddress/dataset" xsi:type="string">customer_DE</data>
+            <data name="shippingAddress/dataset" xsi:type="string">DE_address</data>
             <data name="shipping/shipping_service" xsi:type="string">DHL</data>
-            <data name="shipping/shipping_method" xsi:type="string">Express worldwide</data>
-            <data name="cart/data/shipping_method" xsi:type="string">Express worldwide</data>
+            <data name="shipping/shipping_method" xsi:type="string">Express easy</data>
+            <data name="cart/data/shipping_method" xsi:type="string">Express easy</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, dhl_eu, shipping_origin_CH, config_base_currency_ch</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test_deprecated</data>
