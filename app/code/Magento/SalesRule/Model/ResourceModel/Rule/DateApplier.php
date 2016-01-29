@@ -14,6 +14,7 @@ class DateApplier
     /**
      * @param \Magento\Framework\DB\Select $select
      * @param int|string $now
+     * @return void
      */
     public function applyDate($select, $now)
     {
