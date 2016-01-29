@@ -34,6 +34,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
     /**
      * Save action
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
