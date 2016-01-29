@@ -62,7 +62,8 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         $messages = $this->validate($modules);
         if (!empty($messages)) {
             $output->writeln(implode(PHP_EOL, $messages));
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
         /**
          * @var \Magento\Framework\Module\Status $status
@@ -72,7 +73,8 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
             $modulesToChange = $status->getModulesToChange($isEnable, $modules);
         } catch (\LogicException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
         if (!empty($modulesToChange)) {
             $force = $input->getOption(self::INPUT_KEY_FORCE);
@@ -83,7 +85,8 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
                         "<error>Unable to change status of modules because of the following constraints:</error>"
                     );
                     $output->writeln('<error>' . implode("</error>\n<error>", $constraints) . '</error>');
-                    return;
+                    // we must have an exit code higher than zero to indicate something was wrong
+                    return 255;
                 }
             }
             $status->setIsEnabled($isEnable, $modulesToChange);

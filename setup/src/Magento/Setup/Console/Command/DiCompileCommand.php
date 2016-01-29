@@ -124,7 +124,8 @@ class DiCompileCommand extends Command
             foreach ($errors as $line) {
                 $output->writeln($line);
             }
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
@@ -197,6 +198,8 @@ class DiCompileCommand extends Command
             $output->writeln('<info>Generated code and dependency injection configuration successfully.</info>');
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
     }
 

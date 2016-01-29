@@ -133,7 +133,8 @@ class XmlConverterCommand extends Command
         } catch (\Exception $exception) {
             $errorMessage = $exception->getMessage();
             $output->writeln("<error>$errorMessage</error>");
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
     }
 }

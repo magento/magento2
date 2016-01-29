@@ -58,7 +58,8 @@ class AdminUserCreateCommand extends AbstractSetupCommand
         $errors = $this->validate($input);
         if ($errors) {
             $output->writeln('<error>' . implode('</error>' . PHP_EOL .  '<error>', $errors) . '</error>');
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->installAdminUser($input->getOptions());

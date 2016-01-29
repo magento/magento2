@@ -62,7 +62,8 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
     {
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return 255;
         }
         $installer = $this->installFactory->create(new ConsoleLogger($output));
         $installer->installSchema();
