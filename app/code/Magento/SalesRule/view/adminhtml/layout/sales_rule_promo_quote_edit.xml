@@ -8,20 +8,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <referenceBlock name="sales _rule_form">
-                <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions" name="promo_sales_rule_edit_tab_conditions">
-                    <arguments>
-                        <argument name="config" xsi:type="array">
-                            <item name="label" xsi:type="string" translate="true">Conditions</item>
-                            <item name="collapsible" xsi:type="boolean">true</item>
-                            <item name="opened" xsi:type="boolean">false</item>
-                            <item name="sortOrder" xsi:type="string">1</item>
-                            <item name="canShow" xsi:type="boolean">true</item>
-                            <item name="componentType" xsi:type="string">fieldset</item>
-                        </argument>
-                    </arguments>
-                </block>
-            </referenceBlock>
             <uiComponent name="sales_rule_form"/>
         </referenceContainer>
     </body>
