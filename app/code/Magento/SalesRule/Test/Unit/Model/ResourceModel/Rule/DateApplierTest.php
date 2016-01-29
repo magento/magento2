@@ -1,12 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: cpartica
- * Date: 1/29/16
- * Time: 10:22 AM
- */
-
-/**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
