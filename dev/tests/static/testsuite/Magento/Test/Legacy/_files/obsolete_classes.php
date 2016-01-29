@@ -3879,6 +3879,7 @@ return [
         'Magento\Framework\Component\ComponentRegistrar'
     ],
     ['Magento\Framework\App\Router\ActionList\Reader'],
+    ['Magento\User\Observer\Backend\CheckAdminPasswordChangeObserver'],
     ['Magento\Framework\View\File\AbstractCollector'],
     ['Magento\Tools\Migration\Acl\FileManager'],
     ['Magento\Tools\Migration\Acl\Formatter'],
@@ -4128,4 +4129,10 @@ return [
         'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
         'Magento\Catalog\Model\ResourceModel\Product\Gallery'
     ],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Actions'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Form'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tabs'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit']
 ];
