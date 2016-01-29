@@ -356,6 +356,25 @@
             </argument>
         </field>
     </fieldset>
+    <fieldset name="conditions">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Conditions</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sort_order" xsi:type="string">20</item>
+            </item>
+        </argument>
+        <container name="conditions_apply_to" >
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+            <htmlContent name="html_content">
+                <argument name="block" xsi:type="object">Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions</argument>
+            </htmlContent>
+        </container>
+    </fieldset>
     <fieldset name="actions">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -460,5 +479,15 @@
                 </item>
             </argument>
         </field>
+        <container name="actions_apply_to" >
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                </item>
+            </argument>
+            <htmlContent name="html_content">
+                <argument name="block" xsi:type="object">Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions</argument>
+            </htmlContent>
+        </container>
     </fieldset>
 </form>
