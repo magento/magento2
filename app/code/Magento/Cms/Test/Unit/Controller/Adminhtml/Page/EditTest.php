@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
+namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
 class EditTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Cms\Controller\Adminhtml\Block\Edit
+     * @var \Magento\Cms\Controller\Adminhtml\Page\Edit
      */
     protected $editController;
 
@@ -43,9 +43,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected $requestMock;
 
     /**
-     * @var \Magento\Cms\Model\Block|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\Page|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $blockMock;
+    protected $pageMock;
 
     /**
      * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
@@ -62,7 +62,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
 
-        $this->blockMock = $this->getMockBuilder('Magento\Cms\Model\Block')
+        $this->pageMock = $this->getMockBuilder('Magento\Cms\Model\Page')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -72,8 +72,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Cms\Model\Block')
-            ->willReturn($this->blockMock);
+            ->with('Magento\Cms\Model\Page')
+            ->willReturn($this->pageMock);
 
         $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
@@ -110,7 +110,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultRedirectFactoryMock);
 
         $this->editController = $this->objectManager->getObject(
-            'Magento\Cms\Controller\Adminhtml\Block\Edit',
+            'Magento\Cms\Controller\Adminhtml\Page\Edit',
             [
                 'context' => $this->contextMock,
                 'resultPageFactory' => $this->resultPageFactoryMock
@@ -118,25 +118,25 @@ class EditTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testEditActionBlockNoExists()
+    public function testEditActionPageNoExists()
     {
-        $blockId = 1;
+        $pageId = 1;
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->with('block_id')
-            ->willReturn($blockId);
+            ->with('page_id')
+            ->willReturn($pageId);
 
-        $this->blockMock->expects($this->once())
+        $this->pageMock->expects($this->once())
             ->method('load')
-            ->with($blockId);
-        $this->blockMock->expects($this->once())
+            ->with($pageId);
+        $this->pageMock->expects($this->once())
             ->method('getId')
             ->willReturn(null);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
-            ->with(__('This block no longer exists.'));
+            ->with(__('This page no longer exists.'));
 
         $this->resultRedirectFactoryMock->expects($this->atLeastOnce())
             ->method('create')
@@ -151,25 +151,25 @@ class EditTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $blockId
+     * @param int $pageId
      * @param string $label
      * @param string $title
      * @dataProvider editActionData
      */
-    public function testEditAction($blockId, $label, $title)
+    public function testEditAction($pageId, $label, $title)
     {
         $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->with('block_id')
-            ->willReturn($blockId);
+            ->with('page_id')
+            ->willReturn($pageId);
 
-        $this->blockMock->expects($this->any())
+        $this->pageMock->expects($this->any())
             ->method('load')
-            ->with($blockId);
-        $this->blockMock->expects($this->any())
+            ->with($pageId);
+        $this->pageMock->expects($this->any())
             ->method('getId')
-            ->willReturn($blockId);
-        $this->blockMock->expects($this->any())
+            ->willReturn($pageId);
+        $this->pageMock->expects($this->any())
             ->method('getTitle')
             ->willReturn('Test title');
 
@@ -180,7 +180,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->willReturn($resultPageMock);
 
         $titleMock = $this->getMock('Magento\Framework\View\Page\Title', [], [], '', false);
-        $titleMock->expects($this->at(0))->method('prepend')->with(__('Blocks'));
+        $titleMock->expects($this->at(0))->method('prepend')->with(__('Pages'));
         $titleMock->expects($this->at(1))->method('prepend')->with($this->getTitle());
         $pageConfigMock = $this->getMock('Magento\Framework\View\Page\Config', [], [], '', false);
         $pageConfigMock->expects($this->exactly(2))->method('getTitle')->willReturn($titleMock);
@@ -207,7 +207,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTitle()
     {
-        return $this->blockMock->getId() ? $this->blockMock->getTitle() : __('New Block');
+        return $this->pageMock->getId() ? $this->pageMock->getTitle() : __('New Page');
     }
 
     /**
@@ -216,8 +216,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function editActionData()
     {
         return [
-            [null, 'New Block', 'New Block'],
-            [2, 'Edit Block', 'Edit Block']
+            [null, 'New Page', 'New Page'],
+            [2, 'Edit Page', 'Edit Page']
         ];
     }
 }
