@@ -33,12 +33,13 @@ class CanVoidHandler implements ValueHandlerInterface
      * @param int|null $storeId
      *
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handle(array $subject, $storeId = null)
     {
         $paymentDO = $this->subjectReader->readPayment($subject);
 
         $payment = $paymentDO->getPayment();
-        return !$payment instanceof Payment || !(bool)$payment->getAmountPaid();
+        return $payment instanceof Payment && !(bool)$payment->getAmountPaid();
     }
 }

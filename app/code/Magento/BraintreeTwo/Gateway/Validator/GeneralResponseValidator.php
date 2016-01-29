@@ -61,8 +61,7 @@ class GeneralResponseValidator extends AbstractValidator
         return [
             function ($response) {
                 return [
-                    property_exists($response, 'success') && $response->success === true
-                    && !(property_exists($response, 'errors') && $response->errors->deepSize() > 0),
+                    property_exists($response, 'success') && $response->success === true,
                     [__('Braintree error response.')]
                 ];
             }
