@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Import entity product model
@@ -1155,15 +1156,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveProductAttributes(array $attributesData)
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         foreach ($attributesData as $tableName => $skuData) {
             $tableData = [];
             foreach ($skuData as $sku => $attributes) {
-                $productId = $this->skuProcessor->getNewSku($sku)['entity_id'];
+                $linkId = $this->_connection->fetchOne(
+                    $this->_connection->select()
+                        ->from($this->getResource()->getTable('catalog_product_entity'))
+                        ->where('sku = ?', $sku)
+                        ->columns($metadata->getLinkField())
+                );
+                    //$this->skuProcessor->getNewSku($sku)[$metadata->getLinkField()];
 
                 foreach ($attributes as $attributeId => $storeValues) {
                     foreach ($storeValues as $storeId => $storeValue) {
                         $tableData[] = [
-                            'entity_id' => $productId,
+                            $metadata->getLinkField() => $linkId,
                             'attribute_id' => $attributeId,
                             'store_id' => $storeId,
                             'value' => $storeValue,
@@ -1221,7 +1229,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $entityRowsUp Row for update
      * @return $this
      */
-    protected function _saveProductEntity(array $entityRowsIn, array $entityRowsUp)
+    public function saveProductEntity(array $entityRowsIn, array $entityRowsUp)
     {
         static $entityTable = null;
         $this->countItemsCreated += count($entityRowsIn);
@@ -1614,7 +1622,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
 
-            $this->_saveProductEntity(
+            $this->saveProductEntity(
                 $entityRowsIn,
                 $entityRowsUp
             )->_saveProductWebsites(
@@ -1963,7 +1971,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $productIdsToReindex[] = $row['product_id'];
 
                 $row['website_id'] = $this->stockConfiguration->getDefaultScopeId();
-                $row['stock_id'] = $this->stockRegistry->getStock()->getStockId();
+                $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
 
                 $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
                 $existStockData = $stockItemDo->getData();

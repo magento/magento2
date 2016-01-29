@@ -13,14 +13,14 @@
     <div class="content" style="clear: both;">
         <input type="hidden" name="categories" id="product_categories" value="" />
         <?php if ($block->getRoot()): ?>
-        <div data-mage-init='<?php
+        <div data-mage-init="<?php
             echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode([
                 'categoryTree' => [
                     'data' => $block->getTreeArray(null),
                     'url' => $block->getLoadTreeUrl(),
                 ],
             ]));
-        ?>' class="jstree-default"></div>
+        ?>" class="jstree-default"></div>
         <?php endif; ?>
     </div>
 </fieldset>
