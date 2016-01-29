@@ -47,7 +47,7 @@ class ExtensionPool
         foreach ($this->extensionActions as $name => $actionGroup) {
             if (isset($actionGroup[$entityType][$actionName])) {
                 $actions[$name] = $this->objectManager->get($actionGroup[$entityType][$actionName]);
-            } elseif (isset($actionGroup['default'])) {
+            } elseif (isset($actionGroup['default'][$actionName])) {
                 $actions[$name] = $this->objectManager->get($actionGroup['default'][$actionName]);
             }
         }
