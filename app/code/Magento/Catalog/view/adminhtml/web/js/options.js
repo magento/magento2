@@ -25,7 +25,7 @@ define([
                 totalItems: 0,
                 rendered: 0,
                 template: mageTemplate('#row-template'),
-                isReadOnly: config.idReadOnly,
+                isReadOnly: config.isReadOnly,
                 add: function (data, render) {
                     var isNewOption = false,
                         element;

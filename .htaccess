@@ -285,10 +285,3 @@
 ## http://developer.yahoo.com/performance/rules.html#etags
 
     #FileETag none
-
-############################################
-## Add custom headers
-<IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-XSS-Protection "1; mode=block"
-</IfModule>
