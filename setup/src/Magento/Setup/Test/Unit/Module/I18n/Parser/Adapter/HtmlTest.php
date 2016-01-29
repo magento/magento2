@@ -100,8 +100,6 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
 
         $this->_adapter->parse($this->_testFile);
 
-        $phrases = $this->_adapter->getPhrases();
-
         $this->assertEquals($expectedResult, $this->_adapter->getPhrases());
     }
 }
