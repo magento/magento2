@@ -49,14 +49,6 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
                 return $resultRedirect->setPath('*/*/');
             }
         }
-        // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
-        if (!empty($data)) {
-            $model->setData($data);
-        }
-
-        // 4. Register model to use later in blocks
-        $this->_coreRegistry->register('cms_block', $model);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
