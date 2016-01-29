@@ -56,7 +56,7 @@ class DataPersistor implements DataPersistorInterface
      */
     public function clear($key)
     {
-        $method = 'unset' . ucfirst($key) . 'Data';
+        $method = 'uns' . ucfirst($key) . 'Data';
         call_user_func_array([$this->session, $method], []);
     }
 }
