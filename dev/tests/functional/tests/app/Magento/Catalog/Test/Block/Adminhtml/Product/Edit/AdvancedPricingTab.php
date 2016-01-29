@@ -37,7 +37,7 @@ class AdvancedPricingTab extends ProductTab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $context = $element ? $element : $this->_rootElement;
         foreach ($fields as $fieldName => $field) {
@@ -75,7 +75,7 @@ class AdvancedPricingTab extends ProductTab
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $formData = [];
         foreach ($fields as $fieldName => $field) {
