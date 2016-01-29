@@ -1,4 +1,4 @@
-/**l
+/**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -74,12 +74,25 @@ define([
         },
 
         /**
+         * Rerender dynamic-rows elems
+         */
+        reload: function () {
+            this.cacheGridData = [];
+            this._super();
+        },
+
+        /**
          * Parsed data
          *
          * @param {Array} data - array with data
          * about selected records
          */
         processingInsertData: function (data) {
+
+            if (!data) {
+                return false;
+            }
+
             var changes = this._checkGridData(data);
 
             this.cacheGridData = data;
@@ -90,23 +103,60 @@ define([
         },
 
         /**
-         * Delete record instance,
-         * call parent method deleteRecord,
+         * Delete record instance
          * update data provider dataScope
          *
          * @param {String|Number} index - record index
          */
         deleteRecord: function (index, recordId) {
             var data = this.getElementData(this.insertData(), recordId),
-                recordData = this.getElementData(this.recordData(), recordId, 'record_id');
+                lastRecord =
+                    _.findWhere(this.elems(), {index: this.recordIterator-1}) ||
+                    _.findWhere(this.elems(), {index: (this.recordIterator-1).toString()}),
+                recordsData;
 
-            this._super();
-            this.insertData(_.reject(this.source.get(this.dataProvider), data));
-            this.recordData(_.reject(this.source.get(this.dataScope), recordData));
+            this.mapping = true;
+            lastRecord.destroy();
+            this.removeMaxPosition();
+            this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
+                return parseInt(recordData[this.map.id], 10) === parseInt(data[this.map.id], 10);
+            }, this));
+            recordsData = _.reject(this.source.get(this.dataScope + '.' + this.index), function (recordData) {
+                return parseInt(recordData.id, 10) === parseInt(recordId, 10);
+            }, this);
+            this._updateData(recordsData);
+            this._sortAfterDelete();
+            --this.recordIterator;
+            this.mapping = false;
+        },
 
-            if (this.elems().length) {
-                this.sort(this.elems()[0].position, this.elems()[0]);
-            }
+        /**
+         * Set new data to dataSource,
+         * delete element
+         *
+         * @param {Object} data - record data
+         */
+        _updateData: function (data) {
+            var elems = utils.copy(this.elems()),
+                path;
+
+            this.recordData([]);
+            elems = utils.copy(this.elems());
+            data.each(function (rec, idx) {
+                elems[idx].recordId = rec.id;
+                path = this.dataScope + '.' + this.index + '.' + idx;
+                this.source.set(path, rec);
+            }, this);
+            this.elems(elems);
+        },
+
+        /**
+         * Sort elems by position property
+         */
+        _sortAfterDelete: function () {
+            this.elems(this.elems().sort(function (propOne, propTwo) {
+                return parseInt(propOne.position, 10) - parseInt(propTwo.position, 10);
+            }));
         },
 
         /**
@@ -141,10 +191,12 @@ define([
             var cacheLength = this.cacheGridData.length,
                 curData = data.length,
                 max = cacheLength > curData ? this.cacheGridData : data,
-                changes = [];
+                changes = [],
+                obj = {};
 
             max.each(function (record, index) {
-                if (!_.where(this.cacheGridData, data[index]).length) {
+                obj[this.map.id] = record[this.map.id];
+                if (!_.where(this.cacheGridData, obj).length) {
                     changes.push(data[index]);
                 }
             }, this);
@@ -159,6 +211,10 @@ define([
             var path,
                 data,
                 elements = this.elems();
+
+            if (this.mapping) {
+                return false;
+            }
 
             elements.each(function (record) {
                 data = this.getElementData(this.insertData(), record.recordId);
@@ -180,12 +236,15 @@ define([
          * @returns {Object} data object
          */
         getElementData: function (array, index, property) {
-            var obj = {};
+            var obj = {},
+                result;
 
-            index = index.toString();
             property ? obj[property] = index : obj[this.map.id] = index;
+            result = _.findWhere(array, obj);
+            !result ? property ? obj[property] = index.toString() : obj[this.map.id] = index.toString() : false;
+            result = _.findWhere(array, obj);
 
-            return _.findWhere(array, obj);
+            return result;
         }
     });
 });
