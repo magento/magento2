@@ -100,10 +100,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $customerGroups = $this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems();
         $applyOptions = [
-            ['label' => __('Apply as percentage of original'), 'value' => 'by_percent'],
-            ['label' => __('Apply as fixed amount'), 'value' => 'by_fixed'],
-            ['label' => __('Adjust final price to this percentage'), 'value' => 'to_percent'],
-            ['label' => __('Adjust final price to discount value'), 'value' => 'to_fixed']
+            ['label' => __('Percent of product price discount'), 'value' =>  Rule::BY_PERCENT_ACTION],
+            ['label' => __('Fixed amount discount'), 'value' => Rule::BY_FIXED_ACTION],
+            ['label' => __('Fixed amount discount for whole cart'), 'value' => Rule::BY_PERCENT_ACTION],
+            ['label' => __('Buy X get Y free (discount amount is Y)'), 'value' => Rule::BUY_X_GET_Y_ACTION]
         ];
 
         $couponTypesOptions = [];
@@ -144,6 +144,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 'fields' => [
                     'simple_action' => [
                         'options' => $applyOptions
+                    ],
+                    'discount_amount' => [
+                        'value' => '0',
+                    ],
+                    'discount_qty' => [
+                        'value' => '0',
+                    ],
+                    'apply_to_shipping' => [
+                        'options' => [
+                            ['label' => __('Yes'), 'value' => '1'],
+                            ['label' => __('No'), 'value' => '0']
+                        ]
                     ],
                     'stop_rules_processing' => [
                         'options' => [
