@@ -29,7 +29,7 @@ class RuleInformation extends Tab
      * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $context = ($element === null) ? $this->_rootElement : $element;
         $data = $this->dataMapping($fields);
