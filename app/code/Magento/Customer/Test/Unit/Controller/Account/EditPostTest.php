@@ -254,24 +254,18 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $errorNumber
-     * @param string $postedEmail
-     * @param string $errorMessage
-     *
-     * @dataProvider changeEmailErrorDataProvider
+     * @return void
      */
-    public function testChangeEmailError(
-        $errorNumber,
-        $postedEmail,
-        $errorMessage
-    ) {
+    public function testChangeEmailError()
+    {
         $customerId = 1;
         $password = '1234567';
+        $errorMessage = __('The password doesn\'t match this account.');
 
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
 
-        $currentCustomerMock = $this->getCurrentCustomerMock($address);
+        $currentCustomerMock = $this->getCurrentCustomerMock($customerId, $address);
         $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
 
         $this->customerExtractor->expects($this->once())
@@ -297,22 +291,21 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with($customerId)
             ->willReturn($currentCustomerMock);
 
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->with('change_email')
             ->willReturn(true);
 
-        $this->request->expects($this->any())
+        $this->request->expects($this->once())
             ->method('getPost')
-            ->withConsecutive(['email'], ['current_password'])
-            ->willReturnOnConsecutiveCalls($postedEmail, $password);
+            ->with('current_password')
+            ->willReturn($password);
 
-        if ($errorNumber == 2) {
-            $this->customerAccountManagement->expects($this->once())
-                ->method('validatePasswordById')
-                ->with($customerId, $password)
-                ->willReturn(false);
-        }
+        $exception = new \Magento\Framework\Exception\InvalidEmailOrPasswordException(__($errorMessage));
+        $this->currentCustomerHelper->expects($this->once())
+            ->method('validatePassword')
+            ->with($password)
+            ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())
             ->method('addError')
@@ -325,25 +318,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertSame($this->resultRedirect, $this->model->execute());
-    }
-
-    /**
-     * @return array
-     */
-    public function changeEmailErrorDataProvider()
-    {
-        return [
-            [
-                'error_number' => 1,
-                'posted_email' => '',
-                'error_message' => __('Please enter new email.')
-            ],
-            [
-                'error_number' => 2,
-                'posted_email' => 'test@example.com',
-                'error_message' => __('You have entered an invalid password for current user.')
-            ]
-        ];
     }
 
     /**
