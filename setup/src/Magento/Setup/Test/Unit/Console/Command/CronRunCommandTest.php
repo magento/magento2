@@ -115,7 +115,7 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->readinessCheck->expects($this->once())->method('runReadinessCheck')->willReturn(true);
         $this->status->expects($this->once())->method('isUpdateInProgress')->willReturn(false);
-        $this->status->expects($this->once())->method('isUpdateError')->willReturn(false);
+        $this->status->expects($this->exactly(2))->method('isUpdateError')->willReturn(false);
         $this->status->expects($this->exactly(2))->method('toggleUpdateInProgress');
     }
 
