@@ -41,10 +41,10 @@
                         <!-- ko foreach: { data: options, as: 'option' } -->
                         <dt class="label"><!-- ko text: option.label --><!-- /ko --></dt>
                         <dd class="values">
-                            <!-- ko if: Array.isArray(option) -->
+                            <!-- ko if: Array.isArray(option.value) -->
                                 <span data-bind="html: option.value.join('<br>')"></span>
                             <!-- /ko -->
-                            <!-- ko ifnot: Array.isArray(option) -->
+                            <!-- ko ifnot: Array.isArray(option.value) -->
                                 <span data-bind="html: option.value"></span>
                             <!-- /ko -->
                         </dd>
