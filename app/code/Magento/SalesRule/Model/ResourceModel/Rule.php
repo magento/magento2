@@ -85,46 +85,6 @@ class Rule extends AbstractResource
     }
 
     /**
-     * Add customer group ids and website ids to rule data after load
-     *
-     * @param AbstractModel $object
-     * @return $this
-     */
-    protected function _afterLoad(AbstractModel $object)
-    {
-        $this->loadCustomerGroupIds($object);
-        $this->loadWebsiteIds($object);
-
-        parent::_afterLoad($object);
-        return $this;
-    }
-
-    /**
-     * @param AbstractModel $object
-     * @return void
-     */
-    public function loadCustomerGroupIds(AbstractModel $object)
-    {
-        if (!$this->customerGroupIds) {
-            $this->customerGroupIds = (array)$this->getCustomerGroupIds($object->getId());
-        }
-        $object->setData('customer_group_ids', $this->customerGroupIds);
-    }
-
-    /**
-     * @param AbstractModel $object
-     * @return void
-     */
-    public function loadWebsiteIds(AbstractModel $object)
-    {
-        if (!$this->websiteIds) {
-            $this->websiteIds = (array)$this->getWebsiteIds($object->getId());
-        }
-
-        $object->setData('website_ids', $this->websiteIds);
-    }
-
-    /**
      * Prepare sales rule's discount quantity
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -169,22 +129,6 @@ class Rule extends AbstractResource
     {
         if ($object->hasStoreLabels()) {
             $this->saveStoreLabels($object->getId(), $object->getStoreLabels());
-        }
-
-        if ($object->hasWebsiteIds()) {
-            $websiteIds = $object->getWebsiteIds();
-            if (!is_array($websiteIds)) {
-                $websiteIds = explode(',', (string)$websiteIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $websiteIds, 'website');
-        }
-
-        if ($object->hasCustomerGroupIds()) {
-            $customerGroupIds = $object->getCustomerGroupIds();
-            if (!is_array($customerGroupIds)) {
-                $customerGroupIds = explode(',', (string)$customerGroupIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $customerGroupIds, 'customer_group');
         }
 
         // Save product attributes used in rule

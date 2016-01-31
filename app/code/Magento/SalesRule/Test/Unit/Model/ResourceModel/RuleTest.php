@@ -130,72 +130,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testLoadCustomerGroupIds()
-    {
-        $customerGroupIds = [1];
-
-        $object = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $object->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
-        $this->adapter->expects($this->once())
-            ->method('select')
-            ->willReturn($this->select);
-        $this->select->expects($this->once())
-            ->method('from')
-            ->with('salesrule_customer_group', ['customer_group_id'])
-            ->willReturnSelf();
-        $this->select->expects($this->once())
-            ->method('where')
-            ->with('rule_id = ?', 1)
-            ->willReturnSelf();
-        $this->adapter->expects($this->once())
-            ->method('fetchCol')
-            ->with($this->select)
-            ->willReturn($customerGroupIds);
-
-        $object->expects($this->once())
-            ->method('setData')
-            ->with('customer_group_ids', $customerGroupIds);
-
-        $this->model->loadCustomerGroupIds($object);
-    }
-
-    public function testLoadWebsiteIds()
-    {
-        $websiteIds = [1];
-
-        $object = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $object->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
-        $this->adapter->expects($this->once())
-            ->method('select')
-            ->willReturn($this->select);
-        $this->select->expects($this->once())
-            ->method('from')
-            ->with('salesrule_website', ['website_id'])
-            ->willReturnSelf();
-        $this->select->expects($this->once())
-            ->method('where')
-            ->with('rule_id = ?', 1)
-            ->willReturnSelf();
-        $this->adapter->expects($this->once())
-            ->method('fetchCol')
-            ->with($this->select)
-            ->willReturn($websiteIds);
-
-        $object->expects($this->once())
-            ->method('setData')
-            ->with('website_ids', $websiteIds);
-
-        $this->model->loadWebsiteIds($object);
-    }
-
     /**
      * test load
      */
@@ -211,26 +145,8 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->entityManager->expects($this->once())
             ->method('load')
             ->with(RuleInterface::class, $abstractModel, $ruleId);
-        $this->setupConnectionMock($customerGroups, $websiteIds);
         $result = $this->model->load($abstractModel, $ruleId);
         $this->assertSame($this->model, $result);
-    }
-
-    private function setupConnectionMock($customerGroups, $websiteIds)
-    {
-        $this->adapter->expects($this->any())
-            ->method('select')
-            ->willReturn($this->select);
-        $this->select->expects($this->any())
-            ->method('from')
-            ->willReturnSelf();
-        $this->select->expects($this->any())
-            ->method('where')
-            ->willReturnSelf();
-        $this->adapter->expects($this->exactly(2))
-            ->method('fetchCol')
-            ->with($this->select)
-            ->willReturnOnConsecutiveCalls([$customerGroups, $websiteIds]);
     }
 
     public function testSave()
