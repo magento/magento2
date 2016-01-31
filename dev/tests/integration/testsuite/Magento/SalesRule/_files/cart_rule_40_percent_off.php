@@ -5,6 +5,8 @@
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var Magento\Framework\Registry $registry */
+$registry = $objectManager->get('Magento\Framework\Registry');
 
 /** @var \Magento\SalesRule\Model\Rule $salesRule */
 $salesRule = $objectManager->create('Magento\SalesRule\Model\Rule');
@@ -24,6 +26,7 @@ $salesRule->setData(
         ],
         'simple_action' => 'by_percent',
         'discount_amount' => 40,
+        'discount_step' => 0,
         'stop_rules_processing' => 1,
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -33,5 +36,5 @@ $salesRule->setData(
     ]
 );
 $salesRule->save();
-$objectManager->get('Magento\Framework\Registry')
-    ->register('Magento/SalesRule/_files/cart_rule_40_percent_off', $salesRule->getRuleId(), true);
+$registry->unregister('Magento/SalesRule/_files/cart_rule_40_percent_off');
+$registry->register('Magento/SalesRule/_files/cart_rule_40_percent_off', $salesRule->getRuleId());
