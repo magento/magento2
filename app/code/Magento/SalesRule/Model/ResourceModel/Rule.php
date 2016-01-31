@@ -85,6 +85,33 @@ class Rule extends AbstractResource
     }
 
     /**
+     * @param AbstractModel $object
+     * @return void
+     * @deprecated
+     */
+    public function loadCustomerGroupIds(AbstractModel $object)
+    {
+        if (!$this->customerGroupIds) {
+            $this->customerGroupIds = (array)$this->getCustomerGroupIds($object->getId());
+        }
+        $object->setData('customer_group_ids', $this->customerGroupIds);
+    }
+
+    /**
+     * @param AbstractModel $object
+     * @return void
+     * @deprecated
+     */
+    public function loadWebsiteIds(AbstractModel $object)
+    {
+        if (!$this->websiteIds) {
+            $this->websiteIds = (array)$this->getWebsiteIds($object->getId());
+        }
+
+        $object->setData('website_ids', $this->websiteIds);
+    }
+
+    /**
      * Prepare sales rule's discount quantity
      *
      * @param \Magento\Framework\Model\AbstractModel $object

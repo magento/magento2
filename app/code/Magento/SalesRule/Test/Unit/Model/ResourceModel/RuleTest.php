@@ -136,8 +136,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     public function testLoad()
     {
         $ruleId = 1;
-        $customerGroups = [1, 2, 3, 4];
-        $websiteIds = [1, 2];
         /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $abstractModel */
         $abstractModel = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
             ->disableOriginalConstructor()
