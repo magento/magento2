@@ -40,7 +40,7 @@
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_Sales::order_statuses"  title="Order Status" sortOrder="40" />
+                        <resource id="Magento_Sales::order_statuses"  title="Order Statuses" sortOrder="40" />
                         <resource id="Magento_Config::config">
                             <resource id="Magento_Sales::config_sales" title="Sales Section" sortOrder="60" />
                             <resource id="Magento_Sales::sales_email" title="Sales Emails Section" sortOrder="65" />
