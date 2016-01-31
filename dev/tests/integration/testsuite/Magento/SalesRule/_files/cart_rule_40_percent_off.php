@@ -4,8 +4,10 @@
  * See COPYING.txt for license details.
  */
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
 /** @var \Magento\SalesRule\Model\Rule $salesRule */
-$salesRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
+$salesRule = $objectManager->create('Magento\SalesRule\Model\Rule');
 $salesRule->setData(
     [
         'name' => '40% Off on Large Orders',
@@ -31,3 +33,5 @@ $salesRule->setData(
     ]
 );
 $salesRule->save();
+$objectManager->get('Magento\Framework\Registry')
+    ->register('Magento/SalesRule/_files/cart_rule_40_percent_off', $salesRule->getRuleId(), true);
