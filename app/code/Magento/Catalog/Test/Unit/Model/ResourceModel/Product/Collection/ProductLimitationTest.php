@@ -26,8 +26,8 @@ class ProductLimitationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUsePriceIndex()
     {
-        $this->assertFalse($this->productLimitation->getUsePriceIndex());
+        $this->assertFalse($this->productLimitation->isUsePriceIndex());
         $this->productLimitation->setUsePriceIndex(true);
-        $this->assertTrue($this->productLimitation->getUsePriceIndex());
+        $this->assertTrue($this->productLimitation->isUsePriceIndex());
     }
 }
