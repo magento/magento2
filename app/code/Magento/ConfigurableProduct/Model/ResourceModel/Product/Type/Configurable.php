@@ -7,6 +7,9 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
+
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -17,16 +20,24 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_catalogProductRelation;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation
+     * @param MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation,
+        MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_catalogProductRelation = $catalogProductRelation;
+        $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
 
@@ -77,9 +88,9 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
             $this->getConnection()->insertMultiple($this->getMainTable(), $data);
         }
-
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         // configurable product relations should be added to relation table
-        $this->_catalogProductRelation->processRelations($mainProductId, $productIds);
+        $this->_catalogProductRelation->processRelations($mainProduct->getData($linkField), $productIds);
 
         return $this;
     }

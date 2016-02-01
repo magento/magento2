@@ -147,11 +147,11 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
 
         $olderThen = $timestamp - $sessionLifetime;
 
-        $this->adminSessionInfoFactoryMock->expects($this->once())
+        $this->adminSessionInfoFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->currentSessionMock);
 
-        $this->authSessionMock->expects($this->once())
+        $this->authSessionMock->expects($this->exactly(2))
             ->method('getSessionId')
             ->willReturn($sessionId);
 
