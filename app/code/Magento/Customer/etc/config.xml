@@ -26,6 +26,10 @@
             <default>
                 <group>1</group>
             </default>
+            <account_information>
+                <change_email_template>customer_account_information_change_email_template</change_email_template>
+                <change_email_and_password_template>customer_account_information_change_email_and_password_template</change_email_and_password_template>
+            </account_information>
             <password>
                 <forgot_email_identity>support</forgot_email_identity>
                 <forgot_email_template>customer_password_forgot_email_template</forgot_email_template>

@@ -33,6 +33,9 @@ class InlineEdit extends \Magento\Backend\App\Action
     /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
+    /** @var \Magento\Customer\Helper\EmailNotification */
+    protected $emailNotification;
+
     /**
      * @param Action\Context $context
      * @param CustomerRepositoryInterface $customerRepository
@@ -40,6 +43,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
      */
     public function __construct(
         Action\Context $context,
@@ -47,13 +51,15 @@ class InlineEdit extends \Magento\Backend\App\Action
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Customer\Helper\EmailNotification $emailNotification
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->customerMapper = $customerMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
+        $this->emailNotification = $emailNotification;
         parent::__construct($context);
     }
 
@@ -75,11 +81,15 @@ class InlineEdit extends \Magento\Backend\App\Action
 
         foreach (array_keys($postItems) as $customerId) {
             $this->setCustomer($this->customerRepository->getById($customerId));
+            $currentCustomer = clone $this->getCustomer();
+
             if ($this->getCustomer()->getDefaultBilling()) {
                 $this->updateDefaultBilling($this->getData($postItems[$customerId]));
             }
             $this->updateCustomer($this->getData($postItems[$customerId], true));
             $this->saveCustomer($this->getCustomer());
+
+            $this->emailNotification->sendNotificationEmailsIfRequired($currentCustomer, $this->getCustomer());
         }
 
         return $resultJson->setData([

@@ -59,6 +59,9 @@ class Save extends \Magento\User\Controller\Adminhtml\User
                 throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
             $model->save();
+
+            $model->sendNotificationEmailsIfRequired();
+
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
