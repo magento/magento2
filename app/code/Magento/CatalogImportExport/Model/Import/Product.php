@@ -745,7 +745,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ->_initTypeModels()
             ->_initSkus();
         $this->validator->init($this);
-        $this->initMediaGalleryResources();
     }
 
     /**
@@ -1292,15 +1291,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function initMediaGalleryResources()
     {
-        $this->productEntityTableName = $this->getResource()->getTable('catalog_product_entity');
-        $this->mediaGalleryTableName = $this->getResource()->getTable('catalog_product_entity_media_gallery');
-        $this->mediaGalleryValueTableName = $this->getResource()->getTable('catalog_product_entity_media_gallery_value');
-        $this->mediaGalleryEntityToValueTableName = $this->getResource()->getTable(
-            'catalog_product_entity_media_gallery_value_to_entity'
-        );
-        $this->productEntityLinkField = $this->metadataPool
-            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->getLinkField();
+        if (null == $this->mediaGalleryTableName) {
+            $this->productEntityTableName = $this->getResource()->getTable('catalog_product_entity');
+            $this->mediaGalleryTableName = $this->getResource()->getTable('catalog_product_entity_media_gallery');
+            $this->mediaGalleryValueTableName = $this->getResource()->getTable(
+                'catalog_product_entity_media_gallery_value'
+            );
+            $this->mediaGalleryEntityToValueTableName = $this->getResource()->getTable(
+                'catalog_product_entity_media_gallery_value_to_entity'
+            );
+            $this->productEntityLinkField = $this->metadataPool
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
     }
 
     /**
@@ -1312,21 +1315,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function getExistingImages($bunch)
     {
         $result = [];
-        $productSKUs = array_map('strval', array_column($bunch, self::COL_SKU));
-        if (!$productSKUs) {
+        if ($this->getErrorAggregator()->hasToBeTerminated()) {
             return $result;
         }
 
-        $linkField = $this->metadataPool
-            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->getLinkField();
+        $this->initMediaGalleryResources();
+        $productSKUs = array_map('strval', array_column($bunch, self::COL_SKU));
         $select = $this->_connection->select()->from(
             ['mg' => $this->mediaGalleryTableName],
             ['value' => 'mg.value']
         )->joinInner(
             ['mgvte' => $this->mediaGalleryEntityToValueTableName],
             '(mg.value_id = mgvte.value_id)',
-            [$linkField => 'mgvte.' . $linkField]
+            [$this->productEntityLinkField => 'mgvte.' . $this->productEntityLinkField]
         )->joinInner(
             ['pe' => $this->productEntityTableName],
             "(mgvte.{$this->productEntityLinkField} = pe.{$this->productEntityLinkField})",
@@ -1814,6 +1815,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($mediaGalleryData)) {
             return $this;
         }
+        $this->initMediaGalleryResources();
         $productIds = [];
         $imageNames = [];
         $multiInsertData = [];
