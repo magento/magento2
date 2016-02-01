@@ -42,7 +42,7 @@ class ProductLimitation implements \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return $this->offsetExists($offset) ? $this->productLimitationFilters[$offset] : null;
+        return $this->productLimitationFilters[$offset];
     }
 
     /**
