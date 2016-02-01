@@ -134,6 +134,7 @@ define([
                     if ($('frontend_input') && $('frontend_input').value === 'multiselect') {
                         optionDefaultInputType = 'checkbox';
                     }
+
                     return optionDefaultInputType;
                 }
             };
