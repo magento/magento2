@@ -24,7 +24,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /** @var \Magento\Framework\Webapi\ServiceOutputProcessor|\PHPUnit_Framework_MockObject_MockObject */
-    protected $serviceOutputProcessor;
+    protected $dataObjectEncoderMock;
 
     protected function setUp()
     {
@@ -33,7 +33,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $this->configMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serviceOutputProcessor = $this->getMockBuilder('Magento\Framework\Webapi\ServiceOutputProcessor')
+        $this->dataObjectEncoderMock = $this->getMockBuilder('Magento\Framework\Webapi\ServiceOutputProcessor')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -41,7 +41,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\MessageQueue\MessageEncoder',
             [
                 'queueConfig' => $this->configMock,
-                'serviceOutputProcessor' => $this->serviceOutputProcessor
+                'dataObjectEncoder' => $this->dataObjectEncoderMock
             ]
         );
         parent::setUp();
@@ -77,7 +77,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->serviceOutputProcessor
+        $this->dataObjectEncoderMock
             ->expects($this->once())
             ->method('convertValue')
             ->willThrowException(new LocalizedException(__($exceptionMessage)));
@@ -97,7 +97,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->serviceOutputProcessor
+        $this->dataObjectEncoderMock
             ->expects($this->once())
             ->method('convertValue')
             ->willThrowException(new LocalizedException(__($exceptionMessage)));

@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\MessageValidator;
 
 /**
  * A MessageQueue Publisher to handle publishing a message.
@@ -45,6 +46,11 @@ class Publisher implements PublisherInterface
     private $messageEncoder;
 
     /**
+     * @var MessageValidator
+     */
+    private $messageValidator;
+
+    /**
      * Initialize dependencies.
      *
      * @param ExchangeRepository $exchangeRepository
@@ -52,19 +58,22 @@ class Publisher implements PublisherInterface
      * @param MessageQueueConfig $messageQueueConfig
      * @param \Magento\Amqp\Model\Config $amqpConfig
      * @param MessageEncoder $messageEncoder
+     * @param MessageValidator $messageValidator
      */
     public function __construct(
         ExchangeRepository $exchangeRepository,
         EnvelopeFactory $envelopeFactory,
         MessageQueueConfig $messageQueueConfig,
         \Magento\Amqp\Model\Config $amqpConfig,
-        MessageEncoder $messageEncoder
+        MessageEncoder $messageEncoder,
+        MessageValidator $messageValidator
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
         $this->messageQueueConfig = $messageQueueConfig;
         $this->amqpConfig = $amqpConfig;
         $this->messageEncoder = $messageEncoder;
+        $this->messageValidator = $messageValidator;
     }
 
     /**
@@ -72,6 +81,7 @@ class Publisher implements PublisherInterface
      */
     public function publish($topicName, $data)
     {
+        $this->messageValidator->validate($topicName, $data);
         $data = $this->messageEncoder->encode($topicName, $data);
         $replyTo = $this->messageQueueConfig->getResponseQueueName($topicName);
         $envelope = $this->envelopeFactory->create(

@@ -37,24 +37,32 @@ class Publisher implements PublisherInterface
     private $messageEncoder;
 
     /**
+     * @var MessageValidator
+     */
+    private $messageValidator;
+
+    /**
      * Initialize dependencies.
      *
      * @param ExchangeRepository $exchangeRepository
      * @param EnvelopeFactory $envelopeFactory
      * @param MessageQueueConfig $messageQueueConfig
      * @param MessageEncoder $messageEncoder
+     * @param MessageValidator $messageValidator
      * @internal param ExchangeInterface $exchange
      */
     public function __construct(
         ExchangeRepository $exchangeRepository,
         EnvelopeFactory $envelopeFactory,
         MessageQueueConfig $messageQueueConfig,
-        MessageEncoder $messageEncoder
+        MessageEncoder $messageEncoder,
+        MessageValidator $messageValidator
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
         $this->messageQueueConfig = $messageQueueConfig;
         $this->messageEncoder = $messageEncoder;
+        $this->messageValidator = $messageValidator;
     }
 
     /**
@@ -62,6 +70,7 @@ class Publisher implements PublisherInterface
      */
     public function publish($topicName, $data)
     {
+        $this->messageValidator->validate($topicName, $data);
         $data = $this->messageEncoder->encode($topicName, $data);
         $envelope = $this->envelopeFactory->create(['body' => $data]);
         $connectionName = $this->messageQueueConfig->getConnectionByTopic($topicName);

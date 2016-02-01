@@ -17,6 +17,7 @@ use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
+use Magento\Framework\MessageQueue\MessageValidator;
 
 /**
  * A MessageQueue Consumer to handle receiving, processing and replying to an RPC message.
@@ -60,6 +61,11 @@ class Consumer implements ConsumerInterface
     private $envelopeFactory;
 
     /**
+     * @var MessageValidator
+     */
+    private $messageValidator;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
@@ -69,6 +75,7 @@ class Consumer implements ConsumerInterface
      * @param \Magento\Framework\MessageQueue\QueueRepository $queueRepository
      * @param \Magento\Framework\MessageQueue\ConfigInterface $queueConfig
      * @param EnvelopeFactory $envelopeFactory
+     * @param MessageValidator $messageValidator
      */
     public function __construct(
         CallbackInvoker $invoker,
@@ -77,7 +84,8 @@ class Consumer implements ConsumerInterface
         ConsumerConfigurationInterface $configuration,
         \Magento\Framework\MessageQueue\QueueRepository $queueRepository,
         \Magento\Framework\MessageQueue\ConfigInterface $queueConfig,
-        EnvelopeFactory $envelopeFactory
+        EnvelopeFactory $envelopeFactory,
+        MessageValidator $messageValidator
     ) {
         $this->invoker = $invoker;
         $this->messageEncoder = $messageEncoder;
@@ -86,6 +94,7 @@ class Consumer implements ConsumerInterface
         $this->queueRepository = $queueRepository;
         $this->queueConfig = $queueConfig;
         $this->envelopeFactory = $envelopeFactory;
+        $this->messageValidator = $messageValidator;
     }
 
     /**
@@ -121,6 +130,7 @@ class Consumer implements ConsumerInterface
                 foreach ($handlers as $callback) {
                     $result = call_user_func_array($callback, $decodedMessage);
                     if (isset($result)) {
+                        $this->messageValidator->validate($topicName, $result, false);
                         return $this->messageEncoder->encode($topicName, $result, false);
                     } else {
                         throw new LocalizedException(new Phrase('No reply message resulted in RPC.'));
@@ -130,6 +140,7 @@ class Consumer implements ConsumerInterface
                 foreach ($handlers as $callback) {
                     $result = call_user_func($callback, $decodedMessage);
                     if (isset($result)) {
+                        $this->messageValidator->validate($topicName, $result, false);
                         return $this->messageEncoder->encode($topicName, $result, false);
                     } else {
                         throw new LocalizedException(new Phrase('No reply message resulted in RPC.'));
