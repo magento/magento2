@@ -1226,7 +1226,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         $http->close();
 
         if (!$this->_validateResponse($methodName, $response)) {
-            $this->_logger->critical(new \Exception(__("PayPal response hasn't required fields.")));
+            $this->_logger->critical(new \Exception(__('PayPal response hasn\'t required fields.')));
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while processing your order.')
             );
