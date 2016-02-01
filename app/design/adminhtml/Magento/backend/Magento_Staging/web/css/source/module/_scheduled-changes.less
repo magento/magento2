@@ -74,16 +74,25 @@
             margin-left: @indent__m;
         }
     }
+    
+    .admin__data-grid-outer-wrap {
+        min-height: 0;
+    } 
 
     .block-content {
         border-top: 1px solid @scheduled-changes-block__border-color;
         height: 15rem;
+        margin-bottom: @indent__base;
         min-height: 15rem;
         overflow: auto;
         padding: @indent__m;
         position: relative;
         resize: vertical;
         z-index: 1;
+    }
+
+    .admin__data-grid-outer-wrap {
+        position: relative;
     }
 }
 
@@ -122,9 +131,10 @@
     }
 
     .schedule-date {
-        font-weight: bold;
-        padding-left: 20px;
+        font-weight: @font-weight__bold;
+        padding-left: @indent__base;
         white-space: nowrap;
+        width: 10rem;
 
         &:before {
             background: @scheduled-changes-scale-from__background-color;
@@ -143,6 +153,12 @@
         time {
             white-space: nowrap;
         }
+
+        &.schedule-date-empty {
+            &:before {
+                display: none;
+            }
+        }
     }
 
     .schedule-end {
@@ -158,11 +174,13 @@
 
     .schedule-time {
         white-space: nowrap;
+        width: 7rem;
     }
 
     .schedule-label {
         color: @scheduled-changes-table-accent__color;
         font-size: 1.2rem;
+        width: 1%;
     }
 
     tr {
@@ -176,23 +194,31 @@
     .schedule-actions {
         padding-right: 0;
         white-space: nowrap;
+        width: 10%;
 
         a {
             + a {
                 &:before {
                     color: @scheduled-changes-table-accent__color;
-                    content: ' | ';
+                    content: '|';
                     display: inline-block;
-                    margin: 0 .3rem 0 .1rem;
+                    margin: 0 .3rem 0 0.4rem;
                 }
             }
+        }
+        .action-menu-item {
+            cursor: pointer;
         }
     }
 }
 
+.schedule-name {
+    font-weight: @font-weight__bold;
+}
+
 .limited-text {
     display: inline-block;
-    line-height: 1.2em;
+    line-height: 1.4em;
     max-height: 2.4em; // Exactly 3 lines
     overflow: hidden;
     position: relative;
@@ -207,6 +233,11 @@
         text-align: right;
         top: 1.2em;
         width: 5rem;
+    }
+
+    + .limited-text {
+        line-height: 1.6rem;
+        margin: .8rem 0 0;
     }
 }
 
@@ -249,5 +280,23 @@
 
     &:before {
         content: ':::::';
+    }
+}
+
+.block-nodata {
+    padding: @indent__m;
+}
+
+//  Create/Edit update form
+.fieldset-schedule {
+    border-bottom: 1px solid @collapsible__border-color;
+
+    .fieldset-wrapper-title {
+        margin: @indent__base 0 @indent__s;
+
+        strong {
+            font-size: 2rem;
+            font-weight: @font-weight__regular;
+        }
     }
 }
