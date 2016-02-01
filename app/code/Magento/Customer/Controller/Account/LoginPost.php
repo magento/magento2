@@ -13,6 +13,8 @@ use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -36,12 +38,18 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     protected $session;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerUrl $customerHelperData
      * @param Validator $formKeyValidator
      * @param AccountRedirect $accountRedirect
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Context $context,
@@ -49,13 +57,15 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
         AccountManagementInterface $customerAccountManagement,
         CustomerUrl $customerHelperData,
         Validator $formKeyValidator,
-        AccountRedirect $accountRedirect
+        AccountRedirect $accountRedirect,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerUrl = $customerHelperData;
         $this->formKeyValidator = $formKeyValidator;
         $this->accountRedirect = $accountRedirect;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -89,11 +99,19 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
+                } catch (UserLockedException $e) {
+                    $message = __(
+                        'The account is locked. Please wait and try again or contact %1.',
+                        $this->scopeConfig->getValue('contact/email/recipient_email')
+                    );
+                    $this->messageManager->addError($message);
+                    $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
                     $message = __('Invalid login or password.');
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
-                } catch (\Exception $e) {
+                }
+                catch (\Exception $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
                     $this->messageManager->addError(
                         __('An unspecified error occurred. Please contact us for assistance.')

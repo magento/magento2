@@ -5,8 +5,12 @@
  */
 namespace Magento\Customer\Block\Form;
 
+use Magento\Customer\Helper\Config as CustomerConfigHelper;
+
 /**
  * Customer register form block
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Register extends \Magento\Directory\Block\Data
 {
@@ -26,6 +30,13 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerUrl;
 
     /**
+     * @var CustomerConfigHelper
+     */
+    protected $customerConfigHelper;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -35,6 +46,7 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
+     * @param CustomerConfigHelper $customerConfigHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -49,11 +61,13 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
+        CustomerConfigHelper $customerConfigHelper,
         array $data = []
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
+        $this->customerConfigHelper = $customerConfigHelper;
         parent::__construct(
             $context,
             $directoryHelper,
@@ -189,5 +203,25 @@ class Register extends \Magento\Directory\Block\Data
         }
 
         return $this;
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     */
+    public function getMinimumPasswordLength()
+    {
+        return $this->customerConfigHelper->getMinimumPasswordLength();
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     */
+    public function getRequiredCharacterClassesNumber()
+    {
+        return $this->customerConfigHelper->getRequiredCharacterClassesNumber();
     }
 }

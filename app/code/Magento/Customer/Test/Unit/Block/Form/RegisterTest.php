@@ -42,6 +42,9 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */
     private $_customerUrl;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Config */
+    protected $customerConfigHelper;
+
     /** @var Register */
     private $_block;
 
@@ -58,7 +61,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->customerConfigHelper = $this->getMock('Magento\Customer\Helper\Config', [], [], '', false);
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
 
@@ -71,7 +74,8 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Directory\Model\ResourceModel\Country\CollectionFactory', [], [], '', false),
             $this->_moduleManager,
             $this->_customerSession,
-            $this->_customerUrl
+            $this->_customerUrl,
+            $this->customerConfigHelper
         );
     }
 
