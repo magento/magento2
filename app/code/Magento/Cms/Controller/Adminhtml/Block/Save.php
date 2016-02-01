@@ -21,14 +21,16 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
 
     /**
      * @param Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
         Context $context,
+        \Magento\Framework\Registry $coreRegistry,
         DataPersistorInterface $dataPersistor
     ) {
         $this->dataPersistor = $dataPersistor;
-        parent::__construct($context);
+        parent::__construct($context, $coreRegistry);
     }
 
     /**
