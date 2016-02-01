@@ -106,7 +106,10 @@ define([
          *
          */
         onSelectedChange: function () {
-            if (!this.dataLinks.imports || this.suppressDataLinks || !this.initialExportDone) {
+            if (!this.dataLinks.imports ||
+                this.suppressDataLinks ||
+                _.isBoolean(this.initialExportDone) && !this.initialExportDone
+            ) {
                 this.suppressDataLinks = false;
 
                 return;
@@ -167,6 +170,12 @@ define([
             totalSelected = provider.totalSelected();
             itemsType = selections && selections.excludeMode ? 'excluded' : 'selected';
             rows = provider && provider.rows();
+
+            if (_.isEmpty(selections.selected)) {
+                this.suppressDataLinks = false;
+
+                return result;
+            }
 
             if (this.canUpdateFromClientData(totalSelected, selections.selected, rows)) {
                 this.updateFromClientData(selections.selected, rows);
@@ -284,10 +293,12 @@ define([
                 value = this.externalValue(),
                 selectedIds = _.pluck(newValue, this.indexField);
 
-            if (keys && !_.isEmpty(keys)) {
-                newValue = _.map(value, function (item) {
+            if (_.isArray(keys) && !_.isEmpty(keys)) {
+                newValue = _.map(newValue, function (item) {
                     return _.pick(item, keys);
                 }, this);
+            } else if (keys && _.isString(keys) && !_.isEmpty(newValue)) {
+                newValue = newValue[0][keys];
             }
 
             if (this.externalFilterMode) {
@@ -358,12 +369,18 @@ define([
             }
 
             this.suppressDataLinks = true;
-            ids = _.pluck(items || [], this.indexField)
-                .map(function (item) {
-                    return item.toString();
-                });
             provider.deselectAll();
-            provider.selected(ids || []);
+
+            if (_.isString(items)) {
+                provider.selected([items] || []);
+            } else {
+                ids = _.pluck(items || [], this.indexField)
+                    .map(function (item) {
+                        return item.toString();
+                    });
+
+                provider.selected(ids || []);
+            }
             this.initialExportDone = true;
         },
 
@@ -387,17 +404,6 @@ define([
          */
         reload: function () {
             this.externalSource().set('params.t', new Date().getTime());
-        },
-
-        /**
-         * Reload source
-         *
-         * @param {bool} state
-         */
-        reload: function (state) {
-            if (!state) {
-                this.externalSource().set('params.t', new Date().getTime());
-            }
         },
 
         /**
