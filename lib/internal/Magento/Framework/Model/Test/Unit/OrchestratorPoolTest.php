@@ -12,12 +12,30 @@ class OrchestratorPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManagerMock;
+
+    /**
+     * @var \Magento\Framework\Model\Operation\WriteInterface
+     */
+    protected $writeOperationMock;
+
+    /**
+     * @var \Magento\Framework\Model\Operation\ReadInterface
+     */
+    protected $readOperationMock;
+
     public function setUp()
     {
-        $writeOperationInstance = $this->getMockBuilder('Magento\Framework\Model\Operation\WriteInterface')
+        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $readOperationInstance = $this->getMockBuilder('Magento\Framework\Model\Operation\WriteInterface')
+        $this->writeOperationMock = $this->getMockBuilder('Magento\Framework\Model\Operation\WriteInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->readOperationMock = $this->getMockBuilder('Magento\Framework\Model\Operation\ReadInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $operations = [
@@ -27,48 +45,56 @@ class OrchestratorPoolTest extends \PHPUnit_Framework_TestCase
             ],
             'test_write_entity_type' =>
                 [
-                    'write' => $writeOperationInstance,
-                    'read' => $readOperationInstance
+                    'write' => 'WriteOperation',
+                    'read' => 'ReadOperation'
                 ],
             'test_read_entity_type' =>
                 [
-                    'read' => $readOperationInstance
+                    'read' => 'ReadOperation'
                 ]
         ];
-        $this->model = new \Magento\Framework\Model\OrchestratorPool($operations);
+        $this->model = new \Magento\Framework\Model\OrchestratorPool($this->objectManagerMock, $operations);
     }
 
     public function testGetWriteOperationDefault()
     {
         $entityType = 'not_isset_test_entity';
         $operationName = 'write';
-
-        $this->assertEquals('Write_Operation', $this->model->getWriteOperation($entityType, $operationName));
+        $this->objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with('Write_Operation')
+            ->willReturn($this->writeOperationMock);
+        $this->assertEquals($this->writeOperationMock, $this->model->getWriteOperation($entityType, $operationName));
     }
 
     public function testGetWriteOperation()
     {
         $entityType = 'test_write_entity_type';
         $operationName = 'write';
-        $this->assertInstanceOf(
-            'Magento\Framework\Model\Operation\WriteInterface',
-            $this->model->getWriteOperation($entityType, $operationName)
-        );
+        $this->objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with('WriteOperation')
+            ->willReturn($this->writeOperationMock);
+        $this->assertEquals($this->writeOperationMock, $this->model->getWriteOperation($entityType, $operationName));
     }
 
     public function testGetReadOperationDefault()
     {
-        $entityType = 'test_read_entity_type';
-        $this->assertEquals('Read_Operation', $this->model->getReadOperation($entityType));
+        $entityType = 'not_isset_test_entity';
+        $this->objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with('Read_Operation')
+            ->willReturn($this->readOperationMock);
+        $this->assertEquals($this->readOperationMock, $this->model->getReadOperation($entityType));
     }
 
     public function testGetReadOperation()
     {
         $entityType = 'test_read_entity_type';
-        $operationName = 'read';
-        $this->assertInstanceOf(
-            'Magento\Framework\Model\Operation\WriteInterface',
-            $this->model->getWriteOperation($entityType, $operationName)
-        );
+        $this->objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with('ReadOperation')
+            ->willReturn($this->readOperationMock);
+        $this->assertEquals($this->readOperationMock, $this->model->getReadOperation($entityType));
     }
 }

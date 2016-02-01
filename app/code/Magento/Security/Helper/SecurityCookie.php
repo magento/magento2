@@ -56,6 +56,8 @@ class SecurityCookie extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get cookie with logout reason code
+     *
      * @return string|int
      */
     public function getLogoutReasonCookie()
@@ -103,6 +105,8 @@ class SecurityCookie extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Create Cookie Metadata instance
+     *
      * @return \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata
      */
     protected function createCookieMetaData()
