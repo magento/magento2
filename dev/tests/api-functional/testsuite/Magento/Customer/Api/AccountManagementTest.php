@@ -13,6 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Security\Helper\SecurityConfig;
 
 /**
  * Test class for Magento\Customer\Api\AccountManagementInterface
@@ -67,6 +68,16 @@ class AccountManagementTest extends WebapiAbstract
     private $dataObjectProcessor;
 
     /**
+     * @var \Magento\Config\Model\Config
+     */
+    private $config;
+
+    /**
+     * @var int
+     */
+    private $configValue;
+
+    /**
      * Execute per test initialization.
      */
     public function setUp()
@@ -88,6 +99,25 @@ class AccountManagementTest extends WebapiAbstract
         $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
             'Magento\Framework\Reflection\DataObjectProcessor'
         );
+        $this->config = Bootstrap::getObjectManager()->create(
+            'Magento\Config\Model\Config'
+        );
+
+        if ($this->config->getConfigDataValue(
+            SecurityConfig::XML_PATH_FRONTED_AREA .
+            SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+        ) != 0) {
+            $this->configValue = $this->config
+                ->getConfigDataValue(
+                    SecurityConfig::XML_PATH_FRONTED_AREA .
+                    SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+                );
+            $this->config->setDataByPath(
+                SecurityConfig::XML_PATH_FRONTED_AREA . SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+                0
+            );
+            $this->config->save();
+        }
     }
 
     public function tearDown()
@@ -111,6 +141,11 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertTrue($response);
             }
         }
+        $this->config->setDataByPath(
+            SecurityConfig::XML_PATH_FRONTED_AREA . SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+            $this->configValue
+        );
+        $this->config->save();
         unset($this->accountManagement);
     }
 
@@ -399,6 +434,7 @@ class AccountManagementTest extends WebapiAbstract
                     'field2Name' => 'websiteId',
                     'field2Value' => 0,
                 ];
+
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
