@@ -13,6 +13,7 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Convert\DataObject;
 use Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Class DataProvider
@@ -55,7 +56,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $actionOptions;
 
     /**
-     * DataProvider constructor.
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -65,6 +70,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataObject $objectConverter
      * @param SimpleActionOptionsProvider $actionOptions
+     * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -79,6 +85,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DataObject $objectConverter,
         SimpleActionOptionsProvider $actionOptions,
+        DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = []
     ) {
@@ -88,6 +95,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->objectConverter = $objectConverter;
         $this->actionOptions = $actionOptions;
+        $this->dataPersistor = $dataPersistor;
 
         $meta = array_replace_recursive($meta, $this->getMetadata());
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
@@ -145,6 +153,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         /** @var Rule $rule */
         foreach ($items as $rule) {
             $rule->load($rule->getId());
+            $this->loadedData[$rule->getId()] = $rule->getData();
+        }
+
+        $data = $this->dataPersistor->get('catalog_rule');
+        if (!empty($data)) {
+            $rule = $this->collection->getNewEmptyItem();
+            $rule->setData($data);
             $this->loadedData[$rule->getId()] = $rule->getData();
         }
 
