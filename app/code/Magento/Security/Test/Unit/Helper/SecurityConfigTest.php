@@ -24,7 +24,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Security\Helper\SecurityConfig
      */
-    protected $securityConfig;
+    protected $helper;
 
     /**
      * Init mocks for tests
@@ -49,7 +49,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->securityConfig = $objectManager->getObject(
+        $this->helper = $objectManager->getObject(
             'Magento\Security\Helper\SecurityConfig',
             [
                 'scopeConfig' => $this->scopeConfigMock,
@@ -66,7 +66,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             \Magento\Security\Helper\SecurityConfig::TIME_PERIOD_TO_CALCULATE_LIMITATIONS,
-            $this->securityConfig->getTimePeriodToCalculateLimitations()
+            $this->helper->getTimePeriodToCalculateLimitations()
         );
     }
 
@@ -86,7 +86,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue($email)
             );
-        $this->assertEquals($email, $this->securityConfig->getCustomerServiceEmail());
+        $this->assertEquals($email, $this->helper->getCustomerServiceEmail());
     }
 
     /**
@@ -102,7 +102,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue($lifetime)
             );
-        $this->assertEquals($lifetime, $this->securityConfig->getAdminSessionLifetime());
+        $this->assertEquals($lifetime, $this->helper->getAdminSessionLifetime());
     }
 
     /**
@@ -117,7 +117,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue($isShared)
             );
-        $this->assertEquals($isShared, $this->securityConfig->isAdminAccountSharingEnabled());
+        $this->assertEquals($isShared, $this->helper->isAdminAccountSharingEnabled());
     }
 
     /**
@@ -132,7 +132,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue($ipToLong)
             );
 
-        $this->assertEquals($ipToLong, $this->securityConfig->getRemoteIp($ipToLong));
+        $this->assertEquals($ipToLong, $this->helper->getRemoteIp($ipToLong));
     }
 
     /**
@@ -159,7 +159,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue($resetMethod)
             );
-        $this->assertEquals($resetMethod, $this->securityConfig->getLimitPasswordResetRequestsMethod($scope));
+        $this->assertEquals($resetMethod, $this->helper->getLimitPasswordResetRequestsMethod($scope));
     }
 
     /**
@@ -214,7 +214,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue($limitNumber)
             );
-        $this->assertEquals($limitNumber, $this->securityConfig->getLimitNumberPasswordResetRequests($scope));
+        $this->assertEquals($limitNumber, $this->helper->getLimitNumberPasswordResetRequests($scope));
     }
 
     /**
@@ -233,7 +233,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue($limitTime)
             );
-        $this->assertEquals($limitTime * 60, $this->securityConfig->getLimitTimeBetweenPasswordResetRequests($scope));
+        $this->assertEquals($limitTime * 60, $this->helper->getLimitTimeBetweenPasswordResetRequests($scope));
     }
 
     /**
@@ -252,6 +252,6 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrentTimestamp()
     {
-        $this->assertEquals(true, is_int($this->securityConfig->getCurrentTimestamp()));
+        $this->assertEquals(true, is_int($this->helper->getCurrentTimestamp()));
     }
 }

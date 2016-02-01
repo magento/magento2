@@ -15,11 +15,6 @@ use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 class AuthSession
 {
     /**
-     * Cookie name
-     */
-    const LOGOUT_REASON_CODE_COOKIE_NAME = 'loggedOutReasonCode';
-
-    /**
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;

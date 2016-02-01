@@ -241,17 +241,17 @@ class AdminSessionsManager
      */
     protected function createNewSession()
     {
-        $this->currentSession = $this->adminSessionInfoFactory->create();
-        $this->currentSession->setData(
-            [
-                'session_id' => $this->authSession->getSessionId(),
-                'user_id' => $this->authSession->getUser()->getId(),
-                'ip' => $this->securityConfig->getRemoteIp(),
-                'updated_at' => $this->securityConfig->getCurrentTimestamp(),
-                'status' => AdminSessionInfo::LOGGED_IN
-            ]
-        );
-        $this->currentSession->save();
+        $this->adminSessionInfoFactory
+            ->create()
+            ->setData(
+                [
+                    'session_id' => $this->authSession->getSessionId(),
+                    'user_id' => $this->authSession->getUser()->getId(),
+                    'ip' => $this->securityConfig->getRemoteIp(),
+                    'status' => AdminSessionInfo::LOGGED_IN
+                ]
+            )->save();
+
         return $this;
     }
 

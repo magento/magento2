@@ -33,6 +33,6 @@ XML;
         $results = $this->object->convert($xml);
         $this->assertArrayHasKey('test', $results);
         $this->assertArrayHasKey('schedule_generate_every', $results['test']);
-        $this->assertEquals('1', $results['test']['schedule_generate_every']);
+        $this->assertEquals('1', $results['test']['schedule_generate_every']['value']);
     }
 }
