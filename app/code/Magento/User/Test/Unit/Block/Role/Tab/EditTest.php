@@ -30,6 +30,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $integrationDataMock;
 
+    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    protected $coreRegistryMock;
+
     protected function setUp()
     {
         $this->rootResourceMock = $this->getMockBuilder('Magento\Framework\Acl\RootResource')
@@ -58,6 +61,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
+        $this->coreRegistryMock = $this->getMockBuilder('Magento\Framework\Registry')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             'Magento\User\Block\Role\Tab\Edit',
@@ -66,7 +74,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 'rootResource' => $this->rootResourceMock,
                 'rulesCollectionFactory' => $this->rulesCollectionFactoryMock,
                 'aclResourceProvider' => $this->aclResourceProviderMock,
-                'integrationData' => $this->integrationDataMock
+                'integrationData' => $this->integrationDataMock,
+                'coreRegistry' => $this->coreRegistryMock
             ]
         );
     }
@@ -79,5 +88,32 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->integrationDataMock->expects($this->once())->method('mapResources')->willReturn($mappedResources);
 
         $this->assertEquals($mappedResources, $this->model->getTree());
+    }
+
+    /**
+     * @param bool $isAllowed
+     * @dataProvider dataProviderBoolValues
+     */
+    public function testIsEverythingAllowed($isAllowed)
+    {
+        $id = 10;
+        if ($isAllowed) {
+            $this->model->setSelectedResources([$id]);
+        } else {
+            $this->model->setSelectedResources([11]);
+        }
+        $this->rootResourceMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($id);
+
+        $this->assertEquals($isAllowed, $this->model->isEverythingAllowed());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderBoolValues()
+    {
+        return [[true], [false]];
     }
 }
