@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -15,16 +14,14 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context, $coreRegistry);
+        parent::__construct($context);
     }
 
     /**
@@ -49,14 +46,6 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
                 return $resultRedirect->setPath('*/*/');
             }
         }
-        // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
-        if (!empty($data)) {
-            $model->setData($data);
-        }
-
-        // 4. Register model to use later in blocks
-        $this->_coreRegistry->register('cms_block', $model);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
