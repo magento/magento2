@@ -83,5 +83,7 @@ class TestPhrases
             __("string with escaped \"double quotes\""),
             __("string with placeholder in escaped double quotes \"%1\"", "arg"),
         ];
+
+        $unclosedApostrophePhrase = __('string that\'s got an unclosed single quote in it');
     }
 }
