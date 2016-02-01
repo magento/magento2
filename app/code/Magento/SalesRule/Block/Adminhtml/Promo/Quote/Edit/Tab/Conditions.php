@@ -48,6 +48,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabClass()
     {
@@ -56,6 +57,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabUrl()
     {
@@ -64,6 +66,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function isAjaxLoaded()
     {
@@ -72,6 +75,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -80,6 +84,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -88,6 +93,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -96,6 +102,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
