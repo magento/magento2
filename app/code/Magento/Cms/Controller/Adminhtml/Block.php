@@ -5,30 +5,8 @@
  */
 namespace Magento\Cms\Controller\Adminhtml;
 
-/**
- * Cms manage blocks controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 abstract class Block extends \Magento\Backend\App\Action
 {
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry = null;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
-    {
-        $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context);
-    }
-
     /**
      * Init page
      *
