@@ -282,7 +282,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Conditions</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="sort_order" xsi:type="string">20</item>
+                <item name="sortOrder" xsi:type="number">20</item>
             </item>
         </argument>
         <container name="conditions_apply_to" >
