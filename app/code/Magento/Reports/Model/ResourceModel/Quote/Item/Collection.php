@@ -181,7 +181,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $select = clone $this->productResource->getSelect();
         $select->reset();
         $select->from(
-            ['main_table' => $this->getTable('catalog_product_entity')]
+            ['main_table' => $this->getTable('catalog_product_entity')],
+            ['main_table.entity_id', 'main_table.*']
         )->useStraightJoin(
             true
         )->joinInner(
@@ -195,7 +196,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             "product_price.{$linkField} = main_table.{$linkField}"
             ." AND product_price.attribute_id = {$productAttrPriceId}",
             ['price' => new \Zend_Db_Expr('product_price.value')]
-        )->where("main_table.{$linkField} IN (?)", $productIds);
+        )->where("main_table.entity_id IN (?)", $productIds);
 
         $productData = $productConnection->fetchAssoc($select);
         return $productData;
