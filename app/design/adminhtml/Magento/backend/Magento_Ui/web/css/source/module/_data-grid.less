@@ -744,14 +744,22 @@ body._in-resize {
 .data-grid-info-panel {
     box-shadow: 0 0 5px rgba(0, 0, 0, .5);
     margin: @data-grid-header-row__indent .1rem -(@data-grid-header-row__indent);
-    padding: @data-grid-th__padding-vertical;
 
     .messages {
-        margin-bottom: @indent__s;
+        overflow: hidden;
+
+        .message {
+            margin: @data-grid-th__padding-vertical;
+
+            &:last-child {
+                margin-bottom: @data-grid-th__padding-vertical;
+            }
+        }
     }
 }
 
 .data-grid-info-panel-actions {
+    padding: @data-grid-th__padding-vertical;
     text-align: right;
 }
 
