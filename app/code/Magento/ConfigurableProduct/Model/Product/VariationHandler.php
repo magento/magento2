@@ -5,10 +5,8 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product\Type as ProductType;
-use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Variation Handler
@@ -40,11 +38,6 @@ class VariationHandler
     protected $variationMediaAttributes;
 
     /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * @param Type\Configurable $configurableProduct
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
      * @param \Magento\Eav\Model\EntityFactory $entityFactory
@@ -52,7 +45,6 @@ class VariationHandler
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param VariationMediaAttributes $variationMediaAttributes
      * @param \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Type\Configurable $configurableProduct,
@@ -61,8 +53,7 @@ class VariationHandler
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes $variationMediaAttributes,
-        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor,
-        MetadataPool $metadataPool
+        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
     ) {
         $this->configurableProduct = $configurableProduct;
         $this->attributeSetFactory = $attributeSetFactory;
@@ -71,7 +62,6 @@ class VariationHandler
         $this->stockConfiguration = $stockConfiguration;
         $this->variationMediaAttributes = $variationMediaAttributes;
         $this->mediaGalleryProcessor = $mediaGalleryProcessor;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -87,7 +77,6 @@ class VariationHandler
         $this->prepareAttributeSetToBeBaseForNewVariations($parentProduct);
         $generatedProductIds = [];
         $productsData = $this->duplicateImagesForVariations($productsData);
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
             if (isset($simpleProductData['configurable_attribute'])) {
@@ -104,7 +93,7 @@ class VariationHandler
             );
             $newSimpleProduct->save();
 
-            $generatedProductIds[] = $newSimpleProduct->getData($metadata->getLinkField());
+            $generatedProductIds[] = $newSimpleProduct->getId();
         }
         return $generatedProductIds;
     }
