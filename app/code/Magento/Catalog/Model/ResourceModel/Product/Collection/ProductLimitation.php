@@ -42,7 +42,7 @@ class ProductLimitation implements \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return $this->productLimitationFilters[$offset];
+        return $this->offsetExists($offset) ? $this->productLimitationFilters[$offset] : null;
     }
 
     /**
@@ -65,7 +65,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getStoreId()
     {
@@ -73,7 +73,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCategoryId()
     {
@@ -81,7 +81,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getCategoryIsAnchor()
     {
@@ -89,7 +89,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * @return array|int
+     * @return array|int|null
      */
     public function getVisibility()
     {
@@ -97,7 +97,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * @return array|int
+     * @return array|int|null
      */
     public function getWebsiteIds()
     {
@@ -105,7 +105,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getStoreTable()
     {
@@ -134,7 +134,7 @@ class ProductLimitation implements \ArrayAccess
     /**
      * Required for price; customer group limitation for price
      *
-     * @return int
+     * @return int|null
      */
     public function getCustomerGroupId()
     {
@@ -144,7 +144,7 @@ class ProductLimitation implements \ArrayAccess
     /**
      * Required for price; website limitation for price
      *
-     * @return int
+     * @return int|null
      */
     public function getWebsiteId()
     {
