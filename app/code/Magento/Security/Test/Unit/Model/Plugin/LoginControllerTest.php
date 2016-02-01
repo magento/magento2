@@ -22,20 +22,8 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Security\Model\AdminSessionsManager */
     protected $adminSessionsManagerMock;
 
-    /** @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager */
-    protected $phpCookieManagerMock;
-
-    /** @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface */
-    protected $cookieReaderMock;
-
-    /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata */
-    protected $backendDataMock;
-
-    /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory */
-    protected $cookieMetadataFactoryMock;
-
-    /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata */
-    protected $cookieMetadataMock;
+    /** @var \Magento\Security\Helper\SecurityCookie */
+    protected $securityCookieHelperMock;
 
     /** @var \Magento\Backend\Controller\Adminhtml\Auth\Login */
     protected $backendControllerAuthLoginMock;
@@ -70,41 +58,9 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->phpCookieManagerMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\PhpCookieManager',
-            ['setPublicCookie'],
-            [],
-            '',
-            false
-        );
-
-        $this->cookieReaderMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\CookieReaderInterface',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->backendDataMock = $this->getMock(
-            '\Magento\Backend\Helper\Data',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->cookieMetadataFactoryMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-
-        $this->cookieMetadataMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
-            ['setPath', 'setDuration'],
+        $this->securityCookieHelperMock = $this->getMock(
+            '\Magento\Security\Helper\SecurityCookie',
+            ['getLogoutReasonCookie', 'deleteLogoutReasonCookie'],
             [],
             '',
             false
@@ -131,10 +87,7 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
             [
                 'messageManager' => $this->messageManagerMock,
                 'sessionsManager' => $this->adminSessionsManagerMock,
-                'phpCookieManager' => $this->phpCookieManagerMock,
-                'cookieReader' => $this->cookieReaderMock,
-                'backendData' => $this->backendDataMock,
-                'cookieMetadataFactory' => $this->cookieMetadataFactoryMock
+                'securityCookieHelper' => $this->securityCookieHelperMock
             ]
         );
     }
@@ -144,18 +97,13 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeExecute()
     {
-        $cookie = '123';
+        $logoutReasonCode = 2;
         $uri = '/uri/';
         $errorMessage = 'Error Message';
-        $frontName = 'FrontName';
 
-        $this->cookieReaderMock->expects($this->once())
-            ->method('getCookie')
-            ->with(
-                \Magento\Security\Model\Plugin\AuthSession::LOGOUT_REASON_CODE_COOKIE_NAME,
-                -1
-            )
-            ->willReturn($cookie);
+        $this->securityCookieHelperMock->expects($this->once())
+            ->method('getLogoutReasonCookie')
+            ->willReturn($logoutReasonCode);
 
         $this->backendControllerAuthLoginMock->expects($this->once())
             ->method('getRequest')
@@ -171,37 +119,15 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->adminSessionsManagerMock->expects($this->once())
             ->method('getLogoutReasonMessageByStatus')
+            ->with($logoutReasonCode)
             ->willReturn($errorMessage);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with($errorMessage);
 
-        $this->cookieMetadataFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->cookieMetadataMock);
-
-        $this->backendDataMock->expects($this->once())
-            ->method('getAreaFrontName')
-            ->willReturn($frontName);
-
-        $this->cookieMetadataMock->expects($this->once())
-            ->method('setPath')
-            ->with('/' . $frontName)
-            ->willReturnSelf();
-
-        $this->cookieMetadataMock->expects($this->once())
-            ->method('setDuration')
-            ->with(-1)
-            ->willReturnSelf();
-
-        $this->phpCookieManagerMock->expects($this->once())
-            ->method('setPublicCookie')
-            ->with(
-                \Magento\Security\Model\Plugin\AuthSession::LOGOUT_REASON_CODE_COOKIE_NAME,
-                '',
-                $this->cookieMetadataMock
-            )
+        $this->securityCookieHelperMock->expects($this->once())
+            ->method('deleteLogoutReasonCookie')
             ->willReturnSelf();
 
         $this->controller->beforeExecute($this->backendControllerAuthLoginMock);
