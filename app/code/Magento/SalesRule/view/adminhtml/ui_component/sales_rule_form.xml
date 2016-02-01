@@ -56,28 +56,6 @@
                 <item name="sort_order" xsi:type="string">10</item>
             </item>
         </argument>
-        <field name="rule_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">sales_rule</item>
-                    <item name="dataScope" xsi:type="string">rule_id</item>
-                </item>
-            </argument>
-        </field>
-        <field name="product_ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">sales_rule</item>
-                    <item name="dataScope" xsi:type="string">product_ids</item>
-                </item>
-            </argument>
-        </field>
         <field name="name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
