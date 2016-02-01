@@ -53,11 +53,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $coreRegistryMock;
-
-    /**
      * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultPageFactoryMock;
@@ -66,7 +61,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
-        $this->coreRegistryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
 
         $this->blockMock = $this->getMockBuilder('Magento\Cms\Model\Block')
             ->disableOriginalConstructor()
@@ -119,7 +113,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
             'Magento\Cms\Controller\Adminhtml\Block\Edit',
             [
                 'context' => $this->contextMock,
-                'coreRegistry' => $this->coreRegistryMock,
                 'resultPageFactory' => $this->resultPageFactoryMock
             ]
         );
@@ -179,20 +172,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->blockMock->expects($this->any())
             ->method('getTitle')
             ->willReturn('Test title');
-
-        $sessionManagerMock = $this->getMock('Magento\Backend\Model\Session', ['getFormData'], [], '', false);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Backend\Model\Session')
-            ->willReturn($sessionManagerMock);
-
-        $sessionManagerMock->expects($this->once())
-            ->method('getFormData')
-            ->with(true);
-
-        $this->coreRegistryMock->expects($this->once())
-            ->method('register')
-            ->with('cms_block', $this->blockMock);
 
         $resultPageMock = $this->getMock('Magento\Backend\Model\View\Result\Page', [], [], '', false);
 
