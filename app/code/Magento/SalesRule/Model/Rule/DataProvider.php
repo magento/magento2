@@ -54,6 +54,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $salesRuleFactory;
 
     /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $coreRegistry;
+
+    /**
      * DataProvider constructor.
      *
 *@param string $name
@@ -65,6 +72,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataObject $objectConverter
      * @param \Magento\SalesRule\Model\RuleFactory $salesRuleFactory
+     * @param \Magento\Framework\Registry $registry
      * @param array $meta
      * @param array $data
      *
@@ -80,6 +88,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DataObject $objectConverter,
         \Magento\SalesRule\Model\RuleFactory $salesRuleFactory,
+        \Magento\Framework\Registry $registry,
         array $meta = [],
         array $data = []
     ) {
@@ -90,6 +99,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->objectConverter = $objectConverter;
         $this->salesRuleFactory = $salesRuleFactory;
+        $this->coreRegistry = $registry;
         $this->initMeta();
     }
 
@@ -114,6 +124,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 'value' => $key,
             ];
         }
+
+        $rule = $rule = $this->coreRegistry->registry('current_promo_quote_rule');
+        $labels = $rule->getStoreLabels();
+
         $this->meta = [
             'rule_information' => [
                 'fields' => [
@@ -160,11 +174,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     'stop_rules_processing' => [
                         'options' => [
                             ['label' => __('Yes'), 'value' => '1'],
-                            ['label' => __('No'), 'value' => '0']
+                            ['label' => __('No'), 'value' => '0'],
                         ]
                     ],
                 ]
-            ]
+            ],
+            'labels' => [
+                'fields' => [
+                    'store_default_label' => [
+                        'value' => isset($labels[0]) ? $labels[0] : '',
+                    ]
+                ]
+            ],
         ];
     }
 
