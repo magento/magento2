@@ -180,16 +180,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('getTitle')
             ->willReturn('Test title');
 
-        $sessionManagerMock = $this->getMock('Magento\Backend\Model\Session', ['getFormData'], [], '', false);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Backend\Model\Session')
-            ->willReturn($sessionManagerMock);
-
-        $sessionManagerMock->expects($this->once())
-            ->method('getFormData')
-            ->with(true);
-
         $this->coreRegistryMock->expects($this->once())
             ->method('register')
             ->with('cms_block', $this->blockMock);
