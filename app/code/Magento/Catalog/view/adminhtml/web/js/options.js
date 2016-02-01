@@ -130,7 +130,8 @@ define([
                 },
                 getOptionInputType: function () {
                     var optionDefaultInputType = 'radio';
-                    if ($('frontend_input') && $('frontend_input').value == 'multiselect') {
+
+                    if ($('frontend_input') && $('frontend_input').value === 'multiselect') {
                         optionDefaultInputType = 'checkbox';
                     }
                     return optionDefaultInputType;
