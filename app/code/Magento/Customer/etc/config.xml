@@ -36,6 +36,10 @@
                 <remind_email_template>customer_password_remind_email_template</remind_email_template>
                 <reset_link_expiration_period>2</reset_link_expiration_period>
                 <reset_password_template>customer_password_reset_password_template</reset_password_template>
+                <required_character_classes_number>3</required_character_classes_number>
+                <minimum_password_length>8</minimum_password_length>
+                <lockout_failures>10</lockout_failures>
+                <lockout_threshold>10</lockout_threshold>
             </password>
             <address>
                 <street_lines>2</street_lines>

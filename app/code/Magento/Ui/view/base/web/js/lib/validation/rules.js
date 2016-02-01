@@ -419,6 +419,46 @@ define([
             },
             $.mage.__('Please enter 7 or more characters, using both numeric and alphabetic.')
         ],
+        "validate-customer-password": [
+            function (v, elm) {
+                var validator = this,
+                    length = 0,
+                    counter = 0;
+                var passwordMinLength = $(elm).data('password-min-length');
+                var passwordMinCharacterSets = $(elm).data('password-min-character-sets');
+                var pass = $.trim(v);
+                var result = pass.length >= passwordMinLength;
+                if (result == false) {
+                    validator.passwordErrorMessage = $.mage.__(
+                        "Minimum length of this field must be equal or greater than %1 symbols." +
+                        " Leading or trailing spaces will be ignored."
+                    ).replace('%1', passwordMinLength);
+                    return result;
+                }
+                if (pass.match(/\d+/)) {
+                    counter ++;
+                }
+                if (pass.match(/[a-z]+/)) {
+                    counter ++;
+                }
+                if (pass.match(/[A-Z]+/)) {
+                    counter ++;
+                }
+                if (pass.match(/[^a-zA-Z0-9]+/)) {
+                    counter ++;
+                }
+                if (counter < passwordMinCharacterSets) {
+                    result = false;
+                    validator.passwordErrorMessage = $.mage.__(
+                        "Minimum different classes of characters in password are %1." +
+                        " Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
+                    ).replace('%1', passwordMinCharacterSets);
+                }
+                return result;
+            }, function () {
+                return this.passwordErrorMessage;
+            }
+        ],
         "validate-url": [
             function(value) {
                 if (utils.isEmptyNoTrim(value)) {
