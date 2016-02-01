@@ -11,7 +11,7 @@
             <emails>
                 <forgot_email_template>admin_emails_forgot_email_template</forgot_email_template>
                 <forgot_email_identity>general</forgot_email_identity>
-                <reset_password_template>admin_emails_reset_password_template</reset_password_template>
+                <user_notification_template>admin_emails_user_notification_template</user_notification_template>
             </emails>
             <security>
                 <password_reset_link_expiration_period>2</password_reset_link_expiration_period>

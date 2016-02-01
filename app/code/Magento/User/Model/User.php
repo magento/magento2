@@ -37,7 +37,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
-    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
+    const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
 
     /**
      * Model event prefix
@@ -399,19 +399,76 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * Send email to when password is resetting
+     * Check changes and send notification emails
      *
      * @return $this
      */
-    public function sendPasswordResetNotificationEmail()
+    public function sendNotificationEmailsIfRequired()
     {
-        $templateId = $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE);
-        $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
+        $changes = $this->createChangesDescriptionString();
+
+        if ($changes) {
+            if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
+                $this->sendUserNotificationEmail($changes, $this->getOrigData('email'));
+            }
+            $this->sendUserNotificationEmail($changes);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Create changes description string
+     *
+     * @return string
+     */
+    protected function createChangesDescriptionString()
+    {
+        $changes = [];
+
+        if ($this->getEmail() != $this->getOrigData('email') && $this->getOrigData('email')) {
+            $changes[] = __('email');
+        }
+
+        if ($this->getPassword()
+            && $this->getOrigData('password')
+            && $this->getPassword() != $this->getOrigData('password')) {
+            $changes[] = __('password');
+        }
+
+        if ($this->getUsername() != $this->getOrigData('username') && $this->getOrigData('username')) {
+            $changes[] = __('username');
+        }
+
+        return implode(', ', $changes);
+    }
+
+    /**
+     * Send user notification email
+     *
+     * @param string $changes
+     * @param string $email
+     * @return $this
+     */
+    protected function sendUserNotificationEmail($changes, $email = null)
+    {
+        if ($email === null) {
+            $email = $this->getEmail();
+        }
+
+        $transport = $this->_transportBuilder
+            ->setTemplateIdentifier($this->_config->getValue(self::XML_PATH_USER_NOTIFICATION_TEMPLATE))
             ->setTemplateModel('Magento\Email\Model\BackendTemplate')
             ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
-            ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
+            ->setTemplateVars(
+                [
+                    'user' => $this,
+                    'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID),
+                    'changes' => $changes
+                ]
+            )
             ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName())
+            ->addTo($email, $this->getName())
             ->getTransport();
 
         $transport->sendMessage();
