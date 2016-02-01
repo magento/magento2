@@ -56,28 +56,6 @@
                 <item name="sort_order" xsi:type="string">10</item>
             </item>
         </argument>
-        <field name="rule_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">sales_rule</item>
-                    <item name="dataScope" xsi:type="string">rule_id</item>
-                </item>
-            </argument>
-        </field>
-        <field name="product_ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">sales_rule</item>
-                    <item name="dataScope" xsi:type="string">product_ids</item>
-                </item>
-            </argument>
-        </field>
         <field name="name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -468,7 +446,7 @@
             </htmlContent>
         </container>
     </fieldset>
-    <fieldset name="Labels">
+    <fieldset name="labels">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Labels</item>
@@ -487,5 +465,15 @@
                 </item>
             </argument>
         </field>
+        <container name="store_view_specific_labels" >
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                </item>
+            </argument>
+            <htmlContent name="html_content">
+                <argument name="block" xsi:type="object">Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels</argument>
+            </htmlContent>
+        </container>
     </fieldset>
 </form>
