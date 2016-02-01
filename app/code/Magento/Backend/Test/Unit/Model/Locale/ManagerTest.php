@@ -15,7 +15,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\TranslateInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\TranslateInterface
      */
     protected $_translator;
 
@@ -25,9 +25,14 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected $_session;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Auth\Session
      */
     protected $_authSession;
+    
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\ConfigInterface
+     */
+    protected $_backendConfig;
 
     protected function setUp()
     {
@@ -40,7 +45,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        
+        $this->_backendConfig = $this->getMockForAbstractClass('Magento\Backend\App\ConfigInterface', [], '', false);
+        
         $userMock = new \Magento\Framework\DataObject();
 
         $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
@@ -54,7 +61,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Backend\Model\Locale\Manager(
             $this->_session,
             $this->_authSession,
-            $this->_translator
+            $this->_translator,
+            $this->_backendConfig
         );
     }
 
@@ -101,5 +109,18 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $locale = $this->_model->getUserInterfaceLocale();
 
         $this->assertEquals($locale, 'de_DE');
+    }
+
+    /**
+     * @covers \Magento\Backend\Model\Locale\Manager::getUserInterfaceLocale
+     */
+    public function testGetUserInterfaceGeneralLocale()
+    {
+        $this->_backendConfig->expects($this->any())
+            ->method('getValue')
+            ->with('general/locale/code')
+            ->willReturn('test_locale');
+        $locale = $this->_model->getUserInterfaceLocale();
+        $this->assertEquals($locale, 'test_locale');
     }
 }
