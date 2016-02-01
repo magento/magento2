@@ -51,7 +51,6 @@
     <fieldset name="rule_information">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <!--<item name="dataScope" xsi:type="string">data</item>-->
                 <item name="label" xsi:type="string" translate="true">Rule Information</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sort_order" xsi:type="string">10</item>
@@ -158,12 +157,68 @@
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">Coupon</item>
                     <item name="visible" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">coupon_type</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="switcherConfig" xsi:type="array">
+                        <item name="enabled" xsi:type="boolean">true</item>
+                        <item name="rules" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="value" xsi:type="number">1</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.coupon_code</item>
+                                        <item name="callback" xsi:type="string">hide</item>
+                                    </item>
+                                    <item name="1" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.use_auto_generation</item>
+                                        <item name="callback" xsi:type="string">hide</item>
+                                    </item>
+                                    <item name="2" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.uses_per_coupon</item>
+                                        <item name="callback" xsi:type="string">hide</item>
+                                    </item>
+                                </item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="value" xsi:type="number">2</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.coupon_code</item>
+                                        <item name="callback" xsi:type="string">show</item>
+                                    </item>
+                                    <item name="1" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.use_auto_generation</item>
+                                        <item name="callback" xsi:type="string">show</item>
+                                    </item>
+                                    <item name="2" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.uses_per_coupon</item>
+                                        <item name="callback" xsi:type="string">show</item>
+                                    </item>
+                                </item>
+                            </item>
+                            <item name="2" xsi:type="array">
+                                <item name="value" xsi:type="number">3</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.coupon_code</item>
+                                        <item name="callback" xsi:type="string">hide</item>
+                                    </item>
+                                    <item name="1" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.use_auto_generation</item>
+                                        <item name="callback" xsi:type="string">hide</item>
+                                    </item>
+                                    <item name="2" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.uses_per_coupon</item>
+                                        <item name="callback" xsi:type="string">hide</item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
                     </item>
                 </item>
             </argument>
@@ -194,6 +249,29 @@
                     <item name="dataScope" xsi:type="string">use_auto_generation</item>
                     <item name="note" xsi:type="string" translate="true">
                         If you select and save the rule you will be able to generate multiple coupon codes.
+                    </item>
+                    <item name="switcherConfig" xsi:type="array">
+                        <item name="enabled" xsi:type="boolean">true</item>
+                        <item name="rules" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="value" xsi:type="number">0</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.coupon_code</item>
+                                        <item name="callback" xsi:type="string">enable</item>
+                                    </item>
+                                </item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="value" xsi:type="number">1</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.rule_information.coupon_code</item>
+                                        <item name="callback" xsi:type="string">disable</item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
                     </item>
                 </item>
             </argument>
@@ -299,7 +377,6 @@
     <fieldset name="actions">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <!--<item name="dataScope" xsi:type="string">data</item>-->
                 <item name="label" xsi:type="string" translate="true">Actions</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sort_order" xsi:type="string">30</item>
@@ -308,75 +385,18 @@
         <field name="simple_action">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Apply</item>
-                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="label" xsi:type="string" translate="true">Apply</item>
+                    <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">simple_action</item>
-                    <item name="switcherConfig" xsi:type="array">
-                        <item name="enabled" xsi:type="boolean">true</item>
-                        <item name="rules" xsi:type="array">
-                            <item name="0" xsi:type="array">
-                                <item name="value" xsi:type="string">by_percent</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.actions.discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">0.00-100.00</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="1" xsi:type="array">
-                                <item name="value" xsi:type="string">to_percent</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.actions.discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">0.00-100.00</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="2" xsi:type="array">
-                                <item name="value" xsi:type="string">by_fixed</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.actions.discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">false</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                            <item name="3" xsi:type="array">
-                                <item name="value" xsi:type="string">to_fixed</item>
-                                <item name="actions" xsi:type="array">
-                                    <item name="0" xsi:type="array">
-                                        <item name="target" xsi:type="string">sales_rule_form.sales_rule_form.actions.discount_amount</item>
-                                        <item name="callback" xsi:type="string">setValidation</item>
-                                        <item name="params" xsi:type="array">
-                                            <item name="0" xsi:type="string">validate-number-range</item>
-                                            <item name="1" xsi:type="string">false</item>
-                                        </item>
-                                    </item>
-                                </item>
-                            </item>
-                        </item>
-                    </item>
                 </item>
             </argument>
         </field>
         <field name="discount_amount">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Discount Amount</item>
+                    <item name="label" xsi:type="string" translate="true">Discount Amount</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">sales_rule</item>
@@ -387,10 +407,47 @@
                 </item>
             </argument>
         </field>
+        <field name="discount_qty">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Maximum Qty Discount is Applied To</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">sales_rule</item>
+                    <item name="dataScope" xsi:type="string">discount_qty</item>
+
+                </item>
+            </argument>
+        </field>
+        <field name="discount_step">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Discount Qty Step (Buy X)</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">sales_rule</item>
+                    <item name="dataScope" xsi:type="string">discount_step</item>
+
+                </item>
+            </argument>
+        </field>
+        <field name="apply_to_shipping">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Discard subsequent rules</item>
+                    <item name="fieldGroup" xsi:type="string">bool</item>
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="value" xsi:type="string">0</item>
+                    <item name="source" xsi:type="string">sales_rule</item>
+                    <item name="dataScope" xsi:type="string">apply_to_shipping</item>
+                </item>
+            </argument>
+        </field>
         <field name="stop_rules_processing">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Discard subsequent rules</item>
+                    <item name="label" xsi:type="string" translate="true">Discard subsequent rules</item>
                     <item name="fieldGroup" xsi:type="string">bool</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
@@ -410,5 +467,25 @@
                 <argument name="block" xsi:type="object">Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions</argument>
             </htmlContent>
         </container>
+    </fieldset>
+    <fieldset name="Labels">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Labels</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sort_order" xsi:type="string">40</item>
+            </item>
+        </argument>
+        <field name="store_default_label">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Default Rule Label for All Store Views</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">sales_rule</item>
+                    <item name="dataScope" xsi:type="string">store_default_label</item>
+                </item>
+            </argument>
+        </field>
     </fieldset>
 </form>
