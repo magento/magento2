@@ -6,10 +6,38 @@
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+    \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTabClass()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTabUrl()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -18,6 +46,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -26,6 +55,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -34,6 +64,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -53,27 +84,14 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
-        $fieldset = $form->addFieldset('default_label_fieldset', ['legend' => __('Default Label')]);
         $labels = $rule->getStoreLabels();
-
-        $fieldset->addField(
-            'store_default_label',
-            'text',
-            [
-                'name' => 'store_labels[0]',
-                'required' => false,
-                'label' => __('Default Rule Label for All Store Views'),
-                'value' => isset($labels[0]) ? $labels[0] : ''
-            ]
-        );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $fieldset = $this->_createStoreSpecificFieldset($form, $labels);
-        }
-
-        if ($rule->isReadonly()) {
-            foreach ($fieldset->getElements() as $element) {
-                $element->setReadonly(true, true);
+            if ($rule->isReadonly()) {
+                foreach ($fieldset->getElements() as $element) {
+                    $element->setReadonly(true, true);
+                }
             }
         }
 
