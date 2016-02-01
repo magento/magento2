@@ -53,6 +53,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerMock;
 
     /**
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $coreRegistryMock;
+
+    /**
      * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultPageFactoryMock;
@@ -61,6 +66,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
+        $this->coreRegistryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
 
         $this->pageMock = $this->getMockBuilder('Magento\Cms\Model\Page')
             ->disableOriginalConstructor()
@@ -113,7 +119,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
             'Magento\Cms\Controller\Adminhtml\Page\Edit',
             [
                 'context' => $this->contextMock,
-                'resultPageFactory' => $this->resultPageFactoryMock
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'registry' => $this->coreRegistryMock,
             ]
         );
     }
@@ -172,6 +179,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->pageMock->expects($this->any())
             ->method('getTitle')
             ->willReturn('Test title');
+
+        $this->coreRegistryMock->expects($this->once())
+            ->method('register')
+            ->with('cms_page', $this->pageMock);
 
         $resultPageMock = $this->getMock('Magento\Backend\Model\View\Result\Page', [], [], '', false);
 

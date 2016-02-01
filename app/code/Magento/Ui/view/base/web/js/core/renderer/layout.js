@@ -28,8 +28,9 @@ define([
         return node.type || parent && parent.childType;
     }
 
-    function getDataScope(parentScope, node) {
-        var dataScope = node.dataScope;
+    function getDataScope(parent, node) {
+        var dataScope = node.dataScope,
+            parentScope = parent && parent.dataScope;
 
         return !utils.isEmpty(parentScope) ?
             !utils.isEmpty(dataScope) ?
@@ -41,7 +42,8 @@ define([
     function loadDeps(node) {
         var loaded = $.Deferred();
 
-        registry.get(node.deps, function () {
+        registry.get(node.deps, function (deps) {
+            node.provider = node.extendProvider ? deps && deps.name : node.provider;
             loaded.resolve(node);
         });
 
@@ -104,31 +106,31 @@ define([
             var defaults    = parent && parent.childDefaults || {},
                 children    = node.children,
                 type        = getNodeType(parent, node),
-                parentScope,
-                dataScope,
+                dataScope   = getDataScope(parent, node),
                 nodeName;
 
             node.children = false;
+            node.extendProvider = true;
+
+            if (node.config && node.config.provider || node.provider) {
+                node.extendProvider = false;
+            }
 
             node = utils.extend({
             }, types.get(type), defaults, node);
 
             nodeName = getNodeName(parent, node, name);
 
-            if (node.config && typeof node.config.parentScope !== 'undefined') {
-                parentScope = node.config.parentScope;
-            } else {
-                parentScope = parent && parent.dataScope || '';
+            if (parent && parent.deps) {
+                node.deps = parent.deps;
             }
-
-            dataScope = getDataScope(parentScope, node);
 
             _.extend(node, node.config || {}, {
                 index: node.name || name,
                 name: nodeName,
                 dataScope: dataScope,
                 parentName: utils.getPart(nodeName, -2),
-                parentScope: parentScope
+                parentScope: utils.getPart(dataScope, -2)
             });
 
             node.children = children;
