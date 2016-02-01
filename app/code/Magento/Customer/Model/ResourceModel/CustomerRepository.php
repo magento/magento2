@@ -399,13 +399,12 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
     ) {
         $fields = [];
-        $conditions = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
             $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
         }
         if ($fields) {
-            $collection->addFieldToFilter($fields, $conditions);
+            $collection->addFieldToFilter($fields);
         }
     }
 }
