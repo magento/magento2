@@ -11,6 +11,13 @@ use Magento\Backend\App\Action;
 class Edit extends \Magento\Backend\App\Action
 {
     /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $_coreRegistry;
+
+    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
@@ -18,12 +25,15 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\Registry $registry
     ) {
         $this->resultPageFactory = $resultPageFactory;
+        $this->_coreRegistry = $registry;
         parent::__construct($context);
     }
 
@@ -70,10 +80,11 @@ class Edit extends \Magento\Backend\App\Action
                 $this->messageManager->addError(__('This page no longer exists.'));
                 /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
-
                 return $resultRedirect->setPath('*/*/');
             }
         }
+
+        $this->_coreRegistry->register('cms_page', $model);
 
         // 5. Build edit form
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
