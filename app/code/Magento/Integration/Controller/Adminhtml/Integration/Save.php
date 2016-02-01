@@ -121,6 +121,8 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
     }
 
     /**
+     * Get Integration entity
+     *
      * @param int $integrationId
      * @return \Magento\Integration\Model\Integration|null
      */
