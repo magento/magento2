@@ -102,7 +102,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory $productLimitation,
         MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {

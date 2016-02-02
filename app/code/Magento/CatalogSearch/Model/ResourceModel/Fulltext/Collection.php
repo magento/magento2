@@ -101,7 +101,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory $productLimitation,
         \Magento\Search\Model\QueryFactory $catalogSearchData,
         \Magento\Framework\Search\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
