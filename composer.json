@@ -32,6 +32,8 @@
         "zendframework/zend-log": "~2.4.6",
         "zendframework/zend-http": "~2.4.6",
         "magento/zendframework1": "1.12.16",
+        "colinmollenhour/credis": "1.6",
+        "colinmollenhour/php-redis-session-abstract": "1.0",
         "composer/composer": "1.0.0-alpha10",
         "monolog/monolog": "1.16.0",
         "oyejorge/less.php": "1.7.0.3",
@@ -57,7 +59,8 @@
         "ext-intl": "*",
         "ext-xsl": "*",
         "ext-mbstring": "*",
-        "ext-openssl": "*"
+        "ext-openssl": "*",
+        "ext-zip": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
@@ -147,6 +150,7 @@
         "magento/module-sales-sequence": "100.0.2",
         "magento/module-sample-data": "100.0.2",
         "magento/module-search": "100.0.2",
+        "magento/module-security": "100.0.0",
         "magento/module-send-friend": "100.0.2",
         "magento/module-shipping": "100.0.2",
         "magento/module-sitemap": "100.0.2",
@@ -182,7 +186,6 @@
         "magento/framework": "100.0.2",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "colinmollenhour/cache-backend-redis": "1.8",
-        "colinmollenhour/credis": "1.5",
         "components/jquery": "1.11.0",
         "blueimp/jquery-file-upload": "5.6.14",
         "components/jqueryui": "1.10.4",
@@ -193,7 +196,6 @@
         "component_paths": {
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
             "colinmollenhour/cache-backend-redis": "lib/internal/Cm/Cache/Backend/Redis.php",
-            "colinmollenhour/credis": "lib/internal/Credis",
             "components/jquery": [
                 "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",
