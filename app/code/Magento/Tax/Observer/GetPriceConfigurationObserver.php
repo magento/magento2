@@ -7,6 +7,7 @@ namespace Magento\Tax\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 
 class GetPriceConfigurationObserver implements ObserverInterface
 {
@@ -116,9 +117,13 @@ class GetPriceConfigurationObserver implements ObserverInterface
                         if ($holder['optionId'] == $selectionItem->getId()) {
                             /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
                             $baseAmount = $selectionItem->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getAmount();
+                            /** @var \Magento\Framework\Pricing\Amount\Base $oldAmount */
+                            $oldAmount = $selectionItem->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getAmount();
                             if ($baseAmount->hasAdjustment('tax')) {
-                                $holder[$key]['basePrice']['amount'] = $holder[$key]['oldPrice']['amount'] =
+                                $holder[$key]['basePrice']['amount'] =
                                     $baseAmount->getBaseAmount() + $baseAmount->getAdjustmentAmount('tax');
+                                $holder[$key]['oldPrice']['amount'] =
+                                    $oldAmount->getBaseAmount() + $oldAmount->getAdjustmentAmount('tax');
                             }
                         }
                     }
