@@ -13,6 +13,7 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 /**
  * Class DataProvider
@@ -99,7 +100,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $storeManager;
 
     /**
-     * Constructor
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
+     * DataProvider constructor
      *
      * @param string $name
      * @param string $primaryFieldName
@@ -110,9 +116,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Framework\Registry $registry
      * @param Config $eavConfig
      * @param \Magento\Framework\App\RequestInterface $request
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param array $meta
      * @param array $data
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -125,6 +131,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \Magento\Framework\Registry $registry,
         Config $eavConfig,
         \Magento\Framework\App\RequestInterface $request,
+        CategoryRepositoryInterface $categoryRepository,
         array $meta = [],
         array $data = []
     ) {
@@ -135,6 +142,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->registry = $registry;
         $this->storeManager = $storeManager;
         $this->request = $request;
+        $this->categoryRepository = $categoryRepository;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
     }
@@ -297,7 +305,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function getCurrentCategory()
     {
-        return $this->registry->registry('category');
+        $category = $this->registry->registry('category');
+        if ($category) {
+            return $category;
+        }
+        if ($this->request->getParam($this->requestFieldName)) {
+            $category = $this->categoryRepository->get($this->request->getParam($this->requestFieldName));
+        }
+        return $category;
     }
 
     /**
