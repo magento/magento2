@@ -110,7 +110,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             if (!$category->getId()) {
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
-                $category->setParentId($parentId);
+                $category->setParentId($parentCategory->getId());
             }
 
             /**

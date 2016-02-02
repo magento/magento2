@@ -452,6 +452,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $parentCategoryMock->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue('parent_category_path'));
+        $parentCategoryMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($parentId));
         $categoryMock->expects($this->once())
             ->method('setPath')
             ->with('parent_category_path');
