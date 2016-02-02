@@ -23,7 +23,7 @@ define(
                     type: index,
                     config: config.config,
                     component: config.component,
-                    typeComparator: function (typeA, typeB) {
+                    typeComparatorCallback: function (typeA, typeB) {
                         return typeA.indexOf(typeB) === 0;
                     }
                 }
