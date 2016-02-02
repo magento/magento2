@@ -52,17 +52,17 @@ class FlushCacheByTags
      * @return \Magento\Framework\Model\ResourceModel\AbstractResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-     public function aroundSave(
-         \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
-         \Closure $proceed,
-         \Magento\Framework\Model\AbstractModel $object
-     ) {
+    public function aroundSave(
+        \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
+        \Closure $proceed,
+        \Magento\Framework\Model\AbstractModel $object
+    ) {
         $result = $proceed($object);
         if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
             $this->cleanCacheByTags($object->getIdentities());
         }
         return $result;
-     }
+    }
 
     /**
      * Clean cache on delete object
