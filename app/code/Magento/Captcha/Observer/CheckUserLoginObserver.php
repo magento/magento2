@@ -6,10 +6,9 @@
 namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Customer\Model\ResourceModel\LockoutManagement;
-use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 class CheckUserLoginObserver implements ObserverInterface
 {
@@ -46,16 +45,9 @@ class CheckUserLoginObserver implements ObserverInterface
     protected $_customerUrl;
 
     /**
-     * Lockout manager
-     *
-     * @var \Magento\Customer\Model\ResourceModel\LockoutManagement
+     * @var CustomerRepositoryInterface
      */
-    protected $lockoutManager;
-
-    /**
-     * @var \Magento\Customer\Model\CustomerRegistry
-     */
-    protected $customerRegistry;
+    protected $customerRepository;
 
     /**
      * Account manager
@@ -71,8 +63,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param CaptchaStringResolver $captchaStringResolver
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Customer\Model\ResourceModel\LockoutManagement $lockoutManager
-     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
+     * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementHelper $accountManagementHelper
      */
     public function __construct(
@@ -82,8 +73,7 @@ class CheckUserLoginObserver implements ObserverInterface
         \Magento\Framework\Session\SessionManagerInterface $session,
         CaptchaStringResolver $captchaStringResolver,
         \Magento\Customer\Model\Url $customerUrl,
-        LockoutManagement $lockoutManager,
-        CustomerRegistry $customerRegistry,
+        CustomerRepositoryInterface $customerRepository,
         AccountManagementHelper $accountManagementHelper
     ) {
         $this->_helper = $helper;
@@ -92,8 +82,7 @@ class CheckUserLoginObserver implements ObserverInterface
         $this->_session = $session;
         $this->captchaStringResolver = $captchaStringResolver;
         $this->_customerUrl = $customerUrl;
-        $this->lockoutManager = $lockoutManager;
-        $this->customerRegistry = $customerRegistry;
+        $this->customerRepository = $customerRepository;
         $this->accountManagementHelper = $accountManagementHelper;
     }
 
@@ -115,9 +104,9 @@ class CheckUserLoginObserver implements ObserverInterface
             $word = $this->captchaStringResolver->resolve($controller->getRequest(), $formId);
             if (!$captchaModel->isCorrect($word)) {
                 try {
-                    $customer = $this->customerRegistry->retrieveByEmail($login);
-                    $this->lockoutManager->processLockout($customer);
-                    $this->accountManagementHelper->reindexCustomer($customer->getId());
+                    $customer = $this->customerRepository->get($login);
+                    $this->accountManagementHelper->processCustomerLockoutData($customer->getId());
+                    $this->customerRepository->save($customer);
                 } catch (NoSuchEntityException $e) {
                     //do nothing as customer existance is validated later in authenticate method
                 }
