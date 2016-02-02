@@ -16,7 +16,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * @var \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
      */
-    protected $galleryManagement;
+    protected $productGalleryReadHandler;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
@@ -29,7 +29,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $jsonDecoder;
 
     /**
-     * @param \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface $galleryManagementInterface
+     * Gallery constructor.
+     * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $productGalleryReadHandler
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -37,14 +38,14 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface $galleryManagementInterface,
+        \Magento\Catalog\Model\Product\Gallery\ReadHandler $productGalleryReadHandler,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Json\DecoderInterface $jsonDecoder,
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         array $data = []
     ) {
-        $this->galleryManagement = $galleryManagementInterface;
+        $this->productGalleryReadHandler = $productGalleryReadHandler;
         $this->jsonEncoder = $jsonEncoder;
         $this->jsonDecoder = $jsonDecoder;
         parent::__construct($context, $arrayUtils, $data);
@@ -88,7 +89,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     private function getProductGallery($product)
     {
         $result = [];
-        $product->setMediaGalleryEntries($this->galleryManagement->getList($product->getSku()));
+        $this->productGalleryReadHandler->execute('catalog_product', $product);
         $images = $product->getMediaGalleryImages();
         foreach ($images as $image) {
             $result[] = [
