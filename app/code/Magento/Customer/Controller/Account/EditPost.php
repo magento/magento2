@@ -15,7 +15,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -40,20 +39,12 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     protected $session;
 
     /**
-     * Account manager
-     *
-     * @var AccountManagementHelper
-     */
-    protected $accountManagementHelper;
-
-    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
-     * @param AccountManagementHelper $accountManagementHelper
      */
     public function __construct(
         Context $context,
@@ -61,15 +52,13 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
-        CustomerExtractor $customerExtractor,
-        AccountManagementHelper $accountManagementHelper
+        CustomerExtractor $customerExtractor
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
-        $this->accountManagementHelper = $accountManagementHelper;
         parent::__construct($context);
     }
 
