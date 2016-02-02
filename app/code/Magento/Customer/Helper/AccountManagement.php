@@ -14,6 +14,8 @@ use Magento\Backend\App\ConfigInterface;
  */
 class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    const LOCKOUT_THRESHOLD_PATH = 'customer/password/lockout_threshold';
+    const MAX_FAILURES_PATH = 'customer/password/lockout_failures';
     /**
      * @var CustomerRegistry
      */
@@ -69,8 +71,8 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $failuresNum = (int)$customerSecure->getFailuresNum() + 1;
 
-        /** @noinspection PhpAssignmentInConditionInspection */
-        if ($firstFailureDate = $customerSecure->getFirstFailure()) {
+        $firstFailureDate = $customerSecure->getFirstFailure();
+        if ($firstFailureDate) {
             $firstFailureDate = new \DateTime($firstFailureDate);
         }
 
@@ -85,7 +87,6 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $customerSecure->setFailuresNum($failuresNum);
-
     }
 
     /**
@@ -108,7 +109,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function getLockThreshold()
     {
-        return $this->backendConfig->getValue('customer/password/lockout_threshold') * 60;
+        return $this->backendConfig->getValue(self::LOCKOUT_THRESHOLD_PATH) * 60;
     }
 
     /**
@@ -118,6 +119,6 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function getMaxFailures()
     {
-        return $this->backendConfig->getValue('customer/password/lockout_failures');
+        return $this->backendConfig->getValue(self::MAX_FAILURES_PATH);
     }
 }
