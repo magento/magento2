@@ -7,27 +7,14 @@
 namespace Magento\Customer\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Customer\Model\CustomerRegistry;
-use Magento\Customer\Model\ResourceModel\LockoutManagement;
 use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Class CustomerLoginFailedObserver
  */
 class CustomerLoginFailedObserver implements ObserverInterface
 {
-    /**
-     * @var CustomerRegistry
-     */
-    protected $customerRegistry;
-
-    /**
-     * Lockout manager
-     *
-     * @var \Magento\Customer\Model\ResourceModel\LockoutManagement
-     */
-    protected $lockoutManager;
-
     /**
      * Account manager
      *
@@ -36,32 +23,35 @@ class CustomerLoginFailedObserver implements ObserverInterface
     protected $accountManagementHelper;
 
     /**
-     * @param CustomerRegistry $customerRegistry
-     * @param LockoutManagement $lockoutManager
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * @param AccountManagementHelper $accountManagementHelper
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
-        CustomerRegistry $customerRegistry,
-        LockoutManagement $lockoutManager,
-        AccountManagementHelper $accountManagementHelper
+        AccountManagementHelper $accountManagementHelper,
+        CustomerRepositoryInterface $customerRepository
     ) {
-        $this->customerRegistry = $customerRegistry;
-        $this->lockoutManager = $lockoutManager;
         $this->accountManagementHelper = $accountManagementHelper;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
-     * Customer locking implementation.
+     * Customer locking implementation
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $username = $observer->getEvent()->getData('username');
-        $customer = $this->customerRegistry->retrieveByEmail($username);
+        $customer = $this->customerRepository->get($username);
         if ($customer && $customer->getId()) {
-            $this->lockoutManager->processLockout($customer);
-            $this->accountManagementHelper->reindexCustomer($customer->getId());
+            $this->accountManagementHelper->processCustomerLockoutData($customer->getId());
+            $this->customerRepository->save($customer);
         }
         return $this;
     }
