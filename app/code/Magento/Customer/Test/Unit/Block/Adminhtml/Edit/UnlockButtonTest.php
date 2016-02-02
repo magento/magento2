@@ -19,13 +19,6 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
     protected $customerRegistryMock;
 
     /**
-     * AccountManagement Helper
-     *
-     * @var \Magento\Customer\Helper\AccountManagement
-     */
-    protected $accountManagementHelperMock;
-
-    /**
      * @var  \Magento\Backend\Block\Widget\Context
      */
     protected $contextMock;
@@ -41,6 +34,11 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilderMock;
+
+    /**
+     * @var \Magento\Framework\Registry
+     */
+    protected $registryMock;
 
     /**
      * @var \Magento\Customer\Block\Adminhtml\Edit\UnlockButton
@@ -70,13 +68,14 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->accountManagementHelperMock = $this->getMock(
-            'Magento\Customer\Helper\AccountManagement',
-            ['isCustomerLocked'],
+        $this->registryMock = $this->getMock(
+            'Magento\Framework\Registry',
+            ['registry'],
             [],
             '',
             false
         );
+
         $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
             ->setMethods(['getUrl'])
             ->disableOriginalConstructor()
@@ -89,8 +88,8 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->contextMock,
                 'customerRegistry' => $this->customerRegistryMock,
-                'accountManagementHelper' => $this->accountManagementHelperMock,
-                'urlBuilder' => $this->urlBuilderMock
+                'urlBuilder' => $this->urlBuilderMock,
+                'registry' => $this->registryMock
             ]
         );
     }
@@ -103,8 +102,9 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetButtonData($result, $expectedValue)
     {
+        $this->registryMock->expects($this->any())->method('registry')->willReturn(1);
         $this->customerRegistryMock->expects($this->once())->method('retrieve')->willReturn($this->customerModelMock);
-        $this->accountManagementHelperMock->expects($this->once())->method('isCustomerLocked')->willReturn($expectedValue);
+        $this->customerModelMock->expects($this->once())->method('isCustomerLocked')->willReturn($expectedValue);
         $this->urlBuilderMock->expects($this->any())->method('getUrl')->willReturn('http://website.com/');
 
         $this->assertEquals($result, $this->block->getButtonData());
