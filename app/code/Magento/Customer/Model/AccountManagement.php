@@ -367,7 +367,9 @@ class AccountManagement implements AccountManagementInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
 
+        $this->checkLock($customer);
         $this->validatePasswordByCustomer($customer, $password);
+        $this->checkLock($customer);
         if ($customer->getConfirmation() && $this->isConfirmationRequired($customer)) {
             throw new EmailNotConfirmedException(__('This account is not confirmed.'));
         }
@@ -665,7 +667,6 @@ class AccountManagement implements AccountManagementInterface
      */
     private function validatePasswordByCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer, $password)
     {
-        $this->ifCustomerLocked($customer);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $hash = $customerSecure->getPasswordHash();
         if (!$this->encryptor->validateHash($password, $hash)) {
@@ -676,6 +677,7 @@ class AccountManagement implements AccountManagementInterface
                     'password' => $password
                 ]
             );
+            $this->checkLock($customer);
             throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
         }
 
@@ -683,16 +685,12 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Check if customer is locked and throw exception
-     *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @throws NoSuchEntityException
-     * @throws UserLockedException
+     * {@inheritdoc}
      */
-    protected function ifCustomerLocked(\Magento\Customer\Api\Data\CustomerInterface $customer)
+    public function checkLock(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         $currentCustomer = $this->customerRegistry->retrieve($customer->getId());
-        if ($this->accountManagementHelper->isCustomerLocked($currentCustomer->getLockExpires())) {
+        if ($currentCustomer->isCustomerLocked()) {
             throw new UserLockedException(
                 __(
                     'The account is locked. Please wait and try again or contact %1.',
