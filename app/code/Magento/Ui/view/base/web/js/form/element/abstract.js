@@ -335,12 +335,11 @@ define([
             var value   = this.value(),
                 result  = validator(this.validation, value),
                 message = result.message,
-                isValid = !this.visible() || result.passed;
-
-            this.error(message);
+                isValid = !this.visible() || this.disabled() || result.passed;
 
             //TODO: Implement proper result propagation for form
             if (!isValid) {
+                this.error(message);
                 this.source.set('params.invalid', true);
             }
 
