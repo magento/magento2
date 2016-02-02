@@ -68,7 +68,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             $products = $productType->getUsedProducts($this->getProduct());
             $attributes = $productType->getConfigurableAttributesAsArray($this->getProduct());
             /** @var \Magento\Catalog\Model\Product $product */
-            foreach($attributes as $attribute) {
+            foreach ($attributes as $attribute) {
                 foreach ($products as $product) {
                     $attributeValue = $product->getData($attribute['attribute_code']);
                     if ($attributeValue) {
