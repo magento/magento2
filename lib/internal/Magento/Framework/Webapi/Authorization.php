@@ -14,6 +14,7 @@ class Authorization
      * @var \Magento\Framework\AuthorizationInterface
      */
     protected $authorization;
+
     /**
      * Initialize dependencies.
      *
@@ -23,6 +24,7 @@ class Authorization
     {
         $this->authorization = $authorization;
     }
+
     /**
      * Check if all ACL resources are allowed to be accessed by current API user.
      *

@@ -4,8 +4,10 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Cache\Type;
+
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * System / Cache Management / Cache type "Web Services Configuration"
  */
@@ -15,18 +17,22 @@ class Webapi extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
      * Cache type code unique among all cache types
      */
     const TYPE_IDENTIFIER = 'config_webservice';
+
     /**
      * Cache tag used to distinguish the cache type from all other cache
      */
     const CACHE_TAG = 'WEBSERVICE';
+
     /**
      * @var StoreManagerInterface
      */
     protected $storeManager;
+
     /**
      * @var UserContextInterface
      */
     protected $userContext;
+
     /**
      * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
      * @param StoreManagerInterface $storeManager
@@ -41,6 +47,7 @@ class Webapi extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
         $this->userContext = $userContext;
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
     }
+
     /**
      * Generate cache ID using current context: user permissions and store
      *
