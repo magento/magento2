@@ -50,7 +50,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $_oauthServiceMock;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_authorizationMock;
 
@@ -98,7 +98,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->_oauthServiceMock = $this->getMockBuilder('\Magento\Framework\Oauth\OauthInterface')
             ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
-        $this->_authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
+        $this->_authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
             ->disableOriginalConstructor()->getMock();
         $paramsOverriderMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\ParamsOverrider')
             ->setMethods(['overrideParams'])

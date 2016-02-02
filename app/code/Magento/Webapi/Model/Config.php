@@ -6,7 +6,7 @@
 
 namespace Magento\Webapi\Model;
 
-use Magento\Framework\App\Cache\Type\Webapi as WebapiCache;
+use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
 use Magento\Webapi\Model\Config\Reader;
 
 /**
@@ -16,7 +16,7 @@ use Magento\Webapi\Model\Config\Reader;
  */
 class Config
 {
-    const CACHE_ID = 'webapi';
+    const CACHE_ID = 'webapi_config';
 
     /**
      * Pattern for Web API interface name.
