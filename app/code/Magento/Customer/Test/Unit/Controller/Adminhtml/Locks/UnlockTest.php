@@ -82,7 +82,7 @@ class UnlockTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->accountManagementHelperMock = $this->getMock(
             'Magento\Customer\Helper\AccountManagement',
-            ['processUnlockData', 'unlock'],
+            ['processUnlockData'],
             [],
             '',
             false
