@@ -179,15 +179,11 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     public function save($sku, OptionInterface $option)
     {
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
-        $configurableAttribute = $this->configurableAttributeFactory->create();
+        /** @var Product $product */
+        $product = $this->getProduct($sku);
         if ($option->getId()) {
-            /** @var Product $product */
-            $product = $this->getProduct($sku);
-            $configurableAttribute->load($option->getId());
-            if (!$configurableAttribute->getId()
-                || $configurableAttribute->getProductId() != $product->getData($metadata->getLinkField())
-            ) {
+            $option->load($option->getId());
+            if (!$option->getId() || $option->getProductId() != $product->getData($metadata->getLinkField())) {
                 throw new NoSuchEntityException(
                     __(
                         'Option with id "%1" not found',
@@ -195,60 +191,25 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
                     )
                 );
             }
-            $configurableAttribute->addData($option->getData());
-            $configurableAttribute->setValues(
-                $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getOptions()
-            );
-
-            try {
-                $configurableAttribute->save();
-            } catch (\Exception $e) {
-                throw new CouldNotSaveException(
-                    __(
-                        'Could not update option with id "%1"',
-                        $option->getId()
-                    )
-                );
-            }
         } else {
             $this->validateNewOptionData($option);
-            /** @var Product $product */
-            $product = $this->productRepository->get($sku);
             $allowedTypes = [ProductType::TYPE_SIMPLE, ProductType::TYPE_VIRTUAL, ConfigurableType::TYPE_CODE];
             if (!in_array($product->getTypeId(), $allowedTypes)) {
                 throw new \InvalidArgumentException('Incompatible product type');
             }
-
-            $eavAttribute = $this->productAttributeRepository->get($option->getAttributeId());
-            $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
-            if ($configurableAttribute->getId()) {
-                throw new CouldNotSaveException(__('Product already has this option'));
-            }
-
-            $configurableAttributesData = [
-                'attribute_id' => $option->getAttributeId(),
-                'position' => $option->getPosition(),
-                'use_default' => $option->getIsUseDefault(),
-                'label' => $option->getLabel(),
-                'values' => $option->getValues()
-            ];
-
-            try {
-                $product->setTypeId(ConfigurableType::TYPE_CODE);
-                $product->setConfigurableAttributesData([$configurableAttributesData]);
-                $product->setStoreId($this->storeManager->getStore(Store::ADMIN_CODE)->getId());
-                $product->save();
-            } catch (\Exception $e) {
-                throw new CouldNotSaveException(__('Something went wrong while saving option.'));
-            }
-
-            $configurableAttribute = $this->configurableAttributeFactory->create();
-            $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
+            $option->setProductId($product->getData($metadata->getLinkField()));
         }
-        if (!$configurableAttribute->getId()) {
+
+        try {
+            $option->save();
+        } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Something went wrong while saving option.'));
         }
-        return $configurableAttribute->getId();
+
+        if (!$option->getId()) {
+            throw new CouldNotSaveException(__('Something went wrong while saving option.'));
+        }
+        return $option->getId();
     }
 
     /**
