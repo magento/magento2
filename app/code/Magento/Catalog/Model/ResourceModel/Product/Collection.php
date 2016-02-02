@@ -286,7 +286,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory $productLimitation,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->moduleManager = $moduleManager;
@@ -299,7 +299,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->_groupManagement = $groupManagement;
-        $this->_productLimitationFilters = $productLimitation;
+        $this->_productLimitationFilters = $productLimitation->create();
         parent::__construct(
             $entityFactory,
             $logger,
