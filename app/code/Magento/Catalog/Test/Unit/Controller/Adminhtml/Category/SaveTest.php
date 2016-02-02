@@ -368,6 +368,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $messagesMock->expects($this->once())
+            ->method('getCountByType')
+            ->will($this->returnValue(0));
+
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($resultRedirectMock));
@@ -430,7 +434,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('addData')
             ->with($postData);
-        $categoryMock->expects($this->at(0))
+        $categoryMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($categoryId));
 
@@ -521,9 +525,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $layoutMock->expects($this->once())
             ->method('getMessagesBlock')
             ->will($this->returnValue($blockMock));
-        $this->messageManagerMock->expects($this->once())
+        $this->messageManagerMock->expects($this->any())
             ->method('getMessages')
-            ->with(true)
             ->will($this->returnValue($messagesMock));
         $blockMock->expects($this->once())
             ->method('setMessages')
