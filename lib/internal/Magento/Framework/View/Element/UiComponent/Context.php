@@ -138,6 +138,11 @@ class Context implements ContextInterface
     {
         if (!isset($this->componentsDefinitions[$name])) {
             $this->componentsDefinitions[$name] = $config;
+        } else {
+            $this->componentsDefinitions[$name] = array_merge(
+                $this->componentsDefinitions[$name],
+                $config
+            );
         }
     }
 
