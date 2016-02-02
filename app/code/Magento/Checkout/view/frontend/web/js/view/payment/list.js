@@ -96,7 +96,15 @@ define([
          */
         createRenderer: function (paymentMethodData) {
             _.find(rendererList(), function (renderer) {
-                if (renderer.type.indexOf(paymentMethodData.method) === 0) {
+                var isRendererForMethod = false;
+
+                if ('typeComparator' in renderer) {
+                    isRendererForMethod = renderer.typeComparator(renderer.type, paymentMethodData.method);
+                } else {
+                    isRendererForMethod = renderer.type === paymentMethodData.method;
+                }
+
+                if (isRendererForMethod) {
                     layout(
                         [
                             this.createComponent(
