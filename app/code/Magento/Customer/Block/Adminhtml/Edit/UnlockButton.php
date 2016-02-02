@@ -44,7 +44,7 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
         $customerId = $this->getCustomerId();
         $data = [];
         if ($customerId) {
-            $customer = $this->customerRegistry->retrieve($this->getCustomerId());
+            $customer = $this->customerRegistry->retrieve($customerId);
             if ($customer->isCustomerLocked()) {
                 $data = [
                     'label' => __('Unlock'),
