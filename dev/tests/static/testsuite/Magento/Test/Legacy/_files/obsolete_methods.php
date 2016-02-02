@@ -2504,4 +2504,5 @@ return [
     ['get', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['set', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['getTypeSwitcherData', 'Magento\Catalog\Block\Adminhtml\Product'],
+    ['getBunchImages', 'Magento\CatalogImportExport\Model\Import\Product'],
 ];

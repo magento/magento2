@@ -164,6 +164,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_attrSetNameToId = [];
 
     /**
+     * @var string
+     */
+    protected $mediaGalleryTableName;
+
+    /**
+     * @var string
+     */
+    protected $mediaGalleryValueTableName;
+    /**
+     * @var string
+     */
+    protected $mediaGalleryEntityToValueTableName;
+
+    /**
+     * @var string
+     */
+    protected $productEntityTableName;
+
+    /**
      * Attributes with index (not label) value.
      *
      * @var string[]
@@ -1269,77 +1288,58 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Retrieving images from all columns and rows
+     * Init media gallery resources
+     * @return void
+     */
+    protected function initMediaGalleryResources()
+    {
+        if (null == $this->productEntityTableName) {
+            $this->productEntityTableName = $this->getResource()->getTable('catalog_product_entity');
+            $this->mediaGalleryTableName = $this->getResource()->getTable('catalog_product_entity_media_gallery');
+            $this->mediaGalleryValueTableName = $this->getResource()->getTable(
+                'catalog_product_entity_media_gallery_value'
+            );
+            $this->mediaGalleryEntityToValueTableName = $this->getResource()->getTable(
+                'catalog_product_entity_media_gallery_value_to_entity'
+            );
+        }
+    }
+
+    /**
+     * Get existing images for current bunch
      *
      * @param array $bunch
      * @return array
      */
-    protected function getBunchImages($bunch)
+    protected function getExistingImages($bunch)
     {
-        $images = [];
-        foreach ($bunch as $row) {
-            $row = $this->_customFieldsMapping($row);
-            foreach ($this->_imagesArrayKeys as $imageColumn) {
-                if (empty($row[$imageColumn])) {
-                    continue;
-                }
-
-                $rowImages = explode($this->getMultipleValueSeparator(), $row[$imageColumn]);
-                foreach ($rowImages as $rowImage) {
-                    $destinationPath = str_replace('\\', '/', $rowImage);
-                    $destinationPath = explode('/', $destinationPath);
-                    $destinationPath = array_pop($destinationPath);
-                    $destinationPath = preg_replace('/[^a-z0-9\._-]+/i', '', $destinationPath);
-
-                    $dispersion = \Magento\Framework\File\Uploader::getDispretionPath($destinationPath);
-                    $destinationPath = mb_strtolower($dispersion . '/' . $destinationPath);
-
-                    $images[$rowImage] = $destinationPath;
-                }
-            }
+        $result = [];
+        $productSKUs = array_map('strval', array_column($bunch, self::COL_SKU));
+        if (!$productSKUs) {
+            return $result;
         }
-        return $images;
-    }
+        $this->initMediaGalleryResources();
 
-    /**
-     * Prepare all media files
-     *
-     * @param array $images
-     * @return array
-     */
-    protected function getExistingImages($images)
-    {
-        static $productMediaGalleryTableName = null;
-        static $resource = null;
-        if (!$resource) {
-            $resource = $this->_resourceFactory->create();
-        }
-        if (!$productMediaGalleryTableName) {
-            $productMediaGalleryTableName = $resource->getTable('catalog_product_entity_media_gallery');
-        }
         $select = $this->_connection->select()->from(
-            ['mg' => $resource->getTable('catalog_product_entity_media_gallery')],
+            ['mg' => $this->mediaGalleryTableName],
             ['value' => 'mg.value']
-        )->joinLeft(
-            ['mgvte' => $resource->getTable('catalog_product_entity_media_gallery_value_to_entity')],
+        )->joinInner(
+            ['mgvte' => $this->mediaGalleryEntityToValueTableName],
             '(mg.value_id = mgvte.value_id)',
             ['entity_id' => 'mgvte.entity_id']
+        )->joinInner(
+            ['pe' => $this->productEntityTableName],
+            "(mgvte.entity_id = pe.entity_id)",
+            ['sku' => 'pe.sku']
         )->where(
-            'mg.value IN(?)',
-            $images
+            'pe.sku IN (?)',
+            $productSKUs
         );
-        $allMedia = $this->_connection->fetchAll($select);
-        $result = [];
-        foreach ($allMedia as $image) {
-            if (!isset($result[$image['value']])){
-                $result[$image['value']] = [];
-            }
-            foreach ($this->_oldSku as $sku => $oldSkuData) {
-                if ($oldSkuData['entity_id'] == $image['entity_id']) {
-                    $result[$image['value']][$image['entity_id']] = $sku;
-                }
-            }
+
+        foreach ($this->_connection->fetchAll($select) as $image) {
+            $result[$image['sku']][$image['value']] = true;
         }
+
         return $result;
     }
 
@@ -1400,8 +1400,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $uploadedImages = [];
             $previousType = null;
             $prevAttributeSet = null;
-            $bunchImages = $this->getBunchImages($bunch);
-            $existingImages = $this->getExistingImages($bunchImages);
+            $existingImages = $this->getExistingImages($bunch);
 
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
@@ -1521,8 +1520,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             $rowData[$column] = $uploadedFile;
                         }
 
-                        $imageNotAssigned = !isset($existingImages[$uploadedFile])
-                            || !in_array($rowSku, $existingImages[$uploadedFile]);
+                        $imageNotAssigned = !isset($existingImages[$rowSku][$uploadedFile]);
 
                         if ($uploadedFile && $imageNotAssigned) {
                             if ($column == self::COL_MEDIA_IMAGE) {
@@ -1535,7 +1533,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 'disabled' => isset($disabledImages[$columnImage]) ? '1' : '0',
                                 'value' => $uploadedFile,
                             ];
-                            $existingImages[$uploadedFile][] = $rowSku;
+                            $existingImages[$rowSku][$uploadedFile] = true;
                         }
                     }
                 }
@@ -1816,18 +1814,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($mediaGalleryData)) {
             return $this;
         }
-        static $mediaGalleryTableName = null;
-        static $mediaValueTableName = null;
-        static $mediaEntityToValueTableName = null;
-        $mediaGalleryTableName = $mediaGalleryTableName ?: $this->_resourceFactory->create()->getTable(
-            'catalog_product_entity_media_gallery'
-        );
-        $mediaValueTableName = $mediaValueTableName ?: $this->_resourceFactory->create()->getTable(
-            'catalog_product_entity_media_gallery_value'
-        );
-        $mediaEntityToValueTableName = $mediaEntityToValueTableName ?: $this->_resourceFactory->create()->getTable(
-            'catalog_product_entity_media_gallery_value_to_entity'
-        );
+        $this->initMediaGalleryResources();
         $productIds = [];
         $imageNames = [];
         $multiInsertData = [];
@@ -1836,12 +1823,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $productId = $this->skuProcessor->getNewSku($productSku)['entity_id'];
             $productIds[] = $productId;
             $insertedGalleryImgs = [];
-            if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
-                $this->_connection->delete(
-                    $mediaGalleryTableName,
-                    $this->_connection->quoteInto('entity_id IN (?)', $productId)
-                );
-            }
             foreach ($mediaGalleryRows as $insertValue) {
                 if (!in_array($insertValue['value'], $insertedGalleryImgs)) {
                     $valueArr = [
@@ -1856,17 +1837,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         }
         $oldMediaValues = $this->_connection->fetchAssoc(
-            $this->_connection->select()->from($mediaGalleryTableName, ['value_id', 'value'])
+            $this->_connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
                 ->where('value IN (?)', $imageNames)
         );
-        $this->_connection->insertOnDuplicate($mediaGalleryTableName, $multiInsertData, []);
+        $this->_connection->insertOnDuplicate($this->mediaGalleryTableName, $multiInsertData, []);
         $multiInsertData = [];
-        $newMediaSelect = $this->_connection->select()->from($mediaGalleryTableName, ['value_id', 'value'])
+        $newMediaSelect = $this->_connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
             ->where('value IN (?)', $imageNames);
         if (array_keys($oldMediaValues)) {
             $newMediaSelect->where('value_id NOT IN (?)', array_keys($oldMediaValues));
         }
 
+        $dataForSkinnyTable = [];
         $newMediaValues = $this->_connection->fetchAssoc($newMediaSelect);
         foreach ($mediaGalleryData as $productSku => $mediaGalleryRows) {
             foreach ($mediaGalleryRows as $insertValue) {
@@ -1897,14 +1879,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         try {
             $this->_connection->insertOnDuplicate(
-                $mediaValueTableName,
+                $this->mediaGalleryValueTableName,
                 $multiInsertData,
                 ['value_id', 'store_id', 'entity_id', 'label', 'position', 'disabled']
             );
-            $this->_connection->insertOnDuplicate($mediaEntityToValueTableName, $dataForSkinnyTable, ['value_id']);
+            $this->_connection->insertOnDuplicate(
+                $this->mediaGalleryEntityToValueTableName,
+                $dataForSkinnyTable,
+                ['value_id']
+            );
         } catch (\Exception $e) {
             $this->_connection->delete(
-                $mediaGalleryTableName,
+                $this->mediaGalleryTableName,
                 $this->_connection->quoteInto('value_id IN (?)', $newMediaValues)
             );
         }
