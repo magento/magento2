@@ -17,6 +17,7 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 
 /**
  * Import entity product model
@@ -1467,10 +1468,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (!array_key_exists($rowSku, $this->categoriesCache)) {
                     $this->categoriesCache[$rowSku] = [];
                 }
+                $rowData['rowNum'] = $rowNum;
                 $categoryIds = $this->processRowCategories($rowData);
                 foreach ($categoryIds as $id) {
                     $this->categoriesCache[$rowSku][$id] = true;
                 }
+                unset($rowData['rowNum']);
 
                 // 4.1. Tier prices phase
                 if (!empty($rowData['_tier_price_website'])) {
@@ -1625,6 +1628,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
 
+            foreach ($bunch as $rowNum => $rowData) {
+                if ($this->getErrorAggregator()->isRowInvalid($rowNum)) {
+                    unset($bunch[$rowNum]);
+                }
+            }
+
             $this->saveProductEntity(
                 $entityRowsIn,
                 $entityRowsUp
@@ -1661,6 +1670,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $categoriesString,
                 $this->getMultipleValueSeparator()
             );
+            foreach ($this->categoryProcessor->getFailedCategories() as $error) {
+                $this->errorAggregator->addError(
+                    AbstractEntity::ERROR_CODE_CATEGORY_NOT_VALID,
+                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
+                    $rowData['rowNum'],
+                    self::COL_CATEGORY,
+                    __('Category "%1" has not been created.', $error['category'])
+                    . ' ' . $error['exception']->getMessage()
+                );
+            }
         }
         return $categoryIds;
     }
