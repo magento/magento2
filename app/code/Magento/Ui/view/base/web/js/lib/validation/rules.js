@@ -450,7 +450,7 @@ define([
                 if (counter < passwordMinCharacterSets) {
                     result = false;
                     validator.passwordErrorMessage = $.mage.__(
-                        "Minimum different classes of characters in password are %1." +
+                        "Minimum of different classes of characters in password is %1." +
                         " Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
                     ).replace('%1', passwordMinCharacterSets);
                 }
