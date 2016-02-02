@@ -352,4 +352,34 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->_block, $block);
         $this->assertEquals($data, $block->getData(self::FORM_DATA));
     }
+
+    /**
+     * Test get minimum password length
+     */
+    public function testGetMinimumPasswordLength()
+    {
+        $this->customerConfigHelper->expects(
+            $this->once()
+        )->method(
+            'getMinimumPasswordLength'
+        )->will(
+            $this->returnValue(6)
+        );
+        $this->assertEquals(6, $this->_block->getMinimumPasswordLength());
+    }
+
+    /**
+     * Test get required character classes number
+     */
+    public function testGetRequiredCharacterClassesNumber()
+    {
+        $this->customerConfigHelper->expects(
+            $this->once()
+        )->method(
+            'getRequiredCharacterClassesNumber'
+        )->will(
+            $this->returnValue(3)
+        );
+        $this->assertEquals(3, $this->_block->getRequiredCharacterClassesNumber());
+    }
 }

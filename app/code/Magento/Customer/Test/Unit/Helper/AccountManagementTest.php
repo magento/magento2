@@ -49,7 +49,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->helper = $objectManagerHelper->getObject(
             'Magento\Customer\Helper\AccountManagement',
             [
-                'context' => $this->contextMock
+                'context' => $this->contextMock,
+                'indexerRegistry' => $this->indexerRegistryMock
             ]
         );
     }
@@ -73,5 +74,30 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
           ['lockExpirationDate' => date("F j, Y", strtotime( '-1 days' )), 'expectedResult' => false],
           ['lockExpirationDate' => date("F j, Y", strtotime( '+1 days' )), 'expectedResult' => true]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testReindexCustomer()
+    {
+        $customerId = 7;
+        $indexer = $this->getMock(
+            'Magento\Framework\Indexer\IndexerInterface',
+            [],
+            [],
+            '',
+            false
+        );
+        $indexer->expects($this->once())
+            ->method('reindexList')
+            ->with([$customerId]);
+
+        $this->indexerRegistryMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID)
+            ->willReturn($indexer);
+
+        $this->helper->reindexCustomer($customerId);
     }
 }

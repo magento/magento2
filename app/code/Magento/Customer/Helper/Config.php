@@ -29,10 +29,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getMinimumPasswordLength()
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_MINIMUM_PASSWORD_LENGTH,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-        );
+        return $this->scopeConfig->getValue(self::XML_PATH_MINIMUM_PASSWORD_LENGTH);
     }
 
     /**
@@ -42,9 +39,6 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getRequiredCharacterClassesNumber()
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-        );
+        return $this->scopeConfig->getValue(self::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
 }
