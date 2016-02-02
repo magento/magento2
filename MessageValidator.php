@@ -66,11 +66,7 @@ class MessageValidator
         $topicSchema = $this->getTopicSchema($topic, $requestType);
         if ($topicSchema[QueueConfig::TOPIC_SCHEMA_TYPE] == QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT) {
             $messageDataType = $topicSchema[QueueConfig::TOPIC_SCHEMA_VALUE];
-            if (preg_match_all("/\\\\/", $messageDataType)) {
-                $this->validateClassType($message, $messageDataType, $topic);
-            } else {
-                $this->validatePrimitiveType($message, $messageDataType, $topic);
-            }
+            $this->validateMessage($message, $messageDataType, $topic);
         } else {
             /** Validate message according to the method signature associated with the message topic */
             $message = (array)$message;
@@ -81,20 +77,12 @@ class MessageValidator
                 if ($isIndexedArray) {
                     $paramPosition = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_POSITION];
                     if (isset($message[$paramPosition])) {
-                        if (preg_match_all("/\\\\/", $paramType)) {
-                            $this->validateClassType($message[$paramPosition], $paramType, $topic);
-                        } else {
-                            $this->validatePrimitiveType($message[$paramPosition], $paramType, $topic);
-                        }
+                        $this->validateMessage($message[$paramPosition], $paramType, $topic);
                     }
                 } else {
                     if (isset($message[$paramName])) {
                         if (isset($message[$paramName])) {
-                            if (preg_match_all("/\\\\/", $paramType)) {
-                                $this->validateClassType($message[$paramName], $paramType, $topic);
-                            } else {
-                                $this->validatePrimitiveType($message[$paramName], $paramType, $topic);
-                            }
+                            $this->validateMessage($message[$paramName], $paramType, $topic);
                         }
                     }
                 }
@@ -103,9 +91,24 @@ class MessageValidator
     }
 
     /**
-     * @param $message
-     * @param $messageType
-     * @param $topic
+     * @param string $message
+     * @param string $messageType
+     * @param string $topic
+     * @return void
+     */
+    protected function validateMessage($message, $messageType, $topic)
+    {
+        if (preg_match_all("/\\\\/", $messageType)) {
+            $this->validateClassType($message, $messageType, $topic);
+        } else {
+            $this->validatePrimitiveType($message, $messageType, $topic);
+        }
+    }
+
+    /**
+     * @param string $message
+     * @param string $messageType
+     * @param string $topic
      * @return void
      */
     protected function validatePrimitiveType($message, $messageType, $topic)
@@ -126,9 +129,9 @@ class MessageValidator
     }
 
     /**
-     * @param $message
-     * @param $messageType
-     * @param $topic
+     * @param string $message
+     * @param string $messageType
+     * @param string $topic
      * @return void
      */
     protected function validateClassType($message, $messageType, $topic)
@@ -149,7 +152,7 @@ class MessageValidator
     }
 
     /**
-     * @param $message
+     * @param string $message
      * @return string
      */
     private function getRealType($message)
