@@ -15,7 +15,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
@@ -41,11 +40,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     protected $session;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * Account manager
      *
      * @var AccountManagementHelper
@@ -59,7 +53,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
-     * @param ScopeConfigInterface $scopeConfig
      * @param AccountManagementHelper $accountManagementHelper
      */
     public function __construct(
@@ -69,7 +62,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor,
-        ScopeConfigInterface $scopeConfig,
         AccountManagementHelper $accountManagementHelper
     ) {
         $this->session = $customerSession;
@@ -77,7 +69,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
-        $this->scopeConfig = $scopeConfig;
         $this->accountManagementHelper = $accountManagementHelper;
         parent::__construct($context);
     }
@@ -109,6 +100,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             }
 
             try {
+                $this->customerAccountManagement->checkLock($customer);
                 // Check if a customer can change email
                 if ($this->getRequest()->getParam('change_email')) {
                     if (!$this->isAllowedChangeCustomerEmail($customerId)) {
@@ -125,11 +117,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             } catch (UserLockedException $e) {
                 $this->session->logout();
                 $this->session->start();
-                $message = __(
-                    'The account is locked. Please wait and try again or contact %1.',
-                    $this->scopeConfig->getValue('contact/email/recipient_email')
-                );
-                $this->messageManager->addError($message);
+                $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('customer/account/login');
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
