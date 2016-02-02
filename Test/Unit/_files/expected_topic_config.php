@@ -176,7 +176,8 @@ return [
                 'schema_type' => 'object',
                 'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
             ],
-            'publisher' => 'amqp-ex.01'
+            'publisher' => 'amqp-ex.01',
+            'is_synchronous' => false,
         ],
         'top.03' => [
             'name' => 'top.03',
@@ -188,7 +189,8 @@ return [
                 'schema_type' => 'object',
                 'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
             ],
-            'publisher' => 'amqp-magento'
+            'publisher' => 'amqp-magento',
+            'is_synchronous' => false,
         ],
         'top.04' => [
             'name' => 'top.04',
@@ -200,7 +202,8 @@ return [
                 'schema_type' => 'object',
                 'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
             ],
-            'publisher' => 'db-magento'
+            'publisher' => 'db-magento',
+            'is_synchronous' => false,
         ],
         'user.created.remote' => [
             'name' => 'user.created.remote',
@@ -212,7 +215,8 @@ return [
                 'schema_type' => 'object',
                 'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
             ],
-            'publisher' => 'amqp-magento'
+            'publisher' => 'amqp-magento',
+            'is_synchronous' => false,
         ],
         'product.created.local' => [
             'name' => 'product.created.local',
@@ -224,7 +228,8 @@ return [
                 'schema_type' => 'object',
                 'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
             ],
-            'publisher' => 'amqp-magento'
+            'publisher' => 'amqp-magento',
+            'is_synchronous' => false,
         ],
     ]
 

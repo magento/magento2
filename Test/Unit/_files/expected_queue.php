@@ -34,6 +34,7 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
+            'is_synchronous' => false,
         ],
         'customer.created.one' => [
             'name' => 'customer.created.one',
@@ -46,6 +47,7 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
+            'is_synchronous' => false,
         ],
         'customer.created.one.two' => [
             'name' => 'customer.created.one.two',
@@ -58,6 +60,7 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
+            'is_synchronous' => false,
         ],
         'customer.created.two' => [
             'name' => 'customer.created.two',
@@ -70,6 +73,7 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
+            'is_synchronous' => false,
         ],
         'customer.updated' => [
             'name' => 'customer.updated',
@@ -82,6 +86,7 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
+            'is_synchronous' => false,
         ],
         'customer.deleted' => [
             'name' => 'customer.deleted',
@@ -94,6 +99,7 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
+            'is_synchronous' => false,
         ],
         'cart.created' => [
             'name' => 'cart.created',
@@ -106,6 +112,7 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
+            'is_synchronous' => false,
         ],
         'cart.created.one' => [
             'name' => 'cart.created.one',
@@ -118,6 +125,7 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
+            'is_synchronous' => false,
         ],
     ],
     'consumers' => [
