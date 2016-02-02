@@ -30,6 +30,13 @@ class Manager implements ManagerInterface
      * @var ConfigInterface
      */
     protected $_eventConfig;
+    
+    /**
+     * Magento registry
+     * 
+     * @var \Magento\Framework\Registry
+     */
+    protected $_registry;
 
     /**
      * @param InvokerInterface $invoker
@@ -39,6 +46,8 @@ class Manager implements ManagerInterface
     {
         $this->_invoker = $invoker;
         $this->_eventConfig = $eventConfig;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_registry = $objectManager->get('Magento\Framework\Registry');
     }
 
     /**
@@ -54,7 +63,12 @@ class Manager implements ManagerInterface
     public function dispatch($eventName, array $data = [])
     {
         $eventName = mb_strtolower($eventName);
+        $registryKey = 'event-dispatch-' . $eventName;
+        if ($this->_registry->registry($registryKey) === true) {
+            return false;
+        }
         \Magento\Framework\Profiler::start('EVENT:' . $eventName, ['group' => 'EVENT', 'name' => $eventName]);
+        $this->_registry->register($registryKey, true);
         foreach ($this->_eventConfig->getObservers($eventName) as $observerConfig) {
             $event = new \Magento\Framework\Event($data);
             $event->setName($eventName);
@@ -66,6 +80,7 @@ class Manager implements ManagerInterface
             $this->_invoker->dispatch($observerConfig, $wrapper);
             \Magento\Framework\Profiler::stop('OBSERVER:' . $observerConfig['name']);
         }
+        $this->_registry->unregister($registryKey, true);
         \Magento\Framework\Profiler::stop('EVENT:' . $eventName);
     }
 }
