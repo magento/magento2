@@ -8,7 +8,6 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * Class AccountLock
@@ -16,29 +15,19 @@ use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 class AccountLock extends Column
 {
     /**
-     * AccountManagement Helper
-     *
-     * @var AccountManagementHelper
-     */
-    protected $accountManagementHelper;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param AccountManagementHelper $accountManagementHelper
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        AccountManagementHelper $accountManagementHelper,
         array $components = [],
         array $data = []
     ) {
-        $this->accountManagementHelper = $accountManagementHelper;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -52,7 +41,8 @@ class AccountLock extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                if ($this->accountManagementHelper->isCustomerLocked($item['lock_expires'])) {
+                $lockExpires = new \DateTime($item['lock_expires']);
+                if ($lockExpires > new \DateTime() ) {
                     $item['lock_expires'] =  _('Locked');
                 } else {
                     $item['lock_expires'] = __('Unlocked');

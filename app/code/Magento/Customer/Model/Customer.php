@@ -1349,4 +1349,20 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         ];
         return $types;
     }
+
+    /**
+     * Check if customer is locked
+     *
+     * @return bool
+     */
+    public function isCustomerLocked()
+    {
+        if ($this->getLockExpires()) {
+            $lockExpires = new \DateTime($this->getLockExpires());
+            if ($lockExpires > new \DateTime()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
