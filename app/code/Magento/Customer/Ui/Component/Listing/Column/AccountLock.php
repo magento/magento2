@@ -8,7 +8,7 @@ namespace Magento\Customer\Ui\Component\Listing\Column;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
+use Magento\Customer\Model\Customer;
 
 /**
  * Class AccountLock
@@ -16,29 +16,27 @@ use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 class AccountLock extends Column
 {
     /**
-     * AccountManagement Helper
-     *
-     * @var AccountManagementHelper
+     * @var \Magento\Customer\Model\Customer
      */
-    protected $accountManagementHelper;
+    protected $customerModel;
 
     /**
      * Constructor
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param AccountManagementHelper $accountManagementHelper
+     * @param \Magento\Customer\Model\Customer $customerModel
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        AccountManagementHelper $accountManagementHelper,
+        Customer $customerModel,
         array $components = [],
         array $data = []
     ) {
-        $this->accountManagementHelper = $accountManagementHelper;
+        $this->customerModel = $customerModel;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -52,7 +50,7 @@ class AccountLock extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                if ($this->accountManagementHelper->isCustomerLocked($item['lock_expires'])) {
+                if ($this->customerModel->isCustomerLocked($item['lock_expires'])) {
                     $item['lock_expires'] =  _('Locked');
                 } else {
                     $item['lock_expires'] = __('Unlocked');

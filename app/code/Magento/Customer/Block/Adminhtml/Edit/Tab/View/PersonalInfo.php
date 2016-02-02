@@ -11,7 +11,7 @@ use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Model\CustomerRegistry;
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
+use Magento\Customer\Model\Customer;
 
 /**
  * Adminhtml customer view personal information sales block.
@@ -105,11 +105,9 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     protected $addressMapper;
 
     /**
-     * AccountManagement Helper
-     *
-     * @var AccountManagementHelper
+     * @var \Magento\Customer\Model\Customer
      */
-    protected $accountManagementHelper;
+    protected $customerModel;
 
     /**
      * Data object helper
@@ -130,7 +128,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Customer\Model\Logger $customerLogger
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
-     * @param AccountManagementHelper $accountManagementHelper
+     * @param \Magento\Customer\Model\Customer $customerModel
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -146,7 +144,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Model\Logger $customerLogger,
         CustomerRegistry $customerRegistry,
-        AccountManagementHelper $accountManagementHelper,
+        Customer $customerModel,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -159,7 +157,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerLogger = $customerLogger;
         $this->customerRegistry = $customerRegistry;
-        $this->accountManagementHelper = $accountManagementHelper;
+        $this->customerModel = $customerModel;
 
         parent::__construct($context, $data);
     }
@@ -456,7 +454,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         $customerModel = $this->customerRegistry->retrieve($this->getCustomerId());
         $customerStatus = __('Unlocked');
-        if ($this->accountManagementHelper->isCustomerLocked($customerModel->getLockExpires())) {
+        if ($this->customerModel->isCustomerLocked($customerModel->getLockExpires())) {
             $customerStatus = __('Locked');
         }
         return $customerStatus;
