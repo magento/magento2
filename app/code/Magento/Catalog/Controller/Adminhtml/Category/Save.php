@@ -281,7 +281,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         if (!$parentId) {
             if ($storeId) {
                 $parentId = $this->_objectManager->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    \Magento\Store\Model\StoreManagerInterface::class
                 )->getStore(
                     $storeId
                 )->getRootCategoryId();
@@ -289,7 +289,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $parentId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
             }
         }
-        return $this->_objectManager->create('Magento\Catalog\Model\Category')->load($parentId);
+        return $this->_objectManager->create(\Magento\Catalog\Model\Category::class)->load($parentId);
     }
 
     /**
