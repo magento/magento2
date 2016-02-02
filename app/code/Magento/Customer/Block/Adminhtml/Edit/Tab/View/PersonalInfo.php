@@ -12,7 +12,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\CustomerFactory;
 
 /**
  * Adminhtml customer view personal information sales block.
@@ -113,11 +112,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
-     */
-    protected $customerFactory;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
@@ -129,7 +123,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Customer\Model\Logger $customerLogger
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -145,7 +138,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Model\Logger $customerLogger,
         CustomerRegistry $customerRegistry,
-        CustomerFactory $customerFactory,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -158,7 +150,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerLogger = $customerLogger;
         $this->customerRegistry = $customerRegistry;
-        $this->customerFactory = $customerFactory;
 
         parent::__construct($context, $data);
     }
