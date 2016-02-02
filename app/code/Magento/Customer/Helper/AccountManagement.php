@@ -14,8 +14,16 @@ use Magento\Backend\App\ConfigInterface;
  */
 class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    /**
+     * Configuration path to customer lockout threshold
+     */
     const LOCKOUT_THRESHOLD_PATH = 'customer/password/lockout_threshold';
+
+    /**
+     * Configuration path to customer max login failures number
+     */
     const MAX_FAILURES_PATH = 'customer/password/lockout_failures';
+
     /**
      * @var CustomerRegistry
      */
