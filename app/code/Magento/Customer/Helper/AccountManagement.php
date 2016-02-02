@@ -93,7 +93,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
      * @param $customerId
      * @return void
      */
-    public function unlock($customerId)
+    public function processUnlockData($customerId)
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
         $customerSecure->setFailuresNum(0);

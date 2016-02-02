@@ -55,7 +55,7 @@ class Unlock extends \Magento\Backend\App\Action
             // unlock customer
             if ($customerId) {
                 $customer = $this->customerRepository->getById($customerId);
-                $this->accountManagementHelper->unlock($customerId);
+                $this->accountManagementHelper->processUnlockData($customerId);
                 $this->customerRepository->save($customer);
                 $this->getMessageManager()->addSuccess(__('Customer has been unlocked successfully.'));
             }

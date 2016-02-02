@@ -49,7 +49,7 @@ class CustomerLoginSuccessObserver implements ObserverInterface
         /** @var \Magento\Customer\Model\Customer $model */
         $customerModel = $observer->getEvent()->getData('model');
         $customer = $this->customerRepository->getById($customerModel->getId());
-        $this->accountManagementHelper->unlock($customer->getId());
+        $this->accountManagementHelper->processUnlockData($customer->getId());
         $this->customerRepository->save($customer);
         return $this;
     }

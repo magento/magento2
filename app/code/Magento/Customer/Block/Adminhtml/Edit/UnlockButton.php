@@ -7,7 +7,6 @@ namespace Magento\Customer\Block\Adminhtml\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Customer\Model\CustomerRegistry;
-use Magento\Customer\Model\Customer;
 
 /**
  * Class UnlockButton
@@ -20,27 +19,19 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
     protected $customerRegistry;
 
     /**
-     * @var \Magento\Customer\Model\Customer
-     */
-    protected $customerModel;
-
-    /**
      * Constructor
      *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
-     * @param \Magento\Customer\Model\Customer $customerModel
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        CustomerRegistry $customerRegistry,
-        Customer $customerModel
+        CustomerRegistry $customerRegistry
     ) {
         parent::__construct($context, $registry);
         $this->customerRegistry = $customerRegistry;
-        $this->customerModel = $customerModel;
     }
 
     /**
@@ -52,7 +43,7 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
     {
         $customer = $this->customerRegistry->retrieve($this->getCustomerId());
         $data = [];
-        if ($this->customerModel->isCustomerLocked($customer->getLockExpires())) {
+        if ($customer->isCustomerLocked()) {
             $data = [
                 'label' => __('Unlock'),
                 'class' => 'unlock unlock-customer',
