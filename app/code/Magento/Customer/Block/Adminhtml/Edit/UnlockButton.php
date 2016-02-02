@@ -41,15 +41,18 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        $customer = $this->customerRegistry->retrieve($this->getCustomerId());
+        $customerId = $this->getCustomerId();
         $data = [];
-        if ($customer->isCustomerLocked()) {
-            $data = [
-                'label' => __('Unlock'),
-                'class' => 'unlock unlock-customer',
-                'on_click' => sprintf("location.href = '%s';", $this->getUnlockUrl()),
-                'sort_order' => 50,
-            ];
+        if ($customerId) {
+            $customer = $this->customerRegistry->retrieve($this->getCustomerId());
+            if ($customer->isCustomerLocked()) {
+                $data = [
+                    'label' => __('Unlock'),
+                    'class' => 'unlock unlock-customer',
+                    'on_click' => sprintf("location.href = '%s';", $this->getUnlockUrl()),
+                    'sort_order' => 50,
+                ];
+            }
         }
         return $data;
     }
