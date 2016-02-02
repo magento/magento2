@@ -17,7 +17,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
      */
-    protected $_catalogProductRelation;
+    protected $catalogProductRelation;
 
     /**
      * @var MetadataPool
@@ -36,7 +36,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         MetadataPool $metadataPool,
         $connectionName = null
     ) {
-        $this->_catalogProductRelation = $catalogProductRelation;
+        $this->catalogProductRelation = $catalogProductRelation;
         $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
@@ -60,38 +60,29 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function saveProducts($mainProduct, $productIds)
     {
-        $isProductInstance = false;
+        if (!$mainProduct instanceof ProductInterface || empty($productIds)) {
+            return $this;
+        }
+
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        if ($mainProduct instanceof \Magento\Catalog\Model\Product) {
-            $mainProductId = $mainProduct->getData($metadata->getLinkField());
-            $isProductInstance = true;
-        }
-        $old = [];
-        if (!$mainProduct->getIsDuplicate()) {
-            $old = $mainProduct->getTypeInstance()->getUsedProductIds($mainProduct);
+        $productId = $mainProduct->getData($metadata->getLinkField());
+
+        $data = [];
+        foreach ($productIds as $id) {
+            $data[] = ['product_id' => (int) $id, 'parent_id' => (int) $productId];
         }
 
-        $insert = array_diff($productIds, $old);
-        $delete = array_diff($old, $productIds);
+        $this->getConnection()->insertOnDuplicate(
+            $this->getMainTable(),
+            $data,
+            ['product_id', 'parent_id']
+        );
 
-        if ((!empty($insert) || !empty($delete)) && $isProductInstance) {
-            $mainProduct->setIsRelationsChanged(true);
-        }
-
-        if (!empty($delete)) {
-            $where = ['parent_id = ?' => $mainProductId, 'product_id IN(?)' => $delete];
-            $this->getConnection()->delete($this->getMainTable(), $where);
-        }
-        if (!empty($insert)) {
-            $data = [];
-            foreach ($insert as $childId) {
-                $data[] = ['product_id' => (int)$childId, 'parent_id' => (int)$mainProductId];
-            }
-            $this->getConnection()->insertMultiple($this->getMainTable(), $data);
-        }
+        $where = ['parent_id = ?' => $productId, 'product_id NOT IN(?)' => $productIds];
+        $this->getConnection()->delete($this->getMainTable(), $where);
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         // configurable product relations should be added to relation table
-        $this->_catalogProductRelation->processRelations($mainProduct->getData($linkField), $productIds);
+        $this->catalogProductRelation->processRelations($mainProduct->getData($linkField), $productIds);
 
         return $this;
     }
