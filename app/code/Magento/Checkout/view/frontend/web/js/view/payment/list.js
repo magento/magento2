@@ -98,8 +98,9 @@ define([
             _.find(rendererList(), function (renderer) {
                 var isRendererForMethod = false;
 
-                if ('typeComparator' in renderer) {
-                    isRendererForMethod = renderer.typeComparator(renderer.type, paymentMethodData.method);
+                if (renderer.hasOwnProperty('typeComparatorCallback')
+                    && typeof renderer.typeComparatorCallback == 'function') {
+                    isRendererForMethod = renderer.typeComparatorCallback(renderer.type, paymentMethodData.method);
                 } else {
                     isRendererForMethod = renderer.type === paymentMethodData.method;
                 }
