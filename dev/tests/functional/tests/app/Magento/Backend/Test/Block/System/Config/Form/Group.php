@@ -77,6 +77,45 @@ class Group extends Form
     }
 
     /**
+     * Set store configuration value by element data-ui-id.
+     *
+     * @param string $tabName
+     * @param string $groupName
+     * @param string $fieldName
+     * @return array/string
+     */
+    public function getValue($tabName, $groupName, $fieldName)
+    {
+        $input = null;
+        $attribute = $this->_rootElement->find(
+            sprintf($this->field, $tabName, $groupName, $fieldName),
+            Locator::SELECTOR_CSS
+        )->getAttribute('data-ui-id');
+
+        $parts = explode('-', $attribute, 2);
+        if (in_array($parts[0], ['select', 'text', 'checkbox'])) {
+            $input = $parts[0];
+        }
+
+        $element = $this->_rootElement->find(
+            sprintf($this->field, $tabName, $groupName, $fieldName),
+            Locator::SELECTOR_CSS,
+            $input
+        );
+
+        if ($element->isDisabled()) {
+            $checkbox = $this->_rootElement->find(
+                sprintf($this->defaultCheckbox, $tabName, $groupName, $fieldName),
+                Locator::SELECTOR_CSS,
+                'checkbox'
+            );
+            $checkbox->setValue('No');
+        }
+
+        return $element->getValue();
+    }
+
+    /**
      * Check if a field is visible in a given group.
      *
      * @param string $tabName
