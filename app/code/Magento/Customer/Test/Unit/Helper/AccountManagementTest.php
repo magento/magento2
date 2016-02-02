@@ -19,9 +19,26 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * Backend configuration interface
+     *
+     * @var \Magento\Backend\App\ConfigInterface
      */
-    protected $indexerRegistryMock;
+    protected $backendConfigMock;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
+    protected $dateTimeMock;
+
+    /**
+     * @var \Magento\Customer\Model\CustomerRegistry
+     */
+    protected $customerRegistryMock;
+
+    /**
+     * @var \Magento\Customer\Model\Data\CustomerSecure
+     */
+    protected $customerSecure;
 
     /**
      * @var \Magento\Customer\Helper\AccountManagement
@@ -37,9 +54,27 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
+        $this->backendConfigMock = $this->getMockBuilder('Magento\Backend\App\ConfigInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
+        $this->dateTimeMock = $this->getMock(
+            'Magento\Framework\Stdlib\DateTime',
             [],
+            [],
+            '',
+            false
+        );
+        $this->customerRegistryMock = $this->getMock(
+            'Magento\Customer\Model\CustomerRegistry',
+            ['retrieveSecureData'],
+            [],
+            '',
+            false
+        );
+        $this->customerSecure = $this->getMock(
+            'Magento\Customer\Model\Data\CustomerSecure',
+            ['getFailuresNum', 'getFirstFailure', 'setFirstFailure', 'setFailuresNum', 'setLockExpires'],
             [],
             '',
             false
@@ -50,54 +85,106 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Helper\AccountManagement',
             [
                 'context' => $this->contextMock,
-                'indexerRegistry' => $this->indexerRegistryMock
+                'customerRegistry' => $this->customerRegistryMock,
+                'backendConfig' => $this->backendConfigMock,
+                'dateTime' => $this->dateTimeMock
             ]
         );
     }
 
     /**
-     * @param $lockExpirationDate
-     * @param $expectedResult
-     * @dataProvider isCustomerLockedDataProvider
+     * @return void
      */
-    public function testIsCustomerLocked($lockExpirationDate, $expectedResult)
+    public function testLockingIsDisabled()
     {
-        $this->assertEquals($expectedResult, $this->helper->isCustomerLocked($lockExpirationDate));
-    }
-
-    /**
-     * @return array
-     */
-    public function isCustomerLockedDataProvider()
-    {
-        return [
-          ['lockExpirationDate' => date("F j, Y", strtotime( '-1 days' )), 'expectedResult' => false],
-          ['lockExpirationDate' => date("F j, Y", strtotime( '+1 days' )), 'expectedResult' => true]
-        ];
+        $customerId = 1;
+        $this->backendConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->withConsecutive(
+                [\Magento\Customer\Helper\AccountManagement::LOCKOUT_THRESHOLD_PATH],
+                [\Magento\Customer\Helper\AccountManagement::MAX_FAILURES_PATH]
+            )
+            ->willReturnOnConsecutiveCalls(0, 0);
+        $this->customerRegistryMock->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($this->customerSecure);
+        $this->helper->processCustomerLockoutData($customerId);
     }
 
     /**
      * @return void
      */
-    public function testReindexCustomer()
+    public function testCustomerFailedFirstAttempt()
     {
-        $customerId = 7;
-        $indexer = $this->getMock(
-            'Magento\Framework\Indexer\IndexerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $indexer->expects($this->once())
-            ->method('reindexList')
-            ->with([$customerId]);
+        $customerId = 1;
+        $this->backendConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->withConsecutive(
+                [\Magento\Customer\Helper\AccountManagement::LOCKOUT_THRESHOLD_PATH],
+                [\Magento\Customer\Helper\AccountManagement::MAX_FAILURES_PATH]
+            )
+            ->willReturnOnConsecutiveCalls(10, 5);
 
-        $this->indexerRegistryMock->expects($this->once())
-            ->method('get')
-            ->with(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID)
-            ->willReturn($indexer);
+        $this->customerRegistryMock->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($this->customerSecure);
 
-        $this->helper->reindexCustomer($customerId);
+        $this->customerSecure->expects($this->once())->method('getFailuresNum')->willReturn(0);
+        $this->customerSecure->expects($this->once())->method('getFirstFailure')->willReturn(0);
+        $this->customerSecure->expects($this->once())->method('setFirstFailure');
+        $this->customerSecure->expects($this->once())->method('setFailuresNum');
+
+        $this->helper->processCustomerLockoutData($customerId);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCustomerHasFailedMaxNumberOfAttempts()
+    {
+        $customerId = 1;
+        $date = new \DateTime();
+        $date->modify('-500 second');
+        $formattedDate = $date->format('Y-m-d H:i:s');
+        $this->backendConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->withConsecutive(
+                [\Magento\Customer\Helper\AccountManagement::LOCKOUT_THRESHOLD_PATH],
+                [\Magento\Customer\Helper\AccountManagement::MAX_FAILURES_PATH]
+            )
+            ->willReturnOnConsecutiveCalls(10, 5);
+
+        $this->customerRegistryMock->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($this->customerSecure);
+
+        $this->customerSecure->expects($this->once())->method('getFailuresNum')->willReturn(5);
+        $this->customerSecure->expects($this->once())
+            ->method('getFirstFailure')
+            ->willReturn($formattedDate);
+        $this->customerSecure->expects($this->once())->method('setLockExpires');
+        $this->customerSecure->expects($this->once())->method('setFailuresNum');
+
+        $this->helper->processCustomerLockoutData($customerId);
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessUnlockData()
+    {
+        $customerId = 1;
+        $this->customerRegistryMock->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($this->customerSecure);
+        $this->customerSecure->expects($this->once())->method('setFailuresNum')->with(0);
+        $this->customerSecure->expects($this->once())->method('setFirstFailure')->with(null);
+        $this->customerSecure->expects($this->once())->method('setLockExpires')->with(null);
+        $this->helper->processUnlockData($customerId);
     }
 }
+
