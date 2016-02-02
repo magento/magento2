@@ -154,9 +154,9 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     protected function isAllowedChangeCustomerEmail($customerId)
     {
         return $this->customerAccountManagement->validatePasswordById(
-                $customerId,
-                $this->getRequest()->getPost('current_password')
-            );
+            $customerId,
+            $this->getRequest()->getPost('current_password')
+        );
     }
 
     /**
