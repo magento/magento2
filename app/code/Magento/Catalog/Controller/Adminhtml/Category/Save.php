@@ -93,21 +93,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $category = $this->_initCategory();
-        $isNewCategory = !$category->getId();
 
         if (!$category) {
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $hasError = true;
+        $isNewCategory = !$category->getId();
         $data['general'] = $this->getRequest()->getPostValue();
         $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
         $data = $this->imagePreprocessing($data);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
-        if ($data) {
+        if ($data['general']) {
             $category->addData($this->_filterCategoryPostData($data['general']));
-            if (!$category->getId()) {
+            if ($isNewCategory) {
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
                 $category->setParentId($parentCategory->getId());
@@ -183,14 +182,16 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
-                $hasError = false;
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($data);
-                $hasError = true;
             }
         }
+
+        $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+        );
 
         if ($this->getRequest()->getPost('return_session_messages_only')) {
             $category->load($category->getId());
