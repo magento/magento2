@@ -194,9 +194,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
                 $refreshTree = true;
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                $this->messageManager->addError($e->getMessage());
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            } finally {
                 $this->_getSession()->setCategoryData($data);
                 $refreshTree = false;
             }
