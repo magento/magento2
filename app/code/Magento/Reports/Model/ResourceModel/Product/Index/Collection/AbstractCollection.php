@@ -48,7 +48,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory $productLimitationFactory
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param mixed $connection
      *
@@ -74,7 +74,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory $productLimitation,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory $productLimitationFactory,
         \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
@@ -98,7 +98,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
             $customerSession,
             $dateTime,
             $groupManagement,
-            $productLimitation,
+            $productLimitationFactory,
             $connection
         );
         $this->_customerVisitor = $customerVisitor;
