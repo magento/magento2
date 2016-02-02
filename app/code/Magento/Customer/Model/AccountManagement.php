@@ -69,6 +69,8 @@ class AccountManagement implements AccountManagementInterface
 
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
+    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
+
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
@@ -358,6 +360,7 @@ class AccountManagement implements AccountManagementInterface
     public function authenticate($username, $password)
     {
         $this->passwordStrength->checkLoginPasswordStrength($password);
+
         try {
             $customer = $this->customerRepository->get($username);
         } catch (NoSuchEntityException $e) {
@@ -606,6 +609,19 @@ class AccountManagement implements AccountManagementInterface
     /**
      * {@inheritdoc}
      */
+    public function validatePasswordById($customerId, $password)
+    {
+        try {
+            $customer = $this->customerRepository->getById($customerId);
+        } catch (NoSuchEntityException $e) {
+            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
+        }
+        return $this->validatePasswordByCustomer($customer, $password);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function changePassword($email, $currentPassword, $newPassword)
     {
         try {
@@ -641,16 +657,39 @@ class AccountManagement implements AccountManagementInterface
      */
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
+        $this->validatePasswordByCustomer($customer, $currentPassword);
+
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $hash = $customerSecure->getPasswordHash();
-        if (!$this->encryptor->validateHash($currentPassword, $hash)) {
-            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
-        }
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $this->passwordStrength->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->customerRepository->save($customer);
+        // FIXME: Are we using the proper template here?
+        try {
+            $this->sendPasswordResetNotificationEmail($customer);
+        } catch (MailException $e) {
+            $this->logger->critical($e);
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate customer password.
+     *
+     * @param CustomerModel $customer
+     * @param string $password
+     * @return bool true on success
+     * @throws InvalidEmailOrPasswordException
+     */
+    private function validatePasswordByCustomer($customer, $password)
+    {
+        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+        $hash = $customerSecure->getPasswordHash();
+        if (!$this->encryptor->validateHash($password, $hash)) {
+            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
+        }
         return true;
     }
 
@@ -821,6 +860,32 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * Send email to customer when his password is reset
+     *
+     * @param CustomerInterface $customer
+     * @return $this
+     */
+    protected function sendPasswordResetNotificationEmail($customer)
+    {
+        $storeId = $customer->getStoreId();
+        if (!$storeId) {
+            $storeId = $this->getWebsiteStoreId($customer);
+        }
+
+        $customerEmailData = $this->getFullCustomerObject($customer);
+
+        $this->sendEmailTemplate(
+            $customer,
+            self::XML_PATH_RESET_PASSWORD_TEMPLATE,
+            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
+            $storeId
+        );
+
+        return $this;
+    }
+
+    /**
      * Get either first store ID from a set website or the provided as default
      *
      * @param CustomerInterface $customer
@@ -868,27 +933,16 @@ class AccountManagement implements AccountManagementInterface
      * @param string $sender configuration path of email identity
      * @param array $templateParams
      * @param int|null $storeId
-     * @param string $email
      * @return $this
      */
-    protected function sendEmailTemplate(
-        $customer,
-        $template,
-        $sender,
-        $templateParams = [],
-        $storeId = null,
-        $email = null
-    ) {
+    protected function sendEmailTemplate($customer, $template, $sender, $templateParams = [], $storeId = null)
+    {
         $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
-        if (is_null($email)) {
-            $email = $customer->getEmail();
-        }
-
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
             ->setTemplateVars($templateParams)
             ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
-            ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
+            ->addTo($customer->getEmail(), $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
 
         $transport->sendMessage();
@@ -956,8 +1010,8 @@ class AccountManagement implements AccountManagementInterface
             return true;
         }
 
-        $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
-        if ($hourDifference >= $expirationPeriod) {
+        $dayDifference = floor(($currentTimestamp - $tokenTimestamp) / (24 * 60 * 60));
+        if ($dayDifference >= $expirationPeriod) {
             return true;
         }
 
