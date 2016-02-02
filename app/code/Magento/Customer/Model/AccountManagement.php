@@ -369,7 +369,6 @@ class AccountManagement implements AccountManagementInterface
 
         $this->checkLock($customer);
         $this->validatePasswordByCustomer($customer, $password);
-        $this->checkLock($customer);
         if ($customer->getConfirmation() && $this->isConfirmationRequired($customer)) {
             throw new EmailNotConfirmedException(__('This account is not confirmed.'));
         }
