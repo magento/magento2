@@ -98,8 +98,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $isNewCategory = !$category->getId();
         $data['general'] = $this->getRequest()->getPostValue();
+        $isNewCategory = !isset($data['general']['entity_id']);
         $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
         $data = $this->imagePreprocessing($data);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
