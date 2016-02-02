@@ -15,8 +15,6 @@ use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration
- *
- * @method Config setSaveHandler()
  */
 class Config implements ConfigInterface
 {
@@ -99,6 +97,11 @@ class Config implements ConfigInterface
      */
     protected $_scopeType;
 
+    /**
+     * @var string
+     */
+    private $saveHandlerName;
+
     /** @var  \Magento\Framework\ValidatorFactory */
     protected $_validatorFactory;
 
@@ -141,7 +144,6 @@ class Config implements ConfigInterface
             self::PARAM_SESSION_SAVE_METHOD,
             $defaultSaveHandler
         );
-        $saveMethod = $saveMethod === 'db' ? 'user' : $saveMethod;
         $this->setSaveHandler($saveMethod);
 
         /**
@@ -290,6 +292,38 @@ class Config implements ConfigInterface
     public function getName()
     {
         return (string)$this->getOption('session.name');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSaveHandler($saveHandler)
+    {
+        $this->setSaveHandlerName($saveHandler);
+        if ($saveHandler === 'db' || $saveHandler === 'redis') {
+            $saveHandler = 'user';
+        }
+        $this->setOption('session.save_handler', $saveHandler);
+        return $this;
+    }
+
+    /**
+     * Set save handler name
+     *
+     * @param string $saveHandlerName
+     * @return void
+     */
+    private function setSaveHandlerName($saveHandlerName)
+    {
+        $this->saveHandlerName = $saveHandlerName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSaveHandlerName()
+    {
+        return $this->saveHandlerName;
     }
 
     /**
