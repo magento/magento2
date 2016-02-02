@@ -21,14 +21,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**  @var \Magento\Webapi\Model\Rest\SwaggerFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $swaggerFactoryMock;
 
-    /** @var \Magento\Framework\App\Cache\Type\Webapi|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Webapi\Model\Cache\Type\Webapi|\PHPUnit_Framework_MockObject_MockObject */
     protected $cacheMock;
 
     /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $typeProcessorMock;
-
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storeManagerMock;
 
     /**
      * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -56,9 +53,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $this->swaggerFactoryMock->expects($this->any())->method('create')->will($this->returnValue($swagger));
 
-        $this->cacheMock = $this->getMockBuilder(
-            'Magento\Framework\App\Cache\Type\Webapi'
-        )->disableOriginalConstructor()->getMock();
+        $this->cacheMock = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type\Webapi')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
         $this->cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
 
@@ -77,21 +74,19 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getAllServiceDataInterfaces')
             ->willReturn(['$customAttributeClass']);
 
-        $this->storeManagerMock = $this->getMockBuilder(
-            'Magento\Store\Model\StoreManagerInterface'
-        )->setMethods(['getStore'])->disableOriginalConstructor()->getMockForAbstractClass();
-
         $storeMock = $this->getMockBuilder(
             'Magento\Store\Model\Store'
         )->disableOriginalConstructor()->getMock();
 
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
-
         $storeMock->expects($this->any())
             ->method('getCode')
             ->will($this->returnValue('store_code'));
+
+        /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject $authorizationMock */
+        $authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
         $this->generator = $this->objectManager->getObject(
             'Magento\Webapi\Model\Rest\Swagger\Generator',
@@ -99,9 +94,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'swaggerFactory' => $this->swaggerFactoryMock,
                 'cache' => $this->cacheMock,
                 'typeProcessor' => $this->typeProcessorMock,
-                'storeManager' => $this->storeManagerMock,
                 'serviceMetadata' => $this->serviceMetadataMock,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocatorMock,
+                'authorization' => $authorizationMock
             ]
         );
     }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Webapi\Controller;
 
-use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Webapi\Request;
@@ -52,8 +52,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /** @var \Magento\Framework\App\State */
     protected $_appState;
 
-    /** @var AuthorizationInterface */
-    protected $_authorization;
+    /** @var Authorization */
+    protected $authorization;
 
     /** @var ServiceInputProcessor */
     protected $serviceInputProcessor;
@@ -93,7 +93,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param Router $router
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
-     * @param AuthorizationInterface $authorization
+     * @param Authorization $authorization
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param ErrorProcessor $errorProcessor
      * @param PathProcessor $pathProcessor
@@ -113,7 +113,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         Router $router,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
-        AuthorizationInterface $authorization,
+        Authorization $authorization,
         ServiceInputProcessor $serviceInputProcessor,
         ErrorProcessor $errorProcessor,
         PathProcessor $pathProcessor,
@@ -129,7 +129,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->_response = $response;
         $this->_objectManager = $objectManager;
         $this->_appState = $appState;
-        $this->_authorization = $authorization;
+        $this->authorization = $authorization;
         $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_errorProcessor = $errorProcessor;
         $this->_pathProcessor = $pathProcessor;
@@ -198,28 +198,12 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected function checkPermissions()
     {
         $route = $this->getCurrentRoute();
-        if (!$this->isAllowed($route->getAclResources())) {
+        if (!$this->authorization->isAllowed($route->getAclResources())) {
             $params = ['resources' => implode(', ', $route->getAclResources())];
             throw new AuthorizationException(
                 __(AuthorizationException::NOT_AUTHORIZED, $params)
             );
         }
-    }
-
-    /**
-     * Check if all ACL resources are allowed to be accessed by current API user.
-     *
-     * @param string[] $aclResources
-     * @return bool
-     */
-    protected function isAllowed($aclResources)
-    {
-        foreach ($aclResources as $resource) {
-            if (!$this->_authorization->isAllowed($resource)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -231,7 +215,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     {
         $requestedServices = $this->_request->getRequestedServices('all');
         $requestedServices = $requestedServices == Request::ALL_SERVICES
-            ? array_keys($this->swaggerGenerator->getListOfServices())
+            ? $this->swaggerGenerator->getListOfServices()
             : $requestedServices;
         $responseBody = $this->swaggerGenerator->generate(
             $requestedServices,
