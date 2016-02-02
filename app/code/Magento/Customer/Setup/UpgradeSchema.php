@@ -103,7 +103,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'lock_expires',
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-                    'comment' => 'Expiration Lock Dates'
+                    'comment' => 'Lock Expiration Date'
                 ]
             );
         }

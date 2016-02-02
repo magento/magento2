@@ -7,21 +7,14 @@
 namespace Magento\Customer\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Customer\Model\ResourceModel\LockoutManagement;
 use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Class CustomerLoginSuccessObserver
  */
 class CustomerLoginSuccessObserver implements ObserverInterface
 {
-    /**
-     * Lockout manager
-     *
-     * @var \Magento\Customer\Model\ResourceModel\LockoutManagement
-     */
-    protected $lockoutManager;
-
     /**
      * Account manager
      *
@@ -30,15 +23,20 @@ class CustomerLoginSuccessObserver implements ObserverInterface
     protected $accountManagementHelper;
 
     /**
-     * @param LockoutManagement $lockoutManager
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * @param AccountManagementHelper $accountManagementHelper
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
-        LockoutManagement $lockoutManager,
-        AccountManagementHelper $accountManagementHelper
+        AccountManagementHelper $accountManagementHelper,
+        CustomerRepositoryInterface $customerRepository
     ) {
-        $this->lockoutManager = $lockoutManager;
         $this->accountManagementHelper = $accountManagementHelper;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -50,8 +48,9 @@ class CustomerLoginSuccessObserver implements ObserverInterface
     {
         /** @var \Magento\Customer\Model\Customer $model */
         $customerModel = $observer->getEvent()->getData('model');
-        $this->lockoutManager->unlock($customerModel->getId());
-        $this->accountManagementHelper->reindexCustomer($customerModel->getId());
+        $customer = $this->customerRepository->getById($customerModel->getId());
+        $this->accountManagementHelper->processUnlockData($customer->getId());
+        $this->customerRepository->save($customer);
         return $this;
     }
 }
