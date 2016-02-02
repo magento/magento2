@@ -264,6 +264,7 @@ interface AccountManagementInterface
      * @api
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @throws \Magento\Framework\Exception\State\UserLockedException
+     * @return void
      */
     public function checkLock(\Magento\Customer\Api\Data\CustomerInterface $customer);
 }
