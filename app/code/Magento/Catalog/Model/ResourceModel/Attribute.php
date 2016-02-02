@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 
 /**
@@ -27,11 +28,17 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
     protected $attrLockValidator;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -40,10 +47,12 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
         \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
         LockValidatorInterface $lockValidator,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
+        $this->metadataPool = $metadataPool;
         parent::__construct($context, $storeManager, $eavEntityType, $connectionName);
     }
 
@@ -138,9 +147,13 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 
             $backendTable = $attribute->getBackend()->getTable();
             if ($backendTable) {
+                $linkField = $this->metadataPool
+                    ->getMetadata(ProductInterface::class)
+                    ->getLinkField();
+
                 $select = $this->getConnection()->select()->from(
                     $attribute->getEntity()->getEntityTable(),
-                    'entity_id'
+                    $linkField
                 )->where(
                     'attribute_set_id = ?',
                     $result['attribute_set_id']
@@ -148,7 +161,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 
                 $clearCondition = [
                     'attribute_id =?' => $attribute->getId(),
-                    'entity_id IN (?)' => $select,
+                    $linkField . ' IN (?)' => $select,
                 ];
                 $this->getConnection()->delete($backendTable, $clearCondition);
             }

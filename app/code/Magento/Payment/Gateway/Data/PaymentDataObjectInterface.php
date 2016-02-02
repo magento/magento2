@@ -7,6 +7,11 @@ namespace Magento\Payment\Gateway\Data;
 
 use Magento\Payment\Model\InfoInterface;
 
+/**
+ * Interface PaymentDataObjectInterface
+ * @package Magento\Payment\Gateway\Data
+ * @api
+ */
 interface PaymentDataObjectInterface
 {
     /**

@@ -248,6 +248,7 @@ class ThemeUninstallCommand extends Command
             $text = 'Theme path should be specified as full path which is area/vendor/name.';
             $messages[] = '<error>Incorrect theme(s) format: ' . implode(', ', $incorrectThemes)
                 . '. ' . $text . '</error>';
+            return $messages;
         }
 
         $unknownPackages = $this->getUnknownPackages($themePaths);
