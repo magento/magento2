@@ -16,6 +16,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -45,6 +46,13 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     protected $scopeConfig;
 
     /**
+     * Account manager
+     *
+     * @var AccountManagementHelper
+     */
+    protected $accountManagementHelper;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
@@ -52,6 +60,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
      * @param ScopeConfigInterface $scopeConfig
+     * @param AccountManagementHelper $accountManagementHelper
      */
     public function __construct(
         Context $context,
@@ -60,7 +69,8 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        AccountManagementHelper $accountManagementHelper
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
@@ -68,6 +78,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
         $this->scopeConfig = $scopeConfig;
+        $this->accountManagementHelper = $accountManagementHelper;
         parent::__construct($context);
     }
 
@@ -97,26 +108,36 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $customer->setAddresses($currentCustomer->getAddresses());
             }
 
-            // Check if a customer can change email
-            if ($this->getRequest()->getParam('change_email')) {
-                if (!$this->isAllowedChangeCustomerEmail($customerId)) {
-                    return $resultRedirect->setPath('*/*/edit');
-                }
-            } else {
-                $customer->setEmail($currentCustomerEmail);
-            }
-
-            // Change customer password
-            if ($this->getRequest()->getParam('change_password')) {
-                $this->changeCustomerPassword($currentCustomerEmail);
-            }
-
             try {
+                // Check if a customer can change email
+                if ($this->getRequest()->getParam('change_email')) {
+                    if (!$this->isAllowedChangeCustomerEmail($customerId)) {
+                        return $resultRedirect->setPath('*/*/edit');
+                    }
+                } else {
+                    $customer->setEmail($currentCustomerEmail);
+                }
+                // Change customer password
+                if ($this->getRequest()->getParam('change_password')) {
+                    $this->changeCustomerPassword($currentCustomerEmail);
+                }
                 $this->customerRepository->save($customer);
+            } catch (UserLockedException $e) {
+                $this->session->logout();
+                $this->session->start();
+                $message = __(
+                    'The account is locked. Please wait and try again or contact %1.',
+                    $this->scopeConfig->getValue('contact/email/recipient_email')
+                );
+                $this->messageManager->addError($message);
+                return $resultRedirect->setPath('customer/account/login');
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {
                 $this->messageManager->addException($e, __('Invalid input'));
+                foreach ($e->getErrors() as $error) {
+                    $this->messageManager->addError($error->getMessage());
+                }
             } catch (\Exception $e) {
                 $message = __('We can\'t save the customer.')
                     . $e->getMessage()
@@ -144,24 +165,10 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     protected function isAllowedChangeCustomerEmail($customerId)
     {
-        try {
-            return $this->customerAccountManagement->validatePasswordById(
+        return $this->customerAccountManagement->validatePasswordById(
                 $customerId,
                 $this->getRequest()->getPost('current_password')
             );
-        } catch (UserLockedException $e) {
-            $message = __(
-                'The account is locked. Please wait and try again or contact %1.',
-                $this->scopeConfig->getValue('contact/email/recipient_email')
-            );
-            $this->messageManager->addError($message);
-            $this->session->logout();
-        } catch (AuthenticationException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong while changing the email.'));
-        }
-        return false;
     }
 
     /**
@@ -186,25 +193,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             return $this;
         }
 
-        try {
-            $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
-        } catch (UserLockedException $e) {
-            $message = __(
-                'The account is locked. Please wait and try again or contact %1.',
-                $this->scopeConfig->getValue('contact/email/recipient_email')
-            );
-            $this->messageManager->addError($message);
-            $this->session->logout();
-        } catch (AuthenticationException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (InputException $e) {
-            $this->messageManager->addError($e->getMessage());
-            foreach ($e->getErrors() as $error) {
-                $this->messageManager->addError($error->getMessage());
-            }
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong while changing the password.'));
-        }
+        $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
 
         return $this;
     }

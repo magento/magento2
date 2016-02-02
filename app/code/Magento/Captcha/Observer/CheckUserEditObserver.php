@@ -10,6 +10,7 @@ use Magento\Customer\Model\ResourceModel\LockoutManagement;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class CheckUserEditObserver implements ObserverInterface
 {
@@ -58,6 +59,11 @@ class CheckUserEditObserver implements ObserverInterface
     protected $session;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -75,7 +81,8 @@ class CheckUserEditObserver implements ObserverInterface
         CaptchaStringResolver $captchaStringResolver,
         LockoutManagement $lockoutManager,
         AccountManagementHelper $accountManagementHelper,
-        Session $customerSession
+        Session $customerSession,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->_helper = $helper;
         $this->_actionFlag = $actionFlag;
@@ -85,6 +92,7 @@ class CheckUserEditObserver implements ObserverInterface
         $this->lockoutManager = $lockoutManager;
         $this->accountManagementHelper = $accountManagementHelper;
         $this->session = $customerSession;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -105,6 +113,10 @@ class CheckUserEditObserver implements ObserverInterface
                     $customer = $this->session->getCustomer();
                     $this->lockoutManager->processLockout($customer);
                     $this->accountManagementHelper->reindexCustomer($customer->getId());
+                    if ($this->accountManagementHelper->isCustomerLocked($customer->getLockExpires())) {
+                        $this->workWithLock($controller);
+                        return $this;
+                    }
                 } catch (NoSuchEntityException $e) {
                     //do nothing as customer existance is validated later in authenticate method
                 }
@@ -115,5 +127,25 @@ class CheckUserEditObserver implements ObserverInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Logout a user if it is locked
+     *
+     * @param \Magento\Framework\App\Action\Action $controller
+     * @throws \Magento\Framework\Exception\SessionException
+     * @return void
+     */
+    protected function workWithLock(\Magento\Framework\App\Action\Action $controller)
+    {
+        $this->session->logout();
+        $this->session->start();
+        $message = __(
+            'The account is locked. Please wait and try again or contact %1.',
+            $this->scopeConfig->getValue('contact/email/recipient_email')
+        );
+        $this->messageManager->addError($message);
+        $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+        $this->redirect->redirect($controller->getResponse(), '*/*/login');
     }
 }

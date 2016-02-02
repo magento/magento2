@@ -28,7 +28,4 @@
     <event name="backend_auth_user_login_success">
         <observer name="captcha_reset_attempt" instance="Magento\Captcha\Observer\ResetAttemptForBackendObserver" />
     </event>
-    <event name="controller_action_predispatch_customer_account_editpost">
-        <observer name="captcha" instance="Magento\Captcha\Observer\CheckUserEditObserver"/>
-    </event>
 </config>
