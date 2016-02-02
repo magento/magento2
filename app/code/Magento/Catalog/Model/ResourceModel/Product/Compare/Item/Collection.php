@@ -123,7 +123,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $productLimitationFactory,
+            $productLimitation,
             $connection
         );
     }

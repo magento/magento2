@@ -98,7 +98,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
             $customerSession,
             $dateTime,
             $groupManagement,
-            $productLimitationFactory,
+            $productLimitation,
             $connection
         );
         $this->_customerVisitor = $customerVisitor;
