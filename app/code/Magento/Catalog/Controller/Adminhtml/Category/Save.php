@@ -93,32 +93,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $category = $this->_initCategory();
+        $newCategory = !$category->getId();
 
         if (!$category) {
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $refreshTree = false;
+        $hasError = true;
         $data['general'] = $this->getRequest()->getPostValue();
         $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
         $data = $this->imagePreprocessing($data);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
+        $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
             if (!$category->getId()) {
-                $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
-                if (!$parentId) {
-                    if ($storeId) {
-                        $parentId = $this->_objectManager->get(
-                            'Magento\Store\Model\StoreManagerInterface'
-                        )->getStore(
-                            $storeId
-                        )->getRootCategoryId();
-                    } else {
-                        $parentId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
-                    }
-                }
-                $parentCategory = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($parentId);
+                $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
                 $category->setParentId($parentId);
             }
@@ -193,12 +183,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
-                $refreshTree = true;
+                $hasError = false;
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($data);
-                $refreshTree = false;
+                $hasError = true;
             }
         }
 
@@ -214,23 +204,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultJson->setData(
                 [
                     'messages' => $block->getGroupedHtml(),
-                    'error' => !$refreshTree,
+                    'error' => $hasError,
                     'category' => $category->toArray(),
                 ]
             );
         }
 
-        $redirectParams = [
-            '_current' => true,
-            'id' => $category->getId()
-        ];
-        if ($storeId) {
-            $redirectParams['store'] = $storeId;
-        }
+        $redirectParams = $this->getRedirectParams($newCategory, $hasError, $category->getId(), $parentId, $storeId);
 
         return $resultRedirect->setPath(
-            'catalog/*/edit',
-            $redirectParams
+            $redirectParams['path'],
+            $redirectParams['params']
         );
     }
 
@@ -282,5 +266,57 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             }
         }
         return $data;
+    }
+
+    /**
+     * Get parent category
+     *
+     * @param int $parentId
+     * @param int $storeId
+     *
+     * @return \Magento\Catalog\Model\Category
+     */
+    protected function getParentCategory($parentId, $storeId)
+    {
+        if (!$parentId) {
+            if ($storeId) {
+                $parentId = $this->_objectManager->get(
+                    'Magento\Store\Model\StoreManagerInterface'
+                )->getStore(
+                    $storeId
+                )->getRootCategoryId();
+            } else {
+                $parentId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
+            }
+        }
+        return $this->_objectManager->create('Magento\Catalog\Model\Category')->load($parentId);
+    }
+
+    /**
+     * Get category redirect path
+     *
+     * @param bool $newCategory
+     * @param bool $hasError
+     * @param int $categoryId
+     * @param int $parentId
+     * @param int $storeId
+     *
+     * @return array
+     */
+    protected function getRedirectParams($newCategory, $hasError, $categoryId, $parentId, $storeId)
+    {
+        $params = ['_current' => true];
+        if ($storeId) {
+            $params['store'] = $storeId;
+        }
+        if ($newCategory && $hasError) {
+            $path = 'catalog/*/add';
+            $params['parent'] = $parentId;
+        } else {
+            $path = 'catalog/*/edit';
+            $params['id'] = $categoryId;
+
+        }
+        return ['path' => $path, 'params' => $params];
     }
 }
