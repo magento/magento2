@@ -9,6 +9,11 @@ use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
+/**
+ * Class ValidatorComposite
+ * @package Magento\Payment\Gateway\Validator
+ * @api
+ */
 class ValidatorComposite extends AbstractValidator
 {
     /**
