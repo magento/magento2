@@ -148,7 +148,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         );
         $this->customerModel = $this->getMock(
             'Magento\Customer\Model\Customer',
-            [],
+            ['isCustomerLocked'],
             [],
             '',
             false
@@ -294,7 +294,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function testGetAccountLock($expectedResult, $value)
     {
         $this->customerRegistry->expects($this->once())->method('retrieve')->willReturn($this->customerModel);
-        $this->accountManagementHelper->expects($this->once())->method('isCustomerLocked')->willReturn($value);
+        $this->customerModel->expects($this->once())->method('isCustomerLocked')->willReturn($value);
         $expectedResult =  new \Magento\Framework\Phrase($expectedResult);
         $this->assertEquals($expectedResult, $this->block->getAccountLock());
     }
