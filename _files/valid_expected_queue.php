@@ -48,7 +48,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "demo-publisher-1"
+            "publisher" => "demo-publisher-1",
+            'is_synchronous' => false,
         ],
         "demo.object.updated" => [
             "name" => "demo.object.updated",
@@ -60,7 +61,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "demo-publisher-2"
+            "publisher" => "demo-publisher-2",
+            'is_synchronous' => false,
         ],
         "demo.object.custom.created" => [
             "name" => "demo.object.custom.created",
@@ -72,7 +74,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "demo-publisher-2"
+            "publisher" => "demo-publisher-2",
+            'is_synchronous' => false,
         ],
         "test.schema.defined.by.method" => [
             "name" => "test.schema.defined.by.method",
@@ -103,7 +106,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "demo-publisher-2"
+            "publisher" => "demo-publisher-2",
+            'is_synchronous' => false,
         ],
         "customer.created" => [
             "name" => "customer.created",
@@ -115,7 +119,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "test-publisher-1"
+            "publisher" => "test-publisher-1",
+            'is_synchronous' => false,
         ],
         "customer.created.one" => [
             "name" => "customer.created.one",
@@ -127,7 +132,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "test-publisher-1"
+            "publisher" => "test-publisher-1",
+            'is_synchronous' => false,
         ],
         "customer.created.one.two" => [
             "name" => "customer.created.one.two",
@@ -139,7 +145,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "test-publisher-1"
+            "publisher" => "test-publisher-1",
+            'is_synchronous' => false,
         ],
         "customer.created.two" => [
             "name" => "customer.created.two",
@@ -151,7 +158,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "test-publisher-1"
+            "publisher" => "test-publisher-1",
+            'is_synchronous' => false,
         ],
         "customer.updated" => [
             "name" => "customer.updated",
@@ -163,7 +171,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "demo-publisher-2"
+            "publisher" => "demo-publisher-2",
+            'is_synchronous' => false,
         ],
         "customer.deleted" => [
             "name" => "customer.deleted",
@@ -175,7 +184,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "demo-publisher-2"
+            "publisher" => "demo-publisher-2",
+            'is_synchronous' => false,
         ],
         "cart.created" => [
             "name" => "cart.created",
@@ -187,7 +197,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "test-publisher-3"
+            "publisher" => "test-publisher-3",
+            'is_synchronous' => false,
         ],
         "cart.created.one" => [
             "name" => "cart.created.one",
@@ -199,7 +210,8 @@ return [
                 "schema_type" => null,
                 "schema_value" => null
             ],
-            "publisher" => "test-publisher-3"
+            "publisher" => "test-publisher-3",
+            'is_synchronous' => false,
         ],
         "topic.broker.test" => [
             "name" => "topic.broker.test",
@@ -211,7 +223,8 @@ return [
                 "schema_type" => "object",
                 "schema_value" => "string"
             ],
-            "publisher" => "amqp-magento"
+            "publisher" => "amqp-magento",
+            'is_synchronous' => true,
         ],
         "publisher5.topic" => [
             "name" => "publisher5.topic",
@@ -223,7 +236,8 @@ return [
                 "schema_type" => "object",
                 "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInter"
             ],
-            "publisher" => "test-publisher-5"
+            "publisher" => "test-publisher-5",
+            'is_synchronous' => true,
         ],
     ],
     "consumers" => [
