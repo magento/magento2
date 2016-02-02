@@ -18,9 +18,6 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\View\Element\UiComponentFactory */
     protected $uiComponentFactory;
 
-    /** @var \Magento\Customer\Helper\AccountManagement */
-    protected $accountManagementHelper;
-
     public function setup()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
@@ -36,17 +33,9 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->accountManagementHelper = $this->getMock(
-            'Magento\Customer\Helper\AccountManagement',
-            ['isCustomerLocked'],
-            [],
-            '',
-            false
-        );
         $this->component = new AccountLock(
             $this->context,
-            $this->uiComponentFactory,
-            $this->accountManagementHelper
+            $this->uiComponentFactory
         );
     }
 
@@ -54,10 +43,9 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $lockExpirationDate
      * @param \Magento\Framework\Phrase $expectedResult
-     * @param bool $isLocked
      * @dataProvider testPrepareDataSourceDataProvider
      */
-    public function testPrepareDataSource($lockExpirationDate, $expectedResult, $isLocked)
+    public function testPrepareDataSource($lockExpirationDate, $expectedResult)
     {
         $dataSource = [
             'data' => [
@@ -77,10 +65,6 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $this->accountManagementHelper->expects($this->once())
-            ->method('isCustomerLocked')
-            ->with($lockExpirationDate)
-            ->willReturn($isLocked);
         $dataSource = $this->component->prepareDataSource($dataSource);
 
         $this->assertEquals($expectedDataSource, $dataSource);
@@ -94,13 +78,11 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'lockExpirationDate' => date("F j, Y", strtotime( '-1 days' )),
-                'expectedResult' => new \Magento\Framework\Phrase('Unlocked'),
-                'isLocked' => false
+                'expectedResult' => new \Magento\Framework\Phrase('Unlocked')
             ],
             [
                 'lockExpirationDate' => date("F j, Y", strtotime( '+1 days' )),
-                'expectedResult' => new \Magento\Framework\Phrase('Locked'),
-                'isLocked' => true
+                'expectedResult' => new \Magento\Framework\Phrase('Locked')
             ]
         ];
     }

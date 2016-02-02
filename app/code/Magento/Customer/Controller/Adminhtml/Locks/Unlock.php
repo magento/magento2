@@ -9,6 +9,7 @@ namespace Magento\Customer\Controller\Adminhtml\Locks;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action;
 use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Unlock Customer Controller
@@ -23,16 +24,24 @@ class Unlock extends \Magento\Backend\App\Action
     protected $accountManagementHelper;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * Unlock constructor.
      * @param Action\Context $context
      * @param AccountManagementHelper $accountManagementHelper
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         Action\Context $context,
-        AccountManagementHelper $accountManagementHelper
+        AccountManagementHelper $accountManagementHelper,
+        CustomerRepositoryInterface $customerRepository
     ) {
         parent::__construct($context);
         $this->accountManagementHelper = $accountManagementHelper;
+        $this->customerRepository = $customerRepository;
     }
     /**
      * Unlock specified customer
@@ -45,10 +54,9 @@ class Unlock extends \Magento\Backend\App\Action
         try {
             // unlock customer
             if ($customerId) {
-                $this->_objectManager
-                    ->get('Magento\Customer\Model\ResourceModel\LockoutManagement')
-                    ->unlock($customerId);
-                $this->accountManagementHelper->reindexCustomer($customerId);
+                $customer = $this->customerRepository->getById($customerId);
+                $this->accountManagementHelper->processUnlockData($customerId);
+                $this->customerRepository->save($customer);
                 $this->getMessageManager()->addSuccess(__('Customer has been unlocked successfully.'));
             }
         } catch (\Exception $e) {

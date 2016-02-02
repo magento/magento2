@@ -7,7 +7,6 @@ namespace Magento\Customer\Block\Adminhtml\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Customer\Model\CustomerRegistry;
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * Class UnlockButton
@@ -20,49 +19,47 @@ class UnlockButton extends GenericButton implements ButtonProviderInterface
     protected $customerRegistry;
 
     /**
-     * AccountManagement Helper
-     *
-     * @var AccountManagementHelper
-     */
-    protected $accountManagementHelper;
-
-    /**
      * Constructor
      *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
-     * @param AccountManagementHelper $accountManagementHelper
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        CustomerRegistry $customerRegistry,
-        AccountManagementHelper $accountManagementHelper
+        CustomerRegistry $customerRegistry
     ) {
         parent::__construct($context, $registry);
         $this->customerRegistry = $customerRegistry;
-        $this->accountManagementHelper = $accountManagementHelper;
     }
+
     /**
+     * Returns Unlock button data
+     *
      * @return array
      */
     public function getButtonData()
     {
-        $customer = $this->customerRegistry->retrieve($this->getCustomerId());
+        $customerId = $this->getCustomerId();
         $data = [];
-        if ($this->accountManagementHelper->isCustomerLocked($customer->getLockExpires())) {
-            $data = [
-                'label' => __('Unlock'),
-                'class' => 'unlock unlock-customer',
-                'on_click' => sprintf("location.href = '%s';", $this->getUnlockUrl()),
-                'sort_order' => 50,
-            ];
+        if ($customerId) {
+            $customer = $this->customerRegistry->retrieve($customerId);
+            if ($customer->isCustomerLocked()) {
+                $data = [
+                    'label' => __('Unlock'),
+                    'class' => 'unlock unlock-customer',
+                    'on_click' => sprintf("location.href = '%s';", $this->getUnlockUrl()),
+                    'sort_order' => 50,
+                ];
+            }
         }
         return $data;
     }
 
     /**
+     * Returns customer unlock action URL
+     *
      * @return string
      */
     protected function getUnlockUrl()
