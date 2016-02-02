@@ -156,15 +156,9 @@ class CustomerRegistry
         $customerSecure->setRpToken($customer->getRpToken());
         $customerSecure->setRpTokenCreatedAt($customer->getRpTokenCreatedAt());
         $customerSecure->setDeleteable($customer->isDeleteable());
-        if ($customer->getFailuresNum()) {
-            $customerSecure->setFailuresNum($customer->getFailuresNum());
-        }
-        if ($customer->getFirstFailure()) {
-            $customerSecure->setFirstFailure($customer->getFirstFailure());
-        }
-        if ($customer->getLockExpires()) {
-            $customerSecure->setLockExpires($customer->getLockExpires());
-        }
+        $customerSecure->setFailuresNum($customer->getFailuresNum());
+        $customerSecure->setFirstFailure($customer->getFirstFailure());
+        $customerSecure->setLockExpires($customer->getLockExpires());
         $this->customerSecureRegistryById[$customer->getId()] = $customerSecure;
 
         return $customerSecure;

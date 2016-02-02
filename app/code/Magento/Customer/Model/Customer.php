@@ -1353,13 +1353,12 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Check if customer is locked
      *
-     * @param string $lockExpires
      * @return bool
      */
-    public function isCustomerLocked($lockExpires)
+    public function isCustomerLocked()
     {
-        if ($lockExpires) {
-            $lockExpires = new \DateTime($lockExpires);
+        if ($this->getLockExpires()) {
+            $lockExpires = new \DateTime($this->getLockExpires());
             if ($lockExpires > new \DateTime()) {
                 return true;
             }

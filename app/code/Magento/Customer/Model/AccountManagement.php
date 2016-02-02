@@ -368,7 +368,7 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $currentCustomer = $this->customerRegistry->retrieve($customer->getId());
-        if ($this->customerModel->isCustomerLocked($currentCustomer->getLockExpires())) {
+        if ($currentCustomer->isCustomerLocked()) {
             throw new UserLockedException(
                 __(
                     'The account is locked. Please wait and try again or contact %1.',
