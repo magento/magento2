@@ -106,7 +106,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
             $customerSession,
             $dateTime,
             $groupManagement,
-            $productLimitationFactory,
+            $productLimitation,
             $metadataPool,
             $connection
         );

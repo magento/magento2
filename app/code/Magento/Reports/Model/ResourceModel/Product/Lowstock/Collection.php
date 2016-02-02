@@ -127,7 +127,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $productLimitationFactory,
+            $productLimitation,
             $product,
             $eventTypeFactory,
             $productType,
