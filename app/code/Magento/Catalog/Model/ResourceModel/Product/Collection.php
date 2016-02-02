@@ -261,7 +261,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory $productLimitationFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -286,7 +286,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory $productLimitation,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory $productLimitationFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->moduleManager = $moduleManager;
@@ -299,7 +299,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->_groupManagement = $groupManagement;
-        $this->_productLimitationFilters = $productLimitation->create();
+        $this->_productLimitationFilters = $productLimitationFactory->create();
         parent::__construct(
             $entityFactory,
             $logger,
