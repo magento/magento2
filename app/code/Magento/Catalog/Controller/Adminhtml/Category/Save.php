@@ -93,7 +93,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $category = $this->_initCategory();
-        $newCategory = !$category->getId();
+        $isNewCategory = !$category->getId();
 
         if (!$category) {
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
@@ -210,7 +210,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             );
         }
 
-        $redirectParams = $this->getRedirectParams($newCategory, $hasError, $category->getId(), $parentId, $storeId);
+        $redirectParams = $this->getRedirectParams($isNewCategory, $hasError, $category->getId(), $parentId, $storeId);
 
         return $resultRedirect->setPath(
             $redirectParams['path'],
@@ -295,7 +295,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Get category redirect path
      *
-     * @param bool $newCategory
+     * @param bool $isNewCategory
      * @param bool $hasError
      * @param int $categoryId
      * @param int $parentId
@@ -303,13 +303,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @return array
      */
-    protected function getRedirectParams($newCategory, $hasError, $categoryId, $parentId, $storeId)
+    protected function getRedirectParams($isNewCategory, $hasError, $categoryId, $parentId, $storeId)
     {
         $params = ['_current' => true];
         if ($storeId) {
             $params['store'] = $storeId;
         }
-        if ($newCategory && $hasError) {
+        if ($isNewCategory && $hasError) {
             $path = 'catalog/*/add';
             $params['parent'] = $parentId;
         } else {
