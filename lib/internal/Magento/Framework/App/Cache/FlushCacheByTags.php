@@ -50,6 +50,7 @@ class FlushCacheByTags
      * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\AbstractResource
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
      public function aroundSave(
          \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
@@ -70,6 +71,7 @@ class FlushCacheByTags
      * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\ResourceModel\AbstractResource
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
         \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
