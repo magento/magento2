@@ -1,0 +1,107 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
+
+use Magento\Customer\Ui\Component\Listing\Column\AccountLock;
+
+class AccountLockTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var AccountLock */
+    protected $component;
+
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface */
+    protected $context;
+
+    /** @var \Magento\Framework\View\Element\UiComponentFactory */
+    protected $uiComponentFactory;
+
+    /** @var \Magento\Customer\Helper\AccountManagement */
+    protected $accountManagementHelper;
+
+    public function setup()
+    {
+        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $this->uiComponentFactory = $this->getMock(
+            'Magento\Framework\View\Element\UiComponentFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->accountManagementHelper = $this->getMock(
+            'Magento\Customer\Helper\AccountManagement',
+            ['isCustomerLocked'],
+            [],
+            '',
+            false
+        );
+        $this->component = new AccountLock(
+            $this->context,
+            $this->uiComponentFactory,
+            $this->accountManagementHelper
+        );
+    }
+
+
+    /**
+     * @param string $lockExpirationDate
+     * @param \Magento\Framework\Phrase $expectedResult
+     * @param bool $isLocked
+     * @dataProvider testPrepareDataSourceDataProvider
+     */
+    public function testPrepareDataSource($lockExpirationDate, $expectedResult, $isLocked)
+    {
+        $dataSource = [
+            'data' => [
+                'items' => [
+                    [
+                        'lock_expires' => $lockExpirationDate
+                    ],
+                ]
+            ]
+        ];
+        $expectedDataSource = [
+            'data' => [
+                'items' => [
+                    [
+                        'lock_expires' => $expectedResult,
+                    ],
+                ]
+            ]
+        ];
+        $this->accountManagementHelper->expects($this->once())
+            ->method('isCustomerLocked')
+            ->with($lockExpirationDate)
+            ->willReturn($isLocked);
+        $dataSource = $this->component->prepareDataSource($dataSource);
+
+        $this->assertEquals($expectedDataSource, $dataSource);
+    }
+
+    /**
+     * @return array
+     */
+    public function testPrepareDataSourceDataProvider()
+    {
+        return [
+            [
+                'lockExpirationDate' => date("F j, Y", strtotime( '-1 days' )),
+                'expectedResult' => new \Magento\Framework\Phrase('Unlocked'),
+                'isLocked' => false
+            ],
+            [
+                'lockExpirationDate' => date("F j, Y", strtotime( '+1 days' )),
+                'expectedResult' => new \Magento\Framework\Phrase('Locked'),
+                'isLocked' => true
+            ]
+        ];
+    }
+}
