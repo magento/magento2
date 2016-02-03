@@ -454,6 +454,17 @@
                 <item name="sortOrder" xsi:type="string">40</item>
             </item>
         </argument>
+        <field name="store_labels[0]">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Default Rule Label for All Store Views</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">sales_rule</item>
+                    <item name="dataScope" xsi:type="string">store_labels[0]</item>
+                </item>
+            </argument>
+        </field>
         <container name="store_view_labels" >
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
