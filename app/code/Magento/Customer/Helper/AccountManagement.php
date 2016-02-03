@@ -8,6 +8,10 @@ namespace Magento\Customer\Helper;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Backend\App\ConfigInterface;
+use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Customer helper for account management.
@@ -42,23 +46,39 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     protected $dateTime;
 
     /**
+     * @var Encryptor
+     */
+    protected $encryptor;
+
+    /**
+     * @var ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * AccountManagement constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param CustomerRegistry $customerRegistry
      * @param ConfigInterface $backendConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param Encryptor $encryptor
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         CustomerRegistry $customerRegistry,
         ConfigInterface $backendConfig,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        Encryptor $encryptor,
+        ManagerInterface $eventManager
     ) {
         parent::__construct($context);
         $this->customerRegistry = $customerRegistry;
         $this->backendConfig = $backendConfig;
         $this->dateTime = $dateTime;
+        $this->encryptor = $encryptor;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -128,5 +148,51 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     protected function getMaxFailures()
     {
         return $this->backendConfig->getValue(self::MAX_FAILURES_PATH);
+    }
+
+    /**
+     * Validate that password is correct and customer is not locked
+     *
+     * @param string $password
+     * @return bool true on success
+     * @throws InvalidEmailOrPasswordException
+     */
+    public function validatePasswordAndLockStatus(\Magento\Customer\Api\Data\CustomerInterface $customer, $password)
+    {
+        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+        $hash = $customerSecure->getPasswordHash();
+        if (!$this->encryptor->validateHash($password, $hash)) {
+            $this->eventManager->dispatch(
+                'customer_password_invalid',
+                [
+                    'username' => $customer->getEmail(),
+                    'password' => $password
+                ]
+            );
+            $this->checkIfLocked($customer);
+            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
+        }
+        return true;
+    }
+
+    /**
+     * Check if customer is locked and throw exception.
+     *
+     * @api
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @throws \Magento\Framework\Exception\State\UserLockedException
+     * @return void
+     */
+    public function checkIfLocked(\Magento\Customer\Api\Data\CustomerInterface $customer)
+    {
+        $currentCustomer = $this->customerRegistry->retrieve($customer->getId());
+        if ($currentCustomer->isCustomerLocked()) {
+            throw new UserLockedException(
+                __(
+                    'The account is locked. Please wait and try again or contact %1.',
+                    $this->scopeConfig->getValue('contact/email/recipient_email')
+                )
+            );
+        }
     }
 }

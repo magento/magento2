@@ -69,7 +69,7 @@ class PasswordStrength implements PasswordStrengthInterface
         if ($requiredCharactersCheck !== 0) {
             throw new InputException(
                 __(
-                    'Minimum different classes of characters in password are %1.' .
+                    'Minimum of different classes of characters in password is %1.' .
                     ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
                     $requiredCharactersCheck
                 )

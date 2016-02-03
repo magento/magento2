@@ -460,6 +460,6 @@ Suffix,Suffix
 "Customer has been unlocked successfully.","Customer has been unlocked successfully."
 "Account Lock:","Account Lock:"
 "Account Lock","Account Lock"
-"Minimum different classes of characters in password are %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.","Minimum different classes of characters in password are %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
+"Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.","Minimum different classes of characters in password are %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
 "The password can't begin or end with a space.","The password can't begin or end with a space."
 "Please enter a password with at least %1 characters.","Please enter a password with at least %1 characters."
