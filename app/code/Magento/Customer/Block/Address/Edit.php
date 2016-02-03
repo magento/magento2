@@ -45,11 +45,6 @@ class Edit extends \Magento\Directory\Block\Data
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Customer\Api\Data\RegionInterfaceFactory
-     */
-    protected $regionDataFactory;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -79,7 +74,6 @@ class Edit extends \Magento\Directory\Block\Data
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory,
         array $data = []
     ) {
         $this->_customerSession = $customerSession;
@@ -87,7 +81,6 @@ class Edit extends \Magento\Directory\Block\Data
         $this->addressDataFactory = $addressDataFactory;
         $this->currentCustomer = $currentCustomer;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->regionDataFactory = $regionDataFactory;
         parent::__construct(
             $context,
             $directoryHelper,
@@ -138,8 +131,6 @@ class Edit extends \Magento\Directory\Block\Data
                     'region_id' => $postedData['region_id'],
                     'region' => $postedData['region'],
                 ];
-            } else {
-                $postedData['region'] = $this->regionDataFactory->create();
             }
             $this->dataObjectHelper->populateWithArray(
                 $this->_address,
