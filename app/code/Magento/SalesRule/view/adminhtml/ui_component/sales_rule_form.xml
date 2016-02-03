@@ -412,7 +412,7 @@
         <field name="apply_to_shipping">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Discard subsequent rules</item>
+                    <item name="label" xsi:type="string" translate="true">Apply to Shipping Amount</item>
                     <item name="fieldGroup" xsi:type="string">bool</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
@@ -454,14 +454,14 @@
                 <item name="sort_order" xsi:type="string">40</item>
             </item>
         </argument>
-        <field name="store_default_label">
+        <field name="store_labels[0]">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">Default Rule Label for All Store Views</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">sales_rule</item>
-                    <item name="dataScope" xsi:type="string">store_default_label</item>
+                    <item name="dataScope" xsi:type="string">store_labels[0]</item>
                 </item>
             </argument>
         </field>
