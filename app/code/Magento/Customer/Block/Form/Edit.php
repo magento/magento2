@@ -41,10 +41,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         CustomerConfigHelper $customerConfigHelper,
         array $data = []
     ) {
-        $this->customerSession = $customerSession;
-        $this->subscriberFactory = $subscriberFactory;
-        $this->customerRepository = $customerRepository;
-        $this->customerAccountManagement = $customerAccountManagement;
         $this->customerConfigHelper = $customerConfigHelper;
         parent::__construct(
             $context,

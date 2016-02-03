@@ -397,7 +397,7 @@ define([
                 }
                 return !(pass.length > 0 && pass.length < 6);
             },
-            $.mage.__('Please enter 6 or more characters. Leading or trailing spaces will be ignored.')
+            $.mage.__('Please enter 6 or more characters. Leading and trailing spaces will be ignored.')
         ],
         "validate-admin-password": [
             function(value) {
@@ -431,7 +431,7 @@ define([
                 if (result == false) {
                     validator.passwordErrorMessage = $.mage.__(
                         "Minimum length of this field must be equal or greater than %1 symbols." +
-                        " Leading or trailing spaces will be ignored."
+                        " Leading and trailing spaces will be ignored."
                     ).replace('%1', passwordMinLength);
                     return result;
                 }
@@ -806,7 +806,7 @@ define([
                 }
                 return true;
             },
-            $.mage.__('Please enter 6 or more characters. Leading or trailing spaces will be ignored.')
+            $.mage.__('Please enter 6 or more characters. Leading and trailing spaces will be ignored.')
         ],
         'validate-item-quantity': [
             function (value, params) {
