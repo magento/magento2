@@ -21,6 +21,8 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * Class Configurable
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Configurable
 {
@@ -113,7 +115,8 @@ class Configurable
      * @param ProductExtensionInterface $extensionAttributes
      * @return void
      */
-    private function setConfigurableOptions(ProductExtensionInterface $extensionAttributes) {
+    private function setConfigurableOptions(ProductExtensionInterface $extensionAttributes)
+    {
         $options = [];
         $configurableAttributesData = $this->request->getPost('product')['configurable_attributes_data'];
         foreach ($configurableAttributesData as $item) {
