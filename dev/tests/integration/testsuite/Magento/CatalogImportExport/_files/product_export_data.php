@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
 require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';

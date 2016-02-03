@@ -10,7 +10,8 @@
         "magento/module-config": "100.0.*",
         "magento/module-payment": "100.0.*",
         "magento/module-customer": "100.0.*",
-        "magento/module-quote": "100.0.*"
+        "magento/module-quote": "100.0.*",
+        "magento/module-theme": "100.0.*"
     },
     "type": "magento2-module",
     "version": "100.0.2",

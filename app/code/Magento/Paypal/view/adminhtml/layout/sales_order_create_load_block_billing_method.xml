@@ -10,7 +10,7 @@
         <referenceBlock name="order.create.billing.method.form">
             <action method="setMethodFormTemplate">
                 <argument name="method" xsi:type="string">payflowpro</argument>
-                <argument name="template" xsi:type="string">Magento_Payment::transparent/form.phtml</argument>
+                <argument name="template" xsi:type="string">Magento_Paypal::transparent/form.phtml</argument>
             </action>
         </referenceBlock>
     </body>

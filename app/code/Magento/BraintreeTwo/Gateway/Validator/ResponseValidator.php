@@ -75,7 +75,7 @@ class ResponseValidator extends AbstractValidator
     {
         return in_array(
             $response->transaction->status,
-            [Transaction::AUTHORIZED, Transaction::SUBMITTED_FOR_SETTLEMENT]
+            [Transaction::AUTHORIZED, Transaction::SUBMITTED_FOR_SETTLEMENT, Transaction::SETTLING]
         );
     }
 }

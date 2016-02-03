@@ -22,7 +22,10 @@ define(
                 {
                     type: index,
                     config: config.config,
-                    component: config.component
+                    component: config.component,
+                    typeComparatorCallback: function (typeA, typeB) {
+                        return typeA.indexOf(typeB) === 0;
+                    }
                 }
             );
         });
