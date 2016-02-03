@@ -11,6 +11,7 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -22,6 +23,11 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
+    /**
+     * @var string
+     */
+    protected $requestScopeFieldName = 'store';
+
     /**
      * @var array
      */
@@ -86,7 +92,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    private $request;
+    protected $request;
 
 
     /**
@@ -288,7 +294,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function addUseDefaultSettings($category, $categoryData)
     {
         if ($category->getExistsStoreValueFlag('url_key') ||
-            $category->getStoreId() === \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            $category->getStoreId() === Store::DEFAULT_STORE_ID
         ) {
             $categoryData['use_default']['url_key'] = false;
         } else {
@@ -309,8 +315,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if ($category) {
             return $category;
         }
-        if ($this->request->getParam($this->requestFieldName)) {
-            $category = $this->categoryRepository->get($this->request->getParam($this->requestFieldName));
+        $requestId = $this->request->getParam($this->requestFieldName);
+        $requestScope = $this->request->getParam($this->requestScopeFieldName, Store::DEFAULT_STORE_ID);
+        if ($requestId) {
+            $category = $this->categoryRepository->get($requestId, $requestScope);
         }
         return $category;
     }
