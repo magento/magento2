@@ -38,6 +38,7 @@ class SaveHandler
      * @var CollectionFactory
      */
     private $collectionFactory;
+
     /**
      * @var ProductAttributeRepositoryInterface
      */
@@ -66,9 +67,11 @@ class SaveHandler
     }
 
     /**
-     * @param $entityType
+     * @param string $entityType
      * @param ProductInterface $entity
      * @return ProductInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, ProductInterface $entity)
     {
