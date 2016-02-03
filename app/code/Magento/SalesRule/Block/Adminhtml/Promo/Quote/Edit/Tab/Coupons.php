@@ -54,7 +54,7 @@ class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\B
      */
     public function canShowTab()
     {
-        return $this->_isEditing();
+        return true;
     }
 
     /**
@@ -62,17 +62,14 @@ class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\B
      */
     public function isHidden()
     {
-        return !$this->_isEditing();
+        return false;
     }
 
     /**
-     * Check whether we edit existing rule or adding new one
-     *
-     * @return bool
+     * @param bool $canShow
      */
-    protected function _isEditing()
+    public function setCanSHow($canShow)
     {
-        $priceRule = $this->_coreRegistry->registry('current_promo_quote_rule');
-        return $priceRule->getRuleId() !== null;
+        $this->_data['config']['canShow'] = $canShow;
     }
 }
