@@ -289,7 +289,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
 
         if ($this->directoryData->isRegionRequired($customerAddressModel->getCountryId())) {
             $regionCollection = $customerAddressModel->getCountryModel()->getRegionCollection();
-            if (!$regionCollection->count() && empty($attributeValues['region'])) {
+            if (!$regionCollection->count() && empty($customerAddressModel->getRegion())) {
                 $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'region']));
             } elseif (
                 $regionCollection->count()
