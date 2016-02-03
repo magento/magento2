@@ -178,7 +178,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                         ]
                     ],
                 ]
-            ]
+            ],
+            'labels' => [
+                'fields' => [
+                    'store_labels[0]' => [
+                        'value' => isset($labels[0]) ? $labels[0] : '',
+                    ]
+                ]
+            ],
         ];
     }
 
