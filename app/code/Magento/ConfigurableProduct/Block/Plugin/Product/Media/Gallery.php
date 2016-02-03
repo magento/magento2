@@ -3,8 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\ConfigurableProduct\Block\Plugin\ProductVideo\Product\Media;
+namespace Magento\ConfigurableProduct\Block\Plugin\Product\Media;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
@@ -52,14 +51,14 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * @param \Magento\ProductVideo\Block\Product\View\Gallery $subject
+     * @param \Magento\Catalog\Block\Product\View\Gallery $subject
      * @param string $result
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetOptionsMediaGalleryDataJson(
-        \Magento\ProductVideo\Block\Product\View\Gallery $subject,
+        \Magento\Catalog\Block\Product\View\Gallery $subject,
         $result
     ) {
         $result = $this->jsonDecoder->decode($result);
