@@ -152,7 +152,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'id' => '2',
                     'path' => '1/2',
                     'url_key' => 'default-category',
-                    'is_anchor' => '0',
+                    'is_anchor' => 'false',
                     'use_default' => [
                         'name' => 1,
                         'is_active' => 1,
