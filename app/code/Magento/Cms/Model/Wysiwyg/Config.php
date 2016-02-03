@@ -168,7 +168,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
                 'no_display' => false,
                 'encode_directives' => true,
                 'baseStaticUrl' => $this->_assetRepo->getStaticViewFileContext()->getBaseUrl(),
-                'baseStaticDefaultUrl' => $this->_backendUrl->getBaseUrl()
+                'baseStaticDefaultUrl' => str_replace('index.php/', '', $this->_backendUrl->getBaseUrl())
                     . $this->filesystem->getUri(DirectoryList::STATIC_VIEW) . '/',
                 'directives_url' => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
                 'popup_css' => $this->_assetRepo->getUrl(
