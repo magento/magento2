@@ -762,7 +762,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->setGroupId($groupId);
         /** @var \Magento\Framework\Math\Random $mathRandom */
         $password = $this->objectManager->get('Magento\Framework\Math\Random')->getRandomString(
-            AccountManagement::MIN_PASSWORD_LENGTH
+            PasswordStrength::MIN_PASSWORD_LENGTH
         );
         /** @var \Magento\Framework\Encryption\EncryptorInterface $encryptor */
         $encryptor = $this->objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
