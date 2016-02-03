@@ -44,6 +44,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\PasswordStrengthInterface;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * Handle various customer account actions
@@ -210,6 +211,11 @@ class AccountManagement implements AccountManagementInterface
     protected $passwordStrength;
 
     /**
+     * @var AccountManagementHelper
+     */
+    protected $accountManagementHelper;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -233,6 +239,7 @@ class AccountManagement implements AccountManagementInterface
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param PasswordStrengthInterface $passwordStrength
+     * @param AccountManagementHelper $accountManagementHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -258,7 +265,8 @@ class AccountManagement implements AccountManagementInterface
         CustomerModel $customerModel,
         ObjectFactory $objectFactory,
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        PasswordStrengthInterface $passwordStrength
+        PasswordStrengthInterface $passwordStrength,
+        AccountManagementHelper $accountManagementHelper
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -283,6 +291,7 @@ class AccountManagement implements AccountManagementInterface
         $this->objectFactory = $objectFactory;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->passwordStrength = $passwordStrength;
+        $this->accountManagementHelper = $accountManagementHelper;
     }
 
     /**
@@ -365,28 +374,8 @@ class AccountManagement implements AccountManagementInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
 
-        $currentCustomer = $this->customerRegistry->retrieve($customer->getId());
-        if ($currentCustomer->isCustomerLocked()) {
-            throw new UserLockedException(
-                __(
-                    'The account is locked. Please wait and try again or contact %1.',
-                    $this->scopeConfig->getValue('contact/email/recipient_email')
-                )
-            );
-        }
-
-        $hash = $this->customerRegistry->retrieveSecureData($customer->getId())->getPasswordHash();
-        if (!$this->encryptor->validateHash($password, $hash)) {
-            $this->eventManager->dispatch(
-                'customer_login_failed',
-                [
-                    'username' => $username,
-                    'password' => $password
-                ]
-            );
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
-
+        $this->accountManagementHelper->checkIfLocked($customer);
+        $this->accountManagementHelper->validatePasswordAndLockStatus($customer, $password);
         if ($customer->getConfirmation() && $this->isConfirmationRequired($customer)) {
             throw new EmailNotConfirmedException(__('This account is not confirmed.'));
         }
@@ -642,11 +631,8 @@ class AccountManagement implements AccountManagementInterface
      */
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
+        $this->accountManagementHelper->validatePasswordAndLockStatus($customer, $currentPassword);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $hash = $customerSecure->getPasswordHash();
-        if (!$this->encryptor->validateHash($currentPassword, $hash)) {
-            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
-        }
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
         $this->passwordStrength->checkPasswordStrength($newPassword);

@@ -14,9 +14,10 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\InputException;
 use Magento\Customer\Helper\EmailNotification;
-use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Customer\Helper\AccountManagement;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\State\UserLockedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -55,9 +56,9 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     protected $emailNotification;
 
     /**
-     * @var CurrentCustomer
+     * @var AccountManagement
      */
-    protected $currentCustomerHelper;
+    protected $accountManagementHelper;
 
     /**
      * @param Context $context
@@ -66,7 +67,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
-     * @param CurrentCustomer $currentCustomerHelper
+     * @param AccountManagement $accountManagementHelper
      * @param EmailNotification $emailNotification
      */
     public function __construct(
@@ -76,7 +77,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor,
-        CurrentCustomer $currentCustomerHelper,
+        AccountManagement $accountManagementHelper,
         EmailNotification $emailNotification
     ) {
         parent::__construct($context);
@@ -85,7 +86,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
-        $this->currentCustomerHelper = $currentCustomerHelper;
+        $this->accountManagementHelper = $accountManagementHelper;
         $this->emailNotification = $emailNotification;
     }
 
@@ -112,11 +113,11 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             try {
                 // whether a customer enabled change email option
                 if ($this->getRequest()->getParam('change_email')) {
-                    $this->currentCustomerHelper->validatePassword(
+                    $this->accountManagementHelper->validatePasswordAndLockStatus(
+                        $currentCustomerDataObject,
                         $this->getRequest()->getPost('current_password')
                     );
                 }
-
                 // whether a customer enabled change password option
                 $isPasswordChanged = false;
                 if ($this->getRequest()->getParam('change_password')) {
@@ -127,25 +128,29 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                         $this->getRequest()->getPost('password_confirmation')
                     );
                 }
-
                 $this->customerRepository->save($customerCandidateDataObject);
-
                 $this->emailNotification
                     ->sendNotificationEmailsIfRequired(
                         $currentCustomerDataObject,
                         $customerCandidateDataObject,
                         $isPasswordChanged
                     );
-
                 $this->messageManager->addSuccess(__('You saved the account information.'));
                 return $resultRedirect->setPath('customer/account');
-
             } catch (InvalidEmailOrPasswordException $e) {
                 $this->messageManager->addError($e->getMessage());
+            } catch (UserLockedException $e) {
+                $this->session->logout();
+                $this->session->start();
+                $this->messageManager->addError($e->getMessage());
+                return $resultRedirect->setPath('customer/account/login');
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {
                 $this->messageManager->addException($e, __('Invalid input'));
+                foreach ($e->getErrors() as $error) {
+                    $this->messageManager->addError($error->getMessage());
+                }
             } catch (\Exception $e) {
                 $message = __('We can\'t save the customer.')
                     . $e->getMessage()
@@ -208,6 +213,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         if ($newPass != $confPass) {
             throw new InputException(__('Password confirmation doesn\'t match entered password.'));
         }
+
         return $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
     }
 }

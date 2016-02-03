@@ -12,9 +12,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Customer\Model\CustomerRegistry;
-use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
-use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 
 /**
  * Class CurrentCustomer
@@ -57,16 +54,6 @@ class CurrentCustomer
     protected $view;
 
     /**
-     * @var CustomerRegistry
-     */
-    private $customerRegistry;
-
-    /**
-     * @var Encryptor
-     */
-    private $encryptor;
-
-    /**
      * @param CustomerSession $customerSession
      * @param LayoutInterface $layout
      * @param CustomerInterfaceFactory $customerFactory
@@ -74,8 +61,6 @@ class CurrentCustomer
      * @param RequestInterface $request
      * @param ModuleManager $moduleManager
      * @param ViewInterface $view
-     * @param CustomerRegistry $customerRegistry
-     * @param Encryptor $encryptor
      */
     public function __construct(
         CustomerSession $customerSession,
@@ -84,9 +69,7 @@ class CurrentCustomer
         CustomerRepositoryInterface $customerRepository,
         RequestInterface $request,
         ModuleManager $moduleManager,
-        ViewInterface $view,
-        CustomerRegistry $customerRegistry,
-        Encryptor $encryptor
+        ViewInterface $view
     ) {
         $this->customerSession = $customerSession;
         $this->layout = $layout;
@@ -95,8 +78,6 @@ class CurrentCustomer
         $this->request = $request;
         $this->moduleManager = $moduleManager;
         $this->view = $view;
-        $this->customerRegistry = $customerRegistry;
-        $this->encryptor = $encryptor;
     }
 
     /**
@@ -158,23 +139,5 @@ class CurrentCustomer
     public function setCustomerId($customerId)
     {
         $this->customerSession->setId($customerId);
-    }
-
-    /**
-     * Validate current customer password.
-     *
-     * @param string $password
-     * @return bool true on success
-     * @throws InvalidEmailOrPasswordException
-     */
-    public function validatePassword($password)
-    {
-        $customer = $this->getCustomerFromService();
-        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $hash = $customerSecure->getPasswordHash();
-        if (!$this->encryptor->validateHash($password, $hash)) {
-            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
-        }
-        return true;
     }
 }
