@@ -113,7 +113,7 @@ class MessageValidator
      */
     protected function validatePrimitiveType($message, $messageType, $topic)
     {
-        if (gettype($message) !== $messageType) {
+        if ($this->getRealType($message) !== $messageType) {
             throw new InvalidArgumentException(
                 new Phrase(
                     'Data in topic "%topic" must be of type "%expectedType". '
@@ -157,6 +157,7 @@ class MessageValidator
      */
     private function getRealType($message)
     {
-        return is_object($message) ? get_class($message) : gettype($message);
+        $type = is_object($message) ? get_class($message) : gettype($message);
+        return $type == "integer" ? "int" : $type;
     }
 }
