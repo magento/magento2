@@ -27,17 +27,17 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
     private $jsonDecoder;
 
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
+     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
      */
-    private $galleryManagement;
+    private $galleryHandler;
 
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->galleryManagement = $this->getMock(
-            '\Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface'
-        );
-        $this->galleryManagement->expects($this->any())->method('getList')->with('sku')->willReturn([]);
+        $this->galleryHandler = $this->getMockBuilder('\Magento\Catalog\Model\Product\Gallery\ReadHandler')
+            ->disableOriginalConstructor()
+            ->setMethods(['execute'])
+            ->getMock();
 
         $this->jsonEncoder = $this->getMock('\Magento\Framework\Json\EncoderInterface');
         $this->jsonDecoder = $this->getMock('\Magento\Framework\Json\DecoderInterface');
@@ -60,6 +60,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $variationProduct->expects($this->any())->method('getImage')->willReturn('image.jpg');
         $variationProduct->expects($this->any())->method('getData')->with('configurable_attribute')->willReturn(1);
 
+        $this->galleryHandler->expects($this->once())->method('execute')->with('', $variationProduct);
 
         $configurableType = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable')
             ->disableOriginalConstructor()
@@ -76,7 +77,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $this->plugin = $helper->getObject(
             '\Magento\ConfigurableProduct\Block\Plugin\ProductVideo\Product\Media\Gallery',
             [
-                'galleryManagementInterface' => $this->galleryManagement,
+                'productGalleryReadHandler' => $this->galleryHandler,
                 'jsonEncoder' => $this->jsonEncoder,
                 'jsonDecoder' => $this->jsonDecoder
             ]

@@ -14,19 +14,19 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
+     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
      */
-    protected $productGalleryReadHandler;
+    private $productGalleryReadHandler;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $jsonEncoder;
+    private $jsonEncoder;
 
     /**
      * @var \Magento\Framework\Json\DecoderInterface
      */
-    protected $jsonDecoder;
+    private $jsonDecoder;
 
     /**
      * Gallery constructor.
@@ -89,7 +89,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     private function getProductGallery($product)
     {
         $result = [];
-        $this->productGalleryReadHandler->execute('catalog_product', $product);
+        $this->productGalleryReadHandler->execute('', $product);
         $images = $product->getMediaGalleryImages();
         foreach ($images as $image) {
             $result[] = [
