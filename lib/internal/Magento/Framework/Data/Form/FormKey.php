@@ -23,15 +23,23 @@ class FormKey
     protected $session;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
+    /**
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Session\SessionManagerInterface $session
+     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\Framework\Math\Random $mathRandom,
-        \Magento\Framework\Session\SessionManagerInterface $session
+        \Magento\Framework\Session\SessionManagerInterface $session,
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->mathRandom = $mathRandom;
         $this->session = $session;
+        $this->escaper = $escaper;
     }
 
     /**
@@ -44,7 +52,7 @@ class FormKey
         if (!$this->isPresent()) {
             $this->set($this->mathRandom->getRandomString(16));
         }
-        return $this->session->getData(self::FORM_KEY);
+        return $this->escaper->escapeHtmlAttr($this->session->getData(self::FORM_KEY));
     }
 
     /**
