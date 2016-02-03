@@ -16,6 +16,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Customer\Helper\EmailNotification;
 use Magento\Customer\Helper\AccountManagement;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 
@@ -144,18 +145,14 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->session->start();
                 $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('customer/account/login');
-            } catch (AuthenticationException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {
-                $this->messageManager->addException($e, __('Invalid input'));
                 foreach ($e->getErrors() as $error) {
                     $this->messageManager->addError($error->getMessage());
                 }
             } catch (\Exception $e) {
-                $message = __('We can\'t save the customer.')
-                    . $e->getMessage()
-                    . '<pre>' . $e->getTraceAsString() . '</pre>';
-                $this->messageManager->addException($e, $message);
+                $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
 
             $this->session->setCustomerFormData($this->getRequest()->getPostValue());
