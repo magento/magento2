@@ -53,7 +53,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Rule Information</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="sort_order" xsi:type="string">10</item>
+                <item name="sortOrder" xsi:type="number">10</item>
             </item>
         </argument>
         <field name="name">
@@ -357,7 +357,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Actions</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="sort_order" xsi:type="string">30</item>
+                <item name="sortOrder" xsi:type="number">30</item>
             </item>
         </argument>
         <field name="simple_action">
@@ -451,7 +451,7 @@
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Labels</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="sort_order" xsi:type="string">40</item>
+                <item name="sortOrder" xsi:type="number">40</item>
             </item>
         </argument>
         <field name="store_labels[0]">
