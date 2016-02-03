@@ -89,7 +89,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             }
 
             try {
-                $this->customerAccountManagement->checkLock($customer);
                 // Check if a customer can change email
                 if ($this->getRequest()->getParam('change_email')) {
                     if (!$this->isAllowedChangeCustomerEmail($customerId)) {

@@ -257,14 +257,4 @@ interface AccountManagementInterface
      * @return string
      */
     public function getPasswordHash($password);
-
-    /**
-     * Check if customer is locked and throw exception.
-     *
-     * @api
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @throws \Magento\Framework\Exception\State\UserLockedException
-     * @return void
-     */
-    public function checkLock(\Magento\Customer\Api\Data\CustomerInterface $customer);
 }
