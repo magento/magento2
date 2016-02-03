@@ -149,4 +149,20 @@ class Multiline extends AbstractElement
         }
         return $html;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEscapedValue($index = null)
+    {
+        $value = $this->getValue();
+        if (is_string($value)) {
+            $value = explode("\n", $value);
+            if (is_array($value)) {
+                $this->setValue($value);
+            }
+        }
+
+        return parent::getEscapedValue($index);
+    }
 }
