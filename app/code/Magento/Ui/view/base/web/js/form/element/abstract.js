@@ -6,9 +6,10 @@
 define([
     'underscore',
     'mageUtils',
+    'uiLayout',
     'uiElement',
     'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, Element, validator) {
+], function (_, utils, layout, Element, validator) {
     'use strict';
 
     return Element.extend({
@@ -29,7 +30,12 @@ define([
             notice: '',
             customScope: '',
             additionalClasses: {},
-
+            switcherConfig: {
+                component: 'Magento_Ui/js/form/switcher',
+                name: '${ $.name }_switcher',
+                target: '${ $.name }',
+                property: 'value'
+            },
             listens: {
                 visible: 'setPreview',
                 '${ $.provider }:data.reset': 'reset',
@@ -50,7 +56,8 @@ define([
 
             this._super()
                 .setInitialValue()
-                ._setClasses();
+                ._setClasses()
+                .initSwicher();
 
             return this;
         },
@@ -93,6 +100,19 @@ define([
                 noticeId: 'notice-' + uid,
                 inputName: utils.serializeName(name.join('.'))
             });
+
+            return this;
+        },
+
+        /**
+         * Initializes switcher element instance.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        initSwicher: function () {
+            if (this.switcherConfig.enabled) {
+                layout([this.switcherConfig]);
+            }
 
             return this;
         },
@@ -164,6 +184,76 @@ define([
          */
         setVisible: function (isVisible) {
             this.visible(isVisible);
+
+            return this;
+        },
+
+        /**
+         * Show element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        show: function () {
+            this.visible(true);
+
+            return this;
+        },
+
+        /**
+         * Hide element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        hide: function () {
+            this.visible(false);
+
+            return this;
+        },
+
+        /**
+         * Disable element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        disable: function() {
+            this.disabled(true);
+
+            return this;
+        },
+
+        /**
+         * Enable element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        enable: function() {
+            this.disabled(false);
+
+            return this;
+        },
+
+        /**
+         *
+         * @param {(String|Object)} rule
+         * @param {(Object|Boolean)} [options]
+         * @returns {Abstract} Chainable.
+         */
+        setValidation: function (rule, options) {
+            var rules =  utils.copy(this.validation),
+                changed;
+
+            if (_.isObject(rule)) {
+                _.extend(this.validation, rule)
+            } else {
+                this.validation[rule] = options;
+            }
+
+            changed = utils.compare(rules, this.validation).equal;
+
+            if (changed) {
+                this.required(!!rules['required-entry']);
+                this.validate();
+            }
 
             return this;
         },
