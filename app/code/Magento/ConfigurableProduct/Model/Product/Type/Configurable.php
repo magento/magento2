@@ -5,9 +5,9 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Configurable product type implementation
@@ -30,14 +30,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @var string
      */
-    protected $_usedProductAttributeIds = '_cache_instance_used_product_attribute_ids';
+    protected $usedProductAttributeIds = '_cache_instance_used_product_attribute_ids';
 
     /**
      * Cache key for Used Product Attributes
      *
      * @var string
      */
-    protected $_usedProductAttributes = '_cache_instance_used_product_attributes';
+    protected $usedProductAttributes = '_cache_instance_used_product_attributes';
 
     /**
      * Cache key for Used Attributes
@@ -269,6 +269,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param   array $ids
      * @param   \Magento\Catalog\Model\Product $product
      * @return  \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @deprecated use \Magento\ConfigurableProduct\Model\Product\Type\Configurable::setUsedProductAttributes instead
      */
     public function setUsedProductAttributeIds($ids, $product)
     {
@@ -281,9 +282,29 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $this->getAttributeById($attributeId, $product)
             );
         }
-        $product->setData($this->_usedProductAttributes, $usedProductAttributes);
-        $product->setData($this->_usedProductAttributeIds, $ids);
+        $product->setData($this->usedProductAttributes, $usedProductAttributes);
+        $product->setData($this->usedProductAttributeIds, $ids);
         $product->setData($this->_configurableAttributes, $configurableAttributes);
+
+        return $this;
+    }
+
+    /**
+     * Set list of used attributes to product
+     *
+     * @param ProductInterface $product
+     * @param array $ids
+     * @return $this
+     */
+    public function setUsedProductAttributes(ProductInterface $product, array $ids)
+    {
+        $usedProductAttributes = [];
+
+        foreach ($ids as $attributeId) {
+            $usedProductAttributes[] = $this->getAttributeById($attributeId, $product);
+        }
+        $product->setData($this->usedProductAttributes, $usedProductAttributes);
+        $product->setData($this->usedProductAttributeIds, $ids);
 
         return $this;
     }
@@ -296,14 +317,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getUsedProductAttributeIds($product)
     {
-        if (!$product->hasData($this->_usedProductAttributeIds)) {
+        if (!$product->hasData($this->usedProductAttributeIds)) {
             $usedProductAttributeIds = [];
             foreach ($this->getUsedProductAttributes($product) as $attribute) {
                 $usedProductAttributeIds[] = $attribute->getId();
             }
-            $product->setData($this->_usedProductAttributeIds, $usedProductAttributeIds);
+            $product->setData($this->usedProductAttributeIds, $usedProductAttributeIds);
         }
-        return $product->getData($this->_usedProductAttributeIds);
+        return $product->getData($this->usedProductAttributeIds);
     }
 
     /**
@@ -314,7 +335,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getUsedProductAttributes($product)
     {
-        if (!$product->hasData($this->_usedProductAttributes)) {
+        if (!$product->hasData($this->usedProductAttributes)) {
             $usedProductAttributes = [];
             $usedAttributes = [];
             foreach ($this->getConfigurableAttributes($product) as $attribute) {
@@ -325,9 +346,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
             }
             $product->setData($this->_usedAttributes, $usedAttributes);
-            $product->setData($this->_usedProductAttributes, $usedProductAttributes);
+            $product->setData($this->usedProductAttributes, $usedProductAttributes);
         }
-        return $product->getData($this->_usedProductAttributes);
+        return $product->getData($this->usedProductAttributes);
     }
 
     /**

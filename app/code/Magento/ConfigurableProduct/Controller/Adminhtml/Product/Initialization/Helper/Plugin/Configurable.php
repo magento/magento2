@@ -94,7 +94,7 @@ class Configurable
             $product->setAttributeSetId($setId);
         }
         $extensionAttributes = $product->getExtensionAttributes();
-        $this->setConfigurableOptions($product, $extensionAttributes);
+        $this->setConfigurableOptions($extensionAttributes);
 
         $product->setNewVariationsAttributeSetId($setId);
 
@@ -110,14 +110,10 @@ class Configurable
     /**
      * Set configurable product options
      *
-     * @param ProductInterface $product
      * @param ProductExtensionInterface $extensionAttributes
      * @return void
      */
-    private function setConfigurableOptions(
-        ProductInterface $product,
-        ProductExtensionInterface $extensionAttributes
-    ) {
+    private function setConfigurableOptions(ProductExtensionInterface $extensionAttributes) {
         $options = [];
         $configurableAttributesData = $this->request->getPost('product')['configurable_attributes_data'];
         foreach ($configurableAttributesData as $item) {
@@ -130,10 +126,7 @@ class Configurable
                     'Provided attribute can not be used with configurable product'
                 );
             }
-            $attribute->loadByProductAndAttribute($product, $eavAttribute);
-            if (!$attribute->getId()) {
-                $this->updateAttributeData($attribute, $item);
-            }
+            $this->updateAttributeData($attribute, $item);
             $options[] = $attribute;
         }
 
