@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Magento\Framework\Search;
 
-class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
+class SearchEngineConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;
@@ -24,7 +24,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request_merged.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_engine.xsd');
     }
 
     /**
@@ -34,7 +34,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_engine.xsd');
     }
 
     /**
@@ -44,7 +44,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownValidXml()
     {
-        return __DIR__ . '/_files/valid.xml';
+        return __DIR__ . '/_files/search_engine/valid.xml';
     }
 
     /**
@@ -54,7 +54,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownInvalidXml()
     {
-        return __DIR__ . '/_files/invalid.xml';
+        return __DIR__ . '/_files/search_engine/invalid.xml';
     }
 
     /**
@@ -64,7 +64,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownValidPartialXml()
     {
-        return __DIR__ . '/_files/valid_partial.xml';
+        return null;
     }
 
     /**
@@ -76,37 +76,15 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
             explode(
                 "\n",
                 "
-No match found for key-sequence ['sugegsted_search_container'] of keyref 'requestQueryReference'.
-Element 'queryReference': No match found for key-sequence ['fulltext_search_query4'] of keyref 'queryReference'.
+Element 'feature': The attribute 'support' is required but missing.
+Element 'wrong': This element is not expected. Expected is ( feature ).
+Element 'feature': The attribute 'name' is required but missing.
+Element 'engine', attribute 'wrong': The attribute 'wrong' is not allowed.
+Element 'engine': The attribute 'name' is required but missing.
 "
             )
         );
         parent::testSchemaUsingInvalidXml($expectedErrors);
-    }
-
-    /**
-     * @param null $expectedErrors
-     */
-    public function testFileSchemaUsingInvalidXml($expectedErrors = null)
-    {
-        $expectedErrors = array_filter(
-            explode(
-                "\n",
-                "
-Element 'dimensions': Missing child element(s). Expected is ( dimension ).
-Element 'queryReference': The attribute 'clause' is required but missing.
-Element 'queryReference': The attribute 'ref' is required but missing.
-Element 'filterReference': The attribute 'clause' is required but missing.
-Element 'filterReference': The attribute 'ref' is required but missing.
-Element 'filter': The attribute 'field' is required but missing.
-Element 'metric', attribute 'type': [facet 'enumeration'] " .
-                "The value 'sumasdasd' is not an element of the set {'sum', 'count', 'min', 'max'}.
-Element 'metric', attribute 'type': 'sumasdasd' is not a valid value of the local atomic type.
-Element 'bucket': Missing child element(s). Expected is one of ( metrics, ranges ).
-Element 'request': Missing child element(s). Expected is ( from )."
-            )
-        );
-        parent::testFileSchemaUsingInvalidXml($expectedErrors);
     }
 
     /**
@@ -116,7 +94,7 @@ Element 'request': Missing child element(s). Expected is ( from )."
      */
     protected function _getXmlName()
     {
-        return 'search_request.xml';
+        return 'search_engine.xml';
     }
 
     /**
@@ -126,7 +104,7 @@ Element 'request': Missing child element(s). Expected is ( from )."
      */
     protected function _getKnownInvalidPartialXml()
     {
-        return __DIR__ . '/_files/invalid_partial.xml';
+        return null;
     }
 
     public function testSchemaUsingValidXml()
