@@ -91,8 +91,7 @@ define([
             adapter.on({
                 'reset': this.reset.bind(this),
                 'save': this.save.bind(this, true, {}),
-                'saveAndContinue': this.save.bind(this, false, {}),
-                'saveAndApply': this.saveAndApply.bind(this, true, {})
+                'saveAndContinue': this.save.bind(this, false, {})
             }, this.selectorPrefix, this.eventPrefix);
 
             return this;
@@ -194,18 +193,6 @@ define([
          */
         reset: function () {
             this.source.trigger('data.reset');
-        },
-
-        /**
-         * Save form and apply data
-         */
-        saveAndApply: function (redirect) {
-            this.validate();
-
-            if (!this.source.get('params.invalid')) {
-                this.source.set('data.auto_apply', 1);
-                this.submit(redirect);
-            }
         },
 
         /**
