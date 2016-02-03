@@ -59,7 +59,7 @@ class SetupInfo
         if (empty($server['DOCUMENT_ROOT'])) {
             throw new \InvalidArgumentException('DOCUMENT_ROOT variable is unavailable.');
         }
-        $this->docRoot = rtrim(str_replace('\\', '/', $server['DOCUMENT_ROOT']), '/');
+        $this->docRoot = rtrim(str_replace('\\', '/', realpath($server['DOCUMENT_ROOT'])), '/');
         $this->projectRoot = $projectRoot ?: $this->detectProjectRoot();
         $this->projectRoot = str_replace('\\', '/', $this->projectRoot);
     }
