@@ -303,7 +303,7 @@
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
             <field id="title" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Title</label>
-                <comment>It is recommended to set this value to "Magento_Paypal" per store views.</comment>
+                <comment>It is recommended to set this value to "PayPal" per store views.</comment>
                 <config_path>payment/paypal_express/title</config_path>
                 <attribute type="shared">1</attribute>
             </field>

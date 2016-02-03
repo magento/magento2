@@ -31,9 +31,9 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     private $payment;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|MockObject
      */
-    private $subjectReaderMock;
+    private $subjectReader;
 
     protected function setUp()
     {
@@ -47,7 +47,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
                 'setIsTransactionClosed'
             ])
             ->getMock();
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -62,7 +62,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         $this->payment->expects(static::any())
             ->method('setAdditionalInformation');
 
-        $this->paymentHandler = new PaymentDetailsHandler($this->subjectReaderMock);
+        $this->paymentHandler = new PaymentDetailsHandler($this->subjectReader);
     }
 
     /**
@@ -76,11 +76,11 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         $subject = ['payment' => $paymentData];
         $response = ['object' => $transaction];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReader->expects(self::once())
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentData);
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReader->expects(self::once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
@@ -108,7 +108,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Create Braintree transaction
-     * @return MockObject
+     * @return Transaction
      */
     private function getBraintreeTransaction()
     {
@@ -122,7 +122,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'processorResponseText' => 'Approved'
         ];
 
-        $transaction = \Braintree\Transaction::factory($attributes);
+        $transaction = Transaction::factory($attributes);
 
         return $transaction;
     }

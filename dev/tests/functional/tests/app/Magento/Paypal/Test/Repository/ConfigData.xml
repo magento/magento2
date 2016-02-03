@@ -233,7 +233,7 @@
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">1</item>
             </field>
-            <field name="ayment/paypal_express/debug" xsi:type="array">
+            <field name="payment/paypal_express/debug" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>
