@@ -28,7 +28,7 @@ define(
                      * Custom payment method types comparator
                      * @param {String} typeA
                      * @param {String} typeB
-                     * @return {boolean}
+                     * @return {Boolean}
                      */
                     typeComparatorCallback: function (typeA, typeB) {
                         return typeA.indexOf(typeB) === 0;
