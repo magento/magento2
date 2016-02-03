@@ -3,8 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\ConfigurableProduct\Block\Plugin\ProductVideo\Product\Media;
+namespace Magento\ConfigurableProduct\Block\Plugin\Product\Media;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
@@ -14,22 +13,23 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
+     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
      */
-    protected $galleryManagement;
+    private $productGalleryReadHandler;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $jsonEncoder;
+    private $jsonEncoder;
 
     /**
      * @var \Magento\Framework\Json\DecoderInterface
      */
-    protected $jsonDecoder;
+    private $jsonDecoder;
 
     /**
-     * @param \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface $galleryManagementInterface
+     * Gallery constructor.
+     * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $productGalleryReadHandler
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -37,28 +37,28 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface $galleryManagementInterface,
+        \Magento\Catalog\Model\Product\Gallery\ReadHandler $productGalleryReadHandler,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Json\DecoderInterface $jsonDecoder,
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         array $data = []
     ) {
-        $this->galleryManagement = $galleryManagementInterface;
+        $this->productGalleryReadHandler = $productGalleryReadHandler;
         $this->jsonEncoder = $jsonEncoder;
         $this->jsonDecoder = $jsonDecoder;
         parent::__construct($context, $arrayUtils, $data);
     }
 
     /**
-     * @param \Magento\ProductVideo\Block\Product\View\Gallery $subject
+     * @param \Magento\Catalog\Block\Product\View\Gallery $subject
      * @param string $result
      * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetOptionsMediaGalleryDataJson(
-        \Magento\ProductVideo\Block\Product\View\Gallery $subject,
+        \Magento\Catalog\Block\Product\View\Gallery $subject,
         $result
     ) {
         $result = $this->jsonDecoder->decode($result);
@@ -68,7 +68,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             $products = $productType->getUsedProducts($this->getProduct());
             $attributes = $productType->getConfigurableAttributesAsArray($this->getProduct());
             /** @var \Magento\Catalog\Model\Product $product */
-            foreach($attributes as $attribute) {
+            foreach ($attributes as $attribute) {
                 foreach ($products as $product) {
                     $attributeValue = $product->getData($attribute['attribute_code']);
                     if ($attributeValue) {
@@ -88,7 +88,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     private function getProductGallery($product)
     {
         $result = [];
-        $product->setMediaGalleryEntries($this->galleryManagement->getList($product->getSku()));
+        $this->productGalleryReadHandler->execute('', $product);
         $images = $product->getMediaGalleryImages();
         foreach ($images as $image) {
             $result[] = [
