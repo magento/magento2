@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Unit\Block\Plugin\ProductVideo\Product\Media;
+namespace Magento\ConfigurableProduct\Test\Unit\Block\Plugin\Product\Media;
 
 /**
  * Class GalleryTest
