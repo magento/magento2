@@ -145,12 +145,12 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->session->start();
                 $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('customer/account/login');
-            } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {
                 foreach ($e->getErrors() as $error) {
                     $this->messageManager->addError($error->getMessage());
                 }
+            } catch (LocalizedException $e) {
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
