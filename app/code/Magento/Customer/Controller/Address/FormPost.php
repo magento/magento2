@@ -206,9 +206,7 @@ class FormPost extends \Magento\Customer\Controller\Address
 
         $url = $redirectUrl;
         if (!$redirectUrl) {
-            $postData = $this->getRequest()->getPostValue();
-            $postData['region'] = $address->getRegion();
-            $this->_getSession()->setAddressFormData($postData);
+            $this->_getSession()->setAddressFormData($this->getRequest()->getPostValue());
             $url = $this->_buildUrl('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
         }
 
