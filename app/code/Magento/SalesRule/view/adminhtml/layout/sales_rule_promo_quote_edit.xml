@@ -26,5 +26,8 @@
             </referenceBlock>
             <uiComponent name="sales_rule_form"/>
         </referenceContainer>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="sales_rule_form_page_head_components" template="Magento_SalesRule::promo/salesrulejs.phtml"/>
+        </referenceBlock>
     </body>
 </page>
