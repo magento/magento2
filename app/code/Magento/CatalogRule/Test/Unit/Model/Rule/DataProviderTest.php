@@ -42,6 +42,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $collectionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataPersistorMock;
+
     protected function setUp()
     {
         $this->collectionFactoryMock = $this->getMock(
@@ -88,6 +93,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectMock->expects($this->once())->method('toOptionArray')->with([$groupsMock], 'id', 'code')
             ->willReturn([]);
 
+        $actionOptionProviderMock = $this->getMock(
+            'Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->dataPersistorMock = $this->getMock('Magento\Framework\App\Request\DataPersistorInterface');
+
         $this->model = new \Magento\CatalogRule\Model\Rule\DataProvider(
             'Name',
             'Primary',
@@ -96,7 +110,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->storeMock,
             $this->groupRepositoryMock,
             $this->searchCriteriaBuilderMock,
-            $this->dataObjectMock
+            $this->dataObjectMock,
+            $actionOptionProviderMock,
+            $this->dataPersistorMock
         );
     }
 
@@ -111,6 +127,30 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $ruleMock->expects($this->atLeastOnce())->method('getId')->willReturn($ruleId);
         $ruleMock->expects($this->once())->method('load')->willReturnSelf();
         $ruleMock->expects($this->once())->method('getData')->willReturn($ruleData);
+        $this->dataPersistorMock->expects($this->once())->method('get')->with('catalog_rule')->willReturn(null);
+
+        $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
+        // Load from object-cache the second time
+        $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
+    }
+
+    public function testGetDataIfRulePersisted()
+    {
+        $ruleId = 42;
+        $ruleData = ['name' => 'Catalog Price Rule'];
+        $this->collectionMock->expects($this->once())->method('getItems')->willReturn([]);
+
+        $persistedData = ['key' => 'value'];
+        $this->dataPersistorMock->expects($this->once())
+            ->method('get')
+            ->with('catalog_rule')
+            ->willReturn($persistedData);
+
+        $newRuleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
+        $newRuleMock->expects($this->atLeastOnce())->method('setData')->with($persistedData)->willReturnSelf();
+        $newRuleMock->expects($this->atLeastOnce())->method('getId')->willReturn($ruleId);
+        $newRuleMock->expects($this->once())->method('getData')->willReturn($ruleData);
+        $this->collectionMock->expects($this->once())->method('getNewEmptyItem')->willReturn($newRuleMock);
 
         $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
         // Load from object-cache the second time

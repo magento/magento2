@@ -16,6 +16,7 @@ class NewConditionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\C
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
+        $formName = $this->getRequest()->getParam('form_namespace');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
@@ -31,6 +32,7 @@ class NewConditionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\C
 
         if ($model instanceof AbstractCondition) {
             $model->setJsFormObject($this->getRequest()->getParam('form'));
+            $model->setFormName($formName);
             $html = $model->asHtmlRecursive();
         } else {
             $html = '';

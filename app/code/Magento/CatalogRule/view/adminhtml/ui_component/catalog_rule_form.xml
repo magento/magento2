@@ -52,10 +52,10 @@
     <fieldset name="rule_information">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <!--<item name="dataScope" xsi:type="string">data</item>-->
                 <item name="label" xsi:type="string" translate="true">Rule Information</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="sort_order" xsi:type="string">10</item>
+                <item name="sortOrder" xsi:type="number">10</item>
+                <item name="opened" xsi:type="boolean">true</item>
             </item>
         </argument>
         <field name="rule_id">
@@ -185,10 +185,9 @@
     <fieldset name="actions">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <!--<item name="dataScope" xsi:type="string">data</item>-->
                 <item name="label" xsi:type="string" translate="true">Actions</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="sort_order" xsi:type="string">30</item>
+                <item name="sortOrder" xsi:type="number">30</item>
             </item>
         </argument>
         <field name="simple_action">
