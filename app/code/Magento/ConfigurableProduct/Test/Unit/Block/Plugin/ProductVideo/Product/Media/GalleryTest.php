@@ -12,7 +12,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Block\Plugin\ProductVideo\Produc
 class GalleryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Block\Plugin\ProductVideo\Product\Media\Gallery
+     * @var \Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery
      */
     private $plugin;
 
@@ -75,7 +75,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
 
         $this->plugin = $helper->getObject(
-            '\Magento\ConfigurableProduct\Block\Plugin\ProductVideo\Product\Media\Gallery',
+            '\Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery',
             [
                 'productGalleryReadHandler' => $this->galleryHandler,
                 'jsonEncoder' => $this->jsonEncoder,
