@@ -294,7 +294,7 @@
                             }
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                    errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists".') ?>';
+                                    errorText = '<?php echo $this->escapeQuote('An attribute group named "/name/" already exists.') ?>';
                                     alert({
                                         content: errorText.replace("/name/",name)
                                     });
