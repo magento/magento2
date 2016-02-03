@@ -944,7 +944,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category'
         );
-        $category = $this->loadCategoryByName('Category 1');
+        //$category = $this->loadCategoryByName('Category 1');
+        //$category->
+        $category->setStoreId(1);
+        $category->load(444);
+
 
         $this->assertTrue($category !== null);
 
