@@ -15,14 +15,19 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 class CheckUserEditObserver implements ObserverInterface
 {
     /**
+     * Form ID
+     */
+    const FORM_ID = 'user_edit';
+
+    /**
      * @var \Magento\Captcha\Helper\Data
      */
-    protected $_helper;
+    protected $helper;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
      */
-    protected $_actionFlag;
+    protected $actionFlag;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
@@ -83,8 +88,8 @@ class CheckUserEditObserver implements ObserverInterface
         ScopeConfigInterface $scopeConfig,
         CustomerRepositoryInterface $customerRepository
     ) {
-        $this->_helper = $helper;
-        $this->_actionFlag = $actionFlag;
+        $this->helper = $helper;
+        $this->actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
         $this->redirect = $redirect;
         $this->captchaStringResolver = $captchaStringResolver;
@@ -102,12 +107,16 @@ class CheckUserEditObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $formId = 'user_edit';
-        $captchaModel = $this->_helper->getCaptcha($formId);
+        $captchaModel = $this->helper->getCaptcha(self::FORM_ID);
         if ($captchaModel->isRequired()) {
             /** @var \Magento\Framework\App\Action\Action $controller */
             $controller = $observer->getControllerAction();
-            if (!$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))) {
+            if (!$captchaModel->isCorrect(
+                $this->captchaStringResolver->resolve(
+                    $controller->getRequest(),
+                    self::FORM_ID
+                )
+            )) {
                 try {
                     $customer = $this->customerRepository->getById($this->session->getCustomerId());
                     $this->accountManagementHelper->processCustomerLockoutData($customer->getId());
@@ -117,7 +126,7 @@ class CheckUserEditObserver implements ObserverInterface
                 }
                 $this->workWithLock();
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
-                $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+                $this->actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->redirect->redirect($controller->getResponse(), '*/*/edit');
             }
         }
