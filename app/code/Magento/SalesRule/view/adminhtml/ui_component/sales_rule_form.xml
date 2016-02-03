@@ -14,7 +14,7 @@
         <item name="label" xsi:type="string" translate="true">Cart Price Rule</item>
         <item name="config" xsi:type="array">
             <item name="dataScope" xsi:type="string">data</item>
-            <item name="namespace" xsi:type="string">cart_rule_form</item>
+            <item name="namespace" xsi:type="string">sales_rule_form</item>
         </item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="buttons" xsi:type="array">
