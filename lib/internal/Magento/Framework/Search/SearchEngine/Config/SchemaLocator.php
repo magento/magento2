@@ -39,7 +39,7 @@ class SchemaLocator implements SchemaLocatorInterface
     }
 
     /**
-     * Get path to pre file validation schema
+     * Get path to per file validation schema
      *
      * @return string|null
      */

@@ -23,7 +23,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $config = $objectManager->create('Magento\Search\Model\SearchEngine\Config', ['dataStorage' => $dataStorage]);
         $this->assertEquals(['synonyms'], $config->getDeclaredFeatures('mysql'));
-        $this->assertEquals(['synonyms', 'stopword'], $config->getDeclaredFeatures('other'));
+        $this->assertEquals(['synonyms', 'stopwords'], $config->getDeclaredFeatures('other'));
         $this->assertEquals([], $config->getDeclaredFeatures('none'));
         $this->assertEquals([], $config->getDeclaredFeatures('non_exist'));
     }
