@@ -64,7 +64,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $gridBlockJsObject = $gridBlock->getJsObjectName();
         }
 
-        $fieldset = $form->addFieldset('information_fieldset', ['legend' => __('Coupons Information')]);
+        $fieldset = $form->addFieldset('information_fieldset', []);
         $fieldset->addClass('ignore-validate');
 
         $fieldset->addField('rule_id', 'hidden', ['name' => 'rule_id', 'value' => $ruleId]);
