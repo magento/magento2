@@ -318,6 +318,7 @@
                 <item name="default" xsi:type="string">BraintreeTwoPayPalConfigValueHandler</item>
                 <item name="can_void" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
                 <item name="can_cancel" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
+                <item name="can_capture" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
             </argument>
         </arguments>
     </virtualType>
