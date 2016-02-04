@@ -17,6 +17,7 @@ define([
             error: false,
             opened: false,
             level: 0
+            additionalClasses: {}
         },
 
         /**
@@ -26,7 +27,8 @@ define([
         initialize: function () {
             _.bindAll(this, 'onChildrenUpdate', 'onChildrenError', 'onContentLoading');
 
-            return this._super();
+            return this._super()
+                       ._setClasses();
         },
 
         /**
@@ -73,6 +75,34 @@ define([
             }
 
             this.changed(hasChanged);
+        },
+
+        /**
+         * Extends 'additionalClasses' object.
+         *
+         * @returns {Group} Chainable.
+         */
+        _setClasses: function () {
+            var addtional = this.additionalClasses,
+                classes;
+
+            if (_.isString(addtional)) {
+                addtional = this.additionalClasses.split(' ');
+                classes = this.additionalClasses = {};
+
+                addtional.forEach(function (name) {
+                    classes[name] = true;
+                }, this);
+            }
+
+            _.extend(this.additionalClasses, {
+                'admin__collapsible-block-wrapper': this.collapsible,
+                _show: this.opened,
+                _hide: !this.opened,
+                _disabled: this.disabled
+            });
+
+            return this;
         },
 
         /**

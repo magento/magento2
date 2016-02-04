@@ -16,7 +16,7 @@
                 },
                 textInput: inputValue,
                 keyboard: {
-                    13: apply,
+                    13: apply.bind($data, false),
                     27: cancel
                 }"/>
     <button class="action-submit" type="button" click="apply.bind($data, false)">

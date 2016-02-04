@@ -15,16 +15,26 @@ define([
     return Collection.extend({
         defaults: {
             template: 'ui/modal/modal-component',
+            title: '',
+            subTitle: '',
             options: {
                 title: '',
+                subTitle: '',
                 buttons: [],
                 keyEventHandlers: {}
             },
             valid: true,
-            listens: {
-                state: 'onState'
+            links: {
+                title: 'options.title',
+                subTitle: 'options.subTitle'
             },
-            modalClass: 'modal-component'
+            listens: {
+                state: 'onState',
+                title: 'setTitle',
+                'options.subTitle': 'setSubTitle'
+            },
+            modalClass: 'modal-component',
+            onCancel: 'closeModal'
         },
 
         /**
@@ -40,7 +50,6 @@ define([
                 'closeModal',
                 'toggleModal',
                 'setPrevValues',
-                'actionCancel',
                 'validate');
             this.initializeContent();
 
@@ -78,7 +87,7 @@ define([
          * @returns {Object} Chainable.
          */
         initModalEvents: function () {
-            this.options.keyEventHandlers.escapeKey = this.options.outerClickHandler = this.actionCancel.bind(this);
+            this.options.keyEventHandlers.escapeKey = this.options.outerClickHandler = this[this.onCancel].bind(this);
 
             return this;
         },
@@ -87,7 +96,9 @@ define([
          * Initialize modal's content components
          */
         initializeContent: function () {
-            $.async(this.contentSelector, this, this.initModal);
+            $.async({
+                component: this.name
+            }, this.initModal);
         },
 
         /**
@@ -118,7 +129,7 @@ define([
         initModal: function (element) {
             if (!this.modal) {
                 this.overrideModalButtonCallback();
-                this.options.modalCloseBtnHandler = this.actionCancel;
+                this.options.modalCloseBtnHandler = this[this.onCancel].bind(this);
                 this.modal = $(element).modal(this.options);
                 this.initToolbarSection();
 
@@ -161,6 +172,36 @@ define([
                 this.state(!this.state());
             } else {
                 this.waitCbk = this.toggleModal;
+            }
+        },
+
+        /**
+         * Sets title for modal
+         *
+         * @param {String} title
+         */
+        setTitle: function (title) {
+            if (this.title !== title) {
+                this.title = title;
+            }
+
+            if (this.modal) {
+                this.modal.modal('setTitle', title);
+            }
+        },
+
+        /**
+         * Sets subTitle for modal
+         *
+         * @param {String} subTitle
+         */
+        setSubTitle: function (subTitle) {
+            if (this.subTitle !== subTitle) {
+                this.subTitle = subTitle;
+            }
+
+            if (this.modal) {
+                this.modal.modal('setSubTitle', subTitle);
             }
         },
 
@@ -214,7 +255,7 @@ define([
          */
         gatherValues: function (applied, elem) {
             if (typeof elem.value === 'function') {
-                applied[elem.index] = elem.value();
+                applied[elem.name] = elem.value();
             } else if (elem.elems) {
                 elem.elems().forEach(this.gatherValues.bind(this, applied), this);
             }
@@ -228,7 +269,7 @@ define([
         setPrevValues: function (elem) {
             if (typeof elem.value === 'function') {
                 this.modal.focus();
-                elem.value(this.applied[elem.index]);
+                elem.value(this.applied[elem.name]);
             } else if (elem.elems) {
                 elem.elems().forEach(this.setPrevValues, this);
             }

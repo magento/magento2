@@ -6,15 +6,21 @@
 namespace Magento\Cms\Model\ResourceModel;
 
 use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\EntityManager;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * CMS block model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Block extends AbstractDb
 {
     /**
      * Store manager
@@ -64,16 +70,24 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getConnection()
+    {
+        return $this->metadataPool->getMetadata(BlockInterface::class)->getEntityConnection();
+    }
+
+    /**
      * Perform operations before object save
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         if (!$this->getIsUniqueBlockToStores($object)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('A block identifier with the same properties already exists in the selected store.')
             );
         }
@@ -83,12 +97,12 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load an object
      *
-     * @param \Magento\Cms\Model\Block|\Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Cms\Model\Block|AbstractModel $object
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
      */
-    public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
+    public function load(AbstractModel $object, $value, $field = null)
     {
         $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
 
@@ -101,7 +115,7 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $isId = true;
         if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
             $select = $this->_getLoadSelect($field, $value, $object);
-            $select->reset(\Magento\Framework\DB\Select::COLUMNS)
+            $select->reset(Select::COLUMNS)
                 ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
                 ->limit(1);
             $result = $this->getConnection()->fetchCol($select);
@@ -121,8 +135,8 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Cms\Model\Block|\Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\DB\Select
+     * @param \Magento\Cms\Model\Block|AbstractModel $object
+     * @return Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -132,7 +146,7 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select = parent::_getLoadSelect($field, $value, $object);
 
         if ($object->getStoreId()) {
-            $stores = [(int)$object->getStoreId(), \Magento\Store\Model\Store::DEFAULT_STORE_ID];
+            $stores = [(int)$object->getStoreId(), Store::DEFAULT_STORE_ID];
 
             $select->join(
                 ['cbs' => $this->getTable('cms_block_store')],
@@ -151,17 +165,17 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Check for unique of identifier of block to selected store(s).
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsUniqueBlockToStores(\Magento\Framework\Model\AbstractModel $object)
+    public function getIsUniqueBlockToStores(AbstractModel $object)
     {
         $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
         $linkField = $entityMetadata->getLinkField();
 
         if ($this->_storeManager->hasSingleStore()) {
-            $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID];
+            $stores = [Store::DEFAULT_STORE_ID];
         } else {
             $stores = (array)$object->getData('stores');
         }
@@ -213,11 +227,11 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      * @throws \Exception
      */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    public function save(AbstractModel $object)
     {
         if ($object->isDeleted()) {
             return $this->delete($object);
@@ -248,6 +262,28 @@ class Block extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(AbstractModel $object)
+    {
+        $this->transactionManager->start($this->getConnection());
+        try {
+            $object->beforeDelete();
+            $this->_beforeDelete($object);
+            $this->entityManager->delete(BlockInterface::class, $object);
+            $this->_afterDelete($object);
+            $object->isDeleted(true);
+            $object->afterDelete();
+            $this->transactionManager->commit();
+            $object->afterDeleteCommit();
+        } catch (\Exception $e) {
+            $this->transactionManager->rollBack();
             throw $e;
         }
         return $this;
