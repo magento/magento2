@@ -17,7 +17,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $result = $converter->convert($dom);
         $expected = [
             'mysql' => ['synonyms'],
-            'other' => ['synonyms', 'stopword'],
+            'other' => ['synonyms', 'stopwords'],
             'none' => [],
         ];
         $this->assertEquals($expected, $result);

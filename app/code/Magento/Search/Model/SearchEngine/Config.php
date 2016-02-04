@@ -17,9 +17,9 @@ class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
     /**
      * Constructor
      *
-     * @param Config\Data $dataStorage
+     * @param \Magento\Framework\Config\DataInterface $dataStorage
      */
-    public function __construct(Config\Data $dataStorage)
+    public function __construct(\Magento\Framework\Config\DataInterface $dataStorage)
     {
         $this->dataStorage = $dataStorage;
     }
