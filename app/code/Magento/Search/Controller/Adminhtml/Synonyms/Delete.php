@@ -9,7 +9,7 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 /**
  * Delete Controller
  */
-class Delete extends \Magento\Backend\App\Action
+class Delete extends \Magento\Search\Controller\Adminhtml\Synonyms
 {
     /**
      * Delete action

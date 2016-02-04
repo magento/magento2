@@ -31,4 +31,13 @@ class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
     {
         return $this->dataStorage->get($searchEngine) ?: [];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFeatureSupported($featureName, $searchEngine)
+    {
+        $features = $this->getDeclaredFeatures($searchEngine);
+        return in_array(strtolower($featureName), $features);
+    }
 }

@@ -24,7 +24,7 @@ class Converter implements ConverterInterface
                 if ($feature->getAttribute('support') === '1'
                     || strtolower($feature->getAttribute('support')) === 'true'
                 ) {
-                    $result[$name][] = $feature->getAttribute('name');
+                    $result[$name][] = strtolower($feature->getAttribute('name'));
                 }
             }
         }
