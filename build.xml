@@ -29,8 +29,29 @@
     <!-- run unittests -->
     <target name="unit" description="PHPUnit testing" depends="composer">
         <exec executable="${project.basedir}/vendor/bin/phpunit" checkreturn="true" passthru="true">
-            <arg value="--configuration=${project.basedir}/dev/tests/unit/phpunit.xml.dist"/>                    
+            <arg value="--configuration=${project.basedir}/dev/tests/unit/phpunit.xml.dist"/>
             <arg value="--log-junit=${project.basedir}/test-reports/junit.xml"/>
+        </exec>
+    </target>
+
+    <target name="integration_db" description="create integration test database">
+        <exec executable="mysql">
+            <arg value="-uroot" />
+            <arg value="-e" />
+            <arg value="SET @@global.sql_mode = NO_ENGINE_SUBSTITUTION;" />
+        </exec>
+        <exec executable="mysql">
+            <arg value="-uroot" />
+            <arg value="-e" />
+            <arg value="CREATE DATABASE IF NOT EXISTS `magento_integration_tests` DEFAULT CHARSET utf8;" />
+        </exec>
+        <copy file="${project.basedir}/dev/tests/integration/etc/install-config-mysql.travis.php.dist" tofile="${project.basedir}/dev/tests/integration/etc/install-config-mysql.php" overwrite="true"/>
+    </target>
+
+    <target name="integration_integrity" description="integration test integrity check" depends="composer,integration_db">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/integration" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/integration/phpunit.xml.dist"/>
+            <arg value="testsuite/Magento/Test/Integrity"/>
         </exec>
     </target>
 </project>
