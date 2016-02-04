@@ -1637,9 +1637,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->addPriceData();
             if ($this->_productLimitationFilters->isUsePriceIndex()) {
                 $this->getSelect()->order("price_index.min_price {$dir}");
+                return $this;
             }
-
-            return $this;
         }
 
         if ($this->isEnabledFlat()) {
