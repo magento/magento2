@@ -232,7 +232,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
         $this->product->expects(static::never())
             ->method('getExtensionAttributes');
-        $this->request->expects(static::never())
+        $this->request->expects(static::once())
             ->method('getPost');
         $this->variationHandler->expects(static::never())
             ->method('generateSimpleProducts');
@@ -249,7 +249,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn('non-configurable');
         $this->product->expects(static::never())
             ->method('getExtensionAttributes');
-        $this->request->expects(static::never())
+        $this->request->expects(static::once())
             ->method('getPost');
         $this->variationHandler->expects(static::never())
             ->method('generateSimpleProducts');
