@@ -146,6 +146,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
+                $this->messageManager->addError($e->getMessage());
                 foreach ($e->getErrors() as $error) {
                     $this->messageManager->addError($error->getMessage());
                 }
