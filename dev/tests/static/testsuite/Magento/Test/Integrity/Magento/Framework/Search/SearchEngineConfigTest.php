@@ -81,6 +81,7 @@ Element 'wrong': This element is not expected. Expected is ( feature ).
 Element 'feature': The attribute 'name' is required but missing.
 Element 'engine', attribute 'wrong': The attribute 'wrong' is not allowed.
 Element 'engine': The attribute 'name' is required but missing.
+Element 'feature', attribute 'support': 'wrong' is not a valid value of the atomic type 'xs:boolean'.
 "
             )
         );
