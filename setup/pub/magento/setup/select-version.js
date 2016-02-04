@@ -28,30 +28,35 @@ angular.module('select-version', ['ngStorage'])
         $http.get('index.php/select-version/systemPackage', {'responseType' : 'json'})
             .success(function (data) {
                 if (data.responseType != 'error') {
-                    $scope.selectedOption = [];
-                    $scope.versions = [];
-                    for (var i = 0; i < data.packages.length; i++) {
-                        angular.forEach(data.packages[i].versions, function (value, key) {
-                            $scope.versions.push({
-                                'versionInfo': angular.toJson({
-                                    'package': data.packages[i].package,
-                                    'version': value
-                                }), 'version': value
+                    if (data.packages.length <= 1) {
+                        $scope.upgradeProcessError = true;
+                        $scope.upgradeProcessErrorMessage = 'No upgrades available.';
+                    } else {
+                        $scope.selectedOption = [];
+                        $scope.versions = [];
+                        for (var i = 0; i < data.packages.length; i++) {
+                            angular.forEach(data.packages[i].versions, function (value, key) {
+                                $scope.versions.push({
+                                    'versionInfo': angular.toJson({
+                                        'package': data.packages[i].package,
+                                        'version': value
+                                    }), 'version': value
+                                });
                             });
-                        });
-                    }
+                        }
 
-                    $scope.versions = $scope.versions.sort(function (a, b) {
-                        if (a.version.id < b.version.id) {
-                            return 1;
-                        }
-                        if (a.version.id > b.version.id) {
-                            return -1;
-                        }
-                        return 0;
-                    });
-                    $scope.selectedOption = $scope.versions[0].versionInfo;
-                    $scope.upgradeReadyForNext = true;
+                        $scope.versions = $scope.versions.sort(function (a, b) {
+                            if (a.version.id < b.version.id) {
+                                return 1;
+                            }
+                            if (a.version.id > b.version.id) {
+                                return -1;
+                            }
+                            return 0;
+                        });
+                        $scope.selectedOption = $scope.versions[0].versionInfo;
+                        $scope.upgradeReadyForNext = true;
+                    }
 
                 } else {
                     $scope.upgradeProcessError = true;
