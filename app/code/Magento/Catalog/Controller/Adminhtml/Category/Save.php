@@ -185,10 +185,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->_getSession()->setCategoryData($data);
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-            } finally {
                 $this->_getSession()->setCategoryData($data);
             }
         }
