@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Observer;
 
 use Magento\Framework\Event\Observer;
-use Magento\Customer\Observer\CustomerLoginFailedObserver;
+use Magento\Customer\Observer\CustomerInvalidPasswordObserver;
 
 /**
- * Class CustomerLoginFailedObserverTest
+ * Class CustomerInvalidPasswordObserverTest
  */
-class CustomerLoginFailedObserverTest extends \PHPUnit_Framework_TestCase
+class CustomerInvalidPasswordObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Account manager
@@ -31,9 +31,9 @@ class CustomerLoginFailedObserverTest extends \PHPUnit_Framework_TestCase
     protected $customerData;
 
     /**
-     * @var CustomerLoginFailedObserver
+     * @var CustomerInvalidPasswordObserver
      */
-    protected $customerLoginFailedObserver;
+    protected $observer;
 
     /**
      * @return void
@@ -58,7 +58,7 @@ class CustomerLoginFailedObserverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['get', 'save'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->customerLoginFailedObserver = new CustomerLoginFailedObserver(
+        $this->observer = new CustomerInvalidPasswordObserver(
             $this->accountManagementHelperMock,
             $this->customerRepositoryMock
         );
@@ -91,7 +91,6 @@ class CustomerLoginFailedObserverTest extends \PHPUnit_Framework_TestCase
         $this->customerRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->customerData);
-        $this->customerLoginFailedObserver->execute($observerMock);
+        $this->observer->execute($observerMock);
     }
 }
-
