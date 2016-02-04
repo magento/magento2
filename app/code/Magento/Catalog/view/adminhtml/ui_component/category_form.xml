@@ -22,6 +22,7 @@
             <item name="dataScope" xsi:type="string">data</item>
             <item name="namespace" xsi:type="string">category_form</item>
         </item>
+        <item name="childrenFromMeta" xsi:type="boolean">true</item>
     </argument>
     <dataSource name="category_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
