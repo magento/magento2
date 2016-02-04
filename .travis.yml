@@ -51,12 +51,10 @@ before_script:
       sudo apt-get -y -qq autoremove;
       sudo apt-get -y -qq autoclean;
       sudo apt-get install -y -qq mysql-server-5.6 mysql-client-5.6;
-      mysql -uroot -e 'SET @@global.sql_mode = NO_ENGINE_SUBSTITUTION; CREATE DATABASE magento_integration_tests;';
-      mv dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php;
       fi"
   # Change memory_limit for travis
   - echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv rehash;
   - composer install --no-interaction --prefer-dist
 script:
-  - ./vendor/bin/phing $TEST_SUITE
+  - sh -c "./vendor/bin/phing $TEST_SUITE"
