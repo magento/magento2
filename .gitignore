@@ -48,3 +48,5 @@ atlassian*
 !/var/.htaccess
 /vendor
 !/vendor/.htaccess
+
+test-reports/

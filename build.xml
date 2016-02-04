@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="magento2" default="unit">
+    <!-- ****************************** -->
+    <!-- DEV TASKS                      -->
+    <!-- ****************************** -->
+
+    <!-- install project dependencies with composer -->
+    <target name="composer" description="install composer dependencies">
+        <exec executable="composer" checkreturn="true" passthru="true">
+            <arg value="install" />
+        </exec>
+    </target>
+
+    <!-- install local grunt part -->
+    <target name="local-install-grunt" description="install project local part of grunt">
+        <exec executable="npm" passthru="true">
+            <arg value="install" />
+            <arg value="grunt" />
+            <arg value="--save-dev" />
+        </exec>
+        <exec executable="npm" passthru="true">
+            <arg value="install" />
+        </exec>
+    </target>
+
+    <!-- ****************************** -->
+    <!-- BUILD TASKS                    -->
+    <!-- ****************************** -->
+    <!-- run unittests -->
+    <target name="unit" description="PHPUnit testing" depends="composer">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/unit/phpunit.xml.dist"/>                    
+            <arg value="--log-junit=${project.basedir}/test-reports/junit.xml"/>
+        </exec>
+    </target>
+</project>
