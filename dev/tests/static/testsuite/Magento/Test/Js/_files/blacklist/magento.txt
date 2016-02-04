@@ -339,6 +339,7 @@ app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/marked.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/swagger-oauth.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/underscore-min.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui.js
+app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/magento-swagger.js
 app/code/Magento/Swatches/view/frontend/requirejs-config.js
 app/code/Magento/Swatches/view/adminhtml/requirejs-config.js
 app/code/Magento/Tax/view/adminhtml/web/js/bootstrap.js
