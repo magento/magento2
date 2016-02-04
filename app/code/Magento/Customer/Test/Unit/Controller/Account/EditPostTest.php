@@ -473,7 +473,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
                 'confirmation_password' => 'user3@example.com',
                 'errors' => [
                     'counter' => 1,
-                    'message' => __('Confirm your new password.'),
+                    'message' => __('Password confirmation doesn\'t match entered password.'),
                 ]
             ],
             [
