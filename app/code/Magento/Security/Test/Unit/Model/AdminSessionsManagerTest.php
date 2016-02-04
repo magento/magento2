@@ -147,11 +147,11 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
 
         $olderThen = $timestamp - $sessionLifetime;
 
-        $this->adminSessionInfoFactoryMock->expects($this->once())
+        $this->adminSessionInfoFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->currentSessionMock);
 
-        $this->authSessionMock->expects($this->once())
+        $this->authSessionMock->expects($this->exactly(2))
             ->method('getSessionId')
             ->willReturn($sessionId);
 
@@ -174,7 +174,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $this->securityConfigMock->expects($this->once())
+        $this->securityConfigMock
             ->method('getCurrentTimestamp')
             ->willReturn($timestamp);
 
@@ -329,19 +329,15 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $expectedResult
-     * @param bool $isActiveSession
      * @param int $sessionStatus
      * @dataProvider dataProviderLogoutReasonMessage
      */
-    public function testGetLogoutReasonMessage($expectedResult, $isActiveSession, $sessionStatus)
+    public function testGetLogoutReasonMessage($expectedResult, $sessionStatus)
     {
-        $this->adminSessionInfoFactoryMock->expects($this->any())
+        $this->adminSessionInfoFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->currentSessionMock);
-        $this->currentSessionMock->expects($this->any())
-            ->method('isActive')
-            ->will($this->returnValue($isActiveSession));
-        $this->currentSessionMock->expects($this->any())
+        $this->currentSessionMock->expects($this->once())
             ->method('getStatus')
             ->will($this->returnValue($sessionStatus));
 
@@ -359,22 +355,22 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
                     'Someone logged into this account from another device or browser.'
                     . ' Your current session is terminated.'
                 ),
-                'isActiveSession' => false,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_BY_LOGIN
             ],
             [
                 'expectedResult' => __('Your current session is terminated by another user of this account.'),
-                'isActiveSession' => false,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY
             ],
             [
                 'expectedResult' => __('Your current session has been expired.'),
-                'isActiveSession' => false,
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT
             ],
             [
-                'expectedResult' => __(''),
-                'isActiveSession' => true,
+                'expectedResult' => __('Your account is temporarily disabled.'),
+                'sessionStatus' => \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+            ],
+            [
+                'expectedResult' => '',
                 'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_IN
             ]
         ];
@@ -416,7 +412,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testLogoutAnotherUserSessions()
+    public function testLogoutOtherUserSessions()
     {
         $useId = 1;
         $sessionLifetime = 100;
@@ -454,6 +450,6 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         $this->adminSessionInfoCollectionMock->expects($this->once())
             ->method('save');
 
-        $this->model->logoutAnotherUserSessions();
+        $this->model->logoutOtherUserSessions();
     }
 }

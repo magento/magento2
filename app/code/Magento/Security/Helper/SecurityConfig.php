@@ -5,6 +5,8 @@
  */
 namespace Magento\Security\Helper;
 
+use \Magento\Store\Model\ScopeInterface;
+
 /**
  * Security config helper
  */
@@ -69,7 +71,7 @@ class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_EMAIL_RECIPIENT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -90,7 +92,10 @@ class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isAdminAccountSharingEnabled()
     {
-        return $this->scopeConfig->isSetFlag(self::XML_PATH_ADMIN_ACCOUNT_SHARING);
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_ADMIN_ACCOUNT_SHARING,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -127,7 +132,8 @@ class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
     public function getLimitPasswordResetRequestsMethod($scope)
     {
         return (int) $this->scopeConfig->getValue(
-            $this->getXmlPathByScope($scope) . self::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+            $this->getXmlPathByScope($scope) . self::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -140,7 +146,8 @@ class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
     public function getLimitNumberPasswordResetRequests($scope)
     {
         return (int) $this->scopeConfig->getValue(
-            $this->getXmlPathByScope($scope) . self::XML_PATH_LIMIT_NUMBER_REQUESTS
+            $this->getXmlPathByScope($scope) . self::XML_PATH_LIMIT_NUMBER_REQUESTS,
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -153,7 +160,8 @@ class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
     public function getLimitTimeBetweenPasswordResetRequests($scope)
     {
         $timeInMin = $this->scopeConfig->getValue(
-            $this->getXmlPathByScope($scope) . self::XML_PATH_LIMIT_TIME_BETWEEN_REQUESTS
+            $this->getXmlPathByScope($scope) . self::XML_PATH_LIMIT_TIME_BETWEEN_REQUESTS,
+            ScopeInterface::SCOPE_STORE
         );
         return $timeInMin * 60;
     }

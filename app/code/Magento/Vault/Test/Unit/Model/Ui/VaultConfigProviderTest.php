@@ -34,11 +34,12 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
         $vaultMethod = $this->getMock(VaultPaymentInterface::class);
         $storeManager = $this->getMock(StoreManagerInterface::class);
         $store = $this->getMock(StoreInterface::class);
-        $customerSession = $this->getMockBuilder(Session::class)
+
+        $session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $customerSession->expects(static::once())
+        $session->expects(static::once())
             ->method('getCustomerId')
             ->willReturn($customerId);
         $storeManager->expects(static::once())
@@ -57,7 +58,7 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->with($storeId)
             ->willReturn($paymentProviderCode);
 
-        $vaultCards = new VaultConfigProvider($storeManager, $vaultMethod, $customerSession);
+        $vaultCards = new VaultConfigProvider($storeManager, $vaultMethod, $session);
 
         static::assertEquals(
             $expectedConfiguration,

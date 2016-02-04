@@ -10,6 +10,8 @@ use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\Customer;
 
 /**
  * Adminhtml customer view personal information sales block.
@@ -45,6 +47,13 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @var \Magento\Customer\Model\Logger
      */
     protected $customerLogger;
+
+    /**
+     * Customer registry
+     *
+     * @var \Magento\Customer\Model\CustomerRegistry
+     */
+    protected $customerRegistry;
 
     /**
      * Account management
@@ -113,6 +122,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @param Mapper $addressMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Customer\Model\Logger $customerLogger
+     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -127,6 +137,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         Mapper $addressMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Model\Logger $customerLogger,
+        CustomerRegistry $customerRegistry,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -138,6 +149,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         $this->addressMapper = $addressMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerLogger = $customerLogger;
+        $this->customerRegistry = $customerRegistry;
 
         parent::__construct($context, $data);
     }
@@ -423,5 +435,20 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
+    }
+
+    /**
+     * Get customer account lock status
+     *
+     * @return string
+     */
+    public function getAccountLock()
+    {
+        $customerModel = $this->customerRegistry->retrieve($this->getCustomerId());
+        $customerStatus = __('Unlocked');
+        if ($customerModel->isCustomerLocked()) {
+            $customerStatus = __('Locked');
+        }
+        return $customerStatus;
     }
 }

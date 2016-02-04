@@ -6,6 +6,9 @@
 namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 class CheckUserLoginObserver implements ObserverInterface
 {
@@ -42,12 +45,26 @@ class CheckUserLoginObserver implements ObserverInterface
     protected $_customerUrl;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * Account manager
+     *
+     * @var AccountManagementHelper
+     */
+    protected $accountManagementHelper;
+
+    /**
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param CaptchaStringResolver $captchaStringResolver
      * @param \Magento\Customer\Model\Url $customerUrl
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementHelper $accountManagementHelper
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -55,7 +72,9 @@ class CheckUserLoginObserver implements ObserverInterface
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Session\SessionManagerInterface $session,
         CaptchaStringResolver $captchaStringResolver,
-        \Magento\Customer\Model\Url $customerUrl
+        \Magento\Customer\Model\Url $customerUrl,
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementHelper $accountManagementHelper
     ) {
         $this->_helper = $helper;
         $this->_actionFlag = $actionFlag;
@@ -63,12 +82,15 @@ class CheckUserLoginObserver implements ObserverInterface
         $this->_session = $session;
         $this->captchaStringResolver = $captchaStringResolver;
         $this->_customerUrl = $customerUrl;
+        $this->customerRepository = $customerRepository;
+        $this->accountManagementHelper = $accountManagementHelper;
     }
 
     /**
      * Check Captcha On User Login Page
      *
      * @param \Magento\Framework\Event\Observer $observer
+     * @throws NoSuchEntityException
      * @return $this
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -81,6 +103,13 @@ class CheckUserLoginObserver implements ObserverInterface
         if ($captchaModel->isRequired($login)) {
             $word = $this->captchaStringResolver->resolve($controller->getRequest(), $formId);
             if (!$captchaModel->isCorrect($word)) {
+                try {
+                    $customer = $this->customerRepository->get($login);
+                    $this->accountManagementHelper->processCustomerLockoutData($customer->getId());
+                    $this->customerRepository->save($customer);
+                } catch (NoSuchEntityException $e) {
+                    //do nothing as customer existance is validated later in authenticate method
+                }
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->_session->setUsername($login);

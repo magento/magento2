@@ -34,6 +34,11 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
+
+    /**
      * Init mocks for tests
      * @return void
      */
@@ -89,12 +94,23 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->eventManagerMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Event\ManagerInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['dispatch']
+        );
+
         $this->model = $this->objectManager->getObject(
             '\Magento\Security\Model\SecurityManager',
             [
                 'securityConfig' => $this->securityConfigMock,
                 'passwordResetRequestEventModelFactory' => $this->passwordResetRequestEventFactoryMock,
                 'passwordResetRequestEventCollectionFactory' => $this->passwordResetRequestEventCollectionFactoryMock,
+                'eventManager' => $this->eventManagerMock,
                 'securityCheckers' => [$securityChecker]
             ]
         );
@@ -122,6 +138,7 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             $this->securityConfigMock,
             $this->passwordResetRequestEventFactoryMock,
             $this->passwordResetRequestEventCollectionFactoryMock,
+            $this->eventManagerMock,
             [$securityChecker]
         );
     }
@@ -188,5 +205,84 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->model->cleanExpiredRecords();
+    }
+
+    /**
+     * Test for adminIdentityCheck method
+     *
+     * @param bool $verifyIdentityResult
+     * @param bool $lockExpires
+     * @dataProvider dataProviderAdminIdentityCheck
+     */
+    public function testAdminIdentityCheck($verifyIdentityResult, $lockExpires)
+    {
+        $password = 'qwerty1';
+        $userName = 'John Doe';
+        $userMock = $this->getMock(
+            'Magento\User\Model\User',
+            ['verifyIdentity', 'getUserName', 'load', 'getId', 'getLockExpires'],
+            [],
+            '',
+            false
+        );
+        $userMock->expects($this->once())
+            ->method('verifyIdentity')
+            ->with($password)
+            ->willReturn($verifyIdentityResult);
+        $userMock->expects($this->once())
+            ->method('getUserName')
+            ->will($this->returnValue($userName));
+        $userMock->expects($this->once())
+            ->method('load')
+            ->will($this->returnSelf());
+        $userMock->expects($this->once())
+            ->method('getLockExpires')
+            ->willReturn($lockExpires);
+
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'admin_user_authenticate_after',
+                [
+                    'username' => $userName,
+                    'password' => $password,
+                    'user' => $userMock,
+                    'result' => $verifyIdentityResult
+                ]
+            )
+            ->willReturnSelf();
+
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->willReturnSelf();
+
+        if ($lockExpires) {
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\State\UserLockedException',
+                __('Your account is temporarily disabled.')
+            );
+        }
+
+        if (!$verifyIdentityResult) {
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\AuthenticationException',
+                __('You have entered an invalid password for current user.')
+            );
+        }
+
+        $this->model->adminIdentityCheck($userMock, $password);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderAdminIdentityCheck()
+    {
+        return [
+            ['verifyIdentityResult' => true, 'lockExpires' => false],
+            ['verifyIdentityResult' => false, 'lockExpires' => false],
+            ['verifyIdentityResult' => true, 'lockExpires' => true],
+            ['verifyIdentityResult' => false, 'lockExpires' => true]
+        ];
     }
 }

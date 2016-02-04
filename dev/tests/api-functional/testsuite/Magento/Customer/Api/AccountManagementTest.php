@@ -103,10 +103,10 @@ class AccountManagementTest extends WebapiAbstract
             'Magento\Config\Model\Config'
         );
 
-        if($this->config->getConfigDataValue(
-                SecurityConfig::XML_PATH_FRONTED_AREA .
-                SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
-            ) != 0) {
+        if ($this->config->getConfigDataValue(
+            SecurityConfig::XML_PATH_FRONTED_AREA .
+            SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+        ) != 0) {
             $this->configValue = $this->config
                 ->getConfigDataValue(
                     SecurityConfig::XML_PATH_FRONTED_AREA .
@@ -114,7 +114,8 @@ class AccountManagementTest extends WebapiAbstract
                 );
             $this->config->setDataByPath(
                 SecurityConfig::XML_PATH_FRONTED_AREA . SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
-                0);
+                0
+            );
             $this->config->save();
         }
     }

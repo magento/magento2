@@ -18,6 +18,11 @@ class AdminSessionsManager
     const ADMIN_SESSION_LIFETIME = 86400;
 
     /**
+     * Logout reason when current user has been locked out
+     */
+    const LOGOUT_REASON_USER_LOCKED = 10;
+
+    /**
      * @var \Magento\Security\Helper\SecurityConfig
      */
     protected $securityConfig;
@@ -133,6 +138,8 @@ class AdminSessionsManager
     }
 
     /**
+     * Get logout reason message by status
+     *
      * @param int $statusCode
      * @return string
      */
@@ -151,6 +158,11 @@ class AdminSessionsManager
             case AdminSessionInfo::LOGGED_OUT_MANUALLY:
                 $reasonMessage = __(
                     'Your current session is terminated by another user of this account.'
+                );
+                break;
+            case self::LOGOUT_REASON_USER_LOCKED:
+                $reasonMessage = __(
+                    'Your account is temporarily disabled.'
                 );
                 break;
             default:
@@ -191,7 +203,7 @@ class AdminSessionsManager
      *
      * @return $this
      */
-    public function logoutAnotherUserSessions()
+    public function logoutOtherUserSessions()
     {
         $collection = $this->createAdminSessionInfoCollection()
             ->filterByUser(
@@ -229,16 +241,16 @@ class AdminSessionsManager
      */
     protected function createNewSession()
     {
-        $this->currentSession = $this->adminSessionInfoFactory->create();
-        $this->currentSession->setData(
-            [
-                'session_id' => $this->authSession->getSessionId(),
-                'user_id' => $this->authSession->getUser()->getId(),
-                'ip' => $this->securityConfig->getRemoteIp(),
-                'status' => AdminSessionInfo::LOGGED_IN
-            ]
-        );
-        $this->currentSession->save();
+        $this->adminSessionInfoFactory
+            ->create()
+            ->setData(
+                [
+                    'session_id' => $this->authSession->getSessionId(),
+                    'user_id' => $this->authSession->getUser()->getId(),
+                    'ip' => $this->securityConfig->getRemoteIp(),
+                    'status' => AdminSessionInfo::LOGGED_IN
+                ]
+            )->save();
 
         return $this;
     }

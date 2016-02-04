@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+/*eslint-disable no-undef*/
 
 define(
     ['jquery'],
@@ -18,6 +19,7 @@ define(
                     $.ajax({
                         type: 'GET',
                         url: requestUrl,
+
                         /**
                          * @param {Object} response
                          */

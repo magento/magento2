@@ -41,8 +41,10 @@ use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Api\PasswordStrengthInterface;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * Handle various customer account actions
@@ -67,8 +69,6 @@ class AccountManagement implements AccountManagementInterface
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
 
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
-
-    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
@@ -96,8 +96,6 @@ class AccountManagement implements AccountManagementInterface
     const EMAIL_REMINDER = 'email_reminder';
 
     const EMAIL_RESET = 'email_reset';
-
-    const MIN_PASSWORD_LENGTH = 6;
 
     /**
      * @var CustomerFactory
@@ -160,11 +158,6 @@ class AccountManagement implements AccountManagementInterface
     private $configShare;
 
     /**
-     * @var StringHelper
-     */
-    private $stringHelper;
-
-    /**
      * @var CustomerRepositoryInterface
      */
     private $customerRepository;
@@ -213,6 +206,16 @@ class AccountManagement implements AccountManagementInterface
     protected $customerModel;
 
     /**
+     * @var PasswordStrengthInterface
+     */
+    protected $passwordStrength;
+
+    /**
+     * @var AccountManagementHelper
+     */
+    protected $accountManagementHelper;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -225,7 +228,6 @@ class AccountManagement implements AccountManagementInterface
      * @param PsrLogger $logger
      * @param Encryptor $encryptor
      * @param ConfigShare $configShare
-     * @param StringHelper $stringHelper
      * @param CustomerRepositoryInterface $customerRepository
      * @param ScopeConfigInterface $scopeConfig
      * @param TransportBuilder $transportBuilder
@@ -236,7 +238,8 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerModel $customerModel
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
-     *
+     * @param PasswordStrengthInterface $passwordStrength
+     * @param AccountManagementHelper $accountManagementHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -252,7 +255,6 @@ class AccountManagement implements AccountManagementInterface
         PsrLogger $logger,
         Encryptor $encryptor,
         ConfigShare $configShare,
-        StringHelper $stringHelper,
         CustomerRepositoryInterface $customerRepository,
         ScopeConfigInterface $scopeConfig,
         TransportBuilder $transportBuilder,
@@ -262,7 +264,9 @@ class AccountManagement implements AccountManagementInterface
         DateTime $dateTime,
         CustomerModel $customerModel,
         ObjectFactory $objectFactory,
-        ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        PasswordStrengthInterface $passwordStrength,
+        AccountManagementHelper $accountManagementHelper
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -276,7 +280,6 @@ class AccountManagement implements AccountManagementInterface
         $this->logger = $logger;
         $this->encryptor = $encryptor;
         $this->configShare = $configShare;
-        $this->stringHelper = $stringHelper;
         $this->customerRepository = $customerRepository;
         $this->scopeConfig = $scopeConfig;
         $this->transportBuilder = $transportBuilder;
@@ -287,6 +290,8 @@ class AccountManagement implements AccountManagementInterface
         $this->customerModel = $customerModel;
         $this->objectFactory = $objectFactory;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->passwordStrength = $passwordStrength;
+        $this->accountManagementHelper = $accountManagementHelper;
     }
 
     /**
@@ -361,7 +366,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function authenticate($username, $password)
     {
-        $this->checkPasswordStrength($password);
+        $this->passwordStrength->checkLoginPasswordStrength($password);
 
         try {
             $customer = $this->customerRepository->get($username);
@@ -369,11 +374,8 @@ class AccountManagement implements AccountManagementInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
 
-        $hash = $this->customerRegistry->retrieveSecureData($customer->getId())->getPasswordHash();
-        if (!$this->encryptor->validateHash($password, $hash)) {
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
-
+        $this->accountManagementHelper->checkIfLocked($customer);
+        $this->accountManagementHelper->validatePasswordAndLockStatus($customer, $password);
         if ($customer->getConfirmation() && $this->isConfirmationRequired($customer)) {
             throw new EmailNotConfirmedException(__('This account is not confirmed.'));
         }
@@ -444,7 +446,7 @@ class AccountManagement implements AccountManagementInterface
         $customer = $this->customerRepository->get($email);
         //Validate Token and new password strength
         $this->validateResetPasswordToken($customer->getId(), $resetToken);
-        $this->checkPasswordStrength($newPassword);
+        $this->passwordStrength->checkPasswordStrength($newPassword);
         //Update secure data
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
@@ -476,7 +478,7 @@ class AccountManagement implements AccountManagementInterface
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
         if ($password !== null) {
-            $this->checkPasswordStrength($password);
+            $this->passwordStrength->checkPasswordStrength($password);
             $hash = $this->createPasswordHash($password);
         } else {
             $hash = null;
@@ -629,47 +631,14 @@ class AccountManagement implements AccountManagementInterface
      */
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
+        $this->accountManagementHelper->validatePasswordAndLockStatus($customer, $currentPassword);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $hash = $customerSecure->getPasswordHash();
-        if (!$this->encryptor->validateHash($currentPassword, $hash)) {
-            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
-        }
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
-        $this->checkPasswordStrength($newPassword);
+        $this->passwordStrength->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->customerRepository->save($customer);
-        // FIXME: Are we using the proper template here?
-        try {
-            $this->sendPasswordResetNotificationEmail($customer);
-        } catch (MailException $e) {
-            $this->logger->critical($e);
-        }
-
         return true;
-    }
-
-    /**
-     * Make sure that password complies with minimum security requirements.
-     *
-     * @param string $password
-     * @return void
-     * @throws InputException
-     */
-    protected function checkPasswordStrength($password)
-    {
-        $length = $this->stringHelper->strlen($password);
-        if ($length < self::MIN_PASSWORD_LENGTH) {
-            throw new InputException(
-                __(
-                    'Please enter a password with at least %1 characters.',
-                    self::MIN_PASSWORD_LENGTH
-                )
-            );
-        }
-        if ($this->stringHelper->strlen(trim($password)) != $length) {
-            throw new InputException(__('The password can\'t begin or end with a space.'));
-        }
     }
 
     /**
@@ -839,32 +808,6 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Send email to customer when his password is reset
-     *
-     * @param CustomerInterface $customer
-     * @return $this
-     */
-    protected function sendPasswordResetNotificationEmail($customer)
-    {
-        $storeId = $customer->getStoreId();
-        if (!$storeId) {
-            $storeId = $this->getWebsiteStoreId($customer);
-        }
-
-        $customerEmailData = $this->getFullCustomerObject($customer);
-
-        $this->sendEmailTemplate(
-            $customer,
-            self::XML_PATH_RESET_PASSWORD_TEMPLATE,
-            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)],
-            $storeId
-        );
-
-        return $this;
-    }
-
-    /**
      * Get either first store ID from a set website or the provided as default
      *
      * @param CustomerInterface $customer
@@ -912,16 +855,27 @@ class AccountManagement implements AccountManagementInterface
      * @param string $sender configuration path of email identity
      * @param array $templateParams
      * @param int|null $storeId
+     * @param string $email
      * @return $this
      */
-    protected function sendEmailTemplate($customer, $template, $sender, $templateParams = [], $storeId = null)
-    {
+    protected function sendEmailTemplate(
+        $customer,
+        $template,
+        $sender,
+        $templateParams = [],
+        $storeId = null,
+        $email = null
+    ) {
         $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
+        if (is_null($email)) {
+            $email = $customer->getEmail();
+        }
+
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
             ->setTemplateVars($templateParams)
             ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
-            ->addTo($customer->getEmail(), $this->customerViewHelper->getCustomerName($customer))
+            ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
 
         $transport->sendMessage();
@@ -989,8 +943,8 @@ class AccountManagement implements AccountManagementInterface
             return true;
         }
 
-        $dayDifference = floor(($currentTimestamp - $tokenTimestamp) / (24 * 60 * 60));
-        if ($dayDifference >= $expirationPeriod) {
+        $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
+        if ($hourDifference >= $expirationPeriod) {
             return true;
         }
 

@@ -12,30 +12,54 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
+use Magento\Customer\Helper\EmailNotification;
+use Magento\Customer\Helper\AccountManagement;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\State\UserLockedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EditPost extends \Magento\Customer\Controller\AbstractAccount
 {
-    /** @var AccountManagementInterface */
-    protected $customerAccountManagement;
-
-    /** @var CustomerRepositoryInterface  */
-    protected $customerRepository;
-
-    /** @var Validator */
-    protected $formKeyValidator;
-
-    /** @var CustomerExtractor */
-    protected $customerExtractor;
+    /**
+     * Form code for data extractor
+     */
+    const FORM_DATA_EXTRACTOR_CODE = 'customer_account_edit';
 
     /**
-     * @var Session
+     * @var AccountManagementInterface
      */
+    protected $customerAccountManagement;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * @var Validator
+     */
+    protected $formKeyValidator;
+
+    /**
+     * @var CustomerExtractor
+     */
+    protected $customerExtractor;
+
+    /** @var Session */
     protected $session;
+
+    /** @var EmailNotification */
+    protected $emailNotification;
+
+    /**
+     * @var AccountManagement
+     */
+    protected $accountManagementHelper;
 
     /**
      * @param Context $context
@@ -44,6 +68,8 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
+     * @param AccountManagement $accountManagementHelper
+     * @param EmailNotification $emailNotification
      */
     public function __construct(
         Context $context,
@@ -51,21 +77,24 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
-        CustomerExtractor $customerExtractor
+        CustomerExtractor $customerExtractor,
+        AccountManagement $accountManagementHelper,
+        EmailNotification $emailNotification
     ) {
+        parent::__construct($context);
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
-        parent::__construct($context);
+        $this->accountManagementHelper = $accountManagementHelper;
+        $this->emailNotification = $emailNotification;
     }
 
     /**
-     * Change customer password action
+     * Change customer email or password action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
@@ -76,76 +105,113 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         if ($this->getRequest()->isPost()) {
-            $customerId = $this->session->getCustomerId();
-            $currentCustomer = $this->customerRepository->getById($customerId);
-
-            // Prepare new customer data
-            $customer = $this->customerExtractor->extract('customer_account_edit', $this->_request);
-            $customer->setId($customerId);
-            if ($customer->getAddresses() == null) {
-                $customer->setAddresses($currentCustomer->getAddresses());
-            }
-
-            // Change customer password
-            if ($this->getRequest()->getParam('change_password')) {
-                $this->changeCustomerPassword($currentCustomer->getEmail());
-            }
+            $currentCustomerDataObject = $this->getCurrentCustomerDataObject();
+            $customerCandidateDataObject = $this->populateNewCustomerDataObject(
+                $this->_request,
+                $currentCustomerDataObject
+            );
 
             try {
-                $this->customerRepository->save($customer);
-            } catch (AuthenticationException $e) {
+                // whether a customer enabled change email option
+                if ($this->getRequest()->getParam('change_email')) {
+                    $this->accountManagementHelper->validatePasswordAndLockStatus(
+                        $currentCustomerDataObject,
+                        $this->getRequest()->getPost('current_password')
+                    );
+                }
+                // whether a customer enabled change password option
+                $isPasswordChanged = false;
+                if ($this->getRequest()->getParam('change_password')) {
+                    $isPasswordChanged = $this->changeCustomerPassword(
+                        $currentCustomerDataObject->getEmail(),
+                        $this->getRequest()->getPost('current_password'),
+                        $this->getRequest()->getPost('password'),
+                        $this->getRequest()->getPost('password_confirmation')
+                    );
+                }
+                $this->customerRepository->save($customerCandidateDataObject);
+                $this->emailNotification
+                    ->sendNotificationEmailsIfRequired(
+                        $currentCustomerDataObject,
+                        $customerCandidateDataObject,
+                        $isPasswordChanged
+                    );
+                $this->messageManager->addSuccess(__('You saved the account information.'));
+                return $resultRedirect->setPath('customer/account');
+            } catch (InvalidEmailOrPasswordException $e) {
                 $this->messageManager->addError($e->getMessage());
+            } catch (UserLockedException $e) {
+                $this->session->logout();
+                $this->session->start();
+                $this->messageManager->addError($e->getMessage());
+                return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
-                $this->messageManager->addException($e, __('Invalid input'));
+                $this->messageManager->addError($e->getMessage());
+                foreach ($e->getErrors() as $error) {
+                    $this->messageManager->addError($error->getMessage());
+                }
+            } catch (LocalizedException $e) {
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $message = __('We can\'t save the customer.')
-                    . $e->getMessage()
-                    . '<pre>' . $e->getTraceAsString() . '</pre>';
-                $this->messageManager->addException($e, $message);
+                $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
 
-            if ($this->messageManager->getMessages()->getCount() > 0) {
-                $this->session->setCustomerFormData($this->getRequest()->getPostValue());
-                return $resultRedirect->setPath('*/*/edit');
-            }
-
-            $this->messageManager->addSuccess(__('You saved the account information.'));
-            return $resultRedirect->setPath('customer/account');
+            $this->session->setCustomerFormData($this->getRequest()->getPostValue());
+            return $resultRedirect->setPath('*/*/edit');
         }
 
         return $resultRedirect->setPath('*/*/edit');
     }
 
     /**
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     */
+    protected function getCurrentCustomerDataObject()
+    {
+        return $this->customerRepository->getById(
+            $this->session->getCustomerId()
+        );
+    }
+
+    /**
+     * Create Data Transfer Object of customer candidate
+     *
+     * @param \Magento\Framework\App\RequestInterface $inputData
+     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     */
+    protected function populateNewCustomerDataObject(
+        \Magento\Framework\App\RequestInterface $inputData,
+        \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
+    ) {
+        $customerDto = $this->customerExtractor->extract(self::FORM_DATA_EXTRACTOR_CODE, $inputData);
+        $customerDto->setId($currentCustomerData->getId());
+        if (!$customerDto->getAddresses()) {
+            $customerDto->setAddresses($currentCustomerData->getAddresses());
+        }
+        if (!$inputData->getParam('change_email')) {
+            $customerDto->setEmail($currentCustomerData->getEmail());
+        }
+
+        return $customerDto;
+    }
+
+    /**
      * Change customer password
      *
      * @param string $email
-     * @return $this
+     * @param string $currPass
+     * @param string $newPass
+     * @param string $confPass
+     * @return bool
+     * @throws InvalidEmailOrPasswordException|InputException
      */
-    protected function changeCustomerPassword($email)
+    protected function changeCustomerPassword($email, $currPass, $newPass, $confPass)
     {
-        $currPass = $this->getRequest()->getPost('current_password');
-        $newPass = $this->getRequest()->getPost('password');
-        $confPass = $this->getRequest()->getPost('password_confirmation');
-
-        if (!strlen($newPass)) {
-            $this->messageManager->addError(__('Please enter new password.'));
-            return $this;
+        if ($newPass != $confPass) {
+            throw new InputException(__('Password confirmation doesn\'t match entered password.'));
         }
 
-        if ($newPass !== $confPass) {
-            $this->messageManager->addError(__('Confirm your new password.'));
-            return $this;
-        }
-
-        try {
-            $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
-        } catch (AuthenticationException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong while changing the password.'));
-        }
-
-        return $this;
+        return $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
     }
 }

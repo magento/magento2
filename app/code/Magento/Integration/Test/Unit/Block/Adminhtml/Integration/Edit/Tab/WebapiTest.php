@@ -95,7 +95,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
                 true
             ],
             'manual integration data' => [
-                [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL],
+                Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL,
                 true
             ],
             'config integration data' => [
@@ -169,6 +169,46 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $rootResourceId
+     * @param array $savedData
+     * @param bool $expectedValue
+     * @dataProvider isEverythingAllowedWithSavedFromDataProvider
+     */
+    public function testIsEverythingAllowedWithSavedFromData($rootResourceId, $savedData, $expectedValue)
+    {
+        $this->registry->expects($this->once())
+            ->method('registry')->with(IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE)
+            ->willReturn($savedData);
+
+        $this->rootResource->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($rootResourceId));
+
+        $this->webapiBlock = $this->getWebapiBlock();
+
+        $this->assertEquals($expectedValue, $this->webapiBlock->isEverythingAllowed());
+    }
+
+    /**
+     * @return array
+     */
+    public function isEverythingAllowedWithSavedFromDataProvider()
+    {
+        return [
+            'root resource in array' => [
+                2,
+                ['all_resources' => 0, 'resource'=>[2, 3]],
+                true
+            ],
+            'root resource not in array' => [
+                2,
+                ['all_resources' => 1],
+                true
+            ]
+        ];
+    }
+
+    /**
      * @param array $integrationData
      * @param array $selectedResources
      * @return \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi
@@ -185,9 +225,12 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->registry->expects($this->any())
-            ->method('registry')
-            ->with(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION)
-            ->will($this->returnValue($integrationData));
+            ->method('registry')->withConsecutive(
+                [IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE],
+                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION],
+                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION]
+            )
+            ->willReturnOnConsecutiveCalls(false, $integrationData, $integrationData);
 
         return $this->objectManager->getObject(
             'Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi',
