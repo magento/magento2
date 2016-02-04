@@ -40,11 +40,9 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                'setTransactionId',
                 'setCcTransId',
                 'setLastTransId',
-                'setAdditionalInformation',
-                'setIsTransactionClosed'
+                'setAdditionalInformation'
             ])
             ->getMock();
         $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
@@ -52,13 +50,9 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->payment->expects(static::once())
-            ->method('setTransactionId');
-        $this->payment->expects(static::once())
             ->method('setCcTransId');
         $this->payment->expects(static::once())
             ->method('setLastTransId');
-        $this->payment->expects(static::once())
-            ->method('setIsTransactionClosed');
         $this->payment->expects(static::any())
             ->method('setAdditionalInformation');
 
@@ -122,8 +116,6 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'processorResponseText' => 'Approved'
         ];
 
-        $transaction = Transaction::factory($attributes);
-
-        return $transaction;
+        return Transaction::factory($attributes);
     }
 }
