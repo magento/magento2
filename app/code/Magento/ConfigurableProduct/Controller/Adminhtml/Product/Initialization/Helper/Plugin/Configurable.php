@@ -79,16 +79,20 @@ class Configurable
 
         $product->setNewVariationsAttributeSetId($setId);
 
+        $productData = $this->request->getPost('product');
+        $configurableOptions = [];
+        if (!empty($productData['configurable_attributes_data'])) {
+            $configurableOptions = $this->optionsFactory->create(
+                (array) $productData['configurable_attributes_data']
+            );
+        }
+
+        $extensionAttributes->setConfigurableProductOptions($configurableOptions);
+
         $this->setLinkedProducts($product, $extensionAttributes);
         $product->setCanSaveConfigurableAttributes(
             (bool) $this->request->getPost('affect_configurable_product_attributes')
         );
-
-        $configurableOptions = $this->optionsFactory->create(
-            (array) $this->request->getPost('product')['configurable_attributes_data']
-        );
-
-        $extensionAttributes->setConfigurableProductOptions($configurableOptions);
 
         $product->setExtensionAttributes($extensionAttributes);
 

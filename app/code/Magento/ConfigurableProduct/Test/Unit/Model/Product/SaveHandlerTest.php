@@ -23,6 +23,8 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class SaveHandlerTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
