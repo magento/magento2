@@ -73,4 +73,11 @@
             <arg value="testsuite/Magento/Test/Integrity"/>
         </exec>
     </target>
+
+    <target name="static_phpcs" description="Code Style">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/static" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/static/phpunit.xml.dist"/>
+            <arg value="--filter=Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle"/>
+        </exec>
+    </target>
 </project>
