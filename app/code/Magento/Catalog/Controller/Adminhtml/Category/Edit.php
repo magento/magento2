@@ -59,7 +59,16 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
             if ($storeId) {
                 $categoryId = (int)$this->storeManager->getStore($storeId)->getRootCategoryId();
             } else {
-                $categoryId = (int)$this->storeManager->getDefaultStoreView()->getRootCategoryId();
+                $defaultStoreView = $this->storeManager->getDefaultStoreView();
+                if ($defaultStoreView) {
+                    $categoryId = (int)$defaultStoreView->getRootCategoryId();
+                } else {
+                    $stores = $this->storeManager->getStores();
+                    if (count($stores)) {
+                        $store = reset($stores);
+                        $categoryId = (int)$store->getRootCategoryId();
+                    }
+                }
             }
             $this->getRequest()->setParam('id', $categoryId);
         }
