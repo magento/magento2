@@ -113,27 +113,20 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
     /**
      * Delete entity
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteEntity(\Magento\Framework\Model\AbstractModel $object)
+    public function deleteEntity(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $object)
     {
         if (!$object->getEntityAttributeId()) {
             return $this;
         }
 
-        $select = $this->getConnection()->select()->from(
-            $this->getTable('eav_entity_attribute')
-        )->where(
-            'entity_attribute_id = ?',
-            (int)$object->getEntityAttributeId()
-        );
-        $result = $this->getConnection()->fetchRow($select);
-
+        $result = $this->getEntityAttribute($object->getEntityAttributeId());
         if ($result) {
             $attribute = $this->_eavConfig->getAttribute(
-                \Magento\Catalog\Model\Product::ENTITY,
+                $object->getEntityTypeId(),
                 $result['attribute_id']
             );
 
