@@ -18,6 +18,8 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class FactoryTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

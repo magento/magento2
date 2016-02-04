@@ -10,7 +10,7 @@ use Magento\Catalog\Api\Data\ProductExtensionInterface;
 /**
  * Class PaymentExtensionAttributes
  */
-class PaymentExtensionAttributes implements ProductExtensionInterface
+abstract class PaymentExtensionAttributes implements ProductExtensionInterface
 {
 
 }
