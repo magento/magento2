@@ -135,6 +135,7 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
         $customerStoreId = 2;
+        $customerWebsiteId = 1;
         $customerData = ['key' => 'value'];
         $customerName = 'Customer Name';
         $templateIdentifier = 'Template Identifier';
@@ -159,10 +160,13 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $origCustomer->expects($this->any())
             ->method('getStoreId')
-            ->willReturn($customerStoreId);
+            ->willReturn(0);
         $origCustomer->expects($this->any())
             ->method('getId')
             ->willReturn($customerId);
+        $origCustomer->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($customerWebsiteId);
 
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
@@ -175,6 +179,19 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects(clone $expects)
             ->method('getStore')
             ->willReturn($storeMock);
+
+        $websiteMock = $this->getMockBuilder('Magento\Store\Model\Website')
+            ->disableOriginalConstructor()
+            ->setMethods(['getStoreIds'])
+            ->getMock();
+        $websiteMock->expects($this->any())
+            ->method('getStoreIds')
+            ->willReturn([$customerStoreId]);
+
+        $this->storeManagerMock->expects(clone $expects)
+            ->method('getWebsite')
+            ->with($customerWebsiteId)
+            ->willReturn($websiteMock);
 
         $customerSecureMock = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
             ->disableOriginalConstructor()
