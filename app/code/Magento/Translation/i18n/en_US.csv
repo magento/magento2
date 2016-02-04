@@ -63,7 +63,7 @@ B,B
 "Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890.","Please enter a valid fax number. For example (123) 456-7890 or 123-456-7890."
 "Please enter a valid email address. For example johndoe@domain.com.","Please enter a valid email address. For example johndoe@domain.com."
 "Please use only visible characters and spaces.","Please use only visible characters and spaces."
-"Please enter 6 or more characters. Leading or trailing spaces will be ignored.","Please enter 6 or more characters. Leading or trailing spaces will be ignored."
+"Please enter 6 or more characters. Leading and trailing spaces will be ignored.","Please enter 6 or more characters. Leading and trailing spaces will be ignored."
 "Please enter 7 or more characters. Password should contain both numeric and alphabetic characters.","Please enter 7 or more characters. Password should contain both numeric and alphabetic characters."
 "Please enter a valid URL. Protocol is required (http://, https:// or ftp://)","Please enter a valid URL. Protocol is required (http://, https:// or ftp://)"
 "Please enter a valid URL Key. For example ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"".","Please enter a valid URL Key. For example ""example-page"", ""example-page.html"" or ""anotherlevel/example-page""."
@@ -145,3 +145,4 @@ Translations,Translations
 "Please put your store into maintenance mode and redeploy static files after changing strategy","Please put your store into maintenance mode and redeploy static files after changing strategy"
 "Dictionary (Translation on Storefront side)","Dictionary (Translation on Storefront side)"
 "Embedded (Translation on Admin side)","Embedded (Translation on Admin side)"
+"Minimum length of this field must be equal or greater than %1 symbols. Leading and trailing spaces will be ignored.","Minimum length of this field must be equal or greater than %1 symbols. Leading and trailing spaces will be ignored."

@@ -150,10 +150,30 @@
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
                 <field id="reset_link_expiration_period" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Recovery Link Expiration Period (days)</label>
+                    <label>Recovery Link Expiration Period (hours)</label>
                     <comment>Please enter a number 1 or greater in this field.</comment>
                     <validate>required-entry validate-digits validate-digits-range digits-range-1-</validate>
                     <backend_model>Magento\Customer\Model\Config\Backend\Password\Link\Expirationperiod</backend_model>
+                </field>
+                <field id="required_character_classes_number" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Number of Required Character Classes</label>
+                    <comment>Number of different character classes required in password: Lowercase, Uppercase, Digits, Special Characters.</comment>
+                    <validate>required-entry validate-digits validate-digits-range digits-range-1-4</validate>
+                </field>
+                <field id="minimum_password_length" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Minimum Password Length</label>
+                    <comment>Please enter a number 1 or greater in this field.</comment>
+                    <validate>required-entry validate-digits validate-digits-range digits-range-1-</validate>
+                </field>
+                <field id="lockout_failures" translate="label comment" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Maximum Login Failures to Lockout Account</label>
+                    <comment>Use 0 to disable account locking.</comment>
+                    <frontend_class>required-entry validate-digits</frontend_class>
+                </field>
+                <field id="lockout_threshold" translate="label" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Lockout Time (minutes)</label>
+                    <comment>Account will be unlocked after provided time.</comment>
+                    <frontend_class>required-entry validate-digits</frontend_class>
                 </field>
             </group>
             <group id="address" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">

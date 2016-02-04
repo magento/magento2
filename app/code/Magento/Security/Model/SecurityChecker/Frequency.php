@@ -46,6 +46,8 @@ class Frequency extends AbstractSecurityChecker implements SecurityCheckerInterf
     }
 
     /**
+     * Load last record creation timestamp
+     *
      * @param int $securityEventType
      * @param string $accountReference
      * @param int $longIp

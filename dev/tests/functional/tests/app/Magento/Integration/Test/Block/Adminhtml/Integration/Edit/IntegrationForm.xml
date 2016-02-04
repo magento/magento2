@@ -15,6 +15,10 @@
             <email />
             <endpoint />
             <identity_link_url />
+            <current_password>
+                <selector>[name='current_password']</selector>
+                <strategy>css selector</strategy>
+            </current_password>
             <key>
                 <selector>[name="consumer_key"]</selector>
             </key>

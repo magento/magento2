@@ -294,6 +294,50 @@ class UpgradeData implements UpgradeDataInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '2.0.7', '<')) {
+            $customerSetup->addAttribute(
+                Customer::ENTITY,
+                'failures_num',
+                [
+                    'type' => 'static',
+                    'label' => 'Failures Number',
+                    'input' => 'hidden',
+                    'required' => false,
+                    'sort_order' => 100,
+                    'visible' => false,
+                    'system' => true,
+                ]
+            );
+
+            $customerSetup->addAttribute(
+                Customer::ENTITY,
+                'first_failure',
+                [
+                    'type' => 'static',
+                    'label' => 'First Failure Date',
+                    'input' => 'date',
+                    'required' => false,
+                    'sort_order' => 110,
+                    'visible' => false,
+                    'system' => true,
+                ]
+            );
+
+            $customerSetup->addAttribute(
+                Customer::ENTITY,
+                'lock_expires',
+                [
+                    'type' => 'static',
+                    'label' => 'Failures Number',
+                    'input' => 'date',
+                    'required' => false,
+                    'sort_order' => 120,
+                    'visible' => false,
+                    'system' => true,
+                ]
+            );
+        }
+
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();

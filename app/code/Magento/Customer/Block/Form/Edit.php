@@ -7,6 +7,7 @@ namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Helper\Config as CustomerConfigHelper;
 
 /**
  * Customer edit form block
@@ -15,6 +16,42 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  */
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
+    /**
+     * @var CustomerConfigHelper
+     */
+    protected $customerConfigHelper;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface $customerAccountManagement
+     * @param CustomerConfigHelper $customerConfigHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementInterface $customerAccountManagement,
+        CustomerConfigHelper $customerConfigHelper,
+        array $data = []
+    ) {
+        $this->customerConfigHelper = $customerConfigHelper;
+        parent::__construct(
+            $context,
+            $customerSession,
+            $subscriberFactory,
+            $customerRepository,
+            $customerAccountManagement,
+            $data
+        );
+    }
+
     /**
      * Retrieve form data
      *
@@ -64,5 +101,25 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     public function getChangePassword()
     {
         return $this->customerSession->getChangePassword();
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     */
+    public function getMinimumPasswordLength()
+    {
+        return $this->customerConfigHelper->getMinimumPasswordLength();
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     */
+    public function getRequiredCharacterClassesNumber()
+    {
+        return $this->customerConfigHelper->getRequiredCharacterClassesNumber();
     }
 }

@@ -26,12 +26,20 @@
             <default>
                 <group>1</group>
             </default>
+            <account_information>
+                <change_email_template>customer_account_information_change_email_template</change_email_template>
+                <change_email_and_password_template>customer_account_information_change_email_and_password_template</change_email_and_password_template>
+            </account_information>
             <password>
                 <forgot_email_identity>support</forgot_email_identity>
                 <forgot_email_template>customer_password_forgot_email_template</forgot_email_template>
                 <remind_email_template>customer_password_remind_email_template</remind_email_template>
-                <reset_link_expiration_period>1</reset_link_expiration_period>
+                <reset_link_expiration_period>2</reset_link_expiration_period>
                 <reset_password_template>customer_password_reset_password_template</reset_password_template>
+                <required_character_classes_number>3</required_character_classes_number>
+                <minimum_password_length>8</minimum_password_length>
+                <lockout_failures>10</lockout_failures>
+                <lockout_threshold>10</lockout_threshold>
             </password>
             <address>
                 <street_lines>2</street_lines>
