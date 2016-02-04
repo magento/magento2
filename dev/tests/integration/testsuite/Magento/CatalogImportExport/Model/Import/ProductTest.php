@@ -23,7 +23,7 @@ use Magento\ImportExport\Model\Import;
  *
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
@@ -56,6 +56,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\CatalogImportExport\Model\Import\Product'
         );
+        parent::setUp();
     }
 
     /**
@@ -901,9 +902,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Catalog/_files/category_with_position.php
+     * @magentoDataFixture Magento/Catalog/_files/category_duplicates.php
      */
     public function testProductDuplicateCategories()
     {
@@ -931,57 +932,56 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ]
             )->validateData();
 
-        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->assertTrue($errors->getErrorsCount() === 0);
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var Magento\Catalog\Model\ResourceModel\Product $resource */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
         $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
-        $productId = $resource->getIdBySku('simple1');
-        $this->assertTrue(is_numeric($productId));
 
-        /** @var Magento\Catalog\Model\Category $category */
+        /** @var \Magento\Catalog\Model\Category $category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category'
         );
-        //$category = $this->loadCategoryByName('Category 1');
-        //$category->
+
         $category->setStoreId(1);
         $category->load(444);
-
 
         $this->assertTrue($category !== null);
 
         $category->setName(
-            'Category1-updated'
+            'Category 2-updated'
         )->save();
 
         $this->_model->importData();
 
-
-        //Magento\CatalogImportExport\Model\Import;
         $categoryProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\CatalogImportExport\Model\ImportProduct\CategoryProcessor'
+            'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'
         );
 
         $errorProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator'
         );
-        $errorProcessor->getAllErrors();
+        $errorCount = count($errorProcessor->getAllErrors());
+
+        $errorMessage = $errorProcessor->getAllErrors()[0]->getErrorMessage();
+        $this->assertContains('URL key for specified store already exists' , $errorMessage);
+        $this->assertContains('Default Category/Category 2' , $errorMessage);
+        $this->assertTrue($errorCount === 1 , 'Error expected');
+
 
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category'
         );
 
-        $categoryAfter = $this->loadCategoryByName('Category 1');
+        $categoryAfter = $this->loadCategoryByName('Category 2');
         $this->assertTrue($categoryAfter === null);
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product'
         );
-        $product->load($productId);
-        $this->assertFalse($product->isObjectNew());
+        $product->load(1);
         $categories = $product->getCategoryIds();
         $this->assertTrue(count($categories) == 1);
     }
