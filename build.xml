@@ -80,4 +80,11 @@
             <arg value="--filter=Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle"/>
         </exec>
     </target>
+
+    <target name="static_annotation" description="Code Style">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/static" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/static/phpunit.xml.dist"/>
+            <arg value="--filter=Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard"/>
+        </exec>
+    </target>
 </project>
