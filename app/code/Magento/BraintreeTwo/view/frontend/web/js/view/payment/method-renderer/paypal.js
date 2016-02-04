@@ -9,8 +9,9 @@ define([
     'underscore',
     'Magento_Checkout/js/view/payment/default',
     'Magento_BraintreeTwo/js/view/payment/adapter',
-    'Magento_Checkout/js/model/quote'
-], function ($, _, Component, Braintree, quote) {
+    'Magento_Checkout/js/model/quote',
+    'Magento_Checkout/js/model/full-screen-loader'
+], function ($, _, Component, Braintree, quote, fullScreenLoader) {
     'use strict';
 
     var checkout;
@@ -35,6 +36,7 @@ define([
                  */
                 onReady: function (integration) {
                     checkout = integration;
+                    this.enableButton();
                 },
 
                 /**
@@ -160,6 +162,7 @@ define([
             checkout.teardown(function () {
                 checkout = null;
             });
+            this.disableButton();
             this.clientConfig.paypal.amount = this.grandTotalAmount;
 
             Braintree.setConfig(this.clientConfig);
@@ -267,6 +270,22 @@ define([
         getPaymentAcceptanceMarkSrc: function () {
 
             return window.checkoutConfig.payment[this.getCode()].paymentAcceptanceMarkSrc;
+        },
+
+        /**
+         * Disable submit button
+         */
+        disableButton: function () {
+            fullScreenLoader.startLoader();
+            $('[data-button="place"]').attr('disabled', 'disabled');
+        },
+
+        /**
+         * Enable submit button
+         */
+        enableButton: function () {
+            $('[data-button="place"]').removeAttr('disabled');
+            fullScreenLoader.stopLoader();
         }
     });
 });

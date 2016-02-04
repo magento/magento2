@@ -112,11 +112,12 @@ define([
                     self.selectedCardType(null);
                 }
 
-                if (!event.isValid) {
-                    return false;
-                }
-
-                if (event.card) {
+                if (event.target.fieldKey === 'number' && event.card) {
+                    if (event.isValid) {
+                        self.cardNumber = event.card;
+                    } else {
+                        self.cardNumber = null;
+                    }
                     self.selectedCardType(
                         validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
                     );
