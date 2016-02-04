@@ -72,16 +72,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * Add availability call after load as public
-     *
-     * @return void
-     */
-    public function afterLoad()
-    {
-        $this->_afterLoad();
-    }
-
-    /**
      * Check if config data value was changed
      *
      * @return bool

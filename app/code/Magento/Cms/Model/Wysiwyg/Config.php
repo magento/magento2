@@ -5,10 +5,12 @@
  */
 namespace Magento\Cms\Model\Wysiwyg;
 
+use Magento\Ui\Component\Wysiwyg\ConfigInterface;
+
 /**
  * Wysiwyg Config for Editor HTML Element
  */
-class Config extends \Magento\Framework\DataObject
+class Config extends \Magento\Framework\DataObject implements ConfigInterface
 {
     /**
      * Wysiwyg status enabled
@@ -163,6 +165,7 @@ class Config extends \Magento\Framework\DataObject
                     'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css'
                 ),
                 'width' => '100%',
+                'height' => '500px',
                 'plugins' => [],
             ]
         );

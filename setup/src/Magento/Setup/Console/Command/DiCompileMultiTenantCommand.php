@@ -30,6 +30,7 @@ use Magento\Setup\Module\Di\Definition\Compressor;
 use Magento\Setup\Module\Di\Definition\Serializer\Igbinary;
 use Magento\Setup\Module\Di\Definition\Serializer\Standard;
 use \Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Code\Generator as CodeGenerator;
 
 /**
  * Command to generate all non-existing proxies and factories, and pre-compile class definitions,
@@ -87,7 +88,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
 
     /**
      *
-     * @var \Magento\Framework\Code\Generator
+     * @var CodeGenerator
      */
     private $generator;
 
@@ -260,6 +261,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns)
             );
         }
+        $this->files['di'][] = $this->directoryList->getPath(
+            \Magento\Framework\App\Filesystem\DirectoryList::CONFIG
+        ) . '/di.xml';
         $this->files['additional'] = [$input->getOption(self::INPUT_KEY_EXTRA_CLASSES_FILE)];
         $repositoryScanner = new Scanner\RepositoryScanner();
         $repositories = $repositoryScanner->collectEntities($this->files['di']);
@@ -271,26 +275,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $interceptorScanner = new Scanner\XmlInterceptorScanner();
         $this->entities['interceptors'] = $interceptorScanner->collectEntities($this->files['di']);
         // 1.2 Generation of Factory and Additional Classes
-        $generatorIo = new \Magento\Framework\Code\Generator\Io(
-            new \Magento\Framework\Filesystem\Driver\File(),
-            $generationDir
+        $generatorIo = $this->objectManager->create(
+            'Magento\Framework\Code\Generator\Io',
+            ['generationDirectory' => $generationDir]
         );
-        $this->generator = new \Magento\Framework\Code\Generator(
-            $generatorIo,
-            [
-                Interceptor::ENTITY_TYPE => 'Magento\Framework\Interception\Code\Generator\Interceptor',
-                Proxy::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Proxy',
-                Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
-                Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
-                Persistor::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Persistor',
-                Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
-                Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
-                SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
-                ExtensionAttributesInterfaceGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
-                ExtensionAttributesGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator'
-            ]
+        $this->generator = $this->objectManager->create(
+            'Magento\Framework\Code\Generator',
+            ['ioObject' => $generatorIo]
         );
         /** Initialize object manager for code generation based on configs */
         $this->generator->setObjectManager($this->objectManager);
@@ -299,13 +290,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
 
         foreach ($repositories as $entityName) {
             switch ($this->generator->generateClass($entityName)) {
-                case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
+                case CodeGenerator::GENERATION_SUCCESS:
                     $this->log->add(Log::GENERATION_SUCCESS, $entityName);
                     break;
-                case \Magento\Framework\Code\Generator::GENERATION_ERROR:
+                case CodeGenerator::GENERATION_ERROR:
                     $this->log->add(Log::GENERATION_ERROR, $entityName);
                     break;
-                case \Magento\Framework\Code\Generator::GENERATION_SKIP:
+                case CodeGenerator::GENERATION_SKIP:
                 default:
                     //no log
                     break;
@@ -315,13 +306,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             sort($this->entities[$type]);
             foreach ($this->entities[$type] as $entityName) {
                 switch ($this->generator->generateClass($entityName)) {
-                    case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
+                    case CodeGenerator::GENERATION_SUCCESS:
                         $this->log->add(Log::GENERATION_SUCCESS, $entityName);
                         break;
-                    case \Magento\Framework\Code\Generator::GENERATION_ERROR:
+                    case CodeGenerator::GENERATION_ERROR:
                         $this->log->add(Log::GENERATION_ERROR, $entityName);
                         break;
-                    case \Magento\Framework\Code\Generator::GENERATION_SKIP:
+                    case CodeGenerator::GENERATION_SKIP:
                     default:
                         //no log
                         break;
@@ -374,7 +365,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 $directoryInstancesNamesList->getList($path);
             }
         }
-        $inheritanceScanner = new Scanner\InheritanceInterceptorScanner();
+        $inheritanceScanner = new Scanner\InheritanceInterceptorScanner(
+            new \Magento\Framework\ObjectManager\InterceptableValidator()
+        );
         $this->entities['interceptors'] = $inheritanceScanner->collectEntities(
             get_declared_classes(),
             $this->entities['interceptors']
@@ -383,13 +376,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         foreach (['interceptors', 'di'] as $type) {
             foreach ($this->entities[$type] as $entityName) {
                 switch ($this->generator->generateClass($entityName)) {
-                    case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
+                    case CodeGenerator::GENERATION_SUCCESS:
                         $this->log->add(Log::GENERATION_SUCCESS, $entityName);
                         break;
-                    case \Magento\Framework\Code\Generator::GENERATION_ERROR:
+                    case CodeGenerator::GENERATION_ERROR:
                         $this->log->add(Log::GENERATION_ERROR, $entityName);
                         break;
-                    case \Magento\Framework\Code\Generator::GENERATION_SKIP:
+                    case CodeGenerator::GENERATION_SKIP:
                     default:
                         //no log
                         break;

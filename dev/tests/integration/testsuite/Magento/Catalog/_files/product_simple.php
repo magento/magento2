@@ -4,9 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+
+/** @var \Magento\TestFramework\ObjectManager $objectManager */
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+/** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
+$categoryLinkManagement = $objectManager->create('Magento\Catalog\Api\CategoryLinkManagementInterface');
+
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create('Magento\Catalog\Model\Product');
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(1)
@@ -46,7 +53,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setMetaDescription('meta description')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setCategoryIds([2])
     ->setStockData(
         [
             'use_config_manage_stock'   => 1,
@@ -54,86 +60,99 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             'is_qty_decimal'            => 0,
             'is_in_stock'               => 1,
         ]
-    )
-    ->setCanSaveCustomOptions(true)
-    ->setProductOptions(
-        [
+    )->setCanSaveCustomOptions(true)
+    ->setHasOptions(true);
+
+$oldOptions = [
+    [
+        'previous_group' => 'text',
+        'title'     => 'Test Field',
+        'type'      => 'field',
+        'is_require' => 1,
+        'sort_order' => 0,
+        'price'     => 1,
+        'price_type' => 'fixed',
+        'sku'       => '1-text',
+        'max_characters' => 100,
+    ],
+    [
+        'previous_group' => 'date',
+        'title'     => 'Test Date and Time',
+        'type'      => 'date_time',
+        'is_require' => 1,
+        'sort_order' => 0,
+        'price'     => 2,
+        'price_type' => 'fixed',
+        'sku'       => '2-date',
+    ],
+    [
+        'previous_group' => 'select',
+        'title'     => 'Test Select',
+        'type'      => 'drop_down',
+        'is_require' => 1,
+        'sort_order' => 0,
+        'values'    => [
             [
-                'id'        => 1,
-                'option_id' => 0,
-                'previous_group' => 'text',
-                'title'     => 'Test Field',
-                'type'      => 'field',
-                'is_require' => 1,
-                'sort_order' => 0,
-                'price'     => 1,
-                'price_type' => 'fixed',
-                'sku'       => '1-text',
-                'max_characters' => 100,
+                'option_type_id' => -1,
+                'title'         => 'Option 1',
+                'price'         => 3,
+                'price_type'    => 'fixed',
+                'sku'           => '3-1-select',
             ],
             [
-                'id'        => 2,
-                'option_id' => 0,
-                'previous_group' => 'date',
-                'title'     => 'Test Date and Time',
-                'type'      => 'date_time',
-                'is_require' => 1,
-                'sort_order' => 0,
-                'price'     => 2,
-                'price_type' => 'fixed',
-                'sku'       => '2-date',
-            ],
-            [
-                'id'        => 3,
-                'option_id' => 0,
-                'previous_group' => 'select',
-                'title'     => 'Test Select',
-                'type'      => 'drop_down',
-                'is_require' => 1,
-                'sort_order' => 0,
-                'values'    => [
-                    [
-                        'option_type_id' => -1,
-                        'title'         => 'Option 1',
-                        'price'         => 3,
-                        'price_type'    => 'fixed',
-                        'sku'           => '3-1-select',
-                    ],
-                    [
-                        'option_type_id' => -1,
-                        'title'         => 'Option 2',
-                        'price'         => 3,
-                        'price_type'    => 'fixed',
-                        'sku'           => '3-2-select',
-                    ],
-                ]
-            ],
-            [
-                'id'        => 4,
-                'option_id' => 0,
-                'previous_group' => 'select',
-                'title'     => 'Test Radio',
-                'type'      => 'radio',
-                'is_require' => 1,
-                'sort_order' => 0,
-                'values'    => [
-                    [
-                        'option_type_id' => -1,
-                        'title'         => 'Option 1',
-                        'price'         => 3,
-                        'price_type'    => 'fixed',
-                        'sku'           => '4-1-radio',
-                    ],
-                    [
-                        'option_type_id' => -1,
-                        'title'         => 'Option 2',
-                        'price'         => 3,
-                        'price_type'    => 'fixed',
-                        'sku'           => '4-2-radio',
-                    ],
-                ]
+                'option_type_id' => -1,
+                'title'         => 'Option 2',
+                'price'         => 3,
+                'price_type'    => 'fixed',
+                'sku'           => '3-2-select',
             ],
         ]
-    )
-    ->setHasOptions(true)
-    ->save();
+    ],
+    [
+        'previous_group' => 'select',
+        'title'     => 'Test Radio',
+        'type'      => 'radio',
+        'is_require' => 1,
+        'sort_order' => 0,
+        'values'    => [
+            [
+                'option_type_id' => -1,
+                'title'         => 'Option 1',
+                'price'         => 3,
+                'price_type'    => 'fixed',
+                'sku'           => '4-1-radio',
+            ],
+            [
+                'option_type_id' => -1,
+                'title'         => 'Option 2',
+                'price'         => 3,
+                'price_type'    => 'fixed',
+                'sku'           => '4-2-radio',
+            ],
+        ]
+    ]
+];
+
+$options = [];
+
+/** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
+$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+
+foreach ($oldOptions as $option) {
+    /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option */
+    $option = $customOptionFactory->create(['data' => $option]);
+    $option->setProductSku($product->getSku());
+
+    $options[] = $option;
+}
+
+$product->setOptions($options);
+
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
+$productRepositoryFactory = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+$productRepositoryFactory->save($product);
+
+$categoryLinkManagement->assignProductToCategories(
+    $product->getSku(),
+    [2]
+);

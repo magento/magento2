@@ -18,7 +18,20 @@ define([
         items = Array.prototype.slice.call(items);
 
         items.forEach(function (item) {
-            result[item.name] = item.type === 'checkbox' ? +!!item.checked : item.value;
+            switch (item.type) {
+                case 'checkbox':
+                    result[item.name] = +!!item.checked;
+                    break;
+
+                case 'radio':
+                    if (item.checked) {
+                        result[item.name] = item.value;
+                    }
+                    break;
+
+                default:
+                    result[item.name] = item.value;
+            }
         });
 
         return result;
@@ -38,7 +51,8 @@ define([
             adapter.on({
                 'reset': this.reset.bind(this),
                 'save': this.save.bind(this, true),
-                'saveAndContinue': this.save.bind(this, false)
+                'saveAndContinue': this.save.bind(this, false),
+                'saveAndApply': this.saveAndApply.bind(this, true)
             });
 
             return this;
@@ -95,6 +109,15 @@ define([
 
         reset: function () {
             this.source.trigger('data.reset');
+        },
+
+        saveAndApply: function (redirect) {
+            this.validate();
+
+            if (!this.source.get('params.invalid')) {
+                this.source.set('data.auto_apply', 1);
+                this.submit(redirect);
+            }
         }
     });
 });

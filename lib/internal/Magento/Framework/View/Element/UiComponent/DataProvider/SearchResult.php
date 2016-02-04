@@ -14,8 +14,8 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
- * Class Collection
- * Collection for order related documents to display grids on order view page
+ * Class SearchResult
+ * Generic Search Result
  */
 class SearchResult extends AbstractCollection implements Api\Search\SearchResultInterface
 {
@@ -53,6 +53,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     ) {
         $this->_init('Magento\Framework\View\Element\UiComponent\DataProvider\Document', $resourceModel);
         $this->setMainTable(true);
+        $this->setMainTable($this->_resource->getTable($mainTable));
         parent::__construct(
             $entityFactory,
             $logger,
@@ -61,7 +62,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
             null,
             null
         );
-        $this->setMainTable($this->_resource->getTable($mainTable));
         $this->_setIdFieldName($this->getResource()->getIdFieldName());
     }
 

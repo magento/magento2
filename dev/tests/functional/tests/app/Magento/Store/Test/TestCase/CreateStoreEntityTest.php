@@ -34,7 +34,7 @@ class CreateStoreEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'PS';
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
     /**
@@ -72,6 +72,7 @@ class CreateStoreEntityTest extends Injectable
      */
     public function test(Store $store)
     {
+        $this->markTestIncomplete('MAGETWO-48723');
         //Steps:
         $this->storeIndex->open();
         $this->storeIndex->getGridPageActions()->addStoreView();

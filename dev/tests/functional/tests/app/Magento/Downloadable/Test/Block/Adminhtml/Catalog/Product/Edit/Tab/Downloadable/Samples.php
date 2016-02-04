@@ -31,6 +31,13 @@ class Samples extends Form
     protected $rowBlock = '//*[@id="sample_items_body"]/tr[%d]';
 
     /**
+     * Sort rows data
+     *
+     * @var array
+     */
+    protected $sortRowsData = [];
+
+    /**
      * Get Downloadable sample item block
      *
      * @param int $index
@@ -60,8 +67,18 @@ class Samples extends Form
         $this->_fill($mapping);
         foreach ($fields['downloadable']['sample'] as $index => $sample) {
             $element->find($this->addNewSampleRow, Locator::SELECTOR_XPATH)->click();
+
+            if (isset($sample['sort_order'])) {
+                $currentSortOrder = (int)$sample['sort_order'];
+                unset($sample['sort_order']);
+            } else {
+                $currentSortOrder = 0;
+            }
             $this->getRowBlock($index, $element)->fillSampleRow($sample);
+
+            $this->sortSample($index, $currentSortOrder, $element);
         }
+        $this->sortRowsData = [];
     }
 
     /**
@@ -77,9 +94,37 @@ class Samples extends Form
         $mapping = $this->dataMapping(['title' => $fields['title']]);
         $newFields = $this->_getData($mapping);
         foreach ($fields['downloadable']['sample'] as $index => $sample) {
-            $newFields['downloadable']['sample'][$index] = $this->getRowBlock($index, $element)
+            unset($sample['sort_order']);
+            $processedSample = $this->getRowBlock($index, $element)
                 ->getDataSampleRow($sample);
+            $processedSample['sort_order'] = $index;
+            $newFields['downloadable']['sample'][$index] = $processedSample;
         }
         return $newFields;
+    }
+
+    /**
+     * Sort sample element
+     *
+     * @param int $position
+     * @param int $sortOrder
+     * @param SimpleElement|null $element
+     * @return void
+     */
+    protected function sortSample($position, $sortOrder, SimpleElement $element = null)
+    {
+        $currentSortRowData = ['current_position_in_grid' => $position, 'sort_order' => $sortOrder];
+        foreach ($this->sortRowsData as &$sortRowData) {
+            if ($sortRowData['sort_order'] > $currentSortRowData['sort_order']) {
+                // need to reload block because we are changing dom
+                $target = $this->getRowBlock($sortRowData['current_position_in_grid'], $element)->getSortHandle();
+                $this->getRowBlock($currentSortRowData['current_position_in_grid'], $element)->dragAndDropTo($target);
+
+                $currentSortRowData['current_position_in_grid']--;
+                $sortRowData['current_position_in_grid']++;
+            }
+        }
+        unset($sortRowData);
+        $this->sortRowsData[] = $currentSortRowData;
     }
 }

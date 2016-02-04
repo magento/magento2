@@ -169,6 +169,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Response\HeaderManager">
+        <arguments>
+            <argument name="headerProviderList" xsi:type="array">
+                <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XFrameOptions</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
         <arguments>
             <argument name="metadata" xsi:type="array">

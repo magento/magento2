@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Filesystem\Driver;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -65,5 +67,17 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testReadDirectoryRecursivelyFailure()
     {
         $this->driver->readDirectoryRecursively($this->getTestPath('not-existing-directory'));
+    }
+
+    public function testCreateDirectory()
+    {
+        $generatedPath = $this->getTestPath('generated/roo/bar/baz/foo');
+        $generatedPathBase = $this->getTestPath('generated');
+        // Delete the generated directory if it already exists
+        if (is_dir($generatedPath)) {
+            $this->assertTrue($this->driver->deleteDirectory($generatedPathBase));
+        }
+        $this->assertTrue($this->driver->createDirectory($generatedPath, DriverInterface::WRITEABLE_DIRECTORY_MODE));
+        $this->assertTrue(is_dir($generatedPath));
     }
 }

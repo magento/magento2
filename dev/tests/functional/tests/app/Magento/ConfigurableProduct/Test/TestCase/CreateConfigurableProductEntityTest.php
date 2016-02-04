@@ -39,7 +39,7 @@ use Magento\Mtf\TestCase\Injectable;
 class CreateConfigurableProductEntityTest extends Injectable
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
@@ -79,6 +79,7 @@ class CreateConfigurableProductEntityTest extends Injectable
      */
     public function test(ConfigurableProduct $product)
     {
+        $this->markTestIncomplete('MAGETWO-48724');
         // Steps
         $this->productIndex->open();
         $this->productIndex->getGridPageActionBlock()->addProduct('configurable');
