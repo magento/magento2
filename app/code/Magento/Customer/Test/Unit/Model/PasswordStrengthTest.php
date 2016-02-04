@@ -37,7 +37,6 @@ class PasswordStrengthTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-
         $this->model = $objectManager->getObject(
             '\Magento\Customer\Model\PasswordStrength',
             [
