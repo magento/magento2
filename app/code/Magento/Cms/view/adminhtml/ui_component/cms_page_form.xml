@@ -94,6 +94,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Content</item>
+                <item name="sortOrder" xsi:type="number">10</item>
             </item>
         </argument>
         <field name="content_heading">
@@ -124,6 +125,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Search Engine Optimisation</item>
+                <item name="sortOrder" xsi:type="number">20</item>
             </item>
         </argument>
         <field name="identifier">
@@ -168,6 +170,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Page in Websites</item>
+                <item name="sortOrder" xsi:type="number">30</item>
             </item>
         </argument>
         <field name="storeviews">
@@ -192,6 +195,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Design</item>
+                <item name="sortOrder" xsi:type="number">50</item>
             </item>
         </argument>
         <field name="page_layout">
@@ -223,6 +227,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Custom Design Update</item>
+                <item name="sortOrder" xsi:type="number">60</item>
             </item>
         </argument>
         <field name="custom_theme_from">
