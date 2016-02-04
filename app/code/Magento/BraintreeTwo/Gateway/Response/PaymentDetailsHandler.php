@@ -67,12 +67,9 @@ class PaymentDetailsHandler implements HandlerInterface
         $transaction = $this->subjectReader->readTransaction($response);
         /** @var OrderPaymentInterface $payment */
         $payment = $paymentDO->getPayment();
-        ContextHelper::assertOrderPayment($payment);
 
-        $payment->setTransactionId($transaction->id);
         $payment->setCcTransId($transaction->id);
         $payment->setLastTransId($transaction->id);
-        $payment->setIsTransactionClosed(false);
 
         //remove previously set payment nonce
         $payment->unsAdditionalInformation(DataAssignObserver::PAYMENT_METHOD_NONCE);

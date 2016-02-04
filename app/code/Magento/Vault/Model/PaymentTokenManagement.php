@@ -213,10 +213,13 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
         if (!empty($tokenDuplicate)) {
             if ($token->getIsVisible() || $tokenDuplicate->getIsVisible()) {
                 $token->setEntityId($tokenDuplicate->getEntityId());
+                $token->setIsVisible(true);
+            } elseif ($token->getIsVisible() === $tokenDuplicate->getIsVisible()) {
+                $token->setEntityId($tokenDuplicate->getEntityId());
             } else {
                 $token->setPublicHash(
                     $this->encryptor->getHash(
-                        $token->getPublicHash() . $token->getCreatedAt()
+                        $token->getPublicHash() . $token->getGatewayToken()
                     )
                 );
             }
