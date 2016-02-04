@@ -69,7 +69,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Http\Client\TransactionSubmitForSettlement::placeRequest
+     * @covers \Magento\BraintreeTwo\Gateway\Http\Client\TransactionSubmitForSettlement::process
      */
     public function testPlaceRequest()
     {
