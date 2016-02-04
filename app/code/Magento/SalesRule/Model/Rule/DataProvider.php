@@ -15,6 +15,7 @@ use Magento\Framework\Convert\DataObject;
 
 /**
  * Class DataProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -63,7 +64,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * DataProvider constructor.
      *
-*@param string $name
+     * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
@@ -125,7 +126,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ];
         }
 
-        $rule = $rule = $this->coreRegistry->registry('current_promo_quote_rule');
+        $rule = $rule = $this->coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
         $labels = $rule->getStoreLabels();
 
         $this->meta = [
