@@ -48,6 +48,19 @@
         <copy file="${project.basedir}/dev/tests/integration/etc/install-config-mysql.travis.php.dist" tofile="${project.basedir}/dev/tests/integration/etc/install-config-mysql.php" overwrite="true"/>
     </target>
 
+    <target name="integration_prepare" description="prepare part1 and part2 suites">
+        <exec executable="bash" dir="${project.basedir}/dev/tests/integration">
+            <arg value="IntegationTestsForTravis.sh"/>
+            <arg value="2"/>
+        </exec>
+    </target>
+
+    <target name="integration_part_1" description="integration test part 1" depends="composer,integration_db,integration_prepare">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/integration" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/integration/phpunit.xml.travis1"/>
+        </exec>
+    </target>
+
     <target name="integration_integrity" description="integration test integrity check" depends="composer,integration_db">
         <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/integration" checkreturn="true" passthru="true">
             <arg value="--configuration=${project.basedir}/dev/tests/integration/phpunit.xml.dist"/>
