@@ -11,6 +11,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\Address;
@@ -274,6 +275,8 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             foreach ($e->getErrors() as $error) {
                 $this->messageManager->addError($this->escaper->escapeHtml($error->getMessage()));
             }
+        } catch (LocalizedException $e) {
+            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t save the customer.'));
         }
