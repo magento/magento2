@@ -1633,7 +1633,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         $storeId = $this->getStoreId();
-        if ($attribute == 'price' && $storeId != 0) {
+        if ($attribute == 'price' && $storeId != 0 && $this->_productLimitationFilters->isUsePriceIndex()) {
             $this->addPriceData();
             $this->getSelect()->order("price_index.min_price {$dir}");
 
