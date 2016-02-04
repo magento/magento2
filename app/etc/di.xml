@@ -1100,6 +1100,11 @@
             <argument name="selectRenderer" xsi:type="object">Magento\Framework\DB\Select\RendererProxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Data\Form\Filter\Date">
+        <arguments>
+            <argument name="localeResolver" xsi:type="object">Magento\Framework\Locale\ResolverInterface</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\DB\Select\SelectRenderer">
         <arguments>
             <argument name="renderers" xsi:type="array">
