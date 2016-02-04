@@ -9,6 +9,11 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
+     * @var string
+     */
+    protected $_nameInLayout = 'store_view_labels';
+
+    /**
      * {@inheritdoc}
      * @codeCoverageIgnore
      */
@@ -137,10 +142,12 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
                         'text',
                         [
                             'name' => 'store_labels[' . $store->getId() . ']',
-                            'required' => false,
+                            'title' => $store->getName(),
                             'label' => $store->getName(),
+                            'required' => false,
                             'value' => isset($labels[$store->getId()]) ? $labels[$store->getId()] : '',
-                            'fieldset_html_class' => 'store'
+                            'fieldset_html_class' => 'store',
+                            'data-form-part' => 'sales_rule_form'
                         ]
                     );
                 }
