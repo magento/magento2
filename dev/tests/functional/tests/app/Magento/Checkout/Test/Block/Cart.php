@@ -13,7 +13,6 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Paypal\Test\Block\Sandbox\ExpressLogin;
 
 /**
  * Class Cart
@@ -158,6 +157,17 @@ class Cart extends Block
     public function paypalCheckout()
     {
         $this->_rootElement->find($this->paypalCheckoutButton)->click();
+    }
+
+    /**
+     * Click "Check out with PayPal" button.
+     */
+    public function inContextPaypalCheckout()
+    {
+        $this->_rootElement->find($this->inContextPaypalCheckoutButton)->click();
+        $this->browser->selectWindow();
+        $this->waitForFormLoaded();
+        $this->browser->closeWindow();
     }
 
     /**
