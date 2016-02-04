@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Paypal\Test\TestCase\InContextExpressCheckoutFromShoppingCartTest" summary="In-Context Checkout with PayPal Express Checkout (API Credentials) from shopping cart " ticketId="MAGETWO-47213">
+        <variation name="InContextExpressCheckoutFromShoppingCartTestVariation1" summary="In-Context Checkout with PayPal Express Checkout (API Credentials) from shopping cart " ticketId="MAGETWO-47213">
+            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="paypalPrices" xsi:type="array">
+                <item name="total" xsi:type="string">131.00</item>
+            </data>
+            <data name="prices" xsi:type="array">
+                <item name="subTotal" xsi:type="string">131.00</item>
+                <item name="taxTotal" xsi:type="string">10.81</item>
+                <item name="shippingTotal" xsi:type="string">15.00</item>
+                <item name="grandTotal" xsi:type="string">156.81</item>
+            </data>
+            <data name="cart/data/subtotal" xsi:type="string">10.00</data>
+            <data name="cart/data/tax_amount" xsi:type="string">0.83</data>
+            <data name="cart/data/shipping_amount" xsi:type="string">5.00</data>
+            <data name="cart/data/grand_total" xsi:type="string">15.83</data>
+            <data name="configData" xsi:type="string">paypal_express, paypal_express_in_context</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <constraint name="Magento\Paypal\Test\Constraint\assertExpressSuccessfullyCancelledMessage" />
+        </variation>
+    </testCase>
+</config>
