@@ -5,11 +5,10 @@
  */
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
-use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Controller\Account\EditPost;
 use Magento\Customer\Model\CustomerExtractor;
-use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Customer\Helper\AccountManagement;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
@@ -65,9 +64,9 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     protected $emailNotification;
 
     /**
-     * @var CurrentCustomer | \PHPUnit_Framework_MockObject_MockObject
+     * @var AccountManagement | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $currentCustomerHelper;
+    protected $accountManagementHelper;
 
     /**
      * @var RedirectFactory | \PHPUnit_Framework_MockObject_MockObject
@@ -117,7 +116,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->currentCustomerHelper = $this->getMockBuilder('Magento\Customer\Helper\Session\CurrentCustomer')
+        $this->accountManagementHelper = $this->getMockBuilder('Magento\Customer\Helper\AccountManagement')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -133,7 +132,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             $this->customerRepository,
             $this->validator,
             $this->customerExtractor,
-            $this->currentCustomerHelper,
+            $this->accountManagementHelper,
             $this->emailNotification
         );
     }
@@ -215,9 +214,9 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with('current_password')
             ->willReturn($currentPassword);
 
-        $this->currentCustomerHelper->expects($this->once())
-            ->method('validatePassword')
-            ->with($currentPassword)
+        $this->accountManagementHelper->expects($this->once())
+            ->method('validatePasswordAndLockStatus')
+            ->with($currentCustomerMock, $currentPassword)
             ->willReturn(true);
 
         $this->customerRepository->expects($this->once())
@@ -302,9 +301,9 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn($password);
 
         $exception = new \Magento\Framework\Exception\InvalidEmailOrPasswordException(__($errorMessage));
-        $this->currentCustomerHelper->expects($this->once())
-            ->method('validatePassword')
-            ->with($password)
+        $this->accountManagementHelper->expects($this->once())
+            ->method('validatePasswordAndLockStatus')
+            ->with($currentCustomerMock, $password)
             ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())
@@ -672,9 +671,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
             $this->messageManager->expects($this->any())
                 ->method('addException')
-                ->with($exception, __('We can\'t save the customer.')
-                    . $exception->getMessage()
-                    . '<pre>' . $exception->getTraceAsString() . '</pre>')
+                ->with($exception, __('We can\'t save the customer.'))
                 ->willReturnSelf();
         }
 
