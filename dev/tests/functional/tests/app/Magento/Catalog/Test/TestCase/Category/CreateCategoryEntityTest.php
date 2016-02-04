@@ -30,7 +30,7 @@ class CreateCategoryEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'MX';
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
     /**
@@ -69,6 +69,7 @@ class CreateCategoryEntityTest extends Injectable
      */
     public function test(Category $category, $addCategory)
     {
+        $this->markTestIncomplete('MAGETWO-48731');
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($category, false);
         $this->catalogCategoryIndex->getTreeCategories()->$addCategory();

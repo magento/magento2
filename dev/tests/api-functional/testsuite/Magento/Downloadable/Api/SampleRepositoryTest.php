@@ -34,6 +34,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
     protected function setUp()
     {
+        $this->markTestSkipped('Test skiped due to MAGETWO-46832');
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/downloadable-product/downloadable-links/samples',

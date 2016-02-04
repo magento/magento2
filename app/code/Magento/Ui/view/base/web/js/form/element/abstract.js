@@ -6,9 +6,10 @@
 define([
     'underscore',
     'mageUtils',
+    'uiLayout',
     'uiElement',
     'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, Element, validator) {
+], function (_, utils, layout, Element, validator) {
     'use strict';
 
     return Element.extend({
@@ -33,6 +34,12 @@ define([
             isDifferedFromDefault: false,
             showFallbackReset: false,
             additionalClasses: {},
+            switcherConfig: {
+                component: 'Magento_Ui/js/form/switcher',
+                name: '${ $.name }_switcher',
+                target: '${ $.name }',
+                property: 'value'
+            },
             valueUpdate: 'input',
 
             listens: {
@@ -56,7 +63,8 @@ define([
 
             this._super()
                 .setInitialValue()
-                ._setClasses();
+                ._setClasses()
+                .initSwitcher();
 
             return this;
         },
@@ -103,6 +111,19 @@ define([
                 inputName: utils.serializeName(name.join('.')),
                 valueUpdate: valueUpdate
             });
+
+            return this;
+        },
+
+        /**
+         * Initializes switcher element instance.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        initSwitcher: function () {
+            if (this.switcherConfig.enabled) {
+                layout([this.switcherConfig]);
+            }
 
             return this;
         },
@@ -169,8 +190,6 @@ define([
             return this.normalizeData(value);
         },
 
-
-
         /**
          * Sets 'value' as 'hidden' propertie's value, triggers 'toggle' event,
          * sets instance's hidden identifier in params storage based on
@@ -180,6 +199,76 @@ define([
          */
         setVisible: function (isVisible) {
             this.visible(isVisible);
+
+            return this;
+        },
+
+        /**
+         * Show element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        show: function () {
+            this.visible(true);
+
+            return this;
+        },
+
+        /**
+         * Hide element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        hide: function () {
+            this.visible(false);
+
+            return this;
+        },
+
+        /**
+         * Disable element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        disable: function() {
+            this.disabled(true);
+
+            return this;
+        },
+
+        /**
+         * Enable element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        enable: function() {
+            this.disabled(false);
+
+            return this;
+        },
+
+        /**
+         *
+         * @param {(String|Object)} rule
+         * @param {(Object|Boolean)} [options]
+         * @returns {Abstract} Chainable.
+         */
+        setValidation: function (rule, options) {
+            var rules =  utils.copy(this.validation),
+                changed;
+
+            if (_.isObject(rule)) {
+                _.extend(this.validation, rule)
+            } else {
+                this.validation[rule] = options;
+            }
+
+            changed = utils.compare(rules, this.validation).equal;
+
+            if (changed) {
+                this.required(!!rules['required-entry']);
+                this.validate();
+            }
 
             return this;
         },
@@ -208,7 +297,7 @@ define([
          * @returns {Boolean}
          */
         hasChanged: function () {
-            var notEqual = this.value() != this.initialValue;
+            var notEqual = this.value() !== this.initialValue;
 
             return !this.visible() ? false : notEqual;
         },

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\BraintreeTwo\Block\Payment">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\BraintreeTwo\Model\Ui\ConfigProvider</argument>
+        </arguments>
+    </type>
+    <type name="Magento\BraintreeTwo\Block\Info">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item xsi:type="string" name="is_secure_mode">0</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item xsi:type="object" name="braintree">BraintreeTwoFacade</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="BraintreeTwoAuthorizeDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\AddressDataBuilder</item>
+                <item name="vault" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\VaultDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoVaultAuthorizeDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\AddressDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider">
+        <arguments>
+            <argument name="tokenUiComponentProviders" xsi:type="array">
+                <item name="braintreetwo" xsi:type="object">Magento\BraintreeTwo\Model\Ui\Adminhtml\TokenUiComponentProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\BraintreeTwo\Controller\Adminhtml\Payment\GetNonce">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
+    </type>
+</config>

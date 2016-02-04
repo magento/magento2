@@ -23,6 +23,16 @@ class TableBuilder
     protected $_connection;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    protected $resource;
+
+    /**
      * Check whether builder was executed
      *
      * @var bool
@@ -32,13 +42,17 @@ class TableBuilder
     /**
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\Framework\App\ResourceConnection $resource
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
+        $this->resource = $resource;
         $this->_connection = $resource->getConnection();
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -235,6 +249,7 @@ class TableBuilder
         $valueFieldSuffix,
         $storeId
     ) {
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         if (!empty($tableColumns)) {
             $columnsChunks = array_chunk(
                 $tableColumns,
@@ -255,7 +270,12 @@ class TableBuilder
                 $flatColumns = $this->_productIndexerHelper->getFlatColumns();
                 $iterationNum = 1;
 
-                $select->from(['e' => $entityTableName], $keyColumn);
+                $select->from(['et' => $entityTableName], $keyColumn)
+                    ->join(
+                        ['e' => $this->resource->getTableName('catalog_product_entity')],
+                        'e.entity_id = et.entity_id',
+                        []
+                    );
 
                 $selectValue->from(['e' => $temporaryTableName], $keyColumn);
 
@@ -263,9 +283,10 @@ class TableBuilder
                 foreach ($columnsList as $columnName => $attribute) {
                     $countTableName = 't' . $iterationNum++;
                     $joinCondition = sprintf(
-                        'e.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = 0',
+                        'e.%3$s = %1$s.%3$s AND %1$s.attribute_id = %2$d AND %1$s.store_id = 0',
                         $countTableName,
-                        $attribute->getId()
+                        $attribute->getId(),
+                        $metadata->getLinkField()
                     );
 
                     $select->joinLeft(

@@ -8,6 +8,8 @@
 
 namespace Magento\Paypal\Model;
 
+use Magento\Payment\Helper\Formatter;
+
 /**
  * Config model that is aware of all \Magento\Paypal payment methods
  * Works with PayPal-specific system configuration
@@ -16,6 +18,9 @@ namespace Magento\Paypal\Model;
  */
 class Config extends AbstractConfig
 {
+
+    use Formatter;
+
     /**
      * PayPal Standard - alias METHOD_WPP_EXPRESS
      */
@@ -1355,7 +1360,7 @@ class Config extends AbstractConfig
             'locale' => $this->_getSupportedLocaleCode($localeCode),
         ];
         if ($orderTotal) {
-            $params['ordertotal'] = sprintf('%.2F', $orderTotal);
+            $params['ordertotal'] = $this->formatPrice($orderTotal);
             if ($pal) {
                 $params['pal'] = $pal;
             }

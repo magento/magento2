@@ -94,7 +94,7 @@ class DiCompileCommand extends Command
     {
         $this->setName(self::NAME)
             ->setDescription(
-                'Generates DI configuration and all non-existing interceptors and factories'
+                'Generates DI configuration and all missing classes that can be auto-generated'
             );
         parent::configure();
     }
@@ -161,15 +161,9 @@ class DiCompileCommand extends Command
             'application' => $excludedModulePaths,
             'framework' => $excludedLibraryPaths
         ];
-        $dataAttributesIncludePattern = [
-            'extension_attributes' => '/\/etc\/([a-zA-Z_]*\/extension_attributes|extension_attributes)\.xml$/'
-        ];
         $this->configureObjectManager($output);
 
-        $operations = $this->getOperationsConfiguration(
-            $compiledPathsList,
-            $dataAttributesIncludePattern
-        );
+        $operations = $this->getOperationsConfiguration($compiledPathsList);
 
         try {
             $this->cleanupFilesystem(
@@ -286,12 +280,10 @@ class DiCompileCommand extends Command
      * Returns operations configuration
      *
      * @param array $compiledPathsList
-     * @param array $dataAttributesIncludePattern
      * @return array
      */
     private function getOperationsConfiguration(
-        array $compiledPathsList,
-        array $dataAttributesIncludePattern
+        array $compiledPathsList
     ) {
         $excludePatterns = [];
         foreach ($this->excludedPathsList as $excludedPaths) {
@@ -299,20 +291,11 @@ class DiCompileCommand extends Command
         }
 
         $operations = [
-            OperationFactory::PROXY_GENERATOR => [
-                'paths' => $compiledPathsList['application'],
-                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'],
-                'excludePatterns' => $excludePatterns,
-            ],
+            OperationFactory::PROXY_GENERATOR => [],
             OperationFactory::REPOSITORY_GENERATOR => [
                 'paths' => $compiledPathsList['application'],
-                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'],
-                'excludePatterns' => $excludePatterns,
             ],
-            OperationFactory::DATA_ATTRIBUTES_GENERATOR => [
-                'paths' => $compiledPathsList['application'],
-                'filePatterns' => $dataAttributesIncludePattern
-            ],
+            OperationFactory::DATA_ATTRIBUTES_GENERATOR => [],
             OperationFactory::APPLICATION_CODE_GENERATOR => [
                 'paths' => [
                     $compiledPathsList['application'],

@@ -186,16 +186,7 @@
         </column>
         <column name="is_active">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="array">
-                    <item name="disable" xsi:type="array">
-                        <item name="value" xsi:type="string">0</item>
-                        <item name="label" xsi:type="string" translate="true">Disabled</item>
-                    </item>
-                    <item name="enable" xsi:type="array">
-                        <item name="value" xsi:type="string">1</item>
-                        <item name="label" xsi:type="string" translate="true">Enabled</item>
-                    </item>
-                </item>
+                <item name="options" xsi:type="object">Magento\Cms\Model\Block\Source\IsActive</item>
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>

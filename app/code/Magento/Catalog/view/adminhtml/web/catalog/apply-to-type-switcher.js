@@ -4,9 +4,8 @@
  */
 define([
     'jquery',
-    'Magento_Catalog/js/product/weight-handler',
     'Magento_Catalog/catalog/type-events'
-], function ($, weight, productType) {
+], function ($, productType) {
     'use strict';
 
     return {
