@@ -16,6 +16,8 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
 {
     const WSDL_BASE_PATH = '/soap';
 
+    const DEFAULT_TESTS_XDEBUG_SESSION = 'PHPSTORM';
+
     /**
      * SOAP client initialized with different WSDLs.
      *
@@ -34,6 +36,11 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     protected $_converter;
 
     /**
+     * @var \Magento\Integration\Api\AdminTokenServiceInterface
+     */
+    protected $adminTokenService;
+
+    /**
      * Initialize dependencies.
      */
     public function __construct()
@@ -42,6 +49,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         $objectManager = Bootstrap::getObjectManager();
         $this->_soapConfig = $objectManager->get('Magento\Webapi\Model\Soap\Config');
         $this->_converter = $objectManager->get('Magento\Framework\Api\SimpleDataObjectConverter');
+        $this->adminTokenService = $objectManager->get('Magento\Integration\Api\AdminTokenServiceInterface');
         ini_set('default_socket_timeout', 120);
     }
 
@@ -77,7 +85,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         );
         /** Check if there is SOAP client initialized with requested WSDL available */
         if (!isset($this->_soapClients[$wsdlUrl])) {
-            $token = isset($serviceInfo['soap']['token']) ? $serviceInfo['soap']['token'] : null;
+            $token = isset($serviceInfo['soap']['token']) ? $serviceInfo['soap']['token'] : $this->getAdminToken();
             $this->_soapClients[$wsdlUrl] = $this->instantiateSoapClient($wsdlUrl, $token);
         }
         return $this->_soapClients[$wsdlUrl];
@@ -101,7 +109,8 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         $soapClient->setSoapVersion(SOAP_1_2);
         $soapClient->setStreamContext($context);
         if (TESTS_XDEBUG_ENABLED) {
-            $soapClient->setCookie('XDEBUG_SESSION', 1);
+            $xdebugSession = defined(TESTS_XDEBUG_SESSION) ? TESTS_XDEBUG_SESSION : self::DEFAULT_TESTS_XDEBUG_SESSION;
+            $soapClient->setCookie('XDEBUG_SESSION', $xdebugSession);
         }
         return $soapClient;
     }
@@ -237,5 +246,19 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             }
         }
         return $data;
+    }
+
+    /**
+     * Return admin token
+     *
+     * @return string|null Token created
+     */
+    private function getAdminToken()
+    {
+        $token = null;
+        if (defined('TESTS_WEBSERVICE_USER') && defined('TESTS_WEBSERVICE_APIKEY')) {
+            $token = $this->adminTokenService->createAdminAccessToken(TESTS_WEBSERVICE_USER, TESTS_WEBSERVICE_APIKEY);
+        }
+        return $token;
     }
 }
