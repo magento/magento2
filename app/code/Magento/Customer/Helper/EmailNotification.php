@@ -240,4 +240,21 @@ class EmailNotification extends \Magento\Framework\App\Helper\AbstractHelper
         $mergedCustomerData->setData('name', $this->customerViewHelper->getCustomerName($customer));
         return $mergedCustomerData;
     }
+
+    /**
+     * Get either first store ID from a set website or the provided as default
+     *
+     * @param CustomerInterface $customer
+     * @param int|string|null $defaultStoreId
+     * @return int
+     */
+    protected function getWebsiteStoreId($customer, $defaultStoreId = null)
+    {
+        if ($customer->getWebsiteId() != 0 && empty($defaultStoreId)) {
+            $storeIds = $this->storeManager->getWebsite($customer->getWebsiteId())->getStoreIds();
+            reset($storeIds);
+            $defaultStoreId = current($storeIds);
+        }
+        return $defaultStoreId;
+    }
 }
