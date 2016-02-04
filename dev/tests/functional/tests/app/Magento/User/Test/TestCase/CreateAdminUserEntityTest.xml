@@ -34,7 +34,7 @@
             <data name="user/data/is_active" xsi:type="string">Inactive</data>
             <data name="user/data/role_id/dataset" xsi:type="string">role::Administrators</data>
             <data name="isDuplicated" xsi:type="string">-</data>
-            <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+            <data name="user/data/current_password" xsi:type="string">123123q</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
