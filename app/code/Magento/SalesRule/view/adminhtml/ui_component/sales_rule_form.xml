@@ -225,7 +225,7 @@
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">use_auto_generation</item>
-                    <item name="note" xsi:type="string" translate="true">
+                    <item name="notice" xsi:type="string" translate="true">
                         If you select and save the rule you will be able to generate multiple coupon codes.
                     </item>
                     <item name="switcherConfig" xsi:type="array">
@@ -273,7 +273,7 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">uses_per_customer</item>
-                    <item name="note" xsi:type="string" translate="true">
+                    <item name="notice" xsi:type="string" translate="true">
                         Usage limit enforced for logged in customers only.
                     </item>
                 </item>
