@@ -136,9 +136,11 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeId')
             ->willReturn(ConfigurableModel::TYPE_CODE);
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
+        $extensionAttributes = $this->getMockBuilder(PaymentExtensionAttributes::class)
+            ->setMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
         $product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -181,6 +183,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(ConfigurableModel::TYPE_CODE);
 
         $extensionAttributes = $this->getMockBuilder(PaymentExtensionAttributes::class)
+            ->setMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
