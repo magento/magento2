@@ -13,6 +13,7 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Paypal\Test\Block\Sandbox\ExpressLogin;
 
 /**
  * Class Cart
@@ -58,6 +59,13 @@ class Cart extends Block
     protected $paypalCheckoutButton = '[data-action=checkout-form-submit]';
 
     /**
+     * Locator value for "Check out with PayPal" button.
+     *
+     * @var string
+     */
+    protected $inContextPaypalCheckoutButton = '#paypal-express-in-context-mini-cart';
+
+    /**
      * Locator value for "Check out with Braintree PayPal" button.
      *
      * @var string
@@ -84,6 +92,23 @@ class Cart extends Block
      * @var string
      */
     protected $deleteItemButton = 'a.action.action-delete';
+
+    /**
+     * PayPal load spinner.
+     *
+     * @var string
+     */
+    protected $preloaderSpinner = '#preloaderSpinner';
+
+    /**
+     * Wait for PayPal page is loaded.
+     *
+     * @return void
+     */
+    public function waitForFormLoaded()
+    {
+        $this->waitForElementNotVisible($this->preloaderSpinner);
+    }
 
     /**
      * Get Shopping Cart item.
@@ -133,17 +158,6 @@ class Cart extends Block
     public function paypalCheckout()
     {
         $this->_rootElement->find($this->paypalCheckoutButton)->click();
-    }
-
-    /**
-     * Click "Check out with Braintree PayPal" button.
-     *
-     * @return void
-     */
-    public function braintreePaypalCheckout()
-    {
-        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
-            ->click();
     }
 
     /**
