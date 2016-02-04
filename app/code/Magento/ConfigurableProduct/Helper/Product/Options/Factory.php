@@ -67,6 +67,7 @@ class Factory
     public function create(array $attributesData)
     {
         $options = [];
+
         foreach ($attributesData as $item) {
             $attribute = $this->attributeFactory->create();
             $eavAttribute = $this->productAttributeRepository->get($item[Attribute::KEY_ATTRIBUTE_ID]);
@@ -78,6 +79,7 @@ class Factory
             $this->updateAttributeData($attribute, $item);
             $options[] = $attribute;
         }
+
         return $options;
     }
 

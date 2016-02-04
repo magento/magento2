@@ -60,12 +60,14 @@ class Configurable
      * @param Helper $subject
      * @param ProductInterface $product
      * @return ProductInterface
+     * @throws \InvalidArgumentException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterInitialize(Helper $subject, ProductInterface $product)
     {
         $attributes = $this->request->getParam('attributes');
+        $productData = $this->request->getPost('product', []);
 
         if ($product->getTypeId() !== ConfigurableProduct::TYPE_CODE || empty($attributes)) {
             return $product;
@@ -76,6 +78,11 @@ class Configurable
             $product->setAttributeSetId($setId);
         }
         $extensionAttributes = $product->getExtensionAttributes();
+
+        if (!empty($productData['configurable_attributes_data'])) {
+            $configurableOptions = $this->optionsFactory->create($productData['configurable_attributes_data']);
+            $extensionAttributes->setConfigurableProductOptions($configurableOptions);
+        }
 
         $product->setNewVariationsAttributeSetId($setId);
 
