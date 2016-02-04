@@ -14,6 +14,7 @@ use Magento\Paypal\Helper\Data as PaypalHelper;
 
 /**
  * Class ExpressConfigProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExpressConfigProvider implements ConfigProviderInterface
 {
