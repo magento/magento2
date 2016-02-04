@@ -14,7 +14,7 @@
         <feature support="1" />
     </engine>
     <engine wrong="engine3">
-        <feature name="feature1" support="0" />
+        <feature name="feature1" support="wrong" />
         <feature name="feature2" support="0" />
     </engine>
 </engines>

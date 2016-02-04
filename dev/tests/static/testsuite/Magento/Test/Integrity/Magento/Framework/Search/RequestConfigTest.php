@@ -76,7 +76,7 @@ class RequestConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
             explode(
                 "\n",
                 "
-No match found for key-sequence ['sugegsted_search_container'] of keyref 'requestQueryReference'.
+No match found for key-sequence ['suggested_search_container'] of keyref 'requestQueryReference'.
 Element 'queryReference': No match found for key-sequence ['fulltext_search_query4'] of keyref 'queryReference'.
 "
             )
