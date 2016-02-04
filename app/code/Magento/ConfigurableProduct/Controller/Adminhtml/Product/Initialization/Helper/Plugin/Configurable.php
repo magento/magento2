@@ -87,7 +87,7 @@ class Configurable
     {
         $attributes = $this->request->getParam('attributes');
 
-        if ($product->getTypeId() !== ConfigurableProduct::TYPE_CODE && empty($attributes)) {
+        if ($product->getTypeId() !== ConfigurableProduct::TYPE_CODE || empty($attributes)) {
             return $product;
         }
 
