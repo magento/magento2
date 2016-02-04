@@ -29,7 +29,7 @@ class QueryParamsResolver extends \Magento\Framework\DataObject implements Query
      */
     public function setQuery($data)
     {
-        if ($this->_getData('query') != $data) {
+        if ($this->_getData('query') !== $data) {
             $this->unsetData('query_params');
             $this->setData('query', $data);
         }

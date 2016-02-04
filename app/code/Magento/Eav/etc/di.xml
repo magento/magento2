@@ -89,4 +89,8 @@
             <argument name="contextHandler" xsi:type="object">Magento\Eav\Model\ResourceModel\ContextHandler</argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Entity\AbstractEntity">
+        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
+    </type>
 </config>
+
