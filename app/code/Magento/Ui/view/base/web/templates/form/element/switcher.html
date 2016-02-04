@@ -4,7 +4,16 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="switcher">
-    <input type="checkbox" data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
-    <label class="switcher-label" data-text-on="Yes" data-text-off="No" data-bind="attr: { for: uid }"></label>
+<div class="admin__actions-switch" data-role="switcher">
+    <input class="admin__actions-switch-checkbox"
+           type="checkbox"
+           data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
+    <label class="admin__actions-switch-label"
+           data-bind="attr: { for: uid }">
+        <span data-bind="attr: {
+                   'data-text-on': $t('Yes'),
+                   'data-text-off': $t('No')
+              }"
+              class="admin__actions-switch-text"></span>
+    </label>
 </div>
