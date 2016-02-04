@@ -46,6 +46,7 @@ define([
                 visible: 'setPreview',
                 value: 'setDifferedFromDefault',
                 '${ $.provider }:data.reset': 'reset',
+                '${ $.provider }:data.overload': 'overload',
                 '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
             },
 
@@ -136,7 +137,10 @@ define([
         setInitialValue: function () {
             this.initialValue = this.getInitialValue();
 
-            this.value(this.initialValue);
+            if (this.value.peek() !== this.initialValue) {
+                this.value(this.initialValue);
+            }
+
             this.on('value', this.onUpdate.bind(this));
 
             return this;
@@ -161,7 +165,7 @@ define([
             }
 
             _.extend(this.additionalClasses, {
-                required: this.required,
+                _required: this.required,
                 _error: this.error,
                 _warn: this.warn,
                 _disabled: this.disabled
@@ -316,6 +320,15 @@ define([
          */
         reset: function () {
             this.value(this.initialValue);
+            this.error(false);
+        },
+
+        /**
+         * Sets current state as initial.
+         */
+        overload: function () {
+            this.setInitialValue();
+            this.bubble('update', this.hasChanged());
         },
 
         /**

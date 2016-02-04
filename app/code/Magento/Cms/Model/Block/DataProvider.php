@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model\Block;
 
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Class DataProvider
@@ -19,9 +19,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $collection;
 
     /**
-     * @var FilterPool
+     * @var DataPersistorInterface
      */
-    protected $filterPool;
+    protected $dataPersistor;
 
     /**
      * @var array
@@ -35,7 +35,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $blockCollectionFactory
-     * @param FilterPool $filterPool
+     * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
      */
@@ -44,13 +44,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $blockCollectionFactory,
-        FilterPool $filterPool,
+        DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = []
     ) {
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $blockCollectionFactory->create();
-        $this->filterPool = $filterPool;
+        $this->dataPersistor = $dataPersistor;
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
@@ -66,6 +66,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $items = $this->collection->getItems();
         /** @var \Magento\Cms\Model\Block $block */
         foreach ($items as $block) {
+            $this->loadedData[$block->getId()] = $block->getData();
+        }
+
+        $data = $this->dataPersistor->get('cms_block');
+        if (!empty($data)) {
+            $block = $this->collection->getNewEmptyItem();
+            $block->setData($data);
             $this->loadedData[$block->getId()] = $block->getData();
         }
 

@@ -135,6 +135,7 @@ class UiComponentFactory extends DataObject
      * @param array $arguments
      * @return UiComponentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function create($identifier, $name = null, array $arguments = [])
     {
@@ -168,7 +169,10 @@ class UiComponentFactory extends DataObject
             }
             $components = array_filter($components);
             $componentArguments['components'] = $components;
-            $componentArguments['data'][self::IMPORT_CHILDREN_FROM_META] = true;
+
+            if (!isset($componentArguments['data'][self::IMPORT_CHILDREN_FROM_META])) {
+                $componentArguments['data'][self::IMPORT_CHILDREN_FROM_META] = false;
+            }
 
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create(

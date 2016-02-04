@@ -31,6 +31,7 @@ define(function (require) {
         fadeVisible:    require('./fadeVisible'),
         collapsible:    require('./collapsible'),
         staticChecked:  require('./staticChecked'),
+        simpleChecked:  require('./simple-checked'),
         repeat:         require('knockoutjs/knockout-repeat'),
         fastForEach:    require('knockoutjs/knockout-fast-foreach')
     };
