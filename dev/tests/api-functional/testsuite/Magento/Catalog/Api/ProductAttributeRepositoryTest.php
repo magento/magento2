@@ -74,52 +74,6 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertNotNull($response['items'][0]['attribute_id']);
     }
 
-    public function testGetListWithInCondition()
-    {
-        $searchCriteria = [
-            'searchCriteria' => [
-                'filter_groups' => [
-                    [
-                        'filters' => [
-                            [
-                                'field' => 'attribute_code',
-                                'value' => 'name,sku',
-                                'condition_type' => 'in',
-                            ],
-                        ],
-                    ],
-                ],
-                'current_page' => 1,
-                'page_size' => 2,
-            ],
-            'entityTypeCode' => \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
-        ];
-
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'GetList',
-            ],
-        ];
-        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
-
-        $this->assertArrayHasKey('search_criteria', $response);
-        $this->assertArrayHasKey('total_count', $response);
-        $this->assertArrayHasKey('items', $response);
-
-        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
-        $this->assertTrue($response['total_count'] > 0);
-        $this->assertTrue(count($response['items']) > 0);
-
-        $this->assertNotNull($response['items'][0]['attribute_code']);
-        $this->assertNotNull($response['items'][0]['attribute_id']);
-    }
-
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
      */
