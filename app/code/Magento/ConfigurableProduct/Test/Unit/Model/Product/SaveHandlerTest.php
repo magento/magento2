@@ -40,11 +40,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     private $configurable;
 
     /**
-     * @var CollectionFactory|MockObject
-     */
-    private $collectionFactory;
-
-    /**
      * @var ProductAttributeRepositoryInterface|MockObject
      */
     private $productRepository;

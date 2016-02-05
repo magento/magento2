@@ -16,6 +16,11 @@ use Magento\Framework\Model\Entity\EntityMetadata;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Class ConfigurableTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
