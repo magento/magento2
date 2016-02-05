@@ -72,6 +72,17 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     }
 
     /**
+     * Retrieve Entity Primary Key
+     *
+     * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
+     * @return string
+     */
+    protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
+    {
+        return $entity->getLinkField();
+    }
+
+    /**
      * Set store scope
      *
      * @param int|string|\Magento\Store\Model\Store $store

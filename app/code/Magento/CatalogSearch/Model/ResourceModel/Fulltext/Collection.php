@@ -7,9 +7,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Search\Adapter\Mysql\Adapter;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use Magento\Framework\Search\Response\Aggregation\Value;
 use Magento\Framework\Search\Response\QueryResponse;
 
 /**
@@ -38,13 +36,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     private $searchEngine;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $queryText;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $order = null;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $searchRequestName;
 
     /**
