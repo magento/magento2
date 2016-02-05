@@ -55,7 +55,7 @@
     .lib-dropdown();
 }
 </code></pre></div></article><article id="dropdown-variables" class="section"><div class="docs"><a href="#dropdown-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="dropdown-variables">Drop-down variables</h1>
-<p>  <pre>
+  <pre>
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
@@ -67,263 +67,264 @@
         <tr>
             <th>@_toggle-selector</th>
             <td>-</td>
-            <td class="vars_value">~&quot;.action.toggle&quot;</td>
+            <td class="vars_value">~".action.toggle"</td>
             <td class="vars_value">Selector</td>
             <td>Toggle selector</td>
         </tr>
         <tr>
             <th>@_options-selector</th>
             <td>-</td>
-            <td class="vars_value">~&quot;ul.dropdown&quot;</td>
+            <td class="vars_value">~"ul.dropdown"</td>
             <td class="vars_value">Selector</td>
             <td>Options selector</td>
-        </tr></p>
-<textarea class="preview-code" spellcheck="false">    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-actions-padding&lt;/th&gt;
-        &lt;td&gt;@dropdown-actions__padding&lt;/td&gt;
-        &lt;td class="vars_value"&gt;false&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle element padding&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-min-width&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__min-width&lt;/td&gt;
-        &lt;td class="vars_value"&gt;100%&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down min width value&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-width&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__width&lt;/td&gt;
-        &lt;td class="vars_value"&gt;false&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list width value&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-height&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__height&lt;/td&gt;
-        &lt;td class="vars_value"&gt;false&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list height value&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-margin-top&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__margin-top&lt;/td&gt;
-        &lt;td class="vars_value"&gt;4px&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list margin-top value&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th colspan="5" class="vars_section"&gt;Drop-down list&lt;/th&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-position-top&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__position-top&lt;/td&gt;
-        &lt;td class="vars_value"&gt;100%&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list position: top&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-position-right&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__position-right&lt;/td&gt;
-        &lt;td class="vars_value"&gt;false&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list position: right&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-position-bottom&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__position-bottom&lt;/td&gt;
-        &lt;td class="vars_value"&gt;false&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list position: bottom&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-position-left&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__position-left&lt;/td&gt;
-        &lt;td class="vars_value"&gt;false&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list position: left&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-background&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__background&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@color-white&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list background&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-border&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__border&lt;/td&gt;
-        &lt;td class="vars_value"&gt;1px solid #bbb&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list border&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-pointer&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__pointer&lt;/td&gt;
-        &lt;td class="vars_value"&gt;true&lt;/td&gt;
-        &lt;td class="vars_value"&gt;true | false&lt;/td&gt;
-        &lt;td&gt;Drop-down list pointer is visible&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-pointer-border&lt;/th&gt;
-        &lt;td&gt;@dropdown-list-pointer__border&lt;/td&gt;
-        &lt;td class="vars_value"&gt;#bbb&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list pointer border&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-pointer-position&lt;/th&gt;
-        &lt;td&gt;@dropdown-list-pointer__position&lt;/td&gt;
-        &lt;td class="vars_value"&gt;left&lt;/td&gt;
-        &lt;td class="vars_value"&gt;left | right&lt;/td&gt;
-        &lt;td&gt;Drop-down pointer position&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-pointer-position-top&lt;/th&gt;
-        &lt;td&gt;@dropdown-list-pointer__position-top&lt;/td&gt;
-        &lt;td class="vars_value"&gt;-12px&lt;/td&gt;
-        &lt;td class="vars_value"&gt;value&lt;/td&gt;
-        &lt;td&gt;Drop-down pointer top position&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-pointer-position-left-right&lt;/th&gt;
-        &lt;td&gt;@dropdown-list-pointer__position-left-right&lt;/td&gt;
-        &lt;td class="vars_value"&gt;10px&lt;/td&gt;
-        &lt;td class="vars_value"&gt;value&lt;/td&gt;
-        &lt;td&gt;Drop-down pointer left or right position&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-item-border&lt;/th&gt;
-        &lt;td&gt;@dropdown-list-item__border&lt;/td&gt;
-        &lt;td class="vars_value"&gt;0&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list item border&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-item-padding&lt;/th&gt;
-        &lt;td&gt;@dropdown-list-item__padding&lt;/td&gt;
-        &lt;td class="vars_value"&gt;3px @indent__xs&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list item padding&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-item-margin&lt;/th&gt;
-        &lt;td&gt;@dropdown-list-item__margin&lt;/td&gt;
-        &lt;td class="vars_value"&gt;0&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list item margin&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-item-hover&lt;/th&gt;
-        &lt;td&gt;@dropdown-list-item__hover&lt;/td&gt;
-        &lt;td class="vars_value"&gt;#e8e8e8&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list item hovered background&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-shadow&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__shadow&lt;/td&gt;
-        &lt;td class="vars_value"&gt;0 3px 3px rgba(0,0,0,.15)&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list shadow&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-list-z-index&lt;/th&gt;
-        &lt;td&gt;@dropdown-list__z-index&lt;/td&gt;
-        &lt;td class="vars_value"&gt;100&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down list z-index&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th colspan="5" class="vars_section"&gt;Drop-down icon&lt;/th&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_dropdown-toggle-icon-content&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__content&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@icon-pointer-down&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon symbol code for default state&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th nowrap&gt;@_dropdown-toggle-active-icon-content&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__active__content&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@icon-pointer-up&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon symbol code for active state&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__font&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@button-icon__font&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon font&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font-size&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__font-size&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@button-icon__font-size&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon font size&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font-line-height&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__font-line-height&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@button-icon__line-height&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon line height&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font-color&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__font-color&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@button-icon__color&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon color&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font-color-hover&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__font-color-hover&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@button-icon__hover__font-color&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon hovered color&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font-color-active&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__font-color-active&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@button-icon__active__font-color&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon active color&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font-margin&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__font-margin&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@button-icon__margin&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon margin&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font-position&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__position&lt;/td&gt;
-        &lt;td class="vars_value"&gt;after&lt;/td&gt;
-        &lt;td class="vars_value"&gt;before | after&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon position&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font-vertical-align&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__font-vertical-align&lt;/td&gt;
-        &lt;td class="vars_value" nowrap="nowrap"&gt;@button-icon__vertical-align&lt;/td&gt;
-        &lt;td class="vars_value"&gt;'' | false | value&lt;/td&gt;
-        &lt;td&gt;Drop-down toggle icon vertical align&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;th&gt;@_icon-font-text-hide&lt;/th&gt;
-        &lt;td&gt;@dropdown-toggle-icon__text-hide&lt;/td&gt;
-        &lt;td class="vars_value"&gt;@button-icon__text-hide&lt;/td&gt;
-        &lt;td class="vars_value"&gt;true | false&lt;/td&gt;
-        &lt;td&gt;Text in the tag, that contains icon, is hidden&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;</textarea><p>  </pre></p>
-</div><div class="code"><pre><code></code></pre></div></article><article id="dropdown-with-icon-customization" class="section"><div class="docs"><a href="#dropdown-with-icon-customization" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="dropdown-with-icon-customization">Drop-down with icon customization</h1>
+        </tr>
+        <tr>
+            <th>@_dropdown-actions-padding</th>
+            <td>@dropdown-actions__padding</td>
+            <td class="vars_value">false</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle element padding</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-min-width</th>
+            <td>@dropdown-list__min-width</td>
+            <td class="vars_value">100%</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down min width value</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-width</th>
+            <td>@dropdown-list__width</td>
+            <td class="vars_value">false</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list width value</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-height</th>
+            <td>@dropdown-list__height</td>
+            <td class="vars_value">false</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list height value</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-margin-top</th>
+            <td>@dropdown-list__margin-top</td>
+            <td class="vars_value">4px</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list margin-top value</td>
+        </tr>
+        <tr>
+            <th colspan="5" class="vars_section">Drop-down list</th>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-position-top</th>
+            <td>@dropdown-list__position-top</td>
+            <td class="vars_value">100%</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list position: top</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-position-right</th>
+            <td>@dropdown-list__position-right</td>
+            <td class="vars_value">false</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list position: right</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-position-bottom</th>
+            <td>@dropdown-list__position-bottom</td>
+            <td class="vars_value">false</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list position: bottom</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-position-left</th>
+            <td>@dropdown-list__position-left</td>
+            <td class="vars_value">false</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list position: left</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-background</th>
+            <td>@dropdown-list__background</td>
+            <td class="vars_value">@color-white</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list background</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-border</th>
+            <td>@dropdown-list__border</td>
+            <td class="vars_value">1px solid #bbb</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list border</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-pointer</th>
+            <td>@dropdown-list__pointer</td>
+            <td class="vars_value">true</td>
+            <td class="vars_value">true | false</td>
+            <td>Drop-down list pointer is visible</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-pointer-border</th>
+            <td>@dropdown-list-pointer__border</td>
+            <td class="vars_value">#bbb</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list pointer border</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-pointer-position</th>
+            <td>@dropdown-list-pointer__position</td>
+            <td class="vars_value">left</td>
+            <td class="vars_value">left | right</td>
+            <td>Drop-down pointer position</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-pointer-position-top</th>
+            <td>@dropdown-list-pointer__position-top</td>
+            <td class="vars_value">-12px</td>
+            <td class="vars_value">value</td>
+            <td>Drop-down pointer top position</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-pointer-position-left-right</th>
+            <td>@dropdown-list-pointer__position-left-right</td>
+            <td class="vars_value">10px</td>
+            <td class="vars_value">value</td>
+            <td>Drop-down pointer left or right position</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-item-border</th>
+            <td>@dropdown-list-item__border</td>
+            <td class="vars_value">0</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list item border</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-item-padding</th>
+            <td>@dropdown-list-item__padding</td>
+            <td class="vars_value">3px @indent__xs</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list item padding</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-item-margin</th>
+            <td>@dropdown-list-item__margin</td>
+            <td class="vars_value">0</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list item margin</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-item-hover</th>
+            <td>@dropdown-list-item__hover</td>
+            <td class="vars_value">#e8e8e8</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list item hovered background</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-shadow</th>
+            <td>@dropdown-list__shadow</td>
+            <td class="vars_value">0 3px 3px rgba(0,0,0,.15)</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list shadow</td>
+        </tr>
+        <tr>
+            <th>@_dropdown-list-z-index</th>
+            <td>@dropdown-list__z-index</td>
+            <td class="vars_value">100</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down list z-index</td>
+        </tr>
+        <tr>
+            <th colspan="5" class="vars_section">Drop-down icon</th>
+        </tr>
+        <tr>
+            <th>@_dropdown-toggle-icon-content</th>
+            <td>@dropdown-toggle-icon__content</td>
+            <td class="vars_value">@icon-pointer-down</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon symbol code for default state</td>
+        </tr>
+        <tr>
+            <th nowrap>@_dropdown-toggle-active-icon-content</th>
+            <td>@dropdown-toggle-icon__active__content</td>
+            <td class="vars_value">@icon-pointer-up</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon symbol code for active state</td>
+        </tr>
+        <tr>
+            <th>@_icon-font</th>
+            <td>@dropdown-toggle-icon__font</td>
+            <td class="vars_value">@button-icon__font</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon font</td>
+        </tr>
+        <tr>
+            <th>@_icon-font-size</th>
+            <td>@dropdown-toggle-icon__font-size</td>
+            <td class="vars_value">@button-icon__font-size</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon font size</td>
+        </tr>
+        <tr>
+            <th>@_icon-font-line-height</th>
+            <td>@dropdown-toggle-icon__font-line-height</td>
+            <td class="vars_value">@button-icon__line-height</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon line height</td>
+        </tr>
+        <tr>
+            <th>@_icon-font-color</th>
+            <td>@dropdown-toggle-icon__font-color</td>
+            <td class="vars_value">@button-icon__color</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon color</td>
+        </tr>
+        <tr>
+            <th>@_icon-font-color-hover</th>
+            <td>@dropdown-toggle-icon__font-color-hover</td>
+            <td class="vars_value">@button-icon__hover__font-color</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon hovered color</td>
+        </tr>
+        <tr>
+            <th>@_icon-font-color-active</th>
+            <td>@dropdown-toggle-icon__font-color-active</td>
+            <td class="vars_value">@button-icon__active__font-color</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon active color</td>
+        </tr>
+        <tr>
+            <th>@_icon-font-margin</th>
+            <td>@dropdown-toggle-icon__font-margin</td>
+            <td class="vars_value">@button-icon__margin</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon margin</td>
+        </tr>
+        <tr>
+            <th>@_icon-font-position</th>
+            <td>@dropdown-toggle-icon__position</td>
+            <td class="vars_value">after</td>
+            <td class="vars_value">before | after</td>
+            <td>Drop-down toggle icon position</td>
+        </tr>
+        <tr>
+            <th>@_icon-font-vertical-align</th>
+            <td>@dropdown-toggle-icon__font-vertical-align</td>
+            <td class="vars_value" nowrap="nowrap">@button-icon__vertical-align</td>
+            <td class="vars_value">'' | false | value</td>
+            <td>Drop-down toggle icon vertical align</td>
+        </tr>
+        <tr>
+            <th>@_icon-font-text-hide</th>
+            <td>@dropdown-toggle-icon__text-hide</td>
+            <td class="vars_value">@button-icon__text-hide</td>
+            <td class="vars_value">true | false</td>
+            <td>Text in the tag, that contains icon, is hidden</td>
+        </tr>
+    </table>
+  </pre>
+</div></article><article id="dropdown-with-icon-customization" class="section"><div class="docs"><a href="#dropdown-with-icon-customization" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="dropdown-with-icon-customization">Drop-down with icon customization</h1>
 <p>  To customize drop-down icon symbol, specify variables for default state icon code and active state icon code:</p>
 <pre><code class="lang-css">  @_dropdown-toggle-icon-content: @icon-expand,
   @_dropdown-toggle-active-icon-content: @icon-collapse</code></pre>
@@ -522,7 +523,7 @@
         </tr>
         <tr>
             <th>@_dropdown-split-list-margin-top</th>
-            <td></td>
+            <td>@dropdown-split-list__margin-top</td>
             <td class="vars_value">4px</td>
             <td class="vars_value">'' | false | value</td>
             <td>Split button margin-top</td>
