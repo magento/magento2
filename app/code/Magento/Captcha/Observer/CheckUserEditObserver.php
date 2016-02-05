@@ -97,7 +97,7 @@ class CheckUserEditObserver implements ObserverInterface
         $this->redirect = $redirect;
         $this->captchaStringResolver = $captchaStringResolver;
         $this->accountManagementHelper = $accountManagementHelper;
-        $this->session = $customerSession;
+        $this->customerSession = $customerSession;
         $this->scopeConfig = $scopeConfig;
         $this->customerRepository = $customerRepository;
     }
@@ -121,7 +121,7 @@ class CheckUserEditObserver implements ObserverInterface
                 )
             )) {
                 try {
-                    $customer = $this->customerRepository->getById($this->session->getCustomerId());
+                    $customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
                     $this->accountManagementHelper->processCustomerLockoutData($customer->getId());
                     $this->customerRepository->save($customer);
                 } catch (NoSuchEntityException $e) {
@@ -145,10 +145,10 @@ class CheckUserEditObserver implements ObserverInterface
      */
     protected function workWithLock()
     {
-        $customerModel = $this->session->getCustomer();
+        $customerModel = $this->customerSession->getCustomer();
         if ($customerModel->isCustomerLocked()) {
-            $this->session->logout();
-            $this->session->start();
+            $this->customerSession->logout();
+            $this->customerSession->start();
             $message = __(
                 'The account is locked. Please wait and try again or contact %1.',
                 $this->scopeConfig->getValue('contact/email/recipient_email')
