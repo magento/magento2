@@ -12,7 +12,7 @@
                 <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons" name="promo_sales_rule_edit_tab_coupons" as="promo_sales_rule_edit_tab_coupons">
                     <arguments>
                         <argument name="config" xsi:type="array">
-                            <item name="label" xsi:type="string" translate="true">Coupons</item>
+                            <item name="label" xsi:type="string" translate="true">Manage Coupon Codes</item>
                             <item name="collapsible" xsi:type="boolean">true</item>
                             <item name="opened" xsi:type="boolean">false</item>
                             <item name="sortOrder" xsi:type="string">50</item>
