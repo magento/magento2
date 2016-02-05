@@ -6,7 +6,7 @@
 
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit;
 
-use Magento\SalesRule\Controller\RegistryConstants;
+use Magento\SalesRule\Model\RegistryConstants;
 
 class GenericButton
 {
@@ -45,7 +45,7 @@ class GenericButton
      */
     public function getRuleId()
     {
-        $salesRule = $this->registry->registry(RegistryConstants::CURRENT_SALES_RULE_ID);
+        $salesRule = $this->registry->registry(RegistryConstants::CURRENT_SALES_RULE);
         return $salesRule ? $salesRule->getId() : null;
     }
 

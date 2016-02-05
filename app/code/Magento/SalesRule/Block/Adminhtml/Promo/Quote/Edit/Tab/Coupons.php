@@ -66,7 +66,8 @@ class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\B
     }
 
     /**
-     * @param bool $canShow
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function setCanSHow($canShow)
     {

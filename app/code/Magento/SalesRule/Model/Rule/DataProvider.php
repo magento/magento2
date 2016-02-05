@@ -15,6 +15,7 @@ use Magento\Framework\Convert\DataObject;
 
 /**
  * Class DataProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -126,10 +127,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ];
         }
 
+        $rule = $rule = $this->coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
         /**
          * @todo Avoid using of registry
          */
-        $rule = $rule = $this->coreRegistry->registry('current_promo_quote_rule');
         $labels = $rule ? $rule->getStoreLabels() : [];
 
         return [
@@ -205,6 +206,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         /** @var Rule $rule */
         foreach ($items as $rule) {
             $rule->load($rule->getId());
+            $rule->setDiscountAmount($rule->getDiscountAmount() * 1);
+            $rule->setDiscountQty($rule->getDiscountQty() * 1);
+
             $this->loadedData[$rule->getId()] = $rule->getData();
         }
 
