@@ -12,7 +12,6 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessDeleteMessage" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotInGrid" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermNotOnFrontend" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymNotOnFrontend" />
         </variation>
     </testCase>
 </config>

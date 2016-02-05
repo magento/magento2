@@ -16,7 +16,6 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermInGrid" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermForm" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermOnFrontend" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSynonymOnFrontend" />
         </variation>
     </testCase>
 </config>
