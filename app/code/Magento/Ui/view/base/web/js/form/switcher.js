@@ -68,6 +68,7 @@ define([
             return this;
         },
 
+        /*eslint-disable eqeqeq*/
         /**
          *
          * @param {Object} rule - Rule object.
@@ -85,6 +86,8 @@ define([
 
             actions.forEach(this.applyAction, this);
         },
+
+        /*eslint-enable eqeqeq*/
 
         /**
          *
