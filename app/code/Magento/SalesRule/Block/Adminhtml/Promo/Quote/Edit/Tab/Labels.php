@@ -13,6 +13,15 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected $_nameInLayout = 'store_view_labels';
 
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $formFactory, $data);
+    }
+
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
@@ -83,7 +92,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $rule = $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
