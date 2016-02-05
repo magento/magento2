@@ -148,7 +148,7 @@ class CategoryProcessor
      * @param string $categoriesString
      * @param string $categoriesSeparator
      *
-     * @return this
+     * @return array
      */
     public function upsertCategories($categoriesString, $categoriesSeparator)
     {

@@ -923,14 +923,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'directory' => $directory
             ]
         );
-        $errors = $this->_model->setSource(
-            $source
-        )->setParameters(
-                [
-                    'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                    'entity' => 'catalog_product'
-                ]
-            )->validateData();
+        $errors = $this->_model->setSource($source)->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product'
+            ]
+        )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() === 0);
 

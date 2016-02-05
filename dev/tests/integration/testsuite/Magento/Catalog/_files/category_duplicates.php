@@ -29,29 +29,28 @@ $productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->cre
 $productModel->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setId(
-        1
-    )->setAttributeSetId(
-        4
-    )->setName(
-        'New Product'
-    )->setSku(
-        'simple3'
-    )->setPrice(
-        10
-    )->setTierPrice(
-        [0 => ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 8]]
-    )->setVisibility(
-        \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-    )->setStatus(
-        \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-    )->setWebsiteIds(
-        [1]
-    )->setCateroryIds(
-        []
-    )->setStockData(
-        ['qty' => 100, 'is_in_stock' => 1]
-    )->setCategoryIds(
-        [444]
-    )->save();
-
+    1
+)->setAttributeSetId(
+    4
+)->setName(
+    'New Product'
+)->setSku(
+    'simple3'
+)->setPrice(
+    10
+)->setTierPrice(
+    [0 => ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 8]]
+)->setVisibility(
+    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+)->setStatus(
+    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+)->setWebsiteIds(
+    [1]
+)->setCateroryIds(
+    []
+)->setStockData(
+    ['qty' => 100, 'is_in_stock' => 1]
+)->setCategoryIds(
+    [444]
+)->save();
 
