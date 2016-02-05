@@ -150,6 +150,17 @@ class Cart extends Block
     }
 
     /**
+     * Click "Check out with Braintree PayPal" button.
+     *
+     * @return void
+     */
+    public function braintreePaypalCheckout()
+    {
+        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
+            ->click();
+    }
+
+    /**
      * Click "Check out with PayPal" button.
      *
      * @return void
