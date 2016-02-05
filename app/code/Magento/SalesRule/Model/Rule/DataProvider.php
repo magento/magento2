@@ -63,7 +63,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * DataProvider constructor.
      *
-*@param string $name
+     * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
@@ -101,10 +101,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->salesRuleFactory = $salesRuleFactory;
         $this->coreRegistry = $registry;
         $this->initMeta();
+        $this->meta = array_replace_recursive($this->initMeta(), $this->meta);
     }
 
     /**
-     * @return void
+     * @return []
      */
     protected function initMeta()
     {
@@ -125,10 +126,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ];
         }
 
+        /**
+         * @todo Avoid using of registry
+         */
         $rule = $rule = $this->coreRegistry->registry('current_promo_quote_rule');
-        $labels = $rule->getStoreLabels();
+        $labels = $rule ? $rule->getStoreLabels() : [];
 
-        $this->meta = [
+        return [
             'rule_information' => [
                 'fields' => [
                     'website_ids' => [
