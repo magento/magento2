@@ -371,8 +371,11 @@ abstract class AbstractAction
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $linkField = $metadata->getLinkField();
+        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $productLinkField = $productMetadata->getLinkField();
+        $categoryLinkField = $categoryMetadata->getLinkField();
+
         return $this->connection->select()->from(
             ['cc' => $this->getTable('catalog_category_entity')],
             []
@@ -399,35 +402,36 @@ abstract class AbstractAction
             []
         )->joinInner(
             ['cpsd' => $this->getTable('catalog_product_entity_int')],
-            'cpsd.' . $linkField . ' = cpe.' . $linkField . ' AND cpsd.store_id = 0'
+            'cpsd.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpsd.store_id = 0'
                 . ' AND cpsd.attribute_id = ' . $statusAttributeId,
             []
         )->joinLeft(
             ['cpss' => $this->getTable('catalog_product_entity_int')],
-            'cpss.' . $linkField . ' = cpe.' . $linkField . ' AND cpss.attribute_id = cpsd.attribute_id' .
+            'cpss.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpss.attribute_id = cpsd.attribute_id' .
             ' AND cpss.store_id = ' .
             $store->getId(),
             []
         )->joinInner(
             ['cpvd' => $this->getTable('catalog_product_entity_int')],
-            'cpvd.' . $linkField . ' = cpe. ' . $linkField . ' AND cpvd.store_id = 0' .
+            'cpvd.' . $productLinkField . ' = cpe. ' . $productLinkField . ' AND cpvd.store_id = 0' .
             ' AND cpvd.attribute_id = ' .
             $visibilityAttributeId,
             []
         )->joinLeft(
             ['cpvs' => $this->getTable('catalog_product_entity_int')],
-            'cpvs.' . $linkField . ' = cpe.' . $linkField . ' AND cpvs.attribute_id = cpvd.attribute_id ' .
-            'AND cpvs.store_id = ' .
+            'cpvs.' . $productLinkField . ' = cpe.' . $productLinkField .
+            ' AND cpvs.attribute_id = cpvd.attribute_id ' . 'AND cpvs.store_id = ' .
             $store->getId(),
             []
         )->joinInner(
             ['ccad' => $this->getTable('catalog_category_entity_int')],
-            'ccad.entity_id = cc.entity_id AND ccad.store_id = 0' . ' AND ccad.attribute_id = ' . $isAnchorAttributeId,
+            'ccad.' . $categoryLinkField . ' = cc.' . $categoryLinkField . ' AND ccad.store_id = 0' .
+            ' AND ccad.attribute_id = ' . $isAnchorAttributeId,
             []
         )->joinLeft(
             ['ccas' => $this->getTable('catalog_category_entity_int')],
-            'ccas.entity_id = cc.entity_id AND ccas.attribute_id = ccad.attribute_id' .
-            ' AND ccas.store_id = ' .
+            'ccas.' . $categoryLinkField . ' = cc.' . $categoryLinkField
+            . ' AND ccas.attribute_id = ccad.attribute_id AND ccas.store_id = ' .
             $store->getId(),
             []
         )->where(
