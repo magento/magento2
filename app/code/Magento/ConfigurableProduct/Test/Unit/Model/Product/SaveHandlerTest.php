@@ -6,19 +6,15 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\OptionRepository;
 use Magento\ConfigurableProduct\Model\Product\SaveHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableModel;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
-use Magento\Framework\Model\Entity\EntityMetadata;
-use Magento\Framework\Model\Entity\MetadataPool;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -28,21 +24,10 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var OptionRepository|MockObject
      */
     private $optionRepository;
-
-    /**
-     * @var MetadataPool|MockObject
-     */
-    private $metadataPool;
-
-    /**
-     * @var EntityMetadata|MockObject
-     */
-    private $metadata;
 
     /**
      * @var ConfigurableFactory|MockObject
@@ -58,11 +43,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
      * @var CollectionFactory|MockObject
      */
     private $collectionFactory;
-
-    /**
-     * @var Collection|MockObject
-     */
-    private $attributesCollection;
 
     /**
      * @var ProductAttributeRepositoryInterface|MockObject
@@ -81,22 +61,16 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->optionRepository = $this->getMockBuilder(OptionRepository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->setMethods(['save', 'getList', 'deleteById'])
             ->getMock();
 
-        $this->initMetadataPoolMock();
-
         $this->initConfigurableFactoryMock();
-
-        $this->initCollectionFactoryMock();
 
         $this->productRepository = $this->getMock(ProductAttributeRepositoryInterface::class);
 
         $this->saveHandler = new SaveHandler(
             $this->optionRepository,
-            $this->metadataPool,
             $this->configurableFactory,
-            $this->collectionFactory,
             $this->productRepository
         );
     }
@@ -154,10 +128,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->productRepository->expects(static::never())
             ->method('get');
-        $this->metadataPool->expects(static::never())
-            ->method('getMetadata');
-        $this->collectionFactory->expects(static::never())
-            ->method('create');
 
         $entity = $this->saveHandler->execute('Entity', $product);
         static::assertSame($product, $entity);
@@ -171,8 +141,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $attributeId = 90;
         $sku = 'config-1';
         $id = 25;
-        $entityId = 1;
-        $linkField = 'entity_id';
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -209,33 +177,27 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($product, $eavAttribute)
             ->willReturnSelf();
 
-        $product->expects(static::once())
-            ->method('getSku')
-            ->willReturn($sku);
         $this->optionRepository->expects(static::once())
             ->method('save')
             ->with($sku, $attribute)
             ->willReturn($id);
 
-        $this->attributesCollection->expects(static::once())
-            ->method('setProductFilter')
-            ->with($product)
-            ->willReturnSelf();
+        $product->expects(static::exactly(2))
+            ->method('getSku')
+            ->willReturn($sku);
 
-        $this->metadata->expects(static::once())
-            ->method('getLinkField')
-            ->willReturn($linkField);
-        $product->expects(static::once())
-            ->method('getData')
-            ->with($linkField)
-            ->willReturn($entityId);
+        $option = $this->getMockForAbstractClass(OptionInterface::class);
+        $option->expects(static::once())
+            ->method('getId')
+            ->willReturn($id);
 
-        $this->attributesCollection->expects(static::exactly(2))
-            ->method('addFieldToFilter')
-            ->willReturnSelf();
-        $this->attributesCollection->expects(static::once())
-            ->method('walk')
-            ->with('delete');
+        $list = [$option];
+        $this->optionRepository->expects(static::once())
+            ->method('getList')
+            ->with($sku)
+            ->willReturn($list);
+        $this->optionRepository->expects(static::never())
+            ->method('deleteById');
 
         $configurableAttributes = [
             $attribute
@@ -258,28 +220,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Init mock object for metadata pool
-     *
-     * @return void
-     */
-    private function initMetadataPoolMock()
-    {
-        $this->metadata = $this->getMockBuilder(EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getLinkField'])
-            ->getMock();
-
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMetadata'])
-            ->getMock();
-
-        $this->metadataPool->expects(static::any())
-            ->method('getMetadata')
-            ->willReturn($this->metadata);
-    }
-
-    /**
      * Init mock object for configurable factory
      *
      * @return void
@@ -299,27 +239,5 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->configurableFactory->expects(static::any())
             ->method('create')
             ->willReturn($this->configurable);
-    }
-
-    /**
-     * Init mock object for collection factory
-     *
-     * @return void
-     */
-    private function initCollectionFactoryMock()
-    {
-        $this->attributesCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setProductFilter', 'addFieldToFilter', 'walk', '__wakeup'])
-            ->getMock();
-
-        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $this->collectionFactory->expects(static::any())
-            ->method('create')
-            ->willReturn($this->attributesCollection);
     }
 }
