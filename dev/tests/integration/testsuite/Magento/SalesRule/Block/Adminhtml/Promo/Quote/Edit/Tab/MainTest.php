@@ -40,11 +40,6 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $prepareFormMethod->invoke($block);
 
         $form = $block->getForm();
-        foreach (['from_date', 'to_date'] as $id) {
-            $element = $form->getElement($id);
-            $this->assertNotNull($element);
-            $this->assertNotEmpty($element->getDateFormat());
-        }
 
         // assert Customer Groups field
         $customerGroupsField = $form->getElement('customer_group_ids');
