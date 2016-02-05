@@ -703,9 +703,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             foreach ($attributesInfo as $attributeId => $attributeValue) {
                 $productCollection->addAttributeToFilter($attributeId, $attributeValue);
             }
+            /** @var \Magento\Catalog\Model\Product $productObject */
             $productObject = $productCollection->getFirstItem();
-            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-            $productLinkFieldId = $productObject->getData($metadata->getLinkField());
+            $productLinkFieldId = $productObject->getId();
             if ($productLinkFieldId) {
                 return $this->productRepository->getById($productLinkFieldId);
             }
