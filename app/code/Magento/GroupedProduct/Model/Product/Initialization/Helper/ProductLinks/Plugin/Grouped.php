@@ -75,6 +75,7 @@ class Grouped
             }
             $newLinks = [];
             $existingLinks =  $product->getProductLinks();
+            $product->unsetData('_cache_instance_associated_products');
             if ($links) {
                 foreach ($links as $linkId => $linkRaw) {
                     /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
