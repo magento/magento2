@@ -12,24 +12,23 @@ define([
     'use strict';
 
     return Boolean.extend({
-        defaults: {
-        },
+        defaults: {},
 
         /**
-         * Defines if value has changed
-         *
-         * @returns {Boolean}
+         * Hide fields on coupon tab
          */
         onUpdate: function () {
+            var isDisabled = this.value() != this.displayOnlyForCouponType,
+                selector = '[id=coupons_information_fieldset] input, [id=coupons_information_fieldset] select, '
+                    + '[id=coupons_information_fieldset] button, [id=couponCodesGrid] input, '
+                    + '[id=couponCodesGrid] select, [id=couponCodesGrid] button';
+
+
             this._super();
-            var isDisabled = (this.value() != this.displayOnlyForCouponType);
-            var selector = '[id=coupons_information_fieldset] input, [id=coupons_information_fieldset] select, '
-                + '[id=coupons_information_fieldset] button, [id=couponCodesGrid] input, [id=couponCodesGrid] select, '
-                + '[id=couponCodesGrid] button';
             _.each(
                 document.querySelectorAll(selector),
-                function(e) {
-                    e.disabled = isDisabled;
+                function (element) {
+                    element.disabled = isDisabled;
                 }
             );
         }
