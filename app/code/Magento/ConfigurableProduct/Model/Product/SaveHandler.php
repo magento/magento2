@@ -9,8 +9,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
 use Magento\Framework\Model\Entity\MetadataPool;
 
@@ -19,11 +17,6 @@ use Magento\Framework\Model\Entity\MetadataPool;
  */
 class SaveHandler
 {
-    /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
     /**
      * @var OptionRepositoryInterface
      */
@@ -35,11 +28,6 @@ class SaveHandler
     private $configurableFactory;
 
     /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
      * @var ProductAttributeRepositoryInterface
      */
     private $productAttributeRepository;
@@ -47,22 +35,16 @@ class SaveHandler
     /**
      * SaveHandler constructor
      * @param OptionRepositoryInterface $optionRepository
-     * @param MetadataPool $metadataPool
      * @param ConfigurableFactory $configurableFactory
-     * @param CollectionFactory $collectionFactory
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         OptionRepositoryInterface $optionRepository,
-        MetadataPool $metadataPool,
         ConfigurableFactory $configurableFactory,
-        CollectionFactory $collectionFactory,
         ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->optionRepository = $optionRepository;
-        $this->metadataPool = $metadataPool;
         $this->configurableFactory = $configurableFactory;
-        $this->collectionFactory = $collectionFactory;
         $this->productAttributeRepository = $productAttributeRepository;
     }
 
@@ -128,18 +110,11 @@ class SaveHandler
      */
     private function deleteConfigurableProductAttributes(ProductInterface $product, array $ids)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        /** @var Collection $collection */
-        $collection = $this->collectionFactory->create();
-        $collection->setProductFilter($product);
-        $collection->addFieldToFilter(
-            'product_super_attribute_id',
-            ['nin' => $ids]
-        );
-        $collection->addFieldToFilter(
-            'product_id',
-            $product->getData($metadata->getLinkField())
-        );
-        $collection->walk('delete');
+        $list = $this->optionRepository->getList($product->getSku());
+        foreach ($list as $item) {
+            if (!in_array($item->getId(), $ids)) {
+                $this->optionRepository->deleteById($product->getSku(), $item->getId());
+            }
+        }
     }
 }
