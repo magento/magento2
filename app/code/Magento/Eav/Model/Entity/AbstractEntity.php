@@ -1709,7 +1709,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $data = [
             'attribute_id' => $attribute->getId(),
-            $entity->getEntityIdField() => $object->getData($entity->getEntityIdField()),
+            $entity->getLinkField() => $object->getData($entity->getLinkField()),
         ];
 
         if (!$this->getEntityTable()) {
