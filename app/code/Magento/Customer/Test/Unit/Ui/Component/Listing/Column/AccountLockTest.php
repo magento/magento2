@@ -77,11 +77,11 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'lockExpirationDate' => date("F j, Y", strtotime( '-1 days' )),
+                'lockExpirationDate' => date("F j, Y", strtotime('-1 days')),
                 'expectedResult' => new \Magento\Framework\Phrase('Unlocked')
             ],
             [
-                'lockExpirationDate' => date("F j, Y", strtotime( '+1 days' )),
+                'lockExpirationDate' => date("F j, Y", strtotime('+1 days')),
                 'expectedResult' => new \Magento\Framework\Phrase('Locked')
             ]
         ];

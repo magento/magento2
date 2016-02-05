@@ -15,6 +15,10 @@ use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Customer helper for account management.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Class AccountManagement
+ * @package Magento\Customer\Helper\
  */
 class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -119,8 +123,9 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Unlock customer
-     * @param $customerId
-     * @return void
+     *
+     * @param int $customerId
+     * @return bool
      */
     public function processUnlockData($customerId)
     {
@@ -128,6 +133,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
         $customerSecure->setFailuresNum(0);
         $customerSecure->setFirstFailure(null);
         $customerSecure->setLockExpires(null);
+        return true;
     }
 
     /**
@@ -153,8 +159,9 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Validate that password is correct and customer is not locked
      *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $password
-     * @return bool true on success
+     * @return bool
      * @throws InvalidEmailOrPasswordException
      */
     public function validatePasswordAndLockStatus(\Magento\Customer\Api\Data\CustomerInterface $customer, $password)

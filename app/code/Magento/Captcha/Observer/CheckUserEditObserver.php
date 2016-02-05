@@ -12,6 +12,9 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CheckUserEditObserver implements ObserverInterface
 {
     /**

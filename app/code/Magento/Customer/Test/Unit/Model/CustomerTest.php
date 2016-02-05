@@ -260,8 +260,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     public function isCustomerLockedDataProvider()
     {
         return [
-          ['lockExpirationDate' => date("F j, Y", strtotime( '-1 days' )), 'expectedResult' => false],
-          ['lockExpirationDate' => date("F j, Y", strtotime( '+1 days' )), 'expectedResult' => true]
+            ['lockExpirationDate' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
+            ['lockExpirationDate' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
         ];
     }
 }

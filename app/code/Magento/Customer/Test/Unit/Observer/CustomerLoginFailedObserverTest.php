@@ -94,4 +94,3 @@ class CustomerLoginFailedObserverTest extends \PHPUnit_Framework_TestCase
         $this->customerLoginFailedObserver->execute($observerMock);
     }
 }
-

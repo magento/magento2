@@ -25,5 +25,4 @@ class ForgotPassword extends Form
     {
         $this->_rootElement->find($this->submit, Locator::SELECTOR_CSS)->click();
     }
-
 }
