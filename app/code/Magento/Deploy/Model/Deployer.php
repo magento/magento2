@@ -135,6 +135,10 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
 
+                    /** @var \Magento\Framework\Locale\Resolver */
+                    $localeResolver = $this->objectManager->get('Magento\Framework\Locale\ResolverInterface');
+                    $localeResolver->setLocale($locale);
+
                     /** @var \Magento\Theme\Model\View\Design $design */
                     $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
                     $design->setDesignTheme($themePath, $area);
