@@ -198,6 +198,8 @@
                             </item>
                         </item>
                     </item>
+                    <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/coupon-tab-updater-select</item>
+                    <item name="displayOnlyForCouponType" xsi:type="string">2</item>
                 </item>
             </argument>
         </field>
@@ -219,13 +221,14 @@
         <field name="use_auto_generation">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Use Auto Generation</item>
+                    <item name="label" xsi:type="string">&#160;</item>
+                    <item name="description" xsi:type="string" translate="true">Use Auto Generation</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">use_auto_generation</item>
-                    <item name="note" xsi:type="string" translate="true">
+                    <item name="notice" xsi:type="string" translate="true">
                         If you select and save the rule you will be able to generate multiple coupon codes.
                     </item>
                     <item name="switcherConfig" xsi:type="array">
@@ -251,6 +254,7 @@
                             </item>
                         </item>
                     </item>
+                    <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/coupon-tab-updater-checkbox</item>
                 </item>
             </argument>
         </field>
@@ -273,7 +277,7 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">uses_per_customer</item>
-                    <item name="note" xsi:type="string" translate="true">
+                    <item name="notice" xsi:type="string" translate="true">
                         Usage limit enforced for logged in customers only.
                     </item>
                 </item>

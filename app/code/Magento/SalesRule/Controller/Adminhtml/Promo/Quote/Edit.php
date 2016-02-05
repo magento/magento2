@@ -45,7 +45,7 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         $id = $this->getRequest()->getParam('id');
         $model = $this->_objectManager->create('Magento\SalesRule\Model\Rule');
 
-        $this->_coreRegistry->register('current_promo_quote_rule', $model);
+        $this->_coreRegistry->register(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE, $model);
 
         $resultPage = $this->resultPageFactory->create();
         if ($id) {
@@ -71,7 +71,6 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         $model->getActions()->setFormName('sales_rule_form');
 
         $this->_initAction();
-        //$this->_view->getLayout()->getBlock('promo_quote_edit')->setData('action', $this->getUrl('sales_rule/*/save'));
 
         $this->_addBreadcrumb($id ? __('Edit Rule') : __('New Rule'), $id ? __('Edit Rule') : __('New Rule'));
 

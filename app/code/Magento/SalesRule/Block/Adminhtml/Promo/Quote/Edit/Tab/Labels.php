@@ -109,7 +109,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         if (!$rule) {
             $id = $this->getRequest()->getParam('id');
