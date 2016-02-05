@@ -228,49 +228,37 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
-                <item name="label" xsi:type="string" translate="true">Schedule Update Design</item>
+                <item name="label" xsi:type="string" translate="true">Custom Design Update</item>
             </item>
         </argument>
-        <container name="custom_theme_date">
+        <field name="custom_theme_from">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true">Schedule Update Design</item>
-                    <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
-                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">From</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="source" xsi:type="string">page</item>
+                    <item name="dataScope" xsi:type="string">custom_theme_from</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-date" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
-            <field name="custom_theme_from">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">From</item>
-                        <item name="additionalClasses" xsi:type="string">admin__field-date</item>
-                        <item name="dataType" xsi:type="string">date</item>
-                        <item name="formElement" xsi:type="string">date</item>
-                        <item name="source" xsi:type="string">page</item>
-                        <item name="dataScope" xsi:type="string">custom_theme_from</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-date" xsi:type="boolean">true</item>
-                        </item>
+        </field>
+        <field name="custom_theme_to">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">To</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="source" xsi:type="string">page</item>
+                    <item name="dataScope" xsi:type="string">custom_theme_to</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-date" xsi:type="boolean">true</item>
                     </item>
-                </argument>
-            </field>
-            <field name="custom_theme_to">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">To</item>
-                        <item name="additionalClasses" xsi:type="string">admin__field-date</item>
-                        <item name="dataType" xsi:type="string">date</item>
-                        <item name="formElement" xsi:type="string">date</item>
-                        <item name="source" xsi:type="string">page</item>
-                        <item name="dataScope" xsi:type="string">custom_theme_to</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-date" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
-            </field>
-        </container>
+                </item>
+            </argument>
+        </field>
         <field name="custom_theme">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Cms\Model\Page\Source\Theme</item>
