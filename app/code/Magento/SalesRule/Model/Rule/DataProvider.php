@@ -202,6 +202,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         /** @var Rule $rule */
         foreach ($items as $rule) {
             $rule->load($rule->getId());
+            $rule->setDiscountAmount($rule->getDiscountAmount() * 1);
+            $rule->setDiscountQty($rule->getDiscountQty() * 1);
+
             $this->loadedData[$rule->getId()] = $rule->getData();
         }
 
