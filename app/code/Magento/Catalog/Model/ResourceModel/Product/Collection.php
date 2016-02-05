@@ -13,6 +13,8 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * Product collection
@@ -1554,22 +1556,28 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function addOptionsToResult()
     {
-        $productIds = [];
+        $productsByLinkId = [];
+
         foreach ($this as $product) {
-            $productIds[] = $product->getId();
+            $productId = $product->getData(
+                $product->getResource()->getLinkField()
+            );
+
+            $productsByLinkId[$productId] = $product;
         }
-        if (!empty($productIds)) {
+
+        if (!empty($productsByLinkId)) {
             $options = $this->_productOptionFactory->create()->getCollection()->addTitleToResult(
                 $this->_storeManager->getStore()->getId()
             )->addPriceToResult(
                 $this->_storeManager->getStore()->getId()
             )->addProductToFilter(
-                $productIds
+                array_keys($productsByLinkId)
             )->addValuesToResult();
 
             foreach ($options as $option) {
-                if ($this->getItemById($option->getProductId())) {
-                    $this->getItemById($option->getProductId())->addOption($option);
+                if (isset($productsByLinkId[$option->getProductId()])) {
+                    $productsByLinkId[$option->getProductId()]->addOption($option);
                 }
             }
         }
@@ -1993,7 +2001,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $conditions = [
             'cat_pro.product_id=e.entity_id',
-            $this->getConnection()->quoteInto('cat_pro.category_id=?', $filters['category_id']),
+            $this->getConnection()->quoteInto(
+                'cat_pro.category_id=?',
+                $filters['category_id']
+            ),
         ];
         $joinCond = join(' AND ', $conditions);
 

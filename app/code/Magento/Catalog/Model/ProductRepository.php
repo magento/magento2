@@ -178,7 +178,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
-        $cacheKey = $this->getCacheKey(func_get_args());
+        $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         if (!isset($this->instances[$sku][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
 
@@ -204,7 +204,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
-        $cacheKey = $this->getCacheKey(func_get_args());
+        $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         if (!isset($this->instancesById[$productId][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
             if ($editMode) {
@@ -231,8 +231,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     protected function getCacheKey($data)
     {
-        unset($data[0]);
-        unset($data['forceReload']);
         $serializeData = [];
         foreach ($data as $key => $value) {
             if (is_object($value)) {
@@ -467,7 +465,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $tierPrices = $product->getData('tier_price');
 
-        $productId = $this->resourceModel->getIdBySku($product->getSku());
+        try {
+            $existingProduct = $this->get($product->getSku());
+
+            $product->setData(
+                $this->resourceModel->getLinkField(),
+                $existingProduct->getData($this->resourceModel->getLinkField())
+            );
+        } catch (NoSuchEntityException $e) {
+            $existingProduct = null;
+        }
 
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
@@ -480,11 +487,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productLinks = $product->getProductLinks();
         }
         $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
-        $product = $this->initializeProductData($productDataArray, empty($productId));
+        $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
         if (isset($productDataArray['media_gallery_entries'])) {
             $this->processMediaGallery($product, $productDataArray['media_gallery_entries']);
+        }
+
+        if (!$product->getOptionsReadonly()) {
+            $product->setCanSaveCustomOptions(true);
         }
 
         $validationResult = $this->resourceModel->validate($product);

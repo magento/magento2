@@ -71,7 +71,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
     }
 
     /**
-     * Save new admin password
+     * Save current admin password to prevent its usage when changed in the future.
      *
      * @param EventObserver $observer
      * @return void
@@ -81,7 +81,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
         /* @var $user \Magento\User\Model\User */
         $user = $observer->getEvent()->getObject();
         if ($user->getId()) {
-            $password = $user->getNewPassword();
+            $password = $user->getCurrentPassword();
             $passwordLifetime = $this->observerConfig->getAdminPasswordLifetime();
             if ($passwordLifetime && $password && !$user->getForceNewPassword()) {
                 $passwordHash = $this->encryptor->getHash($password, false);

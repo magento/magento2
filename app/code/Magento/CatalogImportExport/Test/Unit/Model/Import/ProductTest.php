@@ -527,10 +527,28 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ]
             ]
         ];
-        $this->skuProcessor->expects($this->once())
-            ->method('getNewSku')
-            ->with($testSku)
-            ->willReturn(['entity_id' => self::ENTITY_ID]);
+        $metadataMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\EntityMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataPool->expects($this->any())->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadataMock);
+        $metadataMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
+        $entityTable = 'catalog_product_entity';
+        $resource = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel')
+            ->disableOriginalConstructor()
+            ->setMethods(['getTable'])
+            ->getMock();
+        $resource->expects($this->once())->method('getTable')->with($entityTable)->willReturnArgument(0);
+        $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
+        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectMock->expects($this->once())->method('from')->with($entityTable, '*', null)->willReturnSelf();
+        $selectMock->expects($this->once())->method('where')->with('sku = ?', $testSku)->willReturnSelf();
+        $selectMock->expects($this->once())->method('columns')->with('entity_id')->willReturnSelf();
+        $this->_connection->expects($this->any())->method('fetchOne')->willReturn(self::ENTITY_ID);
+        $this->_connection->expects($this->any())->method('select')->willReturn($selectMock);
         $this->_connection->expects($this->any())
             ->method('quoteInto')
             ->willReturnCallback([$this, 'returnQuoteCallback']);
