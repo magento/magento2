@@ -8,6 +8,7 @@ namespace Magento\Integration\Model\Message;
 
 use Magento\Framework\UrlInterface;
 use Magento\Integration\Model\Config;
+use Magento\Integration\Model\ConsolidatedConfig;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Api\IntegrationServiceInterface;
 
@@ -33,16 +34,24 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
     protected $integrationService;
 
     /**
+     * @var ConsolidatedConfig
+     */
+    protected $consolidatedConfig;
+
+    /**
      * @param Config $integrationConfig
      * @param UrlInterface $urlBuilder
      * @param IntegrationServiceInterface $integrationService
+     * @param ConsolidatedConfig $consolidatedConfig
      */
     public function __construct(
         Config $integrationConfig,
         UrlInterface $urlBuilder,
-        IntegrationServiceInterface $integrationService
+        IntegrationServiceInterface $integrationService,
+        ConsolidatedConfig $consolidatedConfig
     ) {
         $this->integrationConfig = $integrationConfig;
+        $this->consolidatedConfig = $consolidatedConfig;
         $this->urlBuilder = $urlBuilder;
         $this->integrationService = $integrationService;
     }
@@ -54,7 +63,7 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
      */
     public function isDisplayed()
     {
-        foreach (array_keys($this->integrationConfig->getIntegrations()) as $name) {
+        foreach (array_keys($this->consolidatedConfig->getIntegrations()) as $name) {
             $integration = $this->integrationService->findByName($name);
             if ($integration->getStatus() == Integration::STATUS_RECREATED) {
                 return true;

@@ -81,8 +81,59 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     {
         $attributeCode = 'label_attr_code3df4tr3';
         $attribute = $this->createAttribute($attributeCode);
-        $this->assertArrayHasKey('attribute_id', $attribute);
-        $this->assertEquals($attributeCode, $attribute['attribute_code']);
+
+        $expectedData = [
+            'attribute_code' => $attributeCode,
+            'frontend_labels' => [
+                [
+                    'store_id' => 0,
+                    'label' => 'front_lbl'
+                ],
+            ],
+            'is_required' => true,
+            "default_value" => "",
+            "frontend_input" => "select",
+            "is_visible_on_front" => true,
+            "is_searchable" => true,
+            "is_visible_in_advanced_search" => true,
+            "is_filterable" => true,
+            "is_filterable_in_search" => true,
+            "options" => [
+                [
+                    "label" => "string",
+                    "value" => "string",
+                    "sort_order" => 0,
+                    "is_default" => true,
+                    "store_labels" => [
+                        [
+                            "store_id" => 0,
+                            "label" => "Red"
+                        ],
+                        [
+                            "store_id" => 1,
+                            "label" => "Blue"
+                        ],
+                        [
+                            "store_id" => 2,
+                            "label" => "Yellow"
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertEquals($attribute['options'], $expectedData['options']);
+        $this->assertEquals($attribute['attribute_code'], $expectedData['attribute_code']);
+        $this->assertEquals($attribute['frontend_labels'], $expectedData['frontend_labels']);
+        $this->assertEquals($attribute['is_required'], $expectedData['is_required']);
+        $this->assertEquals($attribute['default_value'], $expectedData['default_value']);
+        $this->assertEquals($attribute['frontend_input'], $expectedData['frontend_input']);
+        $this->assertEquals($attribute['is_filterable'], $expectedData['is_filterable']);
+        $this->assertEquals($attribute['is_filterable_in_search'], $expectedData['is_filterable_in_search']);
+        $this->assertEquals(
+            $attribute['is_visible_in_advanced_search'],
+            $expectedData['is_visible_in_advanced_search']
+        );
     }
 
     /**
@@ -200,11 +251,41 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             'attribute' => [
                 'attribute_code' => $attributeCode,
                 'frontend_labels' => [
-                    ['store_id' => 0, 'label' => 'front_lbl'],
+                    [
+                        'store_id' => 0,
+                        'label' => 'front_lbl'
+                    ],
                 ],
-                'default_value' => 'default value',
-                'frontend_input' => 'textarea',
                 'is_required' => true,
+                "default_value" => "",
+                "frontend_input" => "select",
+                "is_visible_on_front" => true,
+                "is_searchable" => true,
+                "is_visible_in_advanced_search" => true,
+                "is_filterable" => true,
+                "is_filterable_in_search" => true,
+                "options" => [
+                    [
+                        "label" => "string",
+                        "value" => "string",
+                        "sort_order" => 0,
+                        "is_default" => true,
+                        "store_labels" => [
+                            [
+                                "store_id" => 0,
+                                "label" => "Red"
+                            ],
+                            [
+                                "store_id" => 1,
+                                "label" => "Blue"
+                            ],
+                            [
+                                "store_id" => 2,
+                                "label" => "Yellow"
+                            ]
+                        ]
+                    ]
+                ]
             ],
         ];
 

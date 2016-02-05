@@ -7,7 +7,7 @@
 namespace Magento\Integration\Setup;
 
 use Magento\Integration\Model\ConfigBasedIntegrationManager;
-use Magento\Integration\Model\Config;
+use Magento\Integration\Model\ConsolidatedConfig;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -24,7 +24,7 @@ class Recurring implements InstallSchemaInterface
     private $integrationManager;
 
     /**
-     * @var Config
+     * @var ConsolidatedConfig
      */
     private $integrationConfig;
 
@@ -32,11 +32,11 @@ class Recurring implements InstallSchemaInterface
      * Initialize dependencies
      *
      * @param ConfigBasedIntegrationManager $integrationManager
-     * @param Config $integrationConfig
+     * @param ConsolidatedConfig $integrationConfig
      */
     public function __construct(
         ConfigBasedIntegrationManager $integrationManager,
-        Config $integrationConfig
+        ConsolidatedConfig $integrationConfig
     ) {
         $this->integrationManager = $integrationManager;
         $this->integrationConfig = $integrationConfig;
@@ -47,6 +47,6 @@ class Recurring implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $this->integrationManager->processIntegrationConfig($this->integrationConfig->getIntegrations());
+        $this->integrationManager->processConfigBasedIntegrations($this->integrationConfig->getIntegrations());
     }
 }
