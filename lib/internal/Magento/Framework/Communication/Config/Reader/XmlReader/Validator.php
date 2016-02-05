@@ -98,14 +98,6 @@ class Validator extends ConfigValidator
                 )
             );
         }
-        if ($responseSchema && !$handlers) {
-            throw new \LogicException(
-                sprintf(
-                    '"handler" element must be declared for topic "%s", because it has "response" declared',
-                    $topicName
-                )
-            );
-        }
         if (($requestResponseSchema || $responseSchema) && (count($handlers) >= 2)) {
             throw new \LogicException(
                 sprintf(

@@ -14,6 +14,7 @@ $salesRule->setData(
         'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON,
         'simple_action' => 'by_percent',
         'discount_amount' => 50,
+        'discount_step' => 0,
         'stop_rules_processing' => 1,
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
