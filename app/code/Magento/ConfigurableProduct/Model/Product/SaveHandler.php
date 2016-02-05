@@ -7,10 +7,11 @@ namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
-use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Class SaveHandler
@@ -33,19 +34,35 @@ class SaveHandler
     private $productAttributeRepository;
 
     /**
+     * @var LinkManagementInterface
+     */
+    private $linkManagement;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * SaveHandler constructor
      * @param OptionRepositoryInterface $optionRepository
      * @param ConfigurableFactory $configurableFactory
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
+     * @param LinkManagementInterface $linkManagement
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         OptionRepositoryInterface $optionRepository,
         ConfigurableFactory $configurableFactory,
-        ProductAttributeRepositoryInterface $productAttributeRepository
+        ProductAttributeRepositoryInterface $productAttributeRepository,
+        LinkManagementInterface $linkManagement,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->optionRepository = $optionRepository;
         $this->configurableFactory = $configurableFactory;
         $this->productAttributeRepository = $productAttributeRepository;
+        $this->linkManagement = $linkManagement;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -66,18 +83,22 @@ class SaveHandler
             return $entity;
         }
 
+        $ids = [];
         $configurableOptions = $extensionAttributes->getConfigurableProductOptions();
         if (!empty($configurableOptions)) {
             $ids = $this->saveConfigurableProductAttributes($entity, $configurableOptions);
-            $this->deleteConfigurableProductAttributes($entity, $ids);
         }
 
-        $configurableLinks = $extensionAttributes->getConfigurableProductLinks();
+        $this->deleteConfigurableProductAttributes($entity, $ids);
+
+        $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
         if (!empty($configurableLinks)) {
             /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable */
             $configurable = $this->configurableFactory->create();
             $configurable->saveProducts($entity, $configurableLinks);
         }
+
+        $this->deleteConfigurableProductAttributes($entity, $configurableLinks);
 
         return $entity;
     }
@@ -98,11 +119,12 @@ class SaveHandler
             $attribute->loadByProductAndAttribute($product, $eavAttribute);
             $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
         }
+
         return $ids;
     }
 
     /**
-     * Remove all product attributes
+     * Remove product attributes
      *
      * @param ProductInterface $product
      * @param array $ids
@@ -114,6 +136,22 @@ class SaveHandler
         foreach ($list as $item) {
             if (!in_array($item->getId(), $ids)) {
                 $this->optionRepository->deleteById($product->getSku(), $item->getId());
+            }
+        }
+    }
+
+    /**
+     * Remove product links
+     *
+     * @param ProductInterface $product
+     * @param array $ids
+     */
+    private function deleteConfigurableProductLinks(ProductInterface $product, array $ids)
+    {
+        $list = $this->linkManagement->getChildren($product->getSku());
+        foreach ($list as $item) {
+            if (!in_array($item->getId(), $ids)) {
+                $this->linkManagement->removeChild($product->getSku(), $item->getSku());
             }
         }
     }
