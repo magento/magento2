@@ -11,13 +11,16 @@ use Magento\OfflineShipping\Model\SalesRule\Rule;
 class FreeShippingOptions implements OptionSourceInterface
 {
     /**
-     * Get options
-     *
-     * @return array
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function toOptionArray()
     {
         return [
+            [
+                'value' => 0,
+                'label' => __('No')
+            ],
             [
                 'value' => Rule::FREE_SHIPPING_ITEM,
                 'label' => __('For matching items only')
