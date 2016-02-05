@@ -9,6 +9,32 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
+     * @var \Magento\SalesRule\Model\RuleFactory
+     */
+    private $ruleFactory;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
+        array $data = []
+    ) {
+        $this->ruleFactory = $ruleFactory;
+        parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+
+    /**
      * @var string
      */
     protected $_nameInLayout = 'store_view_labels';
@@ -83,7 +109,14 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $rule = $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+
+        if (!$rule) {
+            $id = $this->getRequest()->getParam('id');
+            $rule = $this->ruleFactory->create();
+            $rule->load($id);
+        }
+
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();

@@ -26,11 +26,19 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_nameInLayout = 'conditions_apply_to';
 
     /**
+     * @var \Magento\SalesRule\Model\RuleFactory
+     */
+    private $ruleFactory;
+
+    /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Rule\Block\Conditions $conditions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
+     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $data
      */
     public function __construct(
@@ -39,8 +47,10 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Rule\Block\Conditions $conditions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
+        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         array $data = []
     ) {
+        $this->ruleFactory = $ruleFactory;
         $this->_rendererFieldset = $rendererFieldset;
         $this->_conditions = $conditions;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -117,6 +127,12 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('current_promo_quote_rule');
+
+        if (!$model) {
+            $id = $this->getRequest()->getParam('id');
+            $model = $this->ruleFactory->create();
+            $model->load($id);
+        }
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();

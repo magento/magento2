@@ -31,6 +31,11 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_nameInLayout = 'actions_apply_to';
 
     /**
+     * @var \Magento\SalesRule\Model\RuleFactory
+     */
+    private $ruleFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -46,8 +51,10 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Config\Model\Config\Source\Yesno $sourceYesno,
         \Magento\Rule\Block\Actions $ruleActions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
+        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         array $data = []
     ) {
+        $this->ruleFactory = $ruleFactory;
         $this->_rendererFieldset = $rendererFieldset;
         $this->_ruleActions = $ruleActions;
         $this->_sourceYesno = $sourceYesno;
@@ -126,6 +133,12 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('current_promo_quote_rule');
+
+        if (!$model) {
+            $id = $this->getRequest()->getParam('id');
+            $model = $this->ruleFactory->create();
+            $model->load($id);
+        }
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
