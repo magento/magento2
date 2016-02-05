@@ -151,8 +151,7 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
                         'entityContext' => ['store_id']
                     ]
                 ]
-            ]
-            ,
+            ],
             [
                 'SomeNameSpace\TestInterface',
                 [
