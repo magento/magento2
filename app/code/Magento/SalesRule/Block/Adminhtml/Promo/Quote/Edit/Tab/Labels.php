@@ -13,15 +13,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected $_nameInLayout = 'store_view_labels';
 
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        array $data = []
-    ) {
-        parent::__construct($context, $registry, $formFactory, $data);
-    }
-
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
