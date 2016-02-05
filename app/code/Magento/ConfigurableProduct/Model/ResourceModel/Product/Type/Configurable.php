@@ -80,9 +80,8 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $where = ['parent_id = ?' => $productId, 'product_id NOT IN(?)' => $productIds];
         $this->getConnection()->delete($this->getMainTable(), $where);
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         // configurable product relations should be added to relation table
-        $this->catalogProductRelation->processRelations($mainProduct->getData($linkField), $productIds);
+        $this->catalogProductRelation->processRelations($productId, $productIds);
 
         return $this;
     }
