@@ -43,7 +43,7 @@
         <exec executable="mysql">
             <arg value="-uroot" />
             <arg value="-e" />
-            <arg value="CREATE DATABASE IF NOT EXISTS `magento_integration_tests` DEFAULT CHARSET utf8;" />
+            <arg value="DROP DATABASE IF EXISTS `magento_integration_tests`; CREATE DATABASE `magento_integration_tests` DEFAULT CHARSET utf8;" />
         </exec>
         <copy file="${project.basedir}/dev/tests/integration/etc/install-config-mysql.php.dist" tofile="${project.basedir}/dev/tests/integration/etc/install-config-mysql.php" overwrite="true"/>
     </target>
@@ -87,4 +87,7 @@
             <arg value="--filter=Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard"/>
         </exec>
     </target>
+
+    <target name="testall" description="run all tests in one go"
+        depends="unit,integration_part_1,integration_part_2,integration_integrity,static_phpcs,static_annotation"/>
 </project>
