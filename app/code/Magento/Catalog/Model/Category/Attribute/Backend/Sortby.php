@@ -96,10 +96,10 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             if (!is_array($data)) {
                 $data = [];
             }
-            $object->setData($attributeCode, join(',', $data));
+            $object->setData($attributeCode, implode(',', $data) ?: null);
         }
         if (!$object->hasData($attributeCode)) {
-            $object->setData($attributeCode, false);
+            $object->setData($attributeCode, null);
         }
         return $this;
     }
