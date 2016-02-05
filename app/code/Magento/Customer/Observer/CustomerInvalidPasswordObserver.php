@@ -11,7 +11,7 @@ use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
- * Class CustomerLoginFailedObserver
+ * Class CustomerInvalidPasswordObserver
  */
 class CustomerInvalidPasswordObserver implements ObserverInterface
 {
