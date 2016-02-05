@@ -45,7 +45,7 @@
             <arg value="-e" />
             <arg value="CREATE DATABASE IF NOT EXISTS `magento_integration_tests` DEFAULT CHARSET utf8;" />
         </exec>
-        <copy file="${project.basedir}/dev/tests/integration/etc/install-config-mysql.travis.php.dist" tofile="${project.basedir}/dev/tests/integration/etc/install-config-mysql.php" overwrite="true"/>
+        <copy file="${project.basedir}/dev/tests/integration/etc/install-config-mysql.php.dist" tofile="${project.basedir}/dev/tests/integration/etc/install-config-mysql.php" overwrite="true"/>
     </target>
 
     <target name="integration_prepare" description="prepare part1 and part2 suites">
