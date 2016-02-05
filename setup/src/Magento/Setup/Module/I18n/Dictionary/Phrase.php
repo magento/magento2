@@ -268,7 +268,6 @@ class Phrase
      */
     private function getCompiledString($string)
     {
-        $encloseQuote = $this->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
-        return str_replace("\\$encloseQuote",$encloseQuote,$string);
+        return $string;
     }
 }
