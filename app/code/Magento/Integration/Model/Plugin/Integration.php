@@ -11,7 +11,8 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Api\AuthorizationServiceInterface;
 use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Integration\Model\IntegrationConfig as IntegrationApiConfig;
+use Magento\Integration\Model\IntegrationConfig;
+use Magento\Integration\Model\ConsolidatedConfig;
 
 /**
  * Plugin for \Magento\Integration\Model\IntegrationService.
@@ -24,28 +25,30 @@ class Integration
     /** @var  AclRetriever */
     protected $aclRetriever;
 
-    /**
-     * Integration config
-     *
-     * @var IntegrationApiConfig
-     */
-    protected $integrationApiConfig;
+    /** @var IntegrationConfig */
+    protected $integrationConfig;
+
+    /** @var ConsolidatedConfig */
+    protected $consolidatedConfig;
 
     /**
      * Initialize dependencies.
      *
      * @param AuthorizationServiceInterface $integrationAuthorizationService
      * @param AclRetriever $aclRetriever
-     * @param IntegrationApiConfig $integrationApiConfig
+     * @param IntegrationConfig $integrationConfig
+     * @param ConsolidatedConfig $consolidatedConfig
      */
     public function __construct(
         AuthorizationServiceInterface $integrationAuthorizationService,
         AclRetriever $aclRetriever,
-        IntegrationApiConfig $integrationApiConfig
+        IntegrationConfig $integrationConfig,
+        ConsolidatedConfig $consolidatedConfig
     ) {
         $this->integrationAuthorizationService = $integrationAuthorizationService;
         $this->aclRetriever  = $aclRetriever;
-        $this->integrationApiConfig = $integrationApiConfig;
+        $this->integrationConfig = $integrationConfig;
+        $this->consolidatedConfig = $consolidatedConfig;
     }
 
     /**
@@ -107,9 +110,16 @@ class Integration
      */
     protected function _addAllowedResources(IntegrationModel $integration)
     {
+        $integrations = array_merge(
+            $this->integrationConfig->getIntegrations(),
+            $this->consolidatedConfig->getIntegrations()
+        );
         if ($integration->getId()) {
             if ($integration->getSetupType() == IntegrationModel::TYPE_CONFIG) {
-                $integration->setData('resource', $this->getIntegrationApiResource($integration));
+                $integration->setData(
+                    'resource',
+                    $integrations[$integration->getData('name')]['resource']
+                );
             } else {
                 $integration->setData(
                     'resource',
@@ -160,22 +170,5 @@ class Integration
         $integrationId = (int)$integrationData[IntegrationModel::ID];
         $this->integrationAuthorizationService->removePermissions($integrationId);
         return $integrationData;
-    }
-
-    /**
-     * Return available resourses for integration model
-     *
-     * @param IntegrationModel $integration
-     * @return string[]
-     */
-    private function getIntegrationApiResource(IntegrationModel $integration)
-    {
-        $resources = [];
-        $integrationResources = $this->integrationApiConfig->getIntegrations();
-        $integrationName = $integration->getData('name');
-        if (!empty($integrationResources[$integrationName]['resource'])) {
-            $resources = $integrationResources[$integrationName]['resource'];
-        }
-        return $resources;
     }
 }
