@@ -84,6 +84,7 @@ class Field extends AbstractComponent
         $this->wrappedComponent->setData(
             'config',
             array_replace_recursive(
+                ['dataScope' => $this->getName()],
                 (array) $this->wrappedComponent->getData('config'),
                 (array) $this->getData('config')
             )
