@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Transactions;
+
 use Magento\Mtf\Client\Locator;
 
 /**
