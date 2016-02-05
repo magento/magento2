@@ -93,6 +93,8 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
             $this->_dataSaveAllowed = true;
             $encrypted = $this->_encryptor->encrypt($value);
             $this->setValue($encrypted);
+        } elseif (empty($value)) {
+            $this->_dataSaveAllowed = true;
         }
     }
 
