@@ -53,7 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
          */
         $couponHelper = $this->_salesRuleCoupon;
 
-        $model = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
         $ruleId = $model->getId();
 
         $form->setHtmlIdPrefix('coupons_');

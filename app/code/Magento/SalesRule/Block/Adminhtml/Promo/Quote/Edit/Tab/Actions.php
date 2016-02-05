@@ -125,7 +125,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $model = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();

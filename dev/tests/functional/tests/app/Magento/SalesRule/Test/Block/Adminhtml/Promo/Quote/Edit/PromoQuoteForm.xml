@@ -77,7 +77,7 @@
     </actions>
     <labels>
         <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\Labels</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='store_default_label']]</selector>
+        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='store_labels[0]']]</selector>
         <strategy>xpath</strategy>
     </labels>
 </sections>
