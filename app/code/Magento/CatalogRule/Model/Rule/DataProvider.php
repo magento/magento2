@@ -100,31 +100,61 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         $this->meta = [
             'rule_information' => [
-                'fields' => [
+                'children' => [
                     'website_ids' => [
-                        'options' => $this->store->getWebsiteValuesForForm()
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'options' => $this->store->getWebsiteValuesForForm(),
+                                ],
+                            ],
+                        ],
                     ],
                     'is_active' => [
-                        'options' => [
-                            ['label' => __('Active'), 'value' => '1'],
-                            ['label' => __('Inactive'), 'value' => '0']
-                        ]
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'options' => [
+                                        ['label' => __('Active'), 'value' => '1'],
+                                        ['label' => __('Inactive'), 'value' => '0']
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                     'customer_group_ids' => [
-                        'options' => $this->objectConverter->toOptionArray($customerGroups, 'id', 'code')
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'options' => $this->objectConverter->toOptionArray($customerGroups, 'id', 'code'),
+                                ],
+                            ],
+                        ],
                     ]
                 ]
             ],
             'actions' => [
-                'fields' => [
+                'children' => [
                     'simple_action' => [
-                        'options' => $applyOptions
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'options' => $applyOptions
+                                ],
+                            ],
+                        ],
                     ],
                     'stop_rules_processing' => [
-                        'options' => [
-                            ['label' => __('Yes'), 'value' => '1'],
-                            ['label' => __('No'), 'value' => '0']
-                        ]
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'options' => [
+                                        ['label' => __('Yes'), 'value' => '1'],
+                                        ['label' => __('No'), 'value' => '0']
+                                    ]
+                                ],
+                            ],
+                        ],
                     ],
                 ]
             ]
