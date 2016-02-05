@@ -207,7 +207,7 @@ class EmailNotification extends \Magento\Framework\App\Helper\AbstractHelper
         $email = null
     ) {
         $templateId = $this->scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId);
-        if (is_null($email)) {
+        if ($email === null) {
             $email = $customer->getEmail();
         }
 

@@ -476,14 +476,12 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $counter
      * @param string $message
      * @param string $exception
      *
      * @dataProvider exceptionDataProvider
      */
     public function testGeneralException(
-        $counter,
         $message,
         $exception
     ) {
@@ -672,9 +670,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
             $this->messageManager->expects($this->any())
                 ->method('addException')
-                ->with($exception, __('We can\'t save the customer.')
-                    . $exception->getMessage()
-                    . '<pre>' . $exception->getTraceAsString() . '</pre>')
+                ->with(
+                    $exception,
+                    __('We can\'t save the customer.') . $exception->getMessage()
+                    . '<pre>' . $exception->getTraceAsString() . '</pre>'
+                )
                 ->willReturnSelf();
         }
 

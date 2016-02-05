@@ -10,6 +10,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CheckUserLoginObserver implements ObserverInterface
 {
     /**

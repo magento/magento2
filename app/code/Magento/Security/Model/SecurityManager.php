@@ -142,7 +142,7 @@ class SecurityManager
      */
     public function adminIdentityCheck(\Magento\User\Model\User $user, $passwordString)
     {
-        $isCheckSuccessful = $this->performIdentityCheck($user ,$passwordString);
+        $isCheckSuccessful = $this->performIdentityCheck($user, $passwordString);
         $this->eventManager->dispatch(
             'admin_user_authenticate_after',
             [
