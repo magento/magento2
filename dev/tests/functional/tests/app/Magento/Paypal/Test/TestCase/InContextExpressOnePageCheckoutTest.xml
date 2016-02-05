@@ -9,22 +9,12 @@
     <testCase name="Magento\Paypal\Test\TestCase\InContextExpressOnePageCheckoutTest" summary="In-Context Checkout with PayPal Express Checkout (API Credentials) through one page checkout" ticketId="MAGETWO-47261">
         <variation name="InContextExpressOnePageCheckoutTestVariation1" summary="In-Context Checkout with PayPal Express Checkout (API Credentials) through one page checkout" ticketId="MAGETWO-47261">
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
-            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping" xsi:type="array">
                 <item name="shipping_method" xsi:type="string">Free</item>
                 <item name="shipping_service" xsi:type="string">Free Shipping</item>
-            </data>
-            <data name="paypalPrices" xsi:type="array">
-                <item name="total" xsi:type="string">10.00</item>
-            </data>
-            <data name="prices" xsi:type="array">
-                <item name="subTotal" xsi:type="string">10.00</item>
-                <item name="taxTotal" xsi:type="string">0.83</item>
-                <item name="shippingTotal" xsi:type="string">0.00</item>
-                <item name="grandTotal" xsi:type="string">10.83</item>
             </data>
             <data name="payment/method" xsi:type="string">paypal_express</data>
             <data name="configData" xsi:type="string">paypal_express_in_context, paypal_express, freeshipping</data>
