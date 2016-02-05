@@ -43,6 +43,23 @@ class Method extends Block
     protected $vaultCheckbox = '#%s_vault_enabler';
 
     /**
+     * PayPal load spinner.
+     *
+     * @var string
+     */
+    protected $preloaderSpinner = '#preloaderSpinner';
+
+    /**
+     * Wait for PayPal page is loaded.
+     *
+     * @return void
+     */
+    public function waitForFormLoaded()
+    {
+        $this->waitForElementNotVisible($this->preloaderSpinner);
+    }
+
+    /**
      * Place order.
      *
      * @return void
@@ -51,6 +68,17 @@ class Method extends Block
     {
         $this->_rootElement->find($this->placeOrderButton)->click();
         $this->waitForElementNotVisible($this->waitElement);
+    }
+
+    /**
+     * Click "Check out with PayPal" button.
+     */
+    public function inContextPaypalCheckout()
+    {
+        $this->_rootElement->find($this->placeOrderButton)->click();
+        $this->browser->selectWindow();
+        $this->waitForFormLoaded();
+        $this->browser->closeWindow();
     }
 
     /**
