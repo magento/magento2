@@ -33,6 +33,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $coreRegistryMock;
 
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    protected $objectManagerHelper;
+
     protected function setUp()
     {
         $this->rootResourceMock = $this->getMockBuilder('Magento\Framework\Acl\RootResource')
@@ -63,11 +66,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $this->coreRegistryMock = $this->getMockBuilder('Magento\Framework\Registry')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['registry'])
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManagerHelper->getObject(
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $this->objectManagerHelper->getObject(
             'Magento\User\Block\Role\Tab\Edit',
             [
                 'aclRetriever' => $this->aclRetrieverMock,
@@ -75,9 +78,31 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 'rulesCollectionFactory' => $this->rulesCollectionFactoryMock,
                 'aclResourceProvider' => $this->aclResourceProviderMock,
                 'integrationData' => $this->integrationDataMock,
-                'coreRegistry' => $this->coreRegistryMock
+                'registry' => $this->coreRegistryMock
             ]
         );
+    }
+
+    public function testConstructor()
+    {
+        $this->coreRegistryMock->expects($this->once())
+            ->method('registry')
+            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY)
+            ->willReturn(true);
+
+        $this->model = $this->objectManagerHelper->getObject(
+            'Magento\User\Block\Role\Tab\Edit',
+            [
+                'aclRetriever' => $this->aclRetrieverMock,
+                'rootResource' => $this->rootResourceMock,
+                'rulesCollectionFactory' => $this->rulesCollectionFactoryMock,
+                'aclResourceProvider' => $this->aclResourceProviderMock,
+                'integrationData' => $this->integrationDataMock,
+                'registry' => $this->coreRegistryMock
+            ]
+        );
+
+        $this->testIsEverythingAllowed(true);
     }
 
     public function testGetTree()
@@ -97,6 +122,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function testIsEverythingAllowed($isAllowed)
     {
         $id = 10;
+
         if ($isAllowed) {
             $this->model->setSelectedResources([$id]);
         } else {
