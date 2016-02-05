@@ -23,7 +23,7 @@ use Magento\ImportExport\Model\Import;
  *
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
@@ -56,6 +56,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\CatalogImportExport\Model\Import\Product'
         );
+        parent::setUp();
     }
 
     /**
@@ -898,6 +899,98 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ['import_new_categories_default_separator.csv', ','],
             ['import_new_categories_custom_separator.csv', '|']
         ];
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/category_duplicates.php
+     */
+    public function testProductDuplicateCategories()
+    {
+        $csvFixture = 'products_duplicate_category.csv';
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/_files/' . $csvFixture;
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Filesystem'
+        );
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setSource($source)->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product'
+            ]
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() === 0);
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
+        $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+
+        /** @var \Magento\Catalog\Model\Category $category */
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
+
+        $category->setStoreId(1);
+        $category->load(444);
+
+        $this->assertTrue($category !== null);
+
+        $category->setName(
+            'Category 2-updated'
+        )->save();
+
+        $this->_model->importData();
+
+        $categoryProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'
+        );
+
+        $errorProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator'
+        );
+        $errorCount = count($errorProcessor->getAllErrors());
+
+        $errorMessage = $errorProcessor->getAllErrors()[0]->getErrorMessage();
+        $this->assertContains('URL key for specified store already exists' , $errorMessage);
+        $this->assertContains('Default Category/Category 2' , $errorMessage);
+        $this->assertTrue($errorCount === 1 , 'Error expected');
+
+
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
+
+        $categoryAfter = $this->loadCategoryByName('Category 2');
+        $this->assertTrue($categoryAfter === null);
+
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
+        $product->load(1);
+        $categories = $product->getCategoryIds();
+        $this->assertTrue(count($categories) == 1);
+    }
+
+    protected function loadCategoryByName($categoryName)
+    {
+        /* @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
+        $collection = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Category\Collection');
+        $collection->addNameToResult()->load();
+        return $collection->getItemByColumnValue('name', $categoryName);
     }
 
     /**

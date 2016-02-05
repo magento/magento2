@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
+use Magento\Framework\Filesystem\DirectoryList;
+
 /**
  * @magentoAppArea adminhtml
  */
