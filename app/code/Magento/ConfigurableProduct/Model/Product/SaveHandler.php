@@ -98,7 +98,7 @@ class SaveHandler
             $configurable->saveProducts($entity, $configurableLinks);
         }
 
-        $this->deleteConfigurableProductAttributes($entity, $configurableLinks);
+        $this->deleteConfigurableProductLinks($entity, $configurableLinks);
 
         return $entity;
     }
@@ -145,6 +145,7 @@ class SaveHandler
      *
      * @param ProductInterface $product
      * @param array $ids
+     * @return void
      */
     private function deleteConfigurableProductLinks(ProductInterface $product, array $ids)
     {
