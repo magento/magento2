@@ -13,6 +13,8 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * Product collection
@@ -1999,7 +2001,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $conditions = [
             'cat_pro.product_id=e.entity_id',
-            $this->getConnection()->quoteInto('cat_pro.category_id=?', $filters['category_id']),
+            $this->getConnection()->quoteInto(
+                'cat_pro.category_id=?',
+                $filters['category_id']
+            ),
         ];
         $joinCond = join(' AND ', $conditions);
 

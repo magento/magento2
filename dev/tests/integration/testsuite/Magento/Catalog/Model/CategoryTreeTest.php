@@ -11,6 +11,8 @@ namespace Magento\Catalog\Model;
  *
  * @see \Magento\Catalog\Model\CategoryTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class CategoryTreeTest extends \PHPUnit_Framework_TestCase
 {
