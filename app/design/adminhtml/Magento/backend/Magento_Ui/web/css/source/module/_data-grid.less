@@ -704,6 +704,19 @@ body._in-resize {
     }
 }
 
+//  State actions column
+.data-grid-state-cell-inner {
+    display: block;
+    padding: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+    text-align: center;
+
+    > span {
+        display: inline-block;
+        font-style: @font-style__emphasis;
+        padding: .6rem 0;
+    }
+}
+
 //  Nested rows
 .data-grid-row-parent {
     &._active {
