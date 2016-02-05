@@ -11,6 +11,8 @@ namespace Magento\CatalogSearch\Model\Layer\Filter;
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_weight_filterable.php
  * @magentoDataFixture Magento/Catalog/_files/categories.php
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_base.php
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class DecimalTest extends \PHPUnit_Framework_TestCase
 {

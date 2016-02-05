@@ -177,7 +177,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     {
         $stockId = $this->getData(static::STOCK_ID);
         if ($stockId === null) {
-            $stockId = $this->stockRegistry->getStock()->getStockId();
+            $stockId = $this->stockRegistry->getStock($this->getWebsiteId())->getStockId();
         }
         return (int) $stockId;
     }
