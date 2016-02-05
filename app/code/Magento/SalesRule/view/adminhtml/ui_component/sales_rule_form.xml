@@ -198,6 +198,8 @@
                             </item>
                         </item>
                     </item>
+                    <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/coupon-tab-updater-select</item>
+                    <item name="displayOnlyForCouponType" xsi:type="string">2</item>
                 </item>
             </argument>
         </field>
@@ -251,6 +253,7 @@
                             </item>
                         </item>
                     </item>
+                    <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/coupon-tab-updater-checkbox</item>
                 </item>
             </argument>
         </field>
