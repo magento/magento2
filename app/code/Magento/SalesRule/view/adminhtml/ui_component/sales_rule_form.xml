@@ -221,7 +221,8 @@
         <field name="use_auto_generation">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Use Auto Generation</item>
+                    <item name="label" xsi:type="string">&#160;</item>
+                    <item name="description" xsi:type="string" translate="true">Use Auto Generation</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
