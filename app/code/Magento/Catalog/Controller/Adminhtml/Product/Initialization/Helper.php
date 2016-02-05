@@ -154,7 +154,7 @@ class Helper
         $useDefaults = $this->request->getPost('use_default');
         if ($useDefaults) {
             foreach ($useDefaults as $attributeCode) {
-                $product->setData($attributeCode, false);
+                $product->setData($attributeCode, null);
             }
         }
 

@@ -179,12 +179,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     protected function getSimpleCategoryData($categoryData = [])
     {
         return [
-            'path' => '2',
             'parent_id' => '2',
             'name' => isset($categoryData['name'])
                 ? $categoryData['name'] : uniqid('Category-', true),
             'is_active' => '1',
-            'include_in_menu' => "1",
+            'include_in_menu' => '1',
             'available_sort_by' => ['position', 'name'],
             'custom_attributes' => [
                 ['attribute_code' => 'url_key', 'value' => ''],
