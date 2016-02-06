@@ -135,7 +135,7 @@
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">Coupon</item>
                     <item name="visible" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">coupon_type</item>
@@ -368,7 +368,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="label" xsi:type="string" translate="true">Apply</item>
-                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">simple_action</item>
