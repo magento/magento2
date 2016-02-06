@@ -17,7 +17,8 @@ define([
             displayArea: 'outsideGroup',
             displayAsLink: false,
             elementTmpl: 'ui/form/element/button',
-            template: 'ui/form/components/button/simple'
+            template: 'ui/form/components/button/simple',
+            visible: true
         },
 
         /**
@@ -28,6 +29,15 @@ define([
         initialize: function () {
             return this._super()
                 ._setClasses();
+        },
+
+        /** @inheritdoc */
+        initObservable: function () {
+            return this._super()
+                .observe([
+                    'visible',
+                    'disabled'
+                ]);
         },
 
         /**
