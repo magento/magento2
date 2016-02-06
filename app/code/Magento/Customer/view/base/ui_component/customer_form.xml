@@ -147,6 +147,12 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="source" xsi:type="string">customer</item>
+                        <item name="description" xsi:type="string" translate="true">Disable Automatic Group Change Based on VAT ID</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">1</item>
+                            <item name="false" xsi:type="string">0</item>
+                        </item>
+                        <item name="default" xsi:type="string">0</item>
                     </item>
                 </argument>
             </field>
@@ -455,6 +461,10 @@
                         <item name="targetField" xsi:type="string">default_billing</item>
                         <item name="referencedField" xsi:type="string">entity_id</item>
                     </item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="boolean">true</item>
+                        <item name="false" xsi:type="string"/>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -471,6 +481,10 @@
                         <item name="target" xsi:type="string">customer</item>
                         <item name="targetField" xsi:type="string">default_shipping</item>
                         <item name="referencedField" xsi:type="string">entity_id</item>
+                    </item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="boolean">true</item>
+                        <item name="false" xsi:type="string"/>
                     </item>
                 </item>
             </argument>
