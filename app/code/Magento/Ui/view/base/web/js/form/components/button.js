@@ -18,7 +18,8 @@ define([
             displayAsLink: false,
             elementTmpl: 'ui/form/element/button',
             template: 'ui/form/components/button/simple',
-            visible: true
+            visible: true,
+            disabled: false
         },
 
         /**
