@@ -72,7 +72,7 @@ define([
             }
 
             if (typeof this.value === 'undefined' || this.value === null) {
-                this.value = _.isEmpty(this.valueMap) ? this.default : this.valueMap.false;
+                this.value = _.isEmpty(this.valueMap) || this.default !== '' ? this.default : this.valueMap.false;
                 this.initialValue = this.value;
             } else {
                 this.initialValue = this.value;
