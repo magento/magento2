@@ -137,6 +137,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                         $customerCandidateDataObject,
                         $isPasswordChanged
                     );
+                $this->dispatchSuccessEvent($customerCandidateDataObject);
                 $this->messageManager->addSuccess(__('You saved the account information.'));
                 return $resultRedirect->setPath('customer/account');
             } catch (InvalidEmailOrPasswordException $e) {
@@ -162,6 +163,20 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         return $resultRedirect->setPath('*/*/edit');
+    }
+
+    /**
+     * Account editing action completed successfully event
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject
+     * @return void
+     */
+    protected function dispatchSuccessEvent(\Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject)
+    {
+        $this->_eventManager->dispatch(
+            'customer_account_edited',
+            ['email' => $customerCandidateDataObject->getEmail()]
+        );
     }
 
     /**
