@@ -290,13 +290,16 @@ class UiComponentFactory extends DataObject
                 : array_replace_recursive($bundleComponents[$name], $data);
             return [$bundleComponents, true];
         } else {
-            foreach ($bundleComponents as $childName => &$childData) {
+            foreach ($bundleComponents as &$childData) {
                 if (isset($childData['attributes']['class'])
                     && is_a($childData['attributes']['class'], 'Magento\Ui\Component\Container', true)
                     && isset($childData['children']) && is_array($childData['children'])
                 ) {
                     list($childData['children'], $isMerged) = $this->mergeMetadataElement(
-                        $childData['children'], $name, $data, $reverseMerge
+                        $childData['children'],
+                        $name,
+                        $data,
+                        $reverseMerge
                     );
                     if ($isMerged) {
                         return [$bundleComponents, true];
@@ -325,7 +328,10 @@ class UiComponentFactory extends DataObject
             }
 
             list($bundleComponents, $isMerged) = $this->mergeMetadataElement(
-                $bundleComponents, $name, $selfData, $reverseMerge
+                $bundleComponents,
+                $name,
+                $selfData,
+                $reverseMerge
             );
 
             if (!$isMerged) {
@@ -367,7 +373,7 @@ class UiComponentFactory extends DataObject
      */
     protected function getDataProvider($identifier, array $bundleComponents)
     {
-        foreach ($bundleComponents[$identifier]['children'] as $childrenIdentifier => $childrenData) {
+        foreach ($bundleComponents[$identifier]['children'] as $childrenData) {
             if (isset($childrenData['arguments']['dataProvider'])
                 && $childrenData['arguments']['dataProvider'] instanceof DataProviderInterface
             ) {
