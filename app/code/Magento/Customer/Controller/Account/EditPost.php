@@ -49,7 +49,9 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     protected $customerExtractor;
 
-    /** @var Session */
+    /**
+     * @var Session
+     */
     protected $customerSession;
 
     /** @var EmailNotification */
