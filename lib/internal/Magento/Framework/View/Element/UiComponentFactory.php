@@ -83,7 +83,7 @@ class UiComponentFactory extends DataObject
         $identifier
     ) {
         list($className, $arguments) = $this->argumentsResolver($identifier, $bundleComponents);
-        if (isset($arguments['data']['disabled']) && $arguments['data']['disabled'] === 'true') {
+        if (isset($arguments['data']['disabled']) && (int)$arguments['data']['disabled']) {
             return null;
         }
         $components = [];
