@@ -126,7 +126,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ];
         }
 
-        $rule = $rule = $this->coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $rule = $this->coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
         $labels = $rule->getStoreLabels();
 
         $this->meta = [
