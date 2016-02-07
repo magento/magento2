@@ -77,13 +77,13 @@ define([
             var actions = rule.actions;
 
             //TODO Refactor this logic in scope of MAGETWO-48585
-            /* jslint eqeq: true */
+            /* eslint-disable eqeqeq */
             if (rule.value != value) {
-            /* jslint eqeq: false */
                 return;
             } else if (rule.strict) {
                 return;
             }
+            /* eslint-enable eqeqeq */
 
             actions.forEach(this.applyAction, this);
         },
