@@ -18,11 +18,10 @@ define([
          * Hide fields on coupon tab
          */
         onUpdate: function () {
-            var isDisabled = this.value() != this.displayOnlyForCouponType,
+            var isDisabled = this.value() != this.displayOnlyForCouponType, // jshint ignore:line
                 selector = '[id=coupons_information_fieldset] input, [id=coupons_information_fieldset] select, ' +
                     '[id=coupons_information_fieldset] button, [id=couponCodesGrid] input, ' +
                     '[id=couponCodesGrid] select, [id=couponCodesGrid] button';
-
 
             this._super();
             _.each(
