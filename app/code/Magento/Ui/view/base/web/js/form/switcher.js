@@ -77,7 +77,9 @@ define([
             var actions = rule.actions;
 
             //TODO Refactor this logic in scope of MAGETWO-48585
-            if (rule.value != value) { // jshint ignore:line
+            /* jslint eqeq: true */
+            if (rule.value != value) {
+            /* jslint eqeq: false */
                 return;
             } else if (rule.strict) {
                 return;
