@@ -68,7 +68,6 @@ define([
             return this;
         },
 
-        /*eslint-disable eqeqeq*/
         /**
          *
          * @param {Object} rule - Rule object.
@@ -78,7 +77,7 @@ define([
             var actions = rule.actions;
 
             //TODO Refactor this logic in scope of MAGETWO-48585
-            if (rule.value != value) {
+            if (rule.value != value) { // jshint ignore:line
                 return;
             } else if (rule.strict) {
                 return;
@@ -86,8 +85,6 @@ define([
 
             actions.forEach(this.applyAction, this);
         },
-
-        /*eslint-enable eqeqeq*/
 
         /**
          *
