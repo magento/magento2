@@ -18,6 +18,7 @@ define([
          * Hide fields on coupon tab
          */
         onUpdate: function () {
+
             /* eslint-disable eqeqeq */
             var isDisabled = this.value() != this.displayOnlyForCouponType,
                 selector = '[id=coupons_information_fieldset] input, [id=coupons_information_fieldset] select, ' +
