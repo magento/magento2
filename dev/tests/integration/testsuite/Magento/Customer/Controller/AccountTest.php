@@ -449,6 +449,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 'firstname' => 'John',
                 'lastname'  => 'Doe',
                 'email'     => 'johndoe@email.com',
+                'change_email'     => 1,
+                'current_password' => 'password'
             ]);
 
         $this->dispatch('customer/account/editPost');
@@ -487,6 +489,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',
                 'change_password'  => 1,
+                'change_email'     => 1,
                 'current_password' => 'password',
                 'password'         => 'new-Password1',
                 'password_confirmation' => 'new-Password1',
