@@ -24,6 +24,7 @@ define([
                     '[id=coupons_information_fieldset] button, [id=couponCodesGrid] input, ' +
                     '[id=couponCodesGrid] select, [id=couponCodesGrid] button';
 
+            /* eslint-enable eqeqeq */
             this._super();
             _.each(
                 document.querySelectorAll(selector),
@@ -31,7 +32,6 @@ define([
                     element.disabled = isDisabled;
                 }
             );
-            /* eslint-enable eqeqeq */
         }
     });
 });

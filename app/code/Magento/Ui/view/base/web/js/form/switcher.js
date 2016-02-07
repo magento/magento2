@@ -83,8 +83,8 @@ define([
             } else if (rule.strict) {
                 return;
             }
-            /* eslint-enable eqeqeq */
 
+            /* eslint-enable eqeqeq */
             actions.forEach(this.applyAction, this);
         },
 
