@@ -134,6 +134,10 @@ class CheckUserEditObserver implements ObserverInterface
             }
         }
 
+        $customer = $this->customerSession->getCustomer();
+        $login = $customer->getEmail();
+        $captchaModel->logAttempt($login);
+
         return $this;
     }
 
