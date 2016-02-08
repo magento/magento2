@@ -43,7 +43,6 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\PasswordStrengthInterface;
-use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**

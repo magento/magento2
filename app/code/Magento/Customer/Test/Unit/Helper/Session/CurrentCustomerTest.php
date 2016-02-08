@@ -56,16 +56,6 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     protected $viewMock;
 
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customerRegistrMock;
-
-    /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $encryptorMock;
-
-    /**
      * @var int
      */
     protected $customerId = 100;
@@ -106,8 +96,6 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
         $this->viewMock = $this->getMock('Magento\Framework\App\View', [], [], '', false);
-        $this->customerRegistryMock = $this->getMock('Magento\Customer\Model\CustomerRegistry', [], [], '', false);
-        $this->encryptorMock = $this->getMock('Magento\Framework\Encryption\EncryptorInterface', [], [], '', false);
 
         $this->currentCustomer = new \Magento\Customer\Helper\Session\CurrentCustomer(
             $this->customerSessionMock,
@@ -116,9 +104,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
             $this->customerRepositoryMock,
             $this->requestMock,
             $this->moduleManagerMock,
-            $this->viewMock,
-            $this->customerRegistryMock,
-            $this->encryptorMock
+            $this->viewMock
         );
     }
 
@@ -196,61 +182,5 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue($this->customerDataMock)
             );
         $this->assertEquals($this->customerDataMock, $this->currentCustomer->getCustomer());
-    }
-
-    /**
-     * @param bool $result
-     * @dataProvider validatePasswordDataProvider
-     */
-    public function testValidatePassword($result)
-    {
-        $password = '1234567';
-        $hash = '1b2af329dd0';
-
-        $this->customerSessionMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($this->customerId);
-
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->with($this->customerId)
-            ->willReturn($this->customerDataMock);
-
-        $this->customerDataMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($this->customerId);
-
-        $customerSecureMock = $this->getMock('Magento\Customer\Model\Data\CustomerSecure', ['getPasswordHash'], [], '', false);
-        $customerSecureMock->expects($this->once())
-            ->method('getPasswordHash')
-            ->willReturn($hash);
-
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieveSecureData')
-            ->with($this->customerId)
-            ->willReturn($customerSecureMock);
-
-        $this->encryptorMock->expects($this->once())
-            ->method('validateHash')
-            ->with($password, $hash)
-            ->willReturn($result);
-
-        if ($result) {
-            $this->assertEquals($result, $this->currentCustomer->validatePassword($password));
-        } else {
-            $this->setExpectedException(
-                '\Magento\Framework\Exception\InvalidEmailOrPasswordException',
-                __('The password doesn\'t match this account.')
-            );
-            $this->currentCustomer->validatePassword($password);
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function validatePasswordDataProvider()
-    {
-        return [[true], [false]];
     }
 }

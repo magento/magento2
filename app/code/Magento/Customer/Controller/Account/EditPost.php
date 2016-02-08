@@ -15,7 +15,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\InputException;
 use Magento\Customer\Helper\EmailNotification;
 use Magento\Customer\Helper\AccountManagement;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
@@ -50,8 +49,10 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     protected $customerExtractor;
 
-    /** @var Session */
-    protected $session;
+    /**
+     * @var Session
+     */
+    protected $customerSession;
 
     /** @var EmailNotification */
     protected $emailNotification;
@@ -82,7 +83,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         EmailNotification $emailNotification
     ) {
         parent::__construct($context);
-        $this->session = $customerSession;
+        $this->customerSession = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
@@ -141,8 +142,8 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             } catch (InvalidEmailOrPasswordException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
-                $this->session->logout();
-                $this->session->start();
+                $this->customerSession->logout();
+                $this->customerSession->start();
                 $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
@@ -156,7 +157,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
 
-            $this->session->setCustomerFormData($this->getRequest()->getPostValue());
+            $this->customerSession->setCustomerFormData($this->getRequest()->getPostValue());
             return $resultRedirect->setPath('*/*/edit');
         }
 
@@ -169,7 +170,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     protected function getCurrentCustomerDataObject()
     {
         return $this->customerRepository->getById(
-            $this->session->getCustomerId()
+            $this->customerSession->getCustomerId()
         );
     }
 
