@@ -164,7 +164,28 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                                 ],
                             ],
                         ],
-                    ]
+                    ],
+                    'coupon_type' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'options' => $couponTypesOptions,
+                                ],
+                            ],
+                        ],
+                    ],
+                    'is_rss' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'options' => [
+                                        ['label' => __('Yes'), 'value' => '1'],
+                                        ['label' => __('No'), 'value' => '0']
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ]
             ],
             'actions' => [
