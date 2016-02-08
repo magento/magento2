@@ -14,6 +14,7 @@
 @action-multiselect-menu-item__padding: 1rem;
 @action-multiselect-menu-item__hover__background-color: @color-gray89;
 @action-multiselect-menu-item__selected__background-color: @color-blue-clear-sky;
+@action-multiselect-menu-item-path__color: @color-gray65-almost;
 
 //  Actions
 @action-multiselect-menu-actions__border: 1px solid @border__color;
@@ -23,6 +24,9 @@
 @action-multiselect-crumb-close-action__size: 2rem;
 @action-multiselect-crumb__background-color: @color-white-smoke;
 @action-multiselect-crumb__border-color: @color-gray65-almost;
+
+//  Search
+@action-multiselect-search-count__color: @color-gray65-almost;
 
 // Tree
 @action-multiselect-tree-arrow__color: @color-gray65-almost;
@@ -88,6 +92,33 @@
             height: @action__height + .1rem;
             top: auto;
         }
+    }
+
+    //  Multiselect inside control table
+    .admin__control-table-wrapper & {
+        position: static;
+
+        .admin__action-multiselect {
+            position: relative;
+
+            &:before {
+                right: -1px;
+                top: -1px;
+            }
+        }
+
+        .action-menu {
+            left: auto;
+            min-width: @field-size__m;
+            right: auto;
+            top: auto;
+        }
+    }
+
+    .admin__action-multiselect-item-path {
+        color: @action-multiselect-menu-item-path__color;
+        font-size: 1.2rem;
+        padding-left: 1rem;
     }
 }
 
@@ -156,6 +187,11 @@
         &:extend(.abs-icon all);
         content: @icon-search__content;
     }
+}
+
+.admin__action-multiselect-search-count {
+    color: @action-multiselect-search-count__color;
+    margin-top: 1rem;
 }
 
 //  Multiselect inner menu
@@ -252,6 +288,12 @@
                 }
             }
         }
+
+        &._with-checkbox {
+            .admin__action-multiselect-label {
+                padding-left: @control-checkbox-radio__size + .5rem;
+            }
+        }
     }
 
     .admin__action-multiselect-menu-inner {
@@ -285,7 +327,7 @@
             border-top: @action-multiselect-tree-lines;
             height: 1px;
             top: @action-multiselect-menu-item__padding + @action-multiselect-tree-arrow__size/2;
-            width: @action-multiselect-menu-item__padding + @action-multiselect-tree-menu-item__margin-left;
+            width: @action-multiselect-tree-menu-item__margin-left;
         }
 
         //  Vertical dotted line
@@ -302,24 +344,34 @@
                 width: @action-multiselect-tree-menu-item__margin-left;
             }
         }
-    }
 
-    //  Top level on tree
-    .admin__action-multiselect-menu-inner-root {
-        > .admin__action-multiselect-menu-inner-item {
+        //  Top level on tree
+        &._root {
             &:after {
-                display: none;
+                left: @action-multiselect-tree-arrow__size;
+                width: @action-multiselect-tree-arrow__size;
             }
 
             &:before {
                 left: @action-multiselect-tree-arrow__size;
                 top: @action-multiselect-menu-item__padding;
             }
+
+            &._parent {
+                &:after {
+                    display: none;
+                }
+            }
+
+            &:last-child {
+                &:before {
+                    height: @action-multiselect-menu-item__padding;
+                }
+            }
         }
     }
 
     .admin__action-multiselect-label {
-        padding-left: @control-checkbox-radio__size + .5rem;
         vertical-align: middle;
         word-break: break-word;
 
