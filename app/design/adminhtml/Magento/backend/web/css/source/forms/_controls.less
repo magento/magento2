@@ -97,9 +97,11 @@
         background-position+: ~'calc(100% - @{field-control__height})' 0;
         border-color: @field-control__focus__border-color;
     }
+
     &::-ms-expand {
         display: none;
     }
+
     .ie9 & {
         background-image: none;
         padding-right: @field-control__padding-horizontal;
@@ -139,10 +141,12 @@ option:empty {
         top: 0;
         width: 100%;
         z-index: 0;
+
         .admin__control-file:active + &,
         .admin__control-file:focus + & {
             &:extend(.abs-form-control-pattern:focus);
         }
+
         .admin__control-file[disabled] + & {
             &:extend(.abs-form-control-pattern[disabled]);
         }
@@ -168,6 +172,7 @@ option:empty {
     line-height: @field-control__line-height;
     padding-top: @field-control__padding-top;
     padding-bottom: @field-control__padding-bottom;
+
     + [class*='admin__control-'] {
         margin-left: @action__outer-indent;
     }
@@ -209,6 +214,7 @@ option:empty {
     position: relative;
     width: 100%;
     z-index: 1;
+
     > [class*='admin__addon-'],
     > [class*='admin__control-'] {
         .lib-vendor-prefix-flex-basis(auto);
@@ -217,12 +223,15 @@ option:empty {
         position: relative;
         z-index: 1;
     }
+
     .admin__control-select {
         width: auto;
     }
+
     .admin__control-text {
         width: 100%;
     }
+
     [class*='admin__control-'][class] {
         .lib-css(appearence,none);
         .lib-vendor-prefix-flex-grow(1);
@@ -232,25 +241,31 @@ option:empty {
         background-color: transparent;
         border-color: transparent;
         vertical-align: top;
+
         & + [class*='admin__control-'] {
             border-left-color: @field-control__border-color;
         }
+
         :focus {
             box-shadow: 0;
         }
+
         & ~ [class*='admin__addon-']:last-child {
             padding-left: 1rem;
             position: static !important;
             z-index: 0;
+
             > * {
                 position: relative;
                 vertical-align: top;
                 z-index: 1;
             }
+
             &:empty {
                 padding: 0;
             }
         }
+
         & ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern);
             bottom: 0;
@@ -262,12 +277,15 @@ option:empty {
             width: 100%;
             z-index: -1;
         }
+
         &[disabled] ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern[disabled]);
         }
+
         &:focus ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern:focus);
         }
+
         &:hover ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern:hover);
         }
@@ -287,6 +305,7 @@ option:empty {
         line-height: @field-control__height;
         padding: 0;
     }
+
     &-suffix {
         .lib-vendor-prefix-order(3);
 
@@ -294,6 +313,7 @@ option:empty {
             padding-right: 1rem;
         }
     }
+
     &-prefix {
         .lib-vendor-prefix-order(0);
     }
@@ -309,18 +329,22 @@ option:empty {
             overflow: hidden;
         }
     }
+
     .admin__addon {
         min-width: 0;
         overflow: hidden;
         text-align: right;
         white-space: nowrap;
         width: auto;
+
         [class*='admin__control-'] {
             display: inline;
         }
+
         &-prefix {
             float: left;
         }
+
         &-suffix {
             float: right;
         }

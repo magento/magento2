@@ -79,18 +79,21 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     public function testAppCodeUsage()
     {
         $files = Files::init();
-        $path = $files->getPathToSource();
+        $componentRegistrar = new ComponentRegistrar();
+        $libPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
         $invoker = new AggregateInvoker($this);
         $invoker(
-            function ($file) use ($path) {
+            function ($file) use ($libPaths) {
                 $content = file_get_contents($file);
-                if (strpos($file, $path . '/lib/') === 0) {
-                    $this->assertSame(
-                        0,
-                        preg_match('~(?<![a-z\\d_:]|->|function\\s)__\\s*\\(~iS', $content),
-                        'Function __() is defined outside of the library and must not be used there. ' .
-                        'Replacement suggestion: new \\Magento\\Framework\\Phrase()'
-                    );
+                foreach ($libPaths as $libPath) {
+                    if (strpos($file, $libPath) === 0) {
+                        $this->assertSame(
+                            0,
+                            preg_match('~(?<![a-z\\d_:]|->|function\\s)__\\s*\\(~iS', $content),
+                            'Function __() is defined outside of the library and must not be used there. ' .
+                            'Replacement suggestion: new \\Magento\\Framework\\Phrase()'
+                        );
+                    }
                 }
             },
             $files->getPhpFiles(

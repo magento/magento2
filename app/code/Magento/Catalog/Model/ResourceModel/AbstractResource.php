@@ -140,7 +140,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $select = $this->getConnection()
             ->select()
             ->from(['attr_table' => $table], [])
-            ->where("attr_table.{$this->getEntityIdField()} = ?", $object->getId())
+            ->where("attr_table.{$this->getLinkField()} = ?", $object->getData($this->getLinkField()))
             ->where('attr_table.store_id IN (?)', $storeIds);
 
         if ($setId) {
@@ -227,13 +227,14 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          * for default store id
          * In this case we clear all not default values
          */
+        $entityIdField = $this->getLinkField();
         if ($this->_storeManager->hasSingleStore()) {
             $storeId = $this->getDefaultStoreId();
             $connection->delete(
                 $table,
                 [
                     'attribute_id = ?' => $attribute->getAttributeId(),
-                    'entity_id = ?' => $object->getEntityId(),
+                    "{$entityIdField} = ?" => $object->getData($entityIdField),
                     'store_id <> ?' => $storeId
                 ]
             );
@@ -243,7 +244,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             [
                 'attribute_id' => $attribute->getAttributeId(),
                 'store_id' => $storeId,
-                'entity_id' => $object->getEntityId(),
+                $entityIdField => $object->getData($entityIdField),
                 'value' => $this->_prepareValueForSave($value, $attribute),
             ]
         );
@@ -296,7 +297,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     ->from($table)
                     ->where('attribute_id = ?', $attribute->getAttributeId())
                     ->where('store_id = ?', $this->getDefaultStoreId())
-                    ->where('entity_id = ?', $object->getEntityId());
+                    ->where($this->getLinkField() . ' = ?', $object->getData($this->getLinkField()));
                 $row = $this->getConnection()->fetchOne($select);
 
                 if (!$row) {
@@ -304,7 +305,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                         [
                             'attribute_id' => $attribute->getAttributeId(),
                             'store_id' => $this->getDefaultStoreId(),
-                            'entity_id' => $object->getEntityId(),
+                            $this->getLinkField() => $object->getData($this->getLinkField()),
                             'value' => $this->_prepareValueForSave($value, $attribute),
                         ]
                     );
@@ -345,7 +346,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     {
         $connection = $this->getConnection();
         $table = $attribute->getBackend()->getTable();
-        $entityIdField = $attribute->getBackend()->getEntityIdField();
+        $entityIdField = $this->getLinkField();
         $select = $connection->select()
             ->from($table, 'value_id')
             ->where("$entityIdField = :entity_field_id")
@@ -390,7 +391,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _deleteAttributes($object, $table, $info)
     {
         $connection = $this->getConnection();
-        $entityIdField = $this->getEntityIdField();
+        $entityIdField = $this->getLinkField();
         $globalValues = [];
         $websiteAttributes = [];
         $storeAttributes = [];
@@ -456,6 +457,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _getOrigObject($object)
     {
+        //TODO:
         $className = get_class($object);
         $origObject = $this->_modelFactory->create($className);
         $origObject->setData([]);
@@ -558,8 +560,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $select = $connection->select()->from(
                 $staticTable,
                 $staticAttributes
+            )->join(
+                ['e' => $this->getTable('catalog_product_entity')],
+                'e.' . $this->getLinkField() . ' = ' . $staticTable . '.' . $this->getLinkField()
             )->where(
-                $this->getEntityIdField() . ' = :entity_id'
+                'e.entity_id = :entity_id'
             );
             $attributesData = $connection->fetchRow($select, ['entity_id' => $entityId]);
         }
@@ -576,8 +581,12 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             foreach ($typedAttributes as $table => $_attributes) {
                 $select = $connection->select()
                     ->from(['default_value' => $table], ['attribute_id'])
-                    ->where('default_value.attribute_id IN (?)', array_keys($_attributes))
-                    ->where('default_value.entity_id = :entity_id')
+                    ->join(
+                        ['e' => $this->getTable('catalog_product_entity')],
+                        'e.' . $this->getLinkField() . ' = ' . 'default_value.' . $this->getLinkField(),
+                        ''
+                    )->where('default_value.attribute_id IN (?)', array_keys($_attributes))
+                    ->where("e.entity_id = :entity_id")
                     ->where('default_value.store_id = ?', 0);
 
                 $bind = ['entity_id' => $entityId];
@@ -590,7 +599,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     );
                     $joinCondition = [
                         $connection->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
-                        'store_value.entity_id = :entity_id',
+                        "store_value.{$this->getLinkField()} = e.{$this->getLinkField()}",
                         'store_value.store_id = :store_id',
                     ];
 

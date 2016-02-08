@@ -62,7 +62,7 @@ class Options extends Tab
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $fields = reset($fields);
         if (empty($fields['value']) || !is_array($fields['value'])) {
@@ -144,7 +144,7 @@ class Options extends Tab
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($tabFields = null, SimpleElement $element = null)
+    public function getFieldsData($tabFields = null, SimpleElement $element = null)
     {
         $fields = reset($tabFields);
         $name = key($tabFields);

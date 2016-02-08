@@ -7,6 +7,7 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Filter;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\Model\Entity\EntityMetadata;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -20,7 +21,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\CatalogSearch\Model\Search\TableMapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $tableMapper;
-
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
      */
@@ -71,6 +71,11 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
      */
     private $conditionManager;
 
+    /**
+     * @var MockObject
+     */
+    private $metadataPoolMock;
+
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -104,11 +109,11 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['select', 'getIfNullSql'])
+            ->setMethods(['select', 'getIfNullSql', 'quote'])
             ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
-            ->setMethods(['from', 'where', '__toString', 'joinLeft', 'columns', 'having'])
+            ->setMethods(['from', 'join', 'where', '__toString', 'joinLeft', 'columns', 'having'])
             ->getMock();
         $this->connection->expects($this->any())
             ->method('select')
@@ -138,6 +143,16 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->tableMapper = $this->getMockBuilder('\Magento\CatalogSearch\Model\Search\TableMapper')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\Model\Entity\MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $metadata = $this->getMockBuilder(EntityMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
+        $metadata->expects($this->any())->method('getLinkField')->willReturn('entity_id');
 
         $this->target = $objectManagerHelper->getObject(
             'Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor',
@@ -147,6 +162,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
                 'config' => $this->config,
                 'resource' => $resource,
                 'attributePrefix' => 'attr_',
+                'metadataPool' => $this->metadataPoolMock,
                 'tableMapper' => $this->tableMapper,
             ]
         );
@@ -170,9 +186,25 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
-    public function testProcessCategoryIds()
+    /**
+     * @return array
+     */
+    public function processCategoryIdsDataProvider()
     {
-        $expectedResult = 'category_ids_index.category_id = FilterValue';
+        return [
+            ['5', 'category_ids_index.category_id = 5'],
+            [3, 'category_ids_index.category_id = 3'],
+            ["' and 1 = 0", 'category_ids_index.category_id = 0'],
+        ];
+    }
+
+    /**
+     * @param string|int $categoryId
+     * @param string $expectedResult
+     * @dataProvider processCategoryIdsDataProvider
+     */
+    public function testProcessCategoryIds($categoryId, $expectedResult)
+    {
         $isNegation = false;
         $query = 'SELECT category_ids FROM catalog_product_entity';
 
@@ -182,7 +214,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
 
         $this->filter->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue('FilterValue'));
+            ->will($this->returnValue($categoryId));
 
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
@@ -249,6 +281,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
         ->willReturn($fieldValue);
 
+        $this->connection->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);
         $actualResult = $this->target->process($this->filter, $isNegation, 'This filter is not depends on used query');
         $this->assertSame($expected, $this->removeWhitespaces($actualResult));
     }
@@ -336,9 +369,14 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('getIfNullSql')
             ->with('current_store.value', 'main_table.value')
             ->will($this->returnValue('IF NULL SQL'));
+        $this->resource->expects($this->once())->method('getTableName')->willReturn('catalog_product_entity');
         $this->select->expects($this->once())
             ->method('from')
-            ->with(['main_table' => 'backend_table'], 'entity_id')
+            ->with(['e' => 'catalog_product_entity'], ['entity_id'])
+            ->will($this->returnSelf());
+        $this->select->expects($this->once())
+            ->method('join')
+            ->with(['main_table' => 'backend_table'], "main_table.entity_id = e.entity_id")
             ->will($this->returnSelf());
         $this->select->expects($this->once())
             ->method('joinLeft')

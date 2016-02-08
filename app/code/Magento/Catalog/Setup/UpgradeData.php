@@ -120,6 +120,23 @@ class UpgradeData implements UpgradeDataInterface
             $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
             $categorySetup->updateAttribute(3, 51, 'default_value', 1);
         }
+
+        if (version_compare($context->getVersion(), '2.0.4') < 0) {
+            /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
+            $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+            $categorySetup->updateAttribute(
+                'catalog_product',
+                'media_gallery',
+                'backend_type',
+                'static'
+            );
+            $categorySetup->updateAttribute(
+                'catalog_product',
+                'media_gallery',
+                'backend_model'
+            );
+        }
+
         $setup->endSetup();
     }
 }

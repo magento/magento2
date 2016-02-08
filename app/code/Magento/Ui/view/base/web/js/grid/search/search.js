@@ -17,8 +17,15 @@ define([
             placeholder: $t('Search by keyword'),
             label: $t('Keyword'),
             value: '',
+            previews: [],
+            chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             statefull: {
                 value: true
+            },
+            tracks: {
+                value: true,
+                previews: true,
+                inputValue: true
             },
             imports: {
                 inputValue: 'value',
@@ -40,21 +47,6 @@ define([
         initialize: function () {
             this._super()
                 .initChips();
-
-            return this;
-        },
-
-        /**
-         * Initializes observable properties.
-         *
-         * @returns {Search} Chainable.
-         */
-        initObservable: function () {
-            this._super()
-                .track('inputValue value')
-                .track({
-                    previews: []
-                });
 
             return this;
         },

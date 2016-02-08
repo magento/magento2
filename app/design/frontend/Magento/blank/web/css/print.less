@@ -17,6 +17,7 @@
         text-align: left;
     }
 }
+
 @media print {
     * {
         background: transparent !important;
@@ -38,30 +39,39 @@
         border: 1px solid @color-gray60;
         page-break-inside: avoid;
     }
+
     thead {
         display: table-header-group;
     }
+
     .table-wrapper table {
         width: 100%;
+
         td {
             width: auto;
         }
+
         table-layout: fixed;
+
         & > tfoot > tr:first-child {
             border-top: 1px solid @color-gray60;
         }
     }
+
     .box,
     tr,
     img {
         page-break-inside: avoid;
     }
+
     img {
         max-width: 100% !important;
     }
+
     @page {
         margin: 1cm;
     }
+
     .block-content,
     p,
     h2,
@@ -69,17 +79,21 @@
         orphans: 3;
         widows: 3;
     }
+
     .block-content {
         page-break-before: avoid;
     }
+
     .block-title,
     h2,
     h3 {
         page-break-after: avoid;
     }
+
     .nav-toggle {
         display: none !important;
     }
+
     .sidebar,
     .nav-sections,
     .header.content > *[class],
@@ -87,6 +101,7 @@
     .footer.content > *[class] {
         display: none;
     }
+
     .logo,
     .footer .copyright {
         display: block !important;
@@ -103,14 +118,17 @@
             }
         }
     }
+
     .column.main {
         width: 100% !important;
         float: none !important;
     }
+
     .breadcrumbs {
         margin: 0 auto;
         text-align: right;
     }
+
     .footer.content {
         padding: 0;
     }

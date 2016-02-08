@@ -43,6 +43,7 @@
             text-align: left;
             top: 0;
             vertical-align: middle;
+
             .products.wrapper ~ .toolbar & {
                 display: none;
             }
@@ -56,13 +57,16 @@
 
         &-products {
             .lib-css(background-color, @toolbar-background);
+
             .pages {
                 display: none;
+
                 .products.wrapper ~ & {
                     display: block;
                 }
             }
         }
+
         .pages {
             margin-bottom: @indent__m;
         }
@@ -70,19 +74,23 @@
 
     .sorter {
         float: right;
+
         .page-products & {
             position: absolute;
             right: @indent__s;
             top: 0;
             z-index: 1;
         }
+
         .products.wrapper ~ .toolbar & {
             display: none;
         }
+
         &-options {
             margin: 0 @indent__xs 0 7px;
             width: auto;
         }
+
         &-action {
             .lib-icon-font(
             @icon-arrow-up,
@@ -91,6 +99,7 @@
             @_icon-font-color-hover: @header-icons-color-hover
             );
             .lib-icon-text-hide();
+
             &.sort-desc:before {
                 content: @icon-arrow-down;
             }
@@ -103,16 +112,20 @@
 
     .limiter {
         display: none;
+
         &-options {
             margin: 0 5px 0 7px;
             width: auto;
         }
+
         &-label {
             font-weight: 400;
         }
+
         .page-products .toolbar & {
             display: none;
         }
+
         .control {
             display: inline-block;
         }
@@ -144,6 +157,7 @@
             float: left;
             position: static;
         }
+
         .products.wrapper ~ & .pages {
             float: left;
             margin-bottom: 0;
@@ -178,14 +192,17 @@
             .modes-label + & {
                 border-radius: 3px 0 0 3px;
             }
+
             &:hover {
                 .lib-css(color, @text__color__muted);
                 background: darken(@toolbar-element-background, 2%);
             }
+
             &:last-child {
                 border-radius: 0 3px 3px 0;
                 border-right: 1px solid @border-color__base;
             }
+
             &.active {
                 .lib-css(box-shadow, @button__shadow-active);
                 background: darken(@toolbar-element-background, 7%);

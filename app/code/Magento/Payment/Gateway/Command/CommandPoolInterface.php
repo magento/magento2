@@ -8,6 +8,11 @@ namespace Magento\Payment\Gateway\Command;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\CommandInterface;
 
+/**
+ * Interface CommandPoolInterface
+ * @package Magento\Payment\Gateway\Command
+ * @api
+ */
 interface CommandPoolInterface
 {
     /**

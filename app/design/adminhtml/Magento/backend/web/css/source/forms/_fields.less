@@ -11,6 +11,15 @@
 @import 'fields/_field-tooltips.less';
 
 //
+//  Extends
+//  _____________________________________________
+
+.abs-field-no-label {
+    #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
+    margin-left: @_length;
+}
+
+//
 //  Form Fields
 //  _____________________________________________
 
@@ -23,6 +32,7 @@
     margin: 0;
     min-width: 0;
     padding: 0;
+
     > .admin__field {
         border: 0;
         margin: 0;
@@ -32,12 +42,19 @@
         &.admin__field-wide {
             &:extend(.abs-field-rows all);
         }
+
         > .admin__field-control {
             #mix-grid .column(@field-control-grid__column, @field-grid__columns);
         }
 
         > .admin__field-label {
             #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+        }
+
+        &.admin__field-no-label {
+            > .admin__field-control {
+                &:extend(.abs-field-no-label all);
+            }
         }
     }
 }
@@ -93,6 +110,7 @@
         }
     }
 
+    .required > &,
     ._required > & {
         span:after {
             color: @field-label__required__color;
@@ -158,6 +176,7 @@
                 width: @_length;
             }
         }
+
         .admin__field-control &:nth-child(n+2):before {
             content: '';
         }
@@ -173,6 +192,60 @@
 .admin__field-control {
     & + & {
         margin-top: 1.5rem;
+    }
+
+    //  If there is a tooltip
+    &._with-tooltip {
+        > .admin__control-text,
+        > .admin__control-textarea {
+            width: ~'calc(100% - @{field-tooltip__width} - 4px)'; // Minus space size
+        }
+
+        .admin__field-tooltip {
+            width: auto;
+        }
+    }
+}
+
+//  Collapsible radiobutton field
+.admin__field-collapsible {
+    .admin__fieldset > & {
+        margin-bottom: 0;
+
+        .admin__field-control {
+            border-top: 1px solid @field-collapsible__border-color;
+            display: block;
+            font-size: 1.7rem;
+            font-weight: @font-weight__bold;
+            padding: 1.7rem 0;
+            width: calc(100% - @indent__l);
+        }
+        
+        .admin__field-option {
+            padding-top: 0;
+        }
+    }
+
+    + div {
+        margin-top: @indent__m;
+    }
+
+    .admin__control-radio {
+        + label {
+            &:before {
+                height: 1.8rem;
+                width: 1.8rem;
+            }
+        }
+
+        &:checked {
+            + label {
+                &:after {
+                    left: 4px;
+                    top: 5px;
+                }
+            }
+        }
     }
 }
 
@@ -214,11 +287,13 @@
         &:nth-child(1):nth-last-child(2),
         &:nth-child(2):nth-last-child(1) {
             display: inline-block;
+
             + .admin__field-option {
                 display: inline-block;
                 margin-left: 41px;
                 margin-top: 0;
             }
+
             + .admin__field-option:before {
                 background: @field-divider__background-color;
                 content: '';
@@ -245,6 +320,7 @@
 .admin__control-fields {
     & > .admin__field:first-child {
         position: static;
+
         & > .admin__field-label {
             #mix-grid .column(@field-label-grid__column, @field-grid__columns);
             cursor: pointer;
@@ -261,6 +337,7 @@
     .admin__field-label ~ .admin__field-control {
         width: 100%;
     }
+
     .admin__field:nth-child(n+2):not(.admin__field-option) {
         > .admin__field-label {
             .extend__visually-hidden();
@@ -272,19 +349,22 @@
 [class*='admin__control-grouped'] {
     box-sizing: border-box;
     display: table;
-    table-layout: fixed;
     width: 100%;
+
     & > .admin__field {
         display: table-cell;
         vertical-align: top;
         width: 50%;
+
         > .admin__field-control {
             float: none;
             width: 100%;
         }
+
         &:nth-child(n+2) {
             padding-left: 20px;
-            &:not(.admin__field-option) .admin__field-label {
+
+            &:not(.admin__field-option):not(.admin__field-date) .admin__field-label {
                 .lib-visually-hidden();
             }
         }
@@ -294,6 +374,7 @@
 //  Group of checkboxes or radiobuttons
 .admin__field-control-group {
     margin-top: .8rem;
+
     & > .admin__field {
         padding: 0;
     }
@@ -308,6 +389,7 @@
     float: left;
     position: static;
     width: 100%;
+
     &:extend(.abs-fieldset-legend);
     & + br {
         display: block;

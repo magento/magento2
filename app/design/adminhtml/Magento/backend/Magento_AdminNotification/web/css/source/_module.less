@@ -17,6 +17,7 @@
 .message-system-inner {
     &:extend(.abs-clearfix all);
     background: @message-system__background-color;
+
     .message-system-list {
         float: left;
         width: 75%;
@@ -32,13 +33,16 @@
 .message-system-short {
     overflow: hidden;
     text-align: right;
+
     .message-system-short-label {
         display: inline-block;
         padding: @message-system-short-message__padding-vertical .3rem @message-system-short-message__padding-vertical 1rem;
     }
+
     .message {
         display: inline-block;
         padding: @message-system-short-message__padding-vertical 2rem @message-system-short-message__padding-vertical 3.3rem;
+
         &:before {
             left: .3rem;
         }

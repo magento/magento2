@@ -85,7 +85,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 'visible' => true,
                 'formElement' => 'select',
                 'label' => __('Country'),
-                'options' => $this->countryCollection->load()->toOptionArray(),
+                'options' => $this->countryCollection->loadByStore()->toOptionArray(),
                 'value' => null
             ],
             'region_id' => [
@@ -109,6 +109,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             $fieldSetPointer = &$jsLayout['components']['block-summary']['children']['block-shipping']
             ['children']['address-fieldsets']['children'];
             $fieldSetPointer = $this->merger->merge($elements, 'checkoutProvider', 'shippingAddress', $fieldSetPointer);
+            $fieldSetPointer['region_id']['config']['skipValidation'] = true;
         }
         return $jsLayout;
     }

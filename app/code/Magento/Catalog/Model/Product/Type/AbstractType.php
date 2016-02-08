@@ -574,20 +574,27 @@ abstract class AbstractType
     {
         $transport = new \StdClass();
         $transport->options = [];
-        foreach ($product->getOptions() as $option) {
-            /* @var $option \Magento\Catalog\Model\Product\Option */
-            $group = $option->groupFactory($option->getType())
-                ->setOption($option)
-                ->setProduct($product)
-                ->setRequest($buyRequest)
-                ->setProcessMode($processMode)
-                ->validateUserValue($buyRequest->getOptions());
+        $options = null;
+        if ($product->getHasOptions()) {
+            $options = $product->getOptions();
+        }
+        if ($options !== null) {
+            foreach ($options as $option) {
+                /* @var $option \Magento\Catalog\Model\Product\Option */
+                $group = $option->groupFactory($option->getType())
+                    ->setOption($option)
+                    ->setProduct($product)
+                    ->setRequest($buyRequest)
+                    ->setProcessMode($processMode)
+                    ->validateUserValue($buyRequest->getOptions());
 
-            $preparedValue = $group->prepareForCart();
-            if ($preparedValue !== null) {
-                $transport->options[$option->getId()] = $preparedValue;
+                $preparedValue = $group->prepareForCart();
+                if ($preparedValue !== null) {
+                    $transport->options[$option->getId()] = $preparedValue;
+                }
             }
         }
+
 
         $eventName = sprintf('catalog_product_type_prepare_%s_options', $processMode);
         $this->_eventManager->dispatch(
@@ -606,8 +613,9 @@ abstract class AbstractType
      */
     public function checkProductBuyState($product)
     {
-        if (!$product->getSkipCheckRequiredOption()) {
-            foreach ($product->getOptions() as $option) {
+        if (!$product->getSkipCheckRequiredOption() && $product->getHasOptions()) {
+            $options = $product->getProductOptionsCollection();
+            foreach ($options as $option) {
                 if ($option->getIsRequire()) {
                     $customOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
                     if (!$customOption || strlen($customOption->getValue()) == 0) {
@@ -970,7 +978,10 @@ abstract class AbstractType
     {
         $searchData = [];
         if ($product->getHasOptions()) {
-            $searchData = $this->_catalogProductOption->getSearchableData($product->getId(), $product->getStoreId());
+            $searchData = $this->_catalogProductOption->getSearchableData(
+                $product->getEntityId(),
+                $product->getStoreId()
+            );
         }
 
         return $searchData;

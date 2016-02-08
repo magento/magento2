@@ -13,6 +13,8 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * Product collection
@@ -1019,13 +1021,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $select = clone $this->getSelect();
         $attribute = $this->getEntity()->getAttribute($attribute);
 
-        $select->reset()->from(
-            $attribute->getBackend()->getTable(),
-            ['entity_id', 'store_id', 'value']
-        )->where(
-            'attribute_id = ?',
-            (int)$attribute->getId()
-        );
+        $aiField = $this->getConnection()->getAutoIncrementField($this->getMainTable());
+        $select->reset()
+            ->from(
+                ['cpe' => $this->getMainTable()],
+                ['entity_id']
+            )->join(
+                ['cpa' => $attribute->getBackend()->getTable()],
+                'cpe.' . $aiField . ' = cpa.' . $aiField,
+                ['store_id', 'value']
+            )->where('attribute_id = ?', (int)$attribute->getId());
 
         $data = $this->getConnection()->fetchAll($select);
         $res = [];
@@ -1516,6 +1521,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
+    {
+        return $entity->getLinkField();
+    }
+
+    /**
      * Add requere tax percent flag for product collection
      *
      * @return $this
@@ -1543,22 +1556,28 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function addOptionsToResult()
     {
-        $productIds = [];
+        $productsByLinkId = [];
+
         foreach ($this as $product) {
-            $productIds[] = $product->getId();
+            $productId = $product->getData(
+                $product->getResource()->getLinkField()
+            );
+
+            $productsByLinkId[$productId] = $product;
         }
-        if (!empty($productIds)) {
+
+        if (!empty($productsByLinkId)) {
             $options = $this->_productOptionFactory->create()->getCollection()->addTitleToResult(
                 $this->_storeManager->getStore()->getId()
             )->addPriceToResult(
                 $this->_storeManager->getStore()->getId()
             )->addProductToFilter(
-                $productIds
+                array_keys($productsByLinkId)
             )->addValuesToResult();
 
             foreach ($options as $option) {
-                if ($this->getItemById($option->getProductId())) {
-                    $this->getItemById($option->getProductId())->addOption($option);
+                if (isset($productsByLinkId[$option->getProductId()])) {
+                    $productsByLinkId[$option->getProductId()]->addOption($option);
                 }
             }
         }
@@ -1982,7 +2001,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $conditions = [
             'cat_pro.product_id=e.entity_id',
-            $this->getConnection()->quoteInto('cat_pro.category_id=?', $filters['category_id']),
+            $this->getConnection()->quoteInto(
+                'cat_pro.category_id=?',
+                $filters['category_id']
+            ),
         ];
         $joinCond = join(' AND ', $conditions);
 
@@ -2078,7 +2100,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
             }
         }
-
+        $linkField = $this->getConnection()->getAutoIncrementField($this->getTable('catalog_product_entity'));
         $connection = $this->getConnection();
         $columns = [
             'price_id' => 'value_id',
@@ -2087,16 +2109,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             'cust_group' => 'customer_group_id',
             'price_qty' => 'qty',
             'price' => 'value',
-            'product_id' => 'entity_id',
+            'product_id' => $linkField,
         ];
         $select = $connection->select()->from(
             $this->getTable('catalog_product_entity_tier_price'),
             $columns
         )->where(
-            'entity_id IN(?)',
+            $linkField .' IN(?)',
             $productIds
         )->order(
-            ['entity_id', 'qty']
+            [$linkField, 'qty']
         );
 
         if ($websiteId == '0') {

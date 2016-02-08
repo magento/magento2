@@ -95,6 +95,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $_entityIdField;
 
     /**
+     * Entity primary key for link field name
+     *
+     * @var string
+     */
+    protected $linkIdField;
+
+    /**
      * Entity values table identification field name
      *
      * @var string
@@ -762,6 +769,25 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     }
 
     /**
+     * Get link id
+     *
+     * @return string
+     */
+    public function getLinkField()
+    {
+        if (!$this->linkIdField) {
+            $indexList = $this->getConnection()->getIndexList($this->getEntityTable());
+            $pkName = $this->getConnection()->getPrimaryKeyName($this->getEntityTable());
+            $this->linkIdField = $indexList[$pkName]['COLUMNS_LIST'][0];
+            if (!$this->linkIdField) {
+                $this->linkIdField = $this->getEntityIdField();
+            }
+        }
+
+        return $this->linkIdField;
+    }
+
+    /**
      * Get entity id field name in entity table
      *
      * @return string
@@ -982,16 +1008,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             $object->isObjectNew(true);
         }
 
-        if (empty($attributes)) {
-            $this->loadAllAttributes($object);
-        } else {
-            if (!is_array($attributes)) {
-                $attributes = [$attributes];
-            }
-            foreach ($attributes as $attrCode) {
-                $this->getAttribute($attrCode);
-            }
-        }
+        $this->loadAttributesMetadata($attributes);
 
         $this->_loadModelAttributes($object);
 
@@ -1001,6 +1018,26 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
 
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
+    }
+
+    /**
+     * Loads attributes metadata.
+     *
+     * @param array|null $attributes
+     * @return $this
+     */
+    protected function loadAttributesMetadata($attributes)
+    {
+        if (empty($attributes)) {
+            $this->loadAllAttributes();
+        } else {
+            if (!is_array($attributes)) {
+                $attributes = [$attributes];
+            }
+            foreach ($attributes as $attrCode) {
+                $this->getAttribute($attrCode);
+            }
+        }
     }
 
     /**
@@ -1148,7 +1185,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $this->objectRelationProcessor->validateDataIntegrity($this->getEntityTable(), $object->getData());
 
                 $this->_beforeSave($object);
-                $this->_processSaveData($this->_collectSaveData($object));
+                $this->processSave($object);
                 $this->_afterSave($object);
 
                 $object->afterSave();
@@ -1162,6 +1199,17 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         }
 
         return $this;
+    }
+
+    /**
+     * Save entity process
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return void
+     */
+    protected function processSave($object)
+    {
+        $this->_processSaveData($this->_collectSaveData($object));
     }
 
     /**
@@ -1661,7 +1709,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $data = [
             'attribute_id' => $attribute->getId(),
-            $entity->getEntityIdField() => $object->getData($entity->getEntityIdField()),
+            $entity->getLinkField() => $object->getData($entity->getLinkField()),
         ];
 
         if (!$this->getEntityTable()) {
@@ -1687,26 +1735,14 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $id = (int) $object;
             } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
                 $object->beforeDelete();
-                $id = (int) $object->getId();
+                $id = (int) $object->getData($this->getLinkField());
             }
             $this->_beforeDelete($object);
-            try {
-                $where = [$this->getEntityIdField() . '=?' => $id];
-                $this->objectRelationProcessor->delete(
-                    $this->transactionManager,
-                    $connection,
-                    $this->getEntityTable(),
-                    $this->getConnection()->quoteInto($this->getEntityIdField() . '=?', $id),
-                    [$this->getEntityIdField() => $id]
-                );
-
-                $this->loadAllAttributes($object);
-                foreach ($this->getAttributesByTable() as $table => $attributes) {
-                    $this->getConnection()->delete($table, $where);
-                }
-            } catch (\Exception $e) {
-                throw $e;
-            }
+            $this->evaluateDelete(
+                $object,
+                $id,
+                $connection
+            );
 
             $this->_afterDelete($object);
 
@@ -1723,6 +1759,39 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             throw $e;
         }
         return $this;
+    }
+
+    /**
+     * Evaluate Delete operations
+     *
+     * @param \Magento\Framework\DataObject|int|string $object
+     * @param string|int $id
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    protected function evaluateDelete($object, $id, $connection)
+    {
+        $where = [$this->getEntityIdField() . '=?' => $id];
+        $this->objectRelationProcessor->delete(
+            $this->transactionManager,
+            $connection,
+            $this->getEntityTable(),
+            $this->getConnection()->quoteInto(
+                $this->getEntityIdField() . '=?',
+                $id
+            ),
+            [$this->getEntityIdField() => $id]
+        );
+
+        $this->loadAllAttributes($object);
+        foreach ($this->getAttributesByTable() as $table => $attributes) {
+            $this->getConnection()->delete(
+                $table,
+                $where
+            );
+        }
     }
 
     /**
@@ -1814,7 +1883,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function getDefaultAttributes()
     {
-        return array_unique(array_merge($this->_getDefaultAttributes(), [$this->getEntityIdField()]));
+        return array_unique(array_merge(
+            $this->_getDefaultAttributes(),
+            [$this->getEntityIdField(), $this->getLinkField()]
+        ));
     }
 
     /**

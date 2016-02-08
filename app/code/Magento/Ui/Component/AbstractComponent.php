@@ -6,6 +6,8 @@
 namespace Magento\Ui\Component;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
@@ -92,10 +94,34 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
         } else {
             $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
         }
+
+        if ($this->hasData('actions')) {
+            $this->getContext()->addActions($this->getData('actions'), $this);
+        }
+
         if ($this->hasData('buttons')) {
             $this->getContext()->addButtons($this->getData('buttons'), $this);
         }
         $this->getContext()->getProcessor()->notify($this->getComponentName());
+    }
+
+    /**
+     * Call prepare method in the component UI
+     *
+     * @param UiComponentInterface $component
+     * @return $this
+     */
+    protected function prepareChildComponent(UiComponentInterface $component)
+    {
+        $childComponents = $component->getChildComponents();
+        if (!empty($childComponents)) {
+            foreach ($childComponents as $child) {
+                $this->prepareChildComponent($child);
+            }
+        }
+        $component->prepare();
+
+        return $this;
     }
 
     /**
@@ -182,7 +208,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function getConfiguration()
     {
-        return (array) $this->getData('config');
+        return (array)$this->getData('config');
     }
 
     /**
@@ -194,7 +220,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function getJsConfig(UiComponentInterface $component)
     {
-        $jsConfig = (array) $component->getData('js_config');
+        $jsConfig = (array)$component->getData('js_config');
         if (!isset($jsConfig['extends'])) {
             $jsConfig['extends'] = $component->getContext()->getNamespace();
         }

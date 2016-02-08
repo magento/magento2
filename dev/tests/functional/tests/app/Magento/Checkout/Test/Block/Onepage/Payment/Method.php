@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Test\Block\Onepage\Payment;
 
 use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Checkout payment method block.
@@ -35,6 +36,13 @@ class Method extends Block
     protected $billingAddressSelector = '.payment-method-billing-address';
 
     /**
+     * Save credit card check box.
+     *
+     * @var string
+     */
+    protected $vaultCheckbox = '#%s_vault_enabler';
+
+    /**
      * Place order.
      *
      * @return void
@@ -58,5 +66,18 @@ class Method extends Block
             '\Magento\Checkout\Test\Block\Onepage\Payment\Method\Billing',
             ['element' => $element]
         );
+    }
+
+    /**
+     * Save credit card.
+     *
+     * @param string $paymentMethod
+     * @param string $creditCardSave
+     * @return void
+     */
+    public function saveCreditCard($paymentMethod, $creditCardSave)
+    {
+        $saveCard = sprintf($this->vaultCheckbox, $paymentMethod);
+        $this->_rootElement->find($saveCard, Locator::SELECTOR_CSS, 'checkbox')->setValue($creditCardSave);
     }
 }

@@ -81,7 +81,7 @@
                             <config_path>payment/braintree/debug</config_path>
                         </field>
                         <field id="capture_action" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Capture action</label>
+                            <label>Capture Action</label>
                             <source_model>Magento\Braintree\Model\Source\CaptureAction</source_model>
                             <config_path>payment/braintree/capture_action</config_path>
                         </field>

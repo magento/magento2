@@ -3,32 +3,13 @@
  * See COPYING.txt for license details.
  */
 
-define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
+define([
+    'jquery',
+    'underscore',
+    'jquery/ui',
+    'jquery/jquery.parsequery'
+], function ($, _) {
     'use strict';
-
-    /**
-     * Parse params
-     * @param {String} query
-     * @returns {{}}
-     */
-    $.parseParams = function (query) {
-        var re = /([^&=]+)=?([^&]*)/g,
-            decodeRE = /\+/g,  // Regex for replacing addition symbol with a space
-            decode = function (str) {
-                return decodeURIComponent(str.replace(decodeRE, " "));
-            },
-            params = {}, e;
-
-        while (e = re.exec(query)) {
-            var k = decode(e[1]), v = decode(e[2]);
-            if (k.substring(k.length - 2) === '[]') {
-                k = k.substring(0, k.length - 2);
-                (params[k] || (params[k] = [])).push(v);
-            }
-            else params[k] = v;
-        }
-        return params;
-    };
 
     /**
      * Render tooltips by attributes (only to up).
@@ -41,7 +22,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
     $.widget('custom.SwatchRendererTooltip', {
         options: {
             delay: 200,                             //how much ms before tooltip to show
-            tooltip_class: 'swatch-option-tooltip'  //configurable, but remember about css
+            tooltipClass: 'swatch-option-tooltip'  //configurable, but remember about css
         },
 
         /**
@@ -50,52 +31,60 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         _init: function () {
             var $widget = this,
                 $this = this.element,
-                $element = $('.' + $widget.options.tooltip_class),
+                $element = $('.' + $widget.options.tooltipClass),
                 timer,
                 type = parseInt($this.attr('option-type'), 10),
                 label = $this.attr('option-label'),
                 thumb = $this.attr('option-tooltip-thumb'),
-                value = $this.attr('option-tooltip-value');
+                value = $this.attr('option-tooltip-value'),
+                $image,
+                $title,
+                $corner;
 
-            if ($element.size() == 0) {
-                $element = $('<div class="' + $widget.options.tooltip_class + '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>');
+            if (!$element.size()) {
+                $element = $('<div class="' +
+                    $widget.options.tooltipClass +
+                    '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>'
+                );
                 $('body').append($element);
             }
 
-            var $image = $element.find('.image'),
-                $title = $element.find('.title'),
-                $corner = $element.find('.corner');
+            $image = $element.find('.image');
+            $title = $element.find('.title');
+            $corner = $element.find('.corner');
 
             $this.hover(function () {
                 if (!$this.hasClass('disabled')) {
                     timer = setTimeout(
                         function () {
+                            var leftOpt = null,
+                                leftCorner = 0,
+                                left,
+                                $window;
 
-                            // Image
-                            if (type == 2) {
+                            if (type === 2) {
+                                // Image
                                 $image.css({
                                     'background': 'url("' + thumb + '") no-repeat center', //Background case
                                     'background-size': 'initial'
                                 });
                                 $image.show();
-                            }
-
-                            // Color
-                            else if (type == 1) {
-                                $image.css({background: value});
+                            } else if (type === 1) {
+                                // Color
+                                $image.css({
+                                    background: value
+                                });
                                 $image.show();
-                            }
-
-                            // Textual or Clear
-                            else if (type == 0 || type == 3) {
+                            } else if (type === 0 || type === 3) {
+                                // Default
                                 $image.hide();
                             }
 
                             $title.text(label);
 
-                            var leftOpt = $this.offset().left,
-                                left = leftOpt + ($this.width() / 2) - ($element.width() / 2),
-                                $window = $(window);
+                            leftOpt = $this.offset().left;
+                            left = leftOpt + $this.width() / 2 - $element.width() / 2;
+                            $window = $(window);
 
                             // the numbers (5 and 5) is magick constants for offset from left or right page
                             if (left < 0) {
@@ -105,11 +94,12 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                             }
 
                             // the numbers (6,  3 and 18) is magick constants for offset tooltip
-                            var leftCorner = 0;
+                            leftCorner = 0;
+
                             if ($element.width() < $this.width()) {
                                 leftCorner = $element.width() / 2 - 3;
                             } else {
-                                leftCorner = (leftOpt > left ? leftOpt - left : left - leftOpt) + ($this.width() / 2) - 6;
+                                leftCorner = (leftOpt > left ? leftOpt - left : left - leftOpt) + $this.width() / 2 - 6;
                             }
 
                             $corner.css({
@@ -164,16 +154,35 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                 moreButton: 'swatch-more',
                 loader: 'swatch-option-loading'
             },
-            jsonConfig: {},                                    // option's json config
-            jsonSwatchConfig: {},                              // swatch's json config
-            selectorProduct: '.product-info-main',             // selector of parental block of prices and swatches (need to know where to seek for price block)
-            selectorProductPrice: '[data-role=priceBox]',      // selector of price wrapper (need to know where set price)
-            numberToShow: false,                               // number of controls to show (false or zero = show all)
-            onlySwatches: false,                               // show only swatch controls
-            enableControlLabel: true,                          // enable label for control
-            moreButtonText: 'More',                            // text for more button
-            mediaCallback: '',                                 // Callback url for media
-            mediaGalleryInitial: [{}]                          // Cache for BaseProduct images. Needed when option unset
+            // option's json config
+            jsonConfig: {},
+
+            // swatch's json config
+            jsonSwatchConfig: {},
+
+            // selector of parental block of prices and swatches (need to know where to seek for price block)
+            selectorProduct: '.product-info-main',
+
+            // selector of price wrapper (need to know where set price)
+            selectorProductPrice: '[data-role=priceBox]',
+
+            // number of controls to show (false or zero = show all)
+            numberToShow: false,
+
+            // show only swatch controls
+            onlySwatches: false,
+
+            // enable label for control
+            enableControlLabel: true,
+
+            // text for more button
+            moreButtonText: 'More',
+
+            // Callback url for media
+            mediaCallback: '',
+
+            // Cache for BaseProduct images. Needed when option unset
+            mediaGalleryInitial: [{}]
         },
 
         /**
@@ -189,7 +198,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
          * @private
          */
         _init: function () {
-            if (this.options.jsonConfig != '' && this.options.jsonSwatchConfig != '') {
+            if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 this._RenderControls();
             } else {
                 console.log('SwatchRenderer: No input data received');
@@ -253,8 +262,14 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
                 // Create new control
                 container.append(
-                    '<div class="' + classes.attributeClass + ' ' + item.code + '" attribute-code="' + item.code + '" attribute-id="' + item.id + '">' + label +
-                    '<div class="' + classes.attributeOptionsWrapper + ' clearfix">' + options + select + '</div>' + input + '</div>'
+                    '<div class="' + classes.attributeClass + ' ' + item.code +
+                        '" attribute-code="' + item.code +
+                        '" attribute-id="' + item.id + '">' +
+                            label +
+                        '<div class="' + classes.attributeOptionsWrapper + ' clearfix">' +
+                            options + select +
+                        '</div>' + input +
+                    '</div>'
                 );
 
                 $widget.optionsMap[item.id] = {};
@@ -263,7 +278,10 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                 $.each(item.options, function () {
                     if (this.products.length > 0) {
                         $widget.optionsMap[item.id][this.id] = {
-                            price: parseInt($widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount, 10),
+                            price: parseInt(
+                                $widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount,
+                                10
+                            ),
                             products: this.products
                         };
                     }
@@ -285,79 +303,83 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             $widget._Rewind(container);
 
             //Emulate click on all swatches from Request
-            $widget._EmulateSelected();
+            $widget._EmulateSelected($.parseQuery());
+            $widget._EmulateSelected($widget._getSelectedAttributes());
         },
 
         /**
          * Render swatch options by part of config
          *
-         * @param config
-         * @returns {string}
+         * @param {Object} config
+         * @returns {String}
          * @private
          */
         _RenderSwatchOptions: function (config) {
-            if (!this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
-                return '';
-            }
-
             var optionConfig = this.options.jsonSwatchConfig[config.id],
                 optionClass = this.options.classes.optionClass,
-                moreLimit = this.options.numberToShow,
+                moreLimit = parseInt(this.options.numberToShow, 10),
                 moreClass = this.options.classes.moreButton,
                 moreText = this.options.moreButtonText,
                 countAttributes = 0,
                 html = '';
 
+            if (!this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
+                return '';
+            }
+
             $.each(config.options, function () {
+                var id,
+                    type,
+                    value,
+                    thumb,
+                    label,
+                    attr;
+
                 if (!optionConfig.hasOwnProperty(this.id)) {
                     return '';
                 }
 
                 // Add more button
-                if (moreLimit != false && moreLimit == countAttributes++) {
+                if (moreLimit === countAttributes++) {
                     html += '<a href="#" class="' + moreClass + '">' + moreText + '</a>';
                 }
 
-                var id = this.id,
-                    type = optionConfig[id].type,
-                    value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '',
-                    thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '',
-                    label = this.label ? this.label : '',
-                    attr =
-                        ' option-type="' + type + '"' +
-                        ' option-id="' + id + '"' +
-                        ' option-label="' + label + '"' +
-                        ' option-tooltip-thumb="' + thumb + '"' +
-                        ' option-tooltip-value="' + value + '"';
+                id = this.id;
+                type = parseInt(optionConfig[id].type, 10);
+                value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
+                thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
+                label = this.label ? this.label : '';
+                attr =
+                    ' option-type="' + type + '"' +
+                    ' option-id="' + id + '"' +
+                    ' option-label="' + label + '"' +
+                    ' option-tooltip-thumb="' + thumb + '"' +
+                    ' option-tooltip-value="' + value + '"';
 
                 if (!this.hasOwnProperty('products') || this.products.length <= 0) {
                     attr += ' option-empty="true"';
                 }
 
-                // Text
-                if (type == 0) {
-                    html += '<div class="' + optionClass + ' text" ' + attr + '>' + (value ? value : label) + '</div>';
-                }
-
-                // Color
-                else if (type == 1) {
+                if (type === 0) {
+                    // Text
+                    html += '<div class="' + optionClass + ' text" ' + attr + '>' + (value ? value : label) +
+                        '</div>';
+                } else if (type === 1) {
+                    // Color
                     html += '<div class="' + optionClass + ' color" ' + attr +
-                        '" style="background: ' + value + ' no-repeat center; background-size: initial;">' + '' + '</div>';
-                }
-
-                // Image
-                else if (type == 2) {
+                        '" style="background: ' + value +
+                        ' no-repeat center; background-size: initial;">' + '' +
+                        '</div>';
+                } else if (type === 2) {
+                    // Image
                     html += '<div class="' + optionClass + ' image" ' + attr +
-                        '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' + '</div>';
-                }
-
-                // Clear
-                else if (type == 3) {
+                        '" style="background: url(' + value + ') no-repeat center; background-size: initial;">' + '' +
+                        '</div>';
+                } else if (type === 3) {
+                    // Clear
                     html += '<div class="' + optionClass + '" ' + attr + '></div>';
-                }
-
-                // Default
-                else {
+                } else {
+                    // Defaualt
                     html += '<div class="' + optionClass + '" ' + attr + '>' + label + '</div>';
                 }
             });
@@ -368,17 +390,19 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Render select by part of config
          *
-         * @param config
-         * @param chooseText
-         * @returns {string}
+         * @param {Object} config
+         * @param {String} chooseText
+         * @returns {String}
          * @private
          */
         _RenderSwatchSelect: function (config, chooseText) {
+            var html;
+
             if (this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
                 return '';
             }
 
-            var html =
+            html =
                 '<select class="' + this.options.classes.selectClass + ' ' + config.code + '">' +
                 '<option value="0" option-id="0">' + chooseText + '</option>';
 
@@ -402,7 +426,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
          * Input for submit form.
          * This control shouldn't have "type=hidden", "display: none" for validation work :(
          *
-         * @param config
+         * @param {Object} config
          * @private
          */
         _RenderFormInput: function (config) {
@@ -434,6 +458,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
             $widget.element.on('click', '.' + this.options.classes.moreButton, function (e) {
                 e.preventDefault();
+
                 return $widget._OnMoreClick($(this));
             });
         },
@@ -441,8 +466,8 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Event for swatch options
          *
-         * @param $this
-         * @param $widget
+         * @param {Object} $this
+         * @param {Object} $widget
          * @private
          */
         _OnClick: function ($this, $widget) {
@@ -480,8 +505,8 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Event for select
          *
-         * @param $this
-         * @param $widget
+         * @param {Object} $this
+         * @param {Object} $widget
          * @private
          */
         _OnChange: function ($this, $widget) {
@@ -504,7 +529,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Event for more switcher
          *
-         * @param $this
+         * @param {Object} $this
          * @private
          */
         _OnMoreClick: function ($this) {
@@ -547,22 +572,22 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     id = $this.attr('attribute-id'),
                     products = $widget._CalcProducts(id);
 
-                if (selected.size() == 1 && selected.first().attr('attribute-id') == id) {
+                if (selected.size() === 1 && selected.first().attr('attribute-id') === id) {
                     return;
                 }
 
                 $this.find('[option-id]').each(function () {
-                    var $this = $(this),
-                        option = $this.attr('option-id');
+                    var $element = $(this),
+                        option = $element.attr('option-id');
 
                     if (!$widget.optionsMap.hasOwnProperty(id) || !$widget.optionsMap[id].hasOwnProperty(option) ||
-                        $this.hasClass('selected') ||
-                        $this.is(':selected')) {
+                        $element.hasClass('selected') ||
+                        $element.is(':selected')) {
                         return;
                     }
 
                     if (_.intersection(products, $widget.optionsMap[id][option].products).length <= 0) {
-                        $this.attr('disabled', true).addClass('disabled');
+                        $element.attr('disabled', true).addClass('disabled');
                     }
                 });
             });
@@ -580,10 +605,10 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
             // Generate intersection of products
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
-                var id = $(this).attr('attribute-id');
-                var option = $(this).attr('option-selected');
+                var id = $(this).attr('attribute-id'),
+                    option = $(this).attr('option-selected');
 
-                if ($skipAttributeId != undefined && $skipAttributeId == id) {
+                if ($skipAttributeId !== undefined && $skipAttributeId === id) {
                     return;
                 }
 
@@ -591,7 +616,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     return;
                 }
 
-                if (products.length == 0) {
+                if (products.length === 0) {
                     products = $widget.optionsMap[id][option].products;
                 } else {
                     products = _.intersection(products, $widget.optionsMap[id][option].products);
@@ -614,10 +639,9 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                 result;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
-                var attributeId = $(this).attr('attribute-id'),
-                    selectedOptionId = $(this).attr('option-selected');
+                var attributeId = $(this).attr('attribute-id');
 
-                options[attributeId] = selectedOptionId;
+                options[attributeId] = $(this).attr('option-selected');
             });
 
             result = $widget.options.jsonConfig.optionPrices[_.findKey($widget.options.jsonConfig.index, options)];
@@ -633,8 +657,10 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
         /**
          * Get prices
+         *
          * @param {Object} newPrices
-         * @returns {Object}
+         * @param {Object} displayPrices
+         * @returns {*}
          * @private
          */
         _getPrices: function (newPrices, displayPrices) {
@@ -662,7 +688,8 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
             var $widget = this,
                 $this = $widget.element,
                 attributes = {},
-                productId = 0;
+                productId = 0,
+                additional;
 
             if (!$widget.options.mediaCallback) {
                 return;
@@ -670,6 +697,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
             $this.find('[option-selected]').each(function () {
                 var $selected = $(this);
+
                 attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
             });
 
@@ -682,14 +710,17 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
                     .find('.price-box.price-final_price').attr('data-product-id');
             }
 
-            var additional = $.parseParams(window.location.search.substring(1));
+            additional = $.parseQuery();
 
             $widget._XhrKiller();
             $widget._EnableProductMediaLoader($this);
             $widget.xhr = $.post(
-                $widget.options.mediaCallback,
-                {product_id: productId, attributes: attributes, isAjax: true, additional: additional},
-                function (data) {
+                $widget.options.mediaCallback, {
+                    'product_id': productId,
+                    attributes: attributes,
+                    isAjax: true,
+                    additional: additional
+                }, function (data) {
                     $widget._ProductMediaCallback($this, data);
                     $widget._DisableProductMediaLoader($this);
                 },
@@ -702,7 +733,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Enable loader
          *
-         * @param $this
+         * @param {Object} $this
          * @private
          */
         _EnableProductMediaLoader: function ($this) {
@@ -721,7 +752,7 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Disable loader
          *
-         * @param $this
+         * @param {Object} $this
          * @private
          */
         _DisableProductMediaLoader: function ($this) {
@@ -740,22 +771,27 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
         /**
          * Callback for product media
          *
-         * @param $this
-         * @param response
+         * @param {Object} $this
+         * @param {String} response
          * @private
          */
         _ProductMediaCallback: function ($this, response) {
             var isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist
-                    ? $this.parents('.column.main')
-                    : $this.parents('.product-item-info'),
+                $main = isProductViewExist ? $this.parents('.column.main') : $this.parents('.product-item-info'),
                 $widget = this,
                 images = [],
+
+                /**
+                 * Check whether object supported or not
+                 *
+                 * @param {Object} e
+                 * @returns {*|Boolean}
+                 */
                 support = function (e) {
                     return e.hasOwnProperty('large') && e.hasOwnProperty('medium') && e.hasOwnProperty('small');
                 };
 
-            if ($widget._ObjectLength(response) < 1) {
+            if (_.size($widget) < 1) {
                 this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
 
                 return;
@@ -820,35 +856,36 @@ define(['jquery', 'underscore', 'jquery/ui'], function ($, _) {
 
         /**
          * Emulate mouse click on all swatches that should be selected
-         *
+         * @param {Object} [selectedAttributes]
          * @private
          */
-        _EmulateSelected: function () {
-            var $widget = this,
-                $this = $widget.element,
-                request = $.parseParams(window.location.search.substring(1));
-
-            $.each(request, function (key, value) {
-                $this.find('.' + $widget.options.classes.attributeClass
-                    + '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
-            });
+        _EmulateSelected: function (selectedAttributes) {
+            $.each(selectedAttributes, $.proxy(function (attributeCode, optionId) {
+                this.element.find('.' + this.options.classes.attributeClass +
+                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]').trigger('click');
+            }, this));
         },
 
         /**
-         * Returns an array/object's length
-         * @param obj
-         * @returns {number}
+         * Get default options values settings with either URL query parameters
          * @private
          */
-        _ObjectLength: function (obj) {
-            var size = 0,
-                key;
+        _getSelectedAttributes: function () {
+            var hashIndex = window.location.href.indexOf('#'),
+                selectedAttributes = {},
+                params;
 
-            for (key in obj) {
-                if (obj.hasOwnProperty(key)) size++;
+            if (hashIndex !== -1) {
+                params = $.parseQuery(window.location.href.substr(hashIndex + 1));
+
+                selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
+                    var attribute = this.options.jsonConfig.attributes[attributeId];
+
+                    return attribute ? attribute.code : attributeId;
+                }.bind(this)));
             }
 
-            return size;
+            return selectedAttributes;
         }
     });
 });

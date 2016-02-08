@@ -79,7 +79,12 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     {
         $connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
             ->disableOriginalConstructor()
+            ->setMethods(['select'])
             ->getMockForAbstractClass();
+        $select = $this->getMockBuilder('Magento\Framework\DB\Select')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connection->expects($this->any())->method('select')->willReturn($select);
 
         $entity = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
             ->setMethods(['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable'])

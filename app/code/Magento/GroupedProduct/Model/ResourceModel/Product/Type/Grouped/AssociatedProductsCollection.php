@@ -7,6 +7,8 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
+use Magento\Framework\Model\Entity\MetadataPool;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -27,6 +29,8 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
     protected $_config;
 
     /**
+     * AssociatedProductsCollection constructor.
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -46,9 +50,10 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
-     * @param mixed $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -72,6 +77,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        MetadataPool $metadataPool,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
@@ -98,6 +104,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
             $customerSession,
             $dateTime,
             $groupManagement,
+            $metadataPool,
             $connection
         );
     }

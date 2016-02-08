@@ -10,7 +10,7 @@ define([
     'uiEvents',
     'uiClass',
     './links',
-    '../storage'
+    '../storage/local'
 ], function (ko, _, utils, registry, Events, Class, links) {
     'use strict';
 
@@ -62,10 +62,12 @@ define([
 
     Element = _.extend({
         defaults: {
+            name: '',
             template: '',
             containers: [],
             _requesetd: {},
             registerNodes: true,
+            ns: '${ $.name.split(".")[0] }',
             storageConfig: {
                 provider: 'localStorage',
                 namespace: '${ $.name }',
@@ -102,6 +104,14 @@ define([
          * @returns {Element} Chainable.
          */
         initObservable: function () {
+            var tracks = this.tracks || {};
+
+            _.each(tracks, function (enabled, key) {
+                if (enabled !== false) {
+                    this.track(key);
+                }
+            }, this);
+
             return this;
         },
 
@@ -510,7 +520,12 @@ define([
          */
         _dropHandlers: function () {
             this.off();
-            this.source.off(this.name);
+
+            if (_.isFunction(this.source)) {
+                this.source().off(this.name);
+            } else if (this.source) {
+                this.source.off(this.name);
+            }
 
             return this;
         },

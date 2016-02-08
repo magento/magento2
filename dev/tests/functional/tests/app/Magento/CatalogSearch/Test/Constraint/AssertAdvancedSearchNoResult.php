@@ -17,7 +17,7 @@ class AssertAdvancedSearchNoResult extends AbstractConstraint
     /**
      * Text for error messages.
      */
-    const ERROR_MESSAGE = 'We can\'t find any items matching these search criteria. Modify your search';
+    const ERROR_MESSAGE = 'We can\'t find any items matching these search criteria. Modify your search.';
 
     /**
      * Assert that Advanced Search without results.

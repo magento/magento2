@@ -3,12 +3,13 @@
  * See COPYING.txt for license details.
  */
 define([
-    './utils',
     'jquery',
+    'underscore',
+    './utils',
     'jquery/validate',
     'jquery/ui',
     'mage/translate'
-], function (utils, $) {
+], function ($, _, utils) {
     'use strict';
 
     /**
@@ -44,7 +45,7 @@ define([
      * Collection of validation rules including rules from additional-methods.js
      * @type {Object}
      */
-    return {
+    return _.mapObject({
         "min_text_length": [
             function (value, params) {
                 return value.length == 0 || value.length >= +params;
@@ -787,5 +788,10 @@ define([
             },
             $.validator.messages.equalTo
         ]
-    };
+    }, function (data) {
+        return {
+            handler: data[0],
+            message: data[1]
+        };
+    });
 });

@@ -55,6 +55,7 @@
     .lib-clearfix();
     display: inline-block;
     position: relative;
+
     @{_toggle-selector} {
         .lib-css(padding, @_dropdown-actions-padding);
         cursor: pointer;
@@ -159,9 +160,11 @@
         @_dropdown-split-toggle-position,
         @_dropdown-split-button-border-radius-fix
     );
+
     @{_button-selector} {
         .lib-css(padding, @_dropdown-split-button-actions-padding);
     }
+
     @{_toggle-selector} {
         .lib-css(padding, @_dropdown-split-toggle-actions-padding);
         ._lib-dropdown-split-icon(
@@ -263,6 +266,7 @@
             ._lib-dropdown-list-item-border(
                 @_dropdown-list-item-border
             );
+
             &:hover {
                 .lib-css(background, @_dropdown-list-item-hover);
                 cursor: pointer;
@@ -435,6 +439,7 @@
         float: right;
         margin: 0;
     }
+
     @{_toggle-selector} {
         float: left;
         margin: 0;
@@ -452,6 +457,7 @@
         float: left;
         margin: 0;
     }
+
     @{_toggle-selector} {
         float: right;
         margin: 0;
@@ -472,6 +478,7 @@
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
     }
+
     button + @{_toggle-selector} {
         border-bottom-left-radius: 0;
         border-left: 0;
@@ -493,6 +500,7 @@
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
     }
+
     button + @{_toggle-selector} {
         border-bottom-right-radius: 0;
         border-right: 0;
@@ -531,10 +539,12 @@
         @_dropdown-list-background,
         @_dropdown-list-pointer-border
     );
+
     &:before {
         .lib-css(left, @_dropdown-list-pointer-position-left-right);
         .lib-css(top, @_dropdown-list-pointer-position-top);
     }
+
     &:after {
         .lib-css(left, @_dropdown-list-pointer-position-left-right - 1);
         .lib-css(top, @_dropdown-list-pointer-position-top - 2);
@@ -552,10 +562,12 @@
         @_dropdown-list-background,
         @_dropdown-list-pointer-border
     );
+
     &:before {
         .lib-css(right, @_dropdown-list-pointer-position-left-right);
         .lib-css(top, @_dropdown-list-pointer-position-top);
     }
+
     &:after {
         .lib-css(right, @_dropdown-list-pointer-position-left-right - 1);
         .lib-css(top, @_dropdown-list-pointer-position-top - 2);
@@ -575,14 +587,16 @@
         position: absolute;
         width: 0;
     }
+
     &:before {
         border: 6px solid;
-        border-color: transparent transparent @_dropdown-list-background transparent;
+        .lib-css(border-color, transparent transparent @_dropdown-list-background transparent);
         z-index: 99;
     }
+
     &:after {
         border: 7px solid;
-        border-color: transparent transparent @_dropdown-list-pointer-border transparent;
+        .lib-css(border-color, transparent transparent @_dropdown-list-pointer-border transparent);
         z-index: 98;
     }
 }
@@ -592,6 +606,7 @@
     @_dropdown-list-item-border
 ) when not (@_dropdown-list-item-border = 0) and not (@_dropdown-list-item-border = false) and not (@_dropdown-list-item-border = '') {
     .lib-css(border-top, @_dropdown-list-item-border);
+
     &:first-child {
         border: none;
     }

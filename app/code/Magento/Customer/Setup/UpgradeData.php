@@ -60,6 +60,52 @@ class UpgradeData implements UpgradeDataInterface
         /** @var CustomerSetup $customerSetup */
         $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
 
+        if (version_compare($context->getVersion(), '2.0.6', '<')) {
+            $customerSetup->updateEntityType(
+                \Magento\Customer\Model\Customer::ENTITY,
+                'entity_model',
+                'Magento\Customer\Model\ResourceModel\Customer'
+            );
+            $customerSetup->updateEntityType(
+                \Magento\Customer\Model\Customer::ENTITY,
+                'increment_model',
+                'Magento\Eav\Model\Entity\Increment\NumericValue'
+            );
+            $customerSetup->updateEntityType(
+                \Magento\Customer\Model\Customer::ENTITY,
+                'entity_attribute_collection',
+                'Magento\Customer\Model\ResourceModel\Attribute\Collection'
+            );
+            $customerSetup->updateEntityType(
+                'customer_address',
+                'entity_model',
+                'Magento\Customer\Model\ResourceModel\Address'
+            );
+            $customerSetup->updateEntityType(
+                'customer_address',
+                'entity_attribute_collection',
+                'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection'
+            );
+            $customerSetup->updateAttribute(
+                'customer_address',
+                'country_id',
+                'source_model',
+                'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country'
+            );
+            $customerSetup->updateAttribute(
+                'customer_address',
+                'region',
+                'backend_model',
+                'Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region'
+            );
+            $customerSetup->updateAttribute(
+                'customer_address',
+                'region_id',
+                'source_model',
+                'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region'
+            );
+        }
+
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $entityAttributes = [
                 'customer' => [
@@ -240,51 +286,6 @@ class UpgradeData implements UpgradeDataInterface
             ];
             $this->upgradeAttributes($entityAttributes, $customerSetup);
         }
-        if (version_compare($context->getVersion(), '2.0.6', '<')) {
-            $customerSetup->updateEntityType(
-                \Magento\Customer\Model\Customer::ENTITY,
-                'entity_model',
-                'Magento\Customer\Model\ResourceModel\Customer'
-            );
-            $customerSetup->updateEntityType(
-                \Magento\Customer\Model\Customer::ENTITY,
-                'increment_model',
-                'Magento\Eav\Model\Entity\Increment\NumericValue'
-            );
-            $customerSetup->updateEntityType(
-                \Magento\Customer\Model\Customer::ENTITY,
-                'entity_attribute_collection',
-                'Magento\Customer\Model\ResourceModel\Attribute\Collection'
-            );
-            $customerSetup->updateEntityType(
-                'customer_address',
-                'entity_model',
-                'Magento\Customer\Model\ResourceModel\Address'
-            );
-            $customerSetup->updateEntityType(
-                'customer_address',
-                'entity_attribute_collection',
-                'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection'
-            );
-            $customerSetup->updateAttribute(
-                'customer_address',
-                'country_id',
-                'source_model',
-                'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country'
-            );
-            $customerSetup->updateAttribute(
-                'customer_address',
-                'region',
-                'backend_model',
-                'Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region'
-            );
-            $customerSetup->updateAttribute(
-                'customer_address',
-                'region_id',
-                'source_model',
-                'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region'
-            );
-        }
 
         if (version_compare($context->getVersion(), '2.0.6', '<')) {
             $setup->getConnection()->delete(
@@ -332,6 +333,9 @@ class UpgradeData implements UpgradeDataInterface
 
         $customers = $setup->getConnection()->fetchAll($select);
         foreach ($customers as $customer) {
+            if ($customer['password_hash'] === null) {
+                continue;
+            }
             list($hash, $salt) = explode(Encryptor::DELIMITER, $customer['password_hash']);
 
             $newHash = $customer['password_hash'];

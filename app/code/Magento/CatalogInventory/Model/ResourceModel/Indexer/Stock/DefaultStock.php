@@ -10,6 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
@@ -41,17 +42,19 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $connectionName = null
     ) {
         $this->_scopeConfig = $scopeConfig;
-        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $connectionName);
     }
 
     /**
@@ -168,6 +171,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
         $select = $connection->select()->from(
@@ -193,7 +197,13 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             '=?',
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         );
-        $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
+        $this->_addAttributeToSelect(
+            $select,
+            'status',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id',
+            $condition
+        );
 
         if ($this->_isManageStock()) {
             $statusExpr = $connection->getCheckSql(
