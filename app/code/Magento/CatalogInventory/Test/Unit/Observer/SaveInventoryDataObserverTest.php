@@ -20,26 +20,6 @@ class SaveInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
     protected $stockIndex;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stockConfiguration;
-
-    /**
-     * @var \Magento\CatalogInventory\Model\Spi\stockResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stockResolver;
-
-    /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stockRegistry;
-
-    /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stockItemRepository;
-
-    /**
      * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $event;
@@ -51,30 +31,12 @@ class SaveInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stockIndex = $this->getMockBuilder('Magento\CatalogInventory\Api\StockIndexInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['rebuild'])
-            ->getMockForAbstractClass();
-
-        $this->stockConfiguration = $this->getMockBuilder('Magento\CatalogInventory\Api\StockConfigurationInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getDefaultScopeId'])
-            ->getMockForAbstractClass();
-
-        $this->stockResolver = $this->getMockBuilder('Magento\CatalogInventory\Model\Spi\StockResolverInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getStockId'])
-            ->getMockForAbstractClass();
-
-        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Api\StockRegistryInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
-            ->getMockForAbstractClass();
-
-        $this->stockItemRepository = $this->getMockBuilder('Magento\CatalogInventory\Api\StockItemRepositoryInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['save'])
-            ->getMockForAbstractClass();
+        $this->stockIndex = $this->getMockForAbstractClass(
+            'Magento\CatalogInventory\Api\StockIndexInterface',
+            ['rebuild'],
+            '',
+            false
+        );
 
         $this->event = $this->getMockBuilder('Magento\Framework\Event')
             ->disableOriginalConstructor()
@@ -94,15 +56,11 @@ class SaveInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogInventory\Observer\SaveInventoryDataObserver',
             [
                 'stockIndex' => $this->stockIndex,
-                'stockConfiguration' => $this->stockConfiguration,
-                'stockResolver' => $this->stockResolver,
-                'stockRegistry' => $this->stockRegistry,
-                'stockItemRepository' => $this->stockItemRepository
             ]
         );
     }
 
-    public function testSaveInventoryDataWithoutStockData()
+    public function testSaveInventoryData()
     {
         $productId = 4;
         $websiteId = 5;
@@ -131,51 +89,6 @@ class SaveInventoryDataObserverTest extends \PHPUnit_Framework_TestCase
         $this->event->expects($this->once())
             ->method('getProduct')
             ->will($this->returnValue($product));
-
-        $this->observer->execute($this->eventObserver);
-    }
-
-    public function testSaveInventoryDataWithStockData()
-    {
-        $stockItemData = [
-            'qty' => 4,
-            'product_id' => 2,
-            'website_id' => 3,
-            'stock_id' => 1,
-            'qty_correction' => -1
-        ];
-
-        $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['getStockData', 'getId', 'getData'],
-            [],
-            '',
-            false
-        );
-        $product->expects($this->exactly(2))->method('getStockData')->will($this->returnValue(
-            ['qty' => $stockItemData['qty']]
-        ));
-        $product->expects($this->once())->method('getId')->will($this->returnValue($stockItemData['product_id']));
-        $product->expects($this->any())->method('getData')->willReturnMap(
-            [
-                ['stock_data/original_inventory_qty', null, $stockItemData['qty']+1]
-            ]
-        );
-        $this->stockConfiguration->expects($this->once())->method('getDefaultScopeId')
-            ->willReturn($stockItemData['website_id']);
-        $this->stockResolver->expects($this->once())->method('getStockId')
-            ->with($stockItemData['product_id'], $stockItemData['website_id'])
-            ->willReturn($stockItemData['stock_id']);
-        $stockItem = $this->getMockBuilder('\Magento\CatalogInventory\Api\Data\StockItemInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['addData'])
-            ->getMockForAbstractClass();
-        $this->stockRegistry->expects($this->once())->method('getStockItem')
-            ->with($stockItemData['product_id'], $stockItemData['website_id'])
-            ->willReturn($stockItem);
-        $stockItem->expects($this->once())->method('addData')->with($stockItemData)->willReturnSelf();
-        $this->stockItemRepository->expects($this->once())->method('save')->with($stockItem);
-        $this->event->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
         $this->observer->execute($this->eventObserver);
     }

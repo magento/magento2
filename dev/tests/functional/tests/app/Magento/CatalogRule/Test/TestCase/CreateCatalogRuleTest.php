@@ -44,6 +44,7 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
      */
     public function testCreate(CatalogRule $catalogPriceRule, $product, $conditionEntity, Customer $customer = null)
     {
+        $this->markTestIncomplete('MAGETWO-48731');
         /** @var CatalogProductSimple $productSimple */
         $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => $product]);
         // Prepare data
