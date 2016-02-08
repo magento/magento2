@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Setup;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+
 /**
  * @codeCoverageIgnore
  */
@@ -36,6 +38,11 @@ class ExternalFKSetup
     protected $externalColumn;
 
     /**
+     * @var string
+     */
+    protected $onDelete;
+
+    /**
      * Install external foreign key
      *
      * @param SchemaSetupInterface $setup
@@ -43,6 +50,7 @@ class ExternalFKSetup
      * @param string $entityColumn
      * @param string $externalTable
      * @param string $externalColumn
+     * @param string $onDelete
      * @return void
      */
     public function install(
@@ -50,13 +58,15 @@ class ExternalFKSetup
         $entityTable,
         $entityColumn,
         $externalTable,
-        $externalColumn
+        $externalColumn,
+        $onDelete = AdapterInterface::FK_ACTION_CASCADE
     ) {
         $this->setup = $setup;
         $this->entityTable = $entityTable;
         $this->entityColumn = $entityColumn;
         $this->externalTable = $externalTable;
         $this->externalColumn = $externalColumn;
+        $this->onDelete = $onDelete;
 
         $this->execute();
     }
@@ -155,7 +165,8 @@ class ExternalFKSetup
                 $this->setup->getTable($this->externalTable),
                 $this->externalColumn,
                 $this->setup->getTable($this->entityTable),
-                $this->entityColumn
+                $this->entityColumn,
+                $this->onDelete
             );
         }
     }
@@ -193,7 +204,8 @@ class ExternalFKSetup
                     $this->setup->getTable($this->externalTable),
                     $this->externalColumn,
                     $foreignKeyInfo['REF_TABLE_NAME'],
-                    $foreignKeyInfo['REF_COLUMN_NAME']
+                    $foreignKeyInfo['REF_COLUMN_NAME'],
+                    $this->onDelete
                 );
             }
         }

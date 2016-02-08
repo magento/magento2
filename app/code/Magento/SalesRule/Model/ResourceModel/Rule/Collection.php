@@ -22,18 +22,12 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @var array
      */
-    protected $_associatedEntitiesMap = [
-        'website' => [
-            'associations_table' => 'salesrule_website',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'website_id',
-        ],
-        'customer_group' => [
-            'associations_table' => 'salesrule_customer_group',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'customer_group_id',
-        ],
-    ];
+    protected $_associatedEntitiesMap;
+
+    /**
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier
+     */
+    protected $dateApplier;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
@@ -46,6 +40,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier $dateApplier
+     * @param array $associatedEntitiesMap
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
@@ -55,11 +51,15 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date,
+        \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier $dateApplier,
+        array $associatedEntitiesMap = [],
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
+        $this->_associatedEntitiesMap = $associatedEntitiesMap;
+        $this->dateApplier = $dateApplier;
     }
 
     /**
@@ -195,13 +195,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                     (int)$customerGroupId
                 ),
                 []
-            )->where(
-                'from_date is null or from_date <= ?',
-                $now
-            )->where(
-                'to_date is null or to_date >= ?',
-                $now
             );
+
+            $this->dateApplier->applyDate($this->getSelect(), $now);
 
             $this->addIsActiveFilter();
 
