@@ -53,4 +53,3 @@ $productModel->setTypeId(
 )->setCategoryIds(
     [444]
 )->save();
-
