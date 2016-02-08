@@ -345,7 +345,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      * @param bool $value
      * @return void
      */
-    public function setShowCaptchaInSession($value = false)
+    public function setShowCaptchaInSession($value = true)
     {
         if ($value !== true) {
             $value = false;
