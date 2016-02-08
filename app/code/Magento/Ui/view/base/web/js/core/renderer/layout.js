@@ -107,6 +107,7 @@ define([
                 children    = node.children,
                 type        = getNodeType(parent, node),
                 dataScope   = getDataScope(parent, node),
+                extendDeps  = true,
                 nodeName;
 
             node.children = false;
@@ -116,12 +117,16 @@ define([
                 node.extendProvider = false;
             }
 
+            if (node.config && node.config.deps || node.deps) {
+                extendDeps= false;
+            }
+
             node = utils.extend({
             }, types.get(type), defaults, node);
 
             nodeName = getNodeName(parent, node, name);
 
-            if (parent && parent.deps) {
+            if (extendDeps && parent && parent.deps && type) {
                 node.deps = parent.deps;
             }
 
