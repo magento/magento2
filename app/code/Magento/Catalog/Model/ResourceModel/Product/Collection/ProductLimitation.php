@@ -117,7 +117,7 @@ class ProductLimitation implements \ArrayAccess
      *
      * @return bool
      */
-    public function isUsePriceIndex()
+    public function isUsingPriceIndex()
     {
         return $this->offsetExists('use_price_index') ? (bool)$this->offsetGet('use_price_index') : false;
     }
