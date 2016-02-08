@@ -34,6 +34,7 @@
     <!-- ko ifnot: chipsEnabled -->
     <div
             class="action-select admin__action-multiselect"
+            data-role="advanced-select"
             data-bind="
             css: {_active: multiselectFocus},
             click: function(data, event) {
@@ -48,6 +49,7 @@
     <!-- ko if: chipsEnabled -->
     <div
             class="action-select admin__action-multiselect"
+            data-role="advanced-select"
             data-bind="
             css: {_active: multiselectFocus},
             click: function(data, event) {
@@ -65,14 +67,15 @@
                 <span data-bind="text: label">
                 </span>
                 <button
-                    class="action-close"
-                    type="button"
-                    tabindex="-1"
-                    data-bind="click: $parent.removeSelected.bind($parent, value)
+                        class="action-close"
+                        type="button"
+                        data-action="remove-selected-item"
+                        tabindex="-1"
+                        data-bind="click: $parent.removeSelected.bind($parent, value)
                 ">
                     <span
-                        class="action-close-text"
-                        data-bind="text: 'Close'
+                            class="action-close-text"
+                            data-bind="text: 'Close'
                     ">
                     </span>
                 </button>
@@ -86,36 +89,38 @@
         <!-- ko if: filterOptions -->
         <div class="admin__action-multiselect-search-wrap">
             <input
-                class="admin__control-text admin__action-multiselect-search"
-                type="text"
-                data-bind="
+                    class="admin__control-text admin__action-multiselect-search"
+                    data-role="advanced-select-text"
+                    type="text"
+                    data-bind="
                 event: {
                     keydown: filterOptionsKeydown
                 },
-                attr: {id: uid+2}
+                attr: {id: uid+2},
                 valueUpdate: 'afterkeydown',
                 value: filterInputValue,
                 hasFocus: filterOptionsFocus
                 ">
             <label
-                class="admin__action-multiselect-search-label"
-                data-bind="attr: {for: uid+2}
+                    class="admin__action-multiselect-search-label"
+                    data-action="advanced-select-search"
+                    data-bind="attr: {for: uid+2}
             ">
             </label>
             <div
-                data-bind="text: itemsQuantity
-            ">
+                    data-bind="text: itemsQuantity"
+                    class="admin__action-multiselect-search-count">
             </div>
         </div>
         <!-- /ko -->
-        <ul class="admin__action-multiselect-menu-inner admin__action-multiselect-menu-inner-root"
+        <ul class="admin__action-multiselect-menu-inner"
             data-bind="
                 event: {
                     mousemove: function(data, event){onMousemove($data, $index(), event)}
                 }
             ">
             <!-- ko foreach: { data: options, as: 'option'}  -->
-            <li class="admin__action-multiselect-menu-inner-item"
+            <li class="admin__action-multiselect-menu-inner-item _root"
                 data-bind="css: { _parent: $data.optgroup }">
                 <div class="action-menu-item"
                      data-bind="
@@ -123,10 +128,9 @@
                             _selected: $parent.isSelected(option.value),
                             _hover: $parent.isHovered(option, $element),
                             _expended: $parent.getLevelVisibility($data),
-                            _unclickable: function ($parent, $data) {
-                                $parent.isLabelDecoration($data);
-                                $parent.addLastElement($data);
-                            }
+                            _unclickable: $parent.isLabelDecoration($data),
+                            _last: $parent.addLastElement($data),
+                            '_with-checkbox': $parent.showCheckbox
                         },
                         click: function(data, event){
                             $parent.toggleOptionSelected($data, $index(), event);
@@ -145,14 +149,17 @@
                     <!-- /ko-->
                     <!--ko if: $parent.showCheckbox-->
                     <input
-                        class="admin__control-checkbox"
-                        type="checkbox"
-                        tabindex="-1"
-                        data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
+                            class="admin__control-checkbox"
+                            type="checkbox"
+                            tabindex="-1"
+                            data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
                     <!-- /ko-->
-                    <label
-                            class="admin__action-multiselect-label"
-                            data-bind="text: option.label">
+                    <label class="admin__action-multiselect-label">
+                        <span data-bind="text: option.label"></span>
+                        <span
+                                if="$parent.getPath(option)"
+                                class="admin__action-multiselect-item-path"
+                                data-bind="text: $parent.getPath(option)"></span>
                     </label>
                 </div>
                 <!-- ko if: $data.optgroup -->
@@ -165,6 +172,7 @@
         <!-- ko if: $data.closeBtn -->
         <div class="admin__action-multiselect-actions-wrap">
             <button class="action-default"
+                    data-action="close-advanced-select"
                     type="button"
                     data-bind="click: outerClick">
                 <span data-bind="text: closeBtnLabel"></span>
