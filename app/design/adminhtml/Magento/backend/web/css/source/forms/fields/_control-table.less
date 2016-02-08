@@ -35,6 +35,7 @@
     tfoot {
         th {
             padding-bottom: @control-table-cell__padding-vertical;
+
             &.validation {
               padding-bottom: 0;
               padding-top: 0;
@@ -54,8 +55,8 @@
     td,
     th {
         background-color: @control-table-cell__background-color;
-        border: 0;
         border-bottom: 1px solid @control-table-cell__border-color;
+        border: 0;
         padding: @control-table-cell__padding-vertical 2.5rem @control-table-cell__padding-vertical 0;
         text-align: left;
         vertical-align: top;
@@ -72,11 +73,11 @@
 
     th {
         border: 0;
-        vertical-align: bottom;
         color: @color-very-dark-gray-black;
         font-size: @font-size__base;
         font-weight: @font-weight__semibold;
         padding-bottom: 0;
+        vertical-align: bottom;
 
         &._required {
             span {

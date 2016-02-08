@@ -33,7 +33,7 @@
 // @todo ui Move to other place - will be done in upcoming task "Address Tabs":
 
 .address-item-edit-content {
-    background: #fff;
+    background: @color-white;
     border: 1px solid #dad1c8;
     box-shadow: 0 2px 1px 0 rgba(217, 210, 202, .5);
     margin-left: 359px;
@@ -72,7 +72,7 @@
         z-index: 1;
 
         &.ui-state-active {
-            background: #fff;
+            background: @color-white;
             box-shadow: 0 1px 1px 0 rgba(217, 210, 202, 1);
             margin-left: -2px;
             padding-left: 12px;
@@ -81,8 +81,8 @@
 
             &:before,
             &:after {
-                color: #fff;
-                content: "\e02a";
+                color: @color-white;
+                content: '\e02a';
                 font-family: 'MUI-Icons';
                 font-size: 18px;
                 font-style: normal;
@@ -150,25 +150,25 @@
                 color: darken(@color-brown-darkie, 20%);
             }
 
-            // @todo ui - testing solution to show action hint without title attribute
+            //  @Todo ui - testing solution to show action hint without title attribute
             span {
                 background-color: @color-very-light-gray;
-                border: 1px solid @color-heathered-grey;
                 border-radius: .4rem;
+                border: 1px solid @color-heathered-grey;
                 bottom: 100%;
                 clip: auto;
                 font-size: @font-size__s;
                 height: auto;
                 left: auto;
                 margin: 0 auto .1rem;
+                max-height: 50px;
+                max-width: 200px;
                 padding: .5rem;
                 right: auto;
                 top: auto;
-                max-height: 50px;
-                max-width: 200px;
+                transition: all .01s linear .7s;
                 white-space: nowrap;
                 width: auto;
-                transition: all .01s linear .7s;
             }
         }
     }
@@ -187,14 +187,13 @@ label.mage-error {
     &:extend(.admin__field-error);
 }
 
-
 //
 //  Login page captcha reload @todo ui - remove after loader consistency
 //  _____________________________________________
 
 .page-layout-admin-login {
     .loading-mask {
-        background: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,.2);
         height: 100%;
         left: 0;
         position: absolute;
@@ -208,9 +207,9 @@ label.mage-error {
         left: 50%;
         margin-left: -218px/2;
         margin-top: -149px/2;
+        overflow: hidden;
         position: absolute;
         top: 50%;
-        overflow: hidden;
         width: 218px;
     }
 }
@@ -251,16 +250,16 @@ label.mage-error {
     .data-grid-filters {
         td {
             padding: 1rem;
-            border-bottom: 1px solid #D6D6D6;
+            border-bottom: 1px solid @color-gray84;
         }
 
         select,
         input[type="text"]{
-            width: 100%;
-            padding: .2rem .4rem;
+            font-size: 1.3rem;
             height: 2.8rem;
             min-width: 5rem;
-            font-size: 1.3rem;
+            padding: .2rem .4rem;
+            width: 100%;
         }
 
         .admin__control-text {
@@ -320,11 +319,11 @@ label.mage-error {
 
 .mass-select-info {
     &:before {
-        content: "(";
+        content: '(';
     }
 
     &:after {
-        content:")";
+        content: ')';
     }
 
     &._empty {
@@ -333,33 +332,33 @@ label.mage-error {
 }
 
 .mass-select-wrap {
+    margin-left: 1.1rem;
+    margin-top: 3.3rem;
     position: absolute;
     top: 100%;
-    margin-top: 3.3rem;
-    margin-left: 1.1rem;
 
     select {
-        position:absolute;
-        top: 0;
+        cursor: pointer;
+        height: 22px;
         left: 0;
         opacity: 0.01;
+        position:absolute;
+        top: 0;
         width: 22px;
-        height: 22px;
-        cursor: pointer;
         z-index: 2;
 
         + label {
             &:extend(.abs-action-default);
-            z-index: 1;
-            width: 16px;
             height: 16px;
             line-height: 16px;
             padding: 0;
+            width: 16px;
+            z-index: 1;
 
             &:before {
                 &:extend(.admin__control-checkbox + label:before);
-                position:absolute;
                 left: 0;
+                position: absolute;
                 top: 0;
             }
 
@@ -399,8 +398,8 @@ label.mage-error {
             display: none;
 
             + label {
-                opacity: .6;
                 cursor: not-allowed;
+                opacity: .6;
             }
         }
     }
@@ -466,10 +465,10 @@ label.mage-error {
             display: inline;
 
             .admin__field-label {
-                width: auto;
                 float: none;
-                padding-right: 1rem;
                 padding-left: 2rem;
+                padding-right: 1rem;
+                width: auto;
             }
         }
 
@@ -489,7 +488,7 @@ label.mage-error {
         }
 
         .admin__control-select-placeholder {
-            color:  @color-darkie-gray;
+            color: @color-darkie-gray;
             font-weight: @font-weight__bold;
         }
     }
@@ -550,13 +549,12 @@ label.mage-error {
     td.col-action {
         a + a {
             &:before {
-                content: "";
+                content: '';
                 display: block;
             }
         }
     }
 }
-
 
 //
 //  Popups
