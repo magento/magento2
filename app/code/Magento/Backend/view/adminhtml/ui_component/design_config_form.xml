@@ -158,7 +158,6 @@
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">15</item>
                     <item name="template" xsi:type="string">ui/form/element/button</item>
-                    <item name="displayAsLink" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">container</item>
                     <item name="componentType" xsi:type="string">container</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/button</item>
