@@ -90,6 +90,11 @@ abstract class Synonyms extends Action
         return $this->_authorization->isAllowed('Magento_Search::synonyms');
     }
 
+    /**
+     * Checks if 'synonyms' feature is supported by configured search engine. If not supported displays a notice
+     *
+     * @return void
+     */
     protected function checkSearchEngineSupport()
     {
         // Display a notice if search engine configuration does not support synonyms
@@ -103,7 +108,11 @@ abstract class Synonyms extends Action
             // Display anotice indicating search synonyms feature is not supported for the selected search engine
             $this->messageManager
                 ->addNoticeMessage(
-                    __('Search Synonyms feature is not supported by %1 search engine', $searchEngine)
+                    __(
+                        'Search synonyms are not supported by the %1 search engine. '
+                        . 'Any synonyms you enter won\'t be used.',
+                        $searchEngine
+                    )
                 );
         }
     }

@@ -7,7 +7,7 @@ namespace Magento\Search\Model\SearchEngine;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    protected  function setUp()
+    protected function setUp()
     {
         $xmlPath = __DIR__ . '/../../_files/search_engine.xml';
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

@@ -14,7 +14,7 @@ use Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory;
 /**
  * Mass-Delete Controller
  */
-class MassDelete extends \Magento\Backend\App\Action
+class MassDelete extends \Magento\Search\Controller\Adminhtml\Synonyms
 {
     /**
      * @var Filter
@@ -31,11 +31,26 @@ class MassDelete extends \Magento\Backend\App\Action
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      */
-    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
+    public function __construct(
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Search\Model\EngineResolver $engineResolver,
+        \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig)
     {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
-        parent::__construct($context);
+        parent::__construct(
+            $context,
+            $resultPageFactory,
+            $forwardFactory,
+            $registry,
+            $engineResolver,
+            $searchFeatureConfig
+        );
     }
 
     /**
