@@ -1011,7 +1011,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == $errorsCount);
         if ($errorsCount >= 1) {
             $this->assertEquals(
-            "Specified url key is already exist",
+            "Specified url key already exists",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
             );
         }
