@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Cms\Model\ResourceModel;
 
 use Magento\Cms\Model\Page as CmsPage;
@@ -87,6 +85,14 @@ class Page extends AbstractDb
     protected function _construct()
     {
         $this->_init('cms_page', 'page_id');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getConnection()
+    {
+        return $this->metadataPool->getMetadata(PageInterface::class)->getEntityConnection();
     }
 
     /**
@@ -216,7 +222,7 @@ class Page extends AbstractDb
             ->where('cp.identifier = ?', $identifier)
             ->where('cps.store_id IN (?)', $store);
 
-        if (!is_null($isActive)) {
+        if ($isActive !== null) {
             $select->where('cp.is_active = ?', $isActive);
         }
 
@@ -373,9 +379,7 @@ class Page extends AbstractDb
     }
 
     /**
-     * @param AbstractModel $object
-     * @return $this
-     * @throws \Exception
+     * @inheritDoc
      */
     public function save(AbstractModel $object)
     {
@@ -408,6 +412,28 @@ class Page extends AbstractDb
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(AbstractModel $object)
+    {
+        $this->transactionManager->start($this->getConnection());
+        try {
+            $object->beforeDelete();
+            $this->_beforeDelete($object);
+            $this->entityManager->delete(PageInterface::class, $object);
+            $this->_afterDelete($object);
+            $object->isDeleted(true);
+            $object->afterDelete();
+            $this->transactionManager->commit();
+            $object->afterDeleteCommit();
+        } catch (\Exception $e) {
+            $this->transactionManager->rollBack();
             throw $e;
         }
         return $this;
