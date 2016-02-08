@@ -43,7 +43,7 @@ class AccountLock extends Column
             foreach ($dataSource['data']['items'] as & $item) {
                 $lockExpires = new \DateTime($item['lock_expires']);
                 if ($lockExpires > new \DateTime()) {
-                    $item['lock_expires'] =  _('Locked');
+                    $item['lock_expires'] =  __('Locked');
                 } else {
                     $item['lock_expires'] = __('Unlocked');
                 }
