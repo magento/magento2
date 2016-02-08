@@ -88,6 +88,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
      */
     protected $messageManager;
 
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManager;
+
     protected function setUp()
     {
         $this->prepareContext();
@@ -172,6 +177,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 1;
         $currentPassword = '1234567';
+        $customerEmail = 'customer@example.com';
 
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
@@ -235,6 +241,17 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->method('sendNotificationEmailsIfRequired')
             ->with($currentCustomerMock, $newCustomerMock, false)
             ->willReturnSelf();
+
+        $newCustomerMock->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+
+        $this->eventManager->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'customer_account_edited',
+                ['email' => $customerEmail]
+            );
 
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
@@ -630,6 +647,13 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
+
+        $this->eventManager = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+            ->getMockForAbstractClass();
+
+        $this->context->expects($this->any())
+            ->method('getEventManager')
+            ->willReturn($this->eventManager);
 
         $this->resultRedirectFactory->expects($this->any())
             ->method('create')
