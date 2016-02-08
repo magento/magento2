@@ -10,35 +10,63 @@ define([
 ], function ($, _, utils, Class) {
     'use strict';
 
+    /**
+     * Before save validate request.
+     *
+     * @param {Object} data
+     * @param {String} url
+     * @returns {*}
+     */
     function beforeSave(data, url) {
         var save = $.Deferred();
 
         data = utils.serialize(data);
 
-        data.form_key = window.FORM_KEY;
+        data['form_key'] = window.FORM_KEY;
+
+        if (!url || url === 'undefined') {
+            return save.resolve();
+        }
 
         $('body').trigger('processStart');
 
         $.ajax({
             url: url,
             data: data,
+
+            /**
+             * Success callback.
+             * @param {Object} resp
+             * @returns {Boolean}
+             */
             success: function (resp) {
                 if (!resp.error) {
                     save.resolve();
+
                     return true;
                 }
 
                 $('body').notification('clear');
-                $.each(resp.messages, function(key, message) {
+                $.each(resp.messages, function (key, message) {
                     $('body').notification('add', {
                         error: resp.error,
                         message: message,
-                        insertMethod: function(message) {
-                            $('.page-main-actions').after(message);
+
+                        /**
+                         * Insert method.
+                         *
+                         * @param {String} msg
+                         */
+                        insertMethod: function (msg) {
+                            $('.page-main-actions').after(msg);
                         }
                     });
                 });
             },
+
+            /**
+             * Complete callback.
+             */
             complete: function () {
                 $('body').trigger('processStop');
             }
@@ -48,9 +76,6 @@ define([
     }
 
     return Class.extend({
-        defaults: {
-            validateBeforeSave: true
-        },
 
         /**
          * Assembles data and submits it using 'utils.submit' method
@@ -59,15 +84,19 @@ define([
             var url = this.urls.beforeSave,
                 save = this._save.bind(this, data, options);
 
-            if (this.validateBeforeSave) {
-                beforeSave(data, url).then(save);
-            } else {
-                save();
-            }
+            beforeSave(data, url).then(save);
 
             return this;
         },
 
+        /**
+         * Save data.
+         *
+         * @param {Object} data
+         * @param {Object} options
+         * @returns {Object}
+         * @private
+         */
         _save: function (data, options) {
             var url = this.urls.save;
 
@@ -75,6 +104,15 @@ define([
 
             if (!options.redirect) {
                 url += 'back/edit';
+            }
+
+            if (options.ajaxSave) {
+                utils.ajaxSubmit({
+                    url: url,
+                    data: data
+                }, options);
+
+                return this;
             }
 
             utils.submit({

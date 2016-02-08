@@ -230,6 +230,48 @@
     }
 }
 
+//  Collapsible radiobutton field
+.admin__field-collapsible {
+    .admin__fieldset > & {
+        margin-bottom: 0;
+
+        .admin__field-control {
+            border-top: 1px solid @field-collapsible__border-color;
+            display: block;
+            font-size: 1.7rem;
+            font-weight: @font-weight__bold;
+            padding: 1.7rem 0;
+            width: calc(100% - @indent__l);
+        }
+        
+        .admin__field-option {
+            padding-top: 0;
+        }
+    }
+
+    + div {
+        margin-top: @indent__m;
+    }
+
+    .admin__control-radio {
+        + label {
+            &:before {
+                height: 1.8rem;
+                width: 1.8rem;
+            }
+        }
+
+        &:checked {
+            + label {
+                &:after {
+                    left: 4px;
+                    top: 5px;
+                }
+            }
+        }
+    }
+}
+
 //
 //  Field messages
 //  ---------------------------------------------
