@@ -934,9 +934,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
-        $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
-
         /** @var \Magento\Catalog\Model\Category $category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category'
@@ -953,10 +950,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->_model->importData();
 
-        $categoryProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor'
-        );
-
         $errorProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator'
         );
@@ -966,11 +959,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertContains('URL key for specified store already exists' , $errorMessage);
         $this->assertContains('Default Category/Category 2' , $errorMessage);
         $this->assertTrue($errorCount === 1 , 'Error expected');
-
-
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
-        );
 
         $categoryAfter = $this->loadCategoryByName('Category 2');
         $this->assertTrue($categoryAfter === null);
