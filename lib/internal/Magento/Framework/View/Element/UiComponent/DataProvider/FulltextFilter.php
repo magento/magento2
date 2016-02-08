@@ -34,6 +34,35 @@ class FulltextFilter implements FilterApplierInterface
     }
 
     /**
+     * Add table alias to columns
+     *
+     * @param array $columns
+     * @param DbCollection $collection
+     * @param string $indexTable
+     * @return array
+     */
+    protected function addTableAliasToColumns(array $columns, DbCollection $collection, $indexTable)
+    {
+        $alias = '';
+        foreach ($collection->getSelect()->getPart('from') as $tableAlias => $data) {
+            if ($indexTable == $data['tableName']) {
+                $alias = $tableAlias;
+                break;
+            }
+        }
+        if ($alias) {
+            $columns = array_map(
+                function ($column) use ($alias) {
+                    return '`' . $alias . '`.' . $column;
+                },
+                $columns
+            );
+        }
+
+        return $columns;
+    }
+
+    /**
      * Apply fulltext filters
      *
      * @param DbCollection $collection
@@ -46,6 +75,7 @@ class FulltextFilter implements FilterApplierInterface
         if (!$columns) {
             return;
         }
+        $columns = $this->addTableAliasToColumns($columns, $collection, $collection->getMainTable());
         $collection->getSelect()
             ->where(
                 'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
