@@ -105,11 +105,16 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     protected $passwordStrength;
 
     /**
+     * @var \Magento\Customer\Helper\AccountManagement|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $accountManagementHelper;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
-        $this->customerFactory = $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false);
+        $this->customerFactory = $this->getMock('Magento\Customer\Model\CustomerFactory', ['create'], [], '', false);
         $this->manager = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
@@ -159,6 +164,13 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->accountManagementHelper = $this->getMock(
+            'Magento\Customer\Helper\AccountManagement',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->customerSecure = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
             ->disableOriginalConstructor()
@@ -190,7 +202,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'customerModel' => $this->customer,
                 'objectFactory' => $this->objectFactory,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
-                'passwordStrength' => $this->passwordStrength
+                'passwordStrength' => $this->passwordStrength,
+                'accountManagementHelper' => $this->accountManagementHelper
             ]
         );
     }
@@ -1221,5 +1234,149 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'customerModel' => $this->customer,
             ]
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testChangePassword()
+    {
+        $customerId = 7;
+        $email = 'test@example.com';
+        $currentPassword = '1234567';
+        $newPassword = 'abcdefg';
+        $passwordHash = '1a2b3f4c';
+
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMock();
+        $customer->expects($this->any())
+            ->method('getId')
+            ->willReturn($customerId);
+
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('get')
+            ->with($email)
+            ->willReturn($customer);
+
+        $this->accountManagementHelper->expects($this->once())
+            ->method('validatePasswordAndLockStatus')
+            ->with($customer, $currentPassword);
+
+        $customerSecure = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
+            ->setMethods(['setRpToken', 'setRpTokenCreatedAt', 'setPasswordHash'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerSecure->expects($this->once())
+            ->method('setRpToken')
+            ->with(null);
+        $customerSecure->expects($this->once())
+            ->method('setRpTokenCreatedAt')
+            ->with(null);
+        $customerSecure->expects($this->once())
+            ->method('setPasswordHash')
+            ->with($passwordHash);
+
+        $this->customerRegistry->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($customerSecure);
+
+        $this->encryptor->expects($this->once())
+            ->method('getHash')
+            ->with($newPassword, true)
+            ->willReturn($passwordHash);
+
+        $this->passwordStrength->expects($this->any())
+            ->method('checkPasswordStrength')
+            ->with($newPassword);
+
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($customer);
+
+        $this->assertTrue($this->accountManagement->changePassword($email, $currentPassword, $newPassword));
+    }
+
+    /**
+     * @return void
+     */
+    public function testChangePasswordException()
+    {
+        $email = 'test@example.com';
+        $currentPassword = '1234567';
+        $newPassword = 'abcdefg';
+
+        $exception = new NoSuchEntityException(
+            new \Magento\Framework\Phrase('Exception message')
+        );
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('get')
+            ->with($email)
+            ->willThrowException($exception);
+
+        $this->setExpectedException(
+            '\Magento\Framework\Exception\InvalidEmailOrPasswordException',
+            __('Invalid login or password.')
+        );
+
+        $this->accountManagement->changePassword($email, $currentPassword, $newPassword);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAuthenticate()
+    {
+        $username = 'login';
+        $password = '1234567';
+
+        $this->passwordStrength->expects($this->once())
+            ->method('checkLoginPasswordStrength')
+            ->with($password);
+
+        $customerData = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMock();
+
+        $customerModel = $this->getMockBuilder('Magento\Customer\Model\Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerModel->expects($this->once())
+            ->method('updateData')
+            ->willReturn($customerModel);
+
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('get')
+            ->with($username)
+            ->willReturn($customerData);
+
+        $this->accountManagementHelper->expects($this->once())
+            ->method('checkIfLocked')
+            ->with($customerData);
+
+        $this->accountManagementHelper->expects($this->once())
+            ->method('validatePasswordAndLockStatus')
+            ->with($customerData, $password);
+
+        $this->customerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($customerModel);
+
+        $this->manager->expects($this->exactly(2))
+            ->method('dispatch')
+            ->withConsecutive(
+                [
+                    'customer_customer_authenticated',
+                    ['model' => $customerModel, 'password' => $password]
+                ],
+                [
+                    'customer_data_object_login', ['customer' => $customerData]
+                ]
+            );
+
+        $this->assertEquals($customerData, $this->accountManagement->authenticate($username, $password));
     }
 }
