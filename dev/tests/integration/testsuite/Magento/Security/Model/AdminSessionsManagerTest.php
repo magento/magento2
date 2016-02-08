@@ -142,52 +142,50 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * Test if other sessions were logged out if logoutOtherUserSessions() action was performed
      *
      * @magentoAdminConfigFixture admin/security/session_lifetime 100
+     * @magentoConfigFixture default_store admin/security/admin_account_sharing 1
      */
     public function testLogoutOtherUserSessions()
     {
-        $adminSessionInfoCollectionFactory = $this->objectManager->create(
-            'Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory'
-        );
-
+        /** @var \Magento\Security\Model\AdminSessionInfo $session */
         $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
         $session->setSessionId('669e2e3d752e8')
             ->setUserId(1)
             ->setStatus(1)
-            ->setCreatedAt(time() - 1000)
-            ->setUpdatedAt(time() - 999)
+            ->setCreatedAt(time() - 50)
+            ->setUpdatedAt(time() - 49)
             ->save();
         $this->auth->login(
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
+        $collection = $this->getCollectionForLogoutOtherUserSessions($session);
+        $this->assertGreaterThanOrEqual(1, $collection->getSize());
+        $this->adminSessionsManager->logoutOtherUserSessions();
+        $collection = $this->getCollectionForLogoutOtherUserSessions($session);
+        $this->assertEquals(0, $collection->getSize());
+    }
 
-        /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection $sessions */
-        $sessions = $adminSessionInfoCollectionFactory->create();
-
-        $collection = $this->objectManager->create('Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection');
+    /**
+     * Collection getter with filters populated for testLogoutOtherUserSessions() method
+     *
+     * @param AdminSessionInfo $session
+     * @return ResourceModel\AdminSessionInfo\Collection
+     */
+    protected function getCollectionForLogoutOtherUserSessions(\Magento\Security\Model\AdminSessionInfo $session)
+    {
+        /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection $collection */
+        $collection = $session->getResourceCollection();
         $collection->filterByUser(
             $this->authSession->getUser()->getId(),
             \Magento\Security\Model\AdminSessionInfo::LOGGED_IN,
             $this->authSession->getSessionId()
-            )
+        )
             ->filterExpiredSessions(100)
             ->load();
-        echo $collection->getSelect()->__toString();
-        echo count($collection) . PHP_EOL;
-        echo $collection->getSize() . PHP_EOL;
-        //echo $sessions->getSelect()->__toString();
 
-        /*
-        $this->adminSessionsManager->logoutOtherUserSessions();
-        $sessions = $adminSessionInfoCollectionFactory->create();
-        $sessions->filterByUser($this->authSession->getUser()->getId())
-            ->filterExpiredSessions(100)
-            ;//->load();
-        echo count($sessions) . PHP_EOL;
-        echo $sessions->getSize() . PHP_EOL;
-        */
+        return $collection;
     }
 }
