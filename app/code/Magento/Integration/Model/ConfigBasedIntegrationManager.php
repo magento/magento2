@@ -23,46 +23,88 @@ class ConfigBasedIntegrationManager
     protected $integrationService;
 
     /**
-     * Integration config
-     *
-     * @var IntegrationConfig
-     */
-    protected $integrationConfig;
-
-    /**
      * @var  AclRetriever
      */
     protected $aclRetriever;
 
     /**
-     * @param IntegrationConfig $integrationConfig
+     * Integration config
+     *
+     * @var Config
+     */
+    protected $integrationConfig;
+
+    /**
      * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param AclRetriever $aclRetriever
+     * @param Config $integrationConfig
      */
     public function __construct(
-        IntegrationConfig $integrationConfig,
         \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
-        AclRetriever $aclRetriever
+        AclRetriever $aclRetriever,
+        Config $integrationConfig
     ) {
         $this->integrationService = $integrationService;
-        $this->integrationConfig = $integrationConfig;
         $this->aclRetriever = $aclRetriever;
+        $this->integrationConfig = $integrationConfig;
     }
 
     /**
      * Process integrations from config files for the given array of integration names
      *
+     * @param array $integrationNames
+     * @return array
+     * @deprecated
+     */
+    public function processIntegrationConfig(array $integrationNames)
+    {
+        if (empty($integrationNames)) {
+            return [];
+        }
+        /** @var array $integrations */
+        $integrations = $this->integrationConfig->getIntegrations();
+        foreach ($integrationNames as $name) {
+            $integrationDetails = $integrations[$name];
+            $integrationData = [Integration::NAME => $name];
+            if (isset($integrationDetails[Converter::KEY_EMAIL])) {
+                $integrationData[Integration::EMAIL] = $integrationDetails[Converter::KEY_EMAIL];
+            }
+            if (isset($integrationDetails[Converter::KEY_AUTHENTICATION_ENDPOINT_URL])) {
+                $integrationData[Integration::ENDPOINT] =
+                    $integrationDetails[Converter::KEY_AUTHENTICATION_ENDPOINT_URL];
+            }
+            if (isset($integrationDetails[Converter::KEY_IDENTITY_LINKING_URL])) {
+                $integrationData[Integration::IDENTITY_LINK_URL] =
+                    $integrationDetails[Converter::KEY_IDENTITY_LINKING_URL];
+            }
+            $integrationData[Integration::SETUP_TYPE] = Integration::TYPE_CONFIG;
+            // If it already exists, update it
+            $integration = $this->integrationService->findByName($name);
+            if ($integration->getId()) {
+                //If Integration already exists, update it.
+                //For now we will just overwrite the integration with same name but we will need a long term solution
+                $integrationData[Integration::ID] = $integration->getId();
+                $this->integrationService->update($integrationData);
+            } else {
+                $this->integrationService->create($integrationData);
+            }
+        }
+        return $integrationNames;
+    }
+
+    /**
+     * Process integrations from config files for the given array of integration names
+     *  to be used with consolidated integration config
+     *
      * @param array $integrations
      * @return array
      */
-    public function processIntegrationConfig(array $integrations)
+    public function processConfigBasedIntegrations(array $integrations)
     {
         if (empty($integrations)) {
             return [];
         }
 
-        /** @var array $integrationsResource */
-        $integrationsResource = $this->integrationConfig->getIntegrations();
         foreach (array_keys($integrations) as $name) {
             $integrationDetails = $integrations[$name];
             $integrationData = [Integration::NAME => $name];
@@ -78,8 +120,8 @@ class ConfigBasedIntegrationManager
                 $integrationData[Integration::IDENTITY_LINK_URL] =
                     $integrationDetails[Converter::KEY_IDENTITY_LINKING_URL];
             }
-            if (isset($integrationsResource[$name]['resource'])) {
-                $integrationData['resource'] = $integrationsResource[$name]['resource'];
+            if (isset($integrationDetails[$name]['resource'])) {
+                $integrationData['resource'] = $integrationDetails[$name]['resource'];
             }
             $integrationData[Integration::SETUP_TYPE] = Integration::TYPE_CONFIG;
 

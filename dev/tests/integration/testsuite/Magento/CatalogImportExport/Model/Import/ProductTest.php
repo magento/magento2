@@ -765,6 +765,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testProductsWithMultipleStores()
