@@ -330,7 +330,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
                 ->with('customer/account/login')
                 ->willReturnSelf();
         }
-        
+
         $this->assertSame($this->resultRedirect, $this->model->execute());
     }
 
@@ -509,14 +509,12 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $counter
      * @param string $message
      * @param string $exception
      *
      * @dataProvider exceptionDataProvider
      */
     public function testGeneralException(
-        $counter,
         $message,
         $exception
     ) {
@@ -589,12 +587,10 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'counter' => 1,
                 'message' => 'LocalizedException',
                 'exception' => '\Magento\Framework\Exception\LocalizedException',
             ],
             [
-                'counter' => 1,
                 'message' => 'Exception',
                 'exception' => '\Exception',
             ],

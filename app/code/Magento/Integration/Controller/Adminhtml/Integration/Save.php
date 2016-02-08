@@ -38,7 +38,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
-     * @param \Magento\Security\Helper\SecurityCookie
+     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
      * @param \Magento\Security\Model\SecurityManager $securityManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */

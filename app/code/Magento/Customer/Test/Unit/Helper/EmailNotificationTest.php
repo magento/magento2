@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Helper;
 
+use Magento\Customer\Helper\EmailNotification;
+
 /**
  * Test class for \Magento\Customer\Helper\EmailNotification testing
  */
@@ -130,6 +132,7 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
      * @param bool $isPasswordChanged
      *
      * @dataProvider sendNotificationEmailsDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSendNotificationEmailsIfRequired($testNumber, $oldEmail, $newEmail, $isPasswordChanged)
     {
@@ -143,15 +146,15 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
 
         switch ($testNumber) {
             case 1:
-                $xmlPathTemplate = \Magento\Customer\Helper\EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE;
+                $xmlPathTemplate = EmailNotification::XML_PATH_RESET_PASSWORD_TEMPLATE;
                 $expects = $this->once();
                 break;
             case 2:
-                $xmlPathTemplate = \Magento\Customer\Helper\EmailNotification::XML_PATH_CHANGE_EMAIL_TEMPLATE;
+                $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_TEMPLATE;
                 $expects = $this->exactly(2);
                 break;
             case 3:
-                $xmlPathTemplate = \Magento\Customer\Helper\EmailNotification::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE;
+                $xmlPathTemplate = EmailNotification::XML_PATH_CHANGE_EMAIL_AND_PASSWORD_TEMPLATE;
                 $expects = $this->exactly(2);
                 break;
         }
@@ -314,5 +317,4 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-
 }

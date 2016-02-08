@@ -62,6 +62,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
