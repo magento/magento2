@@ -28,4 +28,3 @@ $passwordResetRequestEvent
     ->setCreatedAt('2016-01-18 13:00:13')
     ->setIp('3232249858')
     ->save();
-
