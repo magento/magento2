@@ -7,6 +7,8 @@ namespace Magento\Integration\Model\Config\Integration;
 
 /**
  * Converter of api.xml content into array format.
+ *
+ * @deprecated
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -19,28 +21,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**#@-*/
 
-    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface */
-    protected $resourceProvider;
-
-    /**
-     * Initialize dependencies.
-     *
-     * @param \Magento\Framework\Acl\AclResource\ProviderInterface $resourceProvider
-     */
-    public function __construct(
-        \Magento\Framework\Acl\AclResource\ProviderInterface $resourceProvider
-    ) {
-        $this->resourceProvider = $resourceProvider;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function convert($source)
     {
         $result = [];
-        $allResources = $this->resourceProvider->getAclResources();
-        $hashAclResourcesTree = $this->hashResources($allResources[1]['children']);
         /** @var \DOMNodeList $integrations */
         $integrations = $source->getElementsByTagName('integration');
         /** @var \DOMElement $integration */
@@ -59,63 +45,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     continue;
                 }
                 $resource = $resource->attributes->getNamedItem('name')->nodeValue;
-                $resourceNames = $this->addParentsToResource($hashAclResourcesTree, $resource);
-                foreach ($resourceNames as $name) {
-                    $result[$integrationName][self::API_RESOURCES][] = $name;
-                }
+                $result[$integrationName][self::API_RESOURCES][] = $resource;
             }
-            // Remove any duplicates added parents
-            $result[$integrationName][self::API_RESOURCES] =
-                array_unique($result[$integrationName][self::API_RESOURCES]);
         }
         return $result;
-    }
-
-    /**
-     * Make ACL resource array return a hash with parent-resource-name => [children-resources-names] representation
-     *
-     * @param array $resources
-     * @return array
-     */
-    private function hashResources(array $resources)
-    {
-        $output = [];
-        foreach ($resources as $resource) {
-            if (isset($resource['children'])) {
-                $item = $this->hashResources($resource['children']);
-            } else {
-                $item = [];
-            }
-            $output[$resource['id']] = $item;
-        }
-        return $output;
-    }
-
-    /**
-     * Find parents names of a node in an ACL resource hash and add them to returned array
-     *
-     * @param array $resourcesHash
-     * @param string $nodeName
-     * @return array
-     */
-    private function addParentsToResource(array $resourcesHash, $nodeName)
-    {
-        $output = [];
-        foreach ($resourcesHash as $resource => $children) {
-            if ($resource == $nodeName) {
-                $output = [$resource];
-                break;
-            }
-            if (!empty($children)) {
-                $names = $this->addParentsToResource($children, $nodeName);
-                if (!empty($names)) {
-                    $output = array_merge([$resource], $names);
-                    break;
-                } else {
-                    continue;
-                }
-            }
-        }
-        return $output;
     }
 }
