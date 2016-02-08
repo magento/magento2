@@ -708,7 +708,10 @@ class File implements DriverInterface
                 $this->fileSystemException('Unable to write');
             }
             if (false === $fwrite) {
-                $this->fileSystemException('Error occurred during execution of fileWrite %1', [$this->getWarningMessage()]);
+                $this->fileSystemException(
+                    'Error occurred during execution of fileWrite %1',
+                    [$this->getWarningMessage()]
+                );
             }
         }
 
@@ -716,7 +719,7 @@ class File implements DriverInterface
     }
 
     /**
-     * throw a FileSystemException with a Phrase of message and optional arguments
+     * Throw a FileSystemException with a Phrase of message and optional arguments
      *
      * @param string $message
      * @param array $arguments
