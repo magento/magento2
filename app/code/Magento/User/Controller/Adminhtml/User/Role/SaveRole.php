@@ -11,6 +11,9 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\State\UserLockedException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
     /**
@@ -57,7 +60,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * \Magento\Security\Model\SecurityManager $securityManager
+     * @param \Magento\Security\Model\SecurityManager $securityManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
