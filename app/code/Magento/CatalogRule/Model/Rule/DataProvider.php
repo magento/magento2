@@ -17,6 +17,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Class DataProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
