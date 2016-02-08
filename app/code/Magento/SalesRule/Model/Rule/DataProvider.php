@@ -93,7 +93,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         array $meta = [],
         array $data = []
     ) {
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
         $this->store = $store;
         $this->groupRepository = $groupRepository;
@@ -101,8 +100,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->objectConverter = $objectConverter;
         $this->salesRuleFactory = $salesRuleFactory;
         $this->coreRegistry = $registry;
-        $this->initMeta();
-        $this->meta = array_replace_recursive($this->initMeta(), $this->meta);
+        $meta = array_replace_recursive($this->initMeta(), $meta);
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
