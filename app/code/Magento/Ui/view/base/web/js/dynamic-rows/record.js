@@ -5,9 +5,8 @@
 
 define([
     'underscore',
-    'uiRegistry',
     'uiCollection'
-], function (_, registry, uiCollection) {
+], function (_, uiCollection) {
     'use strict';
 
     return uiCollection.extend({
@@ -21,7 +20,8 @@ define([
                 data: '${ $.provider }:${ $.dataScope }'
             },
             listens: {
-                position: 'initPosition'
+                position: 'initPosition',
+                elems: 'setColumnVisibileListener'
             },
             links: {
                 position: '${ $.name }.${ $.positionProvider }:value'
@@ -32,6 +32,19 @@ define([
             modules: {
                 parentComponent: '${ $.parentName }'
             }
+        },
+
+        /**
+         * Init config
+         *
+         * @returns {Object} Chainable.
+         */
+        initConfig: function () {
+            this._super();
+
+            this.label = this.label || this.headerLabel;
+
+            return this;
         },
 
         /**
@@ -66,19 +79,49 @@ define([
         },
 
         /**
+         * Set column visibility listener
+         */
+        setColumnVisibileListener: function () {
+            var elem = _.find(this.elems(), function (curElem) {
+                return !curElem.hasOwnProperty('visibleListener');
+            });
+
+            if (!elem) {
+                return false;
+            }
+
+            this.childVisibleListener(elem);
+            !elem.visibleListener ? elem.on('visible', this.childVisibleListener.bind(this, elem)) : false;
+            elem.visibleListener = true;
+        },
+
+        /**
+         * Child visibility listener
+         *
+         * @param {Object} data
+         */
+        childVisibleListener: function (data) {
+            this.setVisibilityColumn(data.index, data.visible());
+        },
+
+        /**
          * Reset data to initial value.
          * Call method reset on child elements.
          */
         reset: function () {
-            var elems = this.elems();
+            var elems = this.elems(),
+                nameIsEqual,
+                dataScopeIsEqual;
 
             _.each(elems, function (elem) {
+                nameIsEqual = this.name + '.' + this.positionProvider === elem.name;
+                dataScopeIsEqual = this.dataScope === elem.dataScope;
 
-                if ((this.name + '.' + this.positionProvider) === elem.name || this.dataScope === elem.dataScope) {
+                if (nameIsEqual || dataScopeIsEqual) {
                     return false;
                 }
 
-                if (_.isFunction(elem.reset) ) {
+                if (_.isFunction(elem.reset)) {
                     elem.reset();
                 }
             }, this);
@@ -95,12 +138,11 @@ define([
             var elems = this.elems();
 
             _.each(elems, function (elem) {
-
-                if ((this.name + '.' + this.positionProvider) === elem.name || this.dataScope === elem.dataScope) {
+                if (this.name + '.' + this.positionProvider === elem.name || this.dataScope === elem.dataScope) {
                     return false;
                 }
 
-                if (_.isFunction(elem.clear) ) {
+                if (_.isFunction(elem.clear)) {
                     elem.clear();
                 }
             }, this);
@@ -145,8 +187,25 @@ define([
          * @param {Boolean} state
          */
         setVisibilityColumn: function (index, state) {
-            index = parseInt(index, 10);
-            this.elems()[index].visible(state);
+            var elems = this.elems(),
+                curElem = parseInt(index, 10),
+                label;
+
+            if (!this.parentComponent()) {
+                return false;
+            }
+
+            if (_.isNaN(curElem)) {
+                _.findWhere(elems, {
+                    index: index
+                }).visible(state);
+                label = _.findWhere(this.parentComponent().labels(), {
+                    name: index
+                });
+                label.visible() !== state ? label.visible(state) : false;
+            } else {
+                elems[curElem].visible(state);
+            }
         },
 
         /**

@@ -28,10 +28,12 @@ define([
             fit: false,
             addButton: true,
             addButtonLabel: $t('Add'),
-            deleteButtonLabel: $t('Delete'),
             recordData: [],
             recordIterator: 0,
             maxPosition: 0,
+            deleteProperty: 'delete',
+            identificationProperty: 'record_id',
+            deleteValue: true,
             dndConfig: {
                 name: '${ $.name }_dnd',
                 component: 'Magento_Ui/js/dynamic-rows/dnd',
@@ -124,12 +126,11 @@ define([
             return this;
         },
 
+        /**
+         * Render column header
+         */
         renderColumnsHeader: function () {
-            if (this.elems().length) {
-                this.columnsHeader(true);
-            } else {
-                this.columnsHeader(false);
-            }
+            this.elems().length ? this.columnsHeader(true) : this.columnsHeader(false);
         },
 
         /**
@@ -291,26 +292,100 @@ define([
          * @param {Number} index - row index
          *
          */
-        deleteRecord: function (index) {
-            var recordInstance = _.find(this.elems(), function (elem) {
-                return elem.index === index;
-            });
+        deleteRecord: function (index, recordId) {
+            var recordInstance,
+                lastRecord,
+                recordsData;
 
-            recordInstance.destroy();
-            this.removeMaxPosition();
-            this.recordData()[recordInstance.index].delete = true;
-            this.recordData.valueHasMutated();
+            if (this.deleteProperty) {
+                recordInstance = _.find(this.elems(), function (elem) {
+                    return elem.index === index;
+                });
+                recordInstance.destroy();
+                this.removeMaxPosition();
+                this.recordData()[recordInstance.index][this.deleteProperty] = this.deleteValue;
+                this.recordData.valueHasMutated();
+            } else {
+                lastRecord =
+                    _.findWhere(this.elems(), {
+                        index: this.recordIterator - 1
+                    }) ||
+                    _.findWhere(this.elems(), {
+                        index: (this.recordIterator - 1).toString()
+                    });
+                lastRecord.destroy();
+                this.removeMaxPosition();
+                recordsData = this._getDataByProp(recordId);
+                this._updateData(recordsData);
+                this._sortAfterDelete();
+                --this.recordIterator;
+            }
+        },
+
+        /**
+         * Get data object by some property
+         *
+         * @param {Number} id - element id
+         * @param {String} prop - property
+         */
+        _getDataByProp: function (id, prop) {
+            prop = prop || this.identificationProperty;
+
+            return _.reject(this.source.get(this.dataScope + '.' + this.index), function (recordData) {
+                return parseInt(recordData[prop], 10) === parseInt(id, 10);
+            }, this);
+        },
+
+        /**
+         * Sort elems by position property
+         */
+        _sortAfterDelete: function () {
+            this.elems(this.elems().sort(function (propOne, propTwo) {
+                return parseInt(propOne.position, 10) - parseInt(propTwo.position, 10);
+            }));
+        },
+
+        /**
+         * Set new data to dataSource,
+         * delete element
+         *
+         * @param {Object} data - record data
+         */
+        _updateData: function (data) {
+            var elems = utils.copy(this.elems()),
+                path;
+
+            this.recordData([]);
+            elems = utils.copy(this.elems());
+            data.each(function (rec, idx) {
+                elems[idx].recordId = rec[this.identificationProperty];
+                path = this.dataScope + '.' + this.index + '.' + idx;
+                this.source.set(path, rec);
+            }, this);
+
+            this.elems(elems);
         },
 
         /**
          * Rerender dynamic-rows elems
          */
         reload: function () {
+            this.clear();
+            this.initChildren(false, true);
+        },
+
+        /**
+         * Destroy all dynamic-rows elems
+         *
+         * @returns {Object} Chainable.
+         */
+        clear: function () {
             this.elems.each(function (elem) {
                 elem.destroy();
             }, this);
             this.recordIterator = 0;
-            this.initChildren(false, true);
+
+            return this;
         },
 
         /**
@@ -422,11 +497,16 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        addChild: function (data, index) {
+        addChild: function (data, index, prop) {
             var template = this.templates.record,
                 child;
 
             index = !index && !_.isNumber(index) ? this.recordIterator : index;
+            prop = _.isNumber(prop) ? prop : index;
+
+            _.extend(this.templates.record, {
+                recordId: prop
+            });
 
             child = utils.template(template, {
                 collection: this,

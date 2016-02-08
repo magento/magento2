@@ -27,7 +27,7 @@ define([
      * @returns {String|Undefined}
      */
     transformProp = (function () {
-        var style =  document.createElement('div').style,
+        var style = document.createElement('div').style,
             base = 'Transform',
             vendors = ['webkit', 'moz', 'ms', 'o'],
             vi = vendors.length,
@@ -186,7 +186,7 @@ define([
 
             if (prevElem[0] === dragData.originRow[0]) {
                 dragData.instanceCtx.position = depElemPosition;
-                depElementCtx.position = depElemPosition -1;
+                depElementCtx.position = depElemPosition - 1;
 
                 return false;
             }

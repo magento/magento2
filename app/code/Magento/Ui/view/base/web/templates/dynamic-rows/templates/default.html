@@ -9,9 +9,9 @@
         <span text="element.label"/>
     </label>
 
-    <div class="admin__field-control" data-role="grid-wrapper">
+    <div class="admin__field-control" data-role="grid-wrapper" attr="'data-index': index">
         <div class="admin__control-table-wrapper">
-            <table class="admin__dynamic-rows admin__control-table" data-role="grid">
+            <table class="admin__dynamic-rows admin__control-table" data-role="grid" attr="{'data-index': index}">
                 <thead if="element.columnsHeader">
                 <tr>
                     <th if="dndConfig.enabled"/>
@@ -20,7 +20,8 @@
                     <th text="item.label",
                         css="$parent.setClasses(item)",
                         visible="item.visible",
-                        disabled="item.disabled"/>
+                        disabled="item.disabled"
+                        attr="{'data-name': name}"/>
                     <!-- /ko -->
                 </tr>
                 </thead>
@@ -44,7 +45,7 @@
         </div>
 
         <div class="admin__control-table-action" if="element.addButton">
-            <button attr="{disabled: disabled}"
+            <button attr="{disabled: disabled, 'data-action': 'add_new_row'}"
                     type="button"
                     click="addChild.bind($data, false, false)">
                 <span text="addButtonLabel"/>
