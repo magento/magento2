@@ -107,8 +107,8 @@ class LockCustomerOnEditPageTest extends Injectable
         Customer $initialCustomer,
         Customer $customer,
         $attempts,
-        $configData = null)
-    {
+        $configData = null
+    ) {
         $this->configData = $configData;
         // Preconditions
         $this->objectManager->create(
@@ -147,4 +147,3 @@ class LockCustomerOnEditPageTest extends Injectable
         )->run();
     }
 }
-
