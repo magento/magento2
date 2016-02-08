@@ -347,8 +347,10 @@ define([
         validate: function () {
             var value   = this.value(),
                 result  = validator(this.validation, value),
-                message = result.message,
-                isValid = !this.visible() || this.disabled() || result.passed;
+                message = !this.disabled() && this.visible() ? result.message : '',
+                isValid = this.disabled() || !this.visible() || result.passed;
+
+            this.error(message);
 
             //TODO: Implement proper result propagation for form
             if (!isValid) {

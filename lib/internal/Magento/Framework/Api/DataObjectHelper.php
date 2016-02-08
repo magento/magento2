@@ -137,7 +137,7 @@ class DataObjectHelper
     }
 
     /**
-     * @param ExtensibleDataInterface $dataObject
+     * @param mixed $dataObject
      * @param string $getterMethodName
      * @param string $methodName
      * @param array $value
@@ -145,7 +145,7 @@ class DataObjectHelper
      * @return $this
      */
     protected function setComplexValue(
-        ExtensibleDataInterface $dataObject,
+        $dataObject,
         $getterMethodName,
         $methodName,
         array $value,
