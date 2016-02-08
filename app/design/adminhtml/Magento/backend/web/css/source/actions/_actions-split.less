@@ -72,6 +72,7 @@
     .action-default {
         float: left;
         margin: 0;
+
         &.active,
         &._active,
         &:hover {
@@ -86,9 +87,9 @@
 
     .action-toggle {
         .action-toggle-triangle(
-            @_dropdown__padding-right: @_action-toggle__width;
-            @_triangle__height: @button-marker-triangle__height;
-            @_triangle__width: @button-marker-triangle__width;
+        @_dropdown__padding-right: @_action-toggle__width;
+        @_triangle__height: @button-marker-triangle__height;
+        @_triangle__width: @button-marker-triangle__width;
         );
         border-left-color: rgba(0, 0, 0, .2);
         bottom: 0;

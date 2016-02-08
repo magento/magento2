@@ -10,8 +10,10 @@
 & when (@media-common = true) {
     .pages {
         .lib-pager();
+
         .action {
             @_shadow: inset 0 1px 0 0 @color-white, inset 0 -1px 0 0 fade(@border-color__base, 30);
+
             .lib-css(box-shadow, @_shadow);
             border-radius: 3px;
             padding: 0 8px;
