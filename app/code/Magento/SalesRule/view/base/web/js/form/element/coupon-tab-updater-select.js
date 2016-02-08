@@ -18,19 +18,13 @@ define([
          * Hide fields on coupon tab
          */
         onUpdate: function () {
-            var isDisabled = this.value() != this.displayOnlyForCouponType,
-                selector = '[id=coupons_information_fieldset] input, [id=coupons_information_fieldset] select, '
-                    + '[id=coupons_information_fieldset] button, [id=couponCodesGrid] input, '
-                    + '[id=couponCodesGrid] select, [id=couponCodesGrid] button';
 
+            /* eslint-disable eqeqeq */
+            var isDisabled = this.value() != this.displayOnlyForCouponType;
 
+            /* eslint-enable eqeqeq */
             this._super();
-            _.each(
-                document.querySelectorAll(selector),
-                function (element) {
-                    element.disabled = isDisabled;
-                }
-            );
+            disableEnableCouponTabInputFields(isDisabled);
         }
     });
 });
