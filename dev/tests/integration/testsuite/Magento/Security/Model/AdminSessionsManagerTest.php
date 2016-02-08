@@ -87,8 +87,6 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if other sessions are terminated if admin_account_sharing is disabled
      *
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\Plugin\AuthenticationException
      * @magentoAdminConfigFixture admin/security/session_lifetime 100
      * @magentoConfigFixture default_store admin/security/admin_account_sharing 0
      */
@@ -109,8 +107,6 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             'All other open sessions for this account were terminated.',
             (string) $this->messageManager->getMessages()->getLastAddedMessage()->getText()
         );
-
-        $this->auth->logout();
     }
 
     /**
@@ -129,20 +125,69 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test of prolong user action
+     * Test if current session is retrieved
      */
-    public function dsfdstestProcessProlong()
+    public function testGetCurrentSession()
     {
         $this->auth->login(
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
         $sessionId = $this->authSession->getSessionId();
-        $updatedAt = $this->authSession->getUpdatedAt();
-
-
-
         $this->adminSessionInfo->load($sessionId, 'session_id');
-        $this->assertEquals($this->adminSessionInfo->getUpdatedAt(), $updatedAt);
+        $this->assertEquals(
+            $this->adminSessionInfo->getSessionId(),
+            $this->adminSessionsManager->getCurrentSession()->getSessionId()
+        );
+    }
+
+    /**
+     *
+     *
+     * @magentoAdminConfigFixture admin/security/session_lifetime 100
+     */
+    public function testLogoutOtherUserSessions()
+    {
+        $adminSessionInfoCollectionFactory = $this->objectManager->create(
+            'Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory'
+        );
+
+        $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $session->setSessionId('669e2e3d752e8')
+            ->setUserId(1)
+            ->setStatus(1)
+            ->setCreatedAt(time() - 1000)
+            ->setUpdatedAt(time() - 999)
+            ->save();
+        $this->auth->login(
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
+
+        /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection $sessions */
+        $sessions = $adminSessionInfoCollectionFactory->create();
+
+        $collection = $this->objectManager->create('Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection');
+        $collection->filterByUser(
+            $this->authSession->getUser()->getId(),
+            \Magento\Security\Model\AdminSessionInfo::LOGGED_IN,
+            $this->authSession->getSessionId()
+            )
+            ->filterExpiredSessions(100)
+            ->load();
+        echo $collection->getSelect()->__toString();
+        echo count($collection) . PHP_EOL;
+        echo $collection->getSize() . PHP_EOL;
+        //echo $sessions->getSelect()->__toString();
+
+        /*
+        $this->adminSessionsManager->logoutOtherUserSessions();
+        $sessions = $adminSessionInfoCollectionFactory->create();
+        $sessions->filterByUser($this->authSession->getUser()->getId())
+            ->filterExpiredSessions(100)
+            ;//->load();
+        echo count($sessions) . PHP_EOL;
+        echo $sessions->getSize() . PHP_EOL;
+        */
     }
 }

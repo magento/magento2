@@ -53,7 +53,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var ManagerInterface
      */
-    protected $eventManager;
+    //protected $eventManager;
 
     /**
      * AccountManagement constructor
@@ -78,7 +78,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
         $this->backendConfig = $backendConfig;
         $this->dateTime = $dateTime;
         $this->encryptor = $encryptor;
-        $this->eventManager = $eventManager;
+        //$this->eventManager = $eventManager;
     }
 
     /**

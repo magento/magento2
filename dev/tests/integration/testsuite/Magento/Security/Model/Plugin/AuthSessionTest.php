@@ -5,8 +5,6 @@
  */
 namespace Magento\Security\Model\Plugin;
 
-use Magento\TestFramework\Helper\Bootstrap;
-
 /**
  * @magentoAppIsolation enabled
  */
@@ -33,14 +31,14 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
     protected $adminSessionsManager;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
+    protected $dateTime;
 
     /**
      * Set up
@@ -56,8 +54,8 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         $this->authSession = $this->objectManager->create('Magento\Backend\Model\Auth\Session');
         $this->adminSessionInfo = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
         $this->auth->setAuthStorage($this->authSession);
-        $this->messageManager = $this->objectManager->get('Magento\Framework\Message\ManagerInterface');
         $this->adminSessionsManager = $this->objectManager->create('Magento\Security\Model\AdminSessionsManager');
+        $this->dateTime = $this->objectManager->create('Magento\Framework\Stdlib\DateTime');
     }
 
     /**
@@ -83,17 +81,18 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
         $sessionId = $this->authSession->getSessionId();
-        $updatedAtOld = $this->authSession->getUpdatedAt();
-        $this->authSession->setUpdatedAt(time() - 1000);
-
+        $dateInPast = $this->dateTime->formatDate($this->authSession->getUpdatedAt() - 100);
+        $this->adminSessionsManager->getCurrentSession()
+            ->setData(
+                'updated_at',
+                $dateInPast
+            )
+            ->save();
         $this->adminSessionInfo->load($sessionId, 'session_id');
-        $updatedAtOld = $this->adminSessionInfo->getUpdatedAt();
-        echo PHP_EOL;
-        echo $updatedAtOld . PHP_EOL;
+        $oldUpdatedAt = $this->adminSessionInfo->getUpdatedAt();
         $this->authSession->prolong();
+        $this->adminSessionInfo->load($sessionId, 'session_id');
         $updatedAt = $this->adminSessionInfo->getUpdatedAt();
-        echo $updatedAt . PHP_EOL;
-
-        //$this->assertEquals($this->adminSessionInfo->getUpdatedAt(), $updatedAt);
+        $this->assertGreaterThan($oldUpdatedAt, $updatedAt);
     }
 }
