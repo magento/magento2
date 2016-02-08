@@ -16,7 +16,7 @@ define([
             loading: false,
             error: false,
             opened: false,
-            level: 0
+            level: 0,
             additionalClasses: {}
         },
 

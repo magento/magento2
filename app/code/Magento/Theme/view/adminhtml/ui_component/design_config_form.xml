@@ -75,6 +75,102 @@
                 </item>
             </argument>
         </field>
+        <field name="theme_schedule_button">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">25</item>
+                    <item name="template" xsi:type="string">ui/form/element/button</item>
+                    <item name="displayAsLink" xsi:type="boolean">true</item>
+                    <item name="formElement" xsi:type="string">container</item>
+                    <item name="componentType" xsi:type="string">container</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/button</item>
+                    <item name="title" xsi:type="string">Add Theme Schedule</item>
+                    <item name="actions" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="targetName" xsi:type="string">design_config_form.design_config_form.theme.theme_schedule_modal</item>
+                            <item name="actionName" xsi:type="string">toggleModal</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <modal name="theme_schedule_modal">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="componentType" xsi:type="string">modal</item>
+                    <item name="options" xsi:type="array">
+                        <item name="title" xsi:type="string">Theme Schedule</item>
+                        <item name="buttons" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="text" xsi:type="string">Cancel</item>
+                                <item name="class" xsi:type="string">action-secondary</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="targetName" xsi:type="string">${ $.name }</item>
+                                        <item name="actionName" xsi:type="string">actionCancel</item>
+                                    </item>
+                                </item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="text" xsi:type="string">Done</item>
+                                <item name="class" xsi:type="string">action-primary</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="targetName" xsi:type="string">${ $.name }</item>
+                                        <item name="actionName" xsi:type="string">actionDone</item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+            <fieldset name="schedule_date">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Schedule</item>
+                        <item name="sortOrder" xsi:type="number">20</item>
+                    </item>
+                </argument>
+                <field name="schedule_date_from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Start Date</item>
+                            <item name="dataType" xsi:type="string">string</item>
+                            <item name="formElement" xsi:type="string">date</item>
+                            <item name="dataScope" xsi:type="string">schedule_date_from</item>
+                            <item name="sortOrder" xsi:type="number">15</item>
+                            <item name="options" xsi:type="array">
+                                <item name="showsTime" xsi:type="boolean">true</item>
+                                <item name="timeFormat" xsi:type="string">h:mm tt</item>
+                            </item>
+                            <item name="validation" xsi:type="array">
+                                <item name="validate-date" xsi:type="boolean">true</item>
+                                <item name="required-entry" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="schedule_date_to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">End Date</item>
+                            <item name="dataType" xsi:type="string">string</item>
+                            <item name="formElement" xsi:type="string">date</item>
+                            <item name="dataScope" xsi:type="string">schedule_date_to</item>
+                            <item name="sortOrder" xsi:type="number">20</item>
+                            <item name="options" xsi:type="array">
+                                <item name="showsTime" xsi:type="boolean">true</item>
+                                <item name="timeFormat" xsi:type="string">h:mm tt</item>
+                            </item>
+                            <item name="validation" xsi:type="array">
+                                <item name="validate-date" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </fieldset>
+        </modal>
     </fieldset>
     <fieldset name="other_settings">
         <argument name="data" xsi:type="array">
