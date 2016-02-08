@@ -56,7 +56,6 @@
                     <guest_checkout>1</guest_checkout>
                     <register_during_checkout>1</register_during_checkout>
                     <contact_us>1</contact_us>
-                    <user_edit>1</user_edit>
                 </always_for>
             </captcha>
         </customer>

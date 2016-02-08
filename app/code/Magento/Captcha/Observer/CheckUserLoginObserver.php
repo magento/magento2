@@ -33,7 +33,7 @@ class CheckUserLoginObserver implements ObserverInterface
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
-    protected $_session;
+    protected $customerSession;
 
     /**
      * @var CaptchaStringResolver
@@ -63,7 +63,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Session\SessionManagerInterface $session
+     * @param \Magento\Framework\Session\SessionManagerInterface $customerSession
      * @param CaptchaStringResolver $captchaStringResolver
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param CustomerRepositoryInterface $customerRepository
@@ -73,7 +73,7 @@ class CheckUserLoginObserver implements ObserverInterface
         \Magento\Captcha\Helper\Data $helper,
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Session\SessionManagerInterface $session,
+        \Magento\Framework\Session\SessionManagerInterface $customerSession,
         CaptchaStringResolver $captchaStringResolver,
         \Magento\Customer\Model\Url $customerUrl,
         CustomerRepositoryInterface $customerRepository,
@@ -82,7 +82,7 @@ class CheckUserLoginObserver implements ObserverInterface
         $this->_helper = $helper;
         $this->_actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
-        $this->_session = $session;
+        $this->customerSession = $customerSession;
         $this->captchaStringResolver = $captchaStringResolver;
         $this->_customerUrl = $customerUrl;
         $this->customerRepository = $customerRepository;
@@ -115,8 +115,8 @@ class CheckUserLoginObserver implements ObserverInterface
                 }
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $this->_session->setUsername($login);
-                $beforeUrl = $this->_session->getBeforeAuthUrl();
+                $this->customerSession->setUsername($login);
+                $beforeUrl = $this->customerSession->getBeforeAuthUrl();
                 $url = $beforeUrl ? $beforeUrl : $this->_customerUrl->getLoginUrl();
                 $controller->getResponse()->setRedirect($url);
             }
