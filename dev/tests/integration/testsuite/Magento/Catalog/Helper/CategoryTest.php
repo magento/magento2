@@ -5,6 +5,13 @@
  */
 namespace Magento\Catalog\Helper;
 
+/**
+ * Class CategoryTest
+ * @package Magento\Catalog\Helper
+ *
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
+ */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
