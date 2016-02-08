@@ -100,11 +100,11 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $js = '
             function (grid, event) {
                 var trElement = Event.findElement(event, "tr");
-                var blockId = trElement.down("td").innerHTML.replace(/^\s+|\s+$/g,"");
                 var blockTitle = trElement.down("td").next().innerHTML;
+                var blockIdentifier = trElement.down("td").next().next().innerHTML.trim();
                 ' .
             $chooserJsObject .
-            '.setElementValue(blockId);
+            '.setElementValue(blockIdentifier);
                 ' .
             $chooserJsObject .
             '.setElementLabel(blockTitle);
