@@ -29,7 +29,7 @@ class Config implements \Magento\Framework\Search\SearchEngine\ConfigInterface
      */
     public function getDeclaredFeatures($searchEngine)
     {
-        return $this->dataStorage->get($searchEngine) ?: [];
+        return $this->dataStorage->get($searchEngine, []);
     }
 
     /**
