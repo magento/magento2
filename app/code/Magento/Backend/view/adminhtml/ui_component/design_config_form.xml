@@ -17,8 +17,10 @@
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Framework\View\Design\Theme\Label</item>
                 <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">Magento_Backend/form/element/custom-select</item>
                     <item name="label" xsi:type="string" translate="true">Applied Theme</item>
                     <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Backend/js/form/element/custom-select</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="dataScope" xsi:type="string">theme_theme_id</item>
                     <item name="sortOrder" xsi:type="number">10</item>
@@ -26,6 +28,109 @@
                 </item>
             </argument>
         </field>
+        <field name="theme_switcher">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">15</item>
+                    <item name="template" xsi:type="string">Magento_Backend/form/element/custom-button</item>
+                    <item name="displayAsLink" xsi:type="boolean">true</item>
+                    <item name="formElement" xsi:type="string">container</item>
+                    <item name="componentType" xsi:type="string">container</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/button</item>
+                    <item name="title" xsi:type="string">Change</item>
+                    <item name="actions" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="targetName" xsi:type="string">design_config_form.design_config_form.theme.theme_switcher_modal</item>
+                            <item name="actionName" xsi:type="string">toggleModal</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <modal name="theme_switcher_modal">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="componentType" xsi:type="string">modal</item>
+                    <item name="options" xsi:type="array">
+                        <item name="title" xsi:type="string">Change Theme</item>
+                        <item name="buttons" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="text" xsi:type="string">Cancel</item>
+                                <item name="class" xsi:type="string">action-secondary</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="targetName" xsi:type="string">${ $.name }</item>
+                                        <item name="actionName" xsi:type="string">actionCancel</item>
+                                    </item>
+                                </item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="text" xsi:type="string">Done</item>
+                                <item name="class" xsi:type="string">action-primary</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="targetName" xsi:type="string">${ $.name }</item>
+                                        <item name="actionName" xsi:type="string">actionDone</item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+            <fieldset name="theme_modal">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Design Rule</item>
+                        <item name="sortOrder" xsi:type="number">20</item>
+                    </item>
+                </argument>
+                <field name="theme_theme_id">
+                    <argument name="data" xsi:type="array">
+                        <item name="options" xsi:type="object">Magento\Framework\View\Design\Theme\Label</item>
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Applied Theme</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="dataScope" xsi:type="string">theme_theme_id</item>
+                            <item name="sortOrder" xsi:type="number">10</item>
+                            <item name="notice" xsi:type="string" translate="true">If no value is specified, the system default will be used. The system default may be modified by third party extensions.</item>
+                        </item>
+                    </argument>
+                </field>
+            </fieldset>
+        </modal>
+        <!--<container name="theme_ua_regexp">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>-->
+                    <!--<item name="componentType" xsi:type="string">container</item>-->
+                    <!--<item name="isTemplate" xsi:type="boolean">true</item>-->
+                    <!--<item name="is_collection" xsi:type="boolean">true</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+            <!--<container name="theme_ua_regexp_columns">-->
+                <!--<argument name="data" xsi:type="array">-->
+                    <!--<item name="config" xsi:type="array">-->
+                        <!--<item name="label" xsi:type="string" translate="true">Theme Schedule</item>-->
+                        <!--<item name="sortOrder" xsi:type="number">20</item>-->
+                    <!--</item>-->
+                <!--</argument>-->
+                <!--<field name="name">-->
+                    <!--<argument name="data" xsi:type="array">-->
+                        <!--<item name="config" xsi:type="array">-->
+                            <!--<item name="componentType" xsi:type="string">field</item>-->
+                            <!--<item name="formElement" xsi:type="string">input</item>-->
+                            <!--<item name="elementTmpl" xsi:type="string">ui/dynamic-rows/cells/text</item>-->
+                            <!--<item name="dataType" xsi:type="string">text</item>-->
+                            <!--<item name="dataScope" xsi:type="string">name</item>-->
+                            <!--<item name="fit" xsi:type="boolean">false</item>-->
+                            <!--<item name="label" xsi:type="string">Name</item>-->
+                        <!--</item>-->
+                    <!--</argument>-->
+                <!--</field>-->
+            <!--</container>-->
+        <!--</container>-->
     </fieldset>
     <fieldset name="desing_rule">
         <argument name="data" xsi:type="array">
@@ -48,6 +153,76 @@
                 </item>
             </argument>
         </field>
+        <field name="theme_ua_regexp_button">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">15</item>
+                    <item name="template" xsi:type="string">ui/form/element/button</item>
+                    <item name="formElement" xsi:type="string">container</item>
+                    <item name="componentType" xsi:type="string">container</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/button</item>
+                    <item name="title" xsi:type="string">New User Agent Rule</item>
+                    <item name="actions" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="targetName" xsi:type="string">design_config_form.design_config_form.desing_rule.theme_ua_regexp_modal</item>
+                            <item name="actionName" xsi:type="string">toggleModal</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <modal name="theme_ua_regexp_modal">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="componentType" xsi:type="string">modal</item>
+                    <item name="options" xsi:type="array">
+                        <item name="title" xsi:type="string">New User Agent Design Rule</item>
+                        <item name="buttons" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="text" xsi:type="string">Cancel</item>
+                                <item name="class" xsi:type="string">action-secondary</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="targetName" xsi:type="string">${ $.name }</item>
+                                        <item name="actionName" xsi:type="string">actionCancel</item>
+                                    </item>
+                                </item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="text" xsi:type="string">Done</item>
+                                <item name="class" xsi:type="string">action-primary</item>
+                                <item name="actions" xsi:type="array">
+                                    <item name="0" xsi:type="array">
+                                        <item name="targetName" xsi:type="string">${ $.name }</item>
+                                        <item name="actionName" xsi:type="string">actionDone</item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+            <fieldset name="theme_ua_regexp">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true"></item>
+                        <item name="sortOrder" xsi:type="number">20</item>
+                    </item>
+                </argument>
+                <field name="string_name">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">String Name</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">string_name</item>
+                            <item name="sortOrder" xsi:type="number">10</item>
+                            <item name="notice" xsi:type="string" translate="true">Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples: Firefox /^mozilla/i</item>
+                        </item>
+                    </argument>
+                </field>
+            </fieldset>
+        </modal>
     </fieldset>
     <fieldset name="other_settings">
         <fieldset name="pagination">
