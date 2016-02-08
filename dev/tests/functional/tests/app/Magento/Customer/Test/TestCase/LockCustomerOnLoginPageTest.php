@@ -62,19 +62,19 @@ class LockCustomerOnLoginPageTest extends Injectable
      * Run Lock customer on login page test.
      *
      * @param Customer $initialCustomer
-     * @param string $configData
      * @param int $attempts
      * @param FixtureFactory $fixtureFactory
      * @param $incorrectPassword
+     * @param string $configData
      * @return void
      */
-    public function test(Customer $initialCustomer,
-                         $configData = null,
-                         $attempts,
-                         FixtureFactory $fixtureFactory,
-                         $incorrectPassword
-    )
-    {
+    public function test(
+        Customer $initialCustomer,
+        $attempts,
+        FixtureFactory $fixtureFactory,
+        $incorrectPassword,
+        $configData = null
+    ) {
         $this->configData = $configData;
 
         // Preconditions

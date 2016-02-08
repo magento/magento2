@@ -114,29 +114,17 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
 
             try {
                 // whether a customer enabled change email option
-                if ($this->getRequest()->getParam('change_email')) {
-                    $this->accountManagementHelper->validatePasswordAndLockStatus(
-                        $currentCustomerDataObject,
-                        $this->getRequest()->getPost('current_password')
-                    );
-                }
+                $this->changeEmail($currentCustomerDataObject);
+
                 // whether a customer enabled change password option
-                $isPasswordChanged = false;
-                if ($this->getRequest()->getParam('change_password')) {
-                    $isPasswordChanged = $this->changeCustomerPassword(
-                        $currentCustomerDataObject->getEmail(),
-                        $this->getRequest()->getPost('current_password'),
-                        $this->getRequest()->getPost('password'),
-                        $this->getRequest()->getPost('password_confirmation')
-                    );
-                }
+                $isPasswordChanged = $this->changePassword($currentCustomerDataObject);
+
                 $this->customerRepository->save($customerCandidateDataObject);
-                $this->emailNotification
-                    ->sendNotificationEmailsIfRequired(
-                        $currentCustomerDataObject,
-                        $customerCandidateDataObject,
-                        $isPasswordChanged
-                    );
+                $this->emailNotification->sendNotificationEmailsIfRequired(
+                    $currentCustomerDataObject,
+                    $customerCandidateDataObject,
+                    $isPasswordChanged
+                );
                 $this->dispatchSuccessEvent($customerCandidateDataObject);
                 $this->messageManager->addSuccess(__('You saved the account information.'));
                 return $resultRedirect->setPath('customer/account');
@@ -163,6 +151,47 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         return $resultRedirect->setPath('*/*/edit');
+    }
+
+    /**
+     * Change email if required
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject
+     * @return $this
+     * @throws InvalidEmailOrPasswordException
+     */
+    protected function changeEmail(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
+    {
+        if ($this->getRequest()->getParam('change_email')) {
+            $this->accountManagementHelper->validatePasswordAndLockStatus(
+                $currentCustomerDataObject,
+                $this->getRequest()->getPost('current_password')
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Change password if required
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject
+     * @return bool
+     * @throws InputException
+     */
+    protected function changePassword(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
+    {
+        $isPasswordChanged = false;
+        if ($this->getRequest()->getParam('change_password')) {
+            $isPasswordChanged = $this->changeCustomerPassword(
+                $currentCustomerDataObject->getEmail(),
+                $this->getRequest()->getPost('current_password'),
+                $this->getRequest()->getPost('password'),
+                $this->getRequest()->getPost('password_confirmation')
+            );
+        }
+
+        return $isPasswordChanged;
     }
 
     /**
