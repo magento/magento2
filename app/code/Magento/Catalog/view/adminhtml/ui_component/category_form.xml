@@ -22,7 +22,7 @@
             <item name="dataScope" xsi:type="string">data</item>
             <item name="namespace" xsi:type="string">category_form</item>
         </item>
-        <item name="childrenFromMeta" xsi:type="boolean">true</item>
+        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
     </argument>
     <dataSource name="category_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -46,7 +46,7 @@
     <fieldset name="general">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="false"></item>
+                <item name="label" xsi:type="string"/>
                 <item name="collapsible" xsi:type="boolean">false</item>
             </item>
         </argument>
@@ -73,7 +73,6 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">hidden</item>
-                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="source" xsi:type="string">category</item>
                 </item>
             </argument>
@@ -92,14 +91,18 @@
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">10</item>
                     <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="source" xsi:type="string">category</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
-                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Enable Category</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
-                    <item name="label" xsi:type="string" translate="true">Enable Category</item>
+                    <item name="default" xsi:type="number">1</item>
                 </item>
             </argument>
         </field>
@@ -108,13 +111,17 @@
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">20</item>
                     <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="source" xsi:type="string">category</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
-                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
+                    <item name="default" xsi:type="number">1</item>
                     <item name="label" xsi:type="string" translate="true">Include in Menu</item>
                 </item>
             </argument>
@@ -160,11 +167,11 @@
             <field name="savedImage.delete">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Delete Image</item>
+                        <item name="description" xsi:type="string" translate="true">Delete Image</item>
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="imports" xsi:type="array">
-                        <item name="visible" xsi:type="string">${ $.provider }:data.savedImage.value</item>
+                            <item name="visible" xsi:type="string">${ $.provider }:data.savedImage.value</item>
                         </item>
                     </item>
                 </argument>
@@ -241,11 +248,13 @@
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">80</item>
                     <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="source" xsi:type="string">category</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
-                    <item name="component" xsi:type="string">Magento_Catalog/js/components/select-to-checkbox</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="label" xsi:type="string" translate="true">Anchor</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="boolean">true</item>
+                        <item name="false" xsi:type="boolean">false</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -253,6 +262,7 @@
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
+                    <item name="breakLine" xsi:type="boolean">true</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="sortOrder" xsi:type="number">90</item>
@@ -262,22 +272,25 @@
             <field name="available_sort_by">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="additionalClasses" xsi:type="string">admin__field-default</item>
                         <item name="formElement" xsi:type="string">multiselect</item>
                         <item name="source" xsi:type="string">category</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.use_config.available_sort_by</item>
-                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.use_config.available_sort_by</item>
-                        </item>
-                        <item name="component" xsi:type="string">Magento_Catalog/js/components/multiselect-handle-required</item>
                     </item>
                 </argument>
             </field>
             <field name="use_config.available_sort_by">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Use All</item>
+                        <item name="description" xsi:type="string" translate="true">Use All</item>
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="boolean">true</item>
+                            <item name="false" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="exports" xsi:type="array">
+                            <item name="checked" xsi:type="string">ns = ${ $.ns }, index = available_sort_by :disabled</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -286,6 +299,7 @@
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
+                    <item name="breakLine" xsi:type="boolean">true</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">Default Product Sorting</item>
                     <item name="required" xsi:type="boolean">true</item>
@@ -295,22 +309,25 @@
             <field name="default_sort_by">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="additionalClasses" xsi:type="string">admin__field-default</item>
                         <item name="formElement" xsi:type="string">select</item>
                         <item name="source" xsi:type="string">category</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.use_config.default_sort_by</item>
-                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.use_config.default_sort_by</item>
-                        </item>
-                        <item name="component" xsi:type="string">Magento_Catalog/js/components/select-handle-required</item>
                     </item>
                 </argument>
             </field>
             <field name="use_config.default_sort_by">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Use Config Settings</item>
+                        <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="boolean">true</item>
+                            <item name="false" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="exports" xsi:type="array">
+                            <item name="checked" xsi:type="string">ns = ${ $.ns }, index = default_sort_by :disabled</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -319,6 +336,7 @@
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
+                    <item name="breakLine" xsi:type="boolean">true</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">Layered Navigation Price Step</item>
                     <item name="required" xsi:type="boolean">true</item>
@@ -328,13 +346,9 @@
             <field name="filter_price_range">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="additionalClasses" xsi:type="string">admin__field-small</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="source" xsi:type="string">category</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.use_config.filter_price_range</item>
-                            <item name="handleRequired" xsi:type="string">${ $.provider }:data.use_config.filter_price_range</item>
-                        </item>
-                        <item name="component" xsi:type="string">Magento_Catalog/js/components/input-handle-required</item>
                         <item name="addbefore" xsi:type="string">$</item>
                     </item>
                 </argument>
@@ -342,9 +356,16 @@
             <field name="use_config.filter_price_range">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Use Config Settings</item>
+                        <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="boolean">true</item>
+                            <item name="false" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="exports" xsi:type="array">
+                            <item name="checked" xsi:type="string">ns = ${ $.ns }, index = filter_price_range :disabled</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -383,7 +404,7 @@
             <field name="use_default.url_key">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Use Default</item>
+                        <item name="description" xsi:type="string" translate="true">Use Default</item>
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="sortOrder" xsi:type="number">20</item>
@@ -449,26 +470,23 @@
                 <item name="sortOrder" xsi:type="number">60</item>
             </item>
         </argument>
-        <container name="custom_use_parent_settings_group">
+        <field name="custom_use_parent_settings">
             <argument name="data" xsi:type="array">
-                <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true"/>
-                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">admin__field-no-label</item>
                     <item name="sortOrder" xsi:type="number">170</item>
+                    <item name="label" xsi:type="string"/>
+                    <item name="description" xsi:type="string" translate="true">Use Parent Category Settings</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
                 </item>
             </argument>
-            <field name="custom_use_parent_settings">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Use Parent Category Settings</item>
-                        <item name="dataType" xsi:type="string">boolean</item>
-                        <item name="formElement" xsi:type="string">checkbox</item>
-                    </item>
-                </argument>
-            </field>
-        </container>
+        </field>
         <field name="page_layout">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -477,7 +495,7 @@
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Layout</item>
                     <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
+                        <item name="disabled" xsi:type="string">${ $.parentName }.custom_use_parent_settings:checked</item>
                     </item>
                 </item>
             </argument>
@@ -490,34 +508,31 @@
                     <item name="formElement" xsi:type="string">textarea</item>
                     <item name="label" xsi:type="string" translate="true">Layout Update XML</item>
                     <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
+                        <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                     </item>
                 </item>
             </argument>
         </field>
-        <container name="custom_apply_to_products_group">
+        <field name="custom_apply_to_products">
             <argument name="data" xsi:type="array">
-                <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true"/>
-                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">admin__field-no-label</item>
                     <item name="sortOrder" xsi:type="number">200</item>
+                    <item name="label" xsi:type="string"/>
+                    <item name="description" xsi:type="string" translate="true">Apply Design to Products</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
+                    </item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
                 </item>
             </argument>
-            <field name="custom_apply_to_products">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Apply Design to Products</item>
-                        <item name="dataType" xsi:type="string">boolean</item>
-                        <item name="formElement" xsi:type="string">checkbox</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
-                        </item>
-                    </item>
-                </argument>
-            </field>
-        </container>
+        </field>
     </fieldset>
     <fieldset name="schedule_design_update">
         <argument name="data" xsi:type="array">
@@ -534,9 +549,11 @@
                     <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">Schedule Update From</item>
-                    <item name="required" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">210</item>
                     <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
+                    </item>
                 </item>
             </argument>
             <field name="custom_design_from">
@@ -547,7 +564,7 @@
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="formElement" xsi:type="string">date</item>
                         <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
+                            <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                         </item>
                     </item>
                 </argument>
@@ -561,7 +578,7 @@
                         <item name="label" xsi:type="string" translate="true">To</item>
                         <item name="formElement" xsi:type="string">date</item>
                         <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
+                            <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                         </item>
                     </item>
                 </argument>
@@ -575,7 +592,7 @@
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">New Theme</item>
                     <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
+                        <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                     </item>
                 </item>
             </argument>

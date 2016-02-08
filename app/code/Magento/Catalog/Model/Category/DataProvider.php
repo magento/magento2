@@ -13,6 +13,7 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 
@@ -182,7 +183,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         foreach ($fieldsMap as $fieldSet => $fields) {
             foreach ($fields as $field) {
                 if (isset($fieldsMeta[$field])) {
-                    $result[$fieldSet]['fields'][$field] = $fieldsMeta[$field];
+                    $result[$fieldSet]['children'][$field]['arguments']['data']['config'] = $fieldsMeta[$field];
                 }
             }
         }
@@ -251,6 +252,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
 
             $meta[$code]['scope_label'] = $this->getScopeLabel($attribute);
+            $meta[$code]['componentType'] = Field::NAME;
         }
 
         $result = [];
