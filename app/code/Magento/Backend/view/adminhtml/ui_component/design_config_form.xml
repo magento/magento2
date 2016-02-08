@@ -17,10 +17,10 @@
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Framework\View\Design\Theme\Label</item>
                 <item name="config" xsi:type="array">
-                    <item name="template" xsi:type="string">ui/form/element/custom-select</item>
+                    <item name="template" xsi:type="string">Magento_Backend/form/element/custom-select</item>
                     <item name="label" xsi:type="string" translate="true">Applied Theme</item>
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/custom-select</item>
+                    <item name="component" xsi:type="string">Magento_Backend/js/form/element/custom-select</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="dataScope" xsi:type="string">theme_theme_id</item>
                     <item name="sortOrder" xsi:type="number">10</item>
@@ -32,7 +32,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">15</item>
-                    <item name="template" xsi:type="string">ui/form/element/custom-button</item>
+                    <item name="template" xsi:type="string">Magento_Backend/form/element/custom-button</item>
                     <item name="displayAsLink" xsi:type="boolean">true</item>
                     <item name="formElement" xsi:type="string">container</item>
                     <item name="componentType" xsi:type="string">container</item>

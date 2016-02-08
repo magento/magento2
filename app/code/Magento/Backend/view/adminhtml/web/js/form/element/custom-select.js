@@ -4,12 +4,8 @@
  */
 define([
     'underscore',
-    'mageUtils',
-    'uiRegistry',
-    './abstract',
-    'uiLayout',
-    './select'
-], function (_, utils, registry, Abstract, layout, select) {
+    'Magento_Ui/js/form/element/select'
+], function (_, select) {
     'use strict';
 
     return select.extend({
