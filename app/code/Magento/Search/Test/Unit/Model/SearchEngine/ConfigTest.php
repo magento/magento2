@@ -29,7 +29,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['synonyms'], $config->getDeclaredFeatures('mysql'));
     }
 
-    public function testIsFeatureSupportedisFeatureSupported()
+    public function testIsFeatureSupported()
     {
         $config = $this->objectManager->getObject(
             '\Magento\Search\Model\SearchEngine\Config',
