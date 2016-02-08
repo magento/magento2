@@ -723,15 +723,12 @@ class File implements DriverInterface
      *
      * @param string $message
      * @param array $arguments
+     * @return void
      * @throws FileSystemException
      */
     private function fileSystemException($message, $arguments = [])
     {
-        throw new FileSystemException(
-            new \Magento\Framework\Phrase(
-                $message, $arguments
-            )
-        );
+        throw new FileSystemException(new \Magento\Framework\Phrase($message, $arguments));
     }
 
     /**
