@@ -14,6 +14,9 @@ use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 
 /**
  * Customer helper for account management.
+ *
+ * Class AccountManagement
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -110,7 +113,8 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Unlock customer
-     * @param $customerId
+     *
+     * @param int $customerId
      * @return void
      */
     public function processUnlockData($customerId)
@@ -144,8 +148,9 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Validate that password is correct and customer is not locked
      *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $password
-     * @return bool true on success
+     * @return $this
      * @throws InvalidEmailOrPasswordException
      */
     public function validatePasswordAndLockStatus(\Magento\Customer\Api\Data\CustomerInterface $customer, $password)
@@ -163,7 +168,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
             $this->checkIfLocked($customer);
             throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
         }
-        return true;
+        return $this;
     }
 
     /**

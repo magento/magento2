@@ -435,7 +435,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/admin/emails/password_reset_link_expiration_period 10
+     * @magentoConfigFixture default/admin/emails/password_reset_link_expiration_period 2
      */
     public function testIsResetPasswordLinkTokenExpired()
     {
@@ -445,10 +445,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->save();
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->assertFalse($this->_model->isResetPasswordLinkTokenExpired());
-        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 24 * 10 + 10));
+        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 2 + 2));
         $this->assertFalse($this->_model->isResetPasswordLinkTokenExpired());
 
-        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 24 * 10 - 10));
+        $this->_model->setRpTokenCreatedAt($this->_dateTime->formatDate(time() - 60 * 60 * 2 - 1));
         $this->assertTrue($this->_model->isResetPasswordLinkTokenExpired());
     }
 
