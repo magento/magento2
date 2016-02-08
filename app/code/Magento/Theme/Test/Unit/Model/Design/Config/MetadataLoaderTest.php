@@ -80,7 +80,7 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
             ],
             'metadata_name' => [
                 'path' => 'name/metadata_path',
-                'fieldset' => 'theme',
+                'fieldset' => 'meta/group/section',
             ],
         ];
 
@@ -109,19 +109,46 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->model->getData();
 
-        $this->assertTrue(is_array($result));
-        $this->assertTrue(array_key_exists('theme', $result));
-        $this->assertTrue(is_array($result['theme']));
-        $this->assertTrue(array_key_exists('fields', $result['theme']));
-        $this->assertTrue(is_array($result['theme']['fields']));
+        $expected = [
+            'theme' => [
+                'children' => [
+                    'data_name' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'default' => 'data_value',
+                                    'showFallbackReset' => $showFallbackReset,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'meta' => [
+                'children' => [
+                    'group' => [
+                        'children' => [
+                            'section' => [
+                                'children' => [
+                                    'metadata_name' => [
+                                        'arguments' => [
+                                            'data' => [
+                                                'config' => [
+                                                    'default' => 'metadata_value',
+                                                    'showFallbackReset' => $showFallbackReset,
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
-        $this->assertTrue(array_key_exists('data_name', $result['theme']['fields']));
-        $this->assertEquals('data_value', $result['theme']['fields']['data_name']['default']);
-        $this->assertEquals($showFallbackReset, $result['theme']['fields']['data_name']['showFallbackReset']);
-
-        $this->assertTrue(array_key_exists('metadata_name', $result['theme']['fields']));
-        $this->assertEquals('metadata_value', $result['theme']['fields']['metadata_name']['default']);
-        $this->assertEquals($showFallbackReset, $result['theme']['fields']['metadata_name']['showFallbackReset']);
+        $this->assertEquals($expected, $result);
     }
 
     /**

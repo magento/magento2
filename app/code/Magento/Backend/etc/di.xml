@@ -197,19 +197,19 @@
                 </item>
                 <item name="pagination_pagination_frame" xsi:type="array">
                     <item name="path" xsi:type="string">design/pagination/pagination_frame</item>
-                    <item name="fieldset" xsi:type="string">pagination</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
                 </item>
                 <item name="pagination_pagination_frame_skip" xsi:type="array">
                     <item name="path" xsi:type="string">design/pagination/pagination_frame_skip</item>
-                    <item name="fieldset" xsi:type="string">pagination</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
                 </item>
                 <item name="pagination_anchor_text_for_previous" xsi:type="array">
                     <item name="path" xsi:type="string">design/pagination/anchor_text_for_previous</item>
-                    <item name="fieldset" xsi:type="string">pagination</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
                 </item>
                 <item name="pagination_anchor_text_for_next" xsi:type="array">
                     <item name="path" xsi:type="string">design/pagination/anchor_text_for_next</item>
-                    <item name="fieldset" xsi:type="string">pagination</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
                 </item>
             </argument>
         </arguments>

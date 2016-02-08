@@ -141,7 +141,7 @@
             <argument name="metadata" xsi:type="array">
                 <item name="head_shortcut_icon" xsi:type="array">
                     <item name="path" xsi:type="string">design/head/shortcut_icon</item>
-                    <item name="fieldset" xsi:type="string">head</item>
+                    <item name="fieldset" xsi:type="string">other_settings/head</item>
                     <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Image\Favicon</item>
                     <item name="base_url" xsi:type="array">
                         <item name="type" xsi:type="string">media</item>
@@ -151,35 +151,35 @@
                 </item>
                 <item name="head_default_title" xsi:type="array">
                     <item name="path" xsi:type="string">design/head/default_title</item>
-                    <item name="fieldset" xsi:type="string">head</item>
+                    <item name="fieldset" xsi:type="string">other_settings/head</item>
                 </item>
                 <item name="head_title_prefix" xsi:type="array">
                     <item name="path" xsi:type="string">design/head/title_prefix</item>
-                    <item name="fieldset" xsi:type="string">head</item>
+                    <item name="fieldset" xsi:type="string">other_settings/head</item>
                 </item>
                 <item name="head_title_suffix" xsi:type="array">
                     <item name="path" xsi:type="string">design/head/title_suffix</item>
-                    <item name="fieldset" xsi:type="string">head</item>
+                    <item name="fieldset" xsi:type="string">other_settings/head</item>
                 </item>
                 <item name="head_default_description" xsi:type="array">
                     <item name="path" xsi:type="string">design/head/default_description</item>
-                    <item name="fieldset" xsi:type="string">head</item>
+                    <item name="fieldset" xsi:type="string">other_settings/head</item>
                 </item>
                 <item name="head_default_keywords" xsi:type="array">
                     <item name="path" xsi:type="string">design/head/default_keywords</item>
-                    <item name="fieldset" xsi:type="string">head</item>
+                    <item name="fieldset" xsi:type="string">other_settings/head</item>
                 </item>
                 <item name="head_includes" xsi:type="array">
                     <item name="path" xsi:type="string">design/head/includes</item>
-                    <item name="fieldset" xsi:type="string">head</item>
+                    <item name="fieldset" xsi:type="string">other_settings/head</item>
                 </item>
                 <item name="head_demonotice" xsi:type="array">
                     <item name="path" xsi:type="string">design/head/demonotice</item>
-                    <item name="fieldset" xsi:type="string">head</item>
+                    <item name="fieldset" xsi:type="string">other_settings/head</item>
                 </item>
                 <item name="header_logo_src" xsi:type="array">
                     <item name="path" xsi:type="string">design/header/logo_src</item>
-                    <item name="fieldset" xsi:type="string">header</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
                     <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Image\Logo</item>
                     <item name="base_url" xsi:type="array">
                         <item name="type" xsi:type="string">media</item>
@@ -189,27 +189,27 @@
                 </item>
                 <item name="header_logo_width" xsi:type="array">
                     <item name="path" xsi:type="string">design/header/logo_width</item>
-                    <item name="fieldset" xsi:type="string">header</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
                 </item>
                 <item name="header_logo_height" xsi:type="array">
                     <item name="path" xsi:type="string">design/header/logo_height</item>
-                    <item name="fieldset" xsi:type="string">header</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
                 </item>
                 <item name="header_logo_alt" xsi:type="array">
                     <item name="path" xsi:type="string">design/header/logo_alt</item>
-                    <item name="fieldset" xsi:type="string">header</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
                 </item>
                 <item name="header_welcome" xsi:type="array">
                     <item name="path" xsi:type="string">design/header/welcome</item>
-                    <item name="fieldset" xsi:type="string">header</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
                 </item>
                 <item name="footer_copyright" xsi:type="array">
                     <item name="path" xsi:type="string">design/footer/copyright</item>
-                    <item name="fieldset" xsi:type="string">footer</item>
+                    <item name="fieldset" xsi:type="string">other_settings/footer</item>
                 </item>
                 <item name="footer_absolute_footer" xsi:type="array">
                     <item name="path" xsi:type="string">design/footer/absolute_footer</item>
-                    <item name="fieldset" xsi:type="string">footer</item>
+                    <item name="fieldset" xsi:type="string">other_settings/footer</item>
                 </item>
             </argument>
         </arguments>
