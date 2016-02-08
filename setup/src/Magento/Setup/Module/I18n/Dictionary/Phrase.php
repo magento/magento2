@@ -270,8 +270,9 @@ class Phrase
     {
         $encloseQuote = $this->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
         //find all occurrences of ' and ", with no \ before it.
-        preg_match_all('/(?<!\\\\)[\'"]/', $string, $matches);
-        if (count($matches[0]) % 2 !== 0) {
+        preg_match_all('/[^\\\\]' . $encloseQuote . '|' . $encloseQuote . '[^\\\\]/', $string, $matches);
+        if (count($matches[0])) {
+            $string = preg_replace('/([^\\\\])' . $encloseQuote . ' ?\. ?' . $encloseQuote . '/', '$1', $string);
             $string = addslashes($string);
         }
         $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
