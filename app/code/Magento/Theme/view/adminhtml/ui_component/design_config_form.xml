@@ -44,26 +44,6 @@
         </argument>
     </dataSource>
     <fieldset name="theme">
-        <field name="scope">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="dataScope" xsi:type="string">scope</item>
-                </item>
-            </argument>
-        </field>
-        <field name="scope_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="dataScope" xsi:type="string">scope_id</item>
-                </item>
-            </argument>
-        </field>
         <field name="theme_theme_schedule">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

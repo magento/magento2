@@ -26,7 +26,7 @@
             <argument name="metadata" xsi:type="array">
                 <item name="email_logo" xsi:type="array">
                     <item name="path" xsi:type="string">design/email/logo</item>
-                    <item name="fieldset" xsi:type="string">email</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
                     <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Email\Logo</item>
                     <item name="base_url" xsi:type="array">
                         <item name="type" xsi:type="string">media</item>
@@ -36,23 +36,23 @@
                 </item>
                 <item name="email_logo_alt" xsi:type="array">
                     <item name="path" xsi:type="string">design/email/logo_alt</item>
-                    <item name="fieldset" xsi:type="string">email</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
                 </item>
                 <item name="email_logo_width" xsi:type="array">
                     <item name="path" xsi:type="string">design/email/logo_width</item>
-                    <item name="fieldset" xsi:type="string">email</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
                 </item>
                 <item name="email_logo_height" xsi:type="array">
                     <item name="path" xsi:type="string">design/email/logo_height</item>
-                    <item name="fieldset" xsi:type="string">email</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
                 </item>
                 <item name="email_header_template" xsi:type="array">
                     <item name="path" xsi:type="string">design/email/header_template</item>
-                    <item name="fieldset" xsi:type="string">email</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
                 </item>
                 <item name="email_footer_template" xsi:type="array">
                     <item name="path" xsi:type="string">design/email/footer_template</item>
-                    <item name="fieldset" xsi:type="string">email</item>
+                    <item name="fieldset" xsi:type="string">other_settings/email</item>
                 </item>
             </argument>
         </arguments>

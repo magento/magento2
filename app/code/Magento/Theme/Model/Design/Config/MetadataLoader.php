@@ -69,8 +69,15 @@ class MetadataLoader
             $metadata = $this->metadataProvider->get();
             foreach ($metadata as $key => $value) {
                 $fallbackValue = $this->getFallbackValue($value['path'], $scope, $scopeId);
-                $data[$value['fieldset']]['fields'][$key]['default'] = $fallbackValue;
-                $data[$value['fieldset']]['fields'][$key]['showFallbackReset'] = $showFallbackReset;
+                $element = &$data;
+                foreach (explode('/', $value['fieldset']) as $fieldset) {
+                    if (!isset($element[$fieldset]['children'])) {
+                        $element[$fieldset]['children'] = [];
+                    }
+                    $element = &$element[$fieldset]['children'];
+                }
+                $element[$key]['arguments']['data']['config']['default'] = $fallbackValue;
+                $element[$key]['arguments']['data']['config']['showFallbackReset'] = $showFallbackReset;
             }
         }
         return $data;
