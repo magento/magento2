@@ -46,6 +46,11 @@ class MenuBuilder
         $this->engineResolver = $engineResolver;
     }
 
+    /**
+     * Removes 'Search Synonyms' from the menu if 'synonyms' is not supported
+     * @param Builder $subject
+     * @return Menu
+     */
     public function afterGetResult(Builder $subject)
     {
         $menu = $this->menuConfig->getMenu();
@@ -55,10 +60,6 @@ class MenuBuilder
 
             // "Search Synonyms" feature is not supported by the current configured search engine.
             // Menu will be updated to remove it from the list
-            /*$this->menu = */
-
-            //$subject->getResult($this->menu)->remove(self::SEARCH_SYNONYMS_MENU_ITEM_ID);
-            //$this->menu->remove(self::SEARCH_SYNONYMS_MENU_ITEM_ID);
             $menu->remove(self::SEARCH_SYNONYMS_MENU_ITEM_ID);
         }
         return $menu;
