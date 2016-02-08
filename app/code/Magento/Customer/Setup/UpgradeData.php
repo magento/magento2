@@ -52,6 +52,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -154,6 +155,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param CustomerSetup $customerSetup
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function upgradeVersionTwoZeroOne($customerSetup)
     {
