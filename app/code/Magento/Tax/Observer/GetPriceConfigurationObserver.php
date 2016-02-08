@@ -118,7 +118,8 @@ class GetPriceConfigurationObserver implements ObserverInterface
                             /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
                             $baseAmount = $selectionItem->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getAmount();
                             /** @var \Magento\Framework\Pricing\Amount\Base $oldAmount */
-                            $oldAmount = $selectionItem->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getAmount();
+                            $oldAmount =
+                                $selectionItem->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getAmount();
                             if ($baseAmount->hasAdjustment('tax')) {
                                 $holder[$key]['basePrice']['amount'] =
                                     $baseAmount->getBaseAmount() + $baseAmount->getAdjustmentAmount('tax');
