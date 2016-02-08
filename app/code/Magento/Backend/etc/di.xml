@@ -134,6 +134,11 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Request\DataPersistor">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Backend\Model\Session\Quote\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">adminhtml_quote</argument>
