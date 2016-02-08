@@ -15,13 +15,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\InputException;
 use Magento\Customer\Helper\EmailNotification;
 use Magento\Customer\Helper\AccountManagement;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 
-/**
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- */
 class EditPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
@@ -149,7 +145,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 foreach ($e->getErrors() as $error) {
                     $this->messageManager->addError($error->getMessage());
                 }
-            } catch (LocalizedException $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
