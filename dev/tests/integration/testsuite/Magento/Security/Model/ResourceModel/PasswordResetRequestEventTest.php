@@ -55,7 +55,7 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
      * Saving test data to database
      * @return mixed
      */
-    private function saveTestData()
+    protected function saveTestData()
     {
         foreach ($this->getTestData() as $key => $value) {
             $this->model->setData($key, $value);
