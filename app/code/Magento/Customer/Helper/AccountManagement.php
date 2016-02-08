@@ -11,10 +11,12 @@ use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
-use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Customer helper for account management.
+ *
+ * Class AccountManagement
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -51,11 +53,6 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     protected $encryptor;
 
     /**
-     * @var ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
      * AccountManagement constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -63,22 +60,19 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
      * @param ConfigInterface $backendConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Encryptor $encryptor
-     * @param ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         CustomerRegistry $customerRegistry,
         ConfigInterface $backendConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        Encryptor $encryptor,
-        ManagerInterface $eventManager
+        Encryptor $encryptor
     ) {
         parent::__construct($context);
         $this->customerRegistry = $customerRegistry;
         $this->backendConfig = $backendConfig;
         $this->dateTime = $dateTime;
         $this->encryptor = $encryptor;
-        $this->eventManager = $eventManager;
     }
 
     /**
@@ -119,7 +113,8 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Unlock customer
-     * @param $customerId
+     *
+     * @param int $customerId
      * @return void
      */
     public function processUnlockData($customerId)
@@ -153,8 +148,9 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Validate that password is correct and customer is not locked
      *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $password
-     * @return bool true on success
+     * @return $this
      * @throws InvalidEmailOrPasswordException
      */
     public function validatePasswordAndLockStatus(\Magento\Customer\Api\Data\CustomerInterface $customer, $password)
@@ -162,7 +158,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $hash = $customerSecure->getPasswordHash();
         if (!$this->encryptor->validateHash($password, $hash)) {
-            $this->eventManager->dispatch(
+            $this->_eventManager->dispatch(
                 'customer_password_invalid',
                 [
                     'username' => $customer->getEmail(),
@@ -172,7 +168,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
             $this->checkIfLocked($customer);
             throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
         }
-        return true;
+        return $this;
     }
 
     /**

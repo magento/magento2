@@ -74,8 +74,7 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
         IntegrationIndex $integrationIndex,
         IntegrationNew $integrationNew,
         AdminAuthLogin $adminAuthLogin
-    )
-    {
+    ) {
         $this->integrationIndexPage = $integrationIndex;
         $this->integrationNewPage = $integrationNew;
         $this->adminAuthLogin = $adminAuthLogin;
@@ -86,17 +85,16 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
      *
      * @param Integration $integration
      * @param int $attempts
-     * @param string $configData
      * @param User $customAdmin
+     * @param string $configData
      * @return void
      */
     public function test(
         Integration $integration,
         $attempts,
-        $configData = null,
-        User $customAdmin
-    )
-    {
+        User $customAdmin,
+        $configData = null
+    ) {
         $this->configData = $configData;
 
         // Preconditions
