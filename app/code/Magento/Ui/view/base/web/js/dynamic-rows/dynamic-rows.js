@@ -74,7 +74,7 @@ define([
             this._super()
                 .initChildren()
                 .initDnd()
-                .isColumnsHeader()
+                .setColumnsHeaderListener()
                 .initDefaultRecord();
 
             return this;
@@ -118,7 +118,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        isColumnsHeader: function () {
+        setColumnsHeaderListener: function () {
             if (this.columnsHeaderAfterRender) {
                 this.on('elems', this.renderColumnsHeader.bind(this));
             }
