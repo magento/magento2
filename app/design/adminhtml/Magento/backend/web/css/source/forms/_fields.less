@@ -11,6 +11,15 @@
 @import 'fields/_field-tooltips.less';
 
 //
+//  Extends
+//  _____________________________________________
+
+.abs-field-no-label {
+    #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
+    margin-left: @_length;
+}
+
+//
 //  Form Fields
 //  _____________________________________________
 
@@ -40,6 +49,12 @@
 
         > .admin__field-label {
             #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+        }
+
+        &.admin__field-no-label {
+            > .admin__field-control {
+                &:extend(.abs-field-no-label all);
+            }
         }
     }
 }
@@ -95,6 +110,7 @@
         }
     }
 
+    .required > &,
     ._required > & {
         span:after {
             color: @field-label__required__color;
@@ -176,6 +192,18 @@
 .admin__field-control {
     & + & {
         margin-top: 1.5rem;
+    }
+
+    //  If there is a tooltip
+    &._with-tooltip {
+        > .admin__control-text,
+        > .admin__control-textarea {
+            width: ~'calc(100% - @{field-tooltip__width} - 4px)'; // Minus space size
+        }
+
+        .admin__field-tooltip {
+            width: auto;
+        }
     }
 }
 
