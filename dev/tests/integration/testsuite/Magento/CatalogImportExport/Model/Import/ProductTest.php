@@ -933,8 +933,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->assertTrue($errors->getErrorsCount() === 0);
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
         /** @var \Magento\Catalog\Model\Category $category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category'
