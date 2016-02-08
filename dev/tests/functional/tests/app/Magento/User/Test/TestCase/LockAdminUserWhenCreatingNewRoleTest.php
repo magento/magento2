@@ -74,8 +74,7 @@ class LockAdminUserWhenCreatingNewRoleTest extends Injectable
         UserRoleIndex $userRoleIndex,
         UserRoleEditRole $userRoleEditRole,
         AdminAuthLogin $adminAuthLogin
-    )
-    {
+    ) {
         $this->userRoleIndex = $userRoleIndex;
         $this->userRoleEditRole = $userRoleEditRole;
         $this->adminAuthLogin = $adminAuthLogin;
@@ -86,17 +85,16 @@ class LockAdminUserWhenCreatingNewRoleTest extends Injectable
      *
      * @param Role $role
      * @param int $attempts
+     * @param User $customAdmin,
      * @param string $configData
-     * @param User $customAdmin
      * @return void
      */
     public function testLockAdminUser(
         Role $role,
         $attempts,
-        $configData = null,
-        User $customAdmin
-    )
-    {
+        User $customAdmin,
+        $configData = null
+    ) {
         $this->configData = $configData;
 
         // Preconditions
