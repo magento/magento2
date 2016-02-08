@@ -12,6 +12,8 @@ namespace Magento\Catalog\Model;
  * @see \Magento\Catalog\Model\ProductTest
  * @see \Magento\Catalog\Model\ProductPriceTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class ProductExternalTest extends \PHPUnit_Framework_TestCase
 {

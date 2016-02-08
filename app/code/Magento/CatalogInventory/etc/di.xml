@@ -30,8 +30,7 @@
 
     <preference for="Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface" type="Magento\CatalogInventory\Model\StockRegistryProvider" />
     <preference for="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface" type="Magento\CatalogInventory\Model\StockStateProvider" />
-    <preference for="Magento\CatalogInventory\Model\Spi\StockResolverInterface" type="Magento\CatalogInventory\Model\StockResolver" />
-
+    
     <preference for="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface" type="\Magento\CatalogInventory\Model\ResourceModel\Stock" />
     <type name="Magento\Catalog\Model\Product\Attribute\Repository">
         <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />

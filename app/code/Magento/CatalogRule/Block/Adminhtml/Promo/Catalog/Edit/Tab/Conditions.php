@@ -7,7 +7,7 @@ namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 class Conditions extends Generic implements TabInterface
 {
@@ -87,6 +87,39 @@ class Conditions extends Generic implements TabInterface
     }
 
     /**
+     * Tab class getter
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getTabClass()
+    {
+        return null;
+    }
+
+    /**
+     * Return URL link to Tab content
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getTabUrl()
+    {
+        return null;
+    }
+
+    /**
+     * Tab should be loaded trough Ajax call
+     *
+     * @return bool
+     * @codeCoverageIgnore
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
+    }
+
+    /**
      * @return Form
      */
     protected function _prepareForm()
@@ -113,7 +146,13 @@ class Conditions extends Generic implements TabInterface
         $fieldset->addField(
             'conditions',
             'text',
-            ['name' => 'conditions', 'label' => __('Conditions'), 'title' => __('Conditions'), 'required' => true]
+            [
+                'name' => 'conditions',
+                'label' => __('Conditions'),
+                'title' => __('Conditions'),
+                'required' => true,
+                'data-form-part' => 'catalog_rule_form'
+            ]
         )->setRule(
             $model
         )->setRenderer(

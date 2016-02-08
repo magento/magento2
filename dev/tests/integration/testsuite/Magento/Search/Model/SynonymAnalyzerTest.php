@@ -30,9 +30,17 @@ class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
     public static function loadGetSynonymsForPhraseDataProvider()
     {
         return [
-            'withSynonyms' => [
+            'WithSynonymsFromStoreViewScope' => [
                 'phrase' => 'Elizabeth is the English queen.',
                 'expectedResult' => [['elizabeth'],['is'],['the'],['british', 'english'],['queen', 'monarch']]
+            ],
+            'WithSynonymsFromWebsiteScope' => [
+                'phrase' => 'Orange hill',
+                'expectedResult' => [['orange', 'magento'], ['hill', 'mountain', 'peak']]
+            ],
+            'WithSynonymsFromDefaultScope' => [
+                'phrase' => 'universe is enormous.',
+                'expectedResult' => [['universe', 'cosmos'], ['is'], ['big', 'huge', 'large', 'enormous']]
             ],
             'noSynonyms' => [
                 'phrase' => 'This sentence has no synonyms',

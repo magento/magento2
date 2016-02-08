@@ -280,23 +280,24 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection->quoteInto('links.link_type_id = ?', $this->_linkTypeId),
         ];
         $joinType = 'join';
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         if ($this->getProduct() && $this->getProduct()->getId()) {
-            $productId = $this->getProduct()->getData(
-                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+            $linkFieldId = $this->getProduct()->getData(
+                $linkField
             );
             if ($this->_isStrongMode) {
-                $this->getSelect()->where('links.product_id = ?', (int)$productId);
+                $this->getSelect()->where('links.product_id = ?', (int)$linkFieldId);
             } else {
                 $joinType = 'joinLeft';
-                $joinCondition[] = $connection->quoteInto('links.product_id = ?', $productId);
+                $joinCondition[] = $connection->quoteInto('links.product_id = ?', $linkFieldId);
             }
             $this->addFieldToFilter(
-                'entity_id',
-                ['neq' => $productId]
+                $linkField,
+                ['neq' => $linkFieldId]
             );
         } elseif ($this->_isStrongMode) {
             $this->addFieldToFilter(
-                'entity_id',
+                $linkField,
                 ['eq' => -1]
             );
         }
