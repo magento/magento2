@@ -19,7 +19,8 @@
                     _selected: $parent.root.isSelected(option.value),
                     _hover: $parent.root.isHovered(option, $element),
                     _expended: $parent.root.getLevelVisibility($data),
-                    _unclickable: $parent.root.isLabelDecoration($data)
+                    _unclickable: $parent.root.isLabelDecoration($data),
+                    '_with-checkbox': $parent.root.showCheckbox
                 },
                 click: function(data, event){
                     $parent.root.toggleOptionSelected($data, $index(), event);
@@ -30,23 +31,22 @@
             <!-- ko if: $data.optgroup && $parent.root.showOpenLevelsActionIcon-->
             <div class="admin__action-multiselect-dropdown"
                  data-bind="
-                    click: function(data, event){
-                        $parent.root.openChildLevel($data, $element, event);
-                    },
-                    clickBubble: false
-            ">
-            </div>
+                        click: function(data, event){
+                            $parent.root.openChildLevel($data, $element, event);
+                        },
+                        clickBubble: false
+                     "></div>
             <!-- /ko-->
             <!--ko if: $parent.root.showCheckbox-->
             <input
-                class="admin__control-checkbox"
-                type="checkbox"
-                tabindex="-1"
-                data-bind="attr: { 'checked': $parent.root.isSelected(option.value) }">
+                    class="admin__control-checkbox"
+                    type="checkbox"
+                    tabindex="-1"
+                    data-bind="attr: { 'checked': $parent.root.isSelected(option.value) }">
             <!--/ko-->
             <label
-                class="admin__action-multiselect-label"
-                data-bind="text: option.label">
+                    class="admin__action-multiselect-label"
+                    data-bind="text: option.label">
             </label>
         </div>
         <!-- ko if: $data.optgroup -->

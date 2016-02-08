@@ -24,9 +24,11 @@ define([
      */
     function flattenCollection(array, separator, created) {
         var i = 0,
-            length = array.length,
+            length,
             childCollection;
 
+        array = _.compact(array);
+        length = array.length;
         created = created || [];
 
         for (i; i < length; i++) {
@@ -51,18 +53,27 @@ define([
      *
      * @returns {Array} Array with levels
      */
-    function setLevelsProperty(array, separator, level) {
+    function setProperty(array, separator, level, path) {
         var i = 0,
-            length = array.length;
+            length;
 
+        array = _.compact(array);
+        length = array.length;
         level = level || 0;
+        path = path || '';
 
         for (i; i < length; i++) {
-            array[i].level = level;
+            if (array[i]) {
+                _.extend(array[i], {
+                    level: level,
+                    path: path
+                });
+            }
 
             if (array[i].hasOwnProperty(separator)) {
                 level++;
-                setLevelsProperty.call(this, array[i][separator], separator, level);
+                path = path ? path + '.' + array[i].label : array[i].label;
+                setProperty.call(this, array[i][separator], separator, level, path);
             }
         }
 
@@ -83,7 +94,7 @@ define([
             cacheNodes,
             copyNodes;
 
-        nodes = setLevelsProperty(nodes, 'optgroup');
+        nodes = setProperty(nodes, 'optgroup');
         copyNodes = JSON.parse(JSON.stringify(nodes));
         cacheNodes = flattenCollection(copyNodes, 'optgroup');
 
@@ -129,6 +140,7 @@ define([
             showOpenLevelsActionIcon: true,
             optgroupLabels: false,
             closeBtn: true,
+            showPath: true,
             labelsDecoration: false,
             disableLabel: false,
             closeBtnLabel: $t('Done'),
@@ -145,7 +157,7 @@ define([
                 filterInputValue: 'filterOptionsList'
             },
             presets: {
-                simple: {
+                single: {
                     showCheckbox: false,
                     chipsEnabled: false,
                     closeBtn: false
@@ -171,7 +183,7 @@ define([
         initConfig: function (config) {
             var result = parseOptions(config.options),
                 defaults = this.constructor.defaults,
-                mode = _.isBoolean(config.multiple) ? config.multiple : defaults.multiple,
+                multiple = _.isBoolean(config.multiple) ? config.multiple : defaults.multiple,
                 type = config.selectType || defaults.selectType,
                 showOpenLevelsActionIcon = _.isBoolean(config.showOpenLevelsActionIcon) ?
                     config.showOpenLevelsActionIcon :
@@ -180,10 +192,9 @@ define([
                     config.openLevelsAction :
                     defaults.openLevelsAction;
 
-            defaults.levelsVisibility = defaults.levelsVisibility || config.lastSelectable;
-            defaults.showOpenLevelsActionIcon = showOpenLevelsActionIcon && openLevelsAction;
-            _.extend(defaults, result, defaults.presets[mode]);
-            _.extend(defaults, result, defaults.presets[type]);
+            multiple = !multiple ? 'single' : false;
+            config.showOpenLevelsActionIcon = showOpenLevelsActionIcon && openLevelsAction;
+            _.extend(config, result, defaults.presets[multiple], defaults.presets[type]);
             this._super();
 
             return this;
@@ -205,11 +216,21 @@ define([
             return this.hasChildList() && this.selectType !== 'optgroup';
         },
 
+        /**
+         * Add option to lastOptions array
+         *
+         * @param {Object} data
+         * @returns {Boolean}
+         */
         addLastElement: function (data) {
             if (!data.hasOwnProperty(this.separator)) {
                 !this.cacheOptions.lastOptions ? this.cacheOptions.lastOptions = [] : false;
                 this.cacheOptions.lastOptions.push(data);
+
+                return true;
             }
+
+            return false;
         },
 
         /**
@@ -338,6 +359,7 @@ define([
                 this.filterOptionsFocus(false);
                 this.cacheUiSelect.focus();
             }
+
             this.keydownSwitcher(data, event);
 
             return true;
@@ -353,12 +375,14 @@ define([
                 value = this.filterInputValue().trim().toLowerCase();
 
             if (value === '') {
+                this.renderPath = false;
                 this.options(this.cacheOptions.tree);
                 this._setItemsQuantity(false);
 
                 return false;
             }
 
+            this.showPath ? this.renderPath = true : false;
             this.options(this.cacheOptions.plain);
 
             if (this.filterInputValue()) {
@@ -372,18 +396,45 @@ define([
 
                 if (!value.length) {
                     this.options(this.cacheOptions.plain);
-                    this._setItemsQuantity(this.cacheOptions.plain.length - 1);
+                    this._setItemsQuantity(this.cacheOptions.plain.length);
                 } else {
                     this.options(array);
-                    this._setItemsQuantity(array.length - 1);
+                    this._setItemsQuantity(array.length);
                 }
                 this.cleanHoveredElement();
             }
         },
 
+        /**
+         * Get path to current oprion
+         *
+         * @param {Object} data - option data
+         * @returns {String} path
+         */
+        getPath: function (data) {
+            var pathParts,
+                createdPath = '';
+
+            if (this.renderPath) {
+                pathParts = data.path.split('.');
+                _.each(pathParts, function (curData) {
+                    createdPath = createdPath ? createdPath + ' / ' + curData : curData;
+                });
+
+                return createdPath;
+            }
+        },
+
+        /**
+         * Set filtered items quantity
+         *
+         * @param {Object} data - option data
+         */
         _setItemsQuantity: function (data) {
             if (this.showFilteredQuantity) {
-                data ? this.itemsQuantity(data + ' ' + this.quantityPlaceholder) : this.itemsQuantity('');
+                data || parseInt(data, 10) === 0 ?
+                    this.itemsQuantity(data + ' ' + this.quantityPlaceholder) :
+                    this.itemsQuantity('');
             }
         },
 
@@ -424,7 +475,7 @@ define([
          * @return {Boolean}
          */
         isSelected: function (value) {
-            return _.contains(this.value(), value);
+            return this.multiple ? _.contains(this.value(), value) : this.value() === value;
         },
 
         /**
@@ -441,24 +492,14 @@ define([
          * Check hovered option
          *
          * @param {Object} data - element data
-         * @param {String} elem - element
          * @return {Boolean}
          */
-        isHovered: function (data, elem) {
+        isHovered: function (data) {
             var index = this.getOptionIndex(data),
                 status = this.hoverElIndex() === index;
 
             if (this.selectType === 'optgroup' && data.hasOwnProperty(this.separator)) {
                 return false;
-            }
-
-            if (
-                status &&
-                elem.offsetTop > elem.parentNode.offsetHeight ||
-                status &&
-                elem.parentNode.scrollTop > elem.offsetTop - elem.parentNode.offsetTop
-            ) {
-                elem.parentNode.scrollTop = elem.offsetTop - elem.parentNode.offsetTop;
             }
 
             return status;
@@ -503,13 +544,17 @@ define([
                 return this;
             }
 
-            if (!this.multiple && !isSelected) {
-                this.value(data.value);
+            if (!this.multiple) {
+                if (!isSelected) {
+                    this.value(data.value);
+                }
                 this.listVisible(false);
-            } else if (!isSelected) {
-                this.value.push(data.value);
             } else {
-                this.value(_.without(this.value(), data.value));
+                if (!isSelected) { /*eslint no-lonely-if: 0*/
+                    this.value.push(data.value);
+                } else {
+                    this.value(_.without(this.value(), data.value));
+                }
             }
 
             return this;
@@ -568,7 +613,6 @@ define([
             }
 
             id !== this.hoverElIndex() ? this.hoverElIndex(id) : false;
-
             this.setCursorPosition(event);
         },
 
@@ -664,14 +708,63 @@ define([
          * selected first option in list
          */
         pageDownKeyHandler: function () {
-            if (!_.isNull(this.hoverElIndex())) {
-                if (this.hoverElIndex() !== this.cacheOptions.plain.length - 1) {
-                    this.hoverElIndex(this.hoverElIndex() + 1);
-                } else {
-                    this.hoverElIndex(0);
-                }
+            if (!_.isNull(this.hoverElIndex()) && this.hoverElIndex() !== this.cacheOptions.plain.length - 1) {
+                this._setHoverToElement(1);
+                this._scrollTo(this.hoverElIndex());
+
+                return false;
+            }
+
+            this._setHoverToElement(1, -1);
+            this._scrollTo(this.hoverElIndex());
+        },
+
+        /**
+         * Set hover to visible element
+         *
+         * @param {Number} direction - iterator
+         * @param {Number} index - current hovered element
+         * @param {Array} list - collection items
+         */
+        _setHoverToElement: function (direction, index, list) {
+            var modifiedIndex;
+
+            list = list || $(this.cacheUiSelect).find('li');
+            index = index || this.hoverElIndex();
+            modifiedIndex = index + direction;
+
+            if (list.eq(modifiedIndex).is(':visible')) {
+                this.hoverElIndex(modifiedIndex);
             } else {
-                this.hoverElIndex(0);
+                this._setHoverToElement(direction, modifiedIndex, list);
+            }
+        },
+
+        /**
+         * Find current hovered element
+         * and change scroll position
+         *
+         * @param {Number} index - element index
+         */
+        _scrollTo: function (index) {
+            var curEl,
+                parents,
+                wrapper,
+                curElPos = {},
+                wrapperPos = {};
+
+            curEl = $(this.cacheUiSelect).find('li').eq(index);
+            parents = curEl.parents('ul');
+            wrapper = parents.eq(parents.length - 1);
+            curElPos.start = curEl.offset().top;
+            curElPos.end = curElPos.start + curEl.height();
+            wrapperPos.start = wrapper.offset().top;
+            wrapperPos.end = wrapperPos.start + wrapper.height();
+
+            if (curElPos.start < wrapperPos.start) {
+                wrapper.scrollTop(wrapper.scrollTop() - (wrapperPos.start - curElPos.start));
+            } else if (curElPos.end > wrapperPos.end) {
+                wrapper.scrollTop(wrapper.scrollTop() + curElPos.end - wrapperPos.end);
             }
         },
 
@@ -680,15 +773,14 @@ define([
          * selected last option in list
          */
         pageUpKeyHandler: function () {
-            if (!_.isNull(this.hoverElIndex())) {
-                if (this.hoverElIndex() !== 0) {
-                    this.hoverElIndex(this.hoverElIndex() - 1);
-                } else {
-                    this.hoverElIndex(this.cacheOptions.plain.length - 1);
-                }
-            } else {
-                this.hoverElIndex(this.cacheOptions.plain.length - 1);
+            if (this.hoverElIndex()) {
+                this._setHoverToElement(-1);
+                this._scrollTo(this.hoverElIndex());
+
+                return false;
             }
+            this._setHoverToElement(-1, this.cacheOptions.plain.length);
+            this._scrollTo(this.hoverElIndex());
         },
 
         /**
