@@ -21,10 +21,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDeclaredFeatures()
     {
-        $config = $this->objectManager->getObject('\Magento\Search\Model\SearchEngine\Config',
-            [
-                'dataStorage' => $this->dataStorage
-            ]
+        $config = $this->objectManager->getObject(
+            '\Magento\Search\Model\SearchEngine\Config',
+            ['dataStorage' => $this->dataStorage]
         );
         $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
         $this->assertEquals(['synonyms'], $config->getDeclaredFeatures('mysql'));
@@ -32,10 +31,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testIsFeatureSupportedisFeatureSupported()
     {
-        $config = $this->objectManager->getObject('\Magento\Search\Model\SearchEngine\Config',
-            [
-                'dataStorage' => $this->dataStorage
-            ]
+        $config = $this->objectManager->getObject(
+            '\Magento\Search\Model\SearchEngine\Config',
+            ['dataStorage' => $this->dataStorage]
         );
         $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
         $this->assertEquals(true, $config->isFeatureSupported('synonyms', 'mysql'));

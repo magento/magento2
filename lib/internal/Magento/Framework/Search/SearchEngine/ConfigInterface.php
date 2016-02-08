@@ -22,6 +22,7 @@ interface ConfigInterface
 
     /**
      * Checks if a particular search feature is supported
+     *
      * @param string $featureName
      * @param string $searchEngine
      * @return bool
