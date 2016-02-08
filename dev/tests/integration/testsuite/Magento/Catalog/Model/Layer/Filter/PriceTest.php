@@ -9,6 +9,8 @@ namespace Magento\Catalog\Model\Layer\Filter;
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
  *
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
