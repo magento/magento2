@@ -18,6 +18,10 @@ use Magento\Customer\Helper\AccountManagement;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 
+/**
+ * Class EditPost
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EditPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
