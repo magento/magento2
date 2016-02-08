@@ -40,7 +40,7 @@ class InstallData implements InstallDataInterface
             'First-Class Mail Parcel' => '0_FCP',
             'First-Class Mail Package' => '0_FCP',
             'Parcel Post' => '4',
-            'Standard Post' => '4',
+            'Retail Ground' => '4',
             'Media Mail' => '6',
             'Library Mail' => '7',
             'Express Mail' => '3',

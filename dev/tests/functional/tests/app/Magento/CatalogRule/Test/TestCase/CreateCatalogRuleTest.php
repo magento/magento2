@@ -28,7 +28,7 @@ use Magento\Customer\Test\Fixture\CustomerGroup;
 class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
@@ -44,6 +44,7 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
      */
     public function testCreate(CatalogRule $catalogPriceRule, $product, $conditionEntity, Customer $customer = null)
     {
+        $this->markTestIncomplete('MAGETWO-48731');
         /** @var CatalogProductSimple $productSimple */
         $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => $product]);
         // Prepare data

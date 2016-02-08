@@ -29,10 +29,10 @@ class AdvancedInventory extends ProductTab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $this->waitInit();
-        return parent::fillFormTab($fields, $element);
+        return parent::setFieldsData($fields, $element);
     }
 
     /**
@@ -42,10 +42,10 @@ class AdvancedInventory extends ProductTab
      * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $this->waitInit();
-        return parent::getDataFormTab($fields, $element);
+        return parent::getFieldsData($fields, $element);
     }
 
     /**

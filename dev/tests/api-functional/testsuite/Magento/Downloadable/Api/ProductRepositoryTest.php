@@ -29,6 +29,7 @@ class ProductRepositoryTest extends WebapiAbstract
 
     protected function setUp()
     {
+        $this->markTestSkipped('Test skiped due to MAGETWO-46832');
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
     }
 

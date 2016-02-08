@@ -17,15 +17,18 @@ define(
 
             getFinalRowDisplayPriceExclTax: function(item) {
                 var rowTotalExclTax = parseFloat(item.row_total);
-                if(!window.checkoutConfig.getIncludeWeeeFlag) {
-                    return rowTotalExclTax + parseFloat(item.weee_tax_applied_amount);
+                if (!window.checkoutConfig.getIncludeWeeeFlag) {
+                    rowTotalExclTax += parseFloat(item.weee_tax_applied_amount);
                 }
                 return rowTotalExclTax;
             },
 
             getRowDisplayPriceExclTax: function(item) {
                 var rowTotalExclTax = parseFloat(item.row_total);
-                return rowTotalExclTax + this.getRowWeeeTaxExclTax(item);
+                if (window.checkoutConfig.getIncludeWeeeFlag) {
+                    rowTotalExclTax += this.getRowWeeeTaxExclTax(item);
+                }
+                return rowTotalExclTax;
             },
 
             getRowWeeeTaxExclTax: function(item) {

@@ -493,6 +493,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="imagesResizeCommand" xsi:type="object">Magento\Catalog\Console\Command\ImagesResizeCommand</item>
+                <item name="productAttributesCleanUp" xsi:type="object">Magento\Catalog\Console\Command\ProductAttributesCleanUp</item>
             </argument>
         </arguments>
     </type>
@@ -534,6 +535,68 @@
         <arguments>
             <argument name="processorPool" xsi:type="array">
                 <item name="custom_options" xsi:type="object">Magento\Catalog\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\OrchestratorPool">
+        <arguments>
+            <argument name="operations" xsi:type="array">
+                <item name="default" xsi:type="array">
+                    <item name="read" xsi:type="string">Magento\Framework\Model\Operation\Read</item>
+                    <item name="create" xsi:type="string">Magento\Framework\Model\Operation\Write\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\Model\Operation\Write\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\Model\Operation\Write\Delete</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\Entity\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_product</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store_id" xsi:type="string">store_id</item>
+                    </item>
+                </item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store_id" xsi:type="string">store_id</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool">
+        <arguments>
+            <argument name="relationActions" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="optionReader" xsi:type="string">Magento\Catalog\Model\Product\Option\ReadHandler</item>
+                        <item name="mediaGalleryRead" xsi:type="string">Magento\Catalog\Model\Product\Gallery\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="custom_options" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
+                        <item name="mediaGalleryCreate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\CreateHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="optionUpdater" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
+                        <item name="mediaGalleryUpdate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\UpdateHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction">
+        <arguments>
+            <argument name="skipStaticColumns" xsi:type="array">
+                <item name="entity_type_id" xsi:type="string">entity_type_id</item>
+                <item name="attribute_set_id" xsi:type="string">attribute_set_id</item>
             </argument>
         </arguments>
     </type>

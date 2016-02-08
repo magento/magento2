@@ -36,7 +36,6 @@
                 <item name="dataset" xsi:type="string">default_dynamic</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight_type" xsi:type="string">Dynamic</field>
@@ -77,7 +76,6 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
@@ -191,7 +189,6 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>

@@ -762,6 +762,7 @@ return [
     ],
     ['Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\Exception'],
+    ['Magento\Catalog\Model\Product\Option\Converter'],
     [
         'Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException',
         'Magento\Framework\Exception\File\LargeSizeException',
@@ -3878,6 +3879,7 @@ return [
         'Magento\Framework\Component\ComponentRegistrar'
     ],
     ['Magento\Framework\App\Router\ActionList\Reader'],
+    ['Magento\User\Observer\Backend\CheckAdminPasswordChangeObserver'],
     ['Magento\Framework\View\File\AbstractCollector'],
     ['Magento\Tools\Migration\Acl\FileManager'],
     ['Magento\Tools\Migration\Acl\Formatter'],
@@ -4110,4 +4112,27 @@ return [
         'Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface'
     ],
     ['Magento\Quote\Api\ShippingAddressManagementInterface', 'Magento\Quote\Model\ShippingAddressManagementInterface'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Form'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tabs'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Content'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Design'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Main'],
+    ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Meta'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit'],
+    ['Magento\Cms\Block\Adminhtml\Block\Edit\Form'],
+    ['Magento\Backend\Block\Catalog\Category\Tabs'],
+    ['Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes'],
+    ['Magento\Catalog\Block\Adminhtml\Category\Tab\Design'],
+    ['Magento\Catalog\Block\Adminhtml\Category\Edit\Form'],
+    [
+        'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
+        'Magento\Catalog\Model\ResourceModel\Product\Gallery'
+    ],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Actions'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Form'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tabs'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit']
 ];

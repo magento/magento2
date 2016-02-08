@@ -5,7 +5,7 @@
 define([
     './renderer/types',
     './renderer/layout',
-    'Magento_Ui/js/lib/ko/initialize'
+    '../lib/knockout/bootstrap'
 ], function (types, layout) {
     'use strict';
 

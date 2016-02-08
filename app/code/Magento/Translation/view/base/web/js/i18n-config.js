@@ -7,7 +7,7 @@
 (function () {
     require.config({
         config: {
-            'Magento_Ui/js/lib/ko/bind/i18n': {
+            'Magento_Ui/js/lib/knockout/bindings/i18n': {
                 inlineTranslation: true
             }
         }

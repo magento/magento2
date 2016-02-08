@@ -188,4 +188,31 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $integrationController = $this->_createIntegrationController('Save');
         $integrationController->execute();
     }
+
+    public function testSaveActionExceptionOnIntegrationsCreatedFromConfigFile()
+    {
+        $exceptionMessage = 'Cannot edit integrations created via config file.';
+        $intData = new \Magento\Framework\DataObject(
+            [
+                Info::DATA_NAME => 'nameTest',
+                Info::DATA_ID => self::INTEGRATION_ID,
+                'id' => self::INTEGRATION_ID,
+                Info::DATA_EMAIL => 'test@magento.com',
+                Info::DATA_ENDPOINT => 'http://magento.ll/endpoint',
+                Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_CONFIG,
+            ]
+        );
+
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+        $this->_integrationSvcMock
+            ->expects($this->once())
+            ->method('get')
+            ->with(self::INTEGRATION_ID)
+            ->will($this->returnValue($intData));
+
+        // Verify error
+        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $integrationContr = $this->_createIntegrationController('Save');
+        $integrationContr->execute();
+    }
 }

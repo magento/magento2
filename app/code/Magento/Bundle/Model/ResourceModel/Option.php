@@ -5,6 +5,9 @@
  */
 namespace Magento\Bundle\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
+
 /**
  * Bundle Option Resource Model
  *
@@ -18,17 +21,25 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $validator;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Bundle\Model\Option\Validator $validator
+     * @param MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Bundle\Model\Option\Validator $validator,
+        MetadataPool $metadataPool,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->validator = $validator;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -39,6 +50,18 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('catalog_product_bundle_option', 'option_id');
+    }
+
+    /**
+     * @param int $optionId
+     * @return int
+     */
+    public function removeOptionSelections($optionId)
+    {
+        return $this->getConnection()->delete(
+            $this->getTable('catalog_product_bundle_selection'),
+            ['option_id =?' => $optionId]
+        );
     }
 
     /**
@@ -115,6 +138,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'option_title_default.title'
         );
         $bind = ['store_id' => $storeId, 'product_id' => $productId];
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()
             ->from(
                 ['opt' => $this->getMainTable()],
@@ -130,8 +154,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'option_title_store.option_id = opt.option_id AND option_title_store.store_id = :store_id',
                 ['title' => $title]
             )
+            ->join(
+                ['e' => $this->getTable('catalog_product_entity')],
+                "e.$linkField = opt.parent_id",
+                []
+            )
             ->where(
-                'opt.parent_id=:product_id'
+                'e.entity_id=:product_id'
             );
         if (!($searchData = $connection->fetchCol($select, $bind))) {
             $searchData = [];

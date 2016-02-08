@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model;
  *
  * @see \Magento\Catalog\Model\CategoryTreeTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
 class CategoryTest extends \PHPUnit_Framework_TestCase
@@ -25,13 +26,18 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $storeManager \Magento\Store\Model\StoreManagerInterface */
-        $storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->objectManager->get('Magento\Store\Model\StoreManagerInterface');
         $this->_store = $storeManager->getStore();
-        $this->_model = $objectManager->create('Magento\Catalog\Model\Category');
+        $this->_model = $this->objectManager->create('Magento\Catalog\Model\Category');
     }
 
     public function testGetUrlInstance()
@@ -83,17 +89,17 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals([], $this->_model->getProductsPosition());
         $this->_model->unsetData();
-        $this->_model->load(6);
+        $this->_model = $this->getCategoryByName('Category 2');
         $this->assertEquals([], $this->_model->getProductsPosition());
 
         $this->_model->unsetData();
-        $this->_model->load(4);
-        $this->assertContains(1, $this->_model->getProductsPosition());
+        $this->_model = $this->getCategoryByName('Category 1.1.1');
+        $this->assertNotEmpty($this->_model->getProductsPosition());
     }
 
     public function testGetStoreIds()
     {
-        $this->_model->load(3);
+        $this->_model = $this->getCategoryByName('Category 1.1');
         /* id from fixture */
         $this->assertContains(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -187,14 +193,15 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckId()
     {
-        $this->assertEquals(4, $this->_model->checkId(4));
+        $this->_model = $this->getCategoryByName('Category 1.1.1');
+        $categoryId = $this->_model->getId();
+        $this->assertEquals($categoryId, $this->_model->checkId($categoryId));
         $this->assertFalse($this->_model->checkId(111));
     }
 
     public function testVerifyIds()
     {
-        $ids = $this->_model->verifyIds([1, 2, 3, 4, 100]);
-        $this->assertContains(4, $ids);
+        $ids = $this->_model->verifyIds($this->_model->getParentIds());
         $this->assertNotContains(100, $ids);
     }
 
@@ -266,5 +273,38 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $category = $this->_model->load('444');
         $this->assertEquals('5', $category->getPosition());
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     */
+    public function testDeleteChildren()
+    {
+        $this->_model->unsetData();
+        $this->_model->load(4);
+        $this->_model->setSkipDeleteChildren(true);
+        $this->_model->delete();
+
+        $this->_model->unsetData();
+        $this->_model->load(5);
+        $this->assertEquals($this->_model->getId(), 5);
+
+        $this->_model->unsetData();
+        $this->_model->load(3);
+        $this->assertEquals($this->_model->getId(), 3);
+        $this->_model->delete();
+
+        $this->_model->unsetData();
+        $this->_model->load(5);
+        $this->assertEquals($this->_model->getId(), null);
+    }
+
+    protected function getCategoryByName($categoryName)
+    {
+        /* @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
+
+        $collection = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Category\Collection');
+        $collection->addNameToResult()->load();
+        return $collection->getItemByColumnValue('name', $categoryName);
     }
 }

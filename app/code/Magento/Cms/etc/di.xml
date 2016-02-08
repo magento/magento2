@@ -100,4 +100,46 @@
             <argument name="filterPool" xsi:type="object" shared="false">CmsGirdFilterPool</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\Model\Entity\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Cms\Api\Data\PageInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">cms_page</item>
+                    <item name="identifierField" xsi:type="string">page_id</item>
+                </item>
+                <item name="Magento\Cms\Api\Data\BlockInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">cms_block</item>
+                    <item name="identifierField" xsi:type="string">block_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool">
+        <arguments>
+            <argument name="relationActions" xsi:type="array">
+                <item name="Magento\Cms\Api\Data\PageInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Relation\Store\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler</item>
+                    </item>
+                </item>
+                <item name="Magento\Cms\Api\Data\BlockInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

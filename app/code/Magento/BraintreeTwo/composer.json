@@ -1,0 +1,30 @@
+{
+    "name": "magento/module-braintree-two",
+    "description": "N/A",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "magento/framework": "*",
+        "magento/magento-composer-installer": "*",
+        "magento/module-config": "*",
+        "magento/module-directory": "*",
+        "magento/module-payment": "*",
+        "magento/module-checkout": "*",
+        "magento/module-sales": "*",
+        "magento/module-backend": "*",
+        "magento/module-vault": "*",
+        "braintree/braintree_php": "3.7.0"
+    },
+    "type": "magento2-module",
+    "version": "100.0.2",
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\BraintreeTwo\\": ""
+        }
+    }
+}

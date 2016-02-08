@@ -100,6 +100,17 @@ abstract class Validator
                         $this->fileSize->getMaxFileSizeInMb()
                     );
                     break;
+                case \Zend_Validate_File_ImageSize::NOT_DETECTED:
+                    $result[] = __(
+                        "The file '%1' is empty. Please choose another one",
+                        $fileInfo['title']
+                    );
+                    break;
+                default:
+                    $result[] = __(
+                        "The file '%1' is invalid. Please choose another one",
+                        $fileInfo['title']
+                    );
             }
         }
         return $result;

@@ -144,6 +144,19 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Add product relation (duplicate will be updated)
+     *
+     * @param int $parentId
+     * @param int $childId
+     * @return $this
+     */
+    public function addProductRelation($parentId, $childId)
+    {
+        $this->_productRelation->addRelation($parentId, $childId);
+        return $this;
+    }
+
+    /**
      * Add product relations
      *
      * @param int $parentId

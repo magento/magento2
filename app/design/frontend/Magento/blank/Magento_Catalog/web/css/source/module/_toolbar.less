@@ -31,19 +31,24 @@
                 display: none;
             }
         }
+
         &-products {
             margin-bottom: @indent__xl;
             padding: 0 @indent__s;
             text-align: center;
             &:extend(.abs-add-clearfix all);
+
             .pages {
                 display: none;
+
                 .products.wrapper ~ & {
                     display: block;
                 }
             }
+
             .limiter {
                 display: none;
+
                 .control {
                     display: inline-block;
                 }
@@ -53,13 +58,16 @@
 
     .sorter {
         padding: 4px 0 0;
+
         .products.wrapper ~ .toolbar & {
             display: none;
         }
+
         &-options {
             margin: 0 0 0 7px;
             width: auto;
         }
+
         &-action {
             vertical-align: top;
             .lib-icon-font(
@@ -70,6 +78,7 @@
             @_icon-font-color-hover: @header-icons-color-hover,
             @_icon-font-text-hide: true
             );
+
             &.sort-desc:before {
                 content: @icon-arrow-down;
             }
@@ -85,9 +94,11 @@
             width: auto;
             margin: 0 5px 0 7px;
         }
+
         &-label {
             font-weight: 400;
         }
+
         .page-products .toolbar & {
             display: none;
         }
@@ -111,6 +122,7 @@
         .products.wrapper ~ & .pages {
             float: left;
         }
+
         &-amount {
             float: left;
         }
@@ -142,16 +154,20 @@
             line-height: 1;
             padding: 7px 10px;
             text-align: center;
+
             &:not(.active):hover {
                 .lib-css(color, @text__color__muted);
                 background: darken(@toolbar-element-background, 7%);
             }
+
             &:last-child {
                 border-right: 1px solid @border-color__base;
             }
+
             &.active {
                 .lib-css(color, @primary__color__light);
             }
+
             .lib-icon-font(
             @icon-grid,
             @_icon-font-size: @toolbar-mode-icon-font-size,
@@ -168,6 +184,7 @@
 
     .limiter {
         float: right;
+
         .products.wrapper ~ .toolbar & {
             display: block;
         }

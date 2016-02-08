@@ -72,4 +72,13 @@
             </argument>
         </arguments>
     </type>
+
+
+    <type name="Magento\Vault\Model\Ui\TokensConfigProvider">
+        <arguments>
+            <argument name="tokenUiComponentProviders" xsi:type="array">
+                <item name="payflowpro" xsi:type="object">Magento\Paypal\Model\Payflow\Ui\TokenUiComponentProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

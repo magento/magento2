@@ -147,7 +147,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                                             'customEntry' => 'billingAddress' . $paymentCode . '.region',
                                         ],
                                         'validation' => [
-                                            'validate-select' => true,
+                                            'required-entry' => true,
                                         ],
                                         'filterBy' => [
                                             'target' => '${ $.provider }:${ $.parentScope }.country_id',

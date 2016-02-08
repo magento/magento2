@@ -45,6 +45,13 @@ class Links extends Form
     protected $addLinkButtonBlock = '[data-ui-id=downloadable-links] .col-actions-add:last-child';
 
     /**
+     * Sort rows data
+     *
+     * @var array
+     */
+    protected $sortRowsData = [];
+
+    /**
      * Get Downloadable link item block
      *
      * @param int $index
@@ -64,7 +71,7 @@ class Links extends Form
      * Fill links block
      *
      * @param array $fields
-     * @param SimpleElement $element
+     * @param SimpleElement|null $element
      * @return void
      */
     public function fillLinks(array $fields, SimpleElement $element = null)
@@ -79,8 +86,18 @@ class Links extends Form
             if (!$rowBlock->isVisible()) {
                 $element->find($this->addNewLinkRow, Locator::SELECTOR_XPATH)->click();
             }
+
+            if (isset($link['sort_order'])) {
+                $currentSortOrder = (int)$link['sort_order'];
+                unset($link['sort_order']);
+            } else {
+                $currentSortOrder = 0;
+            }
             $rowBlock->fillLinkRow($link);
+
+            $this->sortLink($index, $currentSortOrder, $element);
         }
+        $this->sortRowsData = [];
     }
 
     /**
@@ -98,8 +115,11 @@ class Links extends Form
         );
         $newFields = $this->_getData($mapping);
         foreach ($fields['downloadable']['link'] as $index => $link) {
-            $newFields['downloadable']['link'][$index] = $this->getRowBlock($index, $element)
+            unset($link['sort_order']);
+            $processedLink = $this->getRowBlock($index, $element)
                 ->getDataLinkRow($link);
+            $processedLink['sort_order'] = $index;
+            $newFields['downloadable']['link'][$index] = $processedLink;
         }
         return $newFields;
     }
@@ -118,5 +138,30 @@ class Links extends Form
             $rowBlock->clickDeleteButton();
             ++$index;
         }
+    }
+
+    /**
+     * Sort link element
+     *
+     * @param int $position
+     * @param int $sortOrder
+     * @param SimpleElement|null $element
+     * @return void
+     */
+    protected function sortLink($position, $sortOrder, SimpleElement $element = null)
+    {
+        $currentSortRowData = ['current_position_in_grid' => $position, 'sort_order' => $sortOrder];
+        foreach ($this->sortRowsData as &$sortRowData) {
+            if ($sortRowData['sort_order'] > $currentSortRowData['sort_order']) {
+                // need to reload block because we are changing dom
+                $target = $this->getRowBlock($sortRowData['current_position_in_grid'], $element)->getSortHandle();
+                $this->getRowBlock($currentSortRowData['current_position_in_grid'], $element)->dragAndDropTo($target);
+
+                $currentSortRowData['current_position_in_grid']--;
+                $sortRowData['current_position_in_grid']++;
+            }
+        }
+        unset($sortRowData);
+        $this->sortRowsData[] = $currentSortRowData;
     }
 }

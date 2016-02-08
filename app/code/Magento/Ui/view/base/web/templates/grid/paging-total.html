@@ -4,10 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-
 <div class="admin__control-support-text">
-    <span data-bind="text: totalRecords"></span> records found
-    <!-- ko if: totalSelected -->
-    (<span data-bind="text: totalSelected"></span> selected)
-    <!-- /ko -->
+    <text args="totalRecords"/> records found
+    <text args="'(' + totalSelected + ' selected)'" if="totalSelected"/>
 </div>

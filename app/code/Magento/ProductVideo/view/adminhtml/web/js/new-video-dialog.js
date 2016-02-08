@@ -355,8 +355,10 @@ define([
                 data: 'remote_image=' + sourceUrl,
                 type: 'post',
                 success: $.proxy(function (result) {
-                    this._tempPreviewImageData = result;
-                    this._getPreviewImage().attr('src', sourceUrl).show();
+                    if (!this._isEditPage) {
+                        this._tempPreviewImageData = result;
+                        this._getPreviewImage().attr('src', sourceUrl).show();
+                    }
                     this._blockActionButtons(false, true);
                 }, self)
             });
@@ -1001,6 +1003,7 @@ define([
         _onClose: function () {
             var newVideoForm;
 
+            this._isEditPage = true;
             this.imageData = null;
 
             if (this._previewImage) {

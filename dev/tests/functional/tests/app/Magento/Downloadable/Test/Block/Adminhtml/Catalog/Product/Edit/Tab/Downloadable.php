@@ -33,6 +33,20 @@ class Downloadable extends Tab
     protected $downloadableBlock = '[data-tab-type="tab_content_downloadableInfo"]';
 
     /**
+     * Selector for trigger show/hide "Downloadable Information" section.
+     *
+     * @var string
+     */
+    protected $sectionTrigger = '[data-tab=downloadable_items] [data-role=trigger]';
+
+    /**
+     * Selector for "Is Downloadable product" checkbox.
+     *
+     * @var string
+     */
+    protected $isDownloadable = '#is-downloaodable';
+
+    /**
      * Get Downloadable block
      *
      * @param string $type
@@ -57,7 +71,7 @@ class Downloadable extends Tab
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return array
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $newFields = [];
         if (isset($fields['downloadable_sample']['value'])) {
@@ -82,8 +96,9 @@ class Downloadable extends Tab
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
+        $this->showContent();
         if (isset($fields['downloadable_sample']['value'])) {
             $this->getDownloadableBlock('Samples')->fillSamples($fields['downloadable_sample']['value']);
         }
@@ -93,5 +108,24 @@ class Downloadable extends Tab
         }
 
         return $this;
+    }
+
+    /**
+     * Show "Downloadable" section content.
+     *
+     * @return void
+     */
+    private function showContent()
+    {
+        $isDownloadable = $this->_rootElement->find($this->isDownloadable);
+        if (!$isDownloadable->isVisible()) {
+            //Open Section
+            $this->_rootElement->find($this->sectionTrigger)->click();
+            $this->waitForElementVisible($this->isDownloadable);
+            //Select "Is Downloadable" checkbox
+            if (!$isDownloadable->isSelected()) {
+                $isDownloadable->click();
+            }
+        }
     }
 }

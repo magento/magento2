@@ -920,7 +920,7 @@ class Filter extends \Magento\Framework\Filter\Template
                     !== false
                 ) {
                     throw new \Magento\Framework\Exception\MailException(
-                        __('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>')
+                        __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
                     );
                 }
 

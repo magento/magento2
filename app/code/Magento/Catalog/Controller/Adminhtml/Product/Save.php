@@ -27,6 +27,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productTypeManager;
 
     /**
+     * @var \Magento\Catalog\Api\CategoryLinkManagementInterface
+     */
+    protected $categoryLinkManagement;
+
+    /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
@@ -37,6 +42,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
+     * @param \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
@@ -45,11 +51,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         Initialization\Helper $initializationHelper,
         \Magento\Catalog\Model\Product\Copier $productCopier,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
+        \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
+        $this->categoryLinkManagement = $categoryLinkManagement;
         $this->productRepository = $productRepository;
         parent::__construct($context, $productBuilder);
     }
@@ -67,13 +75,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
-
         $data = $this->getRequest()->getPostValue();
         $productAttributeSetId = $this->getRequest()->getParam('set');
         $productTypeId = $this->getRequest()->getParam('type');
         if ($data) {
             try {
-                $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
+                $product = $this->initializationHelper->initialize(
+                    $this->productBuilder->build($this->getRequest())
+                );
                 $this->productTypeManager->processProduct($product);
 
                 if (isset($data['product'][$product->getIdFieldName()])) {
@@ -83,7 +92,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $originalSku = $product->getSku();
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
-                $productId = $product->getId();
+                $this->categoryLinkManagement->assignProductToCategories(
+                    $product->getSku(),
+                    $product->getCategoryIds()
+                );
+                $productId = $product->getEntityId();
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
 
@@ -99,7 +112,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                             ->save();
                     }
                 }
-
                 $this->messageManager->addSuccess(__('You saved the product.'));
                 if ($product->getSku() != $originalSku) {
                     $this->messageManager->addNotice(
@@ -110,10 +122,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                         )
                     );
                 }
-
                 $this->_eventManager->dispatch(
                     'controller_action_catalog_product_save_entity_after',
-                    ['controller' => $this]
+                    ['controller' => $this, 'product' => $product]
                 );
 
                 if ($redirectBack === 'duplicate') {
@@ -144,7 +155,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         } elseif ($redirectBack === 'duplicate' && isset($newProduct)) {
             $resultRedirect->setPath(
                 'catalog/*/edit',
-                ['id' => $newProduct->getId(), 'back' => null, '_current' => true]
+                ['id' => $newProduct->getEntityId(), 'back' => null, '_current' => true]
             );
         } elseif ($redirectBack) {
             $resultRedirect->setPath(
