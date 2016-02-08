@@ -11,7 +11,6 @@ use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
-use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Customer helper for account management.
@@ -51,11 +50,6 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     protected $encryptor;
 
     /**
-     * @var ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
      * AccountManagement constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -63,22 +57,19 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
      * @param ConfigInterface $backendConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Encryptor $encryptor
-     * @param ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         CustomerRegistry $customerRegistry,
         ConfigInterface $backendConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        Encryptor $encryptor,
-        ManagerInterface $eventManager
+        Encryptor $encryptor
     ) {
         parent::__construct($context);
         $this->customerRegistry = $customerRegistry;
         $this->backendConfig = $backendConfig;
         $this->dateTime = $dateTime;
         $this->encryptor = $encryptor;
-        $this->eventManager = $eventManager;
     }
 
     /**
@@ -162,7 +153,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $hash = $customerSecure->getPasswordHash();
         if (!$this->encryptor->validateHash($password, $hash)) {
-            $this->eventManager->dispatch(
+            $this->_eventManager->dispatch(
                 'customer_password_invalid',
                 [
                     'username' => $customer->getEmail(),
