@@ -272,7 +272,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
             $this->eventManagerMock->expects($this->once())
                 ->method('dispatch')
-                ->with('customer_password_invalid',
+                ->with(
+                    'customer_password_invalid',
                     [
                         'username' => $email,
                         'password' => $password
