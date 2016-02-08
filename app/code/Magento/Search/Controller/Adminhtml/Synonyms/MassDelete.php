@@ -27,9 +27,16 @@ class MassDelete extends \Magento\Search\Controller\Adminhtml\Synonyms
     protected $collectionFactory;
 
     /**
+     * Constructor
+     * 
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Search\Model\EngineResolver $engineResolver
+     * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
      */
     public function __construct(
         Context $context,
@@ -39,7 +46,8 @@ class MassDelete extends \Magento\Search\Controller\Adminhtml\Synonyms
         \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Search\Model\EngineResolver $engineResolver,
-        \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig)
+        \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
+    )
     {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
