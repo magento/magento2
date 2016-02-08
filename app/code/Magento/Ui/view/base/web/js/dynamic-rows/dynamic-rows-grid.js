@@ -4,12 +4,9 @@
  */
 
 define([
-    'ko',
-    'mageUtils',
     'underscore',
-    'uiLayout',
     './dynamic-rows'
-], function (ko, utils, _, layout, dynamicRows) {
+], function (_, dynamicRows) {
     'use strict';
 
     return dynamicRows.extend({
@@ -18,7 +15,9 @@ define([
             insertData: [],
             map: null,
             cacheGridData: [],
+            deleteProperty: false,
             dataLength: 0,
+            identificationProperty: 'id',
             listens: {
                 'insertData': 'processingInsertData',
                 'elems': 'mappingValue'
@@ -88,13 +87,13 @@ define([
          * about selected records
          */
         processingInsertData: function (data) {
+            var changes;
 
-            if (!data) {
-                return false;
+            if (!data.length) {
+                this.elems([]);
             }
 
-            var changes = this._checkGridData(data);
-
+            changes = this._checkGridData(data);
             this.cacheGridData = data;
 
             changes.each(function (changedObject) {
@@ -109,76 +108,14 @@ define([
          * @param {String|Number} index - record index
          */
         deleteRecord: function (index, recordId) {
-            var data = this.getElementData(this.insertData(), recordId),
-                lastRecord =
-                    _.findWhere(this.elems(), {index: this.recordIterator-1}) ||
-                    _.findWhere(this.elems(), {index: (this.recordIterator-1).toString()}),
-                recordsData;
+            var data = this.getElementData(this.insertData(), recordId);
 
             this.mapping = true;
-            lastRecord.destroy();
-            this.removeMaxPosition();
+            this._super();
             this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
                 return parseInt(recordData[this.map.id], 10) === parseInt(data[this.map.id], 10);
             }, this));
-            recordsData = _.reject(this.source.get(this.dataScope + '.' + this.index), function (recordData) {
-                return parseInt(recordData.id, 10) === parseInt(recordId, 10);
-            }, this);
-            this._updateData(recordsData);
-            this._sortAfterDelete();
-            --this.recordIterator;
             this.mapping = false;
-        },
-
-        /**
-         * Set new data to dataSource,
-         * delete element
-         *
-         * @param {Object} data - record data
-         */
-        _updateData: function (data) {
-            var elems = utils.copy(this.elems()),
-                path;
-
-            this.recordData([]);
-            elems = utils.copy(this.elems());
-            data.each(function (rec, idx) {
-                elems[idx].recordId = rec.id;
-                path = this.dataScope + '.' + this.index + '.' + idx;
-                this.source.set(path, rec);
-            }, this);
-            this.elems(elems);
-        },
-
-        /**
-         * Sort elems by position property
-         */
-        _sortAfterDelete: function () {
-            this.elems(this.elems().sort(function (propOne, propTwo) {
-                return parseInt(propOne.position, 10) - parseInt(propTwo.position, 10);
-            }));
-        },
-
-        /**
-         * Add child components, call parent
-         *
-         * @param {Object} data - component data
-         * @param {Number} index - record index
-         * @param {Number} prop - grid record id
-         *
-         * @returns {Object} Chainable.
-         */
-        addChild: function (data, index, prop) {
-            var template = this.templates.record;
-
-            _.extend(this.templates.record, {
-                recordId: prop
-            });
-
-            this._super();
-            this.templates.record = template;
-
-            return this;
         },
 
         /**
@@ -196,6 +133,7 @@ define([
 
             max.each(function (record, index) {
                 obj[this.map.id] = record[this.map.id];
+
                 if (!_.where(this.cacheGridData, obj).length) {
                     changes.push(data[index]);
                 }
@@ -218,7 +156,6 @@ define([
 
             elements.each(function (record) {
                 data = this.getElementData(this.insertData(), record.recordId);
-
                 _.each(this.map, function (prop, index) {
                     path = record.dataScope + '.' + index;
                     this.source.set(path, data[prop]);

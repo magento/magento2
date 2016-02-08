@@ -4,7 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field" visible="visible" disabled="disabled" css="element.setClasses(element)">
+<div class="admin__field"
+     visible="visible"
+     disabled="disabled"
+     css="element.setClasses(element)"
+     attr="'data-index': index">
     <label if="element.label" class="admin__field-label" attr="for: element.uid">
         <span text="element.label"/>
     </label>
@@ -30,7 +34,7 @@
 
                 <tbody data-bind="foreach: elems">
                 <tr class="data-row"
-                    css="'_odd-row': $index % 2">
+                    css="'_odd-row': $index() % 2">
                     <td if="$parent.dndConfig.enabled"
                         class="data-grid-draggable-row-cell"
                         template="name: $parent.dndConfig.template, data: $parent.dnd"/>
@@ -40,7 +44,8 @@
                         visible="elem.visible"
                         disabled="elem.disabled"
                         css="$parents[1].setClasses(elem)"
-                        template="elem.template"/>
+                        template="elem.template"
+                        attr="'data-index': index"/>
                     <!-- /ko -->
                 </tr>
                 </tbody>

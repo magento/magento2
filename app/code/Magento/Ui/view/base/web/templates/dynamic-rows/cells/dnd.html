@@ -1,13 +1,13 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <div class="draggable-handle"
      data-bind="
         event: {
-            mousedown: function () {
+            mousedown: function ($data, event) {
                 mousedownHandler($data, $element, event);
             }
         }
