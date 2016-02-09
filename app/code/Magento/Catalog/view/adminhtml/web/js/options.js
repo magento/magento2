@@ -18,8 +18,7 @@ define([
     'use strict';
 
     return function (config) {
-        var optionDefaultInputType = 'radio',
-            attributeOption = {
+        var attributeOption = {
                 table: $('attribute-options-table'),
                 itemCount: 0,
                 totalItems: 0,
@@ -39,7 +38,7 @@ define([
                     }
 
                     if (!data.intype) {
-                        data.intype = optionDefaultInputType;
+                        data.intype = this.getOptionInputType();
                     }
 
                     if (!this.totalItems) {
@@ -128,6 +127,15 @@ define([
                         '.ignore-validate textarea';
 
                     jQuery('#edit_form').data('validator').settings.forceIgnore = ignore;
+                },
+                getOptionInputType: function () {
+                    var optionDefaultInputType = 'radio';
+
+                    if ($('frontend_input') && $('frontend_input').value === 'multiselect') {
+                        optionDefaultInputType = 'checkbox';
+                    }
+
+                    return optionDefaultInputType;
                 }
             };
 
@@ -167,7 +175,7 @@ define([
         }
 
         window.attributeOption = attributeOption;
-        window.optionDefaultInputType = optionDefaultInputType;
+        window.optionDefaultInputType = attributeOption.getOptionInputType();
 
         rg.set('manage-options-panel', attributeOption);
     };
