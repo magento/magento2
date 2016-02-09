@@ -18,7 +18,7 @@ define([
          * Hide fields on coupon tab
          */
         onUpdate: function () {
-            // @todo: remove this workaround after resolving MAGETWO-48846
+            // @todo: refactor after resolving MAGETWO-48846
             var isDisabled = !this.value(),
                 selector = '[id=coupons_information_fieldset] input, [id=coupons_information_fieldset] select, ' +
                     '[id=coupons_information_fieldset] button, [id=couponCodesGrid] input, ' +
