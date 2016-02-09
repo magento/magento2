@@ -23,6 +23,23 @@ class SaveAndApplyButton extends GenericButton implements ButtonProviderInterfac
                 'class' => 'save',
                 'on_click' => '',
                 'sort_order' => 80,
+                'data_attribute' => [
+                    'mage-init' => [
+                        'Magento_Ui/js/form/button-adapter' => [
+                            'actions' => [
+                                [
+                                    'targetName' => 'catalog_rule_form.catalog_rule_form',
+                                    'actionName' => 'save',
+                                    'params' => [
+                                        true,
+                                        ['auto_apply' => 1],
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+
+                ]
             ];
         }
         return $data;
