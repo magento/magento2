@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- These are the settings for legacy testing within the company's Magento 2 repository
+     (in addition to Magento 2 Core) -->
+<config>
+    <whitelist>
+        <item>
+            <path>app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js</path>
+            <word>twig</word>
+        </item>
+    </whitelist>
+</config>
