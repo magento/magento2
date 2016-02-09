@@ -264,7 +264,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn($result);
 
         if ($result) {
-            $this->assertEquals($result, $this->helper->validatePasswordAndLockStatus($customerMock, $password));
+            $this->assertEquals($this->helper, $this->helper->validatePasswordAndLockStatus($customerMock, $password));
         } else {
             $customerMock->expects($this->once())
                 ->method('getEmail')
