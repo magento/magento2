@@ -7,6 +7,7 @@ namespace Magento\Cms\Test\Unit\Model\Wysiwyg;
 
 /**
  * @covers \Magento\Cms\Model\Wysiwyg\Config
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
