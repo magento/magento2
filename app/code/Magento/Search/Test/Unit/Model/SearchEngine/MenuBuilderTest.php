@@ -58,6 +58,6 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
                 'engineResolver' => $this->engineResolver
             ]
         );
-        $this->assertInstanceOf('\Magento\Backend\Model\Menu',$searchMenuBuilder->afterGetResult($menuBuilder));
+        $this->assertInstanceOf('\Magento\Backend\Model\Menu', $searchMenuBuilder->afterGetResult($menuBuilder));
     }
 }
