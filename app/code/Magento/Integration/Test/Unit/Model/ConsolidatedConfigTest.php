@@ -5,13 +5,13 @@
  */
 namespace Magento\Integration\Test\Unit\Model;
 
-use Magento\Integration\Model\Config;
-use Magento\Integration\Model\Cache\Type;
+use Magento\Integration\Model\ConsolidatedConfig as Config;
+use Magento\Integration\Model\Cache\TypeConsolidated as Type;
 
 /**
- * Unit test for \Magento\Integration\Model\Config
+ * Unit test for \Magento\Integration\Model\ConsolidatedConfig
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConsolidatedConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Integration config model
@@ -26,21 +26,25 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $configCacheTypeMock;
 
     /**
-     * @var  \Magento\Integration\Model\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Integration\Model\Config\Consolidated\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configReaderMock;
 
     public function setUp()
     {
-        $this->configCacheTypeMock = $this->getMockBuilder('Magento\Integration\Model\Cache\Type')
+        $this->configCacheTypeMock = $this->getMockBuilder('Magento\Integration\Model\Cache\TypeConsolidated')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configReaderMock = $this->getMockBuilder('Magento\Integration\Model\Config\Reader')
+        $this->configReaderMock = $this->getMockBuilder('Magento\Integration\Model\Config\Consolidated\Reader')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configModel = new Config(
-            $this->configCacheTypeMock,
-            $this->configReaderMock
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->configModel = $objectManagerHelper->getObject(
+            'Magento\Integration\Model\ConsolidatedConfig',
+            [
+                'configCacheType' => $this->configCacheTypeMock,
+                'configReader' => $this->configReaderMock
+            ]
         );
     }
 
