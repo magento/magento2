@@ -31,14 +31,18 @@ class Store extends Column
     protected $systemStore;
 
     /**
-     * Constructor
-     *
+     * @var string
+     */
+    protected $storeKey;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param SystemStore $systemStore
      * @param Escaper $escaper
      * @param array $components
      * @param array $data
+     * @param string $storeKey
      */
     public function __construct(
         ContextInterface $context,
@@ -46,10 +50,12 @@ class Store extends Column
         SystemStore $systemStore,
         Escaper $escaper,
         array $components = [],
-        array $data = []
+        array $data = [],
+        $storeKey = 'store_id'
     ) {
         $this->systemStore = $systemStore;
         $this->escaper = $escaper;
+        $this->storeKey = $storeKey;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -79,7 +85,7 @@ class Store extends Column
     protected function prepareItem(array $item)
     {
         $content = '';
-        $origStores = $item['store_id'];
+        $origStores = $item[$this->storeKey];
 
         if (empty($origStores)) {
             return '';
