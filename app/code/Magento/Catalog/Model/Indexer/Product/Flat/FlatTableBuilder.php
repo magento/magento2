@@ -50,6 +50,11 @@ class FlatTableBuilder
     protected $_tableData;
 
     /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    protected $resource;
+
+    /**
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      * @param ResourceConnection $resource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -66,6 +71,7 @@ class FlatTableBuilder
         MetadataPool $metadataPool
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
+        $this->resource = $resource;
         $this->_connection = $resource->getConnection();
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -233,8 +239,12 @@ class FlatTableBuilder
         );
 
         $select->from(
-            ['e' => $entityTemporaryTableName],
+            ['et' => $entityTemporaryTableName],
             $allColumns
+        )->joinInner(
+            ['e' => $this->resource->getTableName('catalog_product_entity')],
+            'e.entity_id = et.entity_id',
+            []
         )->joinInner(
             ['wp' => $this->_productIndexerHelper->getTable('catalog_product_website')],
             'wp.product_id = e.entity_id AND wp.website_id = ' . $websiteId,
@@ -255,7 +265,7 @@ class FlatTableBuilder
 
             $select->joinLeft(
                 $temporaryTableName,
-                "e.${linkField} = " . $temporaryTableName . ".${linkField}",
+                "e.entity_id = " . $temporaryTableName . ".entity_id",
                 $columnsNames
             );
             $allColumns = array_merge($allColumns, $columnsNames);
@@ -311,15 +321,20 @@ class FlatTableBuilder
                         $storeId .
                         ' AND t.value IS NOT NULL';
                     /** @var $select \Magento\Framework\DB\Select */
-                    $select = $this->_connection->select()->joinInner(
-                        ['t' => $tableName],
-                        $joinCondition,
-                        [$attributeCode => 't.value']
-                    );
+                    $select = $this->_connection->select()
+                        ->joinInner(
+                            ['e' => $this->resource->getTableName('catalog_product_entity')],
+                            'e.entity_id = et.entity_id',
+                            []
+                        )->joinInner(
+                            ['t' => $tableName],
+                            $joinCondition,
+                            [$attributeCode => 't.value']
+                        );
                     if (!empty($changedIds)) {
-                        $select->where($this->_connection->quoteInto('e.entity_id IN (?)', $changedIds));
+                        $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
                     }
-                    $sql = $select->crossUpdateFromSelect(['e' => $temporaryFlatTableName]);
+                    $sql = $select->crossUpdateFromSelect(['et' => $temporaryFlatTableName]);
                     $this->_connection->query($sql);
                 }
 
@@ -327,13 +342,13 @@ class FlatTableBuilder
                 if (isset($flatColumns[$attributeCode . $valueFieldSuffix])) {
                     $select = $this->_connection->select()->joinInner(
                         ['t' => $this->_productIndexerHelper->getTable('eav_attribute_option_value')],
-                        't.option_id = e.' . $attributeCode . ' AND t.store_id=' . $storeId,
+                        't.option_id = et.' . $attributeCode . ' AND t.store_id=' . $storeId,
                         [$attributeCode . $valueFieldSuffix => 't.value']
                     );
                     if (!empty($changedIds)) {
-                        $select->where($this->_connection->quoteInto('e.entity_id IN (?)', $changedIds));
+                        $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
                     }
-                    $sql = $select->crossUpdateFromSelect(['e' => $temporaryFlatTableName]);
+                    $sql = $select->crossUpdateFromSelect(['et' => $temporaryFlatTableName]);
                     $this->_connection->query($sql);
                 }
             }
