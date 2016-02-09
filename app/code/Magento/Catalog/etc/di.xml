@@ -561,6 +561,14 @@
                         <item name="store_id" xsi:type="string">store_id</item>
                     </item>
                 </item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store_id" xsi:type="string">store_id</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -584,20 +592,28 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction">
+        <arguments>
+            <argument name="skipStaticColumns" xsi:type="array">
+                <item name="entity_type_id" xsi:type="string">entity_type_id</item>
+                <item name="attribute_set_id" xsi:type="string">attribute_set_id</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="watermark_image_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/image_size</item>
-                    <item name="fieldset" xsi:type="string">image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/image</item>
                 </item>
                 <item name="watermark_image_imageOpacity" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/image_imageOpacity</item>
-                    <item name="fieldset" xsi:type="string">image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/image</item>
                 </item>
                 <item name="watermark_image_image" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/image_image</item>
-                    <item name="fieldset" xsi:type="string">image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/image</item>
                     <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Image</item>
                     <item name="upload_dir" xsi:type="array">
                         <item name="config" xsi:type="string">system/filesystem/media</item>
@@ -612,19 +628,19 @@
                 </item>
                 <item name="watermark_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/image_position</item>
-                    <item name="fieldset" xsi:type="string">image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/image</item>
                 </item>
                 <item name="watermark_small_image_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_size</item>
-                    <item name="fieldset" xsi:type="string">small_image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/small_image</item>
                 </item>
                 <item name="watermark_small_image_imageOpacity" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_imageOpacity</item>
-                    <item name="fieldset" xsi:type="string">small_image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/small_image</item>
                 </item>
                 <item name="watermark_small_image_image" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_image</item>
-                    <item name="fieldset" xsi:type="string">small_image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/small_image</item>
                     <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Image</item>
                     <item name="upload_dir" xsi:type="array">
                         <item name="config" xsi:type="string">system/filesystem/media</item>
@@ -639,19 +655,19 @@
                 </item>
                 <item name="watermark_small_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_position</item>
-                    <item name="fieldset" xsi:type="string">small_image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/small_image</item>
                 </item>
                 <item name="watermark_thumbnail_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_size</item>
-                    <item name="fieldset" xsi:type="string">thumbnail</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/thumbnail</item>
                 </item>
                 <item name="watermark_thumbnail_imageOpacity" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_imageOpacity</item>
-                    <item name="fieldset" xsi:type="string">thumbnail</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/thumbnail</item>
                 </item>
                 <item name="watermark_thumbnail_image" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_image</item>
-                    <item name="fieldset" xsi:type="string">thumbnail</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/thumbnail</item>
                     <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Image</item>
                     <item name="upload_dir" xsi:type="array">
                         <item name="config" xsi:type="string">system/filesystem/media</item>
@@ -666,7 +682,7 @@
                 </item>
                 <item name="watermark_thumbnail_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_position</item>
-                    <item name="fieldset" xsi:type="string">thumbnail</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/thumbnail</item>
                 </item>
             </argument>
         </arguments>
