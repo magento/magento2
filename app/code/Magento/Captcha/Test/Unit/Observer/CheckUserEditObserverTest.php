@@ -170,7 +170,7 @@ class CheckUserEditObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->customerSessionMock->expects($this->once())
+        $this->customerSessionMock->expects($this->atLeastOnce())
             ->method('getCustomer')
             ->willReturn($customerDataMock);
 
