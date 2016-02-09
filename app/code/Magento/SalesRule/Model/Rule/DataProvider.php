@@ -100,14 +100,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->objectConverter = $objectConverter;
         $this->salesRuleFactory = $salesRuleFactory;
         $this->coreRegistry = $registry;
-        $meta = array_replace_recursive($this->initMeta(), $meta);
+        $meta = array_replace_recursive($this->getMetadataValues(), $meta);
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
-     * @return []
+     * @return array
      */
-    protected function initMeta()
+    protected function getMetadataValues()
     {
         $customerGroups = $this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems();
         $applyOptions = [
