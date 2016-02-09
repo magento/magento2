@@ -132,9 +132,30 @@ class Attributes extends AbstractModifier
                             ]
                         ]
                     ],
+                    [
+                        'text' => __('Create New Attribute'),
+                        'class' => 'action-secondary',
+                        'actions' => [
+                            [
+                                'targetName' => '',
+                                'actionName' => 'create'
+                            ]
+                        ]
+                    ]
                 ],
             ],
         ];
+
+        $meta['new_attribute_modal']['arguments']['data']['config'] = [
+            'isTemplate' => false,
+            'componentType' => Component\Modal::NAME,
+            'dataScope' => '',
+            'provider' => 'product_form.product_form_data_source',
+            'options' => [
+                'title' => __('New Attribute')
+            ],
+        ];
+
         $meta['add_attribute_modal']['children'] = [
             'product_attributes_grid' => [
                 'arguments' => [
