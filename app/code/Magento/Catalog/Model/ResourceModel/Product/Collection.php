@@ -1637,7 +1637,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $storeId = $this->getStoreId();
         if ($attribute == 'price' && $storeId != 0) {
             $this->addPriceData();
-            if ($this->_productLimitationFilters->isUsePriceIndex()) {
+            if ($this->_productLimitationFilters->isUsingPriceIndex()) {
                 $this->getSelect()->order("price_index.min_price {$dir}");
                 return $this;
             }
@@ -1856,7 +1856,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _productLimitationPrice($joinLeft = false)
     {
         $filters = $this->_productLimitationFilters;
-        if (!$filters->isUsePriceIndex()) {
+        if (!$filters->isUsingPriceIndex()) {
             return $this;
         }
 
