@@ -79,14 +79,8 @@ class Configurable
         }
         $extensionAttributes = $product->getExtensionAttributes();
 
-        if (!empty($productData['configurable_attributes_data'])) {
-            $configurableOptions = $this->optionsFactory->create($productData['configurable_attributes_data']);
-            $extensionAttributes->setConfigurableProductOptions($configurableOptions);
-        }
-
         $product->setNewVariationsAttributeSetId($setId);
 
-        $productData = $this->request->getPost('product');
         $configurableOptions = [];
         if (!empty($productData['configurable_attributes_data'])) {
             $configurableOptions = $this->optionsFactory->create(
