@@ -24,7 +24,7 @@ define([
                 var callback = map[e.keyCode];
 
                 if (callback) {
-                    callback.call(viewModel);
+                    return callback.call(viewModel, e);
                 }
             });
         }
