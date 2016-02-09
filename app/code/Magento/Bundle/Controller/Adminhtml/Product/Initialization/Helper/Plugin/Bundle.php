@@ -180,7 +180,7 @@ class Bundle
      */
     protected function processDynamicOptionsData(\Magento\Catalog\Model\Product $product)
     {
-        if ($product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+        if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
             return;
         }
 
