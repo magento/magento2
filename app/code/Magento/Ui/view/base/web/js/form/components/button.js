@@ -16,6 +16,7 @@ define([
             additionalClasses: {},
             displayArea: 'outsideGroup',
             displayAsLink: false,
+            visible: true,
             elementTmpl: 'ui/form/element/button',
             template: 'ui/form/components/button/simple'
         },

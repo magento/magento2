@@ -443,7 +443,6 @@ dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/components/html.test
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/components/tab_group.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/components/tab.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/abstract.test.js
-dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/boolean.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/date.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/multiselect.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/post-code.test.js
@@ -942,7 +941,6 @@ vendor/magento/module-ui/view/base/web/js/form/components/html.js
 vendor/magento/module-ui/view/base/web/js/form/components/tab_group.js
 vendor/magento/module-ui/view/base/web/js/form/components/tab.js
 vendor/magento/module-ui/view/base/web/js/form/element/abstract.js
-vendor/magento/module-ui/view/base/web/js/form/element/boolean.js
 vendor/magento/module-ui/view/base/web/js/form/element/date.js
 vendor/magento/module-ui/view/base/web/js/form/element/helpers/options.js
 vendor/magento/module-ui/view/base/web/js/form/element/multiselect.js

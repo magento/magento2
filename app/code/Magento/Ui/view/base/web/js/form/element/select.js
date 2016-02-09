@@ -144,6 +144,14 @@ define([
 
             _.extend(config, result);
 
+            if (config.caption !== false && config.caption !== null && typeof config.caption !== 'undefined') {
+                config.options.unshift({
+                    value: '',
+                    label: config.caption.trim() === '' ? ' ' :  config.caption
+                });
+                delete config.caption;
+            }
+
             this._super();
 
             return this;
@@ -228,7 +236,7 @@ define([
             field = field || this.filterBy.field;
 
             result = _.filter(source, function (item) {
-                return item[field] === value;
+                return item[field] === value || item.value === '';
             });
 
             this.setOptions(result);
@@ -288,6 +296,17 @@ define([
 
         getOption: function (value) {
             return this.indexedOptions[value];
+        },
+
+        /**
+         * Select first available option
+         *
+         * @returns {Object} Chainable.
+         */
+        clear: function () {
+            this.value(findFirst(this.options));
+
+            return this;
         }
     });
 });
