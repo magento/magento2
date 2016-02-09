@@ -50,7 +50,7 @@ class Content extends Tab
      *
      * @var string
      */
-    protected $content = '#contentEditor';
+    protected $content = '#cms_page_form_content';
 
     /**
      * Content Heading input locator.
