@@ -12,6 +12,8 @@ use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Class SaveHandler
@@ -39,6 +41,16 @@ class SaveHandler
     private $linkManagement;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
@@ -50,19 +62,25 @@ class SaveHandler
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param LinkManagementInterface $linkManagement
      * @param ProductRepositoryInterface $productRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
         OptionRepositoryInterface $optionRepository,
         ConfigurableFactory $configurableFactory,
         ProductAttributeRepositoryInterface $productAttributeRepository,
         LinkManagementInterface $linkManagement,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder
     ) {
         $this->optionRepository = $optionRepository;
         $this->configurableFactory = $configurableFactory;
         $this->productAttributeRepository = $productAttributeRepository;
         $this->linkManagement = $linkManagement;
         $this->productRepository = $productRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->filterBuilder = $filterBuilder;
     }
 
     /**
@@ -149,9 +167,19 @@ class SaveHandler
      */
     private function deleteConfigurableProductLinks(ProductInterface $product, array $ids)
     {
+        $filters[] = $this->filterBuilder->setField('entity_id')
+            ->setConditionType('in')
+            ->setValue($ids)
+            ->create();
+        $criteria = $this->searchCriteriaBuilder->addFilters($filters)->create();
+        $linkedProducts = $this->productRepository->getList($criteria)->getItems();
+        $skuList = [];
+        foreach ($linkedProducts as $linked) {
+            $skuList[] = $linked->getSku();
+        }
         $list = $this->linkManagement->getChildren($product->getSku());
         foreach ($list as $item) {
-            if (!in_array($item->getId(), $ids)) {
+            if (!in_array($item->getSku(), $skuList)) {
                 $this->linkManagement->removeChild($product->getSku(), $item->getSku());
             }
         }
