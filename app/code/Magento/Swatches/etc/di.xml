@@ -34,15 +34,15 @@
             <argument name="metadata" xsi:type="array">
                 <item name="watermark_swatch_image_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/swatch_image_size</item>
-                    <item name="fieldset" xsi:type="string">swatch_image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
                 </item>
                 <item name="watermark_swatch_image_imageOpacity" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/swatch_image_imageOpacity</item>
-                    <item name="fieldset" xsi:type="string">swatch_image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
                 </item>
                 <item name="watermark_swatch_image_image" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/swatch_image_image</item>
-                    <item name="fieldset" xsi:type="string">swatch_image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
                     <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Image</item>
                     <item name="upload_dir" xsi:type="array">
                         <item name="config" xsi:type="string">system/filesystem/media</item>
@@ -57,7 +57,7 @@
                 </item>
                 <item name="watermark_swatch_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/swatch_image_position</item>
-                    <item name="fieldset" xsi:type="string">swatch_image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
                 </item>
             </argument>
         </arguments>
