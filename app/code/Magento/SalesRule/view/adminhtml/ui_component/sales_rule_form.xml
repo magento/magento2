@@ -226,6 +226,7 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">use_auto_generation</item>
                     <item name="notice" xsi:type="string" translate="true">
