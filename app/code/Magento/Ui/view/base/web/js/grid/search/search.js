@@ -46,12 +46,14 @@ define([
          */
         initialize: function () {
             var urlParams = window.location.href.slice(window.location.href.indexOf('search')).split('&');
+            var searchTerm = [];
 
             this._super()
                 .initChips();
 
             if (urlParams[0]) {
-                var searchTerm = urlParams[0].split('=');
+                searchTerm = urlParams[0].split('=');
+
                 if (searchTerm[1]) {
                     this.apply(searchTerm[1]);
                 }
