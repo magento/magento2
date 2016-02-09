@@ -8,6 +8,7 @@ namespace Magento\Catalog\Helper;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 
@@ -414,10 +415,19 @@ class Product extends \Magento\Framework\Url\Helper\Data
         }
 
         try {
-            $product = $this->productRepository->getById($productId, false, $this->_storeManager->getStore()->getId());
+//            $t = microtime(1);
+//            $product = $this->productRepository->getById($productId, false, $this->_storeManager->getStore()->getId());
+//            var_dump('res', -$t + microtime(1));
+//            $t = microtime(1);
+            $product  = ObjectManager::getInstance()->get('\Magento\Catalog\Model\ProductFactory')
+                ->create()
+                ->setStoreId($this->_storeManager->getStore()->getId())
+                ->load($productId);
+           // var_dump('res', -$t + microtime(1));
         } catch (NoSuchEntityException $e) {
             return false;
         }
+
 
         if (!$this->canShow($product)) {
             return false;
