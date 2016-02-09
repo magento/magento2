@@ -37,6 +37,10 @@ class RuleInformation extends Section
             unset($data['coupon_code']);
             unset($data['uses_per_coupon']);
         }
+
+        unset($data['from_date']);
+        unset($data['to_date']);
+
         return $this->_getData($data, $element);
     }
 
