@@ -321,11 +321,9 @@
 }
 
 .form-orders-search {
-    &:extend(.abs-forms-general-desktop all);
     .field {
-        &.email,
-        &.zip {
-            margin-bottom: 0;
+        &:last-child {
+            margin-bottom: @indent__base;
         }
     }
 }
