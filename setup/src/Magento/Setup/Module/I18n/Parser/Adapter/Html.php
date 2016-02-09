@@ -17,7 +17,7 @@ class Html extends AbstractAdapter
      * <span><!-- ko i18n: 'Next'--><!-- /ko --></span>
      * <th class="col col-method" data-bind="i18n: 'Select Method'"></th>
      */
-    const HTML_FILTER = "/i18n:\s?'(?<value>.*)'/i";
+    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i";
 
     /**
      * {@inheritdoc}
