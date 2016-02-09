@@ -58,6 +58,7 @@
             <xs:element type="columnsControls" name="columnsControls"/>
             <xs:element type="container" name="listingToolbar"/>
             <xs:element type="action" name="action"/>
+            <xs:element type="actionDelete" name="actionDelete"/>
             <xs:element name="component" type="component" />
             <xs:element name="actionsColumn" type="actionsColumn" />
             <xs:element name="selectionsColumn" type="selectionsColumn" />
