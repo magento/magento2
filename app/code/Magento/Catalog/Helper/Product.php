@@ -415,15 +415,16 @@ class Product extends \Magento\Framework\Url\Helper\Data
         }
 
         try {
-//            $t = microtime(1);
-//            $product = $this->productRepository->getById($productId, false, $this->_storeManager->getStore()->getId());
-//            var_dump('res', -$t + microtime(1));
-//            $t = microtime(1);
-            $product  = ObjectManager::getInstance()->get('\Magento\Catalog\Model\ProductFactory')
-                ->create()
-                ->setStoreId($this->_storeManager->getStore()->getId())
-                ->load($productId);
-           // var_dump('res', -$t + microtime(1));
+            /*$t = microtime(1);
+            $product = $this->productRepository
+                  ->getById($productId, false, $this->_storeManager->getStore()->getId());
+            var_dump('res', -$t + microtime(1));
+            $t = microtime(1);*/
+            $product = ObjectManager::getInstance()->get('\Magento\Catalog\Model\ProductFactory')->create()
+                ->setStoreId(
+                    $this->_storeManager->getStore()->getId()
+                )->load($productId);
+            // var_dump('res', -$t + microtime(1));
         } catch (NoSuchEntityException $e) {
             return false;
         }
