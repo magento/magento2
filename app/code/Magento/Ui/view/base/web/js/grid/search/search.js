@@ -45,10 +45,11 @@ define([
          * @returns {Search} Chainable.
          */
         initialize: function () {
+            var urlParams = window.location.href.slice(window.location.href.indexOf('search')).split('&');
+
             this._super()
                 .initChips();
 
-            var urlParams = window.location.href.slice(window.location.href.indexOf('search')).split('&');
             if (urlParams[0]) {
                 var searchTerm = urlParams[0].split('=');
                 if (searchTerm[1]) {
