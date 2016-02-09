@@ -48,6 +48,13 @@ define([
             this._super()
                 .initChips();
 
+            var urlParams = window.location.href.slice(window.location.href.indexOf('search')).split('&');
+            if (urlParams[0]) {
+                var searchTerm = urlParams[0].split('=');
+                if (searchTerm[1]) {
+                    this.apply(searchTerm[1]);
+                }
+            }
             return this;
         },
 
