@@ -18,6 +18,7 @@ define([
          * Hide fields on coupon tab
          */
         onUpdate: function () {
+            // @todo: remove this workaround after resolving MAGETWO-48846
 
             /* eslint-disable eqeqeq */
             var isDisabled = this.value() != this.displayOnlyForCouponType ||
