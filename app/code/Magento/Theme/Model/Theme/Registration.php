@@ -135,6 +135,26 @@ class Registration
     }
 
     /**
+     * Get physical themes
+     *
+     * @return ThemeInterface
+     */
+    public function getAllPhysicalThemes()
+    {
+        return $this->_themeCollection;
+    }
+
+    /**
+     * Get DB themes
+     *
+     * @return ThemeInterface
+     */
+    public function getAllDbThemes()
+    {
+        return $this->_collectionFactory->create();
+    }
+
+    /**
      * Get theme from DB by full path
      *
      * @param string $fullPath

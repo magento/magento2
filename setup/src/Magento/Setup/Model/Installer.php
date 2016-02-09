@@ -321,7 +321,7 @@ class Installer
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
         $estimatedModules = $this->createModulesConfig($request, true);
-        $total = count($script) + 3 * count(array_filter($estimatedModules));
+        $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
 
         $this->log->log('Starting Magento installation:');
@@ -824,6 +824,17 @@ class Installer
                 }
                 $this->logProgress();
             }
+        } else if ($type === 'data') {
+            $this->log->log('Data post-updates:');
+            foreach ($moduleNames as $moduleName) {
+                $this->log->log("Module '{$moduleName}':");
+                $modulePostUpdater = $this->getSchemaDataHandler($moduleName, 'data-recurring');
+                if ($modulePostUpdater) {
+                    $this->log->logInline("Running data recurring.. ");
+                    $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
+                }
+                $this->logProgress();
+            }
         }
     }
 
@@ -1165,6 +1176,10 @@ class Installer
             case 'data-upgrade':
                 $className .= '\UpgradeData';
                 $interface = self::DATA_UPGRADE;
+                break;
+            case 'data-recurring':
+                $className .= '\RecurringData';
+                $interface = self::DATA_INSTALL;
                 break;
             default:
                 throw new \Magento\Setup\Exception("$className does not exist");
