@@ -39,6 +39,13 @@ class MenuBuilder
      */
     protected $engineResolver;
 
+    /**
+     * MenuBuilder constructor.
+     *
+     * @param MenuConfig $menuConfig
+     * @param ConfigInterface $searchFeatureConfig
+     * @param EngineResolver $engineResolver
+     */
     public function __construct(
         MenuConfig $menuConfig,
         ConfigInterface $searchFeatureConfig,
