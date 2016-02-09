@@ -62,6 +62,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $coreRegistry;
 
     /**
+     * @var \Magento\SalesRule\Model\Rule\Metadata\ValueProvider
+     */
+    protected $metadataValueProvider;
+
+    /**
      * DataProvider constructor.
      *
      * @param string $name
@@ -90,6 +95,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         DataObject $objectConverter,
         \Magento\SalesRule\Model\RuleFactory $salesRuleFactory,
         \Magento\Framework\Registry $registry,
+        \Magento\SalesRule\Model\Rule\Metadata\ValueProvider $metadataValueProvider,
         array $meta = [],
         array $data = []
     ) {
@@ -100,163 +106,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->objectConverter = $objectConverter;
         $this->salesRuleFactory = $salesRuleFactory;
         $this->coreRegistry = $registry;
+        $this->metadataValueProvider = $metadataValueProvider;
         $meta = array_replace_recursive($this->getMetadataValues(), $meta);
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
+     * Get metadata values
+     *
      * @return array
      */
     protected function getMetadataValues()
     {
-        $customerGroups = $this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems();
-        $applyOptions = [
-            ['label' => __('Percent of product price discount'), 'value' =>  Rule::BY_PERCENT_ACTION],
-            ['label' => __('Fixed amount discount'), 'value' => Rule::BY_FIXED_ACTION],
-            ['label' => __('Fixed amount discount for whole cart'), 'value' => Rule::BY_PERCENT_ACTION],
-            ['label' => __('Buy X get Y free (discount amount is Y)'), 'value' => Rule::BUY_X_GET_Y_ACTION]
-        ];
-
-        $couponTypesOptions = [];
-        $couponTypes = $this->salesRuleFactory->create()->getCouponTypes();
-        foreach ($couponTypes as $key => $couponType) {
-            $couponTypesOptions[] = [
-                'label' => $couponType,
-                'value' => $key,
-            ];
-        }
-
         $rule = $this->coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
-        /**
-         * @todo Avoid using of registry
-         */
-        $labels = $rule ? $rule->getStoreLabels() : [];
-
-        return [
-            'rule_information' => [
-                'children' => [
-                    'website_ids' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'options' => $this->store->getWebsiteValuesForForm(),
-                                ],
-                            ],
-                        ],
-                    ],
-                    'is_active' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'options' => [
-                                        ['label' => __('Active'), 'value' => '1'],
-                                        ['label' => __('Inactive'), 'value' => '0']
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'customer_group_ids' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'options' => $this->objectConverter->toOptionArray($customerGroups, 'id', 'code'),
-                                ],
-                            ],
-                        ],
-                    ],
-                    'coupon_type' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'options' => $couponTypesOptions,
-                                ],
-                            ],
-                        ],
-                    ],
-                    'is_rss' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'options' => [
-                                        ['label' => __('Yes'), 'value' => '1'],
-                                        ['label' => __('No'), 'value' => '0']
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ]
-            ],
-            'actions' => [
-                'children' => [
-                    'simple_action' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'options' => $applyOptions
-                                ],
-                            ]
-                        ]
-                    ],
-                    'discount_amount' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'value' => '0',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'discount_qty' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'value' => '0',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'apply_to_shipping' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'options' => [
-                                        ['label' => __('Yes'), 'value' => '1'],
-                                        ['label' => __('No'), 'value' => '0']
-                                    ]
-                                ],
-                            ],
-                        ],
-                    ],
-                    'stop_rules_processing' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'options' => [
-                                        ['label' => __('Yes'), 'value' => '1'],
-                                        ['label' => __('No'), 'value' => '0'],
-                                    ],
-                                ],
-                            ]
-                        ]
-                    ],
-                ]
-            ],
-            'labels' => [
-                'children' => [
-                    'store_labels[0]' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'value' => isset($labels[0]) ? $labels[0] : '',
-                                ],
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-        ];
+        return $this->metadataValueProvider->getMetadataValues($rule);
     }
 
     /**
