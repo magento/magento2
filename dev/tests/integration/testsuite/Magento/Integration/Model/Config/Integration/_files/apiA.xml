@@ -11,13 +11,14 @@
          in etc/acl.xml of modules and subsequently mapped to web APIs in webapi.xml. -->
         <resources>
             <resource name="Magento_Customer::manage" />
+            <resource name="Magento_Customer::online" />
             <resource name="Magento_Sales::capture" />
             <resource name="Magento_SalesRule::quote" />
         </resources>
     </integration>
     <integration name="TestIntegration2">
         <resources>
-            <resource name="Magento_Sales::capture" />
+            <resource name="Magento_Catalog::product_read" />
         </resources>
     </integration>
 </integrations>
