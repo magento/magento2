@@ -80,16 +80,6 @@ class WeeeTest extends AbstractModifierTest
     {
         $this->assertSame([], $this->getModel()->modifyMeta([]));
 
-        $this->sourceCountryMock->expects($this->once())
-            ->method('toOptionArray')
-            ->willReturn([]);
-        $this->websiteManagerMock->expects($this->once())
-            ->method('getWebsites')
-            ->willReturn([]);
-        $this->websiteManagerMock->expects($this->once())
-            ->method('isMultiWebsites')
-            ->willReturn(true);
-
         $this->assertNotEmpty($this->getModel()->modifyMeta([
             'weee_group' => [
                 'children' => [
