@@ -45,8 +45,8 @@ define([
          * @returns {Search} Chainable.
          */
         initialize: function () {
-            var urlParams = window.location.href.slice(window.location.href.indexOf('search')).split('&');
-            var searchTerm = [];
+            var urlParams = window.location.href.slice(window.location.href.indexOf('search')).split('&'),
+                searchTerm = [];
 
             this._super()
                 .initChips();
@@ -58,6 +58,7 @@ define([
                     this.apply(searchTerm[1]);
                 }
             }
+
             return this;
         },
 
