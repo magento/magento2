@@ -39,8 +39,11 @@ class MenuBuilder
      */
     protected $engineResolver;
 
-    public function __construct(MenuConfig $menuConfig, ConfigInterface $searchFeatureConfig, EngineResolver $engineResolver)
-    {
+    public function __construct(
+        MenuConfig $menuConfig,
+        ConfigInterface $searchFeatureConfig,
+        EngineResolver $engineResolver
+    ) {
         $this->menuConfig = $menuConfig;
         $this->searchFeatureConfig = $searchFeatureConfig;
         $this->engineResolver = $engineResolver;
@@ -48,8 +51,10 @@ class MenuBuilder
 
     /**
      * Removes 'Search Synonyms' from the menu if 'synonyms' is not supported
+     *
      * @param Builder $subject
      * @return Menu
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetResult(Builder $subject)
     {
