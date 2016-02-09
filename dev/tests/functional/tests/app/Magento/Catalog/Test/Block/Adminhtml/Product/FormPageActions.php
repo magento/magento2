@@ -50,7 +50,7 @@ class FormPageActions extends ParentFormPageActions
      *
      * @var string
      */
-    protected $saveButton = '#save-split-button-button';
+    protected $saveButton = '#save-button';
 
     /**
      * Click on "Save" button

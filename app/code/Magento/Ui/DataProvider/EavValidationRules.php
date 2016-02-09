@@ -32,7 +32,7 @@ class EavValidationRules
     public function build(AbstractAttribute $attribute, array $data)
     {
         $rules = [];
-        if (isset($data['required']) && $data['required'] == 1) {
+        if (!empty($data['arguments']['data']['config']['required'])) {
             $rules['required-entry'] = true;
         }
         $validation = $attribute->getValidateRules();

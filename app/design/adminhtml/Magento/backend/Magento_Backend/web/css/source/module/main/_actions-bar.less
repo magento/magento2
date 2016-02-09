@@ -97,6 +97,11 @@
             .lib-vendor-prefix-order(2);
         }
 
+        &.action-secondary {
+            &:extend(.abs-action-secondary all);
+            &:extend(.abs-action-l all);
+        }
+
         &.save {
             //  ToDo UI: Should be changed to ._save
             &:not(.primary) {

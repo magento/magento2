@@ -270,7 +270,7 @@ define([
 
                     obj[optionTitle] = applyToObject(option, optionsText + 'title', value);
 
-                    label = label.replace(nbspRe, '').trim();
+                    label = label.replace(nbspRe, '');
 
                     if (Array.isArray(value)) {
                         obj[optionsText] = strPad('&nbsp;', nestedOptionsLevel * 4) + label;
