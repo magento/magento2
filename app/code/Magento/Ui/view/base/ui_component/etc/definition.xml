@@ -188,9 +188,9 @@
             </item>
         </argument>
     </wysiwyg>
-    <action_delete class="Magento\Ui\Component\Container">
+    <actionDelete class="Magento\Ui\Component\Form\Element\ActionDelete">
         <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
+            <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
                 <item name="config" xsi:type="array">
                     <item name="elementTmpl" xsi:type="string">ui/dynamic-rows/cells/action-delete</item>
@@ -198,7 +198,7 @@
                 </item>
             </item>
         </argument>
-    </action_delete>
+    </actionDelete>
     <input class="Magento\Ui\Component\Form\Element\Input">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">

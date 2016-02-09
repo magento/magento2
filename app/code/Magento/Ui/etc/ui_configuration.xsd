@@ -42,6 +42,7 @@
                     <xs:element type="columnsControls" name="columnsControls"/>
                     <xs:element type="listingToolbarConfiguration" name="listingToolbar"/>
                     <xs:element type="htmlContent" name="htmlContent"/>
+                    <xs:element type="actionDelete" name="actionDelete"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -112,7 +113,10 @@
     <xs:complexType name="dynamicRowsConfiguration">
         <xs:complexContent>
             <xs:extension base="dynamicRows">
-                <xs:choice minOccurs="0" maxOccurs="unbounded"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element type="containerConfiguration" name="container"/>
+                    <xs:element type="actionDelete" name="actionDelete"/>
+                </xs:choice>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
