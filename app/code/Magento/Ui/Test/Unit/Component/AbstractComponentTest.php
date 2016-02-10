@@ -100,16 +100,6 @@ class AbstractComponentTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testToHtml()
-    {
-        $renderResult = 'some html code';
-        $this->initTestRender($renderResult);
-        $this->assertEquals($renderResult, $this->abstractComponent->toHtml());
-    }
-
-    /**
-     * @return void
-     */
     public function testGetComponentNotExists()
     {
         $this->assertNull($this->abstractComponent->getComponent('nameComponent'));

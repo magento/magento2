@@ -101,7 +101,7 @@ class Attributes extends AbstractModifier
             'Magento_Catalog/js/components/attributes-fieldset';
         $meta[static::GROUP_CODE]['arguments']['data']['config']['visible'] =
             !empty($meta[static::GROUP_CODE]['children']);
-        $meta[static::GROUP_CODE]['arguments']['data']['config']['add_attribute_modal'] = [
+        $meta['add_attribute_modal']['arguments']['data']['config'] = [
             'isTemplate' => false,
             'componentType' => Component\Modal::NAME,
             'dataScope' => '',
@@ -135,7 +135,7 @@ class Attributes extends AbstractModifier
                 ],
             ],
         ];
-        $meta[static::GROUP_CODE]['children'] = [
+        $meta['add_attribute_modal']['children'] = [
             'product_attributes_grid' => [
                 'arguments' => [
                     'data' => [

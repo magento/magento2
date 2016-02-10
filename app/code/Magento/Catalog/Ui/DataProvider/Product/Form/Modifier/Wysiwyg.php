@@ -17,14 +17,14 @@ class Wysiwyg extends AbstractModifier
     /**
      * @var ArrayManager
      */
-    protected $arrayManger;
+    protected $arrayManager;
 
     /**
      * @param ArrayManager $arrayManager
      */
     public function __construct(ArrayManager $arrayManager)
     {
-        $this->arrayManger = $arrayManager;
+        $this->arrayManager = $arrayManager;
     }
 
     /**
@@ -58,8 +58,19 @@ class Wysiwyg extends AbstractModifier
         foreach ($fields as $attributeCode) {
             if ($this->getGroupCodeByField($meta, $attributeCode)) {
                 $attributePath = $this->getElementArrayPath($meta, $attributeCode);
+                $containerPath = $this->getElementArrayPath($meta, static::CONTAINER_PREFIX . $attributeCode);
 
-                $meta = $this->arrayManger->merge($attributePath, $meta, [
+                $meta = $this->arrayManager->merge($containerPath, $meta, [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'component' => 'Magento_Ui/js/form/components/group',
+                            ],
+                        ],
+                    ],
+                ]);
+
+                $meta = $this->arrayManager->merge($attributePath, $meta, [
                     'arguments' => [
                         'data' => [
                             'config' => [
