@@ -299,55 +299,54 @@ class General extends AbstractModifier
      */
     protected function customizeNewDateRangeField(array $meta)
     {
-        $mainElement = 'news_from_date';
+        $fromField = 'news_from_date';
+        $toField = 'news_to_date';
 
-        $mainElementPath = $this->getElementArrayPath($meta, $mainElement);
-        $meta = $this->grouper->groupMetaElements(
-            $meta,
-            [
-                $mainElement => [
-                    'meta' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'label' => __('Set Product as New From'),
-                                    'scopeLabel' => null,
-                                    'additionalClasses' => 'admin__field-date'
-                                ],
-                            ],
-                        ],
-                    ]
-                ],
-                'news_to_date' => [
-                    'meta' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'label' => __('To'),
-                                    'scopeLabel' => null,
-                                    'additionalClasses' => 'admin__field-date',
-                                ],
-                            ],
-                        ]
-                    ]
+        $fromFieldPath = $this->getElementArrayPath($meta, $fromField);
+        $toFieldPath = $this->getElementArrayPath($meta, $toField);
+
+        if ($fromFieldPath && $toFieldPath) {
+            $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
+            $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
+            $scopeLabel = $this->arrayManager->get($fromFieldPath . self::META_CONFIG_PATH . '/scopeLabel', $meta);
+
+            $meta = $this->arrayManager->merge(
+                $fromFieldPath . self::META_CONFIG_PATH,
+                $meta,
+                [
+                    'label' => __('Set Product as New From'),
+                    'scopeLabel' => null,
+                    'additionalClasses' => 'admin__field-date',
                 ]
-            ],
-            [
-                'targetCode' => 'news_date_range',
-                'meta' => [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'label' => __('Set Product as New From'),
-                                'additionalClasses' => 'admin__control-grouped-date',
-                                'breakLine' => false,
-                                'scopeLabel' => $this->arrayManager->get($mainElementPath . '/scopeLabel', $meta),
-                            ],
-                        ],
-                    ],
+            );
+            $meta = $this->arrayManager->merge(
+                $toFieldPath . self::META_CONFIG_PATH,
+                $meta,
+                [
+                    'label' => __('To'),
+                    'scopeLabel' => null,
+                    'additionalClasses' => 'admin__field-date',
                 ]
-            ]
-        );
+            );
+            $meta = $this->arrayManager->merge(
+                $fromContainerPath . self::META_CONFIG_PATH,
+                $meta,
+                [
+                    'label' => __('Set Product as New From'),
+                    'additionalClasses' => 'admin__control-grouped-date',
+                    'breakLine' => false,
+                    'component' => 'Magento_Ui/js/form/components/group',
+                    'scopeLabel' => $scopeLabel,
+                ]
+            );
+            $meta = $this->arrayManager->set(
+                $fromContainerPath . '/children/' . $toField,
+                $meta,
+                $this->arrayManager->get($toFieldPath, $meta)
+            );
+
+            $meta =  $this->arrayManager->remove($toContainerPath, $meta);
+        }
 
         return $meta;
     }
