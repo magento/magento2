@@ -222,6 +222,20 @@ class General extends AbstractModifier
                     ]
                 );
 
+                $containerPath = $this->getElementArrayPath(
+                    $meta,
+                    static::CONTAINER_PREFIX . AttributeConstantsInterface::CODE_WEIGHT
+                );
+                $meta = $this->arrayManager->merge($containerPath, $meta, [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'component' => 'Magento_Ui/js/form/components/group',
+                            ],
+                        ],
+                    ],
+                ]);
+
                 $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
                     . AttributeConstantsInterface::CODE_HAS_WEIGHT;
                 $meta = $this->arrayManager->set(

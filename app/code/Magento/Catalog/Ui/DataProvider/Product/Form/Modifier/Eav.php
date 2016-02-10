@@ -231,7 +231,6 @@ class Eav extends AbstractModifier
                         'config' => [
                             'formElement' => 'container',
                             'componentType' => 'container',
-                            'component' => 'Magento_Ui/js/form/components/group',
                             'breakLine' => false,
                             'label' => __($attribute->getDefaultFrontendLabel()),
                             'sortOrder' => $sortKey * self::SORT_ORDER_MULTIPLIER,
@@ -439,7 +438,8 @@ class Eav extends AbstractModifier
                         'visible' => $attribute->getIsVisible(),
                         'required' => $attribute->getIsRequired(),
                         'notice' => $attribute->getNote(),
-                        'default' => $attribute->getDefaultValue()
+                        'default' => $attribute->getDefaultValue(),
+                        'label' => __($attribute->getDefaultFrontendLabel()),
                     ],
                 ],
             ],
