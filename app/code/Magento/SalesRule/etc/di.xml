@@ -42,7 +42,22 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SalesRule\Model\ResourceModel\Rule\Collection" shared="false" />
+    <type name="Magento\SalesRule\Model\ResourceModel\Rule\Collection" shared="false">
+        <arguments>
+            <argument name="associatedEntitiesMap" xsi:type="array">
+                <item name="website" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_website</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">website_id</item>
+                </item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_customer_group</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">customer_group_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Quote\Model\Quote\Config">
         <plugin name="append_sales_rule_keys_to_quote" type="Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes"/>
     </type>
@@ -73,6 +88,57 @@
     <type name="Magento\SalesRule\Model\ResourceModel\Report\Rule\Updatedat">
         <arguments>
             <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\ResourceModel\Rule">
+        <arguments>
+            <argument name="associatedEntitiesMap" xsi:type="array">
+                <item name="website" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_website</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">website_id</item>
+                </item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_customer_group</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">customer_group_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\Entity\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\SalesRule\Api\Data\RuleInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">salesrule</item>
+                    <item name="identifierField" xsi:type="string">rule_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\OrchestratorPool">
+        <arguments>
+            <argument name="operations" xsi:type="array">
+                <item name="default" xsi:type="array">
+                    <item name="read" xsi:type="string">Magento\Framework\Model\Operation\Read</item>
+                    <item name="create" xsi:type="string">Magento\Framework\Model\Operation\Write\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\Model\Operation\Write\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\Model\Operation\Write\Delete</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="salesRule" xsi:type="array">
+                    <item name="Magento\SalesRule\Api\Data\RuleInterface" xsi:type="array">
+                        <item name="read" xsi:type="string">Magento\SalesRule\Model\ResourceModel\ReadHandler</item>
+                        <item name="create" xsi:type="string">Magento\SalesRule\Model\ResourceModel\SaveHandler</item>
+                        <item name="update" xsi:type="string">Magento\SalesRule\Model\ResourceModel\SaveHandler</item>
+                    </item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>
