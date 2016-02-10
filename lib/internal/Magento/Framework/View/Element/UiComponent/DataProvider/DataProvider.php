@@ -190,7 +190,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
-        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
+        return isset($this->meta[$fieldSetName]['children']) ? $this->meta[$fieldSetName]['children'] : [];
     }
 
     /**
@@ -200,8 +200,8 @@ class DataProvider implements DataProviderInterface
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
-        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
-            ? $this->meta[$fieldSetName]['fields'][$fieldName]
+        return isset($this->meta[$fieldSetName]['children'][$fieldName])
+            ? $this->meta[$fieldSetName]['children'][$fieldName]
             : [];
     }
 
