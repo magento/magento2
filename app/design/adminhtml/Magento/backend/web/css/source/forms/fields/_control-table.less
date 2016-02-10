@@ -16,6 +16,9 @@
 @control-table-cell__padding-vertical: 1.3rem;
 @control-table-cell__padding-horizontal: 1rem;
 
+@control-table-horizontal-dragover-mark__width: 3px;
+@control-table-horizontal-dragover-mark__color: #008bdb;
+
 //
 
 .admin__control-table-wrapper {
@@ -55,6 +58,18 @@
             }
         }
 
+        &._dragover-top {
+            td {
+                box-shadow: inset 0 @control-table-horizontal-dragover-mark__width 0 0 @control-table-horizontal-dragover-mark__color;
+            }
+        }
+
+        &._dragover-bottom {
+            td {
+                box-shadow: inset 0 -@control-table-horizontal-dragover-mark__width 0 0 @control-table-horizontal-dragover-mark__color;
+            }
+        }
+
         &._dragged {
             td,
             th {
@@ -67,7 +82,7 @@
     th {
         background-color: @control-table-cell__background-color;
         border: 0;
-        border-bottom: 1px solid @control-table-cell__border-color;
+        border-top: 1px solid @control-table-cell__border-color;
         padding: @control-table-cell__padding-vertical @control-table-cell__padding-horizontal @control-table-cell__padding-vertical 0;
         text-align: left;
         vertical-align: top;
@@ -166,5 +181,14 @@
     &._dragged {
         position: absolute;
         z-index: 999;
+    }
+
+    &.admin__control-table {
+        .admin__control-fields {
+            > .admin__field {
+                border: 0;
+                padding: 0;
+            }
+        }
     }
 }
