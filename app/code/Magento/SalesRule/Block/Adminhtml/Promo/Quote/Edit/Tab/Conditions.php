@@ -134,7 +134,9 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * @param \Magento\SalesRule\Api\Data\RuleInterface $model
+     * Handles addition of conditions tab to supplied form.
+     *
+     * @param \Magento\SalesRule\Model\Rule $model
      * @param string $fieldsetId
      * @param string $formName
      * @return \Magento\Framework\Data\Form
@@ -199,6 +201,8 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
+     * Handles addition of form name to condition and its conditions.
+     *
      * @param \Magento\Rule\Model\Condition\AbstractCondition $conditions
      * @param string $formName
      * @return void
