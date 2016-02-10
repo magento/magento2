@@ -5,10 +5,10 @@
  */
 namespace Magento\Search\Test\Unit\Model\SearchEngine;
 
-use \Magento\Backend\Model\Menu;
-use \Magento\Backend\Model\Menu\Builder;
-use \Magento\Framework\Search\SearchEngine\ConfigInterface;
-use \Magento\Search\Model\EngineResolver;
+use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Builder;
+use Magento\Framework\Search\SearchEngine\ConfigInterface;
+use Magento\Search\Model\EngineResolver;
 use Magento\Backend\Model\Menu\Config as MenuConfig;
 
 class MenuBuilderTest extends \PHPUnit_Framework_TestCase
@@ -37,14 +37,14 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGetResult()
     {
-        $menu = $this->getMock('\Magento\Backend\Model\Menu', [], [], '', false);
-        $this->menuConfig->expects($this->once())->method('getMenu')->willReturn($menu);
         $this->engineResolver->expects($this->once())->method('getCurrentSearchEngine')->willReturn('mysql');
         $this->searchFeatureConfig
             ->expects($this->once())
             ->method('isFeatureSupported')
             ->with('synonyms', 'mysql')
             ->willReturn(false);
+        /** @var \Magento\Backend\Model\Menu $menu */
+        $menu = $this->getMock('\Magento\Backend\Model\Menu', [], [], '', false);
         $menu->expects($this->once())->method('remove')->willReturn(true);
 
         /** @var \Magento\Backend\Model\Menu\Builder $menuBuilder */
@@ -59,6 +59,9 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
                 'engineResolver' => $this->engineResolver
             ]
         );
-        $this->assertInstanceOf('\Magento\Backend\Model\Menu', $searchMenuBuilder->afterGetResult($menuBuilder));
+        $this->assertInstanceOf(
+            '\Magento\Backend\Model\Menu',
+            $searchMenuBuilder->afterGetResult($menuBuilder, $menu)
+        );
     }
 }

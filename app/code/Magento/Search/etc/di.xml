@@ -82,6 +82,6 @@
         </arguments>
     </type>
     <type name="Magento\Backend\Model\Menu\Builder">
-        <plugin name="SearchTermMenuBuiler" type="Magento\Search\Model\SearchEngine\MenuBuilder" />
+        <plugin name="SearchTermMenuBuilder" type="Magento\Search\Model\SearchEngine\MenuBuilder" />
     </type>
 </config>
