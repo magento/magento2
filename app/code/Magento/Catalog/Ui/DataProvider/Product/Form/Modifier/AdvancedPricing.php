@@ -525,6 +525,7 @@ class AdvancedPricing extends AbstractModifier
                     'label' => __('Special Price From'),
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
+                    'component' => 'Magento_Ui/js/form/components/group',
                     'scopeLabel' =>
                         $this->arrayManager->get($pathFrom . '/arguments/data/config/scopeLabel', $this->meta),
                 ]
