@@ -123,7 +123,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getData()
     {
