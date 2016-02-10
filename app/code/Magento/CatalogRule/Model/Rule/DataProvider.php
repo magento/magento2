@@ -8,14 +8,16 @@ namespace Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 use Magento\Store\Model\System\Store;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Convert\DataObject;
+use Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Class DataProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -50,7 +52,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $objectConverter;
 
     /**
-     * DataProvider constructor.
+     * @var SimpleActionOptionsProvider
+     */
+    protected $actionOptions;
+
+    /**
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -59,9 +70,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param GroupRepositoryInterface $groupRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataObject $objectConverter
+     * @param SimpleActionOptionsProvider $actionOptions
+     * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -73,32 +85,31 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         GroupRepositoryInterface $groupRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DataObject $objectConverter,
+        SimpleActionOptionsProvider $actionOptions,
+        DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = []
     ) {
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        $this->groupRepository = $groupRepository;
         $this->collection = $collectionFactory->create();
         $this->store = $store;
-        $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->objectConverter = $objectConverter;
-        $this->initMeta();
+        $this->actionOptions = $actionOptions;
+        $this->dataPersistor = $dataPersistor;
+
+        $meta = array_replace_recursive($meta, $this->getMetadata());
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
-     * @return void
+     * @return array
      */
-    protected function initMeta()
+    protected function getMetadata()
     {
         $customerGroups = $this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems();
-        $applyOptions = [
-            ['label' => __('Apply as percentage of original'), 'value' => 'by_percent'],
-            ['label' => __('Apply as fixed amount'), 'value' => 'by_fixed'],
-            ['label' => __('Adjust final price to this percentage'), 'value' => 'to_percent'],
-            ['label' => __('Adjust final price to discount value'), 'value' => 'to_fixed']
-        ];
 
-        $this->meta = [
+        return [
             'rule_information' => [
                 'children' => [
                     'website_ids' => [
@@ -139,7 +150,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                         'arguments' => [
                             'data' => [
                                 'config' => [
-                                    'options' => $applyOptions
+                                    'options' => $this->actionOptions->toOptionArray()
                                 ],
                             ],
                         ],
@@ -173,6 +184,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         /** @var Rule $rule */
         foreach ($items as $rule) {
             $rule->load($rule->getId());
+            $this->loadedData[$rule->getId()] = $rule->getData();
+        }
+
+        $data = $this->dataPersistor->get('catalog_rule');
+        if (!empty($data)) {
+            $rule = $this->collection->getNewEmptyItem();
+            $rule->setData($data);
             $this->loadedData[$rule->getId()] = $rule->getData();
         }
 
