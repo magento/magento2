@@ -63,11 +63,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     private $filterBuilder;
 
     /**
-     * @var LinkManagementInterface|MockObject
-     */
-    private $linkManagement;
-
-    /**
      * @var ProductRepository|MockObject
      */
     private $productRepository;
@@ -89,7 +84,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->initConfigurableFactoryMock();
 
-        $this->linkManagement = $this->getMock(LinkManagementInterface::class);
 
         $this->productAttributeRepository = $this->getMock(ProductAttributeRepositoryInterface::class);
 
@@ -112,7 +106,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             $this->optionRepository,
             $this->configurableFactory,
             $this->productAttributeRepository,
-            $this->linkManagement,
             $this->productRepository,
             $this->searchCriteriaBuilder,
             $this->filterBuilder
@@ -154,7 +147,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::once())
             ->method('getTypeId')
             ->willReturn(ConfigurableModel::TYPE_CODE);
-        $product->expects(static::exactly(2))
+        $product->expects(static::exactly(1))
             ->method('getSku')
             ->willReturn($sku);
 
@@ -184,23 +177,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->productAttributeRepository->expects(static::never())
             ->method('get');
 
-        $searchCriteria = $this->buildSearchCriteria([]);
-        $list = $this->getMock(ProductSearchResultsInterface::class);
-        $this->productRepository->expects(static::once())
-            ->method('getList')
-            ->with($searchCriteria)
-            ->willReturn($list);
-        $list->expects(static::once())
-            ->method('getItems')
-            ->willReturn([]);
-
-        $this->linkManagement->expects(static::once())
-            ->method('getChildren')
-            ->with($sku)
-            ->willReturn([]);
-        $this->linkManagement->expects(static::never())
-            ->method('removeChild');
-
         $entity = $this->saveHandler->execute('Entity', $product);
         static::assertSame($product, $entity);
     }
@@ -213,7 +189,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $attributeId = 90;
         $sku = 'config-1';
         $id = 25;
-        $linkProductSku = 'link-product';
         $configurableProductLinks = [1, 2, 3];
 
         $product = $this->getMockBuilder(Product::class)
@@ -223,7 +198,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::once())
             ->method('getTypeId')
             ->willReturn(ConfigurableModel::TYPE_CODE);
-        $product->expects(static::exactly(4))
+        $product->expects(static::exactly(2))
             ->method('getSku')
             ->willReturn($sku);
 
@@ -270,10 +245,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('saveProducts')
             ->with($product, $configurableProductLinks);
 
-        $searchCriteria = $this->buildSearchCriteria($configurableProductLinks);
-
-        $this->processDeleteOldLinks($searchCriteria, $sku, $linkProductSku);
-
         $entity = $this->saveHandler->execute('Entity', $product);
         static::assertSame($product, $entity);
     }
@@ -298,38 +269,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->configurableFactory->expects(static::any())
             ->method('create')
             ->willReturn($this->configurable);
-    }
-
-    /**
-     * Get mock for search criteria
-     *
-     * @param array $ids
-     * @return MockObject
-     */
-    private function buildSearchCriteria(array $ids)
-    {
-        $this->filterBuilder->expects(static::once())
-            ->method('setField')
-            ->willReturnSelf();
-        $this->filterBuilder->expects(static::once())
-            ->method('setConditionType')
-            ->with('in')
-            ->willReturnSelf();
-        $this->filterBuilder->expects(static::once())
-            ->method('setValue')
-            ->with($ids)
-            ->willReturnSelf();
-        $this->filterBuilder->expects(static::once())
-            ->method('create');
-
-        $this->searchCriteriaBuilder->expects(static::once())
-            ->method('addFilters')
-            ->willReturnSelf();
-        $searchCriteria = $this->getMock(SearchCriteriaInterface::class);
-        $this->searchCriteriaBuilder->expects(static::once())
-            ->method('create')
-            ->willReturn($searchCriteria);
-        return $searchCriteria;
     }
 
     /**
@@ -362,55 +301,5 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($sku, $attribute)
             ->willReturn($id);
-    }
-
-    /**
-     * Mock for delete product links
-     *
-     * @param MockObject $searchCriteria
-     * @param $sku
-     * @param $linkProductSku
-     * @return void
-     */
-    private function processDeleteOldLinks(MockObject $searchCriteria, $sku, $linkProductSku)
-    {
-        $list = $this->getMock(ProductSearchResultsInterface::class);
-        $this->productRepository->expects(static::once())
-            ->method('getList')
-            ->with($searchCriteria)
-            ->willReturn($list);
-
-        $product1 = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getSku'])
-            ->getMock();
-        $product1->expects(static::once())
-            ->method('getSku')
-            ->willReturn('config-1');
-        $product2 = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getSku'])
-            ->getMock();
-        $product2->expects(static::once())
-            ->method('getSku')
-            ->willReturn('config-2');
-
-        $items = [$product1, $product2];
-        $list->expects(static::once())
-            ->method('getItems')
-            ->willReturn($items);
-
-        $linkProduct = $this->getMock(ProductInterface::class);
-        $links = [$linkProduct];
-        $this->linkManagement->expects(static::once())
-            ->method('getChildren')
-            ->with($sku)
-            ->willReturn($links);
-        $linkProduct->expects(static::exactly(2))
-            ->method('getSku')
-            ->willReturn($linkProductSku);
-        $this->linkManagement->expects(static::once())
-            ->method('removeChild')
-            ->with($sku, $linkProductSku);
     }
 }

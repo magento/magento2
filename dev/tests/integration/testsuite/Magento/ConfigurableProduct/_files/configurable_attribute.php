@@ -3,34 +3,32 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+
+$eavConfig = Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
 $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
-
-//if ($attribute instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
-//    && $attribute->getId()
-//) {
-//    $attribute->delete();
-//}
-
-//$resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-//->create('Magento\Catalog\Model\CategorySetup');
 
 $eavConfig->clear();
 
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
+$installer = Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 if (!$attribute->getId()) {
     /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-    $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    $attribute = Bootstrap::getObjectManager()->create(
         'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
     );
+
+    /** @var AttributeRepositoryInterface $attributeRepository */
+    $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepositoryInterface::class);
 
     $attribute->setData(
         [
             'attribute_code' => 'test_configurable',
             'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
             'is_global' => 1,
+            'default' => ['option_0'],
             'is_user_defined' => 1,
             'frontend_input' => 'select',
             'is_unique' => 0,
@@ -54,12 +52,12 @@ if (!$attribute->getId()) {
         ]
     );
 
-    $attribute->save();
+    $attributeRepository->save($attribute);
 }
 
 /* Assign attribute to attribute set */
 $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
 
 /** @var \Magento\Eav\Model\Config $eavConfig */
-$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+$eavConfig = Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
 $eavConfig->clear();
