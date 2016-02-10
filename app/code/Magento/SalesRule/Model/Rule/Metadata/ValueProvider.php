@@ -12,6 +12,9 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Convert\DataObject;
 
+/**
+ * Metadata provider for sales rule edit form.
+ */
 class ValueProvider
 {
     /**
@@ -40,13 +43,6 @@ class ValueProvider
     protected $salesRuleFactory;
 
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $coreRegistry;
-
-    /**
      * Initialize dependencies.
      *
      * @param Store $store
@@ -54,25 +50,24 @@ class ValueProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DataObject $objectConverter
      * @param \Magento\SalesRule\Model\RuleFactory $salesRuleFactory
-     * @param \Magento\Framework\Registry $coreRegistry
      */
     public function __construct(
         Store $store,
         GroupRepositoryInterface $groupRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DataObject $objectConverter,
-        \Magento\SalesRule\Model\RuleFactory $salesRuleFactory,
-        \Magento\Framework\Registry $coreRegistry
+        \Magento\SalesRule\Model\RuleFactory $salesRuleFactory
     ) {
         $this->store = $store;
         $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->objectConverter = $objectConverter;
         $this->salesRuleFactory = $salesRuleFactory;
-        $this->coreRegistry = $coreRegistry;
     }
 
     /**
+     * Get metadata for sales rule form. It will be merged with form UI component declaration.
+     *
      * @return array
      */
     public function getMetadataValues(\Magento\SalesRule\Model\Rule $rule)
