@@ -225,7 +225,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
             foreach ($data['not_attributes'] as $entityAttributeId) {
                 $entityAttribute = $this->_resourceAttribute->getEntityAttribute($entityAttributeId);
                 if (!$entityAttribute) {
-                    throw new LocalizedException(__('Entity attribute with id "%1" not found'));
+                    throw new LocalizedException(__('Entity attribute with id "%1" not found', $entityAttributeId));
                 }
                 $modelAttribute = $this->_eavConfig->getAttribute(
                     $this->getEntityTypeId(),
