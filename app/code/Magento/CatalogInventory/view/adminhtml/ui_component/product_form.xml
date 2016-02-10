@@ -242,8 +242,8 @@
                         <item name="value" xsi:type="number">0</item>
                         <item name="sortOrder" xsi:type="number">600</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
-                        <item name="quantityIncrements" xsi:type="string">index=qty_increments</item>
-                        <item name="minSaleQuantity" xsi:type="string">index=min_sale_qty</item>
+                        <item name="quantityIncrements" xsi:type="string">ns = ${ $.ns }, index=qty_increments</item>
+                        <item name="minSaleQuantity" xsi:type="string">ns = ${ $.ns }, index=min_sale_qty</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
@@ -290,7 +290,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/backorders</item>
-                            <item name="deferredStockUpdate" xsi:type="string">index=container_deferred_stock_update</item>
+                            <item name="deferredStockUpdate" xsi:type="string">ns = ${ $.ns }, index=container_deferred_stock_update</item>
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataScope" xsi:type="string">backorders</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>

@@ -11,7 +11,7 @@ use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductSection;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -44,13 +44,6 @@ class ProductForm extends FormSections
      * @var string
      */
     protected $customSection = '.admin__collapsible-title';
-
-    /**
-     * Tabs title css selector.
-     *
-     * @var string
-     */
-    protected $tabsTitle = '#product_info_tabs-basic [data-role="title"]';
 
     /**
      * Attribute block selector.
@@ -289,19 +282,19 @@ class ProductForm extends FormSections
     }
 
     /**
-     * Click "Add Attribute" button from specific tab.
+     * Click "Add Attribute" button from specific section.
      *
-     * @param string $tabName
+     * @param string $sectionName
      * @throws \Exception
      */
-    public function addNewAttribute($tabName = 'product-details')
+    public function addNewAttribute($sectionName = 'product-details')
     {
-        $tab = $this->getSection($tabName);
-        if ($tab instanceof ProductSection) {
-            $this->openSection($tabName);
-            $tab->addNewAttribute($tabName);
+        $section = $this->getSection($sectionName);
+        if ($section instanceof Attributes) {
+            $this->openSection($sectionName);
+            $section->addNewAttribute($sectionName);
         } else {
-            throw new \Exception("$tabName hasn't 'Add attribute' button or is not instance of ProductSection class.");
+            throw new \Exception("$sectionName hasn't 'Add attribute' button or is not instance of ProductSection class.");
         }
     }
 }

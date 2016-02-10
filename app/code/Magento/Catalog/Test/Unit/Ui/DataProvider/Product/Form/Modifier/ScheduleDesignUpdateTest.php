@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\ScheduleDesignUpdate;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 
 /**
  * Class ScheduleDesignUpdateTest
@@ -14,35 +13,18 @@ use Magento\Catalog\Ui\DataProvider\Grouper;
 class ScheduleDesignUpdateTest extends AbstractModifierTest
 {
     /**
-     * @var Grouper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $grouper;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->grouper = $this->getMockBuilder(Grouper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function createModel()
     {
         return $this->objectManager->getObject(ScheduleDesignUpdate::class, [
-            'grouper' => $this->grouper,
+            'arrayManager' => $this->arrayManagerMock,
         ]);
     }
 
     public function testModifyMeta()
     {
-        $this->grouper->expects($this->any())
-            ->method('getGroupCodeByField')
-            ->willReturn('test_group_code');
-
-        $this->assertNotEmpty($this->getModel()->modifyMeta([]));
+        $this->assertSame([], $this->getModel()->modifyMeta([]));
     }
 
     public function testModifyData()
