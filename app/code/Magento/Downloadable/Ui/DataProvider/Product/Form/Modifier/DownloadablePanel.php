@@ -126,8 +126,8 @@ class DownloadablePanel extends AbstractModifier
                 'false' => '0',
                 'true' => '1',
             ],
-            'samplesFieldset' => 'index=' . Composite::CONTAINER_SAMPLES,
-            'linksFieldset' => 'index=' . Composite::CONTAINER_LINKS,
+            'samplesFieldset' => 'ns = ${ $.ns }, index=' . Composite::CONTAINER_SAMPLES,
+            'linksFieldset' => 'ns = ${ $.ns }, index=' . Composite::CONTAINER_LINKS,
         ];
         $hideConfig['arguments']['data']['config'] = [
             'dataType' => Form\Element\DataType\Number::NAME,
