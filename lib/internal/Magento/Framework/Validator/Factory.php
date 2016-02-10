@@ -70,7 +70,9 @@ class Factory
             $this->_configFiles = $this->cache->load(self::CACHE_KEY);
             if (!$this->_configFiles) {
                 $this->_configFiles = $this->moduleReader->getConfigurationFiles('validation.xml');
-                $this->cache->save($this->_configFiles, self::CACHE_KEY);
+                $this->cache->save(serialize($this->_configFiles), self::CACHE_KEY);
+            } else {
+                $this->_configFiles = unserialize($this->_configFiles);
             }
         }
     }
