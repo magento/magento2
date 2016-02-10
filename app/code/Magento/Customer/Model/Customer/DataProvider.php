@@ -9,6 +9,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
+use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -100,10 +101,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
-        $this->meta['customer']['fields'] = $this->getAttributesMeta(
+        $this->meta['customer']['children'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
-        $this->meta['address']['fields'] = $this->getAttributesMeta(
+        $this->meta['address']['children'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer_address')
         );
     }
@@ -154,21 +155,22 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
-                $meta[$code][$metaName] = ($metaName === 'label') ? __($value) : $value;
+                $meta[$code]['arguments']['data']['config'][$metaName] = ($metaName === 'label') ? __($value) : $value;
                 if ('frontend_input' === $origName) {
-                    $meta[$code]['formElement'] = isset($this->formElement[$value])
+                    $meta[$code]['arguments']['data']['config']['formElement'] = isset($this->formElement[$value])
                         ? $this->formElement[$value]
                         : $value;
                 }
                 if ($attribute->usesSource()) {
-                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                    $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
                 }
             }
 
-            $rules = $this->eavValidationRules->build($attribute, $meta[$code]);
+            $rules = $this->eavValidationRules->build($attribute, $meta[$code]['arguments']['data']['config']);
             if (!empty($rules)) {
-                $meta[$code]['validation'] = $rules;
+                $meta[$code]['arguments']['data']['config']['validation'] = $rules;
             }
+            $meta[$code]['arguments']['data']['config']['componentType'] = Field::NAME;
         }
         return $meta;
     }
