@@ -19,7 +19,7 @@
         </variation>
         <variation name="NavigateMenuTest57">
             <data name="menuItem" xsi:type="string">Reports > Orders</data>
-            <data name="pageTitle" xsi:type="string">Sales Report</data>
+            <data name="pageTitle" xsi:type="string">Orders Report</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
         </variation>
         <variation name="NavigateMenuTest58">
@@ -59,7 +59,7 @@
         </variation>
         <variation name="NavigateMenuTest65">
             <data name="menuItem" xsi:type="string">Reports > Bestsellers</data>
-            <data name="pageTitle" xsi:type="string">Best Sellers Report</data>
+            <data name="pageTitle" xsi:type="string">Bestsellers Report</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
         </variation>
         <variation name="NavigateMenuTest66">
