@@ -350,8 +350,6 @@ define([
                 message = !this.disabled() && this.visible() ? result.message : '',
                 isValid = this.disabled() || !this.visible() || result.passed;
 
-            this.error(message);
-
             //TODO: Implement proper result propagation for form
             if (!isValid) {
                 this.error(message);

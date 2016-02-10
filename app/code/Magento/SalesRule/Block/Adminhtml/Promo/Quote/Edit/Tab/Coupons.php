@@ -79,6 +79,9 @@ class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\B
      */
     public function toHtml()
     {
+        $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $disableInputFields = ! $model->getUseAutoGeneration();
+        // @todo: remove this workaround after resolving MAGETWO-48846
         // @codingStandardsIgnoreStart
         $html = <<<HTML_ENTITIES
 <script>
@@ -92,7 +95,7 @@ function disableEnableCouponTabInputFields(isDisabled) {
         }
     );
 }
-disableEnableCouponTabInputFields(true);
+disableEnableCouponTabInputFields({$disableInputFields});
 </script>
 HTML_ENTITIES;
         // @codingStandardsIgnoreEnd
