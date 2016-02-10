@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleQuantity;
 
 /**
- * Class BundleSkuTest
+ * Class BundleQuantityTest
  */
 class BundleQuantityTest extends AbstractModifierTest
 {
