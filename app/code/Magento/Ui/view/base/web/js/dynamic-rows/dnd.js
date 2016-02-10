@@ -50,6 +50,11 @@ define([
         defaults: {
             rootSelector: '${ $.recordsProvider }:div.admin__field',
             tableSelector: '${ $.rootSelector } -> table.admin__dynamic-rows',
+            separatorsClass: {
+                top: '_dragover-top',
+                bottom: '_dragover-bottom'
+            },
+            step: 'auto',
             recordsCache: [],
             draggableElement: {},
             draggableElementClass: '_dragged',
@@ -79,7 +84,7 @@ define([
             return this;
         },
 
-        /**
+        /**l
          * Calls 'initObservable' of parent, initializes 'options' and 'initialOptions'
          *     properties, calls 'setOptions' passing options to it
          *
@@ -115,22 +120,21 @@ define([
          */
         mousedownHandler: function (data, elem, event) {
             var recordNode = this.getRecordNode(elem),
-                originRecord = $(elem).parents('tr');
+                originRecord = $(elem).parents('tr'),
+                drEl = this.draggableElement;
 
             $(recordNode).addClass(this.draggableElementClass);
             $(originRecord).addClass(this.draggableElementClass);
-            this.draggableElement.originRow = originRecord;
-            this.draggableElement.instance = recordNode = this.processingStyles(recordNode, elem);
-            this.draggableElement.instanceCtx = this.getRecord(originRecord[0]);
-            this.draggableElement.eventMousedownY = event.pageY;
-            this.draggableElement.minYpos =
+            this.step = this.step === 'auto' ? originRecord.height()/2 : this.step;
+            drEl.originRow = originRecord;
+            drEl.instance = recordNode = this.processingStyles(recordNode, elem);
+            drEl.instanceCtx = this.getRecord(originRecord[0]);
+            drEl.eventMousedownY = event.pageY;
+            drEl.minYpos =
                 this.table.offset().top - originRecord.offset().top +
                 this.table.outerHeight() - this.table.find('tbody').outerHeight();
-            this.draggableElement.maxYpos =
-                this.draggableElement.minYpos +
-                this.table.find('tbody').outerHeight() - originRecord.outerHeight();
+            drEl.maxYpos = drEl.minYpos + this.table.find('tbody').outerHeight() - originRecord.outerHeight();
             this.tableWrapper.append(recordNode);
-
             this.body.bind('mousemove', this.mousemoveHandler);
             this.body.bind('mouseup', this.mouseupHandler);
         },
@@ -141,17 +145,28 @@ define([
          * @param {Object} event - mouse move event
          */
         mousemoveHandler: function (event) {
-            var positionY = event.pageY - this.draggableElement.eventMousedownY,
+            var depEl = this.draggableElement,
+                positionY = event.pageY - depEl.eventMousedownY,
                 processingPositionY = positionY + 'px',
-                processingMaxYpos = this.draggableElement.maxYpos + 'px',
-                processingMinYpos = this.draggableElement.minYpos + 'px';
+                processingMaxYpos = depEl.maxYpos + 'px',
+                processingMinYpos = depEl.minYpos + 'px',
+                depElement = this.getDepElement(depEl.instance, positionY);
 
-            if (positionY > this.draggableElement.minYpos && positionY < this.draggableElement.maxYpos) {
-                $(this.draggableElement.instance)[0].style[transformProp] = 'translateY(' + processingPositionY + ')';
-            } else if (positionY < this.draggableElement.minYpos) {
-                $(this.draggableElement.instance)[0].style[transformProp] = 'translateY(' + processingMinYpos + ')';
-            } else if (positionY >= this.draggableElement.maxYpos) {
-                $(this.draggableElement.instance)[0].style[transformProp] = 'translateY(' + processingMaxYpos + ')';
+            if (depElement) {
+                depEl.depElement ? depEl.depElement.elem.removeClass(depEl.depElement.className) : false;
+                depEl.depElement = depElement;
+                depEl.depElement.insert !== 'none' ? depEl.depElement.elem.addClass(depElement.className) : false;
+            } else if (depEl.depElement && depEl.depElement.insert !== 'none') {
+                depEl.depElement.elem.removeClass(depEl.depElement.className);
+                depEl.depElement.insert = 'none';
+            }
+
+            if (positionY > depEl.minYpos && positionY < depEl.maxYpos) {
+                $(depEl.instance)[0].style[transformProp] = 'translateY(' + processingPositionY + ')';
+            } else if (positionY < depEl.minYpos) {
+                $(depEl.instance)[0].style[transformProp] = 'translateY(' + processingMinYpos + ')';
+            } else if (positionY >= depEl.maxYpos) {
+                $(depEl.instance)[0].style[transformProp] = 'translateY(' + processingMaxYpos + ')';
             }
         },
 
@@ -159,83 +174,96 @@ define([
          * Mouse up handler
          */
         mouseupHandler: function () {
-            var depElement = this._getDepElement(this.draggableElement.instance),
-                depElementCtx = this.getRecord(depElement[0]);
+            var depElementCtx,
+                drEl = this.draggableElement;
 
-            this.setPosition(depElement, depElementCtx, this.draggableElement);
-            this.draggableElement.originRow.removeClass(this.draggableElementClass);
+            if (drEl.depElement) {
+                depElementCtx = this.getRecord(drEl.depElement.elem[0]);
+                drEl.depElement.elem.removeClass(drEl.depElement.className);
+
+                if (drEl.depElement.insert !== 'none') {
+                    this.setPosition(drEl.depElement.elem, depElementCtx, drEl);
+                }
+            }
+
+            drEl.originRow.removeClass(this.draggableElementClass);
             this.body.unbind('mousemove', this.mousemoveHandler);
             this.body.unbind('mouseup', this.mouseupHandler);
-            this.draggableElement.instance.remove();
+            drEl.instance.remove();
             this.draggableElement = {};
         },
 
         /**
          * Set position to element
-         *
+         *`
          * @param {Object} depElem - dep element
-         * @param {Object} depElementCtx - dep element context
+         * @param {Object} depElementCtx - dep element context```
          * @param {Object} dragData - data draggable element
          */
         setPosition: function (depElem, depElementCtx, dragData) {
-            var prevElem = depElem.prev(),
-                nextElem = depElem.next(),
-                depElemPosition = parseInt(depElementCtx.position, 10),
-                prevElemCtx,
-                prevElemPosition;
+            var depElemPosition = parseInt(depElementCtx.position, 10);
 
-            if (prevElem[0] === dragData.originRow[0]) {
+            if (dragData.depElement.insert === 'after') {
+                dragData.instanceCtx.position = depElemPosition + 1;
+            } else if (dragData.depElement.insert === 'before') {
                 dragData.instanceCtx.position = depElemPosition;
-                depElementCtx.position = depElemPosition - 1;
-
-                return false;
             }
-
-            if (!prevElem.length) {
-                depElemPosition = --depElemPosition ? depElemPosition : 1;
-                dragData.instanceCtx.position = depElemPosition;
-
-                return false;
-            }
-
-            if (!nextElem.length) {
-                depElemPosition = ++depElemPosition;
-                dragData.instanceCtx.position = depElemPosition;
-
-                return false;
-            }
-
-            prevElemCtx = this.getRecord(prevElem[0]);
-            prevElemPosition = prevElemCtx.position;
-
-            if (prevElemPosition === depElemPosition - 1) {
-                dragData.instanceCtx.position = depElemPosition;
-            } else {
-                dragData.instanceCtx.position = --depElemPosition;
-            }
-
         },
 
         /**
          * Get dependency element
          *
          * @param {Object} curInstance - current element instance
+         * @param {Number} position
          */
-        _getDepElement: function (curInstance) {
+
+        getDepElement: function (curInstance, position) {
             var recordsCollection = this.table.find('tbody > tr'),
-                curInstancePosition = $(curInstance).position().top,
-                i = 0,
-                length = recordsCollection.length,
-                result,
+                curInstancePositionTop = $(curInstance).position().top,
+                curInstancePositionBottom = curInstancePositionTop + $(curInstance).height();
+
+            if (position < 0) {
+                return this._getDepElement(recordsCollection, 'before', curInstancePositionTop);
+            } else if (position > 0) {
+                return this._getDepElement(recordsCollection, 'after', curInstancePositionBottom);
+            }
+        },
+
+        /**
+         * Get dependency element private
+         *
+         * @param {Array} collection - record collection
+         * @param {String} position - position to add
+         * @param {Number} dragPosition - position drag element
+         */
+        _getDepElement: function (collection, position, dragPosition) {
+            var rec,
+                rangeEnd,
                 rangeStart,
-                rangeEnd;
+                result,
+                className,
+                i = 0,
+                length = collection.length;
 
             for (i; i < length; i++) {
-                rangeStart = recordsCollection.eq(i).position().top;
-                rangeEnd = rangeStart + recordsCollection.eq(i).height();
+                rec = collection.eq(i);
 
-                if (curInstancePosition > rangeStart && curInstancePosition < rangeEnd) {
-                    result = recordsCollection.eq(i);
+                if (position === 'before') {
+                    rangeStart = collection.eq(i).position().top;
+                    rangeEnd = rangeStart + this.step;
+                    className = this.separatorsClass.top;
+                } else if (position === 'after') {
+                    rangeEnd = rec.position().top + rec.height();
+                    rangeStart = rangeEnd - this.step;
+                    className = this.separatorsClass.bottom;
+                }
+
+                if (dragPosition > rangeStart && dragPosition < rangeEnd) {
+                    result = {
+                        elem: rec,
+                        insert: rec[0] === this.draggableElement.originRow[0] ? 'none' : position,
+                        className: className
+                    }
                 }
             }
 
