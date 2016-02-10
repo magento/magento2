@@ -60,15 +60,16 @@ class MenuBuilder
      * Removes 'Search Synonyms' from the menu if 'synonyms' is not supported
      *
      * @param Builder $subject
+     * @param Menu $menu
      * @return Menu
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetResult(Builder $subject)
+    public function afterGetResult(Builder $subject, Menu $menu)
     {
-        $menu = $this->menuConfig->getMenu();
         $searchEngine = $this->engineResolver->getCurrentSearchEngine();
         if (!$this->searchFeatureConfig
-            ->isFeatureSupported(ConfigInterface::SEARCH_ENGINE_FEATURE_SYNONYMS, $searchEngine)) {
+            ->isFeatureSupported(ConfigInterface::SEARCH_ENGINE_FEATURE_SYNONYMS, $searchEngine)
+        ) {
 
             // "Search Synonyms" feature is not supported by the current configured search engine.
             // Menu will be updated to remove it from the list
