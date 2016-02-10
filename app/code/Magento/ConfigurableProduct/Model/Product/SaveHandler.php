@@ -7,12 +7,9 @@ namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Class SaveHandler
@@ -35,43 +32,20 @@ class SaveHandler
     private $productAttributeRepository;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * SaveHandler constructor
+     *
      * @param OptionRepositoryInterface $optionRepository
      * @param ConfigurableFactory $configurableFactory
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
-     * @param ProductRepositoryInterface $productRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
         OptionRepositoryInterface $optionRepository,
         ConfigurableFactory $configurableFactory,
-        ProductAttributeRepositoryInterface $productAttributeRepository,
-        ProductRepositoryInterface $productRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        FilterBuilder $filterBuilder
+        ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->optionRepository = $optionRepository;
         $this->configurableFactory = $configurableFactory;
         $this->productAttributeRepository = $productAttributeRepository;
-        $this->productRepository = $productRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
     }
 
     /**
