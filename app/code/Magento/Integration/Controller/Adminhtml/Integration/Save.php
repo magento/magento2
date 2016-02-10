@@ -133,12 +133,12 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
         } catch (IntegrationException $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirect('*/*/');
-            return;
+            return null;
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             $this->messageManager->addError(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');
-            return;
+            return null;
         }
 
         return $integrationData;
