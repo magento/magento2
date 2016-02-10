@@ -105,7 +105,6 @@ abstract class Synonyms extends Action
                 $searchEngine
             )
         ) {
-            // Display anotice indicating search synonyms feature is not supported for the selected search engine
             $this->messageManager
                 ->addNoticeMessage(
                     __(

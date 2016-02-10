@@ -6,10 +6,12 @@
 
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
+use Magento\Search\Controller\Adminhtml\Synonyms;
+
 /**
  * Delete Controller
  */
-class Delete extends \Magento\Search\Controller\Adminhtml\Synonyms
+class Delete extends Synonyms
 {
     /**
      * Delete action

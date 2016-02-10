@@ -5,6 +5,11 @@
  */
 namespace Magento\Search\Model\SearchEngine;
 
+/**
+ * Class ConfigTest
+ *
+ * @magentoAppIsolation enabled
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
@@ -33,28 +38,123 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetDeclaredFeatures()
+    /**
+     * Data provider for the test
+     *
+     * @return array
+     */
+    public static function loadGetDeclaredFeaturesDataProvider()
     {
-        $this->assertEquals(['synonyms'], $this->config->getDeclaredFeatures('mysql'));
-        $this->assertEquals(['synonyms', 'stopwords'], $this->config->getDeclaredFeatures('other'));
-        $this->assertEquals([], $this->config->getDeclaredFeatures('none1'));
-        $this->assertEquals([], $this->config->getDeclaredFeatures('none2'));
-        $this->assertEquals([], $this->config->getDeclaredFeatures('non_exist'));
+        return [
+            'features-synonyms' => [
+                'searchEngine' => 'mysql',
+                'expectedResult' => ['synonyms']
+            ],
+            'features-synonyms-stopwords' => [
+                'searchEngine' => 'other',
+                'expectedResult' => ['synonyms', 'stopwords']
+            ],
+            'features-none1' => [
+                'searchEngine' => 'none1',
+                'expectedResult' => []
+            ],
+            'features-none2' => [
+                'searchEngine' => 'none2',
+                'expectedResult' => []
+            ],
+            'features-none_exist' => [
+                'searchEngine' => 'none_exist',
+                'expectedResult' => []
+            ]
+
+        ];
     }
 
-    public function testIsFeatureSupported()
+    /**
+     * @param string $searchEngine
+     * @param array $expectedResult
+     * @dataProvider loadGetDeclaredFeaturesDataProvider
+     */
+    public function testGetDeclaredFeatures($searchEngine, $expectedResult)
     {
-        $this->assertEquals(true, $this->config->isFeatureSupported('synonyms', 'mysql'));
-        $this->assertEquals(false, $this->config->isFeatureSupported('stopwords', 'mysql'));
-        $this->assertEquals(true, $this->config->isFeatureSupported('synonyms', 'other'));
-        $this->assertEquals(true, $this->config->isFeatureSupported('stopwords', 'other'));
-        $this->assertEquals(false, $this->config->isFeatureSupported('synonyms', 'none1'));
-        $this->assertEquals(false, $this->config->isFeatureSupported('stopwords', 'none1'));
-        $this->assertEquals(false, $this->config->isFeatureSupported('synonyms', 'none2'));
-        $this->assertEquals(false, $this->config->isFeatureSupported('stopwords', 'none2'));
-        $this->assertEquals(false, $this->config->isFeatureSupported('synonyms', 'non_exist'));
-        $this->assertEquals(false, $this->config->isFeatureSupported('stopwords', 'non_exist'));
-        $this->assertEquals(false, $this->config->isFeatureSupported('non_exist', 'non_exist'));
-        $this->assertEquals(false, $this->config->isFeatureSupported('non_exist', 'mysql'));
+        $this->assertEquals($expectedResult, $this->config->getDeclaredFeatures($searchEngine));
+    }
+
+    /**
+     * Data provider for the test
+     *
+     * @return array
+     */
+    public static function loadIsFeatureSupportedDataProvider()
+    {
+        return [
+            [
+                'feature' => 'synonyms',
+                'searchEngine' => 'mysql',
+                'expectedResult' => true
+            ],
+            [
+                'feature' => 'stopwords',
+                'searchEngine' => 'mysql',
+                'expectedResult' => false
+            ],
+            [
+                'feature' => 'synonyms',
+                'searchEngine' => 'other',
+                'expectedResult' => true
+            ],
+            [
+                'feature' => 'stopwords',
+                'searchEngine' => 'other',
+                'expectedResult' => true
+            ],
+            [
+                'feature' => 'synonyms',
+                'searchEngine' => 'none1',
+                'expectedResult' => false
+            ],
+            [
+                'feature' => 'stopwords',
+                'searchEngine' => 'none1',
+                'expectedResult' => false
+            ],
+            [
+                'feature' => 'synonyms',
+                'searchEngine' => 'none2',
+                'expectedResult' => false
+            ],
+            [
+                'feature' => 'stopwords',
+                'searchEngine' => 'none2',
+                'expectedResult' => false
+            ],
+            [
+                'feature' => 'stopwords',
+                'searchEngine' => 'none_exist',
+                'expectedResult' => false
+            ],
+            [
+                'feature' => 'none_exist',
+                'searchEngine' => 'none_exist',
+                'expectedResult' => false
+            ],
+            [
+                'feature' => 'none_exist',
+                'searchEngine' => 'mysql',
+                'expectedResult' => false
+            ]
+        ];
+    }
+
+    /**
+     * @param string $searchEngine
+     * @param string $feature
+     * @param array $expectedResult
+     * @dataProvider loadIsFeatureSupportedDataProvider
+     */
+    public function testIsFeatureSupported($searchEngine, $feature, $expectedResult)
+    {
+        $this->assertEquals($expectedResult, $this->config->isFeatureSupported($searchEngine, $feature));
+
     }
 }

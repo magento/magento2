@@ -6,10 +6,12 @@
 
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
+use Magento\Search\Controller\Adminhtml\Synonyms;
+
 /**
  * Mass-Delete Controller
  */
-class MassDelete extends \Magento\Search\Controller\Adminhtml\Synonyms
+class MassDelete extends Synonyms
 {
     /**
      * @var \Magento\Ui\Component\MassAction\Filter
