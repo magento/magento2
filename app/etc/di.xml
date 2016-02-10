@@ -1074,6 +1074,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Validator\Factory">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
     <type name="Magento\Server\Reflection" shared="false" />
     <type name="Magento\Framework\Reflection\DataObjectProcessor">
         <arguments>
