@@ -230,6 +230,7 @@
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="field" type="field" />
                     <xs:element name="container" type="container" />
+                    <xs:element name="fieldset" type="fieldset" />
                     <xs:group ref="configurable"/>
                 </xs:choice>
             </xs:extension>
@@ -407,6 +408,24 @@
         <xs:attribute type="xs:string" name="name" use="optional"/>
         <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
         <xs:attribute type="xs:string" name="class" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="modal">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="button">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="insertForm">
         <xs:complexContent>

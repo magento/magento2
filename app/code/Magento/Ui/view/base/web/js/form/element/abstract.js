@@ -126,7 +126,10 @@ define([
         setInitialValue: function () {
             this.initialValue = this.getInitialValue();
 
-            this.value(this.initialValue);
+            if (this.value.peek() !== this.initialValue) {
+                this.value(this.initialValue);
+            }
+
             this.on('value', this.onUpdate.bind(this));
 
             return this;
@@ -151,7 +154,7 @@ define([
             }
 
             _.extend(this.additionalClasses, {
-                required: this.required,
+                _required: this.required,
                 _error: this.error,
                 _warn: this.warn,
                 _disabled: this.disabled
@@ -344,8 +347,8 @@ define([
         validate: function () {
             var value   = this.value(),
                 result  = validator(this.validation, value),
-                message = result.message,
-                isValid = !this.visible() || result.passed;
+                message = !this.disabled() && this.visible() ? result.message : '',
+                isValid = this.disabled() || !this.visible() || result.passed;
 
             this.error(message);
 

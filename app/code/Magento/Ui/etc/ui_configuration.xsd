@@ -60,6 +60,7 @@
             <xs:extension base="container">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="containerConfiguration" name="container"/>
+                    <xs:element type="fieldsetConfiguration" name="fieldset"/>
                     <xs:element name="field" type="field" />
                     <xs:element type="insertFormConfiguration" name="insertForm"/>
                     <xs:element type="insertListingConfiguration" name="insertListing"/>
@@ -110,13 +111,6 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="modalConfiguration">
-        <xs:complexContent>
-            <xs:extension base="containerConfiguration">
-                <xs:choice minOccurs="0" maxOccurs="unbounded"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
     <xs:complexType name="insertFormConfiguration">
         <xs:complexContent>
             <xs:extension base="containerConfiguration">
@@ -125,6 +119,13 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="insertListingConfiguration">
+        <xs:complexContent>
+            <xs:extension base="containerConfiguration">
+                <xs:choice minOccurs="0" maxOccurs="unbounded"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="modalConfiguration">
         <xs:complexContent>
             <xs:extension base="containerConfiguration">
                 <xs:choice minOccurs="0" maxOccurs="unbounded"/>
