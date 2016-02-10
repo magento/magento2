@@ -9,10 +9,10 @@ define([
     'use strict';
 
     var buttons = {
-        'reset':            '#reset',
-        'save':             '#save',
-        'saveAndContinue':  '#save_and_continue'
-    },
+            'reset':            '#reset',
+            'save':             '#save',
+            'saveAndContinue':  '#save_and_continue'
+        },
         selectorPrefix = '',
         eventPrefix;
 
