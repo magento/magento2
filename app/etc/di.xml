@@ -119,6 +119,7 @@
     <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
     <preference for="Magento\Framework\Session\ValidatorInterface" type="Magento\Framework\Session\Validator" />
     <preference for="Magento\Framework\Session\StorageInterface" type="Magento\Framework\Session\Storage" />
+    <preference for="Magento\Framework\App\Request\DataPersistorInterface" type="Magento\Framework\App\Request\DataPersistor" />
     <preference for="Magento\Framework\Url\RouteParamsResolverInterface" type="Magento\Framework\Url\RouteParamsResolver" />
     <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
     <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
@@ -1098,6 +1099,11 @@
     <type name="Magento\Framework\DB\SelectFactory">
         <arguments>
             <argument name="selectRenderer" xsi:type="object">Magento\Framework\DB\Select\RendererProxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Form\Filter\Date">
+        <arguments>
+            <argument name="localeResolver" xsi:type="object">Magento\Framework\Locale\ResolverInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\DB\Select\SelectRenderer">

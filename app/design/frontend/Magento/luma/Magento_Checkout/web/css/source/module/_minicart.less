@@ -323,15 +323,20 @@
             }
 
             &.options {
-                .tooltip.toggle {
-                    .lib-icon-font(
-                    @icon-down,
-                    @_icon-font-size: 12px,
-                    @_icon-font-line-height: 12px,
-                    @_icon-font-text-hide: true,
-                    @_icon-font-margin: -3px 0 0 7px,
-                    @_icon-font-position: after
-                    );
+                .toggle {
+                    &.tooltip {
+                        .lib-icon-font(
+                        @icon-down,
+                        @_icon-font-size: 12px,
+                        @_icon-font-line-height: 12px,
+                        @_icon-font-text-hide: true,
+                        @_icon-font-margin: -3px 0 0 7px,
+                        @_icon-font-position: after
+                        );
+                    }
+                    > span {
+                        &:extend(.abs-visually-hidden-reset all);
+                    }
                 }
 
                 .details {
