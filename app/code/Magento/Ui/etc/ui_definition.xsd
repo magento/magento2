@@ -36,6 +36,7 @@
             <xs:element type="filterDate" name="filterDate"/>
             <xs:element type="container" name="container"/>
             <xs:element type="input" name="input"/>
+            <xs:element type="hidden" name="hidden"/>
             <xs:element type="checkbox" name="checkbox"/>
             <xs:element type="select" name="select"/>
             <xs:element type="multiselect" name="multiselect"/>
@@ -60,6 +61,11 @@
             <xs:element name="component" type="component" />
             <xs:element name="actionsColumn" type="actionsColumn" />
             <xs:element name="selectionsColumn" type="selectionsColumn" />
+            <xs:element name="htmlContent" type="htmlContent" />
+            <xs:element type="insertForm" name="insertForm"/>
+            <xs:element type="insertListing" name="insertListing"/>
+            <xs:element type="modal" name="modal"/>
+            <xs:element type="button" name="button"/>
         </xs:all>
     </xs:complexType>
     <!-- Custom configuration -->
@@ -83,6 +89,9 @@
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="fieldset" name="fieldset"/>
                     <xs:element type="dataSource" name="dataSource"/>
+                    <xs:element type="insertForm" name="insertForm"/>
+                    <xs:element type="insertListing" name="insertListing"/>
+                    <xs:element type="modal" name="modal"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

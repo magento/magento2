@@ -71,6 +71,12 @@ class ProductTab extends Tab
         $addAttributeToggle->click();
         if (!$addAttributeToggle->find($this->newAttributeButton)->isVisible()) {
             $element->find($this->searchAttribute, Locator::SELECTOR_XPATH)->click();
+            $this->browser->waitUntil(
+                function () {
+                    $element = $this->browser->find($this->searchAttribute, Locator::SELECTOR_XPATH);
+                    return $element->isVisible() == true ? true : null;
+                }
+            );
         }
         $element->find($this->newAttributeButton)->click();
     }

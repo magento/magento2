@@ -50,7 +50,7 @@ class Content extends Tab
      *
      * @var string
      */
-    protected $content = '#contentEditor';
+    protected $content = '#cms_page_form_content';
 
     /**
      * Content Heading input locator.
@@ -122,7 +122,7 @@ class Content extends Tab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $context = $element === null ? $this->_rootElement : $element;
         $context->find($this->content)->setValue($fields['content']['value']['content']);
@@ -152,7 +152,7 @@ class Content extends Tab
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         return [
             'content' => [],

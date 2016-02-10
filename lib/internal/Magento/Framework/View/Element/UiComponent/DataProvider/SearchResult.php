@@ -14,8 +14,8 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
- * Class Collection
- * Collection for order related documents to display grids on order view page
+ * Class SearchResult
+ * Generic Search Result
  */
 class SearchResult extends AbstractCollection implements Api\Search\SearchResultInterface
 {

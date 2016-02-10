@@ -32,7 +32,7 @@ class AfterProductLoad
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $subject
+     * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      */
     public function afterLoad(\Magento\Catalog\Model\Product $product)

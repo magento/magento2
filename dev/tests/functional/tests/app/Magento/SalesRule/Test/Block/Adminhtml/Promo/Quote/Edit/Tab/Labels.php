@@ -25,7 +25,7 @@ class Labels extends Tab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         if (isset($fields['store_labels'])) {
             $count = 0;
@@ -47,7 +47,7 @@ class Labels extends Tab
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $context = $element === null ? $this->_rootElement : $element;
         $storeLabels = [];

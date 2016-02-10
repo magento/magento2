@@ -5,30 +5,24 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
+use \Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DB\Select;
+use Magento\Rule\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Model\EntityManager;
+use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
  * Sales Rule resource model
  */
-class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
+class Rule extends AbstractResource
 {
     /**
      * Store associated with rule entities information map
      *
      * @var array
      */
-    protected $_associatedEntitiesMap = [
-        'website' => [
-            'associations_table' => 'salesrule_website',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'website_id',
-        ],
-        'customer_group' => [
-            'associations_table' => 'salesrule_customer_group',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'customer_group_id',
-        ],
-    ];
+    protected $_associatedEntitiesMap = [];
 
     /**
      * @var array
@@ -53,19 +47,30 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $_resourceCoupon;
 
     /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
+     * @param EntityManager $entityManager
+     * @param array $associatedEntitiesMap
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
+        EntityManager $entityManager,
+        array $associatedEntitiesMap = [],
         $connectionName = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
+        $this->entityManager = $entityManager;
+        $this->_associatedEntitiesMap = $associatedEntitiesMap;
         parent::__construct($context, $connectionName);
     }
 
@@ -80,23 +85,9 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Add customer group ids and website ids to rule data after load
-     *
-     * @param AbstractModel $object
-     * @return $this
-     */
-    protected function _afterLoad(AbstractModel $object)
-    {
-        $this->loadCustomerGroupIds($object);
-        $this->loadWebsiteIds($object);
-
-        parent::_afterLoad($object);
-        return $this;
-    }
-
-    /**
      * @param AbstractModel $object
      * @return void
+     * @deprecated
      */
     public function loadCustomerGroupIds(AbstractModel $object)
     {
@@ -109,6 +100,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     /**
      * @param AbstractModel $object
      * @return void
+     * @deprecated
      */
     public function loadWebsiteIds(AbstractModel $object)
     {
@@ -136,6 +128,23 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Load an object
+     *
+     * @param SalesRule|AbstractModel $object
+     * @param mixed $value
+     * @param string $field field to load by (defaults to model id)
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function load(AbstractModel $object, $value, $field = null)
+    {
+        $this->entityManager->load(RuleInterface::class, $object, $value);
+        $this->unserializeFields($object);
+        $this->_afterLoad($object);
+        return $this;
+    }
+
+    /**
      * Bind sales rule to customer group(s) and website(s).
      * Save rule's associated store labels.
      * Save product attributes used in rule.
@@ -147,22 +156,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     {
         if ($object->hasStoreLabels()) {
             $this->saveStoreLabels($object->getId(), $object->getStoreLabels());
-        }
-
-        if ($object->hasWebsiteIds()) {
-            $websiteIds = $object->getWebsiteIds();
-            if (!is_array($websiteIds)) {
-                $websiteIds = explode(',', (string)$websiteIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $websiteIds, 'website');
-        }
-
-        if ($object->hasCustomerGroupIds()) {
-            $customerGroupIds = $object->getCustomerGroupIds();
-            if (!is_array($customerGroupIds)) {
-                $customerGroupIds = explode(',', (string)$customerGroupIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $customerGroupIds, 'customer_group');
         }
 
         // Save product attributes used in rule
@@ -368,5 +361,46 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         }
 
         return $result;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->isDeleted()) {
+            return $this->delete($object);
+        }
+
+        $this->beginTransaction();
+
+        try {
+            if (!$this->isModified($object)) {
+                $this->processNotModifiedSave($object);
+                $this->commit();
+                $object->setHasDataChanges(false);
+                return $this;
+            }
+            $object->validateBeforeSave();
+            $object->beforeSave();
+            if ($object->isSaveAllowed()) {
+                $this->_serializeFields($object);
+                $this->_beforeSave($object);
+                $this->_checkUnique($object);
+                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
+                $this->entityManager->save(RuleInterface::class, $object);
+                $this->unserializeFields($object);
+                $this->processAfterSaves($object);
+            }
+            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
+            $object->setHasDataChanges(false);
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
     }
 }

@@ -3879,6 +3879,7 @@ return [
         'Magento\Framework\Component\ComponentRegistrar'
     ],
     ['Magento\Framework\App\Router\ActionList\Reader'],
+    ['Magento\User\Observer\Backend\CheckAdminPasswordChangeObserver'],
     ['Magento\Framework\View\File\AbstractCollector'],
     ['Magento\Tools\Migration\Acl\FileManager'],
     ['Magento\Tools\Migration\Acl\Formatter'],
@@ -4120,8 +4121,18 @@ return [
     ['Magento\Cms\Block\Adminhtml\Page\Edit\Tab\Meta'],
     ['Magento\Cms\Block\Adminhtml\Block\Edit'],
     ['Magento\Cms\Block\Adminhtml\Block\Edit\Form'],
+    ['Magento\Backend\Block\Catalog\Category\Tabs'],
+    ['Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes'],
+    ['Magento\Catalog\Block\Adminhtml\Category\Tab\Design'],
+    ['Magento\Catalog\Block\Adminhtml\Category\Edit\Form'],
     [
         'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
         'Magento\Catalog\Model\ResourceModel\Product\Gallery'
     ],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Actions'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Form'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tabs'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit']
 ];

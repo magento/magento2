@@ -6,11 +6,14 @@
 namespace Magento\BraintreeTwo\Block;
 
 use Magento\Backend\Model\Session\Quote;
+use Magento\BraintreeTwo\Gateway\Config\Config as GatewayConfig;
+use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType;
+use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
+use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Block\Form\Cc;
 use Magento\Payment\Model\Config;
-use Magento\BraintreeTwo\Gateway\Config\Config as GatewayConfig;
-use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType;
+use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class Form
@@ -19,26 +22,32 @@ class Form extends Cc
 {
 
     /**
-     * @var \Magento\Backend\Model\Session\Quote
+     * @var Quote
      */
     protected $sessionQuote;
 
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Config\Config
+     * @var Config
      */
     protected $gatewayConfig;
 
     /**
-     * @var \Magento\BraintreeTwo\Model\Adminhtml\Source\CcType
+     * @var CcType
      */
     protected $ccType;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Payment\Model\Config $paymentConfig
-     * @param \Magento\Backend\Model\Session\Quote $sessionQuote
-     * @param \Magento\BraintreeTwo\Gateway\Config\Config $gatewayConfig
-     * @param \Magento\BraintreeTwo\Model\Adminhtml\Source\CcType $ccType
+     * @var ConfigProviderInterface
+     */
+    protected $vaultConfigProvider;
+
+    /**
+     * @param Context $context
+     * @param Config $paymentConfig
+     * @param Quote $sessionQuote
+     * @param GatewayConfig $gatewayConfig
+     * @param CcType $ccType
+     * @param ConfigProviderInterface $vaultConfigProvider
      * @param array $data
      */
     public function __construct(
@@ -47,12 +56,14 @@ class Form extends Cc
         Quote $sessionQuote,
         GatewayConfig $gatewayConfig,
         CcType $ccType,
+        ConfigProviderInterface $vaultConfigProvider,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $data);
         $this->sessionQuote = $sessionQuote;
         $this->gatewayConfig = $gatewayConfig;
         $this->ccType = $ccType;
+        $this->vaultConfigProvider = $vaultConfigProvider;
     }
 
     /**
@@ -73,6 +84,16 @@ class Form extends Cc
     public function useCvv()
     {
         return $this->gatewayConfig->isCvvEnabled();
+    }
+
+    /**
+     * Check if vault enabled
+     * @return bool
+     */
+    public function isVaultEnabled()
+    {
+        $vault = $this->vaultConfigProvider->getConfig()[VaultPaymentInterface::CODE];
+        return $vault['is_enabled'] && $vault['vault_provider_code'] == ConfigProvider::CODE;
     }
 
     /**

@@ -284,9 +284,14 @@ define(
 
                         if (addressData.hasOwnProperty(field) &&
                             shippingAddress.hasOwnProperty(field) &&
-                            typeof addressData[field] != 'function'
+                            typeof addressData[field] != 'function' &&
+                            _.isEqual(shippingAddress[field], addressData[field])
                         ) {
                             shippingAddress[field] = addressData[field];
+                        } else if (typeof addressData[field] != 'function' &&
+                            !_.isEqual(shippingAddress[field], addressData[field])) {
+                            shippingAddress = addressData;
+                            break;
                         }
                     }
 

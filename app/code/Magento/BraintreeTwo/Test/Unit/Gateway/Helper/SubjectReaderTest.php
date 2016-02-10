@@ -39,13 +39,13 @@ class SubjectReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadCustomerId()
     {
         $customerId = 1;
-        static::assertEquals($customerId, $this->subjectReader->readCustomerId(['customerId' => $customerId]));
+        static::assertEquals($customerId, $this->subjectReader->readCustomerId(['customer_id' => $customerId]));
     }
 
     /**
      * @covers \Magento\BraintreeTwo\Gateway\Helper\SubjectReader::readPublicHash
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage The "publicHash" field does not exists
+     * @expectedExceptionMessage The "public_hash" field does not exists
      */
     public function testReadPublicHashWithException()
     {
@@ -58,6 +58,6 @@ class SubjectReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadPublicHash()
     {
         $hash = 'fj23djf2o1fd';
-        static::assertEquals($hash, $this->subjectReader->readPublicHash(['publicHash' => $hash]));
+        static::assertEquals($hash, $this->subjectReader->readPublicHash(['public_hash' => $hash]));
     }
 }

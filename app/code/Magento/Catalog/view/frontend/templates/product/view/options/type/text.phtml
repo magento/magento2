@@ -37,6 +37,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
                    data-validate="<?php echo  $block->escapeHtml(json_encode($_textValidate));?>"
                    <?php } ?>
                    name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                   data-selector="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                    value="<?php echo $block->escapeHtml($block->getDefaultValue()) ?>"/>
         <?php elseif ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA): ?>
             <?php $_textAreaValidate = null;
@@ -53,6 +54,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
                         data-validate="<?php echo $block->escapeHtml(json_encode($_textAreaValidate));?>"
                     <?php } ?>
                       name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                      data-selector="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                       rows="5"
                       cols="25"><?php echo $block->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif; ?>

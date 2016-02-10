@@ -6,6 +6,7 @@
 namespace Magento\Vault\Test\Unit\Model;
 
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Framework\Api\FilterBuilder;
@@ -69,6 +70,11 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
     protected $searchCriteriaBuilderMock;
 
     /**
+     * @var EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $encryptorMock;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -95,6 +101,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->encryptorMock = $this->getMock(EncryptorInterface::class);
 
         $this->paymentTokenManagement = new PaymentTokenManagement(
             $this->paymentTokenRepositoryMock,
@@ -102,7 +109,8 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             $this->paymentTokenFactoryMock,
             $this->filterBuilderMock,
             $this->searchCriteriaBuilderMock,
-            $this->searchResultsFactoryMock
+            $this->searchResultsFactoryMock,
+            $this->encryptorMock
         );
     }
 
@@ -233,25 +241,199 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Run test for getByGatewayToken method (return NULL)
+     */
+    public function testGetByPublicHash()
+    {
+        $this->paymentTokenResourceModelMock->expects(self::once())
+            ->method('getByPublicHash')
+            ->with('some-not-exists-token', 1)
+            ->willReturn([]);
+
+        $this->paymentTokenFactoryMock->expects(self::never())
+            ->method('create');
+
+        self::assertEquals(null, $this->paymentTokenManagement->getByPublicHash('some-not-exists-token', 1));
+    }
+
+    /**
      * Run test for saveTokenWithPaymentLink method
      */
-    public function testSaveTokenWithPaymentLink()
+    public function testSaveTokenWithPaymentLinkNoDuplicate()
     {
         /** @var OrderPaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentMock */
         $paymentMock = $this->getMock(OrderPaymentInterface::class);
         /** @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject $tokenMock */
-        $tokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
-            ->getMockForAbstractClass();
+        $tokenMock = $this->getMock(PaymentTokenInterface::class);
+
+        $customerId = 1;
+        $entityId = 1;
+        $publicHash = 'some-not-existing-token';
+        $paymentId = 1;
+
+        $tokenMock->expects(static::atLeastOnce())
+            ->method('getPublicHash')
+            ->willReturn($publicHash);
+        $tokenMock->expects(static::atLeastOnce())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+
+        $this->paymentTokenResourceModelMock->expects(self::once())
+            ->method('getByPublicHash')
+            ->with($publicHash, 1)
+            ->willReturn([]);
+
+        $this->paymentTokenFactoryMock->expects(self::never())
+            ->method('create');
 
         $tokenMock->expects(self::once())
             ->method('getEntityId')
-            ->willReturn(1);
+            ->willReturn($entityId);
         $this->paymentTokenRepositoryMock->expects(self::once())
             ->method('save')
             ->with($tokenMock);
 
         $paymentMock->expects(self::once())
-            ->method('getEntityId');
+            ->method('getEntityId')
+            ->willReturn($paymentId);
+
+        $this->paymentTokenResourceModelMock->expects(static::once())
+            ->method('addLinkToOrderPayment')
+            ->with($entityId, $paymentId);
+
+        $this->paymentTokenManagement->saveTokenWithPaymentLink($tokenMock, $paymentMock);
+    }
+
+    /**
+     * Run test for saveTokenWithPaymentLink method
+     */
+    public function testSaveTokenWithPaymentLinkWithDuplicateTokenVisible()
+    {
+        /** @var OrderPaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentMock */
+        $paymentMock = $this->getMock(OrderPaymentInterface::class);
+        /** @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject $tokenMock */
+        $tokenMock = $this->getMock(PaymentTokenInterface::class);
+        /** @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject $duplicateToken */
+        $duplicateToken = $this->getMock(PaymentTokenInterface::class);
+
+        $entityId = 1;
+        $customerId = 1;
+        $paymentId = 1;
+        $publicHash = 'existing-token';
+        $duplicateTokenData = [
+            'entity_id' => $entityId
+        ];
+
+        $tokenMock->expects(static::atLeastOnce())
+            ->method('getPublicHash')
+            ->willReturn($publicHash);
+        $tokenMock->expects(static::atLeastOnce())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+
+        $this->paymentTokenResourceModelMock->expects(self::once())
+            ->method('getByPublicHash')
+            ->with($publicHash, $customerId)
+            ->willReturn($duplicateTokenData);
+
+        $this->paymentTokenFactoryMock->expects(self::once())
+            ->method('create')
+            ->with(['data' => $duplicateTokenData])
+            ->willReturn($duplicateToken);
+        $tokenMock->expects(static::once())
+            ->method('getIsVisible')
+            ->willReturn(true);
+        $duplicateToken->expects(static::once())
+            ->method('getEntityId')
+            ->willReturn($entityId);
+        $tokenMock->expects(self::once())
+            ->method('getEntityId')
+            ->willReturn($entityId);
+        $this->paymentTokenRepositoryMock->expects(self::once())
+            ->method('save')
+            ->with($tokenMock);
+
+        $paymentMock->expects(self::once())
+            ->method('getEntityId')
+            ->willReturn($paymentId);
+
+        $this->paymentTokenResourceModelMock->expects(static::once())
+            ->method('addLinkToOrderPayment')
+            ->with($entityId, $paymentId);
+
+        $this->paymentTokenManagement->saveTokenWithPaymentLink($tokenMock, $paymentMock);
+    }
+
+    /**
+     * Run test for saveTokenWithPaymentLink method
+     */
+    public function testSaveTokenWithPaymentLinkWithDuplicateTokenNotVisible()
+    {
+        /** @var OrderPaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentMock */
+        $paymentMock = $this->getMock(OrderPaymentInterface::class);
+        /** @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject $tokenMock */
+        $tokenMock = $this->getMock(PaymentTokenInterface::class);
+        /** @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject $duplicateToken */
+        $duplicateToken = $this->getMock(PaymentTokenInterface::class);
+
+        $entityId = 1;
+        $newEntityId = 1;
+        $paymentId = 1;
+        $customerId = 1;
+        $createdAt = '30-02-2017';
+        $publicHash = 'existing-token';
+        $duplicateTokenData = [
+            'entity_id' => $entityId
+        ];
+        $newHash = 'new-token2';
+
+        $tokenMock->expects(static::atLeastOnce())
+            ->method('getPublicHash')
+            ->willReturn($publicHash);
+        $tokenMock->expects(static::atLeastOnce())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+
+        $this->paymentTokenResourceModelMock->expects(self::once())
+            ->method('getByPublicHash')
+            ->with($publicHash, $customerId)
+            ->willReturn($duplicateTokenData);
+
+        $this->paymentTokenFactoryMock->expects(self::once())
+            ->method('create')
+            ->with(['data' => $duplicateTokenData])
+            ->willReturn($duplicateToken);
+        $tokenMock->expects(static::once())
+            ->method('getIsVisible')
+            ->willReturn(false);
+        $tokenMock->expects(static::once())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+        $tokenMock->expects(static::once())
+            ->method('getCreatedAt')
+            ->willReturn($createdAt);
+
+        $this->encryptorMock->expects(static::once())
+            ->method('getHash')
+            ->with($publicHash . $createdAt)
+            ->willReturn($newHash);
+        $tokenMock->expects(static::once())
+            ->method('setPublicHash')
+            ->with($newHash);
+
+        $this->paymentTokenRepositoryMock->expects(self::once())
+            ->method('save')
+            ->with($tokenMock);
+        $tokenMock->expects(static::once())
+            ->method('getEntityId')
+            ->willReturn($newEntityId);
+
+        $paymentMock->expects(self::once())
+            ->method('getEntityId')
+            ->willReturn($paymentId);
+        $this->paymentTokenResourceModelMock->expects(static::once())
+            ->method('addLinkToOrderPayment')
+            ->with($newEntityId, $paymentId);
 
         $this->paymentTokenManagement->saveTokenWithPaymentLink($tokenMock, $paymentMock);
     }

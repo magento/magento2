@@ -2513,4 +2513,9 @@ return [
     ['_beforeDelete', 'Magento\Cms\Model\ResourceModel\Block'],
     ['_afterSave', 'Magento\Cms\Model\ResourceModel\Block', 'Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler::execute'],
     ['_afterLoad', 'Magento\Cms\Model\ResourceModel\Block', 'Magento\Cms\Model\ResourceModel\Block\Relation\Store\ReadHandler::execute'],
+    ['getTabElement', 'Magento\Backend\Test\Block\Widget\FormTabs', 'Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers::getContainerElement'],
+    ['getFieldsByTabs', 'Magento\Backend\Test\Block\Widget\FormTabs', 'Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers::getFixtureFieldsByContainers'],
+    ['fillFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::setFieldsData'],
+    ['getDataFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::getFieldsData'],
+    ['getBunchImages', 'Magento\CatalogImportExport\Model\Import\Product'],
 ];

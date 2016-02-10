@@ -25,7 +25,7 @@ class CatalogCategory extends Page
      *
      * @var string
      */
-    protected $formBlock = '#category-edit-container';
+    protected $formBlock = '.entry-edit';
 
     /**
      * Categories tree block.

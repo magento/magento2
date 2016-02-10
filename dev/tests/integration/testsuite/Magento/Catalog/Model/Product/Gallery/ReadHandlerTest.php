@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -43,8 +45,16 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product'
         );
 
-        $product->setId(1);
+        /**
+         * @var $entityMetadata \Magento\Framework\Model\Entity\EntityMetadata
+         */
+        $entityMetadata = $this->objectManager
+            ->get(MetadataPool::class)
+            ->getMetadata(ProductInterface::class);
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $linkFieldId = $productRepository->get('simple')->getData($entityMetadata->getLinkField());
 
+        $product->setData($entityMetadata->getLinkField(), $linkFieldId);
         $this->readHandler->execute(
             'Magento\Catalog\Api\Data\ProductInterface',
             $product

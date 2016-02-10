@@ -11,7 +11,8 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::marketing">
                     <resource id="Magento_Backend::marketing_seo">
-                        <resource id="Magento_Search::search" title="Search Terms" sortOrder="10" />
+                        <resource id="Magento_Search::search" title="Search Terms" translate="title" sortOrder="10" />
+                        <resource id="Magento_Search::synonyms" title="Search Synonyms" translate="title" sortOrder="20" />
                     </resource>
                 </resource>
             </resource>
