@@ -45,15 +45,7 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
             ->getMockForAbstractClass();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods([
-//                'getStoreId',
-//                'getResource',
-//                'getData',
-//                'getAttributes',
-//                'getStore',
-//                'getAttributeDefaultValue',
-//                'getExistsStoreValueFlag'
-            ])->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $this->locatorMock->expects($this->any())
             ->method('getProduct')
