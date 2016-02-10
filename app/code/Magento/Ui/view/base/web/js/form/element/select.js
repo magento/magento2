@@ -144,14 +144,6 @@ define([
 
             _.extend(config, result);
 
-            if (config.caption !== false && config.caption !== null && typeof config.caption !== 'undefined') {
-                config.options.unshift({
-                    value: '',
-                    label: config.caption.trim() === '' ? ' ' :  config.caption
-                });
-                delete config.caption;
-            }
-
             this._super();
 
             return this;
@@ -304,7 +296,9 @@ define([
          * @returns {Object} Chainable.
          */
         clear: function () {
-            this.value(findFirst(this.options));
+            var value = this.caption ? '' : findFirst(this.options);
+
+            this.value(value);
 
             return this;
         }
