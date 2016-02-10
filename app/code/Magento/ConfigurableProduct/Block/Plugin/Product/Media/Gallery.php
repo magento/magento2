@@ -29,19 +29,19 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * Gallery constructor.
+     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $productGalleryReadHandler
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param array $data
      */
     public function __construct(
+        \Magento\Catalog\Block\Product\Context $context,
+        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Catalog\Model\Product\Gallery\ReadHandler $productGalleryReadHandler,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Json\DecoderInterface $jsonDecoder,
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         array $data = []
     ) {
         $this->productGalleryReadHandler = $productGalleryReadHandler;
