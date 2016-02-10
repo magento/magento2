@@ -9,7 +9,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Ui\Component;
-use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;use Magento\Ui\Component\Container;
 
 class Attributes extends AbstractModifier
 {
@@ -131,32 +131,94 @@ class Attributes extends AbstractModifier
                                 'closeModal'
                             ]
                         ]
-                    ],
-                    [
-                        'text' => __('Create New Attribute'),
-                        'class' => 'action-secondary',
-                        'actions' => [
-                            [
-                                'targetName' => '',
-                                'actionName' => 'create'
-                            ]
-                        ]
                     ]
                 ],
             ],
         ];
 
-        $meta['new_attribute_modal']['arguments']['data']['config'] = [
-            'isTemplate' => false,
-            'componentType' => Component\Modal::NAME,
-            'dataScope' => '',
-            'provider' => 'product_form.product_form_data_source',
-            'options' => [
-                'title' => __('New Attribute')
-            ],
-        ];
-
         $meta['add_attribute_modal']['children'] = [
+            'add_new_attribute_button' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'formElement' => Container::NAME,
+                            'componentType' => Container::NAME,
+                            'component' => 'Magento_Ui/js/form/components/button',
+                            'additionalClasses' => 'admin_field-complex',
+                            'template' => 'ui/form/components/button/container',
+                            'actions' => [
+                                [
+                                    'targetName' => 'product_form.product_form.add_attribute_modal.create_new_attribute_modal',
+                                    'actionName' => 'toggleModal',
+                                ],
+                                [
+                                    'targetName'
+                                    => 'product_form.product_form.add_attribute_modal.create_new_attribute_modal.product_attribute_add_form',
+                                    'actionName' => 'render'
+                                ]
+                            ],
+                            'title' => __('Create New Attribute'),
+                            'additionalForGroup' => true,
+                            'provider' => false,
+                            'source' => 'add_attribute_modal',
+                            'displayArea' => 'insideGroup',
+                        ]
+                    ]
+                ]
+            ],
+            'create_new_attribute_modal' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'isTemplate' => false,
+                            'componentType' => Component\Modal::NAME,
+                            'dataScope' => '',
+                            'provider' => 'product_form.product_form_data_source',
+                            'options' => [
+                                'title' => __('New Attribute'),
+                                'buttons' => [
+                                    [
+                                        'text' => 'Cancel',
+                                        'class' => 'action-secondary',
+                                        'actions' => [
+                                            [
+                                                'targetName' => '${ $.name }',
+                                                'actionName' => 'actionCancel'
+                                            ]
+                                        ]
+                                    ],
+                                ]
+                            ],
+                        ]
+                    ]
+                ],
+                'children' => [
+                    'product_attribute_add_form' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'label' => __('New Attribute'),
+                                    'componentType' => Component\Container::NAME,
+                                    'component' => 'Magento_Ui/js/form/components/insert-form',
+                                    'dataScope' => '',
+                                    'update_url' => $this->urlBuilder->getUrl('mui/index/render'),
+                                    'render_url' => $this->urlBuilder->getUrl(
+                                        'mui/index/render_handle',
+                                        [
+                                            'handle' => 'catalog_product_attribute_edit_form'
+                                        ]
+                                    ),
+                                    'autoRender' => false,
+                                    'ns' => 'product_attribute_add_form',
+                                    'externalProvider' => 'product_attribute_add_form.product_attribute_add_form_data_source',
+                                    'toolbarContainer' => '${ $.parentName }',
+                                    'formSubmitType' => 'ajax',
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'product_attributes_grid' => [
                 'arguments' => [
                     'data' => [
