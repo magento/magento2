@@ -73,4 +73,33 @@ class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\B
     {
         $this->_data['config']['canShow'] = $canShow;
     }
+
+    /**
+     * @return string
+     */
+    public function toHtml()
+    {
+        $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $disableInputFields = ! $model->getUseAutoGeneration();
+        // @todo: remove this workaround after resolving MAGETWO-48846
+        // @codingStandardsIgnoreStart
+        $html = <<<HTML_ENTITIES
+<script>
+function disableEnableCouponTabInputFields(isDisabled) {
+    var selector = '[id=coupons_information_fieldset] input, [id=coupons_information_fieldset] select, [id=coupons_information_fieldset] button, [id=couponCodesGrid] input, [id=couponCodesGrid] select, [id=couponCodesGrid] button';
+
+    _.each(
+        document.querySelectorAll(selector),
+        function (element) {
+            element.disabled = isDisabled;
+        }
+    );
+}
+disableEnableCouponTabInputFields({$disableInputFields});
+</script>
+HTML_ENTITIES;
+        // @codingStandardsIgnoreEnd
+
+        return parent::toHtml() . $html;
+    }
 }
