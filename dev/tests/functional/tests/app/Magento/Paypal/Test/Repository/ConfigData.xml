@@ -277,5 +277,21 @@
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
+        <dataset name="payflowpro_use_vault">
+            <field name="payment/vault/vault_payment" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">PayflowPro</item>
+                <item name="value" xsi:type="string">payflowpro</item>
+            </field>
+        </dataset>
+        <dataset name="payflowpro_use_vault_rollback">
+            <field name="payment/vault/vault_payment" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Select vault provider</item>
+                <item name="value" xsi:type="string">null</item>
+            </field>
+        </dataset>
     </repository>
 </config>
