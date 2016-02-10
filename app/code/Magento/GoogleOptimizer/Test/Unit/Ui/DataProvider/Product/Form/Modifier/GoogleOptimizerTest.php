@@ -172,30 +172,48 @@ class GoogleOptimizerTest extends \PHPUnit_Framework_TestCase
     public function testGetMetaGoogleExperimentEnabled()
     {
         $expectedResult[\Magento\GoogleOptimizer\Ui\DataProvider\Product\Form\Modifier\GoogleOptimizer::GROUP_CODE] = [
-            'componentType' => Fieldset::NAME,
-            'label' => __('Product View Optimization'),
-            'collapsible' => true,
-            'opened' => false,
-            'sortOrder' => 100,
-            'dataScope' => 'data.google_experiment',
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'componentType' => Fieldset::NAME,
+                        'label' => __('Product View Optimization'),
+                        'collapsible' => true,
+                        'opened' => false,
+                        'sortOrder' => 100,
+                        'dataScope' => 'data.google_experiment',
+                    ],
+                ],
+            ],
             'children' => [
                 'experiment_script' => [
-                    'componentType' => Field::NAME,
-                    'formElement' => Textarea::NAME,
-                    'dataType' => Text::NAME,
-                    'label' => __('Experiment Code'),
-                    'notice' => __('Experiment code should be added to the original page only.'),
-                    'dataScope' => 'experiment_script',
-                    'sortOrder' => 10,
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'componentType' => Field::NAME,
+                                'formElement' => Textarea::NAME,
+                                'dataType' => Text::NAME,
+                                'label' => __('Experiment Code'),
+                                'notice' => __('Experiment code should be added to the original page only.'),
+                                'dataScope' => 'experiment_script',
+                                'sortOrder' => 10,
+                            ],
+                        ],
+                    ],
                 ],
                 'code_id' => [
-                    'componentType' => Field::NAME,
-                    'formElement' => Input::NAME,
-                    'dataType' => Text::NAME,
-                    'visible' => false,
-                    'label' => '',
-                    'dataScope' => 'code_id',
-                    'sortOrder' => 20,
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'componentType' => Field::NAME,
+                                'formElement' => Input::NAME,
+                                'dataType' => Text::NAME,
+                                'visible' => false,
+                                'label' => '',
+                                'dataScope' => 'code_id',
+                                'sortOrder' => 20,
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];
