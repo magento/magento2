@@ -6,23 +6,16 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\Data\ProductSearchResultsInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\OptionRepository;
 use Magento\ConfigurableProduct\Model\Product\SaveHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableModel;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use OAuthTest\Mocks\OAuth1\Service\Mock;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -53,21 +46,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     private $productAttributeRepository;
 
     /**
-     * @var SearchCriteriaBuilder|MockObject
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var FilterBuilder|MockObject
-     */
-    private $filterBuilder;
-
-    /**
-     * @var ProductRepository|MockObject
-     */
-    private $productRepository;
-
-    /**
      * @var SaveHandler
      */
     private $saveHandler;
@@ -87,28 +65,10 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->productAttributeRepository = $this->getMock(ProductAttributeRepositoryInterface::class);
 
-        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addFilters', 'create', '__wakeup'])
-            ->getMock();
-
-        $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setValue', 'setField', 'setConditionType', 'create', '__wakeup'])
-            ->getMock();
-
-        $this->productRepository = $this->getMockBuilder(ProductRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getList', '__wakeup'])
-            ->getMock();
-
         $this->saveHandler = new SaveHandler(
             $this->optionRepository,
             $this->configurableFactory,
-            $this->productAttributeRepository,
-            $this->productRepository,
-            $this->searchCriteriaBuilder,
-            $this->filterBuilder
+            $this->productAttributeRepository
         );
     }
 
