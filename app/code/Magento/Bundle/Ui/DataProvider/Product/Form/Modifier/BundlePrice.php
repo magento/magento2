@@ -63,6 +63,7 @@ class BundlePrice extends AbstractModifier
                             'sortOrder' => self::SORT_ORDER,
                             'formElement' => Form\Element\Checkbox::NAME,
                             'componentType' => Form\Field::NAME,
+                            'label' => __('Dynamic Price'),
                             'prefer' => 'toggle',
                             'additionalClasses' => 'admin__field-x-small',
                             'templates' => ['checkbox' => 'ui/form/components/single/switcher'],

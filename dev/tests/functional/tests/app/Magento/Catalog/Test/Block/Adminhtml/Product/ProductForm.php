@@ -294,7 +294,9 @@ class ProductForm extends FormSections
             $this->openSection($sectionName);
             $section->addNewAttribute($sectionName);
         } else {
-            throw new \Exception("$sectionName hasn't 'Add attribute' button or is not instance of ProductSection class.");
+            throw new \Exception(
+                "$sectionName hasn't 'Add attribute' button or is not instance of ProductSection class."
+            );
         }
     }
 }
