@@ -28,7 +28,7 @@ define([
          * @returns {*} instance - Chainable
          */
         disableSelect: function () {
-            var empty = !(this.options().length - 1);
+            var empty = !this.options().length;
 
             this.disabled(empty);
 
