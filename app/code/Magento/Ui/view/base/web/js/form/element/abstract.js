@@ -26,6 +26,7 @@ define([
             placeholder: '',
             description: '',
             label: '',
+            labelVisible: true,
             error: '',
             warn: '',
             notice: '',

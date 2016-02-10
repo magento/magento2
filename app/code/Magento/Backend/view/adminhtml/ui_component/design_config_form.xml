@@ -34,20 +34,67 @@
                 <item name="sortOrder" xsi:type="number">20</item>
             </item>
         </argument>
-        <field name="theme_ua_regexp">
+        <container name="theme_ua_regexp">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">User Agent Rules</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/dynamic-rows</item>
+                    <item name="template" xsi:type="string">ui/dynamic-rows/templates/grid</item>
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="recordTemplate" xsi:type="string">record</item>
                     <item name="dataScope" xsi:type="string">theme_ua_regexp</item>
-                    <item name="notice" xsi:type="string" translate="true">Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples: Firefox /^mozilla/i</item>
-                    <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Find a string in client user-agent header and switch to specific design theme for that browser.</item>
+                    <item name="deleteButtonLabel" xsi:type="string">Remove</item>
+                    <item name="dndConfig" xsi:type="array">
+                        <item name="enabled" xsi:type="boolean">false</item>
                     </item>
                 </item>
             </argument>
-        </field>
+            <container name="record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">User Agent Rules</item>
+                        <item name="component" xsi:type="string" translate="true">Magento_Ui/js/dynamic-rows/record</item>
+                        <item name="sortOrder" xsi:type="number">20</item>
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                    </item>
+                </argument>
+                <field name="search_string">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="dataScope" xsi:type="string">search_string</item>
+                            <item name="fit" xsi:type="boolean">true</item>
+                            <item name="label" xsi:type="string">Search String</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="theme">
+                    <argument name="data" xsi:type="array">
+                        <item name="options" xsi:type="object">Magento\Framework\View\Design\Theme\Label</item>
+                        <item name="config" xsi:type="array">
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="dataScope" xsi:type="string">theme_name</item>
+                            <item name="fit" xsi:type="boolean">true</item>
+                            <item name="label" xsi:type="string">Theme Name</item>
+                        </item>
+                    </argument>
+                </field>
+                <actionDelete>
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="componentType" xsi:type="string">actionDelete</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="fit" xsi:type="boolean">true</item>
+                            <item name="label" xsi:type="string">Actions</item>
+                            <item name="sortOrder" xsi:type="string">50</item>
+                            <item name="additionalClasses" xsi:type="string">data-grid-actions-cell</item>
+                        </item>
+                    </argument>
+                </actionDelete>
+            </container>
+        </container>
     </fieldset>
     <fieldset name="other_settings">
         <fieldset name="pagination">
