@@ -11,6 +11,10 @@ use Magento\Framework\Search\SearchEngine\ConfigInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\Backend\Model\Menu\Config as MenuConfig;
 
+/**
+ * Class MenuBuilderTest. A unit test class to test functionality of
+ * Magento\Search\Model\SearchEngine\MenuBuilder class
+ */
 class MenuBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
