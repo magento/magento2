@@ -150,4 +150,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
         return $conditionMock;
     }
+
+    public function testGetConditionsFieldSetId()
+    {
+        $formName = 'form_name';
+        $this->model->setId(100);
+        $expectedResult = 'form_namerule_conditions_fieldset_100';
+        $this->assertEquals($expectedResult, $this->model->getConditionsFieldSetId($formName));
+    }
 }

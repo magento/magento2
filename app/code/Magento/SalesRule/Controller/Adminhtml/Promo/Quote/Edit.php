@@ -65,8 +65,10 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
             $model->addData($data);
         }
 
-        $model->getConditions()->setJsFormObject('rule_conditions_fieldset');
         $model->getConditions()->setFormName('sales_rule_form');
+        $model->getConditions()->setJsFormObject(
+            $model->getConditionsFieldSetId($model->getConditions()->getFormName())
+        );
         $model->getActions()->setJsFormObject('rule_actions_fieldset');
         $model->getActions()->setFormName('sales_rule_form');
 
