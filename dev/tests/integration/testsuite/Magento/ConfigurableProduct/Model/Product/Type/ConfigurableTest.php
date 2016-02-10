@@ -177,8 +177,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfigurableAttributesAsArray()
     {
-        $attributes = $this->model->getConfigurableAttributesAsArray($this->product);
+        $product = $this->productRepository->getById(1, true);
+        $attributes = $this->model->getConfigurableAttributesAsArray($product);
         $attribute = reset($attributes);
+
         $this->assertArrayHasKey('id', $attribute);
         $this->assertArrayHasKey('label', $attribute);
         $this->assertArrayHasKey('use_default', $attribute);
@@ -309,12 +311,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSelectedAttributesInfo()
     {
-        $attributes = $this->model->getConfigurableAttributesAsArray($this->product);
+        $product = $this->productRepository->getById(1, true);
+        $attributes = $this->model->getConfigurableAttributesAsArray($product);
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $this->product->addCustomOption('attributes', serialize([$attribute['attribute_id'] => $optionValueId]));
-        $info = $this->model->getSelectedAttributesInfo($this->product);
+        $product->addCustomOption('attributes', serialize([$attribute['attribute_id'] => $optionValueId]));
+        $info = $this->model->getSelectedAttributesInfo($product);
         $this->assertEquals([['label' => 'Test Configurable', 'value' => 'Option 1']], $info);
     }
 
@@ -378,9 +381,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOrderOptions()
     {
-        $this->_prepareForCart();
+        $product = $this->_prepareForCart();
 
-        $result = $this->model->getOrderOptions($this->product);
+        $result = $this->model->getOrderOptions($product);
         $this->assertArrayHasKey('info_buyRequest', $result);
         $this->assertArrayHasKey('attributes_info', $result);
         $this->assertEquals(
@@ -407,8 +410,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsVirtual()
     {
-        $this->_prepareForCart();
-        $this->assertFalse($this->model->isVirtual($this->product));
+        $product = $this->_prepareForCart();
+        $this->assertFalse($this->model->isVirtual($product));
     }
 
     /**
@@ -467,8 +470,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetSku()
     {
         $this->assertEquals('configurable', $this->model->getSku($this->product));
-        $this->_prepareForCart();
-        $this->assertStringStartsWith('simple_', $this->model->getSku($this->product));
+        $product = $this->_prepareForCart();
+        $this->assertStringStartsWith('simple_', $this->model->getSku($product));
     }
 
     public function testProcessBuyRequest()
@@ -501,7 +504,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $extensionAttributes->setConfigurableProductLinks([$oneChildId]);
         $product->setExtensionAttributes($extensionAttributes);
 
-        $product->save();
+        $this->productRepository->save($product);
 
         self::assertEquals(
             [
@@ -532,7 +535,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $extensionAttributes->setConfigurableProductLinks([]);
         $product->setExtensionAttributes($extensionAttributes);
 
-        $product->save();
+        $this->productRepository->save($product);
 
         self::assertEquals(
             [
@@ -560,16 +563,21 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Select one of the options and "prepare for cart" with a proper buy request
+     *
+     * @return ProductInterface
      */
     protected function _prepareForCart()
     {
-        $attributes = $this->model->getConfigurableAttributesAsArray($this->product);
+        $product = $this->productRepository->getById(1, true);
+        $attributes = $this->model->getConfigurableAttributesAsArray($product);
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
         $buyRequest = new \Magento\Framework\DataObject(
             ['qty' => 5, 'super_attribute' => [$attribute['attribute_id'] => $optionValueId]]
         );
-        $this->model->prepareForCart($buyRequest, $this->product);
+        $this->model->prepareForCart($buyRequest, $product);
+
+        return $product;
     }
 }
