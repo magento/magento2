@@ -337,7 +337,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     protected function _getWebsitesMap()
     {
         $map = [];
-        $websites = $this->_storeManager->getWebsites(true);
+        $websites = $this->_storeManager->getWebsites();
         foreach ($websites as $website) {
             // Continue if website has no store to be able to create catalog rule for website without store
             if ($website->getDefaultStore() === null) {
