@@ -23,7 +23,7 @@ class VaultEnableAssigner extends AbstractDataAssignObserver
             $payment = $this->readPaymentModelArgument($observer);
             $payment->setAdditionalInformation(
                 VaultConfigProvider::IS_ACTIVE_CODE,
-                (bool)(int)$data[VaultConfigProvider::IS_ACTIVE_CODE]
+                filter_var($data[VaultConfigProvider::IS_ACTIVE_CODE], FILTER_VALIDATE_BOOLEAN)
             );
         }
     }

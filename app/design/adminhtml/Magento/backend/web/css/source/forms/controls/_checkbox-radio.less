@@ -25,7 +25,6 @@
         display: inline-block;
 
         &:before {
-            &:extend(.abs-icon all);
             background-color: @control-checkbox-radio__background-color;
             border: 1px solid @field-control__border-color;
             color: transparent;
@@ -100,8 +99,7 @@
     + label {
         &:before {
             border-radius: @control-checkbox-radio__size;
-            content: @icon-dot__content;
-            font-size: 1rem;
+            content: '';
             transition: @smooth__border-color, color .1s ease-in;
         }
     }
@@ -117,6 +115,21 @@
 
     //  Radio checked state
     &:checked {
+        + label {
+            position: relative;
+
+            &:after {
+                background-color: @control-checkbox-radio-mark__color;
+                border-radius: 50%;
+                content: '';
+                height: 10px;
+                left: 3px;
+                position: absolute;
+                top: 4px;
+                width: 10px;
+            }
+        }
+
         &:not([disabled]),
         &:not(.disabled) {
             //  Prevent hover effects for checked radio
@@ -139,6 +152,7 @@
 .admin__control-checkbox {
     + label {
         &:before {
+            &:extend(.abs-icon all);
             border-radius: 1px;
             content: '';
             font-size: 0;

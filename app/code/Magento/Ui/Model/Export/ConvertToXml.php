@@ -125,6 +125,8 @@ class ConvertToXml
         $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();
 
+        $component->getContext()->getDataProvider()->setLimit(0, 0);
+
         /** @var SearchResultInterface $searchResult */
         $searchResult = $component->getContext()->getDataProvider()->getSearchResult();
 

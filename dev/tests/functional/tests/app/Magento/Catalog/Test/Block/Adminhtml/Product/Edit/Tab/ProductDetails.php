@@ -44,7 +44,7 @@ class ProductDetails extends ProductTab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
         // Select attribute set

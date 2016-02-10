@@ -6,13 +6,14 @@
 namespace Magento\BraintreeTwo\Controller\Payment;
 
 use Magento\BraintreeTwo\Gateway\Command\GetPaymentNonceCommand;
-use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Webapi\Exception;
 use Psr\Log\LoggerInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 
 /**
  * Class GetNonce
@@ -25,7 +26,7 @@ class GetNonce extends Action
     private $logger;
 
     /**
-     * @var Session
+     * @var SessionManagerInterface
      */
     private $session;
 
@@ -37,13 +38,13 @@ class GetNonce extends Action
     /**
      * @param Context $context
      * @param LoggerInterface $logger
-     * @param Session $session
+     * @param SessionManagerInterface $session
      * @param GetPaymentNonceCommand $command
      */
     public function __construct(
         Context $context,
         LoggerInterface $logger,
-        Session $session,
+        SessionManagerInterface $session,
         GetPaymentNonceCommand $command
     ) {
         parent::__construct($context);
@@ -62,8 +63,7 @@ class GetNonce extends Action
         try {
             $publicHash = $this->getRequest()->getParam('public_hash');
             $customerId = $this->session->getCustomerId();
-            $result = $this->command->execute(['publicHash' => $publicHash, 'customerId' => $customerId])
-                ->get();
+            $result = $this->command->execute(['public_hash' => $publicHash, 'customer_id' => $customerId])->get();
             $response->setData(['paymentMethodNonce' => $result['paymentMethodNonce']]);
 
         } catch (\Exception $e) {

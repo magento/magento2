@@ -303,7 +303,7 @@ class Context implements ContextInterface
         $this->acceptType = 'html';
 
         $rawAcceptType = $this->request->getHeader('Accept');
-        if ($this->request->getParam('isAjax') === 'true' || strpos($rawAcceptType, 'json') !== false) {
+        if (strpos($rawAcceptType, 'json') !== false) {
             $this->acceptType = 'json';
         } else if (strpos($rawAcceptType, 'html') !== false) {
             $this->acceptType = 'html';

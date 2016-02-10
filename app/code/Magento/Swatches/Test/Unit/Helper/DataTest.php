@@ -213,24 +213,21 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->prepareVariationCollection();
 
         $this->productMock->method('getId')->willReturn(95);
-        $this->productRepoMock->expects($this->atLeastOnce())->method('getById')->with(95)->willReturn(
-            $this->productMock
-        );
 
         $this->getProductMedia($typesArray);
 
-        $this->swatchHelperObject->loadFirstVariationWithSwatchImage($this->productMock, ['color' => 31]);
+        $this->swatchHelperObject->loadFirstVariationWithSwatchImage($this->productMock, 'color', 31);
     }
 
     public function testLoadFirstVariationWithSwatchImageWithException()
     {
         $this->setExpectedException('\Magento\Framework\Exception\InputException');
-        $this->swatchHelperObject->loadFirstVariationWithSwatchImage(null, ['color' => 31]);
+        $this->swatchHelperObject->loadFirstVariationWithSwatchImage(null, 'color', 31);
     }
 
     public function testLoadFirstVariationWithSwatchImageWithoutProduct()
     {
-        $this->swatchHelperObject->loadFirstVariationWithSwatchImage($this->productMock, ['color' => 31]);
+        $this->swatchHelperObject->loadFirstVariationWithSwatchImage($this->productMock, 'color', 31);
     }
 
     /**
@@ -394,7 +391,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         if (gettype($product) == 'integer') {
             $this->productRepoMock
-                ->expects($this->once())
+                ->expects($this->any())
                 ->method('getById')
                 ->with(95)
                 ->willReturn($this->productMock);
@@ -411,6 +408,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function getAttributesFromConfigurable()
     {
+        $product1 = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $product1->expects($this->any())->method('isSaleable')->willReturn(true);
+        $product1->expects($this->any())->method('getData')->with('color')->willReturn(1);
+
+        $product2 = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $product2->expects($this->any())->method('isSaleable')->willReturn(true);
+        $product2->expects($this->any())->method('getData')->with('color')->willReturn(3);
+
+        $simpleProducts = [$product1, $product2];
+
         $configurable = $this->getMock(
             '\Magento\ConfigurableProduct\Model\Product\Type\Configurable',
             [],
@@ -433,13 +440,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $configurable
-            ->expects($this->atLeastOnce())
+            ->expects($this->any())
             ->method('getConfigurableAttributes')
             ->with($this->productMock)
             ->willReturn([$confAttribute, $confAttribute]);
 
+        $configurable->expects($this->any())->method('getUsedProducts')->with($this->productMock)
+            ->willReturn($simpleProducts);
+
         $confAttribute
-            ->expects($this->atLeastOnce())
+            ->expects($this->any())
             ->method('__call')
             ->with('getProductAttribute')
             ->willReturn($this->attributeMock);
@@ -448,7 +458,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function prepareVariationCollection()
     {
         $this->productCollectionFactoryMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('create')
             ->willReturn($this->productCollectionMock);
 

@@ -25,6 +25,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method array getAffectedCategoryIds()
  * @method Category setUrlKey(string $urlKey)
  * @method Category setUrlPath(string $urlPath)
+ * @method Category getSkipDeleteChildren()
+ * @method Category setSkipDeleteChildren(boolean $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)

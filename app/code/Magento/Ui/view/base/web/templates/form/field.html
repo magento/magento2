@@ -4,12 +4,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field" visible="visible" css="_required: required, _disabled: disabled, _error: error">
+<div class="admin__field" visible="visible" css="$data.additionalClasses" attr="'data-config-scope': $data.scope_label">
 
     <label class="admin__field-label" if="$data.label" attr="for: uid">
         <span text="label"/>
     </label>
-    <div class="admin__field-control">
+    <div class="admin__field-control"
+         css="'_with-tooltip': $data.tooltip">
         <render args="elementTmpl" ifnot="hasAddons()"/>
 
         <div class="admin__control-addon" if="hasAddons()">
@@ -28,7 +29,7 @@
         <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
             <span text="notice"/>
         </div>
-        
+
         <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
     </div>
 </div>

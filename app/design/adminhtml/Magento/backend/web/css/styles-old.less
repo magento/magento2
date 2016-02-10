@@ -2024,8 +2024,7 @@
     }
 
     .switcher input[type="checkbox"] {
-        position: absolute;
-        left: -999em;
+        .lib-visually-hidden();
     }
 
     .switcher-label {
@@ -2067,6 +2066,13 @@
 
     .switcher input[type="checkbox"]:checked + .switcher-label:before {
         content: attr(data-text-on);
+    }
+
+    .admin__actions-switch {
+        .admin__actions-switch-checkbox {
+            position: absolute;
+            z-index: -1;
+        }
     }
 
     //
@@ -5068,10 +5074,9 @@
 
 //  System -> Notifications
 .adminhtml-notification-index {
-    .admin__scope-old {
-        .col-actions a {
-            &:extend(.col-actions-links);
-        }
+    .col-actions a {
+        &:extend(.col-actions-links);
+        white-space: nowrap;
     }
 }
 

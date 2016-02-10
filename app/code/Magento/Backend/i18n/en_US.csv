@@ -306,7 +306,7 @@ YTD,YTD
 "Maximum sender name length is 255. Please correct your settings.","Maximum sender name length is 255. Please correct your settings."
 "The file you're uploading exceeds the server size limit of %1 kilobytes.","The file you're uploading exceeds the server size limit of %1 kilobytes."
 "The base directory to upload file is not specified.","The base directory to upload file is not specified."
-"The specified image adapter cannot be used because of: ","The specified image adapter cannot be used because of: "
+"The specified image adapter cannot be used because of: %1","The specified image adapter cannot be used because of: %1"
 "Default scope","Default scope"
 "Base currency","Base currency"
 "Display default currency","Display default currency"
