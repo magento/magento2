@@ -58,9 +58,9 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $productIds the children id array
      * @return $this
      */
-    public function saveProducts($mainProduct, $productIds)
+    public function saveProducts($mainProduct, array $productIds)
     {
-        if (!$mainProduct instanceof ProductInterface || empty($productIds)) {
+        if (!$mainProduct instanceof ProductInterface) {
             return $this;
         }
 
@@ -72,14 +72,21 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $data[] = ['product_id' => (int) $id, 'parent_id' => (int) $productId];
         }
 
-        $this->getConnection()->insertOnDuplicate(
-            $this->getMainTable(),
-            $data,
-            ['product_id', 'parent_id']
-        );
+        if (!empty($data)) {
+            $this->getConnection()->insertOnDuplicate(
+                $this->getMainTable(),
+                $data,
+                ['product_id', 'parent_id']
+            );
+        }
 
-        $where = ['parent_id = ?' => $productId, 'product_id NOT IN(?)' => $productIds];
+        $where = ['parent_id = ?' => $productId];
+        if (!empty($productIds)) {
+            $where['product_id NOT IN(?)'] = $productIds;
+        }
+
         $this->getConnection()->delete($this->getMainTable(), $where);
+
         // configurable product relations should be added to relation table
         $this->catalogProductRelation->processRelations($productId, $productIds);
 

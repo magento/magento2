@@ -8,7 +8,6 @@ namespace Magento\ConfigurableProduct\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
@@ -36,11 +35,6 @@ class SaveHandler
     private $productAttributeRepository;
 
     /**
-     * @var LinkManagementInterface
-     */
-    private $linkManagement;
-
-    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -60,7 +54,6 @@ class SaveHandler
      * @param OptionRepositoryInterface $optionRepository
      * @param ConfigurableFactory $configurableFactory
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
-     * @param LinkManagementInterface $linkManagement
      * @param ProductRepositoryInterface $productRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
@@ -69,7 +62,6 @@ class SaveHandler
         OptionRepositoryInterface $optionRepository,
         ConfigurableFactory $configurableFactory,
         ProductAttributeRepositoryInterface $productAttributeRepository,
-        LinkManagementInterface $linkManagement,
         ProductRepositoryInterface $productRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder
@@ -77,7 +69,6 @@ class SaveHandler
         $this->optionRepository = $optionRepository;
         $this->configurableFactory = $configurableFactory;
         $this->productAttributeRepository = $productAttributeRepository;
-        $this->linkManagement = $linkManagement;
         $this->productRepository = $productRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
@@ -110,13 +101,10 @@ class SaveHandler
         $this->deleteConfigurableProductAttributes($entity, $ids);
 
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
-        if (!empty($configurableLinks)) {
-            /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable */
-            $configurable = $this->configurableFactory->create();
-            $configurable->saveProducts($entity, $configurableLinks);
-        }
 
-        $this->deleteConfigurableProductLinks($entity, $configurableLinks);
+        /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable */
+        $configurable = $this->configurableFactory->create();
+        $configurable->saveProducts($entity, $configurableLinks);
 
         return $entity;
     }
@@ -145,42 +133,15 @@ class SaveHandler
      * Remove product attributes
      *
      * @param ProductInterface $product
-     * @param array $ids
+     * @param array $attributesIds
      * @return void
      */
-    private function deleteConfigurableProductAttributes(ProductInterface $product, array $ids)
+    private function deleteConfigurableProductAttributes(ProductInterface $product, array $attributesIds)
     {
         $list = $this->optionRepository->getList($product->getSku());
         foreach ($list as $item) {
-            if (!in_array($item->getId(), $ids)) {
+            if (!in_array($item->getId(), $attributesIds)) {
                 $this->optionRepository->deleteById($product->getSku(), $item->getId());
-            }
-        }
-    }
-
-    /**
-     * Remove product links
-     *
-     * @param ProductInterface $product
-     * @param array $ids
-     * @return void
-     */
-    private function deleteConfigurableProductLinks(ProductInterface $product, array $ids)
-    {
-        $filters[] = $this->filterBuilder->setField('entity_id')
-            ->setConditionType('in')
-            ->setValue($ids)
-            ->create();
-        $criteria = $this->searchCriteriaBuilder->addFilters($filters)->create();
-        $linkedProducts = $this->productRepository->getList($criteria)->getItems();
-        $skuList = [];
-        foreach ($linkedProducts as $linked) {
-            $skuList[] = $linked->getSku();
-        }
-        $list = $this->linkManagement->getChildren($product->getSku());
-        foreach ($list as $item) {
-            if (!in_array($item->getSku(), $skuList)) {
-                $this->linkManagement->removeChild($product->getSku(), $item->getSku());
             }
         }
     }
