@@ -17,7 +17,10 @@
             <block class="Magento\Backend\Block\Template" name="refresh_statistics" after="store_switcher" template="Magento_Backend::dashboard/totalbar/refreshstatistics.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Backend\Block\Dashboard" name="dashboard"/>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="timeline.markup"
+                   template="Magento_Backend::timeline.phtml"/>
+            <!--<block class="Magento\Backend\Block\Dashboard" name="dashboard"/>-->
         </referenceContainer>
     </body>
 </page>
