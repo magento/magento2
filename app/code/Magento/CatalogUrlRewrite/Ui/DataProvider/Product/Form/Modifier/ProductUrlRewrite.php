@@ -91,6 +91,16 @@ class ProductUrlRewrite extends AbstractModifier
                 $this->locator->getProduct()->getStoreId()
             );
 
+            $meta = $this->arrayManager->merge($containerPath, $meta, [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'component' => 'Magento_Ui/js/form/components/group',
+                        ],
+                    ],
+                ],
+            ]);
+
             $checkbox['arguments']['data']['config'] = [
                 'componentType' => Field::NAME,
                 'formElement' => Checkbox::NAME,

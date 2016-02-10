@@ -605,6 +605,20 @@ class AdvancedPricing extends AbstractModifier
             ],
         ];
 
+        $this->meta = $this->arrayManager->merge(
+            $this->getElementArrayPath($this->meta, static::CONTAINER_PREFIX . AttributeConstantsInterface::CODE_PRICE),
+            $this->meta,
+            [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'component' => 'Magento_Ui/js/form/components/group',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
         $this->meta['advanced_pricing_modal']['children']['advanced-pricing'] = $this->meta['advanced-pricing'];
         unset($this->meta['advanced-pricing']);
 
