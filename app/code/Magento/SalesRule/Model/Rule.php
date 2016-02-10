@@ -598,4 +598,13 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         }
         return $address;
     }
+
+    /**
+     * @param string $formName
+     * @return string
+     */
+    public function getConditionsFieldSetId($formName = '')
+    {
+        return $formName . 'rule_conditions_fieldset_' . $this->getId();
+    }
 }
