@@ -136,6 +136,9 @@ define([
                 node.isTemplate = false;
 
                 templates.set(node.name, node);
+                registry.get(node.parentName, function (parent) {
+                    parent.childTemplate = node;
+                });
 
                 return false;
             }
