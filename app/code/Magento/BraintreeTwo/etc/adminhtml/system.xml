@@ -68,6 +68,20 @@
                             <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
                             <config_path>payment/braintreetwo/merchant_account_id</config_path>
                         </field>
+                        <field id="fraud_protection" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Advanced Fraud Protection</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>Be sure to Enable Advanced Fraud Protection in Your Braintree Account in Settings/Processing Section</comment>
+                            <config_path>payment/braintreetwo/fraud_protection</config_path>
+                        </field>
+                        <field id="kount_merchant_id" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Kount Merchant ID</label>
+                            <comment><![CDATA[Used for direct fraud tool integration. Make sure you also contact <a href="mailto:accounts@braintreepayments.com">accounts@braintreepayments.com</a> to setup your Kount account.]]></comment>
+                            <depends>
+                                <field id="fraud_protection">1</field>
+                            </depends>
+                            <config_path>payment/braintreetwo/kount_merchant_id</config_path>
+                        </field>
                         <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Debug</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -109,6 +123,30 @@
                             <frontend_model>Magento\BraintreeTwo\Block\Adminhtml\Form\Field\CountryCreditCard</frontend_model>
                             <backend_model>Magento\BraintreeTwo\Model\Adminhtml\System\Config\CountryCreditCard</backend_model>
                             <config_path>payment/braintreetwo/countrycreditcard</config_path>
+                        </field>
+                    </group>
+                    <group id="braintreetwo_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="41">
+                        <label>3D Secure Verification Settings</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="verify_3dsecure" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>3D Secure Verification</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintreetwo/verify_3dsecure</config_path>
+                        </field>
+                        <field id="threshold_amount" translate="label" type="text" sortOrder="151" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Threshold Amount</label>
+                            <config_path>payment/braintreetwo/threshold_amount</config_path>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="152" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Verify for Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/braintreetwo/verify_all_countries</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="153" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Verify for Specific Countries</label>
+                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/braintreetwo/verify_specific_countries</config_path>
                         </field>
                     </group>
                 </group>

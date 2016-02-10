@@ -16,7 +16,7 @@
     <button class="action-select" translate="'Select'" toggleCollapsible/>
     <ul class="action-menu" css="_active: $collapsible.opened">
         <li repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'">
-            <a class="action-menu-item" click="$col.getActionHandler($action())" text="$action().label" attr="href: $action().href"/>
+            <a class="action-menu-item" click="$col.getActionHandler($action())" text="$action().label" attr="href: $action().href, 'data-action': 'item-' + $action().index"/>
         </li>
     </ul>
 </div>

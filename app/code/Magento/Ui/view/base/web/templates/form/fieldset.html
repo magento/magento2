@@ -5,7 +5,7 @@
  */
 -->
 <div class="fieldset-wrapper"
-     css="'admin__collapsible-block-wrapper': collapsible, '_show': opened, '_hide': !opened"
+     css="$data.additionalClasses"
      attr="'data-level': $data.level">
     <div class="fieldset-wrapper-title"
          tabindex="0"
@@ -19,18 +19,18 @@
                       '_error': error">
             <span text="label"/>
             <span class="admin__page-nav-item-messages" if="element.collapsible">
-               <span class="admin__page-nav-item-message _changed">
-                   <span class="admin__page-nav-item-message-icon"></span>
-                   <span class="admin__page-nav-item-message-tooltip"
-                         data-bind="i18n: 'Changes have been made to this section that have not been saved.'">
-                   </span>
-               </span>
-               <span class="admin__page-nav-item-message _error">
-                   <span class="admin__page-nav-item-message-icon"></span>
-               </span>
+                <span class="admin__page-nav-item-message _changed">
+                    <span class="admin__page-nav-item-message-icon"></span>
+                    <span class="admin__page-nav-item-message-tooltip"
+                          data-bind="i18n: 'Changes have been made to this section that have not been saved.'">
+                    </span>
+                </span>
+                <span class="admin__page-nav-item-message _error">
+                    <span class="admin__page-nav-item-message-icon"></span>
+                </span>
                 <span class="admin__page-nav-item-message-loader">
-                    <span class="spinner" repeat="8">
-                        <span/>
+                    <span class="spinner">
+                       <span repeat="8"/>
                     </span>
                </span>
             </span>

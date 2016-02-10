@@ -25,6 +25,10 @@
     <type name="Magento\Directory\Model\ResourceModel\Country\Collection" shared="false">
         <arguments>
             <argument name="helperData" xsi:type="object">DirectoryHelperDataProxy</argument>
+            <argument name="countriesWithNotRequiredStates" xsi:type="array">
+                <item name="FR" xsi:type="string">FR</item>
+                <item name="DE" xsi:type="string">DE</item>
+            </argument>
         </arguments>
     </type>
     <preference for="Magento\Directory\Model\Country\Postcode\ConfigInterface" type="Magento\Directory\Model\Country\Postcode\Config" />

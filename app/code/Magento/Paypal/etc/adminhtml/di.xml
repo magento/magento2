@@ -60,4 +60,12 @@
             <argument xsi:type="object" name="schemaLocator">Magento\Paypal\Model\Config\Rules\SchemaLocator</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item xsi:type="object" name="payflowpro">Magento\Paypal\Model\Payflow\Transparent</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

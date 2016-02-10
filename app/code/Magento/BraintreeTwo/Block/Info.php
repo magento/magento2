@@ -10,7 +10,6 @@ use Magento\Payment\Block\ConfigurableInfo;
 
 /**
  * Class Info
- * @package Magento\BraintreeTwo\Block
  */
 class Info extends ConfigurableInfo
 {

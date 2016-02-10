@@ -8,13 +8,6 @@
 //  _____________________________________________
 
 //
-//  Variables
-//  ---------------------------------------------
-
-@data-grid-sticky-header__z-index: @page-actions__fixed__z-index;
-@data-grid-overlay__z-index: @data-grid-sticky-header__z-index + 1;
-
-//
 //  Components
 //  ---------------------------------------------
 
@@ -68,9 +61,9 @@
 }
 
 .data-grid-cell-content {
+    display: inline-block;
     overflow: hidden;
     width: 100%;
-    display: inline-block;
 }
 
 body._in-resize {
@@ -355,10 +348,9 @@ body._in-resize {
         vertical-align: middle;
     }
 
-    .data-grid-onoff-label {
-        > span {
-            .lib-visually-hidden();
-        }
+    .data-grid-onoff-cell {
+        text-align: center;
+        width: 12rem;
     }
 
     .data-grid-actions-cell {
@@ -711,6 +703,19 @@ body._in-resize {
     }
 }
 
+//  State actions column
+.data-grid-state-cell-inner {
+    display: block;
+    padding: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+    text-align: center;
+
+    > span {
+        display: inline-block;
+        font-style: @font-style__emphasis;
+        padding: .6rem 0;
+    }
+}
+
 //  Nested rows
 .data-grid-row-parent {
     &._active {
@@ -751,14 +756,22 @@ body._in-resize {
 .data-grid-info-panel {
     box-shadow: 0 0 5px rgba(0, 0, 0, .5);
     margin: @data-grid-header-row__indent .1rem -(@data-grid-header-row__indent);
-    padding: @data-grid-th__padding-vertical;
 
     .messages {
-        margin-bottom: @indent__s;
+        overflow: hidden;
+
+        .message {
+            margin: @data-grid-th__padding-vertical;
+
+            &:last-child {
+                margin-bottom: @data-grid-th__padding-vertical;
+            }
+        }
     }
 }
 
 .data-grid-info-panel-actions {
+    padding: @data-grid-th__padding-vertical;
     text-align: right;
 }
 

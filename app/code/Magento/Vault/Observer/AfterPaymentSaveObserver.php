@@ -6,11 +6,14 @@
 
 namespace Magento\Vault\Observer;
 
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Model\PaymentTokenFactory;
-use Magento\Vault\Model\PaymentTokenManagement;
+use Magento\Vault\Api\PaymentTokenManagementInterface;
+use Magento\Vault\Model\Ui\VaultConfigProvider;
 
 /**
  * Order payment after save observer for storing payment vault record in db
@@ -18,114 +21,116 @@ use Magento\Vault\Model\PaymentTokenManagement;
 class AfterPaymentSaveObserver implements ObserverInterface
 {
     const PAYMENT_OBJECT_DATA_KEY = 'payment';
-    const TRANSACTION_CC_TOKEN_DATA_KEY = 'token';
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtensionFactory
-     */
-    protected $paymentExtensionFactory;
-
-    /**
-     * @var PaymentTokenManagement
+     * @var PaymentTokenManagementInterface
      */
     protected $paymentTokenManagement;
 
     /**
-     * @var PaymentTokenFactory
-     */
-    protected $paymentTokenFactory;
-
-    /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @var EncryptorInterface
      */
     protected $encryptor;
 
     /**
-     * @param \Magento\Sales\Api\Data\OrderPaymentExtensionFactory $paymentExtensionFactory
-     * @param PaymentTokenManagement $paymentTokenManagement
-     * @param PaymentTokenFactory $paymentTokenFactory
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param PaymentTokenManagementInterface $paymentTokenManagement
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
-        \Magento\Sales\Api\Data\OrderPaymentExtensionFactory $paymentExtensionFactory,
-        PaymentTokenManagement $paymentTokenManagement,
-        PaymentTokenFactory $paymentTokenFactory,
-        \Magento\Framework\Encryption\EncryptorInterface $encryptor
+        PaymentTokenManagementInterface $paymentTokenManagement,
+        EncryptorInterface $encryptor
     ) {
-        $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->paymentTokenFactory = $paymentTokenFactory;
         $this->encryptor = $encryptor;
     }
 
     /**
      * Create payment vault record
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        /** @var Payment $payment */
+        /** @var OrderPaymentInterface $payment */
         $payment = $observer->getDataByKey(self::PAYMENT_OBJECT_DATA_KEY);
-        $order = $payment->getOrder();
-        $gatewayToken = $this->getGatewayCcToken($payment);
+        $extensionAttributes = $payment->getExtensionAttributes();
 
-        if (!empty($gatewayToken)) {
-            $customerId = $order->getCustomerId();
-
-            $paymentToken = $this->paymentTokenManagement->getByGatewayToken($customerId, $gatewayToken);
-            if ($paymentToken === null) {
-                /** @var PaymentTokenInterface $paymentToken */
-                $paymentToken = $this->paymentTokenFactory->create();
-                $paymentToken->setCreatedAt($order->getCreatedAt());
-                $paymentToken->setCustomerId($customerId);
-                $paymentToken->setPaymentMethodCode($payment->getMethod());
-                $paymentToken->setGatewayToken($gatewayToken);
-                $paymentToken->setPublicHash($this->getFrontendHash($paymentToken));
-                $paymentToken->setIsActive(true);
-            }
-
-            $this->paymentTokenManagement->saveTokenWithPaymentLink($paymentToken, $payment);
-
-            $extensionAttributes = $payment->getExtensionAttributes();
-            if ($extensionAttributes === null) {
-                $extensionAttributes = $this->paymentExtensionFactory->create();
-                $payment->setExtensionAttributes($extensionAttributes);
-            }
-            $extensionAttributes->setVaultPaymentToken($paymentToken);
+        $paymentToken = $this->getPaymentToken($extensionAttributes);
+        if ($paymentToken === null) {
+            return $this;
         }
+
+        if ($paymentToken->getEntityId() !== null) {
+            $this->paymentTokenManagement->addLinkToOrderPayment(
+                $paymentToken->getEntityId(),
+                $payment->getEntityId()
+            );
+
+            return $this;
+        }
+
+        $order = $payment->getOrder();
+
+        $paymentToken->setCustomerId($order->getCustomerId());
+        $paymentToken->setIsActive(true);
+        $paymentToken->setPaymentMethodCode($payment->getMethod());
+
+        $additionalInformation = $payment->getAdditionalInformation();
+        if (isset($additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE])) {
+            $paymentToken->setIsVisible(
+                (bool) (int) $additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE]
+            );
+        }
+
+        $paymentToken->setPublicHash($this->generatePublicHash($paymentToken));
+
+        $this->paymentTokenManagement->saveTokenWithPaymentLink($paymentToken, $payment);
+
+        $extensionAttributes->setVaultPaymentToken($paymentToken);
 
         return $this;
     }
 
     /**
-     * Get gateway token from payment info
+     * Generate vault payment public hash
      *
-     * @param Payment $payment
-     * @return string|null
+     * @param PaymentTokenInterface $paymentToken
+     * @return string
      */
-    protected function getGatewayCcToken(Payment $payment)
+    protected function generatePublicHash(PaymentTokenInterface $paymentToken)
     {
-        $gatewayToken = null;
-        $transactionAdditionalInfo = $payment->getTransactionAdditionalInfo();
-
-        if (!empty($transactionAdditionalInfo[self::TRANSACTION_CC_TOKEN_DATA_KEY])) {
-            $gatewayToken = $transactionAdditionalInfo[self::TRANSACTION_CC_TOKEN_DATA_KEY];
+        $hashKey = $paymentToken->getGatewayToken();
+        if ($paymentToken->getCustomerId()) {
+            $hashKey = $paymentToken->getCustomerId();
         }
 
-        return $gatewayToken;
+        $hashKey .= $paymentToken->getPaymentMethodCode()
+            . $paymentToken->getType()
+            . $paymentToken->getTokenDetails();
+
+        return $this->encryptor->getHash($hashKey);
     }
 
     /**
-     * Get frontend vault payment hash
+     * Reads Payment token from Order Payment
      *
-     * @param PaymentTokenInterface $entity
-     * @return string
+     * @param OrderPaymentExtensionInterface | null $extensionAttributes
+     * @return PaymentTokenInterface | null
      */
-    protected function getFrontendHash(PaymentTokenInterface $entity)
+    protected function getPaymentToken(OrderPaymentExtensionInterface $extensionAttributes = null)
     {
-        $hashedString = $entity->getCustomerId() . $entity->getGatewayToken() . time();
-        return $this->encryptor->getHash($hashedString);
+        if (null === $extensionAttributes) {
+            return null;
+        }
+
+        /** @var PaymentTokenInterface $paymentToken */
+        $paymentToken = $extensionAttributes->getVaultPaymentToken();
+
+        if (null === $paymentToken || empty($paymentToken->getGatewayToken())) {
+            return null;
+        }
+
+        return $paymentToken;
     }
 }

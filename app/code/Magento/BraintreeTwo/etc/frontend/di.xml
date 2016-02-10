@@ -27,4 +27,18 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Vault\Model\Ui\TokensConfigProvider">
+        <arguments>
+            <argument name="tokenUiComponentProviders" xsi:type="array">
+                <item name="braintreetwo" xsi:type="object">Magento\BraintreeTwo\Model\Ui\TokenUiComponentProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\BraintreeTwo\Controller\Payment\GetNonce">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
 </config>

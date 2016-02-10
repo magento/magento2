@@ -9,69 +9,68 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order;
 use Magento\Mtf\Block\Block;
 
 /**
- * Class AbstractItems
- * Base Items block on Credit Memo, Invoice, Shipment view page
+ * Base Items block on Credit Memo, Invoice, Shipment view page.
  */
 class AbstractItems extends Block
 {
     /**
-     * Locator for row item
+     * Locator for row item.
      *
      * @var string
      */
-    protected $rowItem = 'tbody tr';
+    protected $rowItem = 'tbody';
 
     /**
-     * Locator for "Product" column
+     * Locator for "Product" column.
      *
      * @var string
      */
     protected $product = '.col-product';
 
     /**
-     * Locator for "Price" column
+     * Locator for "Price" column.
      *
      * @var string
      */
     protected $price = '.col-price .price';
 
     /**
-     * Locator for "Qty" column
+     * Locator for "Qty" column.
      *
      * @var string
      */
     protected $qty = '.col-qty';
 
     /**
-     * Locator for "Subtotal" column
+     * Locator for "Subtotal" column.
      *
      * @var string
      */
     protected $subtotal = '.col-subtotal .price';
 
     /**
-     * Locator for "Tax Amount" column
+     * Locator for "Tax Amount" column.
      *
      * @var string
      */
     protected $taxAmount = '.col-tax .price';
 
     /**
-     * Locator for "Discount Amount" column
+     * Locator for "Discount Amount" column.
      *
      * @var string
      */
     protected $discountAmount = '.col-discount .price';
 
     /**
-     * Locator for "Row total" column
+     * Locator for "Row total" column.
      *
      * @var string
      */
     protected $rowTotal = '.col-total .price';
 
     /**
-     * Get items data
+     * Get items data.
      *
      * @return array
      */
@@ -98,14 +97,14 @@ class AbstractItems extends Block
     }
 
     /**
-     * Parse product name to title and sku product
+     * Parse product name to title and sku product.
      *
      * @param string $product
      * @return array
      */
     protected function parseProductName($product)
     {
-        $data = array_map('trim', explode('SKU:', $product));
+        $data = array_map('trim', explode('SKU:', str_replace("\n", '', $product)));
         return [
             'product' => $data[0],
             'sku' => isset($data[1]) ? $data[1] : ''
@@ -113,7 +112,7 @@ class AbstractItems extends Block
     }
 
     /**
-     * Prepare price
+     * Prepare price.
      *
      * @var string $price
      * @return string

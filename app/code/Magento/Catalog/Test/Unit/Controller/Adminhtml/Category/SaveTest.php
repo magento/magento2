@@ -192,21 +192,25 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      *
      * @param int|bool $categoryId
      * @param int $storeId
-     * @param int|string $activeTabId
      * @param int|null $parentId
      * @return void
      *
      * @dataProvider dataProviderExecute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testExecute($categoryId, $storeId, $activeTabId, $parentId)
+    public function testExecute($categoryId, $storeId, $parentId)
     {
-        $rootCategoryId = 896;
+        $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
         $products = [['any_product']];
         $postData = [
-            'general' => ['general-data'],
+            'general-data',
+            'parent' => $parentId,
             'category_products' => json_encode($products),
         ];
+
+        if (isset($storeId)) {
+            $postData['store_id'] = $storeId;
+        }
         /**
          * @var \Magento\Backend\Model\View\Result\Redirect
          * |\PHPUnit_Framework_MockObject_MockObject $resultRedirectMock
@@ -288,7 +292,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
          */
         $sessionMock = $this->getMock(
             'Magento\Backend\Model\Auth\Session',
-            ['setActiveTabId'],
+            [],
             [],
             '',
             false
@@ -374,7 +378,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                     [
                         ['id', false, $categoryId],
                         ['store', null, $storeId],
-                        ['active_tab_id', null, $activeTabId],
                         ['parent', null, $parentId],
                     ]
                 )
@@ -397,14 +400,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())
             ->method('setStoreId')
             ->with($storeId);
-        if ($activeTabId) {
-            $sessionMock->expects($this->once())
-                ->method('setActiveTabId')
-                ->with($activeTabId);
-        } else {
-            $sessionMock->expects($this->never())
-                ->method('setActiveTabId');
-        }
         $registryMock->expects($this->any())
             ->method('register')
             ->will(
@@ -434,7 +429,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($postData);
         $categoryMock->expects($this->once())
             ->method('addData')
-            ->with($postData['general']);
+            ->with($postData);
         $categoryMock->expects($this->at(0))
             ->method('getId')
             ->will($this->returnValue($categoryId));
@@ -564,13 +559,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             [
                 'categoryId' => false,
                 'storeId' => 7,
-                'activeTabId' => 33,
                 'parentId' => 123,
             ],
             [
                 'categoryId' => false,
                 'storeId' => 7,
-                'activeTabId' => '',
                 'parentId' => null,
             ]
         ];

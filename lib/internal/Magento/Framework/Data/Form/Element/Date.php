@@ -153,7 +153,7 @@ class Date extends AbstractElement
         if (empty($dateFormat)) {
             throw new \Exception(
                 'Output format is not specified. ' .
-                'Please, specify "format" key in constructor, or set it using setFormat().'
+                'Please specify "format" key in constructor, or set it using setFormat().'
             );
         }
 

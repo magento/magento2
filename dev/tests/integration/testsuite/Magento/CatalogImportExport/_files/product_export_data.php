@@ -4,11 +4,15 @@
  * See COPYING.txt for license details.
  */
 
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
 require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';
 
-$productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$productModel = $objectManager->create('Magento\Catalog\Model\Product');
 
 $customOptions = [
     1 => [
@@ -57,4 +61,17 @@ $productModel->setTypeId(
     [$product->getId() => ['position' => 1]]
 );
 
-$product->setOptions($customOptions)->save();
+$options = [];
+
+/** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
+$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+
+foreach ($customOptions as $option) {
+    /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option */
+    $option = $customOptionFactory->create(['data' => $option]);
+    $option->setProductSku($productModel->getSku());
+
+    $options[] = $option;
+}
+
+$productModel->setOptions($options)->save();

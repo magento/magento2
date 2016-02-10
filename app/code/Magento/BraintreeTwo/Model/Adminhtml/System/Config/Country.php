@@ -10,7 +10,6 @@ use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class Country
- * @package Magento\BraintreeTwo\Model\Adminhtml\System\Config
  */
 class Country implements ArrayInterface
 {

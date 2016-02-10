@@ -5,17 +5,15 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Response;
 
-use Braintree_Transaction;
+use \Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\Payment\Gateway\Helper\ContextHelper;
-use Magento\Payment\Gateway\Helper\SubjectReader;
-use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Sales\Model\Order\Payment;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Payment\Gateway\Response\HandlerInterface;
 
 /**
  * Class CardDetailsHandler
- * @package Magento\BraintreeTwo\Gateway\Response
  */
 class CardDetailsHandler implements HandlerInterface
 {
@@ -30,16 +28,27 @@ class CardDetailsHandler implements HandlerInterface
     const CARD_NUMBER = 'cc_number';
 
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Config\Config
+     * @var Config
      */
     private $config;
 
     /**
-     * @param \Magento\BraintreeTwo\Gateway\Config\Config $config
+     * @var SubjectReader
      */
-    public function __construct(Config $config)
-    {
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param Config $config
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(
+        Config $config,
+        SubjectReader $subjectReader
+    ) {
         $this->config = $config;
+        $this->subjectReader = $subjectReader;
     }
 
     /**
@@ -47,13 +56,12 @@ class CardDetailsHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $paymentDO = SubjectReader::readPayment($handlingSubject);
-        /** @var \Braintree_Transaction $transaction */
-        $transaction = $response['object']->transaction;
+        $paymentDO = $this->subjectReader->readPayment($handlingSubject);
+        $transaction = $this->subjectReader->readTransaction($response);
+
         /**
          * @TODO after changes in sales module should be refactored for new interfaces
          */
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
@@ -72,6 +80,7 @@ class CardDetailsHandler implements HandlerInterface
 
     /**
      * Get type of credit card mapped from Braintree
+     *
      * @param string $type
      * @return array
      */

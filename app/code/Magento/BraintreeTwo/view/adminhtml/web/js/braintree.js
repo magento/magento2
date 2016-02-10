@@ -91,11 +91,11 @@ define([
                 return;
             }
 
+            this.enableEventListeners();
+
             if (!this.scriptLoaded()) {
                 this.loadScript();
             }
-
-            this.enableEventListeners();
         },
 
         /**
@@ -118,6 +118,52 @@ define([
          * Setup Braintree SDK
          */
         initBraintree: function () {
+            var self = this;
+
+            try {
+                $('body').trigger('processStart');
+
+                self.braintree.setup(self.clientToken, 'custom', {
+                    id: self.selector,
+                    hostedFields: self.getHostedFields(),
+
+                    /**
+                     * Triggered when sdk was loaded
+                     */
+                    onReady: function () {
+                        $('body').trigger('processStop');
+                    },
+
+                    /**
+                     * Callback for success response
+                     * @param {Object} response
+                     */
+                    onPaymentMethodReceived: function (response) {
+                        if (self.validateCardType()) {
+                            self.setPaymentDetails(response.nonce);
+                            self.placeOrder();
+                        }
+                    },
+
+                    /**
+                     * Error callback
+                     * @param {Object} response
+                     */
+                    onError: function (response) {
+                        self.error(response.message);
+                    }
+                });
+            } catch (e) {
+                $('body').trigger('processStop');
+                self.error(e.message);
+            }
+        },
+
+        /**
+         * Get hosted fields configuration
+         * @returns {Object}
+         */
+        getHostedFields: function () {
             var self = this,
                 fields = {
                     number: {
@@ -137,72 +183,50 @@ define([
                      * @param {Object} event
                      */
                     onFieldEvent: function (event) {
-                        var $cardType = $('#' + self.container).find('.icon-type');
-
-                        if (event.isEmpty === false) {
-                            self.validateCardType();
-                        }
-
-                        if (event.type !== 'fieldStateChange') {
-
-                            return false;
-                        }
-
-                        // remove previously set classes
-                        $cardType.attr('class', 'icon-type');
-                        self.selectedCardType(null);
-
-                        if (event.card) {
-                            $cardType.addClass('icon-type-' + event.card.type);
-                            self.selectedCardType(
-                                validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
-                            );
-                        }
+                        return self.fieldEventHandler(event);
                     }
                 };
 
-            try {
-                $('body').trigger('processStart');
+            if (self.useCvv) {
+                fields.cvv = {
+                    selector: self.getSelector('cc_cid')
+                };
+            }
 
-                if (self.useCvv) {
-                    fields.cvv = {
-                        selector: self.getSelector('cc_cid')
-                    };
-                }
+            return fields;
+        },
 
-                self.braintree.setup(self.clientToken, 'custom', {
-                    id: self.selector,
-                    hostedFields: fields,
+        /**
+         * Function to handle hosted fields events
+         * @param {Object} event
+         * @returns {Boolean}
+         */
+        fieldEventHandler: function (event) {
+            var self = this,
+                $cardType = $('#' + self.container).find('.icon-type');
 
-                    /**
-                     * Triggered when sdk was loaded
-                     */
-                    onReady: function () {
-                        $('body').trigger('processStop');
-                    },
+            if (event.isEmpty === false) {
+                self.validateCardType();
+            }
 
-                    /**
-                     * Callback for success response
-                     * @param {Object} response
-                     */
-                    onPaymentMethodReceived: function (response) {
-                        if (!self.$selector.validate().errorList.length && self.validateCardType()) {
-                            self.setPaymentDetails(response);
-                            $('#' + self.selector).trigger('realOrder');
-                        }
-                    },
+            if (event.type !== 'fieldStateChange') {
 
-                    /**
-                     * Error callback
-                     * @param {Object} response
-                     */
-                    onError: function (response) {
-                        self.error(response.message);
-                    }
-                });
-            } catch (e) {
-                $('body').trigger('processStop');
-                self.error(e.message);
+                return false;
+            }
+
+            // Handle a change in validation or card type
+            if (event.target.fieldKey === 'number') {
+                self.selectedCardType(null);
+            }
+
+            // remove previously set classes
+            $cardType.attr('class', 'icon-type');
+
+            if (event.card) {
+                $cardType.addClass('icon-type-' + event.card.type);
+                self.selectedCardType(
+                    validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
+                );
             }
         },
 
@@ -233,22 +257,35 @@ define([
 
         /**
          * Store payment details
-         * @param {Object} data
+         * @param {String} nonce
          */
-        setPaymentDetails: function (data) {
+        setPaymentDetails: function (nonce) {
             var $container = $('#' + this.container);
 
-            $container.find('[name="payment[payment_method_nonce]"]').val(data.nonce);
+            $container.find('[name="payment[payment_method_nonce]"]').val(nonce);
         },
 
         /**
-         * Trigger Braintree order submit
+         * Trigger order submit
          */
         submitOrder: function () {
             this.$selector.validate().form();
             this.$selector.trigger('afterValidate.beforeSubmit');
             $('body').trigger('processStop');
+
+            // validate parent form
+            if (this.$selector.validate().errorList.length) {
+                return false;
+            }
+
             $('#' + this.container).find('[type="submit"]').trigger('click');
+        },
+
+        /**
+         * Place order
+         */
+        placeOrder: function () {
+            $('#' + this.selector).trigger('realOrder');
         },
 
         /**

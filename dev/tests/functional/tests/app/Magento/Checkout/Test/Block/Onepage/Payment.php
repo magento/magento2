@@ -20,7 +20,7 @@ class Payment extends Block
      *
      * @var string
      */
-    protected $paymentMethodInput = '#%s';
+    protected $paymentMethodInput = '[id^="%s"]';
 
     /**
      * Labels for payment methods.
@@ -34,7 +34,7 @@ class Payment extends Block
      *
      * @var string
      */
-    protected $paymentMethodLabel = '[for="%s"]';
+    protected $paymentMethodLabel = '[for^="%s"]';
 
     /**
      * Continue checkout button.
@@ -70,7 +70,6 @@ class Payment extends Block
      * @var string
      */
     protected $activePaymentMethodSelector = '.payment-method._active';
-
 
     /**
      * Select payment method.

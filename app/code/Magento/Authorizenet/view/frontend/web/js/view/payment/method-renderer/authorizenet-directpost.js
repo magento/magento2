@@ -5,65 +5,59 @@
 define(
     [
         'jquery',
-        'Magento_Payment/js/view/payment/iframe',
-        'Magento_Checkout/js/action/set-payment-information',
-        'Magento_Checkout/js/model/payment/additional-validators',
-        'Magento_Checkout/js/model/full-screen-loader'
+        'Magento_Payment/js/view/payment/iframe'
     ],
-    function ($, Component, setPaymentInformationAction, additionalValidators, fullScreenLoader) {
+    function ($, Component) {
         'use strict';
 
         return Component.extend({
             defaults: {
-                template: 'Magento_Authorizenet/payment/authorizenet-directpost'
+                template: 'Magento_Authorizenet/payment/authorizenet-directpost',
+                timeoutMessage: 'Sorry, but something went wrong. Please contact the seller.'
             },
             placeOrderHandler: null,
             validateHandler: null,
 
-            setPlaceOrderHandler: function(handler) {
+            /**
+             * @param {Object} handler
+             */
+            setPlaceOrderHandler: function (handler) {
                 this.placeOrderHandler = handler;
             },
 
-            setValidateHandler: function(handler) {
+            /**
+             * @param {Object} handler
+             */
+            setValidateHandler: function (handler) {
                 this.validateHandler = handler;
             },
 
-            context: function() {
+            /**
+             * @returns {Object}
+             */
+            context: function () {
                 return this;
             },
 
-            isShowLegend: function() {
-                return true;
-            },
-
-            getCode: function() {
-                return 'authorizenet_directpost';
-            },
-
-            isActive: function() {
+            /**
+             * @returns {Boolean}
+             */
+            isShowLegend: function () {
                 return true;
             },
 
             /**
-             * @override
+             * @returns {String}
              */
-            placeOrder: function () {
-                var self = this;
+            getCode: function () {
+                return 'authorizenet_directpost';
+            },
 
-                if (this.validateHandler() && additionalValidators.validate()) {
-                    fullScreenLoader.startLoader();
-                    this.isPlaceOrderActionAllowed(false);
-                    $.when(setPaymentInformationAction(this.messageContainer, {
-                        'method': self.getCode()
-                    })).done(function () {
-                        self.placeOrderHandler().fail(function () {
-                            fullScreenLoader.stopLoader();
-                        });
-                    }).fail(function () {
-                        fullScreenLoader.stopLoader();
-                        self.isPlaceOrderActionAllowed(true);
-                    });
-                }
+            /**
+             * @returns {Boolean}
+             */
+            isActive: function () {
+                return true;
             }
         });
     }

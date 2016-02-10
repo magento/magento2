@@ -6,7 +6,7 @@
 -->
 <div class="billing-address-same-as-shipping-block field choice" data-bind="visible: canUseShippingAddress()">
     <input type="checkbox" name="billing-address-same-as-shipping" data-bind="checked: isAddressSameAsShipping, click: useShippingAddress, attr: {id: 'billing-address-same-as-shipping-' + $parent.getCode()}"/>
-    <label data-bind="i18n: 'My billing and shipping address are the same', attr: {for: 'billing-address-same-as-shipping-' + $parent.getCode()}"></label>
+    <label data-bind="attr: {for: 'billing-address-same-as-shipping-' + $parent.getCode()}"><span data-bind="i18n: 'My billing and shipping address are the same'"></span></label>
 </div>
 
 <!-- ko template: 'Magento_Checkout/billing-address/details' --><!-- /ko -->

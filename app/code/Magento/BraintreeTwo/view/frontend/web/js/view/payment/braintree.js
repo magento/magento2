@@ -18,7 +18,7 @@ define(
         rendererList.push(
             {
                 type: 'braintreetwo',
-                component: 'Magento_BraintreeTwo/js/view/payment/method-renderer/braintree'
+                component: 'Magento_BraintreeTwo/js/view/payment/method-renderer/hosted-fields'
             }
         );
 

@@ -56,7 +56,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         $dictionaryPath = 'dictionary_path';
-        $packPath = 'pack_path';
         $localeString = 'locale';
         $mode = 'mode';
         $allowDuplicates = true;
@@ -76,10 +75,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->with($dictionaryPath)
             ->will($this->returnValue($this->dictionaryMock));
         $this->packWriterMock->expects($this->once())
-            ->method('write')
-            ->with($this->dictionaryMock, $packPath, $localeMock, $mode);
+            ->method('writeDictionary')
+            ->with($this->dictionaryMock, $localeMock, $mode);
 
-        $this->_generator->generate($dictionaryPath, $packPath, $localeString, $mode, $allowDuplicates);
+        $this->_generator->generate($dictionaryPath, $localeString, $mode, $allowDuplicates);
     }
 
     /**
@@ -89,7 +88,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerateEmptyFile()
     {
         $dictionaryPath = 'dictionary_path';
-        $packPath = 'pack_path';
         $localeString = 'locale';
         $mode = 'mode';
         $allowDuplicates = true;
@@ -104,7 +102,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->with($dictionaryPath)
             ->will($this->returnValue($this->dictionaryMock));
 
-        $this->_generator->generate($dictionaryPath, $packPath, $localeString, $mode, $allowDuplicates);
+        $this->_generator->generate($dictionaryPath, $localeString, $mode, $allowDuplicates);
     }
 
     public function testGenerateWithNotAllowedDuplicatesAndDuplicatesExist()
@@ -132,6 +130,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getDuplicates')
             ->will($this->returnValue([[$phraseFirstMock], [$phraseSecondMock]]));
 
-        $this->_generator->generate('dictionary_path', 'pack_path', 'locale', 'mode', $allowDuplicates);
+        $this->_generator->generate('dictionary_path', 'locale', 'mode', $allowDuplicates);
     }
 }

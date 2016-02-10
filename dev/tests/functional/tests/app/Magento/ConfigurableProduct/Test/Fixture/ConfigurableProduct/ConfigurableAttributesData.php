@@ -6,6 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 
+use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -45,6 +46,13 @@ class ConfigurableAttributesData extends DataSource
      * @var array
      */
     protected $attributes = [];
+
+    /**
+     * Prepared Attribute Set.
+     *
+     * @var CatalogAttributeSet
+     */
+    protected $attributeSet;
 
     /**
      * Prepared products.
@@ -137,6 +145,21 @@ class ConfigurableAttributesData extends DataSource
     }
 
     /**
+     * Create and assign products.
+     *
+     * @return void
+     */
+    public function generateProducts()
+    {
+        $assignedProducts = ['products' => []];
+        foreach (array_keys($this->variationsMatrix) as $variation) {
+            $assignedProducts['products'][$variation] = 'catalogProductSimple::default';
+        }
+
+        $this->prepareProducts($assignedProducts);
+    }
+
+    /**
      * Prepare products.
      *
      * @param array $data
@@ -157,20 +180,13 @@ class ConfigurableAttributesData extends DataSource
             if (is_string($product)) {
                 list($fixture, $dataset) = explode('::', $product);
                 $attributeData = ['attributes' => $this->getProductAttributeData($key)];
-                $stock = [];
-
-                if (isset($data['matrix'][$key]['quantity_and_stock_status']['qty'])) {
-                    $stock['quantity_and_stock_status'] = [
-                        'qty' => $data['matrix'][$key]['quantity_and_stock_status']['qty'],
-                        'is_in_stock' => 'In Stock',
-                    ];
-                }
+                $productData = isset($this->variationsMatrix[$key]) ? $this->variationsMatrix[$key] : [];
 
                 $product = $this->fixtureFactory->createByCode(
                     $fixture,
                     [
                         'dataset' => $dataset,
-                        'data' => array_merge($attributeSetData, $attributeData, $stock)
+                        'data' => array_merge($attributeSetData, $attributeData, $productData)
                     ]
                 );
             }
@@ -189,19 +205,22 @@ class ConfigurableAttributesData extends DataSource
      */
     protected function createAttributeSet()
     {
-        $attributeSet = $this->fixtureFactory->createByCode(
-            'catalogAttributeSet',
-            [
-                'dataset' => 'custom_attribute_set',
-                'data' => [
-                    'assigned_attributes' => [
-                        'attributes' => array_values($this->attributes),
-                    ],
+        if (!$this->attributeSet) {
+            $this->attributeSet = $this->fixtureFactory->createByCode(
+                'catalogAttributeSet',
+                [
+                    'dataset' => 'custom_attribute_set',
+                    'data' => [
+                        'assigned_attributes' => [
+                            'attributes' => array_values($this->attributes),
+                        ],
+                    ]
                 ]
-            ]
-        );
-        $attributeSet->persist();
-        return $attributeSet;
+            );
+            $this->attributeSet->persist();
+        }
+
+        return $this->attributeSet;
     }
 
     /**
@@ -310,10 +329,11 @@ class ConfigurableAttributesData extends DataSource
 
         /* If empty matrix add one empty row */
         if (empty($variationsMatrix)) {
+            $variationIsolation = mt_rand(10000, 70000);
             $variationsMatrix = [
                 [
-                    'name' => 'In configurable product %isolation%',
-                    'sku' => 'in_configurable_product_%isolation%',
+                    'name' => "In configurable product {$variationIsolation}",
+                    'sku' => "in_configurable_product_{$variationIsolation}",
                 ],
             ];
         }
@@ -418,6 +438,16 @@ class ConfigurableAttributesData extends DataSource
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * Get created attribute set.
+     *
+     * @return CatalogAttributeSet
+     */
+    public function getAttributeSet()
+    {
+        return $this->attributeSet;
     }
 
     /**

@@ -26,6 +26,13 @@ class ConfigData
     private $data = [];
 
     /**
+     * Override previous config options when save
+     *
+     * @var bool
+     */
+    private $overrideWhenSave = false;
+
+    /**
      * Constructor
      *
      * @param string $fileKey
@@ -53,6 +60,27 @@ class ConfigData
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Sets override when save flag
+     *
+     * @param bool $overrideWhenSave
+     * @return void
+     */
+    public function setOverrideWhenSave($overrideWhenSave)
+    {
+        $this->overrideWhenSave = $overrideWhenSave;
+    }
+
+    /**
+     * Gets override when save flag
+     *
+     * @return bool
+     */
+    public function isOverrideWhenSave()
+    {
+        return $this->overrideWhenSave;
     }
 
     /**

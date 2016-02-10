@@ -31,24 +31,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $_logger;
 
     /**
-     * Store associated with rule entities information map
-     *
-     * @var array
-     */
-    protected $_associatedEntitiesMap = [
-        'website' => [
-            'associations_table' => 'catalogrule_website',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'website_id',
-        ],
-        'customer_group' => [
-            'associations_table' => 'catalogrule_customer_group',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'customer_group_id',
-        ],
-    ];
-
-    /**
      * Catalog rule data
      *
      * @var \Magento\CatalogRule\Helper\Data
@@ -93,6 +75,12 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Framework\Model\EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * Rule constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Product\ConditionFactory $conditionFactory
@@ -103,7 +91,9 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
-     * @param string $connectionName
+     * @param \Magento\Framework\Model\EntityManager $entityManager
+     * @param array $associatedEntitiesMap
+     * @param null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -117,6 +107,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Model\EntityManager $entityManager,
+        array $associatedEntitiesMap = [],
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
@@ -128,6 +120,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->_logger = $logger;
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
+        $this->entityManager = $entityManager;
+        $this->_associatedEntitiesMap = $associatedEntitiesMap;
         parent::__construct($context, $connectionName);
     }
 
@@ -143,49 +137,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Add customer group ids and website ids to rule data after load
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     */
-    protected function _afterLoad(AbstractModel $object)
-    {
-        $object->setData('customer_group_ids', (array)$this->getCustomerGroupIds($object->getId()));
-        $object->setData('website_ids', (array)$this->getWebsiteIds($object->getId()));
-
-        return parent::_afterLoad($object);
-    }
-
-    /**
-     * Bind catalog rule to customer group(s) and website(s).
-     * Update products which are matched for rule.
-     *
-     * @param AbstractModel $object
-     * @return $this
-     */
-    protected function _afterSave(AbstractModel $object)
-    {
-        if ($object->hasWebsiteIds()) {
-            $websiteIds = $object->getWebsiteIds();
-            if (!is_array($websiteIds)) {
-                $websiteIds = explode(',', (string)$websiteIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $websiteIds, 'website');
-        }
-
-        if ($object->hasCustomerGroupIds()) {
-            $customerGroupIds = $object->getCustomerGroupIds();
-            if (!is_array($customerGroupIds)) {
-                $customerGroupIds = explode(',', (string)$customerGroupIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $customerGroupIds, 'customer_group');
-        }
-
-        parent::_afterSave($object);
-        return $this;
-    }
-
-    /**
      * @param \Magento\Framework\Model\AbstractModel $rule
      * @return $this
      */
@@ -194,10 +145,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $connection = $this->getConnection();
         $connection->delete(
             $this->getTable('catalogrule_product'),
-            ['rule_id=?' => $rule->getId()]
-        );
-        $connection->delete(
-            $this->getTable('catalogrule_customer_group'),
             ['rule_id=?' => $rule->getId()]
         );
         $connection->delete(
@@ -240,22 +187,13 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     public function getRulePrices(\DateTime $date, $websiteId, $customerGroupId, $productIds)
     {
         $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            $this->getTable('catalogrule_product_price'),
-            ['product_id', 'rule_price']
-        )->where(
-            'rule_date = ?',
-            $date->format('Y-m-d')
-        )->where(
-            'website_id = ?',
-            $websiteId
-        )->where(
-            'customer_group_id = ?',
-            $customerGroupId
-        )->where(
-            'product_id IN(?)',
-            $productIds
-        );
+        $select = $connection->select()
+            ->from($this->getTable('catalogrule_product_price'), ['product_id', 'rule_price'])
+            ->where('rule_date = ?', $date->format('Y-m-d'))
+            ->where('website_id = ?', $websiteId)
+            ->where('customer_group_id = ?', $customerGroupId)
+            ->where('product_id IN(?)', $productIds);
+
         return $connection->fetchPairs($select);
     }
 
@@ -274,25 +212,103 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         if (is_string($date)) {
             $date = strtotime($date);
         }
-        $select = $connection->select()->from(
-            $this->getTable('catalogrule_product')
-        )->where(
-            'website_id = ?',
-            $websiteId
-        )->where(
-            'customer_group_id = ?',
-            $customerGroupId
-        )->where(
-            'product_id = ?',
-            $productId
-        )->where(
-            'from_time = 0 or from_time < ?',
-            $date
-        )->where(
-            'to_time = 0 or to_time > ?',
-            $date
-        );
+        $select = $connection->select()
+            ->from($this->getTable('catalogrule_product'))
+            ->where('website_id = ?', $websiteId)
+            ->where('customer_group_id = ?', $customerGroupId)
+            ->where('product_id = ?', $productId)
+            ->where('from_time = 0 or from_time < ?', $date)
+            ->where('to_time = 0 or to_time > ?', $date);
 
         return $connection->fetchAll($select);
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param mixed $value
+     * @param string $field
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
+    {
+        $this->entityManager->load('Magento\CatalogRule\Api\Data\RuleInterface', $object, $value);
+
+        $this->unserializeFields($object);
+        $this->_afterLoad($object);
+
+        return $this;
+    }
+
+    /**
+     * @param AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->isDeleted()) {
+            return $this->delete($object);
+        }
+
+        $this->beginTransaction();
+
+        try {
+            if (!$this->isModified($object)) {
+                $this->processNotModifiedSave($object);
+                $this->commit();
+                $object->setHasDataChanges(false);
+                return $this;
+            }
+            $object->validateBeforeSave();
+            $object->beforeSave();
+            if ($object->isSaveAllowed()) {
+                $this->_serializeFields($object);
+                $this->_beforeSave($object);
+                $this->_checkUnique($object);
+                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
+
+                $this->entityManager->save(
+                    'Magento\CatalogRule\Api\Data\RuleInterface',
+                    $object
+                );
+
+                $this->unserializeFields($object);
+                $this->processAfterSaves($object);
+            }
+            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
+            $object->setHasDataChanges(false);
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
+    }
+
+    /**
+     * Delete the object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function delete(AbstractModel $object)
+    {
+        $this->transactionManager->start($this->getConnection());
+        try {
+            $object->beforeDelete();
+            $this->_beforeDelete($object);
+            $this->entityManager->delete('Magento\CatalogRule\Api\Data\RuleInterface', $object);
+            $this->_afterDelete($object);
+            $object->isDeleted(true);
+            $object->afterDelete();
+            $this->transactionManager->commit();
+            $object->afterDeleteCommit();
+        } catch (\Exception $exception) {
+            $this->transactionManager->rollBack();
+            throw $exception;
+        }
+        return $this;
     }
 }

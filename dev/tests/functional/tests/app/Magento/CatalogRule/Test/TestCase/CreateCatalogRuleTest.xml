@@ -29,6 +29,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
         <variation name="CatalogRule_Create_ForNewCustomerGroup_ApplyAsPercentage" summary="Apply Catalog Price Rules to Specific Customer Group" ticketId="MAGETWO-12908">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="customer/dataset" xsi:type="string">customer_with_new_customer_group</data>
             <data name="product" xsi:type="string">simple_10_dollar</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
@@ -44,7 +45,6 @@
             <data name="productPrice/0/special" xsi:type="string">5</data>
             <data name="productPrice/0/sub_total" xsi:type="string">5</data>
             <data name="productPrice/0/regular" xsi:type="string">10</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
@@ -54,6 +54,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
         <variation name="CatalogRule_Create_ForGuestUsers_ByProductAttribute_AdjustPriceToValue" summary="Create and Apply Catalog Price Rule with Product Attribute in Condition" ticketId="MAGETWO-30095">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="product" xsi:type="string">product_with_custom_color_attribute</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">Catalog Price Rule %isolation%</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>

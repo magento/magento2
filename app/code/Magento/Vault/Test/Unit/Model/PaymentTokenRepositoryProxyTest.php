@@ -14,7 +14,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\PaymentTokenNullRepository;
 use Magento\Vault\Model\PaymentTokenRepositoryProxy;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-use Magento\Vault\Model\Adminhtml\Source\VaultPayment;
+use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterfaceFactory;
 
@@ -93,7 +93,7 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
 
         $this->configMock->expects(self::once())
             ->method('getValue')
-            ->with(VaultPayment::VALUE_CODE)
+            ->with(VaultProvidersMap::VALUE_CODE)
             ->willReturn('code');
 
         $this->objectManagerMock->expects(self::once())

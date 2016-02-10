@@ -11,7 +11,6 @@ use Magento\BraintreeTwo\Helper\CcType;
 
 /**
  * Class Cctypes
- * @package Magento\BraintreeTwo\Block\Adminhtml\Form\Field
  */
 class Cctypes extends Select
 {

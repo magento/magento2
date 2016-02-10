@@ -6,15 +6,19 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Cms\Model\ResourceModel\Block as ResourceCmsBlock;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * CMS block model
  *
- * @method \Magento\Cms\Model\ResourceModel\Block _getResource()
- * @method \Magento\Cms\Model\ResourceModel\Block getResource()
+ * @method ResourceCmsBlock _getResource()
+ * @method ResourceCmsBlock getResource()
+ * @method Block setStoreId(array $storeId)
+ * @method array getStoreId()
  */
-class Block extends \Magento\Framework\Model\AbstractModel implements BlockInterface, IdentityInterface
+class Block extends AbstractModel implements BlockInterface, IdentityInterface
 {
     /**
      * CMS block cache tag
@@ -51,7 +55,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
     /**
      * Prevent blocks recursion
      *
-     * @return \Magento\Framework\Model\AbstractModel
+     * @return AbstractModel
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()

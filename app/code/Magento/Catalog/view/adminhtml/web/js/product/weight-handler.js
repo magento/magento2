@@ -72,6 +72,14 @@ define([
         },
 
         /**
+         * Has weight
+         * @returns {*}
+         */
+        hasWeight: function () {
+            return this.$weight.is(':visible');
+        },
+
+        /**
          * Product has weight
          * @returns {Bool}
          */

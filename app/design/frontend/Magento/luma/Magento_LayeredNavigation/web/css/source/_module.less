@@ -95,6 +95,7 @@
 
         &-label {
             font-weight: @font-weight__bold;
+
             &:after {
                 content: ': ';
             }
@@ -123,6 +124,7 @@
                 text-transform: uppercase;
                 word-break: break-all;
                 z-index: 1;
+
                 .lib-icon-font(
                 @_icon-font-content: @icon-down,
                 @_icon-font-size: 13px,
@@ -133,7 +135,7 @@
                 &:after {
                     position: absolute;
                     right: 13px;
-                    top: 9px;
+                    top: 12px;
                 }
 
                 &:hover {
@@ -304,6 +306,7 @@
             position: relative;
             text-transform: uppercase;
             z-index: 1;
+
             .lib-icon-font(
                 @_icon-font-content: @icon-down,
                 @_icon-font-size: 13px,
@@ -408,8 +411,8 @@
         }
 
         &-subtitle {
-            position: static;
             display: block;
+            position: static;
         }
     }
 
@@ -448,10 +451,14 @@
                     border: 0;
                     display: inline-block;
                     margin-right: @indent__m;
+                    position: relative;
 
                     &.active {
-                        position: relative;
                         z-index: 2;
+
+                        .filter-options-content {
+                            visibility: visible;
+                        }
 
                         &:hover {
                             z-index: 3;
@@ -463,15 +470,14 @@
                             bottom: -1px;
                             content: '';
                             display: block;
-                            left: 50%;
-                            margin-left: -@indent__base;
+                            left: @indent__xs;
                             position: absolute;
                             z-index: 3;
                         }
 
                         &:after {
                             .lib-css(border-bottom-color, @color-white);
-                            margin-top:2px;
+                            margin-top: 2px;
                             z-index: 4;
                         }
                     }
@@ -496,6 +502,7 @@
                     padding: @indent__xs 0;
                     position: absolute;
                     top: 100%;
+                    visibility: hidden;
                     width: 180px;
                     z-index: 2;
 
@@ -537,6 +544,7 @@
 
                 .item {
                     margin-right: @indent__m;
+                    white-space: nowrap;
                 }
 
                 .action.remove {
@@ -546,6 +554,7 @@
 
             &-actions {
                 display: inline;
+                white-space: nowrap;
 
                 & ~ .filter-options {
                     margin-top: @indent__m;

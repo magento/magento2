@@ -12,27 +12,28 @@
     <preference for="Magento\Vault\Api\PaymentTokenRepositoryInterface" type="Magento\Vault\Model\PaymentTokenRepository" />
     <preference for="Magento\Vault\Api\PaymentTokenManagementInterface" type="Magento\Vault\Model\PaymentTokenManagement" />
     <preference for="Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Vault\Model\Ui\TokenUiComponentInterface" type="Magento\Vault\Model\Ui\TokenUiComponent" />
 
-    <type name="Magento\Sales\Model\Order\Payment">
+    <type name="Magento\Sales\Api\Data\OrderPaymentInterface">
         <plugin name="PaymentVaultExtensionAttributeOperations" type="\Magento\Vault\Plugin\PaymentVaultAttributesLoad"/>
     </type>
 
-    <!-- Configuration payment -->
+    <!-- Configuration vault -->
     <virtualType name="VaultPaymentConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Magento\Vault\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="methodCode" xsi:type="const">Magento\Vault\Model\VaultPaymentInterface::CODE</argument>
         </arguments>
     </virtualType>
 
     <!-- Payment Method configuration -->
     <type name="Magento\Vault\Model\Method\Vault">
         <arguments>
-            <argument name="code" xsi:type="const">Magento\Vault\Model\Ui\ConfigProvider::CODE</argument>
             <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
             <argument name="valueHandlerPool" xsi:type="object">VaultPaymentValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">Magento\Vault\Model\Method\NullPaymentProvider</argument>
         </arguments>
     </type>
-    
+
     <type name="Magento\Vault\Model\PaymentTokenRepositoryProxy">
         <arguments>
             <argument name="nullRepository" xsi:type="object">Magento\Vault\Model\PaymentTokenNullRepository</argument>
@@ -41,9 +42,10 @@
             <argument name="repositories" xsi:type="array"/>
         </arguments>
     </type>
-    
-    <type name="Magento\Vault\Model\Ui\ConfigProvider">
+
+    <type name="Magento\Vault\Model\Ui\TokensConfigProvider">
         <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
             <argument name="paymentTokenRepository" xsi:type="object">Magento\Vault\Model\PaymentTokenRepositoryProxy</argument>
         </arguments>
     </type>

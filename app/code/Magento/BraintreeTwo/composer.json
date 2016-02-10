@@ -11,6 +11,7 @@
         "magento/module-checkout": "*",
         "magento/module-sales": "*",
         "magento/module-backend": "*",
+        "magento/module-vault": "*",
         "braintree/braintree_php": "3.7.0"
     },
     "type": "magento2-module",

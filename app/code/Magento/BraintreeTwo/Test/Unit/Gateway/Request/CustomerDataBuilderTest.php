@@ -9,7 +9,11 @@ use Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
+/**
+ * Class CustomerDataBuilderTest
+ */
 class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -27,23 +31,35 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $builder;
 
+    /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
     public function setUp()
     {
         $this->paymentDOMock = $this->getMock(PaymentDataObjectInterface::class);
         $this->orderMock = $this->getMock(OrderAdapterInterface::class);
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->builder = new CustomerDataBuilder();
+        $this->builder = new CustomerDataBuilder($this->subjectReaderMock);
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Payment data object should be provided
      */
     public function testBuildReadPaymentException()
     {
         $buildSubject = [
             'payment' => null,
         ];
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($buildSubject)
+            ->willThrowException(new \InvalidArgumentException());
 
         $this->builder->build($buildSubject);
     }
@@ -58,10 +74,10 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $billingMock = $this->getBillingMock($billingData);
 
-        $this->paymentDOMock->expects($this->once())
+        $this->paymentDOMock->expects(static::once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects(static::once())
             ->method('getBillingAddress')
             ->willReturn($billingMock);
 
@@ -69,7 +85,12 @@ class CustomerDataBuilderTest extends \PHPUnit_Framework_TestCase
             'payment' => $this->paymentDOMock,
         ];
 
-        $this->assertEquals($expectedResult, $this->builder->build($buildSubject));
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($buildSubject)
+            ->willReturn($this->paymentDOMock);
+
+        self::assertEquals($expectedResult, $this->builder->build($buildSubject));
     }
 
     /**

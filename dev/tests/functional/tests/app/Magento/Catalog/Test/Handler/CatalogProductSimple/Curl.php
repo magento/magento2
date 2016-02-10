@@ -7,9 +7,10 @@
 namespace Magento\Catalog\Test\Handler\CatalogProductSimple;
 
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Util\Protocol\CurlTransport;
-use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Mtf\Handler\Curl as AbstractCurl;
 
 /**
  * Create new simple product via curl.
@@ -17,11 +18,31 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 class Curl extends AbstractCurl implements CatalogProductSimpleInterface
 {
     /**
+     * Fixture instance.
+     *
+     * @var InjectableFixture
+     */
+    protected $fixture;
+
+    /**
+     * Prepared fields.
+     *
+     * @var array
+     */
+    protected $fields;
+
+    /**
      * Mapping values for data.
      *
      * @var array
      */
     protected $mappingData = [
+        'attribute_set_id' => [
+            'Default' => 4
+        ],
+        'tax_class_id' => [
+            'Taxable Goods' => 2
+        ],
         'links_purchased_separately' => [
             'Yes' => 1,
             'No' => 0
@@ -90,6 +111,18 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Yes' => 1,
             'No' => 0,
         ],
+        'use_config_min_sale_qty' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
+        'use_config_max_sale_qty' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
+        'use_config_enable_qty_increments' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
     ];
 
     /**
@@ -115,7 +148,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     ];
 
     /**
-     * Placeholder for fpt data sent Curl
+     * Placeholder for fpt data sent Curl.
      *
      * @var array
      */
@@ -142,6 +175,30 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     ];
 
     /**
+     * Default manage stock data.
+     *
+     * @var array
+     */
+    protected $manageStock = [
+        'Yes' => [
+            'manage_stock' => 'Yes',
+            'use_config_manage_stock' => 'Yes',
+            'enable_qty_increments' => 'No',
+            'use_config_enable_qty_increments' => 'Yes',
+        ],
+        'No' => [
+            'manage_stock' => 'No',
+            'use_config_manage_stock' => 'No',
+            'min_sale_qty' => 1,
+            'use_config_min_sale_qty' => 1,
+            'max_sale_qty' => 10000 ,
+            'use_config_max_sale_qty' => 1,
+            'enable_qty_increments' => 'No',
+            'use_config_enable_qty_increments' => 'No',
+        ]
+    ];
+
+    /**
      * Select custom options.
      *
      * @var array
@@ -153,245 +210,13 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      *
      * @param FixtureInterface|null $fixture [optional]
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function persist(FixtureInterface $fixture = null)
     {
         $config = $fixture->getDataConfig();
-        $prefix = isset($config['input_prefix']) ? $config['input_prefix'] : null;
-        $data = $this->prepareData($fixture, $prefix);
+        $data = $this->prepareData($fixture);
 
         return $this->createProduct($data, $config);
-    }
-
-    /**
-     * Prepare POST data for creating product request.
-     *
-     * @param FixtureInterface $fixture
-     * @param string|null $prefix [optional]
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function prepareData(FixtureInterface $fixture, $prefix = null)
-    {
-        $fields = $this->replaceMappingData($fixture->getData());
-
-        if (!isset($fields['status'])) {
-            // Default product is enabled
-            $fields['status'] = 1;
-        }
-        if (!isset($fields['visibility'])) {
-            // Default product is visible on Catalog, Search
-            $fields['visibility'] = 4;
-        }
-
-        // Getting Tax class id
-        if ($fixture->hasData('tax_class_id')) {
-            $fields['tax_class_id'] = $fixture->getDataFieldConfig('tax_class_id')['source']->getTaxClassId();
-        }
-
-        if (!empty($fields['category_ids'])) {
-            $categoryIds = [];
-            foreach ($fixture->getDataFieldConfig('category_ids')['source']->getCategories() as $category) {
-                $categoryIds[] = $category->getId();
-            }
-            $fields['category_ids'] = $categoryIds;
-        }
-
-        if (isset($fields['tier_price'])) {
-            $fields['tier_price'] = $this->preparePriceData($fields['tier_price']);
-        }
-        if (isset($fields['fpt'])) {
-            $attributeLabel = $fixture->getDataFieldConfig('attribute_set_id')['source']
-                ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']
-                ->getAttributes()[0]->getFrontendLabel();
-            $fields[$attributeLabel] = $this->prepareFptData($fields['fpt']);
-        }
-        if ($isCustomOptions = isset($fields['custom_options'])) {
-            $fields = $this->prepareCustomOptionsData($fields);
-        }
-
-        if (!empty($fields['website_ids'])) {
-            foreach ($fields['website_ids'] as &$value) {
-                $value = isset($this->mappingData['website_ids'][$value])
-                    ? $this->mappingData['website_ids'][$value]
-                    : $value;
-            }
-        }
-
-        // Getting Attribute Set id
-        if ($fixture->hasData('attribute_set_id')) {
-            $attributeSetId = $fixture
-                ->getDataFieldConfig('attribute_set_id')['source']
-                ->getAttributeSet()
-                ->getAttributeSetId();
-            $fields['attribute_set_id'] = $attributeSetId;
-        }
-
-        // Prepare assigned attribute
-        if (isset($fields['attributes'])) {
-            $fields += $fields['attributes'];
-            unset($fields['attributes']);
-        }
-        if (isset($fields['custom_attribute'])) {
-            $fields[$fields['custom_attribute']['code']] = $fields['custom_attribute']['value'];
-        }
-
-        $fields = $this->prepareStockData($fields);
-        $fields = $prefix ? [$prefix => $fields] : $fields;
-        if ($isCustomOptions) {
-            $fields['affect_product_custom_options'] = 1;
-        }
-
-        return $fields;
-    }
-
-    /**
-     * Preparation of custom options data.
-     *
-     * @param array $fields
-     * @return array
-     */
-    protected function prepareCustomOptionsData(array $fields)
-    {
-        $options = [];
-        foreach ($fields['custom_options'] as $key => $customOption) {
-            $options[$key] = [
-                'is_delete' => '',
-                'option_id' => 0,
-                'type' => $this->optionNameConvert($customOption['type']),
-            ];
-
-            foreach ($customOption['options'] as $index => $option) {
-                $customOption['options'][$index]['is_delete'] = '';
-                $customOption['options'][$index]['price_type'] = strtolower($option['price_type']);
-            }
-            $options[$key] += in_array($options[$key]['type'], $this->selectOptions)
-                ? ['values' => $customOption['options']]
-                : $customOption['options'][0];
-
-            unset($customOption['options']);
-            $options[$key] += $customOption;
-        }
-        $fields['options'] = $options;
-        unset($fields['custom_options']);
-
-        return $fields;
-    }
-
-    /**
-     * Convert option name.
-     *
-     * @param string $optionName
-     * @return string
-     */
-    protected function optionNameConvert($optionName)
-    {
-        $optionName = substr($optionName, strpos($optionName, "/") + 1);
-        $optionName = str_replace(['-', ' & '], "_", trim($optionName));
-        $end = strpos($optionName, ' ');
-        if ($end !== false) {
-            $optionName = substr($optionName, 0, $end);
-        }
-        return strtolower($optionName);
-    }
-
-    /**
-     * Preparation of stock data.
-     *
-     * @param array $fields
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function prepareStockData(array $fields)
-    {
-        if (isset($fields['quantity_and_stock_status']) && !is_array($fields['quantity_and_stock_status'])) {
-            $fields['quantity_and_stock_status'] = [
-                'qty' => $fields['qty'],
-                'is_in_stock' => $fields['quantity_and_stock_status']
-            ];
-        }
-
-        if (!isset($fields['stock_data']['is_in_stock'])) {
-            $fields['stock_data']['is_in_stock'] = isset($fields['quantity_and_stock_status']['is_in_stock'])
-                ? $fields['quantity_and_stock_status']['is_in_stock']
-                : (isset($fields['inventory_manage_stock']) ? $fields['inventory_manage_stock'] : null);
-        }
-        if (!isset($fields['stock_data']['qty'])) {
-            $fields['stock_data']['qty'] = isset($fields['quantity_and_stock_status']['qty'])
-                ? $fields['quantity_and_stock_status']['qty']
-                : null;
-        }
-
-        if (!isset($fields['stock_data']['manage_stock'])) {
-            $fields['stock_data']['manage_stock'] = (int)(!empty($fields['stock_data']['qty'])
-                || !empty($fields['stock_data']['is_in_stock']));
-        }
-
-        return $this->filter($fields);
-    }
-
-    /**
-     * Preparation of tier price data.
-     *
-     * @param array $fields
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function preparePriceData(array $fields)
-    {
-        foreach ($fields as &$field) {
-            foreach ($this->priceData as $key => $data) {
-                $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
-                unset($field[$key]);
-            }
-            $field['delete'] = '';
-        }
-        return $fields;
-    }
-
-    /**
-     * Preparation of fpt data
-     *
-     * @param array $fields
-     * @return array
-     */
-    protected function prepareFptData(array $fields)
-    {
-        foreach ($fields as &$field) {
-            foreach ($this->fptData as $key => $data) {
-                $field[$data['name']] = $this->fptData[$key]['data'][$field[$key]];
-                unset($field[$key]);
-            }
-            $field['delete'] = '';
-        }
-        return $fields;
-    }
-
-    /**
-     * Remove items from a null.
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function filter(array $data)
-    {
-        foreach ($data as $key => $value) {
-            if ($value === null) {
-                unset($data[$key]);
-            } elseif (is_array($data[$key])) {
-                $data[$key] = $this->filter($data[$key]);
-            }
-        }
-        return $data;
     }
 
     /**
@@ -404,11 +229,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function createProduct(array $data, array $config)
     {
-        $config['create_url_params']['set'] = isset($data['product']['attribute_set_id'])
-            ? $data['product']['attribute_set_id']
-            : $config['create_url_params']['set'];
         $url = $this->getUrl($config);
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
+
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write($url, $data);
         $response = $curl->read();
@@ -449,5 +272,325 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             $params .= $key . '/' . $value . '/';
         }
         return $_ENV['app_backend_url'] . 'catalog/product/save/' . $params . 'popup/1/back/edit';
+    }
+
+    /**
+     * Prepare POST data for creating product request.
+     *
+     * @param FixtureInterface $fixture
+     * @return array
+     */
+    public function prepareData(FixtureInterface $fixture)
+    {
+        $this->fixture = $fixture;
+        $this->fields = ['product' => $fixture->getData()];
+
+        $this->prepareProductDetails();
+        $this->prepareWebsites();
+        $this->prepareAdvancedPricing();
+        $this->prepareAdvancedInventory();
+        $this->prepareCustomOptionsData();
+        $this->prepareAutosetting();
+        $this->prepareCustomAttributes();
+
+        $this->fields['product'] = $this->replaceMappingData($this->fields['product']);
+        return $this->fields;
+    }
+
+    /**
+     * Preparation of "Product Details" tab data.
+     *
+     * @return void
+     */
+    protected function prepareProductDetails()
+    {
+        $this->prepareStatus();
+        $this->preparePrice();
+        $this->prepareIsVirtual();
+        $this->prepareAttributeSet();
+        $this->prepareTaxClass();
+        $this->prepareQuantityAndStockStatus();
+        $this->prepareCategory();
+    }
+
+    /**
+     * Preparation of product status.
+     *
+     * @return void
+     */
+    protected function prepareStatus()
+    {
+        $this->fields['product']['status'] = isset($this->fields['product']['status'])
+            ? $this->fields['product']['status']
+            : 'Product online';
+    }
+
+    /**
+     * Preparation of price value.
+     *
+     * @return void
+     */
+    protected function preparePrice()
+    {
+        $this->fields['product']['price'] = isset($this->fields['product']['price'])
+            ? (is_array($this->fields['product']['price']) ? null : $this->fields['product']['price'])
+            : null;
+    }
+
+    /**
+     * Preparation wheather product 'Is Virtual'.
+     *
+     * @return void
+     */
+    protected function prepareIsVirtual()
+    {
+        $this->fields['product']['is_virtual'] = isset($this->fields['product']['is_virtual'])
+            ? $this->fields['product']['is_virtual']
+            : 'No';
+    }
+
+    /**
+     * Preparation of attribute set data.
+     *
+     * @return void
+     */
+    protected function prepareAttributeSet()
+    {
+        if ($this->fixture->hasData('attribute_set_id')) {
+            $this->fields['product']['attribute_set_id'] = $this->fixture
+                ->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()
+                ->getAttributeSetId();
+        } else {
+            $this->fields['product']['attribute_set_id'] = 'Default';
+        }
+    }
+
+    /**
+     * Preparation of tax class data.
+     *
+     * @return void
+     */
+    protected function prepareTaxClass()
+    {
+        if ($this->fixture->hasData('tax_class_id')) {
+            $this->fields['product']['tax_class_id'] = $this->fixture->getDataFieldConfig('tax_class_id')['source']
+                ->getTaxClassId();
+        } else {
+            $this->fields['product']['tax_class_id'] = 'Taxable Goods';
+        }
+    }
+
+    /**
+     * Preparation of quantity and stock status data.
+     *
+     * @return void
+     */
+    protected function prepareQuantityAndStockStatus()
+    {
+        $quantityAndStockStatus = isset($this->fields['product']['quantity_and_stock_status'])
+            ? $this->fields['product']['quantity_and_stock_status']
+            : ['is_in_stock' => 'In Stock'];
+
+        if (!isset($quantityAndStockStatus['is_in_stock'])) {
+            $qty = isset($quantityAndStockStatus['qty']) ? intval($quantityAndStockStatus['qty']) : null;
+            $quantityAndStockStatus['is_in_stock'] = 0 === $qty ? 'Out of Stock' : 'In Stock';
+        }
+
+        $this->fields['product']['quantity_and_stock_status'] = $quantityAndStockStatus;
+    }
+
+    /**
+     * Preparation of category data.
+     *
+     * @return void
+     */
+    protected function prepareCategory()
+    {
+        if ($this->fixture->hasData('category_ids')) {
+            $this->fields['product']['category_ids'] = [];
+
+            foreach ($this->fixture->getDataFieldConfig('category_ids')['source']->getCategories() as $category) {
+                $this->fields['product']['category_ids'][] = $category->getId();
+            }
+        }
+    }
+
+    /**
+     * Preparation of websites data.
+     *
+     * @return void
+     */
+    protected function prepareWebsites()
+    {
+        if (!empty($this->fields['product']['website_ids'])) {
+            foreach ($this->fields['product']['website_ids'] as $key => $website) {
+                $website = isset($this->mappingData['website_ids'][$website])
+                    ? $this->mappingData['website_ids'][$website]
+                    : $website;
+                $this->fields['product']['website_ids'][$key] = $website;
+            }
+        }
+    }
+
+    /**
+     * Preparation of advanced pricing data.
+     *
+     * @return void
+     */
+    protected function prepareAdvancedPricing()
+    {
+        if (isset($this->fields['product']['tier_price'])) {
+            $this->fields['product']['tier_price'] = $this->preparePriceFields(
+                $this->fields['product']['tier_price']
+            );
+        }
+    }
+
+    /**
+     * Preparation of tier price data.
+     *
+     * @param array $fields
+     * @return array
+     */
+    protected function preparePriceFields(array $fields)
+    {
+        foreach ($fields as &$field) {
+            foreach ($this->priceData as $key => $data) {
+                $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
+                unset($field[$key]);
+            }
+            $field['delete'] = '';
+        }
+        return $fields;
+    }
+
+    /**
+     * Preparation of advanced inventory data.
+     *
+     * @return void
+     */
+    protected function prepareAdvancedInventory()
+    {
+        if (!isset($this->fields['product']['stock_data']['manage_stock'])) {
+            $this->fields['product']['stock_data']['manage_stock'] = 'Yes';
+        }
+
+        $this->fields['product']['stock_data']['is_in_stock'] =
+            $this->fields['product']['quantity_and_stock_status']['is_in_stock'];
+        $this->fields['product']['stock_data'] = array_merge(
+            $this->manageStock[$this->fields['product']['stock_data']['manage_stock']],
+            $this->fields['product']['stock_data']
+        );
+    }
+
+    /**
+     * Preparation of custom options data.
+     *
+     * @return void
+     */
+    protected function prepareCustomOptionsData()
+    {
+        if (!isset($this->fields['product']['custom_options'])) {
+            return;
+        }
+
+        $options = [];
+        foreach ($this->fields['product']['custom_options'] as $key => $customOption) {
+            $options[$key] = [
+                'is_delete' => '',
+                'option_id' => 0,
+                'type' => $this->optionNameConvert($customOption['type']),
+            ];
+
+            foreach ($customOption['options'] as $index => $option) {
+                $customOption['options'][$index]['is_delete'] = '';
+                $customOption['options'][$index]['price_type'] = strtolower($option['price_type']);
+            }
+            $options[$key] += in_array($options[$key]['type'], $this->selectOptions)
+                ? ['values' => $customOption['options']]
+                : $customOption['options'][0];
+
+            unset($customOption['options']);
+            $options[$key] += $customOption;
+        }
+
+        $this->fields['product']['options'] = $options;
+        $this->fields['affect_product_custom_options'] = 1;
+        unset($this->fields['product']['custom_options']);
+    }
+
+    /**
+     * Convert option name.
+     *
+     * @param string $optionName
+     * @return string
+     */
+    protected function optionNameConvert($optionName)
+    {
+        $optionName = substr($optionName, strpos($optionName, "/") + 1);
+        $optionName = str_replace(['-', ' & '], "_", trim($optionName));
+        $end = strpos($optionName, ' ');
+        if ($end !== false) {
+            $optionName = substr($optionName, 0, $end);
+        }
+        return strtolower($optionName);
+    }
+
+    /**
+     * Preparation of "Autosetting" tab data.
+     *
+     * @return void
+     */
+    protected function prepareAutosetting()
+    {
+        $this->fields['product']['visibility'] = isset($this->fields['product']['visibility'])
+            ? $this->fields['product']['visibility']
+            : 'Catalog, Search';
+    }
+
+    /**
+     * Preparation of attributes data.
+     *
+     * @return void
+     */
+    protected function prepareCustomAttributes()
+    {
+        if (isset($this->fields['product']['custom_attribute'])) {
+            $attrCode = $this->fields['product']['custom_attribute']['code'];
+            $this->fields['product'][$attrCode] = $this->fields['product']['custom_attribute']['value'];
+            unset($this->fields['product']['custom_attribute']);
+        }
+        if (isset($this->fields['product']['attributes'])) {
+            $this->fields['product'] += $this->fields['product']['attributes'];
+            unset($this->fields['product']['attributes']);
+        }
+
+        $this->prepareFpt();
+    }
+
+    /**
+     * Preparation of fpt attribute data.
+     *
+     * @return void
+     */
+    protected function prepareFpt()
+    {
+        if (isset($this->fields['product']['fpt'])) {
+            $attributeLabel = $this->fixture->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']
+                ->getAttributes()[0]->getFrontendLabel();
+
+            foreach ($this->fields['product']['fpt'] as &$field) {
+                foreach ($this->fptData as $key => $data) {
+                    $field[$data['name']] = $this->fptData[$key]['data'][$field[$key]];
+                    unset($field[$key]);
+                }
+                $field['delete'] = '';
+            }
+
+            $this->fields['product'][$attributeLabel] = $this->fields['product']['fpt'];
+            unset($this->fields['product']['fpt']);
+        }
     }
 }

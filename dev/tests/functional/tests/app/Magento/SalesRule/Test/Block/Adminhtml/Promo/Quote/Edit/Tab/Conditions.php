@@ -27,11 +27,11 @@ class Conditions extends Tab
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         foreach ($fields as $key => $value) {
             $this->mapping[$key] = self::FIELD_PREFIX . $key;
         }
-        return parent::fillFormTab($fields, $element);
+        return parent::setFieldsData($fields, $element);
     }
 }

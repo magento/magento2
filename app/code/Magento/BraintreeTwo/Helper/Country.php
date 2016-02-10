@@ -9,7 +9,6 @@ use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 
 /**
  * Class Country
- * @package Magento\BraintreeTwo\Helper
  */
 class Country
 {
