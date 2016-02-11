@@ -25,9 +25,7 @@ class Attributes
         if (isset($result['url_key'])) {
             if ($category && $category->getId()) {
                 if ($category->getLevel() == 1) {
-                    $result['url_key']['visible'] = false;
-                    $result['url_key_create_redirect']['visible'] = false;
-                    $result['url_key_group']['disabled'] = true;
+                    $result['url_key_group']['componentDisabled'] = true;
                 } else {
                     $result['url_key_create_redirect']['valueMap']['true'] = $category->getUrlKey();
                     $result['url_key_create_redirect']['value'] = $category->getUrlKey();
