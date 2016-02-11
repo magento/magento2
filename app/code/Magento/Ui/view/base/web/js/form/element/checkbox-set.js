@@ -81,6 +81,28 @@ define([
         },
 
         /**
+         * Gets initial value of element
+         *
+         * @returns {*} Elements' value.
+         */
+        getInitialValue: function () {
+            var values = [this.value(), this.default],
+                value;
+
+            if (!this.multiple) {
+                return this._super();
+            }
+
+            values.some(function (v) {
+                value = v;
+
+                return v && !!v.length;
+            });
+
+            return utils.copy(value);
+        },
+
+        /**
          * Returns labels which matches current value.
          *
          * @returns {String|Array}

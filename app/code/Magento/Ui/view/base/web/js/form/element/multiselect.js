@@ -30,6 +30,24 @@ define([
         },
 
         /**
+         * Gets initial value of element
+         *
+         * @returns {*} Elements' value.
+         */
+        getInitialValue: function () {
+            var values = [this.value(), this.default],
+                value;
+
+            values.some(function (v) {
+                value = v;
+
+                return v && !!v.length;
+            });
+
+            return utils.copy(value);
+        },
+
+        /**
          * Defines if value has changed
          *
          * @returns {Boolean}
