@@ -17,7 +17,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+    ->get('Magento\Catalog\Api\ProductRepositoryInterface');
 try {
     $product = $productRepository->get('bundle-product');
     $productRepository->delete($product);

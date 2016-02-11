@@ -507,7 +507,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveUnableToSaveException()
     {
         $this->resourceModelMock->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
-        $this->productFactoryMock->expects($this->once())
+        $this->productFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValue($this->productMock));
         $this->initializationHelperMock->expects($this->never())->method('initialize')->with($this->productMock);
@@ -531,7 +531,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveException()
     {
         $this->resourceModelMock->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
-        $this->productFactoryMock->expects($this->once())
+        $this->productFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValue($this->productMock));
         $this->initializationHelperMock->expects($this->never())->method('initialize')->with($this->productMock);
@@ -556,7 +556,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveInvalidProductException()
     {
         $this->resourceModelMock->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
-        $this->productFactoryMock->expects($this->once())
+        $this->productFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValue($this->productMock));
         $this->initializationHelperMock->expects($this->never())->method('initialize')->with($this->productMock);
