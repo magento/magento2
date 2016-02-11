@@ -40,14 +40,14 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $_backendSessionMock;
 
+    /** @var \Magento\Backend\Model\Auth\Session|\PHPUnit_Framework_MockObject_MockObject */
+    protected $backendAuthSessionMock;
+
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $_backendActionCtxMock;
 
     /** @var \Magento\Security\Helper\SecurityCookie|\PHPUnit_Framework_MockObject_MockObject */
     protected $securityCookieHelperMock;
-
-    /** @var \Magento\Security\Model\SecurityManager|\PHPUnit_Framework_MockObject_MockObject */
-    protected $securityManagerMock;
 
     /** @var \Magento\Integration\Api\IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_integrationSvcMock;
@@ -144,6 +144,20 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__call', 'getIntegrationData'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->_userMock = $this->getMockBuilder('Magento\User\Model\User')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'load', 'performIdentityCheck'])
+            ->getMock();
+
+        $this->backendAuthSessionMock = $this->getMockBuilder('Magento\Backend\Model\Auth\Session')
+            ->setMethods(['getUser'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->backendAuthSessionMock->expects($this->any())
+            ->method('getUser')
+            ->willReturn($this->_userMock);
+
         $this->_translateModelMock = $this->getMockBuilder(
             'Magento\Framework\TranslateInterface'
         )->disableOriginalConstructor()->getMock();
@@ -156,10 +170,6 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->_authMock = $this->getMockBuilder('Magento\Backend\Model\Auth')
             ->disableOriginalConstructor()
             ->setMethods(['getUser', 'logout'])
-            ->getMock();
-        $this->_userMock = $this->getMockBuilder('Magento\User\Model\User')
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', 'load'])
             ->getMock();
         $this->_requestMock = $this->getMockBuilder(
             'Magento\Framework\App\Request\Http'
@@ -196,10 +206,6 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->securityCookieHelperMock = $this->getMockBuilder('\Magento\Security\Helper\SecurityCookie')
             ->disableOriginalConstructor()
             ->setMethods(['setLogoutReasonCookie'])
-            ->getMock();
-        $this->securityManagerMock = $this->getMockBuilder('\Magento\Security\Model\SecurityManager')
-            ->disableOriginalConstructor()
-            ->setMethods(['adminIdentityCheck'])
             ->getMock();
     }
 
@@ -318,7 +324,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             'escaper' => $this->_escaper,
             'integrationCollection' => $integrationCollection,
             'securityCookieHelper' => $this->securityCookieHelperMock,
-            'securityManager' => $this->securityManagerMock
+            'backendAuthSession' => $this->backendAuthSessionMock
         ];
         /** Create IntegrationController to test */
         $controller = $this->_objectManagerHelper->getObject(
