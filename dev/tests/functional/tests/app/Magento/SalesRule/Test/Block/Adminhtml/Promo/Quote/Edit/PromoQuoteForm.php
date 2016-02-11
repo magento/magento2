@@ -5,21 +5,21 @@
  */
 namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Sales rule edit form.
  */
-class PromoQuoteForm extends FormTabs
+class PromoQuoteForm extends FormSections
 {
     /**
      * Selector of element to wait for. If set by child will wait for element after action
      *
      * @var string
      */
-    protected $waitForSelector = 'div#promo_catalog_edit_tabs';
+    protected $waitForSelector = '.spinner';
 
     /**
      * Wait for should be for visibility or not?
@@ -29,43 +29,43 @@ class PromoQuoteForm extends FormTabs
     protected $waitForSelectorVisible = false;
 
     /**
-     * Fill form with tabs.
+     * Fill form with sections.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement $element
      * @param array $replace
-     * @return $this|FormTabs
+     * @return $this
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null, array $replace = null)
     {
-        $tabs = $this->getFixtureFieldsByContainers($fixture);
+        $sections = $this->getFixtureFieldsByContainers($fixture);
         if ($replace) {
-            $tabs = $this->prepareData($tabs, $replace);
+            $sections = $this->prepareData($sections, $replace);
         }
-        $this->fillTabs($tabs, $element);
+        $this->fillContainers($sections, $element);
     }
 
     /**
      * Replace placeholders in each values of data.
      *
-     * @param array $tabs
+     * @param array $sections
      * @param array $replace
      * @return array
      */
-    protected function prepareData(array $tabs, array $replace)
+    protected function prepareData(array $sections, array $replace)
     {
-        foreach ($replace as $tabName => $fields) {
+        foreach ($replace as $sectionName => $fields) {
             foreach ($fields as $key => $pairs) {
-                if (isset($tabs[$tabName][$key])) {
-                    $tabs[$tabName][$key]['value'] = str_replace(
+                if (isset($sections[$sectionName][$key])) {
+                    $sections[$sectionName][$key]['value'] = str_replace(
                         array_keys($pairs),
                         array_values($pairs),
-                        $tabs[$tabName][$key]['value']
+                        $sections[$sectionName][$key]['value']
                     );
                 }
             }
         }
 
-        return $tabs;
+        return $sections;
     }
 }
