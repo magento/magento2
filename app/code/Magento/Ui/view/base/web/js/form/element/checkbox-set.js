@@ -124,6 +124,10 @@ define([
             return this.isMultiselect ?
                 !utils.equalArrays(value, initial) :
                 this._super();
+        },
+
+        hasService: function () {
+            return this._super && this._super();
         }
     });
 });
