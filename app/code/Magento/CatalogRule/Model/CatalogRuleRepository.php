@@ -67,7 +67,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     public function get($ruleId)
     {
         if (!isset($this->rules[$ruleId])) {
-            /** @var \Magento\CatalogRule\Model\RuleFactory $rule */
+            /** @var \Magento\CatalogRule\Model\Rule $rule */
             $rule = $this->ruleFactory->create();
 
             /* TODO: change to resource model after entity manager will be fixed */
