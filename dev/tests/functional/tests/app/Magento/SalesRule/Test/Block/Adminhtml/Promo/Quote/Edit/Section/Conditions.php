@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Tab;
+namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section;
 
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
- * Sales rule condition tab.
+ * Sales rule condition section.
  */
-class Conditions extends Tab
+class Conditions extends Section
 {
     /**
      * Field Prefix Constant

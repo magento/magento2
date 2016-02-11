@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Tab;
+namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section;
 
-use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
- * Backend sales rule 'Rule Information' tab.
+ * Backend sales rule 'Rule Information' section.
  */
-class RuleInformation extends Tab
+class RuleInformation extends Section
 {
     /**
      * Locator for Customer Group element.
@@ -23,7 +23,7 @@ class RuleInformation extends Tab
     protected $customerGroup = '#rule_customer_group_ids';
 
     /**
-     * Get data of tab.
+     * Get data of section.
      *
      * @param array|null $fields
      * @param SimpleElement|null $element
@@ -37,6 +37,7 @@ class RuleInformation extends Tab
             unset($data['coupon_code']);
             unset($data['uses_per_coupon']);
         }
+
         return $this->_getData($data, $element);
     }
 
