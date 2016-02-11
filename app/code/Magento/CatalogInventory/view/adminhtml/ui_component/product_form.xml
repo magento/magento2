@@ -11,6 +11,7 @@
             <item name="config" xsi:type="array">
                 <item name="dataScope" xsi:type="string">data.product</item>
                 <item name="provider" xsi:type="string">product_form.product_form_data_source</item>
+                <item name="onCancel" xsi:type="string">actionCancel</item>
                 <item name="options" xsi:type="array">
                     <item name="title" xsi:type="string">Advanced Inventory</item>
                     <item name="buttons" xsi:type="array">
