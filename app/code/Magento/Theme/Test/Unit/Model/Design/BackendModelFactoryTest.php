@@ -93,7 +93,8 @@ class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willReturn([
                 [
-                    'config_id' => 1
+                    'config_id' => 1,
+                    'path' => 'design/head/default_title'
                 ]
             ]);
         $this->objectManagerMock->expects($this->once())
@@ -115,5 +116,28 @@ class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->willReturn('value');
         $this->assertSame($this->backendModel, $this->model->create($data));
+    }
+
+    public function testCreateByPath()
+    {
+        $path = 'design/head/default_title';
+        $backendModelType = 'Magento\Theme\Model\Design\Backend\Exceptions';
+        $backendModel = $this->getMockBuilder($backendModelType)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->metadataProviderMock->expects($this->once())
+            ->method('get')
+            ->willReturn([
+                'head_default_title' => [
+                    'path' => $path,
+                    'backend_model' => $backendModelType
+                ]
+            ]);
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with($backendModelType, ['data' => []])
+            ->willReturn($backendModel);
+        $this->assertEquals($backendModel, $this->model->createByPath($path));
     }
 }

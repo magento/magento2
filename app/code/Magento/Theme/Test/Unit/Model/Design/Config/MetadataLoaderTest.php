@@ -38,6 +38,11 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeFallbackResolver;
 
+    /**
+     * @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $valueProcessor;
+
     protected function setUp()
     {
         $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
@@ -54,11 +59,16 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
         $this->scopeFallbackResolver = $this->getMockBuilder('Magento\Framework\App\ScopeFallbackResolverInterface')
             ->getMockForAbstractClass();
 
+        $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new MetadataLoader(
             $this->request,
             $this->metadataProvider,
             $this->scopeConfig,
-            $this->scopeFallbackResolver
+            $this->scopeFallbackResolver,
+            $this->valueProcessor
         );
     }
 
@@ -106,6 +116,9 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
                 ['name/data_path', $scope, $scopeId, 'data_value'],
                 ['name/metadata_path', $scope, $scopeId, 'metadata_value'],
             ]);
+        $this->valueProcessor->expects($this->atLeastOnce())
+            ->method('process')
+            ->willReturnArgument(0);
 
         $result = $this->model->getData();
 

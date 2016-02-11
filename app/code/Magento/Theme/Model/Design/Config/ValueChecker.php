@@ -7,6 +7,7 @@ namespace Magento\Theme\Model\Design\Config;
 
 use Magento\Framework\App\ScopeFallbackResolverInterface;
 use Magento\Framework\App\Config as AppConfig;
+use Magento\Theme\Model\Design\Config\ValueProcessor;
 
 class ValueChecker
 {
@@ -21,15 +22,22 @@ class ValueChecker
     protected $appConfig;
 
     /**
+     * @var ValueProcessor
+     */
+    protected $valueProcessor;
+
+    /**
      * @param ScopeFallbackResolverInterface $fallbackResolver
      * @param AppConfig $appConfig
      */
     public function __construct(
         ScopeFallbackResolverInterface $fallbackResolver,
-        AppConfig $appConfig
+        AppConfig $appConfig,
+        ValueProcessor $valueProcessor
     ) {
         $this->fallbackResolver = $fallbackResolver;
         $this->appConfig = $appConfig;
+        $this->valueProcessor = $valueProcessor;
     }
 
     /**
@@ -45,7 +53,10 @@ class ValueChecker
     {
         list($scope, $scopeId) = $this->fallbackResolver->getFallbackScope($scope, $scopeId);
         if ($scope) {
-            return $value !== (string)$this->appConfig->getValue($path, $scope, $scopeId);
+            return $value !== $this->valueProcessor->process(
+                $this->appConfig->getValue($path, $scope, $scopeId),
+                $path
+            );
         }
         return true;
     }

@@ -9,6 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeTreeProviderInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
+use Magento\Theme\Model\Design\Config\ValueProcessor;
 
 /**
  * Data collection
@@ -32,23 +33,31 @@ class Collection extends \Magento\Framework\Data\Collection
     protected $appConfig;
 
     /**
+     * @var ValueProcessor
+     */
+    protected $valueProcessor;
+
+    /**
      * Collection constructor
      *
      * @param EntityFactoryInterface $entityFactory
      * @param ScopeTreeProviderInterface $scopeTree
      * @param MetadataProviderInterface $metadataProvider
      * @param ScopeConfigInterface $appConfig
+     * @param ValueProcessor $valueProcessor
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         ScopeTreeProviderInterface $scopeTree,
         MetadataProviderInterface $metadataProvider,
-        ScopeConfigInterface $appConfig
+        ScopeConfigInterface $appConfig,
+        ValueProcessor $valueProcessor
     ) {
         parent::__construct($entityFactory);
         $this->scopeTree = $scopeTree;
         $this->metadataProvider = $metadataProvider;
         $this->appConfig = $appConfig;
+        $this->valueProcessor = $valueProcessor;
     }
 
     /**
@@ -90,7 +99,10 @@ class Collection extends \Magento\Framework\Data\Collection
         $result = [];
         foreach ($this->metadataProvider->get() as $itemName => $itemData) {
             if (isset($itemData['use_in_grid']) && (boolean)$itemData['use_in_grid']) {
-                $result[$itemName] = $this->appConfig->getValue($itemData['path'], $scope, $scopeId);
+                $result[$itemName] = $this->valueProcessor->process(
+                    $this->appConfig->getValue($itemData['path'], $scope, $scopeId),
+                    $itemData['path']
+                );
             }
         }
 

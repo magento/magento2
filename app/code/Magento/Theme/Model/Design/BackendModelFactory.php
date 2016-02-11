@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Model\Design;
 
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
@@ -58,12 +59,56 @@ class BackendModelFactory extends ValueFactory
             $backendModelData['config_id'] = $configId;
         }
 
-        $backendModel = isset($data['config']['backend_model'])
-            ? $this->_objectManager->create($data['config']['backend_model'], ['data' => $backendModelData])
-            : parent::create(['data' => $backendModelData]);
+        $backendType = isset($data['config']['backend_model'])
+            ? $data['config']['backend_model']
+            : $this->_instanceName;
+
+        /** @var Value $backendModel */
+        $backendModel = $this->getNewBackendModel($backendType, $backendModelData);
         $backendModel->setValue($data['value']);
 
         return $backendModel;
+    }
+
+    /**
+     * Retrieve new empty backend model
+     *
+     * @param string $backendType
+     * @param array $data
+     * @return Value
+     */
+    protected function getNewBackendModel($backendType, array $data = [])
+    {
+        return $this->_objectManager->create($backendType, ['data' => $data]);
+    }
+
+    /**
+     * Create backend model by config path
+     *
+     * @param string $path
+     * @param array $data
+     * @return Value
+     */
+    public function createByPath($path, array $data = [])
+    {
+        return $this->getNewBackendModel($this->getBackendTypeByPath($path), $data);
+    }
+
+    /**
+     * Retrieve backend type by config path
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function getBackendTypeByPath($path)
+    {
+        $metadata = $this->metadataProvider->get();
+        $index = array_search($path, array_column($metadata, 'path'));
+        $backendType = $this->_instanceName;
+        if ($index !== false && isset(array_values($metadata)[$index]['backend_model'])) {
+            $backendType = array_values($metadata)[$index]['backend_model'];
+        }
+        return $backendType;
     }
 
     /**
@@ -78,7 +123,10 @@ class BackendModelFactory extends ValueFactory
     {
         $storedData = $this->getStoredData($scope, $scopeId);
         $dataKey = array_search($path, array_column($storedData, 'path'));
-        return isset($storedData[$dataKey]['config_id']) ? $storedData[$dataKey]['config_id'] : null;
+        return $dataKey !== false
+            && isset($storedData[$dataKey]['config_id'])
+                ? $storedData[$dataKey]['config_id']
+                : null;
     }
 
     /**
