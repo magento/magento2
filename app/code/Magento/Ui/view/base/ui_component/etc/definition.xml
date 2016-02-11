@@ -179,6 +179,24 @@
     <field class="Magento\Ui\Component\Form\Field"/>
 
     <!-- Form elements -->
+    <radioset class="Magento\Ui\Component\Form\Element\RadioSet">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
+                <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
+                <item name="isMultiselect" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+    </radioset>
+    <checkboxset class="Magento\Ui\Component\Form\Element\CheckboxSet">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
+                <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
+                <item name="isMultiselect" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+    </checkboxset>
     <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
