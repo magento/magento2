@@ -28,7 +28,10 @@ This Contributor License Agreement ("Agreement") is made and entered into as of 
 
 **IN WITNESS WHEREOF,** the Parties have caused this Agreement to be executed by their duly authorized representatives as of the Effective Date.
 
- **Magento, Inc.**                                                       **Contributor**      
- By:               ____________________                          By:     ____________________ 
- Name:             ____________________                          Name:   ____________________ 
+ **Magento, Inc.**                                                       **Contributor**
+
+ By:               ____________________                          By:     ____________________
+
+ Name:             ____________________                          Name:   ____________________
+
  Title:            ____________________                          Title:  ____________________ 
