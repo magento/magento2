@@ -6,11 +6,11 @@
 namespace Magento\Ui\Component\Form\Element;
 
 /**
- * Class Select
+ * Class RadioSet
  */
-class Select extends AbstractOptionsField
+class RadioSet extends AbstractOptionsField
 {
-    const NAME = 'select';
+    const NAME = 'radioset';
 
     /**
      * Get component name

@@ -6,11 +6,11 @@
 namespace Magento\Ui\Component\Form\Element;
 
 /**
- * Class Select
+ * Class CheckboxSet
  */
-class Select extends AbstractOptionsField
+class CheckboxSet extends AbstractOptionsField
 {
-    const NAME = 'select';
+    const NAME = 'checkboxset';
 
     /**
      * Get component name
