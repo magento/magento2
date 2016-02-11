@@ -739,4 +739,70 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->validate();
         $this->assertTrue($result);
     }
+
+    /**
+     * Test for performIdentityCheck method
+     *
+     * @param bool $verifyIdentityResult
+     * @param bool $lockExpires
+     * @dataProvider dataProviderPerformIdentityCheck
+     */
+    public function testPerformIdentityCheck($verifyIdentityResult, $lockExpires)
+    {
+        $password = 'qwerty1';
+        $userName = 'John Doe';
+
+        $this->encryptorMock
+            ->expects($this->once())
+            ->method('validateHash')
+            ->with($password, $this->model->getPassword())
+            ->willReturn($verifyIdentityResult);
+        $this->model->setIsActive(true);
+        $this->resourceMock->expects($this->any())->method('hasAssigned2Role')->willReturn(true);
+
+        $this->model->setUserName($userName);
+        $this->model->setLockExpires($lockExpires);
+
+        $this->eventManagerMock->expects($this->any())
+            ->method('dispatch')
+            ->with(
+                'admin_user_authenticate_after',
+                [
+                    'username' => $userName,
+                    'password' => $password,
+                    'user' => $this->model,
+                    'result' => $verifyIdentityResult
+                ]
+            )
+            ->willReturnSelf();
+
+        if ($lockExpires) {
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\State\UserLockedException',
+                __('Your account is temporarily disabled.')
+            );
+        }
+
+        if (!$verifyIdentityResult) {
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\AuthenticationException',
+                __('You have entered an invalid password for current user.')
+            );
+        }
+
+        $this->model->performIdentityCheck($password);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderPerformIdentityCheck()
+    {
+        return [
+            ['verifyIdentityResult' => true, 'lockExpires' => false],
+            ['verifyIdentityResult' => false, 'lockExpires' => false],
+            ['verifyIdentityResult' => true, 'lockExpires' => true],
+            ['verifyIdentityResult' => false, 'lockExpires' => true]
+        ];
+    }
 }
