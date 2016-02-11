@@ -256,9 +256,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
-     * Validate customer attribute values.
-     * For existing customer password + confirmation will be validated only when password is set
-     * (i.e. its change is requested)
+     * Validate admin user data.
+     *
+     * Existing user password confirmation will be validated only when password is set
      *
      * @return bool|string[]
      */
@@ -272,8 +272,35 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             return $validator->getMessages();
         }
 
-        return true;
+        return $this->validatePasswordChange();
+    }
 
+    /**
+     * Make sure admin password was changed.
+     *
+     * New password is compared to at least 4 previous passwords to prevent setting them again
+     *
+     * @return bool|string[]
+     */
+    protected function validatePasswordChange()
+    {
+        $password = $this->getPassword();
+        if ($password && !$this->getForceNewPassword() && $this->getId()) {
+            $errorMessage = __('Sorry, but this password has already been used. Please create another.');
+            // Check if password is equal to the current one
+            if ($this->_encryptor->isValidHash($password, $this->getOrigData('password'))) {
+                return [$errorMessage];
+            }
+
+            // Check whether password was used before
+            $passwordHash = $this->_encryptor->getHash($password, false);
+            foreach ($this->getResource()->getOldPasswords($this) as $oldPasswordHash) {
+                if ($passwordHash === $oldPasswordHash) {
+                    return [$errorMessage];
+                }
+            }
+        }
+        return true;
     }
 
     /**

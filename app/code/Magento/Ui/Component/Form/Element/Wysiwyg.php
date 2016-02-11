@@ -5,11 +5,12 @@
  */
 namespace Magento\Ui\Component\Form\Element;
 
-use Magento\Ui\Component\Wysiwyg\ConfigInterface;
+use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\Form;
-use Magento\Framework\Data\Form\Element\Editor as EditorElement;
+use Magento\Framework\Data\FormFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**
  * Class Input
@@ -19,15 +20,18 @@ class Wysiwyg extends AbstractElement
     const NAME = 'wysiwyg';
 
     /**
-     * @var EditorElement
+     * @var Form
      */
-    protected $editorElement;
+    protected $form;
 
     /**
-     * Wysiwyg constructor.
+     * @var Editor
+     */
+    protected $editor;
+
+    /**
      * @param ContextInterface $context
-     * @param Form $form
-     * @param EditorElement $editorElement
+     * @param FormFactory $formFactory
      * @param ConfigInterface $wysiwygConfig
      * @param array $components
      * @param array $data
@@ -35,24 +39,27 @@ class Wysiwyg extends AbstractElement
      */
     public function __construct(
         ContextInterface $context,
-        Form $form,
-        EditorElement $editorElement,
+        FormFactory $formFactory,
         ConfigInterface $wysiwygConfig,
         array $components = [],
         array $data = [],
         array $config = []
     ) {
-        $this->editorElement = $editorElement;
-        $this->editorElement->setForm($form);
-        $this->editorElement->setData('force_load', true);
-        $this->editorElement->setData('rows', 20);
-        $this->editorElement->setData('name', $data['name']);
-        $this->editorElement->setData('html_id', $data['name'] . 'Editor');
-
         $wysiwygConfigData = isset($config['wysiwygConfigData']) ? $config['wysiwygConfigData'] : [];
-        $this->editorElement->setConfig($wysiwygConfig->getConfig($wysiwygConfigData));
+        $this->form = $formFactory->create();
+        $this->editor = $this->form->addField(
+            $context->getNamespace() . '_' . $data['name'],
+            'Magento\Framework\Data\Form\Element\Editor',
+            [
+                'force_load' => true,
+                'rows' => 20,
+                'name' => $data['name'],
+                'config' => $wysiwygConfig->getConfig($wysiwygConfigData),
+                'wysiwyg' => isset($config['wysiwyg']) ? $config['wysiwyg'] : null,
+            ]
+        );
+        $data['config']['content'] = $this->editor->getElementHtml();
 
-        $data['config']['content'] = $editorElement->getElementHtml();
         parent::__construct($context, $components, $data);
     }
 
