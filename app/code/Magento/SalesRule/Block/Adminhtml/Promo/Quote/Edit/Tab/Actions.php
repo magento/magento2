@@ -128,30 +128,55 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Prepare form before rendering HTML
      *
      * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $form = $this->addTabToForm($model);
+        $this->setForm($form);
 
+        return parent::_prepareForm();
+    }
+
+
+    /**
+     * Handles addition of actions tab to supplied form.
+     *
+     * @param \Magento\SalesRule\Model\Rule $model
+     * @param string $fieldsetId
+     * @param string $formName
+     * @return \Magento\Framework\Data\Form
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function addTabToForm($model, $fieldsetId = 'actions_fieldset', $formName = 'sales_rule_form')
+    {
         if (!$model) {
             $id = $this->getRequest()->getParam('id');
             $model = $this->ruleFactory->create();
             $model->load($id);
+        } else {
+            $id = $model->getRuleId();
         }
+        $actionsFieldSetId = $formName . 'rule_actions_fieldset_' . $id;
+
+        $newChildUrl = $this->getUrl(
+            'sales_rule/promo_quote/newActionHtml/form/rule_actions_fieldset_' . $actionsFieldSetId,
+            ['form_namespace' => $formName]
+        );
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
-
         $renderer = $this->_rendererFieldset->setTemplate(
             'Magento_CatalogRule::promo/fieldset.phtml'
         )->setNewChildUrl(
-            $this->getUrl('sales_rule/promo_quote/newActionHtml/form/rule_actions_fieldset')
+            $newChildUrl
+        )->setActionsFieldSetId(
+            $actionsFieldSetId
         );
 
         $fieldset = $form->addFieldset(
-            'actions_fieldset',
+            $fieldsetId,
             [
                 'legend' => __(
                     'Apply the rule only to cart items matching the following conditions ' .
@@ -170,7 +195,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
                 'label' => __('Apply To'),
                 'title' => __('Apply To'),
                 'required' => true,
-                'data-form-part' => 'sales_rule_form'
+                'data-form-part' => $formName
             ]
         )->setRule(
             $model
@@ -181,6 +206,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $this->_eventManager->dispatch('adminhtml_block_salesrule_actions_prepareform', ['form' => $form]);
 
         $form->setValues($model->getData());
+        $this->setActionFormName($model->getActions(), $formName);
 
         if ($model->isReadonly()) {
             foreach ($fieldset->getElements() as $element) {
@@ -188,7 +214,23 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
             }
         }
 
-        $this->setForm($form);
-        return parent::_prepareForm();
+        return $form;
+    }
+
+    /**
+     * Handles addition of form name to action and its actions.
+     *
+     * @param \Magento\Rule\Model\Condition\AbstractCondition $actions
+     * @param string $formName
+     * @return void
+     */
+    private function setActionFormName(\Magento\Rule\Model\Condition\AbstractCondition $actions, $formName)
+    {
+        $actions->setFormName($formName);
+        if ($actions->getActions() && is_array($actions->getActions())) {
+            foreach ($actions->getActions() as $condition) {
+                $this->setActionFormName($condition, $formName);
+            }
+        }
     }
 }
