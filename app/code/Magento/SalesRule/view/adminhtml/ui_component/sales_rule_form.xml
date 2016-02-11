@@ -87,15 +87,19 @@
         <field name="is_active">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Status</item>
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="source" xsi:type="string">sales_rule</item>
-                    <item name="dataScope" xsi:type="string">is_active</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
+                    <item name="default" xsi:type="number">1</item>
+                    <item name="label" xsi:type="string" translate="true">Active</item>
                 </item>
             </argument>
         </field>
@@ -337,9 +341,6 @@
                         <item name="true" xsi:type="number">1</item>
                         <item name="false" xsi:type="number">0</item>
                     </item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">false</item>
-                    </item>
                     <item name="default" xsi:type="number">1</item>
                     <item name="label" xsi:type="string" translate="true">Public In RSS Feed</item>
                 </item>
@@ -433,9 +434,6 @@
                         <item name="true" xsi:type="number">1</item>
                         <item name="false" xsi:type="number">0</item>
                     </item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">false</item>
-                    </item>
                     <item name="default" xsi:type="number">0</item>
                     <item name="label" xsi:type="string" translate="true">Apply to Shipping Amount</item>
                 </item>
@@ -451,9 +449,6 @@
                     <item name="valueMap" xsi:type="array">
                         <item name="true" xsi:type="number">1</item>
                         <item name="false" xsi:type="number">0</item>
-                    </item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
                     <item name="default" xsi:type="number">0</item>
                     <item name="label" xsi:type="string" translate="true">Discard subsequent rules</item>
