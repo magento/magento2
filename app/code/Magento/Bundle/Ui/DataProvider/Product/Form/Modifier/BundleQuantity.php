@@ -31,7 +31,7 @@ class BundleQuantity extends AbstractModifier
                             self::CODE_QUANTITY_AND_STOCK_STATUS => [
                                 'arguments' => [
                                     'data' => [
-                                        'config' => ['disabled' => true],
+                                        'config' => ['disabled' => false],
                                     ],
                                 ],
                             ],
