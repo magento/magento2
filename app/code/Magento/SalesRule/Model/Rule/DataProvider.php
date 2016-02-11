@@ -8,14 +8,9 @@ namespace Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\SalesRule\Model\Rule;
-use Magento\Store\Model\System\Store;
-use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Convert\DataObject;
 
 /**
  * Class DataProvider
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -28,31 +23,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var array
      */
     protected $loadedData;
-
-    /**
-     * @var Store
-     */
-    protected $store;
-
-    /**
-     * @var GroupRepositoryInterface
-     */
-    protected $groupRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var DataObject
-     */
-    protected $objectConverter;
-
-    /**
-     * @var \Magento\SalesRule\Model\RuleFactory
-     */
-    protected $salesRuleFactory;
 
     /**
      * Core registry
@@ -73,39 +43,22 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param Store $store
-     * @param GroupRepositoryInterface $groupRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DataObject $objectConverter
-     * @param \Magento\SalesRule\Model\RuleFactory $salesRuleFactory
      * @param \Magento\Framework\Registry $registry
      * @param Metadata\ValueProvider $metadataValueProvider
      * @param array $meta
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        Store $store,
-        GroupRepositoryInterface $groupRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        DataObject $objectConverter,
-        \Magento\SalesRule\Model\RuleFactory $salesRuleFactory,
         \Magento\Framework\Registry $registry,
         \Magento\SalesRule\Model\Rule\Metadata\ValueProvider $metadataValueProvider,
         array $meta = [],
         array $data = []
     ) {
         $this->collection = $collectionFactory->create();
-        $this->store = $store;
-        $this->groupRepository = $groupRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->objectConverter = $objectConverter;
-        $this->salesRuleFactory = $salesRuleFactory;
         $this->coreRegistry = $registry;
         $this->metadataValueProvider = $metadataValueProvider;
         $meta = array_replace_recursive($this->getMetadataValues(), $meta);

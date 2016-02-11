@@ -48,11 +48,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->conditionCombineFactoryMock = $this->getMockBuilder(
             '\Magento\SalesRule\Model\Rule\Condition\CombineFactory'
         )->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->condProdCombineFactoryMock = $this->getMockBuilder(
             '\Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory'
         )->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->model = $objectManager->getObject(
