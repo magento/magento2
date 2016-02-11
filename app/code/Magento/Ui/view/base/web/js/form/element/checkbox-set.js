@@ -13,7 +13,7 @@ define([
     return Abstract.extend({
         defaults: {
             template: 'ui/form/element/checkbox-set',
-            isMultiselect: true
+            multiple: false
         },
 
         /**
@@ -59,7 +59,7 @@ define([
          * @returns {CheckboxSet} Chainable.
          */
         clear: function () {
-            var value = this.isMultiselect ? [] : '';
+            var value = this.multiple ? [] : '';
 
             this.value(value);
 
@@ -73,7 +73,7 @@ define([
          * @returns {Array|String}
          */
         normalizeData: function (value) {
-            if (!this.isMultiselect) {
+            if (!this.multiple) {
                 return this._super();
             }
 
@@ -88,7 +88,7 @@ define([
         getPreview: function () {
             var option;
 
-            if (!this.isMultiselect) {
+            if (!this.multiple) {
                 option = this.getOption(this.value());
 
                 return option ? option.label : '';
@@ -121,11 +121,14 @@ define([
             var value = this.value(),
                 initial = this.initialValue;
 
-            return this.isMultiselect ?
+            return this.multiple ?
                 !utils.equalArrays(value, initial) :
                 this._super();
         },
 
+        /**
+         * @returns {*}
+         */
         hasService: function () {
             return this._super && this._super();
         }
