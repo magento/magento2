@@ -117,7 +117,7 @@ class AdvancedInventory extends AbstractModifier
         foreach ($stockDataFields as $field) {
             if (isset($data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field])) {
                 $data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field] =
-                    (int)$data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field];
+                    (float)$data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field];
             }
         }
 
@@ -186,6 +186,7 @@ class AdvancedInventory extends AbstractModifier
                     ) - 1,
             ];
             $qty['arguments']['data']['config'] = [
+                'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
                 'dataType' => 'number',
                 'formElement' => 'input',
                 'componentType' => 'field',
@@ -195,6 +196,9 @@ class AdvancedInventory extends AbstractModifier
                 'dataScope' => 'qty',
                 'validation' => [
                     'validate-number' => true
+                ],
+                'imports' => [
+                    'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
                 ],
                 'sortOrder' => 10,
             ];
