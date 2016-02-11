@@ -205,7 +205,7 @@ class Grouped extends AbstractModifier
                             self::$codeQuantityAndStockStatus => [
                                 'arguments' => [
                                     'data' => [
-                                        'config' => ['disabled' => true],
+                                        'config' => ['disabled' => false],
                                     ],
                                 ],
                             ],
