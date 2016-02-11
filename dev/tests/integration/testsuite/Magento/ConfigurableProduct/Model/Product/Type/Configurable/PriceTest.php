@@ -98,9 +98,15 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             $product
         );
 
-        $product->setOptions($options)
-            ->setCanSaveCustomOptions(true)
-            ->save();
+        $product->setOptions($options);
+        $product->setCanSaveCustomOptions(true);
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
+        // force reload product
+        $productRepository->get($product->getSku(), false, null, true);
+
+        $product->save();
 
         $product = $this->getProduct(1);
         $optionId = $product->getOptions()[0]->getId();
