@@ -67,7 +67,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $metadataValueProvider;
 
     /**
-     * DataProvider constructor.
+     * Initialize dependencies.
      *
      * @param string $name
      * @param string $primaryFieldName
@@ -79,6 +79,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param DataObject $objectConverter
      * @param \Magento\SalesRule\Model\RuleFactory $salesRuleFactory
      * @param \Magento\Framework\Registry $registry
+     * @param Metadata\ValueProvider $metadataValueProvider
      * @param array $meta
      * @param array $data
      *

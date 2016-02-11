@@ -11,9 +11,8 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\Quote\Model\Quote\Address;
 
 /**
- * Sales Rules resource collection model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Sales Rules resource collection model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
