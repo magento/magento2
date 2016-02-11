@@ -19,6 +19,7 @@ define(function (require) {
         .addNode('fastForEach');
 
     return {
+        resizable:      require('./resizable'),
         i18n:           require('./i18n'),
         scope:          require('./scope'),
         mageInit:       require('./mage-init'),
