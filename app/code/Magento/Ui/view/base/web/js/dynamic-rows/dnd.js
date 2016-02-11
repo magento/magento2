@@ -84,7 +84,7 @@ define([
             return this;
         },
 
-        /**l
+        /**
          * Calls 'initObservable' of parent, initializes 'options' and 'initialOptions'
          *     properties, calls 'setOptions' passing options to it
          *
@@ -125,7 +125,7 @@ define([
 
             $(recordNode).addClass(this.draggableElementClass);
             $(originRecord).addClass(this.draggableElementClass);
-            this.step = this.step === 'auto' ? originRecord.height()/2 : this.step;
+            this.step = this.step === 'auto' ? originRecord.height() / 2 : this.step;
             drEl.originRow = originRecord;
             drEl.instance = recordNode = this.processingStyles(recordNode, elem);
             drEl.instanceCtx = this.getRecord(originRecord[0]);
@@ -195,9 +195,9 @@ define([
 
         /**
          * Set position to element
-         *`
+         *
          * @param {Object} depElem - dep element
-         * @param {Object} depElementCtx - dep element context```
+         * @param {Object} depElementCtx - dep element context
          * @param {Object} dragData - data draggable element
          */
         setPosition: function (depElem, depElementCtx, dragData) {
@@ -263,7 +263,7 @@ define([
                         elem: rec,
                         insert: rec[0] === this.draggableElement.originRow[0] ? 'none' : position,
                         className: className
-                    }
+                    };
                 }
             }
 
