@@ -9,7 +9,6 @@ use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Menu\Builder;
 use Magento\Framework\Search\SearchEngine\ConfigInterface;
 use Magento\Search\Model\EngineResolver;
-use Magento\Backend\Model\Menu\Config as MenuConfig;
 
 /**
  * A plugin for Magento\Backend\Model\Menu\Builder class. Implements "after" for "getResult()".
@@ -24,11 +23,6 @@ class MenuBuilder
      */
     const SEARCH_SYNONYMS_MENU_ITEM_ID = 'Magento_Search::search_synonyms';
 
-    /*
-     * @var MenuConfig $menuConfig
-     */
-    protected $menuConfig;
-
     /**
      * @var ConfigInterface $searchFeatureConfig
      */
@@ -42,16 +36,13 @@ class MenuBuilder
     /**
      * MenuBuilder constructor.
      *
-     * @param MenuConfig $menuConfig
      * @param ConfigInterface $searchFeatureConfig
      * @param EngineResolver $engineResolver
      */
     public function __construct(
-        MenuConfig $menuConfig,
         ConfigInterface $searchFeatureConfig,
         EngineResolver $engineResolver
     ) {
-        $this->menuConfig = $menuConfig;
         $this->searchFeatureConfig = $searchFeatureConfig;
         $this->engineResolver = $engineResolver;
     }

@@ -16,6 +16,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $xmlPath = __DIR__ . '/../../_files/search_engine.xml';
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        // Clear out the clache
+        $cacheManager = $objectManager->create('Magento\Framework\App\Cache\Manager');
+        /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
+        $cacheManager->clean($cacheManager->getAvailableTypes());
+
+
         $fileResolver = $this->getMockForAbstractClass(
             'Magento\Framework\Config\FileResolverInterface',
             [],
@@ -155,6 +162,5 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testIsFeatureSupported($searchEngine, $feature, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->config->isFeatureSupported($searchEngine, $feature));
-
     }
 }

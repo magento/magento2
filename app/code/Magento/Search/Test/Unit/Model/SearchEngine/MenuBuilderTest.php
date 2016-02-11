@@ -9,7 +9,6 @@ use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Menu\Builder;
 use Magento\Framework\Search\SearchEngine\ConfigInterface;
 use Magento\Search\Model\EngineResolver;
-use Magento\Backend\Model\Menu\Config as MenuConfig;
 
 /**
  * Class MenuBuilderTest. A unit test class to test functionality of
@@ -17,11 +16,6 @@ use Magento\Backend\Model\Menu\Config as MenuConfig;
  */
 class MenuBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var MenuConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $menuConfig;
-
     /**
      * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -34,7 +28,6 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->menuConfig = $this->getMock('\Magento\Backend\Model\Menu\Config', [], [], '', false);
         $this->searchFeatureConfig = $this->getMock('\Magento\Search\Model\SearchEngine\Config', [], [], '', false);
         $this->engineResolver = $this->getMock('\Magento\Search\Model\EngineResolver', [], [], '', false);
     }
@@ -58,7 +51,6 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
         $searchMenuBuilder = $objectManager->getObject(
             'Magento\Search\Model\SearchEngine\MenuBuilder',
             [
-                'menuConfig' => $this->menuConfig,
                 'searchFeatureConfig' => $this->searchFeatureConfig,
                 'engineResolver' => $this->engineResolver
             ]
