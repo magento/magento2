@@ -15,7 +15,8 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class DataProvider
@@ -107,9 +108,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $storeManager;
 
     /**
-     * @var CategoryRepositoryInterface
+     * @var CategoryFactory
      */
-    private $categoryRepository;
+    private $categoryFactory;
 
     /**
      * DataProvider constructor
@@ -123,7 +124,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Framework\Registry $registry
      * @param Config $eavConfig
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param CategoryRepositoryInterface $categoryRepository
+     * @param CategoryFactory $categoryFactory
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -138,7 +139,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \Magento\Framework\Registry $registry,
         Config $eavConfig,
         \Magento\Framework\App\RequestInterface $request,
-        CategoryRepositoryInterface $categoryRepository,
+        CategoryFactory $categoryFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -149,7 +150,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->registry = $registry;
         $this->storeManager = $storeManager;
         $this->request = $request;
-        $this->categoryRepository = $categoryRepository;
+        $this->categoryFactory = $categoryFactory;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
     }
@@ -310,6 +311,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get current category
      *
      * @return Category
+     * @throws NoSuchEntityException
      */
     public function getCurrentCategory()
     {
@@ -320,7 +322,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $requestId = $this->request->getParam($this->requestFieldName);
         $requestScope = $this->request->getParam($this->requestScopeFieldName, Store::DEFAULT_STORE_ID);
         if ($requestId) {
-            $category = $this->categoryRepository->get($requestId, $requestScope);
+            $category = $this->categoryFactory->create();
+            $category->setStoreId($requestScope);
+            $category->load($requestId);
+            if (!$category->getId()) {
+                throw NoSuchEntityException::singleField('id', $requestId);
+            }
         }
         return $category;
     }
