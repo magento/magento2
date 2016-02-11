@@ -13,6 +13,15 @@
         <span text="element.label"/>
     </label>
 
+    <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+    <div class="admin__control-table-action" if="element.addButton">
+        <button attr="{disabled: disabled}"
+                type="button"
+                click="addChild.bind($data, false, false)">
+            <span text="addButtonLabel"/>
+        </button>
+    </div>
+
     <div class="admin__field-control" data-role="grid-wrapper">
         <div class="admin__control-table-wrapper">
             <table class="admin__dynamic-rows data-grid" data-role="grid">
@@ -51,14 +60,5 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="admin__control-table-action" if="element.addButton">
-            <button attr="{disabled: disabled}"
-                    type="button"
-                    click="addChild.bind($data, false, false)">
-                <span text="addButtonLabel"/>
-            </button>
-        </div>
-        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
     </div>
 </div>

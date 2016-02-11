@@ -38,10 +38,12 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/dynamic-rows</item>
-                    <item name="template" xsi:type="string">ui/dynamic-rows/templates/grid</item>
+                    <item name="template" xsi:type="string">Magento_Backend/dynamic-rows/grid</item>
+                    <item name="fallbackResetTpl" xsi:type="string">Magento_Backend/form/element/helper/fallback-reset-link</item>
                     <item name="componentType" xsi:type="string">dynamicRows</item>
                     <item name="recordTemplate" xsi:type="string">record</item>
                     <item name="deleteButtonLabel" xsi:type="string">Remove</item>
+                    <item name="deleteProperty" xsi:type="boolean">false</item>
                     <item name="dndConfig" xsi:type="array">
                         <item name="enabled" xsi:type="boolean">false</item>
                     </item>
@@ -55,6 +57,7 @@
                         <item name="sortOrder" xsi:type="number">20</item>
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="showFallbackReset" xsi:type="boolean">false</item>
                     </item>
                 </argument>
                 <field name="search_string">
@@ -65,6 +68,7 @@
                             <item name="dataScope" xsi:type="string">search_string</item>
                             <item name="fit" xsi:type="boolean">true</item>
                             <item name="label" xsi:type="string">Search String</item>
+                            <item name="showFallbackReset" xsi:type="boolean">false</item>
                         </item>
                     </argument>
                 </field>
@@ -77,6 +81,7 @@
                             <item name="dataScope" xsi:type="string">theme</item>
                             <item name="fit" xsi:type="boolean">true</item>
                             <item name="label" xsi:type="string">Theme Name</item>
+                            <item name="showFallbackReset" xsi:type="boolean">false</item>
                         </item>
                     </argument>
                 </field>
@@ -89,6 +94,7 @@
                             <item name="label" xsi:type="string">Actions</item>
                             <item name="sortOrder" xsi:type="string">50</item>
                             <item name="additionalClasses" xsi:type="string">data-grid-actions-cell</item>
+                            <item name="template" xsi:type="string">Magento_Backend/dynamic-rows/cells/action-delete</item>
                         </item>
                     </argument>
                 </actionDelete>
