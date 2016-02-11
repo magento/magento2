@@ -10,7 +10,7 @@
         <span text="label"/>
     </label>
     <div class="admin__field-control"
-         css="'_with-tooltip': $data.tooltip, '_with-reset': element.showFallbackReset && element.isDifferedFromDefault">
+         css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
         <render args="elementTmpl" ifnot="hasAddons()"/>
 
         <div class="admin__control-addon" if="hasAddons()">
