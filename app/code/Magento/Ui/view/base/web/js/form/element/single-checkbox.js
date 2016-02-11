@@ -14,7 +14,7 @@ define([
         defaults: {
             template: 'ui/form/components/single/field',
             checked: false,
-            isMultiple: false,
+            multiple: false,
             prefer: 'checkbox', // 'radio' | 'checkbox' | 'toggle'
             valueMap: {},
             keyboard: {},
@@ -47,7 +47,7 @@ define([
             this._super();
 
             if (!config.elementTmpl) {
-                if (!this.prefer && !this.isMultiple) {
+                if (!this.prefer && !this.multiple) {
                     this.elementTmpl = this.templates.radio;
                 } else if (this.prefer === 'radio') {
                     this.elementTmpl = this.templates.radio;
@@ -78,7 +78,7 @@ define([
                 this.initialValue = this.value;
             }
 
-            if (this.isMultiple && !_.isArray(this.value)) {
+            if (this.multiple && !_.isArray(this.value)) {
                 this.value = []; // needed for correct observable assingment
             }
 
@@ -171,7 +171,7 @@ define([
                 oldValue = this.initialValue,
                 newChecked;
 
-            if (this.isMultiple) {
+            if (this.multiple) {
                 newChecked = newExportedValue.indexOf(oldValue) !== -1;
             } else if (isMappedUsed) {
                 newChecked = this.getReverseValueMap(newExportedValue);
@@ -202,9 +202,9 @@ define([
                 newValue = oldValue;
             }
 
-            if (!this.isMultiple && newChecked) {
+            if (!this.multiple && newChecked) {
                 this.value(newValue);
-            } else if (!this.isMultiple && !newChecked) {
+            } else if (!this.multiple && !newChecked) {
                 if (typeof newValue === 'boolean') {
                     this.value(newChecked);
                 } else if (newValue === this.value.peek()) {
@@ -214,9 +214,9 @@ define([
                 if (isMappedUsed) {
                     this.value(newValue);
                 }
-            } else if (this.isMultiple && newChecked && this.value.indexOf(newValue) === -1) {
+            } else if (this.multiple && newChecked && this.value.indexOf(newValue) === -1) {
                 this.value.push(newValue);
-            } else if (this.isMultiple && !newChecked && this.value.indexOf(newValue) !== -1) {
+            } else if (this.multiple && !newChecked && this.value.indexOf(newValue) !== -1) {
                 this.value.splice(this.value.indexOf(newValue), 1);
             }
         },

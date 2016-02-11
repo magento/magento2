@@ -39,6 +39,28 @@ define([
                 initial = this.initialValue;
 
             return !utils.equalArrays(value, initial);
+        },
+
+        /**
+         * Restores initial value.
+         *
+         * @returns {MultiSelect} Chainable.
+         */
+        reset: function () {
+            this.value(utils.copy(this.initialValue));
+
+            return this;
+        },
+
+        /**
+         * Empties current value.
+         *
+         * @returns {MultiSelect} Chainable.
+         */
+        clear: function () {
+            this.value([]);
+
+            return this;
         }
     });
 });
