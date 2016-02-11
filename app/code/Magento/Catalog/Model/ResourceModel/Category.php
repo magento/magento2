@@ -174,33 +174,6 @@ class Category extends AbstractResource
     }
 
     /**
-     * Process category data before delete
-     * update children count for parent category
-     * delete child categories
-     *
-     * @param \Magento\Framework\DataObject $object
-     * @return $this
-     */
-    protected function _beforeDelete(\Magento\Framework\DataObject $object)
-    {
-        parent::_beforeDelete($object);
-
-        /**
-         * Update children count for all parent categories
-         */
-        $parentIds = $object->getParentIds();
-        if ($parentIds) {
-            $childDecrease = $object->getChildrenCount() + 1;
-            // +1 is itself
-            $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
-            $where = ['entity_id IN(?)' => $parentIds];
-            $this->getConnection()->update($this->getEntityTable(), $data, $where);
-        }
-        $this->deleteChildren($object);
-        return $this;
-    }
-
-    /**
      * Delete children categories of specific category
      *
      * @param \Magento\Framework\DataObject $object
