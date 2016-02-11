@@ -188,9 +188,9 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->database->expects($this->once())->method('rollback');
         $this->file->expects($this->once())
             ->method('isExists')
-            ->with($this->path . '/backups/12345_db.gz')
+            ->with($this->path . '/backups/12345_db.sql')
             ->willReturn(true);
-        $this->model->dbRollback('12345_db.gz');
+        $this->model->dbRollback('12345_db.sql');
     }
 
     private function setupCodeBackupRollback()
@@ -226,7 +226,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             ->willReturn('RollbackFile_A.gz');
         $this->database->expects($this->atLeastOnce())
             ->method('getBackupPath')
-            ->willReturn('pathToFile/12345_db.tgz');
+            ->willReturn('pathToFile/12345_db.sql');
         $this->log->expects($this->once())
             ->method('logSuccess');
     }
