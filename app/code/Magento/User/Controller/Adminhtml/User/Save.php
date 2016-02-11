@@ -16,27 +16,27 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     protected $securityCookieHelper;
 
     /**
-     * @var \Magento\Security\Model\SecurityManager
+     * @var \Magento\Backend\Model\Auth\Session
      */
-    protected $securityManager;
+    protected $backendAuthSession;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * @param \Magento\Security\Model\SecurityManager $securityManager
+     * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\User\Model\UserFactory $userFactory,
         \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
-        \Magento\Security\Model\SecurityManager $securityManager
+        \Magento\Backend\Model\Auth\Session $backendAuthSession
     ) {
         parent::__construct($context, $coreRegistry, $userFactory);
         $this->securityCookieHelper = $securityCookieHelper;
-        $this->securityManager = $securityManager;
+        $this->backendAuthSession = $backendAuthSession;
     }
 
     /**
@@ -88,7 +88,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             if (!($isCurrentUserPasswordValid)) {
                 throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
-            $this->securityManager->adminIdentityCheck($currentUser, $data[$currentUserPasswordField]);
+            $this->backendAuthSession->getUser()->performIdentityCheck($data[$currentUserPasswordField]);
             $model->save();
 
             $model->sendNotificationEmailsIfRequired();

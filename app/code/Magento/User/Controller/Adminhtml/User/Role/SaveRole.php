@@ -47,9 +47,9 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     protected $securityCookieHelper;
 
     /**
-     * @var \Magento\Security\Model\SecurityManager
+     * @var \Magento\Backend\Model\Auth\Session
      */
-    protected $securityManager;
+    protected $backendAuthSession;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -60,7 +60,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * @param \Magento\Security\Model\SecurityManager $securityManager
+     * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -71,7 +71,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
-        \Magento\Security\Model\SecurityManager $securityManager
+        \Magento\Backend\Model\Auth\Session $backendAuthSession
     ) {
         parent::__construct(
             $context,
@@ -83,7 +83,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             $filterManager
         );
         $this->securityCookieHelper = $securityCookieHelper;
-        $this->securityManager = $securityManager;
+        $this->backendAuthSession = $backendAuthSession;
     }
 
     /**
@@ -116,11 +116,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         }
 
         try {
-            $password = $this->getRequest()->getParam(
-                \Magento\User\Block\Role\Tab\Info::IDENTITY_VERIFICATION_PASSWORD_FIELD
-            );
-            $user = $this->_auth->getUser();
-            $this->securityManager->adminIdentityCheck($user, $password);
+            $this->validateUser();
             $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
             $role->setName($roleName)
                 ->setPid($this->getRequest()->getParam('parent_id', false))
@@ -156,6 +152,24 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         }
 
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Validate current user password
+     *
+     * @return $this
+     * @throws UserLockedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    protected function validateUser()
+    {
+        $password = $this->getRequest()->getParam(
+            \Magento\User\Block\Role\Tab\Info::IDENTITY_VERIFICATION_PASSWORD_FIELD
+        );
+        $user = $this->backendAuthSession->getUser();
+        $user->performIdentityCheck($password);
+
+        return $this;
     }
 
     /**

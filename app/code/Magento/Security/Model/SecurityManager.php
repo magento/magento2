@@ -6,7 +6,6 @@
 namespace Magento\Security\Model;
 
 use Magento\Framework\Exception\SecurityViolationException;
-use Magento\Framework\Exception\State\UserLockedException;
 
 /**
  * Security Control Manager Model
@@ -129,58 +128,5 @@ class SecurityManager
             ->save();
 
         return $passwordResetRequestEventModel;
-    }
-
-    /**
-     * Security check for admin user
-     *
-     * @param \Magento\User\Model\User $user
-     * @param string $passwordString
-     * @return $this
-     * @throws UserLockedException
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     */
-    public function adminIdentityCheck(\Magento\User\Model\User $user, $passwordString)
-    {
-        $isCheckSuccessful = $this->performIdentityCheck($user, $passwordString);
-        $this->eventManager->dispatch(
-            'admin_user_authenticate_after',
-            [
-                'username' => $user->getUserName(),
-                'password' => $passwordString,
-                'user' => $user,
-                'result' => $isCheckSuccessful
-            ]
-        );
-        $user = $user->load($user->getId());
-        if ($user->getLockExpires()) {
-            throw new UserLockedException(__('Your account is temporarily disabled.'));
-        }
-
-        if (!$isCheckSuccessful) {
-            throw new \Magento\Framework\Exception\AuthenticationException(
-                __('You have entered an invalid password for current user.')
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * Identity check
-     *
-     * @param \Magento\User\Model\User $user
-     * @param string $passwordString
-     * @return bool
-     */
-    protected function performIdentityCheck(\Magento\User\Model\User $user, $passwordString)
-    {
-        try {
-            $result = $user->verifyIdentity($passwordString);
-        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
-            $result = false;
-        }
-
-        return $result;
     }
 }
