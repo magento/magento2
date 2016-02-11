@@ -21,11 +21,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_ruleActions;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Yesno
-     */
-    protected $_sourceYesno;
-
-    /**
      * @var string
      */
     protected $_nameInLayout = 'actions_apply_to';
@@ -39,7 +34,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Config\Model\Config\Source\Yesno $sourceYesno
      * @param \Magento\Rule\Block\Actions $ruleActions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
      * @param array $data
@@ -48,7 +42,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Config\Model\Config\Source\Yesno $sourceYesno,
         \Magento\Rule\Block\Actions $ruleActions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -57,7 +50,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $this->ruleFactory = $ruleFactory;
         $this->_rendererFieldset = $rendererFieldset;
         $this->_ruleActions = $ruleActions;
-        $this->_sourceYesno = $sourceYesno;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -157,7 +149,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         } else {
             $id = $model->getRuleId();
         }
-        $actionsFieldSetId = $formName . 'rule_actions_fieldset_' . $id;
+        $actionsFieldSetId = $model->getActionsFieldSetId($formName);
 
         $newChildUrl = $this->getUrl(
             'sales_rule/promo_quote/newActionHtml/form/rule_actions_fieldset_' . $actionsFieldSetId,
@@ -171,7 +163,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
             'Magento_CatalogRule::promo/fieldset.phtml'
         )->setNewChildUrl(
             $newChildUrl
-        )->setActionsFieldSetId(
+        )->setFieldSetId(
             $actionsFieldSetId
         );
 
