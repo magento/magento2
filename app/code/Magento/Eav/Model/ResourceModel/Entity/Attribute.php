@@ -488,7 +488,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get entity attribute
      *
-     * @param $entityAttributeId
+     * @param int|string $entityAttributeId
      * @return array
      */
     public function getEntityAttribute($entityAttributeId)
