@@ -8,6 +8,13 @@ namespace Magento\Framework\Search\SearchEngine\Config;
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
+     * List of id attributes for merge
+     *
+     * @var array
+     */
+    protected $_idAttributes = ['/engines/engine' => 'name'];
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
