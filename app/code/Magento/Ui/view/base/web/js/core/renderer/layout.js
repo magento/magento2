@@ -42,7 +42,8 @@ define([
     function loadDeps(node) {
         var loaded = $.Deferred();
 
-        registry.get(node.deps, function () {
+        registry.get(node.deps, function (deps) {
+            node.provider = node.extendProvider ? deps && deps.name : node.provider;
             loaded.resolve(node);
         });
 
@@ -106,14 +107,28 @@ define([
                 children    = node.children,
                 type        = getNodeType(parent, node),
                 dataScope   = getDataScope(parent, node),
+                extendDeps  = true,
                 nodeName;
 
             node.children = false;
+            node.extendProvider = true;
+
+            if (node.config && node.config.provider || node.provider) {
+                node.extendProvider = false;
+            }
+
+            if (node.config && node.config.deps || node.deps) {
+                extendDeps= false;
+            }
 
             node = utils.extend({
             }, types.get(type), defaults, node);
 
             nodeName = getNodeName(parent, node, name);
+
+            if (extendDeps && parent && parent.deps && type) {
+                node.deps = parent.deps;
+            }
 
             _.extend(node, node.config || {}, {
                 index: node.name || name,

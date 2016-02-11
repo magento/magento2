@@ -9,7 +9,8 @@
     <label class="admin__field-label" if="$data.label" visible="$data.labelVisible" attr="for: uid">
         <span text="label"/>
     </label>
-    <div class="admin__field-control">
+    <div class="admin__field-control"
+         css="'_with-tooltip': $data.tooltip">
         <render args="elementTmpl" ifnot="hasAddons()"/>
 
         <div class="admin__control-addon" if="hasAddons()">
