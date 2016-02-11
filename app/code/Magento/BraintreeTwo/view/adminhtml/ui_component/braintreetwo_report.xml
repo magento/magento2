@@ -109,6 +109,7 @@
                     </item>
                 </argument>
             </filterSelect>
+            <!--
             <filterSelect name="paymentInstrumentType">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\PaymentType</argument>
@@ -125,6 +126,7 @@
                     </item>
                 </argument>
             </filterSelect>
+            -->
             <filterInput name="paypalDetails_paymentId">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
