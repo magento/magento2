@@ -579,6 +579,7 @@ class AdvancedPricing extends AbstractModifier
             'componentType' => Modal::NAME,
             'dataScope' => '',
             'provider' => 'product_form.product_form_data_source',
+            'onCancel' => 'actionCancel',
             'options' => [
                 'title' => __('Advanced Pricing'),
                 'buttons' => [
