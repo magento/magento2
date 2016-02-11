@@ -68,7 +68,9 @@ class ValueProvider
     /**
      * Get metadata for sales rule form. It will be merged with form UI component declaration.
      *
+     * @param Rule $rule
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getMetadataValues(\Magento\SalesRule\Model\Rule $rule)
     {

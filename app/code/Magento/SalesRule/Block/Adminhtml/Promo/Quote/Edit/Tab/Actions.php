@@ -31,11 +31,14 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     private $ruleFactory;
 
     /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Rule\Block\Actions $ruleActions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
+     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $data
      */
     public function __construct(
@@ -146,9 +149,8 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
             $id = $this->getRequest()->getParam('id');
             $model = $this->ruleFactory->create();
             $model->load($id);
-        } else {
-            $id = $model->getRuleId();
         }
+
         $actionsFieldSetId = $model->getActionsFieldSetId($formName);
 
         $newChildUrl = $this->getUrl(
