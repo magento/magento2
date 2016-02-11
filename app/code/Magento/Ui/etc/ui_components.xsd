@@ -197,6 +197,24 @@
             <xs:extension base="select"/>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="checkboxset">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="radioset">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="textarea">
         <xs:complexContent>
             <xs:extension base="ui_element">

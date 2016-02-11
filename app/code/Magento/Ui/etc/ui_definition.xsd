@@ -42,6 +42,8 @@
             <xs:element type="multiselect" name="multiselect"/>
             <xs:element type="textarea" name="textarea"/>
             <xs:element type="wysiwyg" name="wysiwyg"/>
+            <xs:element type="radioset" name="radioset"/>
+            <xs:element type="checkboxset" name="checkboxset"/>
             <xs:element type="multiline" name="multiline"/>
             <xs:element type="dataTypeText" name="text"/>
             <xs:element type="dataTypeBoolean" name="boolean"/>
