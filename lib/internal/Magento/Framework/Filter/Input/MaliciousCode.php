@@ -44,7 +44,11 @@ class MaliciousCode implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        return preg_replace($this->_expressions, '', $value);
+        $replaced = 0;
+        do {
+            $value = preg_replace($this->_expressions, '', $value, -1, $replaced);
+        } while ($replaced !== 0);
+        return  $value;
     }
 
     /**
