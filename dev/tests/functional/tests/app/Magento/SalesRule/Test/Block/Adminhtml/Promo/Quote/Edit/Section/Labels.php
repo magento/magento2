@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Tab;
+namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section;
 
-use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
- * Backend sales rule label tab.
+ * Backend sales rule label section.
  */
-class Labels extends Tab
+class Labels extends Section
 {
     /**
      * Store label field name.
@@ -19,7 +19,7 @@ class Labels extends Tab
     const STORE_LABEL_NAME = '[name="store_labels[%s]"]';
 
     /**
-     * Fill data to labels fields on labels tab.
+     * Fill data to labels fields on labels section.
      *
      * @param array $fields
      * @param SimpleElement|null $element
@@ -39,7 +39,7 @@ class Labels extends Tab
     }
 
     /**
-     * Get data of labels tab.
+     * Get data of labels section.
      *
      * @param array|null $fields
      * @param SimpleElement|null $element
