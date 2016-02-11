@@ -51,3 +51,15 @@
 }
 
 }
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .tooltip.wrapper {
+        .tooltip.content {
+            min-width: auto;
+        }
+    }
+}
