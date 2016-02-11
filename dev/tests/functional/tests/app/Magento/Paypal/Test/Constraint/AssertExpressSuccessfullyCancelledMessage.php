@@ -10,13 +10,13 @@ use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderSuccessPlacedMessage
+ * Class AssertExpressSuccessfullyCancelledMessage
  * Assert that success message is correct
  */
 class AssertExpressSuccessfullyCancelledMessage extends AbstractConstraint
 {
     /**
-     * Message of success checkout
+     * Message of successfully cancelled PayPal Express checkout.
      */
     const SUCCESS_MESSAGE = 'Express Checkout has been canceled.';
 
