@@ -929,11 +929,7 @@
                     [
                         "php.ini.sample",
                         "php.ini.sample"
-                    ],
-                    [
-                        "CONTRIBUTOR_LICENSE_AGREEMENT.html",
-                        "CONTRIBUTOR_LICENSE_AGREEMENT.html"
-                    ],
+                    ]
                     [
                         "index.php",
                         "index.php"
