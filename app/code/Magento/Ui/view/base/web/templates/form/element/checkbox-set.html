@@ -20,12 +20,12 @@
                 ko-checked="$parent.value"
                 ko-disabled="$parent.disabled"
                 css="
-                    'admin__control-radio': !$parent.isMultiselect,
-                    'admin__control-checkbox': $parent.isMultiselect"
+                    'admin__control-radio': !$parent.multiple,
+                    'admin__control-checkbox': $parent.multiple"
                 attr="
                     id: ++ko.uid, 
                     value: value,
-                    type: $parent.isMultiselect ? 'checkbox' : 'radio'"/>
+                    type: $parent.multiple ? 'checkbox' : 'radio'"/>
 
             <label class="admin__field-label" text="label" attr="for: ko.uid"/>
         </div>
