@@ -55,17 +55,14 @@ class Exceptions extends ArraySerialized
         // For value validations
         $exceptions = $this->getValue();
 
-        //TODO Will be removed after MAGETWO-42389 will be done
-        if (empty($exceptions)) {
-            return false;
-        }
         foreach ($exceptions as $rowKey => $row) {
-            if ($rowKey === '__empty') {
+            if (isset($row['delete']) && $row['delete'] == 'true') {
+                unset($exceptions[$rowKey]);
                 continue;
             }
 
             // Validate that all values have come
-            foreach (['search', 'value'] as $fieldName) {
+            foreach (['search_string', 'theme'] as $fieldName) {
                 if (!isset($row[$fieldName])) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Exception does not contain field \'%1\'', $fieldName)
@@ -74,16 +71,16 @@ class Exceptions extends ArraySerialized
             }
 
             // Empty string (match all) is not supported, because it means setting a default theme. Remove such entries.
-            if (!strlen($row['search'])) {
+            if (!strlen($row['search_string'])) {
                 unset($exceptions[$rowKey]);
                 continue;
             }
 
             // Validate the theme value
-            $design->setDesignTheme($row['value'], \Magento\Framework\App\Area::AREA_FRONTEND);
+            $design->setDesignTheme($row['theme'], \Magento\Framework\App\Area::AREA_FRONTEND);
 
             // Compose regular exception pattern
-            $exceptions[$rowKey]['regexp'] = $this->_composeRegexp($row['search']);
+            $exceptions[$rowKey]['regexp'] = $this->_composeRegexp($row['search_string']);
         }
         $this->setValue($exceptions);
 

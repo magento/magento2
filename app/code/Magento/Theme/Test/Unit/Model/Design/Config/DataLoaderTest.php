@@ -33,6 +33,11 @@ class DataLoaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfig;
 
+    /**
+     * @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $valueProcessor;
+
     protected function setUp()
     {
         $this->metadataProvider = $this->getMockBuilder('Magento\Theme\Model\Design\Config\MetadataProvider')
@@ -46,10 +51,15 @@ class DataLoaderTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->getMockForAbstractClass();
 
+        $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new DataLoader(
             $this->metadataProvider,
             $this->request,
-            $this->scopeConfig
+            $this->scopeConfig,
+            $this->valueProcessor
         );
     }
 
@@ -117,6 +127,9 @@ class DataLoaderTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())
             ->method('getItems')
             ->willReturn($items);
+        $this->valueProcessor->expects($this->atLeastOnce())
+            ->method('process')
+            ->willReturnArgument(0);
 
         $this->model->setCollection($collection);
         $result = $this->model->getData();
@@ -153,7 +166,7 @@ class DataLoaderTest extends \PHPUnit_Framework_TestCase
         );
 
         return [
-            [[]],
+            [[],],
             [$items],
         ];
     }

@@ -18,6 +18,9 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
     /** @var ValueChecker */
     protected $valueChecker;
 
+    /** @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    protected $valueProcessor;
+
     public function setUp()
     {
         $this->fallbackResolver = $this->getMockForAbstractClass(
@@ -27,13 +30,18 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->appConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
+
+        $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testIsDifferentFromDefault()
     {
         $valueChecker = new ValueChecker(
             $this->fallbackResolver,
-            $this->appConfig
+            $this->appConfig,
+            $this->valueProcessor
         );
         $this->fallbackResolver->expects($this->once())
             ->method('getFallbackScope')
@@ -54,7 +62,8 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $valueChecker = new ValueChecker(
             $this->fallbackResolver,
-            $this->appConfig
+            $this->appConfig,
+            $this->valueProcessor
         );
         $this->fallbackResolver->expects($this->once())
             ->method('getFallbackScope')
@@ -64,6 +73,9 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with('design/head/default_title', 'default', 0)
             ->willReturn('');
+        $this->valueProcessor->expects($this->atLeastOnce())
+            ->method('process')
+            ->willReturnArgument(0);
 
         $this->assertTrue(
             $valueChecker->isDifferentFromDefault(

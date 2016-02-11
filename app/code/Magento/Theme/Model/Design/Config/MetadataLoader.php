@@ -32,21 +32,29 @@ class MetadataLoader
     protected $scopeFallbackResolver;
 
     /**
+     * @var ValueProcessor
+     */
+    protected $valueProcessor;
+
+    /**
      * @param RequestInterface $request
      * @param MetadataProvider $metadataProvider
      * @param ScopeConfigInterface $scopeConfig
      * @param ScopeFallbackResolverInterface $scopeFallbackResolver
+     * @param ValueProcessor $valueProcessor
      */
     public function __construct(
         RequestInterface $request,
         MetadataProvider $metadataProvider,
         ScopeConfigInterface $scopeConfig,
-        ScopeFallbackResolverInterface $scopeFallbackResolver
+        ScopeFallbackResolverInterface $scopeFallbackResolver,
+        ValueProcessor $valueProcessor
     ) {
         $this->metadataProvider = $metadataProvider;
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
         $this->scopeFallbackResolver = $scopeFallbackResolver;
+        $this->valueProcessor = $valueProcessor;
     }
 
     /**
@@ -95,7 +103,10 @@ class MetadataLoader
     {
         list($fallbackScope, $fallbackScopeId) = $this->scopeFallbackResolver->getFallbackScope($scope, $scopeId);
         if ($fallbackScope) {
-            return (string)$this->scopeConfig->getValue($path, $fallbackScope, $fallbackScopeId);
+            return $this->valueProcessor->process(
+                $this->scopeConfig->getValue($path, $fallbackScope, $fallbackScopeId),
+                $path
+            );
         }
         return '';
     }

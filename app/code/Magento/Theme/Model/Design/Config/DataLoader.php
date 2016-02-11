@@ -37,18 +37,26 @@ class DataLoader
     protected $metadata = [];
 
     /**
+     * @var ValueProcessor
+     */
+    protected $valueProcessor;
+
+    /**
      * @param MetadataProvider $metadataProvider
      * @param RequestInterface $request
      * @param ScopeConfigInterface $scopeConfig
+     * @param ValueProcessor $valueProcessor
      */
     public function __construct(
         MetadataProvider $metadataProvider,
         RequestInterface $request,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        ValueProcessor $valueProcessor
     ) {
         $this->metadataProvider = $metadataProvider;
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
+        $this->valueProcessor = $valueProcessor;
     }
 
     /**
@@ -100,12 +108,15 @@ class DataLoader
         $items = $this->collection->getItems();
         foreach ($items as $item) {
             /** @var \Magento\Framework\App\Config\Value $item */
-            $data[$scope][$metadata[$item->getPath()]] = (string)$item->getValue();
+            $data[$scope][$metadata[$item->getPath()]] = $item->getValue();
         }
 
         $metadataKeys = array_diff_key($this->getMetadata(), (isset($data[$scope]) ? $data[$scope] : []));
         foreach ($metadataKeys as $path) {
-            $data[$scope][$metadata[$path]] = (string)$this->scopeConfig->getValue($path, $scope, $scopeId);
+            $data[$scope][$metadata[$path]] = $this->valueProcessor->process(
+                $this->scopeConfig->getValue($path, $scope, $scopeId),
+                $path
+            );
         }
 
         return $data;
