@@ -27,7 +27,7 @@
 
         <render args="tooltipTpl" if="$data.tooltip"/>
 
-        <render args="fallbackResetTpl" if="element.showFallbackReset && element.isDifferedFromDefault"/>
+        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
 
         <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
             <span text="notice"/>
