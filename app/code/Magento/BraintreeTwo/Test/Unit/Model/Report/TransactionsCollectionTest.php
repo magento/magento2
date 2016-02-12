@@ -145,6 +145,39 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
             $this->braintreeAdapterMock,
             $this->filterMapperMock
         );
+        $collection->setPageSize(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT);
+
+        $collection->addFieldToFilter('orderId', ['like' => '0']);
+        $items = $collection->getItems();
+        $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
+        $this->assertInstanceOf(DocumentInterface::class, $items[1]);
+    }
+
+    /**
+     * Get items with limit
+     */
+    public function testGetItemsWithNullLimit()
+    {
+        $transations = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
+
+        $this->filterMapperMock->expects($this->once())
+            ->method('getFilter')
+            ->willReturn(new BraintreeSearchNodeStub());
+
+        $this->braintreeAdapterMock->expects($this->once())
+            ->method('search')
+            ->willReturn($transations);
+
+        $this->entityFactoryMock->expects($this->exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
+            ->method('create')
+            ->willReturn($this->transactionMapMock);
+
+        $collection = new TransactionsCollection(
+            $this->entityFactoryMock,
+            $this->braintreeAdapterMock,
+            $this->filterMapperMock
+        );
+        $collection->setPageSize(NULL);
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
