@@ -43,6 +43,13 @@ class Install extends Block
     protected $launchAdmin = '.btn-large.btn-prime';
 
     /**
+     * Text for installation is completed.
+     *
+     * @var string
+     */
+    private $successInstallText = "//p[contains(., 'Installing... 100%')]";
+
+    /**
      * Click on 'Install Now' button.
      *
      * @return void
@@ -107,5 +114,25 @@ class Install extends Block
     public function clickLaunchAdmin()
     {
         $this->_rootElement->find($this->launchAdmin, Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Check that success install text is visible.
+     *
+     * @return bool
+     */
+    public function isInstallationCompleted()
+    {
+        return $this->_rootElement->find($this->successInstallText, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Waiting for success install text.
+     *
+     * @return void
+     */
+    public function waitSuccessInstall()
+    {
+        $this->waitForElementVisible($this->successInstallText, Locator::SELECTOR_XPATH);
     }
 }

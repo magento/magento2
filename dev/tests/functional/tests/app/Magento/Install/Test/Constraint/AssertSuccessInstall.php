@@ -39,6 +39,13 @@ class AssertSuccessInstall extends AbstractConstraint
     ];
 
     /**
+     * Install page.
+     *
+     * @var Install
+     */
+    private $installPage;
+
+    /**
      * Assert that Magento successfully installed.
      *
      * @param InstallConfig $installConfig
@@ -48,6 +55,9 @@ class AssertSuccessInstall extends AbstractConstraint
      */
     public function processAssert(Install $installPage, InstallConfig $installConfig, User $user)
     {
+        //TODO Nginx server does't make redirect after installation (random fail)
+        $this->installPage = $installPage;
+        $this->waitSuccessPage();
         $adminData = $installPage->getInstallBlock()->getAdminInfo();
         $dbData = $installPage->getInstallBlock()->getDbInfo();
 
@@ -73,6 +83,20 @@ class AssertSuccessInstall extends AbstractConstraint
                 $dbData[$field['pageData']],
                 'Wrong database information is displayed.'
             );
+        }
+    }
+
+    /**
+     * Wait for success install page.
+     *
+     * @return void
+     */
+    private function waitSuccessPage()
+    {
+        $this->installPage->getInstallBlock()->waitSuccessInstall();
+        sleep(5);
+        if ($this->installPage->getInstallBlock()->isInstallationCompleted()) {
+            $this->installPage->open();
         }
     }
 
