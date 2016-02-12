@@ -30,7 +30,7 @@ angular.module('select-version', ['ngStorage'])
                 if (data.responseType != 'error') {
                     if (data.packages.length <= 1) {
                         $scope.upgradeProcessError = true;
-                        $scope.upgradeProcessErrorMessage = 'No upgrades available.';
+                        $scope.upgradeProcessErrorMessage = "You're already using the latest version, there's nothing for us to do.";
                     } else {
                         $scope.selectedOption = [];
                         $scope.versions = [];
