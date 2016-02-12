@@ -53,7 +53,7 @@ abstract class AbstractOptionsField extends AbstractElement
             } else {
                 $options = array_values($this->options);
             }
-            $config['options'] = array_values(array_merge_recursive($options, $config['options']));
+            $config['options'] = array_values(array_merge_recursive($config['options'], $options));
         }
         $this->setData('config', (array)$config);
         parent::prepare();
@@ -66,8 +66,5 @@ abstract class AbstractOptionsField extends AbstractElement
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsSelected($optionValue)
-    {
-        return $this->getValue() == $optionValue;
-    }
+    abstract public function getIsSelected($optionValue);
 }
