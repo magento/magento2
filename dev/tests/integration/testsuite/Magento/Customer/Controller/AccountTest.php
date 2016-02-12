@@ -313,7 +313,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
-     * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
+     * @magentoConfigFixture current_store customer/password/forgot_email_template password_forgot_email_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
@@ -321,7 +321,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $transportBuilderMock = $this->prepareEmailMock(
             1,
-            'customer_password_forgot_email_template',
+            'password_forgot_email_template',
             'support'
         );
         $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Model\AccountManagement');
@@ -442,7 +442,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @magentoConfigFixture current_store customer/account_information/change_email_template customer_account_information_change_email_template
+     * @magentoConfigFixture current_store customer/account_information/change_email_template change_email_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
@@ -450,7 +450,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $transportBuilderMock = $this->prepareEmailMock(
             2,
-            'customer_account_information_change_email_template',
+            'change_email_template',
             'support'
         );
         $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
@@ -490,7 +490,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @magentoConfigFixture current_store customer/account_information/change_email_and_password_template customer_account_information_change_email_and_password_template
+     * @magentoConfigFixture current_store customer/account_information/change_email_and_password_template template1
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
@@ -498,7 +498,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $transportBuilderMock = $this->prepareEmailMock(
             2,
-            'customer_account_information_change_email_and_password_template',
+            'template1',
             'support'
         );
         $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
