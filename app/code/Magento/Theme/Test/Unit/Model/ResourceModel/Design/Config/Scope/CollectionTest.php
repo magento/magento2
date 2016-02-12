@@ -29,6 +29,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $appConfigMock;
 
+    /** @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    protected $valueProcessor;
+
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Collection\EntityFactoryInterface')
@@ -40,12 +43,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 ->getMockForAbstractClass();
         $this->appConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->getMockForAbstractClass();
+        $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->collection = new Collection(
             $this->entityFactoryMock,
             $this->scopeTreeMock,
             $this->metadataProviderMock,
-            $this->appConfigMock
+            $this->appConfigMock,
+            $this->valueProcessor
         );
     }
 
@@ -103,6 +110,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                     ['second/field/path', ScopeInterface::SCOPE_STORE, 1, 'WebsiteValue'],
                 ]
             );
+        $this->valueProcessor->expects($this->atLeastOnce())
+            ->method('process')
+            ->withConsecutive(
+                ['DefaultValue', 'second/field/path'],
+                ['WebsiteValue', 'second/field/path'],
+                ['WebsiteValue', 'second/field/path']
+            )
+            ->willReturnOnConsecutiveCalls(
+                'DefaultValue',
+                'WebsiteValue',
+                'WebsiteValue'
+            );
+
 
         $expectedResult = [
             new \Magento\Framework\DataObject([

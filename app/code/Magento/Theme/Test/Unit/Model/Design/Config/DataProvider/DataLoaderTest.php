@@ -5,11 +5,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config\DataProvider;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Model\Design\Config\DataProvider\DataLoader;
-use Magento\Theme\Model\Design\Config\MetadataProvider;
 
 class DataLoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,81 +17,63 @@ class DataLoaderTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var MetadataProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $metadataProvider;
-
-    /**
      * @var Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $scopeConfig;
+    protected $dataPersistor;
 
     /**
-     * @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\DesignConfigRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $valueProcessor;
+    protected $designConfigRepository;
+
+    /**
+     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $designConfig;
+
+    /**
+     * @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $designConfigData;
+
+    /**
+     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $designConfigExtension;
 
     protected function setUp()
     {
-        $this->metadataProvider = $this->getMockBuilder('Magento\Theme\Model\Design\Config\MetadataProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->dataPersistor = $this->getMockBuilder('Magento\Framework\App\Request\DataPersistorInterface')
+            ->getMockForAbstractClass();
+        $this->designConfigRepository = $this->getMockBuilder('Magento\Theme\Api\DesignConfigRepositoryInterface')
+            ->getMockForAbstractClass();
+        $this->designConfig = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigInterface')
+            ->getMockForAbstractClass();
+        $this->designConfigData = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigDataInterface')
+            ->getMockForAbstractClass();
+        $this->designConfigExtension = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
+            ->setMethods(['getDesignConfigData'])
             ->getMockForAbstractClass();
 
-        $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->model = new DataLoader(
-            $this->metadataProvider,
             $this->request,
-            $this->scopeConfig,
-            $this->valueProcessor
+            $this->designConfigRepository,
+            $this->dataPersistor
         );
     }
 
-    public function testSetCollection()
-    {
-        $collection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design\Config\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->assertSame($this->model, $this->model->setCollection($collection));
-    }
-
-    /**
-     * @param array $items
-     * @dataProvider dataProviderGetData
-     */
-    public function testGetDataWithNoItems(array $items)
+    public function testGetDataWithNoItems()
     {
         $scope = 'websites';
         $scopeId = 1;
-
-        $metadataSrc = [
-            'data_name' => [
-                'path' => 'name/data_path',
-            ],
-            'metadata_name' => [
-                'path' => 'name/metadata_path',
-            ],
-        ];
-
-        $metadata = [
-            'data_name' => 'name/data_path',
-            'metadata_name' => 'name/metadata_path',
-        ];
 
         $this->request->expects($this->exactly(2))
             ->method('getParam')
@@ -102,72 +82,35 @@ class DataLoaderTest extends \PHPUnit_Framework_TestCase
                 ['scope_id', null, $scopeId],
             ]);
 
-        $this->metadataProvider->expects($this->once())
-            ->method('get')
-            ->willReturn($metadataSrc);
-
-        $this->scopeConfig->expects($this->any())
+        $this->designConfigRepository->expects($this->once())
+            ->method('getByScope')
+            ->with($scope, $scopeId)
+            ->willReturn($this->designConfig);
+        $this->designConfig->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->designConfigExtension);
+        $this->designConfigExtension->expects($this->once())
+            ->method('getDesignConfigData')
+            ->willReturn([$this->designConfigData]);
+        $this->designConfigData->expects($this->once())
+            ->method('getFieldConfig')
+            ->willReturn(['field' => 'field']);
+        $this->designConfigData->expects($this->once())
             ->method('getValue')
-            ->willReturnMap([
-                [$metadata['data_name'], $scope, $scopeId, 'data_value'],
-                [$metadata['metadata_name'], $scope, $scopeId, 'metadata_value'],
-            ]);
+            ->willReturn('value');
+        $this->dataPersistor->expects($this->once())
+            ->method('get')
+            ->with('theme_design_config')
+            ->willReturn(['scope' => $scope, 'scope_id' => $scopeId]);
 
-        $collection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design\Config\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collection->expects($this->once())
-            ->method('addPathsFilter')
-            ->with($metadata)
-            ->willReturnSelf();
-        $collection->expects($this->once())
-            ->method('addScopeIdFilter')
-            ->with($scopeId)
-            ->willReturnSelf();
-        $collection->expects($this->once())
-            ->method('getItems')
-            ->willReturn($items);
-        $this->valueProcessor->expects($this->atLeastOnce())
-            ->method('process')
-            ->willReturnArgument(0);
-
-        $this->model->setCollection($collection);
         $result = $this->model->getData();
 
         $this->assertTrue(is_array($result));
         $this->assertTrue(array_key_exists($scope, $result));
         $this->assertTrue(is_array($result[$scope]));
-
         $this->assertTrue(array_key_exists('scope', $result[$scope]));
-        $this->assertEquals($scope, $result[$scope]['scope']);
         $this->assertTrue(array_key_exists('scope_id', $result[$scope]));
+        $this->assertEquals($scope, $result[$scope]['scope']);
         $this->assertEquals($scopeId, $result[$scope]['scope_id']);
-
-        $this->assertTrue(array_key_exists('data_name', $result[$scope]));
-        $this->assertEquals('data_value', $result[$scope]['data_name']);
-        $this->assertTrue(array_key_exists('metadata_name', $result[$scope]));
-        $this->assertEquals('metadata_value', $result[$scope]['metadata_name']);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderGetData()
-    {
-        $objectManagerHelper = new ObjectManager($this);
-        $items[] = $objectManagerHelper->getObject(
-            'Magento\Framework\App\Config\Value',
-            [
-                'data' => [
-                    'path' => 'name/data_path',
-                    'value' => 'data_value',
-                ],
-            ]
-        );
-
-        return [
-            [[],],
-            [$items],
-        ];
     }
 }

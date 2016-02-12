@@ -5,11 +5,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config\DataProvider;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ScopeFallbackResolverInterface;
 use Magento\Theme\Model\Design\Config\DataProvider\MetadataLoader;
-use Magento\Theme\Model\Design\Config\MetadataProvider;
 
 class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,24 +22,29 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
-     * @var MetadataProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $metadataProvider;
-
-    /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeConfig;
-
-    /**
      * @var ScopeFallbackResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeFallbackResolver;
 
     /**
-     * @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\DesignConfigRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $valueProcessor;
+    protected $designConfigRepository;
+
+    /**
+     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $designConfig;
+
+    /**
+     * @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $designConfigData;
+
+    /**
+     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $designConfigExtension;
 
     protected function setUp()
     {
@@ -49,26 +52,23 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadataProvider = $this->getMockBuilder('Magento\Theme\Model\Design\Config\MetadataProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
-            ->getMockForAbstractClass();
-
         $this->scopeFallbackResolver = $this->getMockBuilder('Magento\Framework\App\ScopeFallbackResolverInterface')
             ->getMockForAbstractClass();
 
-        $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->designConfigRepository = $this->getMockBuilder('Magento\Theme\Api\DesignConfigRepositoryInterface')
+            ->getMockForAbstractClass();
+        $this->designConfig = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigInterface')
+            ->getMockForAbstractClass();
+        $this->designConfigData = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigDataInterface')
+            ->getMockForAbstractClass();
+        $this->designConfigExtension = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
+            ->setMethods(['getDesignConfigData'])
+            ->getMockForAbstractClass();
 
         $this->model = new MetadataLoader(
             $this->request,
-            $this->metadataProvider,
-            $this->scopeConfig,
             $this->scopeFallbackResolver,
-            $this->valueProcessor
+            $this->designConfigRepository
         );
     }
 
@@ -83,17 +83,6 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
         $scopeId,
         $showFallbackReset
     ) {
-        $metadataSrc = [
-            'data_name' => [
-                'path' => 'name/data_path',
-                'fieldset' => 'theme',
-            ],
-            'metadata_name' => [
-                'path' => 'name/metadata_path',
-                'fieldset' => 'meta/group/section',
-            ],
-        ];
-
         $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->willReturnMap([
@@ -101,58 +90,43 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
                 ['scope_id', null, $scopeId],
             ]);
 
-        $this->metadataProvider->expects($this->once())
-            ->method('get')
-            ->willReturn($metadataSrc);
-
-        $this->scopeFallbackResolver->expects($this->exactly(2))
+        $this->scopeFallbackResolver->expects($this->once())
             ->method('getFallbackScope')
             ->with($scope, $scopeId)
             ->willReturn([$scope, $scopeId]);
 
-        $this->scopeConfig->expects($this->exactly(2))
-            ->method('getValue')
-            ->willReturnMap([
-                ['name/data_path', $scope, $scopeId, 'data_value'],
-                ['name/metadata_path', $scope, $scopeId, 'metadata_value'],
+        $this->designConfigRepository->expects($this->once())
+            ->method('getByScope')
+            ->with($scope, $scopeId)
+            ->willReturn($this->designConfig);
+        $this->designConfig->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->designConfigExtension);
+        $this->designConfigExtension->expects($this->once())
+            ->method('getDesignConfigData')
+            ->willReturn([$this->designConfigData]);
+        $this->designConfigData->expects($this->atLeastOnce())
+            ->method('getFieldConfig')
+            ->willReturn([
+                'field' => 'field',
+                'fieldset' => 'fieldset1'
             ]);
-        $this->valueProcessor->expects($this->atLeastOnce())
-            ->method('process')
-            ->willReturnArgument(0);
+        $this->designConfigData->expects($this->once())
+            ->method('getValue')
+            ->willReturn('value');
+
 
         $result = $this->model->getData();
 
         $expected = [
-            'theme' => [
+            'fieldset1' => [
                 'children' => [
-                    'data_name' => [
+                    'field' => [
                         'arguments' => [
                             'data' => [
                                 'config' => [
-                                    'default' => 'data_value',
+                                    'default' => 'value',
                                     'showFallbackReset' => $showFallbackReset,
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'meta' => [
-                'children' => [
-                    'group' => [
-                        'children' => [
-                            'section' => [
-                                'children' => [
-                                    'metadata_name' => [
-                                        'arguments' => [
-                                            'data' => [
-                                                'config' => [
-                                                    'default' => 'metadata_value',
-                                                    'showFallbackReset' => $showFallbackReset,
-                                                ],
-                                            ],
-                                        ],
-                                    ],
                                 ],
                             ],
                         ],
@@ -170,8 +144,8 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
     public function dataProviderGetData()
     {
         return [
-            ['default', 0, false],
-            ['websites', 1, true],
+            ['default', 0, 1],
+            ['websites', 1, 1],
         ];
     }
 }
