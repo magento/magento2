@@ -345,11 +345,6 @@ define([
             _init: function () {
                 this.element.on(this._START_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onRequestHandler, this));
                 this.element.on(this._ERROR_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onVideoInvalid, this));
-                this.element.on(this._FINISH_UPDATE_INFORMATION_TRIGGER, $.proxy(
-                    function () {
-                        this._currentVideoUrl = null;
-                    }, this
-                ));
             },
 
             /**
@@ -364,6 +359,7 @@ define([
                     googleapisUrl;
 
                 if (this._currentVideoUrl === url) {
+                    this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
                     return;
                 }
 
@@ -461,7 +457,7 @@ define([
                  * @private
                  */
                 function _onVimeoLoaded(data) {
-                    var tmp = data[0],
+                    var tmp,
                         respData;
 
                     if (data.length < 1) {
