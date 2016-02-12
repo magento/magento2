@@ -26,6 +26,7 @@ class Collection extends ConfigCollection
      * @param LoggerInterface $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
+     * @param ValueProcessor $valueProcessor
      * @param AdapterInterface|null $connection
      * @param AbstractDb|null $resource
      */
