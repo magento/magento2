@@ -45,7 +45,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     /**
      * Test email sending for forgotPassword action
      *
-     * @magentoAdminConfigFixture admin/emails/user_notification_template admin_emails_user_notification_template
+     * @magentoAdminConfigFixture admin/emails/forgot_email_template admin_emails_forgot_email_template
      * @magentoAdminConfigFixture admin/emails/forgot_email_identity general
      * @magentoDataFixture Magento/User/_files/user_with_role.php
      */
@@ -53,7 +53,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $transportBuilderMock = $this->prepareEmailMock(
             1,
-            'admin_emails_user_notification_template',
+            'admin_emails_forgot_email_template',
             'general'
         );
         $this->addMockToClass($transportBuilderMock, 'Magento\User\Model\User');
