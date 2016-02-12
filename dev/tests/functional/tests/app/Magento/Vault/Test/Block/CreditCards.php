@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Vault\Test\Block;
 
 use Magento\Mtf\Block\Block;
@@ -13,7 +12,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
 
 class CreditCards extends Block
 {
-
     /**
      * Delete button locator for popup window.
      *

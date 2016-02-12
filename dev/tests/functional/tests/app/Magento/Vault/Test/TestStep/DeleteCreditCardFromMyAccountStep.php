@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Vault\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\Customer;
@@ -73,8 +72,7 @@ class DeleteCreditCardFromMyAccountStep implements TestStepInterface
         AssertCreditCardDeletedMessage $assertCreditCardDeletedMessage,
         InjectableFixture $creditCard,
         $creditCardClass = 'credit_card'
-    )
-    {
+    ) {
         $this->myCreditCardsPage = $myCreditCardsPage;
         $this->customer = $customer;
         $this->objectManager = $objectManager;

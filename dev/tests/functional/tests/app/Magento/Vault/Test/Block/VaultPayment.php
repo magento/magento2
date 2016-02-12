@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Vault\Test\Block;
 
 use Magento\Mtf\Block\Block;
@@ -24,7 +23,7 @@ class VaultPayment extends Block
      * @param string $creditCard
      * @return bool
      */
-    public function isVaultPaymentPresent($creditCard)
+    public function isSavedCreditCardPresent($creditCard)
     {
         $paymentLabelSelector = sprintf($this->creditCardSelector, $creditCard);
         return $this->browser->find($paymentLabelSelector, Locator::SELECTOR_XPATH)->isVisible();
