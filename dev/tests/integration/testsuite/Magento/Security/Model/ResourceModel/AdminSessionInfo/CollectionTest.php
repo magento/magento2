@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_BY_LOGIN,
             1,
             '569e2277752e9'
-            );
+        );
         $this->assertGreaterThanOrEqual(1, $quantity);
     }
 

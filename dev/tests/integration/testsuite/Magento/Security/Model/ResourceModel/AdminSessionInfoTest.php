@@ -1,6 +1,6 @@
 <?php
 
-namespace Magento\Security\Model;
+namespace Magento\Security\ModelResourceModel;
 
 /**
  * Class AdminSessionInfoTest
@@ -68,9 +68,8 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
         $modelId = $this->saveTestData();
         $newModel = $this->model->load($modelId);
         $testData = $this->getTestData();
-        $newModelData = array();
-        foreach ($testData as $key => $value)
-        {
+        $newModelData = [];
+        foreach (array_keys($testData) as $key) {
             $newModelData[$key] = $newModel->getData($key);
         }
         $this->assertEquals($testData, $newModelData);
