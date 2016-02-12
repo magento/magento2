@@ -399,8 +399,9 @@ define([
          * Update whether value differs from default value
          */
         setDifferedFromDefault: function () {
-            var value = typeof this.value() != 'undefined' ? this.value() : '';
-            this.isDifferedFromDefault(value !== this.default);
+            var value = typeof this.value() != 'undefined' && this.value() !== null ? this.value() : '',
+                defaultValue = typeof this.default != 'undefined' && this.default !== null ? this.default : '';
+            this.isDifferedFromDefault(value !== defaultValue);
         }
     });
 });

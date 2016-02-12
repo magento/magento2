@@ -65,7 +65,7 @@
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataType" xsi:type="string">text</item>
-                            <item name="dataScope" xsi:type="string">search_string</item>
+                            <item name="dataScope" xsi:type="string">search</item>
                             <item name="fit" xsi:type="boolean">true</item>
                             <item name="label" xsi:type="string">Search String</item>
                             <item name="showFallbackReset" xsi:type="boolean">false</item>
@@ -78,7 +78,7 @@
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataType" xsi:type="string">text</item>
-                            <item name="dataScope" xsi:type="string">theme</item>
+                            <item name="dataScope" xsi:type="string">value</item>
                             <item name="fit" xsi:type="boolean">true</item>
                             <item name="label" xsi:type="string">Theme Name</item>
                             <item name="showFallbackReset" xsi:type="boolean">false</item>

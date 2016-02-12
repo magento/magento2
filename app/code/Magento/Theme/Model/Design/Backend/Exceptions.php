@@ -56,31 +56,26 @@ class Exceptions extends ArraySerialized
         $exceptions = $this->getValue();
 
         foreach ($exceptions as $rowKey => $row) {
-            if (isset($row['delete']) && $row['delete'] == 'true') {
-                unset($exceptions[$rowKey]);
-                continue;
-            }
-
             // Validate that all values have come
-            foreach (['search_string', 'theme'] as $fieldName) {
+            foreach (['search', 'value'] as $fieldName) {
                 if (!isset($row[$fieldName])) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Exception does not contain field \'%1\'', $fieldName)
+                        __($this->getData('field_config/fieldset') . ' does not contain field \'%1\'', $fieldName)
                     );
                 }
             }
 
             // Empty string (match all) is not supported, because it means setting a default theme. Remove such entries.
-            if (!strlen($row['search_string'])) {
+            if (!strlen($row['search'])) {
                 unset($exceptions[$rowKey]);
                 continue;
             }
 
             // Validate the theme value
-            $design->setDesignTheme($row['theme'], \Magento\Framework\App\Area::AREA_FRONTEND);
+            $design->setDesignTheme($row['value'], \Magento\Framework\App\Area::AREA_FRONTEND);
 
             // Compose regular exception pattern
-            $exceptions[$rowKey]['regexp'] = $this->_composeRegexp($row['search_string']);
+            $exceptions[$rowKey]['regexp'] = $this->_composeRegexp($row['search']);
         }
         $this->setValue($exceptions);
 
