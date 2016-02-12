@@ -368,7 +368,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * @magentoConfigFixture current_store customer/account_information/change_email_template 1
+     * Ensure that an email is sent during save action
+     *
+     * @magentoConfigFixture current_store customer/account_information/change_email_template change_email_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
      */
@@ -378,7 +380,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $newEmail = 'newcustomer@example.com';
         $transportBuilderMock = $this->prepareEmailMock(
             2,
-            '1',
+            'change_email_template',
             'support',
             $customerId,
             $newEmail
@@ -412,7 +414,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * @magentoConfigFixture current_store customer/account_information/change_email_template 1
+     * Ensure that an email is sent during inlineEdit action
+     *
+     * @magentoConfigFixture current_store customer/account_information/change_email_template change_email_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
      */
@@ -422,7 +426,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $newEmail = 'newcustomer@example.com';
         $transportBuilderMock = $this->prepareEmailMock(
             2,
-            '1',
+            'change_email_template',
             'support',
             $customerId,
             $newEmail
@@ -795,6 +799,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
+     * Prepare email mock to test emails
+     *
      * @param int $occurrenceNumber
      * @param string $templateId
      * @param string $sender
