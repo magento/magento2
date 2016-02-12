@@ -66,6 +66,8 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Checking that test data is saving to database
+     *
+     * @magentoDbIsolation enabled
      */
     public function testIsModelSavingDataToDatabase()
     {
