@@ -88,6 +88,8 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
         try {
             $this->ruleResource->delete($rule);
             unset($this->rules[$rule->getId()]);
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new CouldNotDeleteException(__('Unable to remove rule %1', $rule->getRuleId()));
         }
