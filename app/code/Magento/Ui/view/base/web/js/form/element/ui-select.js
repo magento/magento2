@@ -55,7 +55,9 @@ define([
      */
     function setProperty(array, separator, level, path) {
         var i = 0,
-            length;
+            length,
+            nextLevel,
+            nextPath;
 
         array = _.compact(array);
         length = array.length;
@@ -71,9 +73,9 @@ define([
             }
 
             if (array[i].hasOwnProperty(separator)) {
-                level++;
-                path = path ? path + '.' + array[i].label : array[i].label;
-                setProperty.call(this, array[i][separator], separator, level, path);
+                nextLevel = level + 1;
+                nextPath = path ? path + '.' + array[i].label : array[i].label;
+                setProperty.call(this, array[i][separator], separator, nextLevel, nextPath);
             }
         }
 
@@ -742,9 +744,10 @@ define([
                 return false;
             }
 
-            if (!_.isNull(this.hoverElIndex()) && this.filterInputValue()) {
-                el = this._getElemByData(this.cacheOptions.plain[this.hoverElIndex()]);
-                nextEl = el.next();
+            if (this.filterInputValue()) {
+                el = !_.isNull(this.hoverElIndex()) ?
+                    this._getElemByData(this.cacheOptions.plain[this.hoverElIndex()]) : false;
+                nextEl = el ? el.next() : $(this.cacheUiSelect).find('li:visible').eq(0);
                 nextIndex = nextEl.length ? nextEl.index() : 0;
                 nextData = this.options()[nextIndex];
                 this.hoverElIndex(this.getOptionIndex(nextData));
@@ -848,10 +851,23 @@ define([
                 return false;
             }
 
-            if (!_.isNull(this.hoverElIndex()) && this.filterInputValue()) {
-                el = this._getElemByData(this.cacheOptions.plain[this.hoverElIndex()]);
-                nextEl = el.prev();
+            if (this.filterInputValue()) {
+                el = !_.isNull(this.hoverElIndex()) ?
+                    this._getElemByData(this.cacheOptions.plain[this.hoverElIndex()]) : false;
+                nextEl = el ? el.prev() : $(this.cacheUiSelect).find('li:visible').eq(this.options().length-1);
                 nextIndex = nextEl.length ? nextEl.index() : this.options().length-1;
+                nextData = this.options()[nextIndex];
+                this.hoverElIndex(this.getOptionIndex(nextData));
+
+                return false;
+            }
+
+
+            if (this.filterInputValue()) {
+                el = !_.isNull(this.hoverElIndex()) ?
+                    this._getElemByData(this.cacheOptions.plain[this.hoverElIndex()]) : false;
+                nextEl = el ? el.next() : $(this.cacheUiSelect).find('li:visible').eq(0);
+                nextIndex = nextEl.length ? nextEl.index() : 0;
                 nextData = this.options()[nextIndex];
                 this.hoverElIndex(this.getOptionIndex(nextData));
 
