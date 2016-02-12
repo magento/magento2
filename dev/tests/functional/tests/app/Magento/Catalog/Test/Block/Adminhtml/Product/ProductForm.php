@@ -175,6 +175,20 @@ class ProductForm extends FormTabs
     }
 
     /**
+     * Click on tab name.
+     *
+     * @param string $tabName
+     * @return void
+     */
+    protected function clickOnTabName($tabName)
+    {
+        $element = $this->getContainerElement($tabName);
+        $element->hover();
+        $this->_rootElement->find($this->tabsTitle)->hover();
+        $element->click();
+    }
+
+    /**
      * Show Advanced Setting.
      *
      * @return void
