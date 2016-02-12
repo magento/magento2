@@ -9,4 +9,8 @@
     <event name="cms_wysiwyg_images_static_urls_allowed">
         <observer name="catalog_wysiwyg" instance="Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowedObserver" />
     </event>
+    <event name="catalog_category_delete_before">
+        <observer name="catalog_category_recalculate_children_count" instance="Magento\Catalog\Observer\CatalogCategoryRecalculateChildrenCount" />
+        <observer name="catalog_category_delete_children" instance="Magento\Catalog\Observer\CatalogCategoryDeleteChildren" />
+    </event>
 </config>
