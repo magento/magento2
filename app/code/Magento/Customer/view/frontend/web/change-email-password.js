@@ -29,7 +29,7 @@ define([
          * @private
          */
         _create: function () {
-            this.element.on('change', $.proxy(function (event) {
+            this.element.on('change', $.proxy(function () {
                 this._checkChoice();
             }, this));
 

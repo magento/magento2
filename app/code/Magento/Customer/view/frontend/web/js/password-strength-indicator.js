@@ -2,13 +2,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true*/
+
+/**
+ * jshint browser:true
+ */
 define([
-    "jquery",
-    "Magento_Customer/js/zxcvbn"
-], function($, zxcvbn){
-    "use strict";
-        
+    'jquery',
+    'Magento_Customer/js/zxcvbn'
+], function ($, zxcvbn) {
+    'use strict';
+
     $.widget('mage.passwordStrengthIndicator', {
         options: {
             defaultClassName: 'password-strength-meter-',
@@ -19,7 +22,7 @@ define([
          * Widget initialization
          * @private
          */
-        _create: function() {
+        _create: function () {
             this._bind();
         },
 
@@ -27,7 +30,7 @@ define([
          * Event binding, will monitor scroll and resize events (resize events left for backward compat)
          * @private
          */
-        _bind: function() {
+        _bind: function () {
             this._on({
                 'change input[type="password"]': this._calculateStrength,
                 'keyup input[type="password"]': this._calculateStrength,
@@ -39,19 +42,20 @@ define([
          * Calculate password strength
          * @private
          */
-        _calculateStrength: function() {
-            var password = this._getPassword();
-            var score = zxcvbn(password).score;
-            var className = this._getClassName(score);
+        _calculateStrength: function () {
+            var password = this._getPassword(),
+                score = zxcvbn(password).score,
+                className = this._getClassName(score);
+
             this._displayStrength(className);
         },
 
         /**
          * Display strength
-         * @param className
+         * @param {String} className
          * @private
          */
-        _displayStrength: function(className) {
+        _displayStrength: function (className) {
             this.element.find('#' + this.options.passwordSrengthMeterId).removeClass();
             this.element.find('#' + this.options.passwordSrengthMeterId).addClass(className);
         },
@@ -61,20 +65,20 @@ define([
          * @returns {*}
          * @private
          */
-        _getPassword: function() {
+        _getPassword: function () {
             return this.element.find('input[type="password"]').val();
         },
 
         /**
          * Get class name for score
-         * @param score
-         * @returns {string}
+         * @param {int} score
+         * @returns {String}
          * @private
          */
-        _getClassName: function(score) {
+        _getClassName: function (score) {
             return this.options.defaultClassName + score;
         }
     });
-    
+
     return $.mage.passwordStrengthIndicator;
 });
