@@ -495,7 +495,7 @@
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Theme</item>
                     <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
+                        <item name="disabled" xsi:type="string">${ $.parentName }.custom_use_parent_settings:checked</item>
                     </item>
                 </item>
             </argument>
@@ -530,7 +530,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="additionalClasses" xsi:type="string">admin__field-no-label</item>
-                    <item name="sortOrder" xsi:type="number">200</item>
+                    <item name="sortOrder" xsi:type="number">210</item>
                     <item name="label" xsi:type="string"/>
                     <item name="description" xsi:type="string" translate="true">Apply Design to Products</item>
                     <item name="dataType" xsi:type="string">boolean</item>
