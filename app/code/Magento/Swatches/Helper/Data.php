@@ -173,7 +173,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             if ($item->getData($attributeCode) != $attributeValue) {
                 continue;
             }
-            $media = $this->getProductMedia($item);
+            $media = $item->getData();
             if (!empty($media) && isset($media['swatch_image'])) {
                 $variationProduct = $item;
                 break;
