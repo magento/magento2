@@ -54,13 +54,6 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     protected $customerModel;
 
     /**
-     * AccountManagement Helper
-     *
-     * @var \Magento\Customer\Helper\AccountManagement
-     */
-    protected $accountManagementHelper;
-
-    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -154,13 +147,6 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->accountManagementHelper = $this->getMock(
-            'Magento\Customer\Helper\AccountManagement',
-            ['isCustomerLocked'],
-            [],
-            '',
-            false
-        );
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -173,10 +159,9 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
                 'localeDate' => $this->localeDate,
                 'scopeConfig' => $this->scopeConfig,
                 'backendSession' => $backendSession,
-                'customerRegistry' => $this->customerRegistry,
-                'accountManagementHelper' => $this->accountManagementHelper
             ]
         );
+        $this->block->setCustomerRegistry($this->customerRegistry);
     }
 
     /**

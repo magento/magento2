@@ -133,10 +133,10 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             $this->customerAccountManagement,
             $this->customerRepository,
             $this->validator,
-            $this->customerExtractor,
-            $this->accountManagementHelper,
-            $this->emailNotification
+            $this->customerExtractor
         );
+        $this->model->setEmailNotification($this->emailNotification);
+        $this->model->setAccountManagementHelper($this->accountManagementHelper);
     }
 
     public function testInvalidFormKey()

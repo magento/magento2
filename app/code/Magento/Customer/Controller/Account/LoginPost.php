@@ -49,7 +49,6 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * @param CustomerUrl $customerHelperData
      * @param Validator $formKeyValidator
      * @param AccountRedirect $accountRedirect
-     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Context $context,
@@ -57,16 +56,44 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
         AccountManagementInterface $customerAccountManagement,
         CustomerUrl $customerHelperData,
         Validator $formKeyValidator,
-        AccountRedirect $accountRedirect,
-        ScopeConfigInterface $scopeConfig
+        AccountRedirect $accountRedirect
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerUrl = $customerHelperData;
         $this->formKeyValidator = $formKeyValidator;
         $this->accountRedirect = $accountRedirect;
-        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
+    }
+
+    /**
+     * Set scope config
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @deprecated
+     */
+    public function setScopeConfig(ScopeConfigInterface $scopeConfig)
+    {
+
+        $this->scopeConfig = $scopeConfig;;
+    }
+
+    /**
+     * Get scope config
+     *
+     * @return ScopeConfigInterface
+     * @deprecated
+     */
+    public function getScopeConfig()
+    {
+
+        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Framework\App\Config\ScopeConfigInterface'
+            );
+        } else {
+            return $this->scopeConfig;
+        }
     }
 
     /**
@@ -102,7 +129,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                 } catch (UserLockedException $e) {
                     $message = __(
                         'The account is locked. Please wait and try again or contact %1.',
-                        $this->scopeConfig->getValue('contact/email/recipient_email')
+                        $this->getScopeConfig()->getValue('contact/email/recipient_email')
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);

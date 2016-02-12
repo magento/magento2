@@ -31,7 +31,7 @@ class CheckUserLoginObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Helper\AccountManagement |\PHPUnit_Framework_MockObject_MockObject */
     protected $accountManagementHelperMock;
 
-    /** @var \Magento\Captcha\Observer\CheckUserEditObserver */
+    /** @var \Magento\Captcha\Observer\CheckUserLoginObserver */
     protected $observer;
 
     /**
@@ -95,10 +95,10 @@ class CheckUserLoginObserverTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSessionMock,
                 'captchaStringResolver' => $this->captchaStringResolverMock,
                 'customerUrl' => $this->customerUrlMock,
-                'customerRepository' => $this->customerRepositoryMock,
-                'accountManagementHelper' => $this->accountManagementHelperMock
             ]
         );
+        $this->observer->setAccountManagementHelper($this->accountManagementHelperMock);
+        $this->observer->setCustomerRepository($this->customerRepositoryMock);
     }
 
     /**

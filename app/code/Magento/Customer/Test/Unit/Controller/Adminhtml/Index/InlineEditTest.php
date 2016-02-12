@@ -153,9 +153,9 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'addressDataFactory' => $this->addressDataFactory,
                 'addressRepository' => $this->addressRepository,
                 'logger' => $this->logger,
-                'emailNotification' => $this->emailNotification
             ]
         );
+        $this->controller->setEmailNotification($this->emailNotification);
 
         $this->items = [
             14 => [

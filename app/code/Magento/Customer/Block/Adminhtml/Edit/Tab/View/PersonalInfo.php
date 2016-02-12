@@ -9,8 +9,6 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Customer;
 
 /**
@@ -122,7 +120,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @param Mapper $addressMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Customer\Model\Logger $customerLogger
-     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -137,7 +134,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         Mapper $addressMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Model\Logger $customerLogger,
-        CustomerRegistry $customerRegistry,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -149,9 +145,37 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         $this->addressMapper = $addressMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerLogger = $customerLogger;
-        $this->customerRegistry = $customerRegistry;
 
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Set customer registry
+     *
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @return void
+     * @deprecated
+     */
+    public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
+    {
+
+        $this->customerRegistry = $customerRegistry;
+    }
+
+    /**
+     * Get customer registry
+     *
+     * @return \Magento\Customer\Model\CustomerRegistry
+     * @deprecated
+     */
+    public function getCustomerRegistry()
+    {
+
+        if (!($this->customerRegistry instanceof \Magento\Customer\Model\CustomerRegistry)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Customer\Model\CustomerRegistry');
+        } else {
+            return $this->customerRegistry;
+        }
     }
 
     /**
@@ -444,7 +468,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getAccountLock()
     {
-        $customerModel = $this->customerRegistry->retrieve($this->getCustomerId());
+        $customerModel = $this->getCustomerRegistry()->retrieve($this->getCustomerId());
         $customerStatus = __('Unlocked');
         if ($customerModel->isCustomerLocked()) {
             $customerStatus = __('Locked');

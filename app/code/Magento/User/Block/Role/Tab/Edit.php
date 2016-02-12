@@ -6,6 +6,7 @@
 
 namespace Magento\User\Block\Role\Tab;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
 
 /**
@@ -64,7 +65,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      * @param \Magento\Authorization\Model\Acl\AclRetriever $aclRetriever
      * @param \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
-     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -74,7 +74,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
         \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\Framework\Acl\AclResource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
-        \Magento\Framework\Registry $registry,
         array $data = []
     ) {
         $this->_aclRetriever = $aclRetriever;
@@ -82,8 +81,36 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
         $this->_rulesCollectionFactory = $rulesCollectionFactory;
         $this->_aclResourceProvider = $aclResourceProvider;
         $this->_integrationData = $integrationData;
-        $this->coreRegistry = $registry;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Set core registry
+     *
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @return void
+     * @deprecated
+     */
+    public function setCoreRegistry(\Magento\Framework\Registry $coreRegistry)
+    {
+
+        $this->coreRegistry = $coreRegistry;
+    }
+
+    /**
+     * Get core registry
+     *
+     * @return \Magento\Framework\Registry
+     * @deprecated
+     */
+    public function getCoreRegistry()
+    {
+
+        if (!($this->coreRegistry instanceof \Magento\Framework\Registry)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\Registry');
+        } else {
+            return $this->coreRegistry;
+        }
     }
 
     /**
@@ -127,37 +154,41 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     }
 
     /**
-     * Class constructor
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-
-        $allResource = $this->coreRegistry->registry(SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY);
-        if ($allResource) {
-            $resources = [$this->_rootResource->getId()];
-        } else {
-            $resources = $this->coreRegistry->registry(SaveRole::RESOURCE_FORM_DATA_SESSION_KEY);
-        }
-
-        if (null === $resources) {
-            $rid = $this->_request->getParam('rid', false);
-            $resources = $this->_aclRetriever->getAllowedResourcesByRole($rid);
-        }
-
-        $this->setSelectedResources($resources);
-    }
-
-    /**
      * Check if everything is allowed
      *
      * @return bool
      */
     public function isEverythingAllowed()
     {
-        return in_array($this->_rootResource->getId(), $this->getSelectedResources());
+        $selectedResources = $this->getSelectedResources();
+        $id = $this->_rootResource->getId();
+        return in_array($id, $selectedResources);
+    }
+
+    /**
+     * Get selected resources
+     *
+     * @return array|mixed|\string[]
+     */
+    public function getSelectedResources()
+    {
+        $selectedResources = $this->getData('selected_resources');
+        if (empty($selectedResources)) {
+            $allResource = $this->getCoreRegistry()->registry(SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY);
+            if ($allResource) {
+                $selectedResources = [$this->_rootResource->getId()];
+            } else {
+                $selectedResources = $this->getCoreRegistry()->registry(SaveRole::RESOURCE_FORM_DATA_SESSION_KEY);
+            }
+
+            if (null === $selectedResources) {
+                $rid = $this->_request->getParam('rid', false);
+                $selectedResources = $this->_aclRetriever->getAllowedResourcesByRole($rid);
+            }
+
+            $this->setData('selected_resources', $selectedResources);
+        }
+        return $selectedResources;
     }
 
     /**

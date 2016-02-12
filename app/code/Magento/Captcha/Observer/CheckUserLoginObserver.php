@@ -33,7 +33,7 @@ class CheckUserLoginObserver implements ObserverInterface
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
-    protected $customerSession;
+    protected $_session;
 
     /**
      * @var CaptchaStringResolver
@@ -66,8 +66,6 @@ class CheckUserLoginObserver implements ObserverInterface
      * @param \Magento\Framework\Session\SessionManagerInterface $customerSession
      * @param CaptchaStringResolver $captchaStringResolver
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param AccountManagementHelper $accountManagementHelper
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -75,18 +73,76 @@ class CheckUserLoginObserver implements ObserverInterface
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Session\SessionManagerInterface $customerSession,
         CaptchaStringResolver $captchaStringResolver,
-        \Magento\Customer\Model\Url $customerUrl,
-        CustomerRepositoryInterface $customerRepository,
-        AccountManagementHelper $accountManagementHelper
+        \Magento\Customer\Model\Url $customerUrl
     ) {
         $this->_helper = $helper;
         $this->_actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
-        $this->customerSession = $customerSession;
+        $this->_session = $customerSession;
         $this->captchaStringResolver = $captchaStringResolver;
         $this->_customerUrl = $customerUrl;
+    }
+
+    /**
+     * Set email notification
+     *
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @return void
+     * @deprecated
+     */
+    public function setCustomerRepository(\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository)
+    {
+
         $this->customerRepository = $customerRepository;
+    }
+
+    /**
+     * Get customer repository
+     *
+     * @return \Magento\Customer\Api\CustomerRepositoryInterface
+     * @deprecated
+     */
+    public function getCustomerRepository()
+    {
+
+        if (!($this->customerRepository instanceof \Magento\Customer\Api\CustomerRepositoryInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Customer\Api\CustomerRepositoryInterface'
+            );
+        } else {
+            return $this->customerRepository;
+        }
+    }
+
+    /**
+     * Set account management helper
+     *
+     * @param AccountManagementHelper $accountManagementHelper
+     * @return void
+     * @deprecated
+     */
+    public function setAccountManagementHelper(AccountManagementHelper $accountManagementHelper)
+    {
+
         $this->accountManagementHelper = $accountManagementHelper;
+    }
+
+    /**
+     * Get account management helper
+     *
+     * @return AccountManagementHelper
+     * @deprecated
+     */
+    public function getAccountManagementHelper()
+    {
+
+        if (!($this->accountManagementHelper instanceof \Magento\Customer\Helper\AccountManagement)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Customer\Helper\AccountManagement'
+            );
+        } else {
+            return $this->accountManagementHelper;
+        }
     }
 
     /**
@@ -107,16 +163,16 @@ class CheckUserLoginObserver implements ObserverInterface
             $word = $this->captchaStringResolver->resolve($controller->getRequest(), $formId);
             if (!$captchaModel->isCorrect($word)) {
                 try {
-                    $customer = $this->customerRepository->get($login);
-                    $this->accountManagementHelper->processCustomerLockoutData($customer->getId());
-                    $this->customerRepository->save($customer);
+                    $customer = $this->getCustomerRepository()->get($login);
+                    $this->getAccountManagementHelper()->processCustomerLockoutData($customer->getId());
+                    $this->getCustomerRepository()->save($customer);
                 } catch (NoSuchEntityException $e) {
                     //do nothing as customer existance is validated later in authenticate method
                 }
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $this->customerSession->setUsername($login);
-                $beforeUrl = $this->customerSession->getBeforeAuthUrl();
+                $this->_session->setUsername($login);
+                $beforeUrl = $this->_session->getBeforeAuthUrl();
                 $url = $beforeUrl ? $beforeUrl : $this->_customerUrl->getLoginUrl();
                 $controller->getResponse()->setRedirect($url);
             }

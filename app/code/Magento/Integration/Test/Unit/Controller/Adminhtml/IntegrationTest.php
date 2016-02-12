@@ -40,9 +40,6 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $_backendSessionMock;
 
-    /** @var \Magento\Backend\Model\Auth\Session|\PHPUnit_Framework_MockObject_MockObject */
-    protected $backendAuthSessionMock;
-
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $_backendActionCtxMock;
 
@@ -149,14 +146,6 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'load', 'performIdentityCheck'])
             ->getMock();
-
-        $this->backendAuthSessionMock = $this->getMockBuilder('Magento\Backend\Model\Auth\Session')
-            ->setMethods(['getUser'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->backendAuthSessionMock->expects($this->any())
-            ->method('getUser')
-            ->willReturn($this->_userMock);
 
         $this->_translateModelMock = $this->getMockBuilder(
             'Magento\Framework\TranslateInterface'
@@ -323,14 +312,15 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             'integrationData' => $this->_integrationHelperMock,
             'escaper' => $this->_escaper,
             'integrationCollection' => $integrationCollection,
-            'securityCookieHelper' => $this->securityCookieHelperMock,
-            'backendAuthSession' => $this->backendAuthSessionMock
         ];
         /** Create IntegrationController to test */
         $controller = $this->_objectManagerHelper->getObject(
             '\\Magento\\Integration\\Controller\\Adminhtml\\Integration\\' . $actionName,
             $subControllerParams
         );
+        if ($actionName == 'Save') {
+            $controller->setSecurityCookieHelper($this->securityCookieHelperMock);
+        }
         return $controller;
     }
 

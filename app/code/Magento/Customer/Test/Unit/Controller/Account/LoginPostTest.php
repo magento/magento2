@@ -114,9 +114,9 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             $this->accountManagement,
             $this->url,
             $this->formkeyValidator,
-            $this->accountRedirect,
-            $this->scopeConfig
+            $this->accountRedirect
         );
+        $this->controller->setScopeConfig($this->scopeConfig);
     }
 
     /**

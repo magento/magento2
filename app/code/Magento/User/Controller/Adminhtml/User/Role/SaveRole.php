@@ -125,7 +125,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             $this->processPreviousUsers($role);
 
             foreach ($roleUsers as $nRuid) {
-                $this->addUserToRole($nRuid, $role->getId());
+                $this->_addUserToRole($nRuid, $role->getId());
             }
             $this->messageManager->addSuccess(__('You saved the role.'));
         } catch (UserLockedException $e) {
@@ -176,7 +176,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         $oldRoleUsers = array_keys($oldRoleUsers);
 
         foreach ($oldRoleUsers as $oUid) {
-            $this->deleteUserFromRole($oUid, $role->getId());
+            $this->_deleteUserFromRole($oUid, $role->getId());
         }
 
         return $this;
@@ -189,7 +189,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param int $roleId
      * @return bool
      */
-    protected function addUserToRole($userId, $roleId)
+    protected function _addUserToRole($userId, $roleId)
     {
         $user = $this->_userFactory->create()->load($userId);
         $user->setRoleId($roleId);
@@ -210,7 +210,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @return bool
      * @throws \Exception
      */
-    protected function deleteUserFromRole($userId, $roleId)
+    protected function _deleteUserFromRole($userId, $roleId)
     {
         try {
             $this->_userFactory->create()->setRoleId($roleId)->setUserId($userId)->deleteFromRole();

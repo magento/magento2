@@ -43,7 +43,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
      */
     public function __construct(
         Action\Context $context,
@@ -51,16 +50,43 @@ class InlineEdit extends \Magento\Backend\App\Action
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Customer\Helper\EmailNotification $emailNotification
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->customerMapper = $customerMapper;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
-        $this->emailNotification = $emailNotification;
         parent::__construct($context);
+    }
+
+    /**
+     * Set email notification
+     *
+     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
+     * @return void
+     * @deprecated
+     */
+    public function setEmailNotification(\Magento\Customer\Helper\EmailNotification $emailNotification)
+    {
+
+        $this->emailNotification = $emailNotification;
+    }
+
+    /**
+     * Get email notification
+     *
+     * @return \Magento\Customer\Helper\EmailNotification
+     * @deprecated
+     */
+    public function getEmailNotification()
+    {
+
+        if (!($this->emailNotification instanceof \Magento\Customer\Helper\EmailNotification)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Customer\Helper\EmailNotification');
+        } else {
+            return $this->emailNotification;
+        }
     }
 
     /**
@@ -89,7 +115,7 @@ class InlineEdit extends \Magento\Backend\App\Action
             $this->updateCustomer($this->getData($postItems[$customerId], true));
             $this->saveCustomer($this->getCustomer());
 
-            $this->emailNotification->sendNotificationEmailsIfRequired($currentCustomer, $this->getCustomer());
+            $this->getEmailNotification()->sendNotificationEmailsIfRequired($currentCustomer, $this->getCustomer());
         }
 
         return $resultJson->setData([

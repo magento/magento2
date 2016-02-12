@@ -400,6 +400,18 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     }
 
     /**
+     * Send email to when password is resetting
+     *
+     * @return $this
+     * @deprecated
+     */
+    public function sendPasswordResetNotificationEmail()
+    {
+        $this->sendNotificationEmailsIfRequired();
+        return $this;
+    }
+
+    /**
      * Check changes and send notification emails
      *
      * @return $this
