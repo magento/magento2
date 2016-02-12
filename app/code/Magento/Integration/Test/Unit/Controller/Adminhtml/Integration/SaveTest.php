@@ -241,9 +241,13 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->with(self::INTEGRATION_ID)
             ->willReturn($intData);
 
-        $this->securityManagerMock->expects($this->once())
-            ->method('adminIdentityCheck')
-            ->with($this->_userMock, $passwordString)
+        $this->backendAuthSessionMock->expects($this->any())
+            ->method('getUser')
+            ->willReturn($this->_userMock);
+
+        $this->_userMock->expects($this->any())
+            ->method('performIdentityCheck')
+            ->with($passwordString)
             ->will($this->throwException(new UserLockedException(__($exceptionMessage))));
 
         $this->_authMock->expects($this->once())
@@ -279,9 +283,9 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->with(self::INTEGRATION_ID)
             ->willReturn($intData);
 
-        $this->securityManagerMock->expects($this->once())
-            ->method('adminIdentityCheck')
-            ->with($this->_userMock, $passwordString)
+        $this->_userMock->expects($this->any())
+            ->method('performIdentityCheck')
+            ->with($passwordString)
             ->will($this->throwException(new AuthenticationException(__($exceptionMessage))));
 
         // Verify error
