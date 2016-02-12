@@ -796,13 +796,21 @@ define([
          * @param {Array} list - collection items
          */
         _setHoverToElement: function (direction, index, list) {
-            var modifiedIndex;
+            var modifiedIndex,
+                curData,
+                canBeHovered = true;
 
             list = list || $(this.cacheUiSelect).find('li');
-            index = index || this.hoverElIndex();
+            index = index || _.isNumber(index) ? index : this.hoverElIndex();
             modifiedIndex = index + direction;
+            modifiedIndex < 0 ? modifiedIndex = this.cacheOptions.plain.length - 1 : false;
+            curData = this.cacheOptions.plain[modifiedIndex];
 
-            if (list.eq(modifiedIndex).is(':visible')) {
+            if (this.selectType === 'optgroup' && !_.findWhere(this.cacheOptions.lastOptions, {value: curData.value})) {
+                canBeHovered = false;
+            }
+
+            if (list.eq(modifiedIndex).is(':visible') && canBeHovered) {
                 this.hoverElIndex(modifiedIndex);
             } else {
                 this._setHoverToElement(direction, modifiedIndex, list);
