@@ -39,13 +39,6 @@ class AssertSuccessInstall extends AbstractConstraint
     ];
 
     /**
-     * Install page.
-     *
-     * @var Install
-     */
-    private $installPage;
-
-    /**
      * Assert that Magento successfully installed.
      *
      * @param InstallConfig $installConfig
@@ -55,6 +48,11 @@ class AssertSuccessInstall extends AbstractConstraint
      */
     public function processAssert(Install $installPage, InstallConfig $installConfig, User $user)
     {
+        //TODO Nginx server does't make redirect after installation (random fail)
+        sleep(5);
+        if ($installPage->getInstallBlock()->isInstallationCompleted()) {
+            return;
+        }
         $adminData = $installPage->getInstallBlock()->getAdminInfo();
         $dbData = $installPage->getInstallBlock()->getDbInfo();
 
@@ -66,12 +64,6 @@ class AssertSuccessInstall extends AbstractConstraint
 
         $allData['baseUrl'] = (isset($allData['https']) ? $allData['https'] : $allData['baseUrl']);
         $allData['admin'] = $allData['baseUrl'] . $allData['admin'] . '/';
-
-        //TODO Nginx server does't make redirect after installation (random fail)
-        sleep(5);
-        if ($installPage->getInstallBlock()->isInstallationCompleted()) {
-            return;
-        }
 
         foreach ($this->adminFieldsList as $field) {
             \PHPUnit_Framework_Assert::assertEquals(
