@@ -100,7 +100,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $refreshTree = false;
         $data['general'] = $this->getRequest()->getPostValue();
-        $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
+        $data = $this->stringToBoolConverting($data);
         $data = $this->imagePreprocessing($data);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         if ($data) {
@@ -258,17 +258,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Converting inputs from string to boolean
      *
-     * @param array $stringToBoolInputs
      * @param array $data
+     * @param array $stringToBoolInputs
      *
      * @return array
      */
-    public function stringToBoolConverting($stringToBoolInputs, $data)
+    public function stringToBoolConverting($data, $stringToBoolInputs = null)
     {
+        if (null === $stringToBoolInputs) {
+            $stringToBoolInputs = $this->stringToBoolInputs;
+        }
         foreach ($stringToBoolInputs as $key => $value) {
             if (is_array($value)) {
                 if (isset($data[$key])) {
-                    $data[$key] = $this->stringToBoolConverting($value, $data[$key]);
+                    $data[$key] = $this->stringToBoolConverting($data[$key], $value);
                 }
             } else {
                 if (isset($data[$value])) {
