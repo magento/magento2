@@ -24,7 +24,6 @@ define([
      *
      * @param {Object} event
      * @param {Object} ui
-     *
      */
     function recalcAllowedSize(event, ui) {
         var size;
@@ -34,7 +33,7 @@ define([
                 component: this.componentName,
                 selector: selector
             }, function (elem) {
-                size = key.indexOf('Height') > -1 ? $(elem).outerHeight(true) : $(elem).outerWidth(true);
+                size = key.indexOf('Height') !== -1 ? $(elem).outerHeight(true) : $(elem).outerWidth(true);
                 $(ui.element).resizable('option', key, size);
             });
         }, this);
@@ -46,27 +45,28 @@ define([
      *
      * @param {Object} config
      * @param {Object} viewModel
-     *
+     * @return {Object} config
      */
     function processConfig(config, viewModel) {
         var sizeConstraint,
             sizeConstraints = {};
 
-        if (!_.isEmpty(config)) {
-            _.each(sizeOptions, function (key) {
-                sizeConstraint = config[key];
-
-                if (sizeConstraint && !_.isNumber(sizeConstraint)) {
-                    sizeConstraints[key] = sizeConstraint;
-                    config[key] = null;
-                }
-            });
-
-            config.start = recalcAllowedSize.bind({
-                sizeConstraints: sizeConstraints,
-                componentName: viewModel.name
-            });
+        if (_.isEmpty(config)) {
+            return {};
         }
+        _.each(sizeOptions, function (key) {
+            sizeConstraint = config[key];
+
+            if (sizeConstraint && !_.isNumber(sizeConstraint)) {
+                sizeConstraints[key] = sizeConstraint;
+                config[key] = null;
+            }
+        });
+
+        config.start = recalcAllowedSize.bind({
+            sizeConstraints: sizeConstraints,
+            componentName: viewModel.name
+        });
 
         return config;
     }
@@ -80,10 +80,9 @@ define([
          * @param {Function} valueAccessor
          * @param {Function} allBindings
          * @param {Object} viewModel
-         *
          */
         init: function (element, valueAccessor, allBindings, viewModel) {
-            var config =  processConfig(valueAccessor(), viewModel);
+            var config = processConfig(valueAccessor(), viewModel);
 
             $(element).resizable(config);
         }
