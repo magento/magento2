@@ -110,8 +110,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $message = __('Invalid login or password.');
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
-                }
-                catch (\Exception $e) {
+                } catch (\Exception $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
                     $this->messageManager->addError(
                         __('An unspecified error occurred. Please contact us for assistance.')
