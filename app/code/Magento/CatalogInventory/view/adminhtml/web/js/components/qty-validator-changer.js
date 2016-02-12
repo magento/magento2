@@ -10,12 +10,6 @@ define([
 
     return Abstract.extend({
         defaults: {
-            numberValidator: {
-                'validate-number': true
-            },
-            digitsValidator: {
-                'validate-digits': true
-            },
             valueUpdate: 'input'
         },
 
@@ -23,13 +17,11 @@ define([
          * Change validator
          */
         handleChanges: function (value) {
-            if (value === 1) {
-                this.validation = this.numberValidator;
-                this.validate();
-            } else {
-                this.validation = this.digitsValidator;
-                this.validate();
-            }
+            var isDigits = value !==1;
+
+            this.validation['validate-number'] = !isDigits;
+            this.validation['validate-digits'] = isDigits;
+            this.validate();
         }
     });
 });
