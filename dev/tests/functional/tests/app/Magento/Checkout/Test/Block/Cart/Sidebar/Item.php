@@ -77,15 +77,14 @@ class Item extends Sidebar
     /**
      * Edit qty.
      *
-     * @param null|array $checkoutData
+     * @param array $checkoutData
      * @return void
      */
-    public function editQty($checkoutData = null)
+    public function editQty(array $checkoutData)
     {
-        if ($checkoutData === null || !isset($checkoutData['qty'])) {
-            return;
+        if (isset($checkoutData['qty'])) {
+            $this->_rootElement->find($this->qty)->setValue($checkoutData['qty']);
+            $this->_rootElement->find($this->updateButton)->click();
         }
-        $this->_rootElement->find($this->qty)->setValue($checkoutData['qty']);
-        $this->_rootElement->find($this->updateButton)->click();
     }
 }
