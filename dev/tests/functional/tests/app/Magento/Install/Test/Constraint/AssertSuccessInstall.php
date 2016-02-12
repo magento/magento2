@@ -93,7 +93,6 @@ class AssertSuccessInstall extends AbstractConstraint
      */
     private function waitSuccessPage()
     {
-        $this->installPage->getInstallBlock()->waitSuccessInstall();
         sleep(5);
         if ($this->installPage->getInstallBlock()->isInstallationCompleted()) {
             $this->installPage->open();
