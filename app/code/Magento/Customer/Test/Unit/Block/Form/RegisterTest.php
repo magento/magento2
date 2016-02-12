@@ -74,9 +74,9 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Directory\Model\ResourceModel\Country\CollectionFactory', [], [], '', false),
             $this->_moduleManager,
             $this->_customerSession,
-            $this->_customerUrl,
-            $this->customerConfigHelper
+            $this->_customerUrl
         );
+        $this->_block->setCustomerConfigHelper($this->customerConfigHelper);
     }
 
     /**
