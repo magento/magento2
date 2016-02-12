@@ -814,7 +814,8 @@
     @_line-height: @form-field-label-asterisk__line-height,
     @_margin: @form-field-label-asterisk__margin
 ) {
-    &.required > .label {
+    &.required > .label,
+    &._required > .label {
         &:after {
             content: '*';
             .lib-typography(
