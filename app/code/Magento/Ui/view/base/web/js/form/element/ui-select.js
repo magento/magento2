@@ -406,12 +406,18 @@ define([
             this.options(this.cacheOptions.plain);
         },
 
+        /**
+         * Filtered options list by value from filter options list
+         *
+         * @param {Array} list - option list
+         * @param {String} value
+         *
+         * @returns {Array} filters result
+         */
         _getFilteredArray: function (list, value) {
             var i = 0,
                 array = [],
                 curOption;
-
-            debugger;
 
             for (i; i < list.length; i++) {
                 curOption = list[i].label.toLowerCase();
@@ -425,7 +431,7 @@ define([
         },
 
         /**
-         * Get path to current oprion
+         * Get path to current option
          *
          * @param {Object} data - option data
          * @returns {String} path
@@ -757,6 +763,13 @@ define([
             this._scrollTo(this.hoverElIndex());
         },
 
+        /**
+         * Get jQuery element by option data
+         *
+         * @param {Object} data - option data
+         *
+         * @returns {Object} jQuery element
+         */
         _getElemByData: function (data) {
             var i = 0,
                 list = $(this.cacheUiSelect).find('li'),
