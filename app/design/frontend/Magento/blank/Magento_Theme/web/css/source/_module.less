@@ -252,8 +252,16 @@
 
     .widget {
         clear: both;
+
         .block-title {
             &:extend(.abs-block-title all);
+        }
+    }
+
+    .page-header,
+    .page-footer {
+        .widget.block {
+            .lib-css(margin, @indent__base 0);
         }
     }
 
@@ -261,9 +269,14 @@
         &:extend(.abs-no-display all);
     }
 
+    //
     //  Calendar
-    .ui-datepicker td {
-        padding: 0;
+    //  ---------------------------------------------
+
+    .ui-datepicker {
+        td {
+            padding: 0;
+        }
     }
 }
 
