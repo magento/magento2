@@ -46,7 +46,6 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param CustomerConfigHelper $customerConfigHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -61,13 +60,11 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
-        CustomerConfigHelper $customerConfigHelper,
         array $data = []
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
-        $this->customerConfigHelper = $customerConfigHelper;
         parent::__construct(
             $context,
             $directoryHelper,
@@ -78,6 +75,35 @@ class Register extends \Magento\Directory\Block\Data
             $data
         );
         $this->_isScopePrivate = false;
+    }
+
+    /**
+     * Set customer config helper
+     *
+     * @param CustomerConfigHelper $customerConfigHelper
+     * @return void
+     * @deprecated
+     */
+    public function setCustomerConfigHelper(CustomerConfigHelper $customerConfigHelper)
+    {
+
+        $this->customerConfigHelper = $customerConfigHelper;
+    }
+
+    /**
+     * Get customer config helper
+     *
+     * @return CustomerConfigHelper|mixed
+     * @deprecated
+     */
+    public function getCustomerConfigHelper()
+    {
+
+        if (!($this->customerConfigHelper instanceof \Magento\Customer\Helper\Config)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Customer\Helper\Config');
+        } else {
+            return $this->customerConfigHelper;
+        }
     }
 
     /**
@@ -212,7 +238,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function getMinimumPasswordLength()
     {
-        return $this->customerConfigHelper->getMinimumPasswordLength();
+        return $this->getCustomerConfigHelper()->getMinimumPasswordLength();
     }
 
     /**
@@ -222,6 +248,6 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function getRequiredCharacterClassesNumber()
     {
-        return $this->customerConfigHelper->getRequiredCharacterClassesNumber();
+        return $this->getCustomerConfigHelper()->getRequiredCharacterClassesNumber();
     }
 }

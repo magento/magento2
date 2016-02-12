@@ -12,9 +12,6 @@
         <item>
             <path>app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js</path>
             <word>twig</word>
-            <word>pinba</word>
-            <word>Enterprise</word>
-            <word>Invitation</word>
         </item>
     </whitelist>
 </config>
