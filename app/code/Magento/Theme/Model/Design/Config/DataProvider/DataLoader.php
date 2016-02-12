@@ -72,7 +72,7 @@ class DataLoader
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
         $data = [];
         foreach ($fieldsData as $fieldData) {
-            $data[$scope][$fieldData->getFieldConfig()['field']] = (string)$fieldData->getValue();
+            $data[$scope][$fieldData->getFieldConfig()['field']] = $fieldData->getValue();
         }
 
         $storedData = $this->dataPersistor->get('theme_design_config');

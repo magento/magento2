@@ -72,7 +72,7 @@ class MetadataLoader
                     $element = &$element[$fieldset]['children'];
                 }
                 $fieldName = $fieldData->getFieldConfig()['field'];
-                $element[$fieldName]['arguments']['data']['config']['default'] = (string)$fieldData->getValue();
+                $element[$fieldName]['arguments']['data']['config']['default'] = $fieldData->getValue();
                 $element[$fieldName]['arguments']['data']['config']['showFallbackReset'] = $showFallbackReset;
             }
         }
