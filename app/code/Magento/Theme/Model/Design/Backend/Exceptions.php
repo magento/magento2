@@ -55,7 +55,8 @@ class Exceptions extends ArraySerialized
         // For value validations
         $exceptions = $this->getValue();
 
-        foreach ($exceptions as $rowKey => $row) {
+        foreach ($exceptions as $rowKey => &$row) {
+            unset($row['record_id']);
             // Validate that all values have come
             foreach (['search', 'value'] as $fieldName) {
                 if (!isset($row[$fieldName])) {

@@ -30,6 +30,9 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Theme\Api\Data\DesignConfigExtension|\PHPUnit_Framework_MockObject_MockObject */
     protected $designConfigExtension;
 
+    /** @var \Magento\Framework\App\ScopeValidatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $scopeValidator;
+
     /** @var ConfigFactory */
     protected $factory;
 
@@ -86,22 +89,24 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
             true,
             ['setDesignConfigData']
         );
+        $this->scopeValidator = $this->getMockBuilder('Magento\Framework\App\ScopeValidatorInterface')
+            ->getMockForAbstractClass();
+
         $this->factory = new ConfigFactory(
             $this->designConfigFactory,
             $this->metadataProvider,
             $this->designConfigDataFactory,
-            $this->configExtensionFactory
+            $this->configExtensionFactory,
+            $this->scopeValidator
         );
     }
 
     public function testCreate()
     {
+        $scope = 'default';
+        $scopeId = 0;
         $data = [
-            'scope' => 'default',
-            'scopeId' => 0,
-            'params' => [
-                'header_default_title' => 'value'
-            ]
+            'header_default_title' => 'value'
         ];
         $metadata = [
             'header_default_title' => [
@@ -113,6 +118,11 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
                 'fieldset' => 'head'
             ],
         ];
+
+        $this->scopeValidator->expects($this->once())
+            ->method('isValidScope')
+            ->with($scope, $scopeId)
+            ->willReturn(true);
 
         $this->designConfigFactory->expects($this->once())
             ->method('create')
@@ -141,13 +151,15 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
                 [
                    [
                        'path' => 'design/header/default_title',
-                       'fieldset' => 'head'
+                       'fieldset' => 'head',
+                       'field' => 'header_default_title'
                    ]
                 ],
                 [
                     [
                         'path' => 'design/head/default_description',
-                        'fieldset' => 'head'
+                        'fieldset' => 'head',
+                        'field' => 'head_default_description'
                     ]
                 ]
             );
@@ -159,10 +171,10 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->designConfigExtension);
         $this->designConfigExtension->expects($this->once())
             ->method('setDesignConfigData')
-            ->with([$this->designConfigData]);
+            ->with([$this->designConfigData, $this->designConfigData]);
         $this->designConfig->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($this->designConfigExtension);
-        $this->assertSame($this->designConfig, $this->factory->create($data));
+        $this->assertSame($this->designConfig, $this->factory->create($scope, $scopeId, $data));
     }
 }

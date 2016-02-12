@@ -18,12 +18,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var DataLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProvider\DataLoader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataLoader;
 
     /**
-     * @var MetadataLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProvider\MetadataLoader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataLoader;
 
@@ -34,11 +34,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataLoader = $this->getMockBuilder('Magento\Theme\Model\Design\Config\DataLoader')
+        $this->dataLoader = $this->getMockBuilder('Magento\Theme\Model\Design\Config\DataProvider\DataLoader')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadataLoader = $this->getMockBuilder('Magento\Theme\Model\Design\Config\MetadataLoader')
+        $this->metadataLoader = $this->getMockBuilder('Magento\Theme\Model\Design\Config\DataProvider\MetadataLoader')
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataLoader->expects($this->once())

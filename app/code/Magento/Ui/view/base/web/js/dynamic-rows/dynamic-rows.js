@@ -535,7 +535,12 @@ define([
          * Update whether value differs from default value
          */
         setDifferedFromDefault: function () {
-            var recordData = typeof this.recordData() != 'undefined' ? this.recordData() : '';
+            var recordData = utils.copy(this.recordData());
+
+            Array.isArray(recordData) && recordData.forEach(function(item) {
+                delete item.record_id;
+            });
+
             this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
         }
     });
