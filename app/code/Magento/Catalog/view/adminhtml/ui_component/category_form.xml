@@ -487,10 +487,23 @@
                 </item>
             </argument>
         </field>
-        <field name="page_layout">
+        <field name="custom_design">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">180</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Theme</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="disabled" xsi:type="string">${ $.provider }:data.custom_use_parent_settings</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="page_layout">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">190</item>
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Layout</item>
@@ -503,7 +516,7 @@
         <field name="custom_layout_update">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">190</item>
+                    <item name="sortOrder" xsi:type="number">200</item>
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">textarea</item>
                     <item name="label" xsi:type="string" translate="true">Layout Update XML</item>
@@ -549,7 +562,8 @@
                     <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="label" xsi:type="string" translate="true">Schedule Update From</item>
-                    <item name="sortOrder" xsi:type="number">210</item>
+                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">220</item>
                     <item name="breakLine" xsi:type="boolean">false</item>
                     <item name="imports" xsi:type="array">
                         <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
@@ -560,7 +574,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="additionalClasses" xsi:type="string">admin__field-date</item>
-                        <item name="sortOrder" xsi:type="number">220</item>
+                        <item name="sortOrder" xsi:type="number">230</item>
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="formElement" xsi:type="string">date</item>
                         <item name="imports" xsi:type="array">
@@ -573,7 +587,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="additionalClasses" xsi:type="string">admin__field-date</item>
-                        <item name="sortOrder" xsi:type="number">230</item>
+                        <item name="sortOrder" xsi:type="number">240</item>
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="label" xsi:type="string" translate="true">To</item>
                         <item name="formElement" xsi:type="string">date</item>
@@ -584,18 +598,5 @@
                 </argument>
             </field>
         </container>
-        <field name="custom_design">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">240</item>
-                    <item name="dataType" xsi:type="string">string</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">New Theme</item>
-                    <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
-                    </item>
-                </item>
-            </argument>
-        </field>
     </fieldset>
 </form>

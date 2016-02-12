@@ -448,6 +448,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                     'custom_use_parent_settings',
                     'custom_apply_to_products',
+                    'custom_design',
                     'page_layout',
                     'custom_layout_update',
                 ],
@@ -455,7 +456,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                     'custom_design_from',
                     'custom_design_to',
-                    'custom_design',
                 ],
             'category_view_optimization' =>
                 [
