@@ -26,6 +26,7 @@ use Magento\User\Api\Data\UserInterface;
  * @method string getExtra()
  * @method \Magento\User\Model\User setExtra(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
