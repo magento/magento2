@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Vault\Test\Constraint;
 
 use Magento\Vault\Test\Page\MyCreditCards;
@@ -21,7 +20,7 @@ class AssertCreditCardDeletedMessage extends AbstractConstraint
     const SUCCESS_MESSAGE = 'Credit Card was successfully removed';
 
     /**
-     * Assert that success message is correct.
+     * Assert that message of success deletion of credit card is present.
      *
      * @param MyCreditCards $myCreditCards
      */
@@ -30,7 +29,7 @@ class AssertCreditCardDeletedMessage extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $myCreditCards->getMessagesBlock()->getSuccessMessage(),
-            'Wrong success message is displayed.'
+            'Message of success deletion of credit card is not present or wrong.'
         );
     }
 
