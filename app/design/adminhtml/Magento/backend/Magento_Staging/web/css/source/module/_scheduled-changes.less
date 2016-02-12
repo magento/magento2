@@ -79,7 +79,7 @@
         min-height: 0;
     } 
 
-    //Resizer
+    //  Resizer
     .resizable {
         height: 15rem;
         min-height: 15rem;
@@ -101,10 +101,10 @@
             text-align: center;
             top: 100%;
 
-        &:before {
-          content: ':::::';
+            &:before {
+              content: ':::::';
+            }
         }
-      }
     }
 
     .block-content {
@@ -113,9 +113,12 @@
         margin-bottom: @indent__base;
         min-height: 15rem;
         overflow: auto;
-        padding: @indent__m;
         position: relative;
         z-index: 1;
+
+       .schedule-table-wrapper {
+         margin: @indent__m;
+       }
     }
 
     .admin__data-grid-outer-wrap {

@@ -31,10 +31,10 @@ define([
 
         _.each(this.sizeConstraints, function (selector, key) {
             async.async({
-                component: this.ctx,
+                component: this.componentName,
                 selector: selector
             }, function (elem) {
-                size = key.includes('Height') ? $(elem).height() : $(elem).width();
+                size = key.indexOf('Height') > -1 ? $(elem).outerHeight(true) : $(elem).outerWidth(true);
                 $(ui.element).resizable('option', key, size);
             });
         }, this);
@@ -52,23 +52,23 @@ define([
         var sizeConstraint,
             sizeConstraints = {};
 
-        _.each(sizeOptions, function (key) {
-            sizeConstraint = config[key];
+        if (!_.isEmpty(config)) {
+            _.each(sizeOptions, function (key) {
+                sizeConstraint = config[key];
 
-            if (sizeConstraint) {
-                config[key] = _.isNumber(sizeConstraint) ? sizeConstraint :
-                    (function () {
-                        sizeConstraints[key] = sizeConstraint;
+                if (sizeConstraint && !_.isNumber(sizeConstraint)) {
+                    sizeConstraints[key] = sizeConstraint;
+                    config[key] = null;
+                }
+            });
 
-                        return null;
-                    })();
-            }
-        });
+            config.start = recalcAllowedSize.bind({
+                sizeConstraints: sizeConstraints,
+                componentName: viewModel.name
+            });
+        }
 
-        config.start = recalcAllowedSize.bind({
-            sizeConstraints: sizeConstraints,
-            ctx: viewModel.name
-        });
+        return config;
     }
 
     ko.bindingHandlers.resizable = {
@@ -83,14 +83,9 @@ define([
          *
          */
         init: function (element, valueAccessor, allBindings, viewModel) {
-            var config = valueAccessor();
+            var config =  processConfig(valueAccessor(), viewModel);
 
-            if (typeof config === 'object') {
-                processConfig(config, viewModel);
-                $(element).resizable(config);
-            } else {
-                $(element).resizable();
-            }
+            $(element).resizable(config);
         }
     };
 
