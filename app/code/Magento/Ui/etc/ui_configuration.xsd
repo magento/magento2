@@ -48,6 +48,7 @@
                     <xs:element type="button" name="button"/>
                     <xs:element type="htmlContent" name="htmlContent"/>
                     <xs:element type="actionDelete" name="actionDelete"/>
+                    <xs:element type="dynamicRowsConfiguration" name="dynamicRows"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -64,6 +65,7 @@
                     <xs:element type="containerConfiguration" name="container"/>
                     <xs:element type="fieldsetConfiguration" name="fieldset"/>
                     <xs:element name="field" type="field" />
+                    <xs:element type="dynamicRowsConfiguration" name="dynamicRows"/>
                     <xs:element type="insertFormConfiguration" name="insertForm"/>
                     <xs:element type="insertListingConfiguration" name="insertListing"/>
                     <xs:element type="modalConfiguration" name="modal"/>
