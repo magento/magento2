@@ -1,5 +1,5 @@
 <?php
-namespace Magento\Security\Model;
+namespace Magento\Security\Model\ResourceModel;
 
 /**
  * Class PasswordResetRequestEventTest
@@ -44,7 +44,7 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
     public function getTestData()
     {
         return [
-            'request_type'      => PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST,
+            'request_type'      => \Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST,
             'account_reference' => 'test27.dev@gmail.com',
             'created_at'        => '2016-01-20 13:00:13',
             'ip'                => '3232249856'
@@ -74,9 +74,8 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
         $modelId = $this->saveTestData();
         $newModel = $this->model->load($modelId);
         $testData = $this->getTestData();
-        $newModelData = array();
-        foreach ($testData as $key => $value)
-        {
+        $newModelData = [];
+        foreach (array_keys($testData) as $key) {
             $newModelData[$key] = $newModel->getData($key);
         }
         $this->assertEquals($testData, $newModelData);
