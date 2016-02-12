@@ -34,7 +34,7 @@ class Plugin
     /**
      * @param DesignConfigRepository $subject
      * @param DesignConfigInterface $designConfig
-     * @return void
+     * @return DesignConfigInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(DesignConfigRepository $subject, DesignConfigInterface $designConfig)
@@ -49,5 +49,27 @@ class Plugin
             'admin_system_config_changed_section_design',
             ['website' => $website, 'store' => $store]
         );
+        return $designConfig;
+    }
+
+    /**
+     * @param DesignConfigRepository $subject
+     * @param DesignConfigInterface $designConfig
+     * @return DesignConfigInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterDelete(DesignConfigRepository $subject, DesignConfigInterface $designConfig)
+    {
+        $website = in_array($designConfig->getScope(), [ScopeInterface::SCOPE_WEBSITE, ScopeInterface::SCOPE_WEBSITES])
+            ? $this->storeManager->getWebsite($designConfig->getScopeId())
+            : '';
+        $store = in_array($designConfig->getScope(), [ScopeInterface::SCOPE_STORE, ScopeInterface::SCOPE_STORES])
+            ? $this->storeManager->getStore($designConfig->getScopeId())
+            : '';
+        $this->eventManager->dispatch(
+            'admin_system_config_changed_section_design',
+            ['website' => $website, 'store' => $store]
+        );
+        return $designConfig;
     }
 }

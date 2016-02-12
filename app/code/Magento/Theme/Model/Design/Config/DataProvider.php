@@ -22,11 +22,11 @@ class DataProvider extends AbstractDataProvider
     protected $collection;
 
     /**
-     * @var DataLoader
+     * @var DataProvider\DataLoader
      */
     protected $dataLoader;
     /**
-     * @var MetadataLoader
+     * @var DataProvider\MetadataLoader
      */
     private $metadataLoader;
 
@@ -34,8 +34,8 @@ class DataProvider extends AbstractDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param DataLoader $dataLoader
-     * @param MetadataLoader $metadataLoader
+     * @param DataProvider\DataLoader $dataLoader
+     * @param DataProvider\MetadataLoader $metadataLoader
      * @param CollectionFactory $configCollectionFactory
      * @param array $meta
      * @param array $data
@@ -44,8 +44,8 @@ class DataProvider extends AbstractDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        DataLoader $dataLoader,
-        MetadataLoader $metadataLoader,
+        DataProvider\DataLoader $dataLoader,
+        DataProvider\MetadataLoader $metadataLoader,
         CollectionFactory $configCollectionFactory,
         array $meta = [],
         array $data = []
@@ -61,7 +61,6 @@ class DataProvider extends AbstractDataProvider
         $this->metadataLoader = $metadataLoader;
 
         $this->collection = $configCollectionFactory->create();
-        $this->dataLoader->setCollection($this->collection);
 
         $this->meta = array_merge($this->meta, $this->metadataLoader->getData());
     }

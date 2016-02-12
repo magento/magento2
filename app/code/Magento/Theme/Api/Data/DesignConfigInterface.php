@@ -7,6 +7,10 @@ namespace Magento\Theme\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * Interface DesignConfigInterface
+ * @api
+ */
 interface DesignConfigInterface extends ExtensibleDataInterface
 {
     /**#@+

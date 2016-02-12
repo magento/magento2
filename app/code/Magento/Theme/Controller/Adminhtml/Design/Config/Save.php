@@ -6,11 +6,11 @@
 namespace Magento\Theme\Controller\Adminhtml\Design\Config;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Theme\Model\DesignConfigRepository;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
-use Magento\Framework\App\ScopeValidatorInterface as ScopeValidator;
 
 class Save extends Action
 {
@@ -25,26 +25,26 @@ class Save extends Action
     protected $configFactory;
 
     /**
-     * @var ScopeValidator
+     * @var DataPersistorInterface
      */
-    protected $scopeValidator;
+    protected $dataPersistor;
 
     /**
+     * @param Context $context
      * @param DesignConfigRepository $designConfigRepository
      * @param ConfigFactory $configFactory
-     * @param ScopeValidator $scopeValidator
-     * @param Context $context
+     * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
+        Context $context,
         DesignConfigRepository $designConfigRepository,
         ConfigFactory $configFactory,
-        ScopeValidator $scopeValidator,
-        Context $context
+        DataPersistorInterface $dataPersistor
     ) {
-        parent::__construct($context);
         $this->designConfigRepository = $designConfigRepository;
         $this->configFactory = $configFactory;
-        $this->scopeValidator = $scopeValidator;
+        $this->dataPersistor = $dataPersistor;
+        parent::__construct($context);
     }
 
     /**
@@ -63,23 +63,19 @@ class Save extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('theme/design_config/');
         $scope = $this->getRequest()->getParam('scope');
         $scopeId = (int)$this->getRequest()->getParam('scope_id');
-        if (!$this->scopeValidator->isValidScope($scope, $scopeId)) {
-            $this->messageManager->addError(__('Invalid scope or scope id'));
-            return $resultRedirect;
-        }
+        $data = $this->getRequestData();
 
-        $data = [
-            'scope' => $scope,
-            'scopeId' => $scopeId,
-            'params' => $this->getRequestData(),
-        ];
-        $designConfigData = $this->configFactory->create($data);
         try {
+            $designConfigData = $this->configFactory->create($scope, $scopeId, $data);
             $this->designConfigRepository->save($designConfigData);
             $this->messageManager->addSuccess(__('Configuration has been saved'));
+
+            $this->dataPersistor->clear('theme_design_config');
+
+            $resultRedirect->setPath('theme/design_config/');
+            return $resultRedirect;
         } catch (LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
@@ -92,6 +88,9 @@ class Save extends Action
             );
         }
 
+        $this->dataPersistor->set('theme_design_config', $data);
+
+        $resultRedirect->setPath('theme/design_config/edit', ['scope' => $scope, 'scope_id' => $scopeId]);
         return $resultRedirect;
     }
 
@@ -107,7 +106,7 @@ class Save extends Action
             $this->getRequest()->getFiles()->toArray()
         );
         $data = array_filter($data, function ($param) {
-            return is_array($param) && isset($param['error']) && $param['error'] > 0 ? false : true;
+            return isset($param['error']) && $param['error'] > 0 ? false : true;
         });
         return $data;
     }

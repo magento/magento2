@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Theme\Test\Unit\Model\Design\Config;
+namespace Magento\Theme\Test\Unit\Model\Design\Config\DataProvider;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Theme\Model\Design\Config\DataLoader;
+use Magento\Theme\Model\Design\Config\DataProvider\DataLoader;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
 
 class DataLoaderTest extends \PHPUnit_Framework_TestCase
