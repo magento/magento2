@@ -70,7 +70,26 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test if current admin user is logged out
+     *
+     * @magentoDbIsolation enabled
+     */
+    public function testProcessLogout()
+    {
+        $this->auth->login(
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
+        $sessionId = $this->authSession->getSessionId();
+        $this->auth->logout();
+        $this->adminSessionInfo->load($sessionId, 'session_id');
+        $this->assertEquals($this->adminSessionInfo->getStatus(), AdminSessionInfo::LOGGED_OUT);
+    }
+
+    /**
      * Test if the admin session is created in database
+     *
+     * @magentoDbIsolation enabled
      */
     public function testIsAdminSessionIsCreated()
     {
@@ -89,6 +108,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoAdminConfigFixture admin/security/session_lifetime 100
      * @magentoConfigFixture default_store admin/security/admin_account_sharing 0
+     * @magentoDbIsolation enabled
      */
     public function testTerminateOtherSessionsProcessLogin()
     {
@@ -110,22 +130,9 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test if current admin user is logged out
-     */
-    public function testProcessLogout()
-    {
-        $this->auth->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-        );
-        $sessionId = $this->authSession->getSessionId();
-        $this->auth->logout();
-        $this->adminSessionInfo->load($sessionId, 'session_id');
-        $this->assertEquals($this->adminSessionInfo->getStatus(), AdminSessionInfo::LOGGED_OUT);
-    }
-
-    /**
      * Test if current session is retrieved
+     *
+     * @magentoDbIsolation enabled
      */
     public function testGetCurrentSession()
     {
@@ -146,6 +153,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoAdminConfigFixture admin/security/session_lifetime 100
      * @magentoConfigFixture default_store admin/security/admin_account_sharing 1
+     * @magentoDbIsolation enabled
      */
     public function testLogoutOtherUserSessions()
     {
@@ -184,6 +192,40 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             $this->authSession->getSessionId()
         )
             ->filterExpiredSessions(100)
+            ->load();
+
+        return $collection;
+    }
+
+    /**
+     * Test for cleanExpiredSessions() method
+     *
+     * @magentoDataFixture Magento/Security/_files/adminsession.php
+     * @magentoAdminConfigFixture admin/security/session_lifetime 1
+     * @magentoDbIsolation enabled
+     */
+    public function testCleanExpiredSessions()
+    {
+        /** @var \Magento\Security\Model\AdminSessionInfo $session */
+        $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $collection = $this->getCollectionForCleanExpiredSessions($session);
+        $sizeBefore = $collection->getSize();
+        $this->adminSessionsManager->cleanExpiredSessions();
+        $collection = $this->getCollectionForCleanExpiredSessions($session);
+        $sizeAfter = $collection->getSize();
+        $this->assertGreaterThan($sizeAfter, $sizeBefore);
+    }
+
+    /**
+     * Collection getter with filters populated for testCleanExpiredSessions() method
+     *
+     * @param AdminSessionInfo $session
+     * @return ResourceModel\AdminSessionInfo\Collection
+     */
+    protected function getCollectionForCleanExpiredSessions(\Magento\Security\Model\AdminSessionInfo $session)
+    {
+        /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection $collection */
+        $collection = $session->getResourceCollection()
             ->load();
 
         return $collection;

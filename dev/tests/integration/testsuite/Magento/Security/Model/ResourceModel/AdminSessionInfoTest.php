@@ -27,11 +27,6 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
-        /** @var $session \Magento\Security\Model\AdminSessionInfo */
-        $session->getResource()->getConnection()->delete(
-            $session->getResource()->getMainTable()
-        );
         $this->objectManager = null;
         parent::tearDown();
     }
@@ -54,7 +49,7 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @return mixed
      */
-    private function saveTestData()
+    protected function saveTestData()
     {
         foreach ($this->getTestData() as $key => $value) {
             $this->model->setData($key, $value);
@@ -64,7 +59,9 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * checking that model is saving data to database
+     * Check that model is saving data to database
+     *
+     * @magentoDbIsolation enabled
      */
     public function testIsModelSavingDataToDatabase()
     {
@@ -80,6 +77,8 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for deleteSessionsOlderThen() method
+     *
      * @magentoDataFixture Magento/Security/_files/adminsession.php
      */
     public function testDeleteSessionsOlderThen()
@@ -95,6 +94,8 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for updateStatusByUserId() method
+     *
      * @magentoDataFixture Magento/Security/_files/adminsession.php
      */
     public function testUpdateStatusByUserId()

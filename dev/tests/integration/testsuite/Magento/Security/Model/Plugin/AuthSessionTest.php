@@ -73,6 +73,8 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test of prolong user action
+     *
+     * @magentoDbIsolation enabled
      */
     public function testProcessProlong()
     {
