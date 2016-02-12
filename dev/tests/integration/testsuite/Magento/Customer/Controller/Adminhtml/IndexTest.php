@@ -36,6 +36,9 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /** @var \Magento\Framework\Data\Form\FormKey */
     protected $formKey;
 
+    /**@var \Magento\Customer\Helper\View */
+    protected $customerViewHelper;
+
     protected function setUp()
     {
         parent::setUp();
@@ -49,9 +52,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Api\AccountManagementInterface'
         );
-
         $this->formKey = Bootstrap::getObjectManager()->get(
             'Magento\Framework\Data\Form\FormKey'
+        );
+        $this->customerViewHelper = Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Helper\View'
         );
     }
 
@@ -360,6 +365,91 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
 
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/account_information/change_email_template 1
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
+     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     */
+    public function testSaveActionExistingCustomerChangeEmail()
+    {
+        $customerId = 1;
+        $newEmail = 'newcustomer@example.com';
+        $transportBuilderMock = $this->prepareEmailMock(
+            2,
+            '1',
+            'support',
+            $customerId,
+            $newEmail
+        );
+        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
+        $post = [
+            'customer' => ['entity_id' => $customerId,
+                'middlename' => 'test middlename',
+                'group_id' => 1,
+                'website_id' => 1,
+                'firstname' => 'test firstname',
+                'lastname' => 'test lastname',
+                'email' => $newEmail,
+                'new_password' => 'auto',
+                'sendemail_store_id' => '1',
+                'sendemail' => '1',
+                'created_at' => '2000-01-01 00:00:00',
+                'default_shipping' => '_item1',
+                'default_billing' => 1,
+            ]
+        ];
+        $this->getRequest()->setPostValue($post);
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/save');
+
+        /**
+         * Check that no errors were generated and set to session
+         */
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
+        $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'index/key/'));
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/account_information/change_email_template 1
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
+     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     */
+    public function testInlineEditChangeEmail()
+    {
+        $customerId = 1;
+        $newEmail = 'newcustomer@example.com';
+        $transportBuilderMock = $this->prepareEmailMock(
+            2,
+            '1',
+            'support',
+            $customerId,
+            $newEmail
+        );
+        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
+        $post = [
+            'items' => [
+                $customerId => [
+                    'middlename' => 'test middlename',
+                    'group_id' => 1,
+                    'website_id' => 1,
+                    'firstname' => 'test firstname',
+                    'lastname' => 'test lastname',
+                    'email' => $newEmail,
+                    'password' => 'password',
+                ],
+            ]
+        ];
+        $this->getRequest()->setParam('ajax', true)->setParam('isAjax', true);
+        $this->getRequest()->setPostValue($post);
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/inlineEdit');
+
+        /**
+         * Check that no errors were generated and set to session
+         */
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
     }
 
     /**
@@ -702,5 +792,79 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'edit'));
+    }
+
+    /**
+     * @param int $occurrenceNumber
+     * @param string $templateId
+     * @param string $sender
+     * @param int $customerId
+     * @param string|null $newEmail
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    protected function prepareEmailMock($occurrenceNumber, $templateId, $sender, $customerId, $newEmail = null)
+    {
+
+        $area = \Magento\Framework\App\Area::AREA_FRONTEND;
+        $customer = $this->customerRepository->getById($customerId);
+        $storeId = $customer->getStoreId();
+        $name = $this->customerViewHelper->getCustomerName($customer);
+        $transportMock = $this->getMock(
+            'Magento\Framework\Mail\TransportInterface',
+            ['sendMessage']
+        );
+        $transportMock->expects($this->exactly($occurrenceNumber))
+            ->method('sendMessage');
+        $transportBuilderMock = $this->getMockBuilder('Magento\Framework\Mail\Template\TransportBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'addTo',
+                    'setFrom',
+                    'setTemplateIdentifier',
+                    'setTemplateVars',
+                    'setTemplateOptions',
+                    'getTransport'
+                ]
+            )
+            ->getMock();
+        $transportBuilderMock->method('setTemplateIdentifier')
+            ->with($templateId)
+            ->willReturnSelf();
+        $transportBuilderMock->method('setTemplateOptions')
+            ->with(['area' => $area, 'store' => $storeId])
+            ->willReturnSelf();
+        $transportBuilderMock->method('setTemplateVars')
+            ->willReturnSelf();
+        $transportBuilderMock->method('setFrom')
+            ->with($sender)
+            ->willReturnSelf();
+        $transportBuilderMock->method('addTo')
+            ->with($this->logicalOr($customer->getEmail(), $newEmail), $name)
+            ->willReturnSelf();
+        $transportBuilderMock->expects($this->exactly($occurrenceNumber))
+            ->method('getTransport')
+            ->willReturn($transportMock);
+
+        return $transportBuilderMock;
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
+     * @param string $className
+     */
+    protected function addEmailMockToClass(
+        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        $className
+    ) {
+        $mocked = $this->_objectManager->create(
+            $className,
+            ['transportBuilder' => $transportBuilderMock]
+        );
+        $this->_objectManager->addSharedInstance(
+            $mocked,
+            $className
+        );
     }
 }
