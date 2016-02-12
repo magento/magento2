@@ -35,24 +35,32 @@ class Storage
     protected $scopeConfig;
 
     /**
+     * @var ValueProcessor
+     */
+    protected $valueProcessor;
+
+    /**
      * @param TransactionFactory $transactionFactory
      * @param BackendModelFactory $backendModelFactory
      * @param ValueChecker $valueChecker
      * @param ConfigFactory $configFactory
      * @param ScopeConfigInterface $scopeConfig
+     * @param ValueProcessor $valueProcessor
      */
     public function __construct(
         TransactionFactory $transactionFactory,
         BackendModelFactory $backendModelFactory,
         ValueChecker $valueChecker,
         ConfigFactory $configFactory,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        ValueProcessor $valueProcessor
     ) {
         $this->transactionFactory = $transactionFactory;
         $this->backendModelFactory = $backendModelFactory;
         $this->valueChecker = $valueChecker;
         $this->configFactory = $configFactory;
         $this->scopeConfig = $scopeConfig;
+        $this->valueProcessor = $valueProcessor;
     }
 
     /**
@@ -68,15 +76,7 @@ class Storage
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
         foreach ($fieldsData as &$fieldData) {
             $value = $this->scopeConfig->getValue($fieldData->getPath(), $scope, $scopeId);
-            /** @var ValueInterface|Value $backendModel */
-            $backendModel = $this->backendModelFactory->create([
-                'value' => $value,
-                'scope' => $designConfig->getScope(),
-                'scopeId' => $designConfig->getScopeId(),
-                'config' => $fieldData->getFieldConfig()
-            ]);
-            $backendModel->afterLoad();
-            $fieldData->setValue($backendModel->getValue());
+            $fieldData->setValue($this->valueProcessor->process($value, $fieldData->getPath()));
         }
         return $designConfig;
     }
