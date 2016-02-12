@@ -360,6 +360,7 @@ define([
 
                 if (this._currentVideoUrl === url) {
                     this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
+
                     return;
                 }
 
