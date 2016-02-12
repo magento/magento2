@@ -17,6 +17,7 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 
 /**
  * Import entity product model
@@ -231,15 +232,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $_messageTemplates = [
         ValidatorInterface::ERROR_INVALID_SCOPE => 'Invalid value in Scope column',
-        ValidatorInterface::ERROR_INVALID_WEBSITE => 'Invalid value in Website column (website does not exists?)',
+        ValidatorInterface::ERROR_INVALID_WEBSITE => 'Invalid value in Website column (website does not exist?)',
         ValidatorInterface::ERROR_INVALID_STORE => 'Invalid value in Store column (store doesn\'t exist?)',
         ValidatorInterface::ERROR_INVALID_ATTR_SET => 'Invalid value for Attribute Set column (set doesn\'t exist?)',
         ValidatorInterface::ERROR_INVALID_TYPE => 'Product Type is invalid or not supported',
-        ValidatorInterface::ERROR_INVALID_CATEGORY => 'Category does not exists',
+        ValidatorInterface::ERROR_INVALID_CATEGORY => 'Category does not exist',
         ValidatorInterface::ERROR_VALUE_IS_REQUIRED => 'Please make sure attribute "%s" is not empty.',
         ValidatorInterface::ERROR_TYPE_CHANGED => 'Trying to change type of existing products',
         ValidatorInterface::ERROR_SKU_IS_EMPTY => 'SKU is empty',
-        ValidatorInterface::ERROR_NO_DEFAULT_ROW => 'Default values row does not exists',
+        ValidatorInterface::ERROR_NO_DEFAULT_ROW => 'Default values row does not exist',
         ValidatorInterface::ERROR_CHANGE_TYPE => 'Product type change is not allowed',
         ValidatorInterface::ERROR_DUPLICATE_SCOPE => 'Duplicate scope',
         ValidatorInterface::ERROR_DUPLICATE_SKU => 'Duplicate SKU',
@@ -263,7 +264,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
-        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Specified url key is already exist',
+        ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Specified url key already exists',
     ];
 
     /**
@@ -1467,10 +1468,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (!array_key_exists($rowSku, $this->categoriesCache)) {
                     $this->categoriesCache[$rowSku] = [];
                 }
+                $rowData['rowNum'] = $rowNum;
                 $categoryIds = $this->processRowCategories($rowData);
                 foreach ($categoryIds as $id) {
                     $this->categoriesCache[$rowSku][$id] = true;
                 }
+                unset($rowData['rowNum']);
 
                 // 4.1. Tier prices phase
                 if (!empty($rowData['_tier_price_website'])) {
@@ -1625,6 +1628,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
 
+            foreach ($bunch as $rowNum => $rowData) {
+                if ($this->getErrorAggregator()->isRowInvalid($rowNum)) {
+                    unset($bunch[$rowNum]);
+                }
+            }
+
             $this->saveProductEntity(
                 $entityRowsIn,
                 $entityRowsUp
@@ -1661,6 +1670,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $categoriesString,
                 $this->getMultipleValueSeparator()
             );
+            foreach ($this->categoryProcessor->getFailedCategories() as $error) {
+                $this->errorAggregator->addError(
+                    AbstractEntity::ERROR_CODE_CATEGORY_NOT_VALID,
+                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
+                    $rowData['rowNum'],
+                    self::COL_CATEGORY,
+                    __('Category "%1" has not been created.', $error['category'])
+                    . ' ' . $error['exception']->getMessage()
+                );
+            }
         }
         return $categoryIds;
     }
