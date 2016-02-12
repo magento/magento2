@@ -17,7 +17,7 @@ define([
          * Change validator
          */
         handleChanges: function (value) {
-            var isDigits = value !==1;
+            var isDigits = value !== 1;
 
             this.validation['validate-number'] = !isDigits;
             this.validation['validate-digits'] = isDigits;
