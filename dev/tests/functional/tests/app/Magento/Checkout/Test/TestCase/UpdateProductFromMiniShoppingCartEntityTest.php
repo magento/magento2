@@ -37,13 +37,6 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Catalog product view page.
-     *
-     * @var CatalogProductView
-     */
-    protected $catalogProductView;
-
-    /**
      * Cms index page.
      *
      * @var CmsIndex
@@ -61,17 +54,12 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
      * Inject data.
      *
      * @param CmsIndex $cmsIndex
-     * @param CatalogProductView $catalogProductView
      * @param FixtureFactory $fixtureFactory
      * @return void
      */
-    public function __inject(
-        CmsIndex $cmsIndex,
-        CatalogProductView $catalogProductView,
-        FixtureFactory $fixtureFactory
-    ) {
+    public function __inject(CmsIndex $cmsIndex, FixtureFactory $fixtureFactory)
+    {
         $this->cmsIndex = $cmsIndex;
-        $this->catalogProductView = $catalogProductView;
         $this->fixtureFactory = $fixtureFactory;
     }
 
@@ -94,8 +82,8 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
         $newProduct = $this->createProduct(explode('::', $originalProduct)[0], [$productData]);
         $miniShoppingCart = $this->cmsIndex->getCartSidebarBlock();
         $miniShoppingCart->openMiniCart();
+        $miniShoppingCart->getCartItem($newProduct)->editQty($newProduct->getCheckoutData());
         $miniShoppingCart->getCartItem($newProduct)->clickEditItem();
-        $this->catalogProductView->getViewBlock()->addToCart($newProduct);
 
         // Prepare data for asserts:
         $cart['data']['items'] = ['products' => [$newProduct]];

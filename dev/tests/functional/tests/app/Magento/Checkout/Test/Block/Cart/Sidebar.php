@@ -20,7 +20,7 @@ class Sidebar extends Block
      *
      * @var string
      */
-    protected $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
+    private $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
 
     /**
      * Mini cart link selector.
