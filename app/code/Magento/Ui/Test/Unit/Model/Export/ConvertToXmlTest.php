@@ -21,6 +21,9 @@ use Magento\Ui\Model\Export\SearchResultIterator;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConvertToXmlTest extends \PHPUnit_Framework_TestCase
 {
     /**

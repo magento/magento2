@@ -177,7 +177,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
             $this->braintreeAdapterMock,
             $this->filterMapperMock
         );
-        $collection->setPageSize(NULL);
+        $collection->setPageSize(null);
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
