@@ -40,7 +40,7 @@ class MultipleEmptyLinesSniff implements PHP_CodeSniffer_Sniff
                 $lines = $tokens[$next]['line'] - $tokens[$stackPtr]['line'];
                 if ($lines > 1) {
                     $error = 'Code must not contain multiple empty lines in a row; found %s empty lines';
-                    $data  = array($lines);
+                    $data  = [$lines];
                     $phpcsFile->addError($error, $stackPtr, 'MultipleEmptyLines', $data);
                 }
             }
