@@ -2144,7 +2144,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         if (!$this->validator->isValid($rowData)) {
             foreach ($this->validator->getMessages() as $message) {
-                $this->addRowError($message, $rowNum);
+                $this->addRowError($message, $rowNum, $this->validator->getInvalidAttribute());
             }
         }
 
