@@ -95,6 +95,7 @@
                         <item name="dataScope" xsi:type="string">quantity_and_stock_status.qty</item>
                         <item name="validation" xsi:type="array">
                             <item name="validate-number" xsi:type="boolean">true</item>
+                            <item name="validate-digits" xsi:type="boolean">true</item>
                         </item>
                         <item name="sortOrder" xsi:type="number">200</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
@@ -170,6 +171,7 @@
                             <item name="dataScope" xsi:type="string">min_sale_qty</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
+                                <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                             <item name="imports" xsi:type="array">
@@ -468,6 +470,7 @@
                             <item name="dataScope" xsi:type="string">qty_increments</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
+                                <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                             <item name="imports" xsi:type="array">
