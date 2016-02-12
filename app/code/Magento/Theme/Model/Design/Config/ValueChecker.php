@@ -29,6 +29,7 @@ class ValueChecker
     /**
      * @param ScopeFallbackResolverInterface $fallbackResolver
      * @param AppConfig $appConfig
+     * @param \Magento\Theme\Model\Design\Config\ValueProcessor $valueProcessor
      */
     public function __construct(
         ScopeFallbackResolverInterface $fallbackResolver,
