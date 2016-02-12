@@ -24,50 +24,30 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
     protected $securityCookieHelper;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * Set security cookie helper
+     *
+     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+     * @void
+     * @deprecated
      */
-    protected $backendAuthSession;
+    public function setSecurityCookieHelper(\Magento\Security\Helper\SecurityCookie $securityCookieHelper)
+    {
+        $this->securityCookieHelper = $securityCookieHelper;
+    }
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
-     * @param \Magento\Integration\Api\OauthServiceInterface $oauthService
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Magento\Integration\Helper\Data $integrationData
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
-     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * Get security cookie helper
+     *
+     * @return \Magento\Security\Helper\SecurityCookie
+     * @deprecated
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
-        \Magento\Integration\Api\OauthServiceInterface $oauthService,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Magento\Integration\Helper\Data $integrationData,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection,
-        \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
-        \Magento\Backend\Model\Auth\Session $backendAuthSession
-    ) {
-        parent::__construct(
-            $context,
-            $registry,
-            $logger,
-            $integrationService,
-            $oauthService,
-            $jsonHelper,
-            $integrationData,
-            $escaper,
-            $integrationCollection
-        );
-        $this->securityCookieHelper = $securityCookieHelper;
-        $this->backendAuthSession = $backendAuthSession;
+    public function getSecurityCookieHelper()
+    {
+        if (!($this->securityCookieHelper instanceof \Magento\Security\Helper\SecurityCookie)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Security\Helper\SecurityCookie');
+        } else {
+            return $this->securityCookieHelper;
+        }
     }
 
     /**
@@ -94,25 +74,25 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->processData($integrationData);
         } catch (UserLockedException $e) {
             $this->_auth->logout();
-            $this->securityCookieHelper->setLogoutReasonCookie(
+            $this->getSecurityCookieHelper()->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
             $this->_redirect('*');
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setIntegrationData($this->getRequest()->getPostValue());
-            $this->redirectOnSaveError();
+            $this->_redirectOnSaveError();
         } catch (IntegrationException $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_getSession()->setIntegrationData($integrationData);
-            $this->redirectOnSaveError();
+            $this->_redirectOnSaveError();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
-            $this->redirectOnSaveError();
+            $this->_redirectOnSaveError();
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
-            $this->redirectOnSaveError();
+            $this->_redirectOnSaveError();
         }
     }
 
@@ -128,7 +108,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
         $password = $this->getRequest()->getParam(
             \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD
         );
-        $user = $this->backendAuthSession->getUser();
+        $user = $this->_auth->getUser();
         $user->performIdentityCheck($password);
 
         return $this;
@@ -163,7 +143,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      *
      * @return void
      */
-    protected function redirectOnSaveError()
+    protected function _redirectOnSaveError()
     {
         $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
         if ($integrationId) {

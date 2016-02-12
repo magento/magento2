@@ -241,10 +241,6 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->with(self::INTEGRATION_ID)
             ->willReturn($intData);
 
-        $this->backendAuthSessionMock->expects($this->any())
-            ->method('getUser')
-            ->willReturn($this->_userMock);
-
         $this->_userMock->expects($this->any())
             ->method('performIdentityCheck')
             ->with($passwordString)

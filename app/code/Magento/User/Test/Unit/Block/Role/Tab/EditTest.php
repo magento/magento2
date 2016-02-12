@@ -78,31 +78,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 'rulesCollectionFactory' => $this->rulesCollectionFactoryMock,
                 'aclResourceProvider' => $this->aclResourceProviderMock,
                 'integrationData' => $this->integrationDataMock,
-                'registry' => $this->coreRegistryMock
             ]
         );
-    }
-
-    public function testConstructor()
-    {
-        $this->coreRegistryMock->expects($this->once())
-            ->method('registry')
-            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY)
-            ->willReturn(true);
-
-        $this->model = $this->objectManagerHelper->getObject(
-            'Magento\User\Block\Role\Tab\Edit',
-            [
-                'aclRetriever' => $this->aclRetrieverMock,
-                'rootResource' => $this->rootResourceMock,
-                'rulesCollectionFactory' => $this->rulesCollectionFactoryMock,
-                'aclResourceProvider' => $this->aclResourceProviderMock,
-                'integrationData' => $this->integrationDataMock,
-                'registry' => $this->coreRegistryMock
-            ]
-        );
-
-        $this->testIsEverythingAllowed(true);
+        $this->model->setCoreRegistry($this->coreRegistryMock);
     }
 
     public function testGetTree()
@@ -123,14 +101,20 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $id = 10;
 
+        $this->coreRegistryMock->expects($this->once())
+            ->method('registry')
+            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY)
+            ->willReturn(true);
+
         if ($isAllowed) {
-            $this->model->setSelectedResources([$id]);
+            $this->rootResourceMock->expects($this->exactly(2))
+                ->method('getId')
+                ->willReturnOnConsecutiveCalls($id, $id);
         } else {
-            $this->model->setSelectedResources([11]);
+            $this->rootResourceMock->expects($this->exactly(2))
+                ->method('getId')
+                ->willReturnOnConsecutiveCalls(11, $id);
         }
-        $this->rootResourceMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($id);
 
         $this->assertEquals($isAllowed, $this->model->isEverythingAllowed());
     }
