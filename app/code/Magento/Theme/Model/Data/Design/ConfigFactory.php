@@ -5,6 +5,8 @@
  */
 namespace Magento\Theme\Model\Data\Design;
 
+use Magento\Framework\App\ScopeValidatorInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Theme\Api\Data\DesignConfigDataInterface;
 use Magento\Theme\Api\Data\DesignConfigExtension;
 use Magento\Theme\Api\Data\DesignConfigInterfaceFactory;
@@ -36,44 +38,60 @@ class ConfigFactory
     protected $configExtensionFactory;
 
     /**
+     * @var ScopeValidatorInterface
+     */
+    protected $scopeValidator;
+
+    /**
      * @param DesignConfigInterfaceFactory $designConfigFactory
      * @param MetadataProviderInterface $metadataProvider
      * @param DesignConfigDataInterfaceFactory $designConfigDataFactory
      * @param DesignConfigExtensionFactory $configExtensionFactory
+     * @param ScopeValidatorInterface $scopeValidator
      */
     public function __construct(
         DesignConfigInterfaceFactory $designConfigFactory,
         MetadataProviderInterface $metadataProvider,
         DesignConfigDataInterfaceFactory $designConfigDataFactory,
-        DesignConfigExtensionFactory $configExtensionFactory
+        DesignConfigExtensionFactory $configExtensionFactory,
+        ScopeValidatorInterface $scopeValidator
     ) {
         $this->designConfigFactory = $designConfigFactory;
         $this->metadataProvider = $metadataProvider;
         $this->designConfigDataFactory = $designConfigDataFactory;
         $this->configExtensionFactory = $configExtensionFactory;
+        $this->scopeValidator = $scopeValidator;
     }
 
     /**
+     * Create Design Configuration for scope
+     *
+     * @param mixed $scope
+     * @param int $scopeId
      * @param array $data
      * @return DesignConfigInterface
+     * @throws LocalizedException
      */
-    public function create(array $data)
+    public function create($scope, $scopeId, array $data = [])
     {
+        if (!$this->scopeValidator->isValidScope($scope, $scopeId)) {
+            throw new LocalizedException(__('Invalid scope or scope id'));
+        }
         /** @var DesignConfigInterface $designConfigData */
         $designConfigData = $this->designConfigFactory->create();
-        $designConfigData->setScope($data['scope']);
-        $designConfigData->setScopeId($data['scopeId']);
+        $designConfigData->setScope($scope);
+        $designConfigData->setScopeId($scopeId);
 
         $configData = [];
         foreach ($this->metadataProvider->get() as $name => $metadata) {
+            $metadata['field'] = $name;
             /** @var DesignConfigDataInterface $configDataObject */
             $configDataObject = $this->designConfigDataFactory->create();
             $configDataObject->setPath($metadata['path']);
             $configDataObject->setFieldConfig($metadata);
-            if (!isset($data['params'][$name])) {
-                continue;
+            if (isset($data[$name])) {
+                $configDataObject->setValue($data[$name]);
             }
-            $configDataObject->setValue($data['params'][$name]);
             $configData[] = $configDataObject;
         }
         /** @var DesignConfigExtension $designConfigExtension */

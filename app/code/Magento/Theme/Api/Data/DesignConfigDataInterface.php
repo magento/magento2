@@ -7,6 +7,10 @@ namespace Magento\Theme\Api\Data;
 
 use Magento\Theme\Api\Data\DesignConfigDataExtensionInterface;
 
+/**
+ * Interface DesignConfigDataInterface
+ * @api
+ */
 interface DesignConfigDataInterface
 {
     /**#@+

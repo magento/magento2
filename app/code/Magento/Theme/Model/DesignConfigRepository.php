@@ -42,6 +42,14 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
     /**
      * @inheritDoc
      */
+    public function getByScope($scope, $scopeId)
+    {
+        return $this->configStorage->load($scope, $scopeId);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function save(DesignConfigInterface $designConfig)
     {
         if (!($designConfig->getExtensionAttributes() &&
@@ -58,6 +66,22 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
             $this->reinitableConfig->reinit();
             throw $e;
         }
+
+        return $designConfig;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(DesignConfigInterface $designConfig)
+    {
+        if (!($designConfig->getExtensionAttributes() &&
+            $designConfig->getExtensionAttributes()->getDesignConfigData())
+        ) {
+            throw new LocalizedException(__('Can not save empty config'));
+        }
+
+        $this->configStorage->delete($designConfig);
 
         return $designConfig;
     }

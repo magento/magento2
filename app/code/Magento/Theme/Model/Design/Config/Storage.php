@@ -5,19 +5,18 @@
  */
 namespace Magento\Theme\Model\Design\Config;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Framework\DB\TransactionFactory;
-use Magento\Framework\DB\Transaction;
 use Magento\Framework\App\Config\ValueInterface;
+use Magento\Theme\Model\Data\Design\ConfigFactory;
 use Magento\Theme\Model\Design\BackendModelFactory;
 
 class Storage
 {
-    /** @var Transaction */
-    protected $deleteTransaction;
-
-    /** @var Transaction */
-    protected $saveTransaction;
+    /** @var TransactionFactory */
+    protected $transactionFactory;
 
     /** @var BackendModelFactory */
     protected $backendModelFactory;
@@ -26,21 +25,60 @@ class Storage
     protected $valueChecker;
 
     /**
+     * @var ConfigFactory
+     */
+    protected $configFactory;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param TransactionFactory $transactionFactory
      * @param BackendModelFactory $backendModelFactory
      * @param ValueChecker $valueChecker
+     * @param ConfigFactory $configFactory
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         TransactionFactory $transactionFactory,
         BackendModelFactory $backendModelFactory,
-        ValueChecker $valueChecker
+        ValueChecker $valueChecker,
+        ConfigFactory $configFactory,
+        ScopeConfigInterface $scopeConfig
     ) {
-        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
-        $this->deleteTransaction = $transactionFactory->create();
-        /* @var $saveTransaction \Magento\Framework\DB\Transaction */
-        $this->saveTransaction = $transactionFactory->create();
+        $this->transactionFactory = $transactionFactory;
         $this->backendModelFactory = $backendModelFactory;
         $this->valueChecker = $valueChecker;
+        $this->configFactory = $configFactory;
+        $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * Load design config from storage
+     *
+     * @param string $scope
+     * @param mixed $scopeId
+     * @return DesignConfigInterface
+     */
+    public function load($scope, $scopeId)
+    {
+        $designConfig = $this->configFactory->create($scope, $scopeId);
+        $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
+        foreach ($fieldsData as &$fieldData) {
+            $value = $this->scopeConfig->getValue($fieldData->getPath(), $scope, $scopeId);
+            /** @var ValueInterface|Value $backendModel */
+            $backendModel = $this->backendModelFactory->create([
+                'value' => $value,
+                'scope' => $designConfig->getScope(),
+                'scopeId' => $designConfig->getScopeId(),
+                'config' => $fieldData->getFieldConfig()
+            ]);
+            $backendModel->afterLoad();
+            $fieldData->setValue($backendModel->getValue());
+        }
+        return $designConfig;
     }
 
     /**
@@ -52,8 +90,12 @@ class Storage
     public function save(DesignConfigInterface $designConfig)
     {
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
+        /* @var $saveTransaction \Magento\Framework\DB\Transaction */
+        $saveTransaction = $this->transactionFactory->create();
+        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
+        $deleteTransaction = $this->transactionFactory->create();
         foreach ($fieldsData as $fieldData) {
-            /** @var ValueInterface $backendModel */
+            /** @var ValueInterface|Value $backendModel */
             $backendModel = $this->backendModelFactory->create([
                 'value' => $fieldData->getValue(),
                 'scope' => $designConfig->getScope(),
@@ -61,18 +103,44 @@ class Storage
                 'config' => $fieldData->getFieldConfig()
             ]);
 
-            if ($this->valueChecker->isDifferentFromDefault(
-                $fieldData->getValue(),
-                $designConfig->getScope(),
-                $designConfig->getScopeId(),
-                $fieldData->getFieldConfig()['path']
-            )) {
-                $this->saveTransaction->addObject($backendModel);
+            if ($fieldData->getValue() !== null
+                && $this->valueChecker->isDifferentFromDefault(
+                    $fieldData->getValue(),
+                    $designConfig->getScope(),
+                    $designConfig->getScopeId(),
+                    $fieldData->getFieldConfig()['path']
+                )
+            ) {
+                $saveTransaction->addObject($backendModel);
             } else {
-                $this->deleteTransaction->addObject($backendModel);
+                $deleteTransaction->addObject($backendModel);
             }
         }
-        $this->saveTransaction->save();
-        $this->deleteTransaction->delete();
+        $saveTransaction->save();
+        $deleteTransaction->delete();
+    }
+
+    /**
+     * Delete design configuration from storage
+     *
+     * @param DesignConfigInterface $designConfig
+     * @return void
+     */
+    public function delete(DesignConfigInterface $designConfig)
+    {
+        $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
+        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
+        $deleteTransaction = $this->transactionFactory->create();
+        foreach ($fieldsData as $fieldData) {
+            /** @var ValueInterface|Value $backendModel */
+            $backendModel = $this->backendModelFactory->create([
+                'value' => $fieldData->getValue(),
+                'scope' => $designConfig->getScope(),
+                'scopeId' => $designConfig->getScopeId(),
+                'config' => $fieldData->getFieldConfig()
+            ]);
+            $deleteTransaction->addObject($backendModel);
+        }
+        $deleteTransaction->delete();
     }
 }

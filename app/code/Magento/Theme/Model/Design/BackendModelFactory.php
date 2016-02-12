@@ -24,6 +24,11 @@ class BackendModelFactory extends ValueFactory
     protected $metadata = [];
 
     /**
+     * @var MetadataProvider
+     */
+    protected $metadataProvider;
+
+    /**
      * @var CollectionFactory
      */
     protected $collectionFactory;
@@ -117,7 +122,7 @@ class BackendModelFactory extends ValueFactory
      * @param string $scope
      * @param string $scopeId
      * @param string $path
-     * @return null
+     * @return mixed
      */
     protected function getConfigId($scope, $scopeId, $path)
     {
