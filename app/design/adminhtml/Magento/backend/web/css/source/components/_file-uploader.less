@@ -1,0 +1,164 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Components -> Single File Uploader
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@file-uploader-preview__border-color: @color-lighter-grayish;
+@file-uploader-preview__background-color: @color-white;
+@file-uploader-preview-focus__color: @color-blue2;
+
+@file-uploader-delete-icon__color: @color-brownie;
+@file-uploader-delete-icon__hover__color: @color-brownie-vanilla;
+@file-uploader-delete-icon__font-size: 2rem;
+
+@file-uploader-muted-text__color: @color-gray62;
+
+@file-uploader-preview__width: 150px;
+@file-uploader-preview__height: @file-uploader-preview__width;
+@file-uploader-preview__opacity: 0.7;
+
+@file-uploader-spinner-dimensions: 15px;
+
+@file-uploader-dragover__background: @color-gray83;
+@file-uploader-dragover-focus__color: @color-blue2;
+
+//
+
+.file-uploader-area {
+    margin-bottom: @indent__xs;
+    position: relative;
+
+    input[type="file"] {
+        bottom: 0;
+        cursor: pointer;
+        height: 0;
+        left: 0;
+        opacity: 0;
+        padding-top: 100px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 0;
+        z-index: 3;
+
+        &:focus {
+            + .file-uploader-button {
+                box-shadow: 0 0 0 1px @file-uploader-preview-focus__color;
+            }
+        }
+    }
+}
+
+.file-uploader-button {
+    cursor: pointer;
+    display: inline-block;
+
+    &._is-dragover {
+        background: @file-uploader-dragover__background;
+        border: 1px solid @file-uploader-preview-focus__color;
+    }
+}
+
+.file-uploader-spinner {
+    background-image: url('@{baseDir}images/loader-1.gif');
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: @file-uploader-spinner-dimensions;
+    display: none;
+    height: 30px;
+    margin-left: @indent__s;
+    vertical-align: top;
+    width: 30px;
+}
+
+.file-uploader-preview {
+    background: @file-uploader-preview__background-color;
+    border: 1px solid @file-uploader-preview__border-color;
+    box-sizing: border-box;
+    cursor: pointer;
+    height: @file-uploader-preview__height;
+    line-height: 1;
+    margin-bottom: @indent__s;
+    overflow: hidden;
+    position: relative;
+    width: @file-uploader-preview__width;
+
+    .action-remove {
+        &:extend(.abs-action-reset all);
+        .lib-icon-font (
+        @icon-delete__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-size: @file-uploader-delete-icon__font-size,
+        @_icon-font-color: @file-uploader-delete-icon__color,
+        @_icon-font-color-hover: @file-uploader-delete-icon__hover__color,
+        @_icon-font-text-hide: true,
+        @_icon-font-display: block
+        );
+        bottom: 4px;
+        cursor: pointer;
+        display: block;
+        height: 27px;
+        left: 6px;
+        position: absolute;
+        text-decoration: none;
+        width: 25px;
+        z-index: 2;
+    }
+
+    &:hover {
+        .preview-image {
+            opacity: @file-uploader-preview__opacity;
+        }
+    }
+
+    .preview-image {
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        max-height: 100%;
+        max-width: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 1;
+    }
+}
+
+.file-uploader {
+    &._loading {
+        .file-uploader-spinner {
+            display: inline-block;
+        }
+    }
+
+    .admin__field-note,
+    .admin__field-error {
+        margin-bottom: @indent__s;
+    }
+
+    .file-uploader-filename {
+        word-break: break-all;
+    }
+
+    .file-uploader-meta {
+        color: @file-uploader-muted-text__color;
+    }
+
+    .admin__field-fallback-reset {
+        margin-left: @indent__s;
+    }
+
+    ._keyfocus & .action-remove {
+        &:focus {
+            box-shadow: 0 0 0 1px @file-uploader-preview-focus__color;
+        }
+    }
+}
