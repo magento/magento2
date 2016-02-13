@@ -4,7 +4,7 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/abstract'
+    'Magento_Ui/js/form/element/single-checkbox'
 ], function (Abstract) {
     'use strict';
 
@@ -19,20 +19,6 @@ define([
             } else {
                 this.disabled(true);
             }
-        },
-
-        /**
-         * Set real 'url_key' to 'url_key_create_redirect' when field is checked
-         */
-        onUpdate: function () {
-            this._super();
-
-            if (this.value()) {
-                this.value(this.initialValue);
-            } else {
-                this.value(0);
-            }
-            this._super();
         }
     });
 });
