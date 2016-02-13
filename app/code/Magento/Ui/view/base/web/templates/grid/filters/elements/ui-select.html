@@ -107,13 +107,13 @@
                     data-bind="attr: {for: uid+2}
             ">
             </label>
-            <div
-                    data-bind="text: itemsQuantity"
-                    class="admin__action-multiselect-search-count">
+            <div if="itemsQuantity"
+                 data-bind="text: itemsQuantity"
+                 class="admin__action-multiselect-search-count">
             </div>
         </div>
         <!-- /ko -->
-        <ul class="admin__action-multiselect-menu-inner"
+        <ul class="admin__action-multiselect-menu-inner _root"
             data-bind="
                 event: {
                     mousemove: function(data, event){onMousemove($data, $index(), event)}
