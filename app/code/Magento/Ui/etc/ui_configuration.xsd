@@ -100,7 +100,6 @@
                     <xs:element type="insertFormConfiguration" name="insertForm"/>
                     <xs:element type="insertListingConfiguration" name="insertListing"/>
                     <xs:element type="modalConfiguration" name="modal"/>
-                    <xs:element type="dynamicRowsConfiguration" name="dynamicRows"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
