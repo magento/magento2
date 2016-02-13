@@ -65,6 +65,10 @@ define(
                         self.bindHandler(elem, delay);
                         postcodeElement = elem;
                     }
+                    
+                    if (elem.index === 'region_id') {
+                        self.bindHandler(elem, delay);
+                    }
                 });
             },
 
