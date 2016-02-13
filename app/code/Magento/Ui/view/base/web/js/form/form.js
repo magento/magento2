@@ -3,23 +3,24 @@
  * See COPYING.txt for license details.
  */
 define([
+    'jquery',
     'underscore',
     'Magento_Ui/js/lib/spinner',
     'rjsResolver',
     './adapter',
-    'uiCollection'
-], function (_, loader, resolver, adapter, Collection) {
+    'uiCollection',
+    'mage/validation'
+], function ($, _, loader, resolver, adapter, Collection) {
     'use strict';
 
     /**
      * Collect form data.
      *
-     * @param {String} selector
+     * @param {Array} items
      * @returns {Object}
      */
-    function collectData(selector) {
-        var items = document.querySelectorAll(selector),
-            result = {};
+    function collectData(items) {
+        var result = {};
 
         items = Array.prototype.slice.call(items);
 
@@ -43,8 +44,28 @@ define([
         return result;
     }
 
+    /**
+     * Check if fields is valid.
+     * 
+     * @param {Array}items
+     * @returns {Boolean}
+     */
+    function isValidFields(items) {
+        var result = true;
+
+        _.each(items, function (item) {
+            if (!$.validator.validateElement(item)) {
+                result = false;
+            }
+        });
+
+        return result;
+    }
+
     return Collection.extend({
         defaults: {
+            additionalFields: [],
+            additionalInvalid: false,
             selectorPrefix: false,
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
@@ -132,7 +153,7 @@ define([
         save: function (redirect, data) {
             this.validate();
 
-            if (!this.source.get('params.invalid')) {
+            if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 this.setAdditionalData(data)
                     .submit(redirect);
             }
@@ -158,7 +179,7 @@ define([
          * @param {String} redirect
          */
         submit: function (redirect) {
-            var additional = collectData(this.selector),
+            var additional = collectData(this.additionalFields),
                 source = this.source;
 
             _.each(additional, function (value, name) {
@@ -183,8 +204,10 @@ define([
          * Validates each element and returns true, if all elements are valid.
          */
         validate: function () {
+            this.additionalFields = document.querySelectorAll(this.selector);
             this.source.set('params.invalid', false);
             this.source.trigger('data.validate');
+            this.set('additionalInvalid', !isValidFields(this.additionalFields));
         },
 
 
