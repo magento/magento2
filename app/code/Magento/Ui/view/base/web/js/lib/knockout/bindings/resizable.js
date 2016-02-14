@@ -34,7 +34,7 @@ define([
                 selector: selector
             }, function (elem) {
                 size = key.indexOf('Height') !== -1 ? $(elem).outerHeight(true) : $(elem).outerWidth(true);
-                $(ui.element).resizable('option', key, size);
+                $(ui.element).resizable('option', key, size + 1);
             });
         }, this);
     }
