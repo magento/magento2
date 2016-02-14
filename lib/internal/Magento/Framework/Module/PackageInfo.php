@@ -79,10 +79,11 @@ class PackageInfo
     {
         if ($this->packageModuleMap === null) {
             $jsonData = $this->reader->getComposerJsonFiles()->toArray();
-            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
-                $key = $moduleDir . '/composer.json';
-                if (isset($jsonData[$key]) && $jsonData[$key]) {
-                    $packageData = \Zend_Json::decode($jsonData[$key]);
+
+            foreach ($jsonData as $packageData) {
+                $packageData = \Zend_Json::decode($packageData);
+                if (isset($packageData['type']) && $packageData['type'] == 'magento2-module') {
+                    $moduleName = $this->determineModuleName($packageData);
                     if (isset($packageData['name'])) {
                         $this->packageModuleMap[$packageData['name']] = $moduleName;
                     }
@@ -99,6 +100,29 @@ class PackageInfo
             }
         }
     }
+
+    /**
+     * @param $packageData
+     *
+     * @return mixed|null|string
+     */
+    public function determineModuleName($packageData)
+    {
+        $packageName = $packageData['name'];
+        if ($this->isMagentoPackage($packageName)) {
+            $packageName = $this->convertPackageNameToModuleName($packageName);
+        } else {
+            //convention Vendor_ModuleName = first psr-4 entry
+            if (isset($packageData['autoload']['psr-4'])) {
+                $firstEntry = key($packageData['autoload']['psr-4']);
+                $firstEntry = rtrim($firstEntry, '\\');
+                $packageName = str_replace('\\', '_', $firstEntry);
+            }
+        }
+
+        return $packageName;
+    }
+
 
     /**
      * Get module name of a package

@@ -82,7 +82,7 @@ class Reader
      */
     public function getComposerJsonFiles()
     {
-        return $this->fileIteratorFactory->create($this->getFiles('composer.json'));
+        return $this->fileIteratorFactory->create($this->getFiles('composer.json', '', true));
     }
 
     /**
@@ -92,7 +92,7 @@ class Reader
      * @param string $subDir
      * @return array
      */
-    private function getFiles($filename, $subDir = '')
+    private function getFiles($filename, $subDir = '', $checkParent = false)
     {
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
@@ -102,6 +102,13 @@ class Reader
             $path = $directoryRead->getRelativePath($file);
             if ($directoryRead->isExist($path)) {
                 $result[] = $file;
+            } elseif ($checkParent) {
+                $file = dirname($moduleEtcDir) . '/' . $filename;
+                $directoryRead = $this->readFactory->create(dirname($moduleEtcDir));
+                $path = $directoryRead->getRelativePath($file);
+                if ($directoryRead->isExist($path)) {
+                    $result[] = $file;
+                }
             }
         }
         return $result;
