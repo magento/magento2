@@ -37,6 +37,11 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
      */
     protected $jsonEncoderMock;
 
+    /**
+     * @var \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imagesConfigMock;
+
     protected function setUp()
     {
         $this->mockContext();
@@ -49,10 +54,15 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->imagesConfigMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new \Magento\Catalog\Block\Product\View\Gallery(
             $this->context,
             $this->arrayUtils,
-            $this->jsonEncoderMock
+            $this->jsonEncoderMock,
+            $this->imagesConfigMock
         );
     }
 

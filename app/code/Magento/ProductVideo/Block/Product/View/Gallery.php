@@ -19,23 +19,29 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     protected $mediaHelper;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param \Magento\ProductVideo\Helper\Media $mediaHelper
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param array $data
+     * @param \Magento\Catalog\Block\Product\Context                              $context
+     * @param \Magento\Framework\Stdlib\ArrayUtils                                $arrayUtils
+     * @param \Magento\Framework\Json\EncoderInterface                            $jsonEncoder
+     * @param \Magento\ProductVideo\Helper\Media                                  $mediaHelper
+     * @param \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory
+     * @param array                                                               $galleryImagesConfig
+     * @param array                                                               $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\ProductVideo\Helper\Media $mediaHelper,
+        \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory,
+        array $galleryImagesConfig = [],
         array $data = []
     ) {
         parent::__construct(
             $context,
             $arrayUtils,
             $jsonEncoder,
+            $imagesConfigFactory,
+            $galleryImagesConfig,
             $data
         );
         $this->mediaHelper = $mediaHelper;

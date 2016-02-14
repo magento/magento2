@@ -11,9 +11,10 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
-use Magento\Framework\Data\Collection;
-use Magento\Framework\Json\EncoderInterface;
 use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\DataObject;
 
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -28,19 +29,29 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $jsonEncoder;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param EncoderInterface $jsonEncoder
-     * @param array $data
+     * @var DataObject
+     */
+    protected $galleryImagesConfig;
+
+    /**
+     * @param \Magento\Catalog\Block\Product\Context                              $context
+     * @param \Magento\Framework\Stdlib\ArrayUtils                                $arrayUtils
+     * @param \Magento\Framework\Json\EncoderInterface                            $jsonEncoder
+     * @param \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory
+     * @param array                                                               $galleryImagesConfig
+     * @param array                                                               $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory,
+        array $galleryImagesConfig = [],
         array $data = []
     ) {
         $this->jsonEncoder = $jsonEncoder;
         parent::__construct($context, $arrayUtils, $data);
+        $this->galleryImagesConfig = $imagesConfigFactory->create($galleryImagesConfig);
     }
 
     /**
@@ -54,25 +65,15 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         $images = $product->getMediaGalleryImages();
         if ($images instanceof \Magento\Framework\Data\Collection) {
             foreach ($images as $image) {
-                /* @var \Magento\Framework\DataObject $image */
-                $image->setData(
-                    'small_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_small')
-                        ->setImageFile($image->getFile())
-                        ->getUrl()
-                );
-                $image->setData(
-                    'medium_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_medium_no_frame')
-                        ->setImageFile($image->getFile())
-                        ->getUrl()
-                );
-                $image->setData(
-                    'large_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_large_no_frame')
-                        ->setImageFile($image->getFile())
-                        ->getUrl()
-                );
+                /** @var DataObject $image */
+                $this->galleryImagesConfig->walk(function (DataObject $imageConfig) use ($image, $product) {
+                    /** @var Product $product */
+                    $productImage = $this->_imageHelper->init($product,
+                        $imageConfig['image_id'])
+                        ->setImageFile($image->getData('file'))
+                        ->getUrl();
+                    $image->setData($imageConfig->getData('data_object_key'), $productImage);
+                });
             }
         }
 
@@ -107,15 +108,22 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     public function getGalleryImagesJson()
     {
         $imagesItems = [];
+        /** @var DataObject $image */
         foreach ($this->getGalleryImages() as $image) {
-            $imagesItems[] = [
-                'thumb' => $image->getData('small_image_url'),
-                'img' => $image->getData('medium_image_url'),
-                'full' => $image->getData('large_image_url'),
-                'caption' => $image->getLabel(),
-                'position' => $image->getPosition(),
-                'isMain' => $this->isMainImage($image),
-            ];
+            $imageItem = new DataObject([
+                'caption'  => $image->getData('label'),
+                'position' => $image->getData('position'),
+                'isMain'   => $this->isMainImage($image),
+            ]);
+            $this->galleryImagesConfig->walk(function (
+                DataObject $imageConfig
+            ) use ($imageItem, $image) {
+                $imageItem->setData(
+                    $imageConfig->getData('json_object_key'),
+                    $image->getData($imageConfig->getData('data_object_key'))
+                );
+            });
+            $imagesItems[] = $imageItem->toArray();
         }
         if (empty($imagesItems)) {
             $imagesItems[] = [
