@@ -96,6 +96,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
     {
         /** @var Collection $collection */
         $collection = parent::getCollection();
+        $collection->addAttributeToSelect('status');
 
         if (!$this->getProduct()) {
             return $collection;
@@ -153,6 +154,10 @@ abstract class AbstractDataProvider extends ProductDataProvider
             return null;
         }
 
-        return $this->product = $this->productRepository->getById($id);
+        if (!($storeId = $this->request->getParam('current_store_id'))) {
+            return null;
+        }
+
+        return $this->product = $this->productRepository->getById($id, false, $storeId);
     }
 }

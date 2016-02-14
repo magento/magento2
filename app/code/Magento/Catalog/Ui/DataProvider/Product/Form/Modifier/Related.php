@@ -8,6 +8,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\DynamicRows;
@@ -18,6 +19,7 @@ use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
 use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Class Related
@@ -67,24 +69,40 @@ class Related extends AbstractModifier
     protected $imageHelper;
 
     /**
+     * @var Status
+     */
+    protected $status;
+
+    /**
+     * @var AttributeSetRepositoryInterface
+     */
+    protected $attributeSetRepository;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ProductLinkRepositoryInterface $productLinkRepository
      * @param ProductRepositoryInterface $productRepository
      * @param ImageHelper $imageHelper
+     * @param Status $status
+     * @param AttributeSetRepositoryInterface $attributeSetRepository
      */
     public function __construct(
         LocatorInterface $locator,
         UrlInterface $urlBuilder,
         ProductLinkRepositoryInterface $productLinkRepository,
         ProductRepositoryInterface $productRepository,
-        ImageHelper $imageHelper
+        ImageHelper $imageHelper,
+        Status $status,
+        AttributeSetRepositoryInterface $attributeSetRepository
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
         $this->productLinkRepository = $productLinkRepository;
         $this->productRepository = $productRepository;
         $this->imageHelper = $imageHelper;
+        $this->status = $status;
+        $this->attributeSetRepository = $attributeSetRepository;
     }
 
     /**
@@ -146,11 +164,19 @@ class Related extends AbstractModifier
                 }
 
                 /** @var \Magento\Catalog\Model\Product $linkedProduct */
-                $linkedProduct = $this->productRepository->get($linkItem->getLinkedProductSku());
+                $linkedProduct = $this->productRepository->get(
+                    $linkItem->getLinkedProductSku(),
+                    false,
+                    $this->locator->getStore()->getId()
+                );
                 $data[$productId]['links'][$dataScope][] = [
                     'id' => $linkedProduct->getId(),
                     'thumbnail' => $this->imageHelper->init($linkedProduct, 'product_listing_thumbnail')->getUrl(),
                     'name' => $linkedProduct->getName(),
+                    'status' => $this->status->getOptionText($linkedProduct->getStatus()),
+                    'attribute_set' => $this->attributeSetRepository
+                        ->get($linkedProduct->getAttributeSetId())
+                        ->getAttributeSetName(),
                     'sku' => $linkItem->getLinkedProductSku(),
                     'price' => $linkedProduct->getPrice(),
                     'position' => $linkItem->getPosition(),
@@ -159,6 +185,7 @@ class Related extends AbstractModifier
         }
 
         $data[$productId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
+        $data[$productId][self::DATA_SOURCE_DEFAULT]['current_store_id'] = $this->locator->getStore()->getId();
 
         return $data;
     }
@@ -412,10 +439,12 @@ class Related extends AbstractModifier
                                 'behaviourType' => 'simple',
                                 'externalFilterMode' => true,
                                 'imports' => [
-                                    'productId' => '${ $.provider }:data.product.current_product_id'
+                                    'productId' => '${ $.provider }:data.product.current_product_id',
+                                    'storeId' => '${ $.provider }:data.product.current_store_id',
                                 ],
                                 'exports' => [
-                                    'productId' => '${ $.externalProvider }:params.current_product_id'
+                                    'productId' => '${ $.externalProvider }:params.current_product_id',
+                                    'storeId' => '${ $.externalProvider }:params.current_store_id',
                                 ]
                             ],
                         ],
@@ -501,8 +530,10 @@ class Related extends AbstractModifier
                             ],
                         ],
                         'name' => $this->getTextColumn('name', false, 'Name', 20),
-                        'sku' => $this->getTextColumn('sku', true, 'SKU', 30),
-                        'price' => $this->getTextColumn('price', true, 'Price', 40),
+                        'status' => $this->getTextColumn('status', true, 'Status', 30),
+                        'attribute_set' => $this->getTextColumn('attribute_set', false, 'Attribute Set', 40),
+                        'sku' => $this->getTextColumn('sku', true, 'SKU', 50),
+                        'price' => $this->getTextColumn('price', true, 'Price', 60),
                         'actionDelete' => [
                             'arguments' => [
                                 'data' => [
@@ -511,7 +542,7 @@ class Related extends AbstractModifier
                                         'componentType' => 'actionDelete',
                                         'dataType' => Text::NAME,
                                         'label' => __('Actions'),
-                                        'sortOrder' => 50,
+                                        'sortOrder' => 70,
                                         'fit' => true,
                                     ],
                                 ],
@@ -525,7 +556,7 @@ class Related extends AbstractModifier
                                         'formElement' => Input::NAME,
                                         'componentType' => Field::NAME,
                                         'dataScope' => 'position',
-                                        'sortOrder' => 60,
+                                        'sortOrder' => 80,
                                         'visible' => false,
                                     ],
                                 ],

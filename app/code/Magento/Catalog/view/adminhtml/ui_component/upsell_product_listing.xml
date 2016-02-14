@@ -53,7 +53,7 @@
             <item name="config" xsi:type="array">
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">groupedProductGrid</item>
+                        <item name="provider" xsi:type="string">upsellProductGrid</item>
                         <item name="target" xsi:type="string">selectProduct</item>
                         <item name="params" xsi:type="array">
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
@@ -105,6 +105,30 @@
                 </item>
             </argument>
         </column>
+        <column name="attribute_set_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Catalog\Model\Product\AttributeSet\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Attribute Set</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                </item>
+            </argument>
+        </column>
+        <column name="status">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Source\Status</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Status</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                </item>
+            </argument>
+        </column>
         <column name="type_id">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Catalog\Model\Product\Type</item>
@@ -113,7 +137,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Type</item>
-                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
                 </item>
             </argument>
         </column>
@@ -122,7 +146,7 @@
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">SKU</item>
-                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="sortOrder" xsi:type="number">70</item>
                 </item>
             </argument>
         </column>
@@ -132,7 +156,7 @@
                     <item name="filter" xsi:type="string">textRange</item>
                     <item name="add_field" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Price</item>
-                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="sortOrder" xsi:type="number">80</item>
                 </item>
             </argument>
         </column>
