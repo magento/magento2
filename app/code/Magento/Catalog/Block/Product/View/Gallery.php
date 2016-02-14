@@ -65,15 +65,16 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         $images = $product->getMediaGalleryImages();
         if ($images instanceof \Magento\Framework\Data\Collection) {
             foreach ($images as $image) {
-                /** @var DataObject $image */
-                $this->galleryImagesConfig->walk(function (DataObject $imageConfig) use ($image, $product) {
+                foreach($this->galleryImagesConfig->getItems() as $imageConfig) {
                     /** @var Product $product */
-                    $productImage = $this->_imageHelper->init($product,
-                        $imageConfig['image_id'])
-                        ->setImageFile($image->getData('file'))
-                        ->getUrl();
-                    $image->setData($imageConfig->getData('data_object_key'), $productImage);
-                });
+                    $image->setData(
+                        $imageConfig->getData('data_object_key'),
+                        $this->_imageHelper->init($product,
+                            $imageConfig['image_id'])
+                            ->setImageFile($image->getData('file'))
+                            ->getUrl()
+                    );
+                }
             }
         }
 
@@ -115,14 +116,12 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'position' => $image->getData('position'),
                 'isMain'   => $this->isMainImage($image),
             ]);
-            $this->galleryImagesConfig->walk(function (
-                DataObject $imageConfig
-            ) use ($imageItem, $image) {
+            foreach($this->galleryImagesConfig->getItems() as $imageConfig) {
                 $imageItem->setData(
                     $imageConfig->getData('json_object_key'),
                     $image->getData($imageConfig->getData('data_object_key'))
                 );
-            });
+            }
             $imagesItems[] = $imageItem->toArray();
         }
         if (empty($imagesItems)) {
