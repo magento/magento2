@@ -487,6 +487,8 @@ class Related extends AbstractModifier
                         'map' => [
                             'id' => 'entity_id',
                             'name' => 'name',
+                            'status' => 'status_text',
+                            'attribute_set' => 'attribute_set_text',
                             'sku' => 'sku',
                             'price' => 'price',
                             'thumbnail' => 'thumbnail_src',

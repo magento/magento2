@@ -117,6 +117,15 @@
                 </item>
             </argument>
         </column>
+        <column name="attribute_set_text" class="Magento\Catalog\Ui\Component\Listing\Columns\AttributeSetText">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">41</item>
+                    <item name="label" xsi:type="string" translate="true">AttributeSetText</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
         <column name="status">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Source\Status</item>
@@ -126,6 +135,15 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
                     <item name="sortOrder" xsi:type="number">50</item>
+                </item>
+            </argument>
+        </column>
+        <column name="status_text" class="Magento\Catalog\Ui\Component\Listing\Columns\StatusText">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">51</item>
+                    <item name="label" xsi:type="string" translate="true">StatusText</item>
+                    <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
