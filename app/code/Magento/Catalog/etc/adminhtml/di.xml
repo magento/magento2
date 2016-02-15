@@ -129,17 +129,13 @@
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Images</item>
                     <item name="sortOrder" xsi:type="number">100</item>
                 </item>
-                <item name="wysiwyg" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Wysiwyg</item>
-                    <item name="sortOrder" xsi:type="number">110</item>
-                </item>
                 <item name="related" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Related</item>
-                    <item name="sortOrder" xsi:type="number">120</item>
+                    <item name="sortOrder" xsi:type="number">110</item>
                 </item>
                 <item name="attributes" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Attributes</item>
-                    <item name="sortOrder" xsi:type="number">130</item>
+                    <item name="sortOrder" xsi:type="number">120</item>
                 </item>
             </argument>
         </arguments>
