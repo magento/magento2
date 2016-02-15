@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Security\Controller\Session;
+namespace Magento\Security\Controller\Adminhtml\Session;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
