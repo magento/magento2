@@ -94,9 +94,8 @@ abstract class AbstractDataProviderTest extends \PHPUnit_Framework_TestCase
         $this->productLinkRepositoryMock->expects($this->once())
             ->method('getList')
             ->willReturn([]);
-        $this->requestMock->expects($this->once())
+        $this->requestMock->expects($this->exactly(2))
             ->method('getParam')
-            ->with('current_product_id')
             ->willReturn(1);
 
         $this->assertInstanceOf(Collection::class, $this->getModel()->getCollection());
