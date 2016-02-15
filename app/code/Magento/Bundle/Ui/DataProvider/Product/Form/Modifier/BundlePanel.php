@@ -521,6 +521,7 @@ class BundlePanel extends AbstractModifier
                     'arguments' => [
                         'data' => [
                             'config' => [
+                                'component' => 'Magento_Bundle/js/components/bundle-checkbox',
                                 'componentType' => Form\Field::NAME,
                                 'dataType' => Form\Element\DataType\Boolean::NAME,
                                 'formElement' => Form\Element\Checkbox::NAME,

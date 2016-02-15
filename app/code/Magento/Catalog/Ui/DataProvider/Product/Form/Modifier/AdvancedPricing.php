@@ -525,6 +525,7 @@ class AdvancedPricing extends AbstractModifier
                     'label' => __('Special Price From'),
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
+                    'component' => 'Magento_Ui/js/form/components/group',
                     'scopeLabel' =>
                         $this->arrayManager->get($pathFrom . '/arguments/data/config/scopeLabel', $this->meta),
                 ]
@@ -578,6 +579,7 @@ class AdvancedPricing extends AbstractModifier
             'componentType' => Modal::NAME,
             'dataScope' => '',
             'provider' => 'product_form.product_form_data_source',
+            'onCancel' => 'actionCancel',
             'options' => [
                 'title' => __('Advanced Pricing'),
                 'buttons' => [
@@ -604,6 +606,20 @@ class AdvancedPricing extends AbstractModifier
                 ],
             ],
         ];
+
+        $this->meta = $this->arrayManager->merge(
+            $this->getElementArrayPath($this->meta, static::CONTAINER_PREFIX . AttributeConstantsInterface::CODE_PRICE),
+            $this->meta,
+            [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'component' => 'Magento_Ui/js/form/components/group',
+                        ],
+                    ],
+                ],
+            ]
+        );
 
         $this->meta['advanced_pricing_modal']['children']['advanced-pricing'] = $this->meta['advanced-pricing'];
         unset($this->meta['advanced-pricing']);

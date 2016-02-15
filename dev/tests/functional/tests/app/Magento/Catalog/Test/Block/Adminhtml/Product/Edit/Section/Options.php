@@ -30,7 +30,7 @@ class Options extends Section
      *
      * @var string
      */
-    protected $newCustomOptionRow = '[data-index="custom_options"] [data-role="grid"] tbody tr:nth-child(1)';
+    protected $newCustomOptionRow = '[data-index="custom_options"] [data-role="grid"] tbody tr:nth-child(%d)';
 
     /**
      * Add an option button.
