@@ -125,6 +125,7 @@ class Grouped extends AbstractModifier
         $product = $this->locator->getProduct();
         $modelId = $product->getId();
         if ($modelId) {
+            $storeId = $this->locator->getStore()->getId();
             /** @var \Magento\Framework\Currency $currency */
             $currency = $this->localeCurrency->getCurrency($this->locator->getBaseCurrencyCode());
             $data[$product->getId()]['links'][self::LINK_TYPE] = [];
@@ -133,7 +134,11 @@ class Grouped extends AbstractModifier
                     continue;
                 }
                 /** @var \Magento\Catalog\Api\Data\ProductInterface $linkedProduct */
-                $linkedProduct = $this->productRepository->get($linkItem->getLinkedProductSku());
+                $linkedProduct = $this->productRepository->get(
+                    $linkItem->getLinkedProductSku(),
+                    false,
+                    $storeId
+ 	 	 	 	);
                 $data[$modelId]['links'][self::LINK_TYPE][] = [
                     'id' => $linkedProduct->getId(),
                     'name' => $linkedProduct->getName(),
@@ -149,6 +154,8 @@ class Grouped extends AbstractModifier
                         ->getAttributeSetName(),
                 ];
             }
+
+            $data[$modelId][self::DATA_SOURCE_DEFAULT]['current_store_id'] = $storeId;
         }
         return $data;
     }
@@ -316,6 +323,12 @@ class Grouped extends AbstractModifier
                         'dataLinks' => ['imports' => false, 'exports' => true],
                         'behaviourType' => 'simple',
                         'externalFilterMode' => true,
+                        'imports' => [
+                            'storeId' => '${ $.provider }:data.product.current_store_id',
+                        ],
+                        'exports' => [
+                            'storeId' => '${ $.externalProvider }:params.current_store_id',
+                        ],
                     ],
                 ],
             ],
