@@ -537,8 +537,8 @@ define([
         setDifferedFromDefault: function () {
             var recordData = utils.copy(this.recordData());
 
-            Array.isArray(recordData) && recordData.forEach(function(item) {
-                delete item.record_id;
+            Array.isArray(recordData) && recordData.forEach(function (item) {
+                delete item['record_id'];
             });
 
             this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
