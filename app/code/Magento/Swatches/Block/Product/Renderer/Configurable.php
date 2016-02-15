@@ -37,11 +37,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     const CONFIGURABLE_RENDERER_TEMPLATE = 'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
 
     /**
-     * When we init media gallery empty image types contain this value.
-     */
-    const EMPTY_IMAGE_VALUE = 'no_selection';
-
-    /**
      * Action name for ajax request
      */
     const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
@@ -276,11 +271,19 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function getVariationMedia($attributeCode, $optionId)
     {
-        $variationProduct = $this->swatchHelper->loadFirstVariationWithSwatchImage(
+        $variationProduct = $this->swatchHelper->loadFirstVariation(
+            'swatch_image',
             $this->getProduct(),
-            $attributeCode,
-            $optionId
+            [$attributeCode => $optionId]
         );
+
+        if (!$variationProduct) {
+            $variationProduct = $this->swatchHelper->loadFirstVariation(
+                'image',
+                $this->getProduct(),
+                [$attributeCode => $optionId]
+            );
+        }
 
         $variationMediaArray = [];
         if ($variationProduct) {
@@ -319,7 +322,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function isProductHasImage(Product $product, $imageType)
     {
-        return $product->getData($imageType) !== null && $product->getData($imageType) != self::EMPTY_IMAGE_VALUE;
+        return $product->getData($imageType) !== null && $product->getData($imageType) != SwatchData::EMPTY_IMAGE_VALUE;
     }
 
     /**

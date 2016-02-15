@@ -87,7 +87,7 @@ class ProductImage
     {
         $childProduct = $this->swatchHelperData->loadVariationByFallback($parentProduct, $filterArray);
         if ($childProduct && !$childProduct->getImage()) {
-            $childProduct = $this->swatchHelperData->loadFirstVariationWithImage($parentProduct, $filterArray);
+            $childProduct = $this->swatchHelperData->loadFirstVariation('image', $parentProduct, $filterArray);
         }
         if (!$childProduct) {
             $childProduct = $parentProduct;

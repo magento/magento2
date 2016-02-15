@@ -21,6 +21,11 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
+     * When we init media gallery empty image types contain this value.
+     */
+    const EMPTY_IMAGE_VALUE = 'no_selection';
+
+    /**
      * Default store ID
      */
     const DEFAULT_STORE_ID = 0;
@@ -154,40 +159,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
-     * @param string $attributeCode
-     * @param string|int $attributeValue
-     * @return \Magento\Catalog\Model\Product|null
-     * @throws InputException
+     * @param string $attributeCode swatch_image|image
+     * @param Product $configurableProduct
+     * @param array $requiredAttributes
+     * @return bool|Product
      */
-    public function loadFirstVariationWithSwatchImage($product, $attributeCode, $attributeValue)
+    public function loadFirstVariation($attributeCode, Product $configurableProduct, array $requiredAttributes)
     {
-        $product = $this->createSwatchProduct($product);
-        if (!$product) {
-            return null;
-        }
+        if ($this->isProductHasSwatch($configurableProduct)) {
+            $usedProducts = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
 
-        $products = $product->getTypeInstance()->getUsedProducts($product);
-        $variationProduct = null;
-        foreach ($products as $item) {
-            if ($item->getData($attributeCode) != $attributeValue) {
-                continue;
-            }
-            $media = $item->getData();
-            if (!empty($media) && isset($media['swatch_image'])) {
-                $variationProduct = $item;
-                break;
-            }
-            if ($variationProduct !== false) {
-                if (! empty($media) && isset($media['image'])) {
-                    $variationProduct = $item;
-                } else {
-                    $variationProduct = false;
+            foreach ($usedProducts as $simpleProduct) {
+                if (!in_array($simpleProduct->getData($attributeCode), [null, self::EMPTY_IMAGE_VALUE], true)
+                    && !array_diff($requiredAttributes, array_filter($simpleProduct->getData(), 'is_scalar'))
+                ) {
+                    return $this->productRepository->getById($simpleProduct->getId());
                 }
             }
         }
 
-        return $variationProduct;
+        return false;
     }
 
     /**
@@ -226,33 +217,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return false;
-    }
-
-    /**
-     * @param Product|integer $product
-     * @param array $attributes
-     * @return Product|bool|null
-     */
-    public function loadFirstVariationWithImage($product, array $attributes)
-    {
-        $product = $this->createSwatchProduct($product);
-        if (! $product) {
-            return false;
-        }
-
-        $productCollection = $this->prepareVariationCollection($product, $attributes);
-
-        $variationProduct = false;
-        foreach ($productCollection as $item) {
-            $currentProduct = $this->productRepository->getById($item->getId());
-            $media = $this->getProductMedia($currentProduct);
-            if (!empty($media) && isset($media['image'])) {
-                $variationProduct = $currentProduct;
-                break;
-            }
-        }
-
-        return $variationProduct;
     }
 
     /**
@@ -306,22 +270,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get all media for product
-     *
-     * @param Product $product
-     * @return array|bool
-     */
-    protected function getProductMedia(Product $product)
-    {
-        return array_filter(
-            $product->getMediaAttributeValues(),
-            function ($value) {
-                return $value != 'no_selection' && $value !== null;
-            }
-        );
-    }
-
-    /**
      * Method getting full media gallery for current Product
      * Array structure: [
      *  ['image'] => 'http://url/pub/media/catalog/product/2/0/blabla.jpg',
@@ -336,22 +284,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getProductMediaGallery (Product $product)
     {
-        $baseImage = '';
-
-        $productMediaAttributes = $this->getProductMedia($product);
-
-        if (isset($productMediaAttributes['image'])) {
-            $baseImage = $productMediaAttributes['image'];
+        if ($product->hasData('image')) {
+            $baseImage = $product->getData('image');
         } else {
-            foreach ($productMediaAttributes as $key => $value) {
-                if ($key != 'swatch_image' && ($value != 'no_selection' && $value !== null)) {
+            $productMediaAttributes = array_filter($product->getMediaAttributeValues(), function ($value) {
+                return $value !== self::EMPTY_IMAGE_VALUE && $value !== null;
+            });
+            foreach ($productMediaAttributes as $attributeCode => $value) {
+                if ($attributeCode !== 'swatch_image') {
                     $baseImage = (string)$value;
                     break;
                 }
             }
         }
 
-        if (!$baseImage) {
+        if (empty($baseImage)) {
             return [];
         }
 

@@ -85,7 +85,8 @@ class Media extends \Magento\Framework\App\Action\Action
 
         $product = $this->swatchHelper->loadVariationByFallback($currentConfigurable, $resultAttributes);
         if (!$product || (!$product->getImage() || $product->getImage() == 'no_selection')) {
-            $product = $this->swatchHelper->loadFirstVariationWithImage(
+            $product = $this->swatchHelper->loadFirstVariation(
+                'image',
                 $currentConfigurable,
                 $resultAttributes
             );
