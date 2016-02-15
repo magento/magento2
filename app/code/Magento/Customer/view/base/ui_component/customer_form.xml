@@ -377,6 +377,7 @@
         <field name="region">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/form/element/region_input</item>

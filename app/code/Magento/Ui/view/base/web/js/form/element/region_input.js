@@ -18,8 +18,6 @@ define([
         },
 
         /**
-         * Set visible true if no country was chosen and toggle element if region_id was changed.
-         *
          * @param {String} value
          */
         update: function (value) {
@@ -29,7 +27,7 @@ define([
                 option;
 
             if (!value) {
-                this.setVisible(true);
+                this.setVisible(false);
                 return;
             }
 
