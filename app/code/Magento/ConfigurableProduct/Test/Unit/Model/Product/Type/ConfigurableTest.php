@@ -198,9 +198,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())->method('getAssociatedProductIds')->will($this->returnValue([2]));
         $product->expects($this->any())->method('hasData')->with('_cache_instance_used_product_attribute_ids')
             ->will($this->returnValue(true));
-        $this->entityMetadata->expects($this->once())
-            ->method('getLinkField')
-            ->willReturn('link');
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods([
                 'getConfigurableProductOptions',
@@ -215,6 +212,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnMap($dataMap);
+        $product->expects(self::exactly(1))
+            ->method('getId')
+            ->willReturn(1);
         $attribute = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute')
             ->disableOriginalConstructor()
             ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__wakeup', '__sleep'])

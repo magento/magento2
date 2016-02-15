@@ -116,7 +116,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadata->expects($this->once())
+        $this->metadata->expects(self::exactly(2))
             ->method('getLinkField')
             ->willReturn('link');
         $product->expects($this->once())
@@ -124,12 +124,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->with('link')
             ->willReturn('getId value');
 
-        $configurable->expects($this->exactly(6))
+        $configurable->expects($this->exactly(7))
             ->method('getTable')
             ->will(
                 $this->returnValueMap(
                     [
                         ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
+                        ['catalog_product_entity', 'catalog_product_entity value'],
                         ['catalog_product_super_link', 'catalog_product_super_link value'],
                         ['eav_attribute', 'eav_attribute value'],
                         ['catalog_product_entity', 'catalog_product_entity value'],
@@ -156,7 +157,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ['super_attribute' => 'catalog_product_super_attribute value'],
                 [
                     'sku' => 'entity.sku',
-                    'product_id' => 'super_attribute.product_id',
+                    'product_id' => 'product_entity.entity_id',
                     'attribute_code' => 'attribute.attribute_code',
                     'option_title' => 'option_value.value',
                     'super_attribute_label' =>  'attribute_label.value'
@@ -184,10 +185,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $superAttribute,
         ];
 
-        $select->expects($this->exactly(4))
+        $select->expects($this->exactly(5))
             ->method('joinInner')
             ->will($this->returnSelf())
             ->withConsecutive(
+                [
+                    ['product_entity' => 'catalog_product_entity value'],
+                    'product_entity.link = super_attribute.product_id',
+                    []
+                ],
                 [
                     ['product_link' => 'catalog_product_super_link value'],
                     'product_link.parent_id = super_attribute.product_id',

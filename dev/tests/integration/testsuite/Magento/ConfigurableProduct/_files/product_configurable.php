@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
@@ -15,6 +16,10 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/configurable_attribute.php';
+
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = Bootstrap::getObjectManager()
+    ->create(ProductRepositoryInterface::class);
 
 /** @var $installer CategorySetup */
 $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
@@ -43,8 +48,9 @@ foreach ($options as $option) {
         ->setTestConfigurable($option->getValue())
         ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
         ->setStatus(Status::STATUS_ENABLED)
-        ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-        ->save();
+        ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
+
+    $product = $productRepository->save($product);
 
     $attributeValues[] = [
         'label' => 'test',
@@ -86,5 +92,6 @@ $product->setTypeId(Configurable::TYPE_CODE)
     ->setSku('configurable')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1])
-    ->save();
+    ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
+
+$productRepository->save($product);
