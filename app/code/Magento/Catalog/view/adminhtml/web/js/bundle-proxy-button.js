@@ -5,8 +5,9 @@
 
 define([
     'Magento_Ui/js/form/components/button',
+    'underscore',
     'uiRegistry'
-], function (Button, registry) {
+], function (Button, _, registry) {
     'use strict';
 
     return Button.extend({
@@ -63,7 +64,7 @@ define([
         action: function () {
             this._super();
             this.source.set(this.currentRecordNamespace, this.name);
-            this.source.set(this.listingDataProvider, this.value())
+            this.source.set(this.listingDataProvider, this.value());
 
             return this;
         },
