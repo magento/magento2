@@ -134,6 +134,11 @@ class Eav extends AbstractModifier
     private $translitFilter;
 
     /**
+     * @var array
+     */
+    private $bannedInputTypes = ['media_image'];
+
+    /**
      * Initialize dependencies
      *
      * @param LocatorInterface $locator
@@ -218,7 +223,12 @@ class Eav extends AbstractModifier
     protected function getAttributesMeta(array $attributes, $groupCode)
     {
         $meta = [];
+
         foreach ($attributes as $sortKey => $attribute) {
+            if (in_array($attribute->getFrontendInput(), $this->bannedInputTypes)) {
+                continue;
+            }
+
             $code = $attribute->getAttributeCode();
             $canDisplayService = $this->canDisplayUseDefault($attribute);
             $usedDefault = $this->usedDefault($attribute);
