@@ -11,6 +11,7 @@
             <item name="config" xsi:type="array">
                 <item name="dataScope" xsi:type="string">data.product</item>
                 <item name="provider" xsi:type="string">product_form.product_form_data_source</item>
+                <item name="onCancel" xsi:type="string">actionCancel</item>
                 <item name="options" xsi:type="array">
                     <item name="title" xsi:type="string">Advanced Inventory</item>
                     <item name="buttons" xsi:type="array">
@@ -88,16 +89,19 @@
             <field name="qty">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
                         <item name="label" xsi:type="string" translate="true">Qty</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">quantity_and_stock_status.qty</item>
                         <item name="validation" xsi:type="array">
                             <item name="validate-number" xsi:type="boolean">true</item>
+                            <item name="validate-digits" xsi:type="boolean">true</item>
                         </item>
                         <item name="sortOrder" xsi:type="number">200</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                            <item name="handleChanges" xsi:type="string">${$.provider}:data.product.stock_data.is_qty_decimal</item>
                         </item>
                     </item>
                 </argument>
@@ -162,12 +166,17 @@
                 <field name="min_sale_qty">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">min_sale_qty</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
+                                <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="imports" xsi:type="array">
+                                <item name="handleChanges" xsi:type="string">${$.provider}:data.product.stock_data.is_qty_decimal</item>
+                            </item>
                         </item>
                     </argument>
                 </field>
@@ -236,14 +245,11 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Qty Uses Decimals</item>
-                        <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/decimal-qty</item>
                         <item name="formElement" xsi:type="string">select</item>
                         <item name="dataScope" xsi:type="string">stock_data.is_qty_decimal</item>
                         <item name="value" xsi:type="number">0</item>
                         <item name="sortOrder" xsi:type="number">600</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
-                        <item name="quantityIncrements" xsi:type="string">index=qty_increments</item>
-                        <item name="minSaleQuantity" xsi:type="string">index=min_sale_qty</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
@@ -290,7 +296,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/backorders</item>
-                            <item name="deferredStockUpdate" xsi:type="string">index=container_deferred_stock_update</item>
+                            <item name="deferredStockUpdate" xsi:type="string">ns = ${ $.ns }, index=container_deferred_stock_update</item>
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataScope" xsi:type="string">backorders</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
@@ -459,12 +465,17 @@
                 <field name="qty_increments">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">qty_increments</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
+                                <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="imports" xsi:type="array">
+                                <item name="handleChanges" xsi:type="string">${$.provider}:data.product.stock_data.is_qty_decimal</item>
+                            </item>
                         </item>
                     </argument>
                 </field>

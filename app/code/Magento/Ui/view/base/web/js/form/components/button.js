@@ -16,9 +16,10 @@ define([
             additionalClasses: {},
             displayArea: 'outsideGroup',
             displayAsLink: false,
-            visible: true,
             elementTmpl: 'ui/form/element/button',
-            template: 'ui/form/components/button/simple'
+            template: 'ui/form/components/button/simple',
+            visible: true,
+            disabled: false
         },
 
         /**
@@ -29,6 +30,15 @@ define([
         initialize: function () {
             return this._super()
                 ._setClasses();
+        },
+
+        /** @inheritdoc */
+        initObservable: function () {
+            return this._super()
+                .observe([
+                    'visible',
+                    'disabled'
+                ]);
         },
 
         /**

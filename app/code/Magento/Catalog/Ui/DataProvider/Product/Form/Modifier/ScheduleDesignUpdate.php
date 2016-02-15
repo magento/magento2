@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Grouper;
+use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class ScheduleDesignUpdateMetaProvider customizes Schedule Design Update panel
@@ -20,16 +20,16 @@ class ScheduleDesignUpdate extends AbstractModifier
     /**#@-*/
 
     /**
-     * @var Grouper
+     * @var ArrayManager
      */
-    protected $grouper;
+    protected $arrayManager;
 
     /**
-     * @param Grouper $grouper
+     * @param ArrayManager $arrayManager
      */
-    public function __construct(Grouper $grouper)
+    public function __construct(ArrayManager $arrayManager)
     {
-        $this->grouper = $grouper;
+        $this->arrayManager = $arrayManager;
     }
 
     /**
@@ -37,6 +37,7 @@ class ScheduleDesignUpdate extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
+        //return $meta;
         return $this->customizeDateRangeField($meta);
     }
 
@@ -63,58 +64,47 @@ class ScheduleDesignUpdate extends AbstractModifier
             return $meta;
         }
 
-        $groupCode = $this->getGroupCodeByField($meta, self::CODE_CUSTOM_DESIGN_FROM);
-        $parentChildren = &$meta[$groupCode]['children'];
+        $fromFieldPath = $this->getElementArrayPath($meta, self::CODE_CUSTOM_DESIGN_FROM);
+        $toFieldPath = $this->getElementArrayPath($meta, self::CODE_CUSTOM_DESIGN_TO);
+        $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
+        $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
+        $scopeLabel = $this->arrayManager->get($fromFieldPath . self::META_CONFIG_PATH . '/scopeLabel', $meta);
 
-        if (isset($parentChildren[self::CODE_CUSTOM_DESIGN_FROM])) {
-            $parentChildrenConfig = $parentChildren[self::CODE_CUSTOM_DESIGN_FROM]['arguments']['data']['config'];
-            $meta = $this->grouper->groupMetaElements(
-                $meta,
-                [
-                    self::CODE_CUSTOM_DESIGN_FROM => [
-                        'meta' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'label' => __('Schedule Update From'),
-                                        'scopeLabel' => null,
-                                        'additionalClasses' => 'admin__field-date'
-                                    ]
+        $meta = $this->arrayManager->merge(
+            $fromFieldPath . self::META_CONFIG_PATH,
+            $meta,
+            [
+                'label' => __('Schedule Update From'),
+                'scopeLabel' => null,
+                'additionalClasses' => 'admin__field-date',
+            ]
+        );
+        $meta = $this->arrayManager->merge(
+            $toFieldPath . self::META_CONFIG_PATH,
+            $meta,
+            [
+                'label' => __('To'),
+                'scopeLabel' => null,
+                'additionalClasses' => 'admin__field-date',
+            ]
+        );
+        $meta = $this->arrayManager->merge(
+            $fromContainerPath . self::META_CONFIG_PATH,
+            $meta,
+            [
+                'label' => __('Schedule Update From'),
+                'additionalClasses' => 'admin__control-grouped-date',
+                'breakLine' => false,
+                'component' => 'Magento_Ui/js/form/components/group',
+                'scopeLabel' => $scopeLabel,
+            ]
+        );
+        $meta = $this->arrayManager->set(
+            $fromContainerPath . '/children/' . self::CODE_CUSTOM_DESIGN_TO,
+            $meta,
+            $this->arrayManager->get($toFieldPath, $meta)
+        );
 
-                                ]
-                            ],
-                        ],
-                    ],
-                    'custom_design_to' => [
-                        'meta' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'label' => __('To'),
-                                        'scopeLabel' => null,
-                                        'additionalClasses' => 'admin__field-date',
-                                    ],
-                                ]
-                            ]
-                        ]
-                    ],
-                    [
-                        'targetCode' => 'custom_design_date_range',
-                        'meta' => [
-                            'arguments' => [
-                                'data' => [
-                                    'label' => __('Schedule Update From'),
-                                    'additionalClasses' => 'admin__control-grouped-date',
-                                    'breakLine' => false,
-                                    'scopeLabel' => $parentChildrenConfig['scopeLabel'],
-                                ],
-                            ],
-                        ]
-                    ],
-                ]
-            );
-        }
-
-        return $meta;
+        return $this->arrayManager->remove($toContainerPath, $meta);
     }
 }

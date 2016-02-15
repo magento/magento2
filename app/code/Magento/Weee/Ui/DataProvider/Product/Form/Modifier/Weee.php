@@ -173,19 +173,54 @@ class Weee extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        'country' => [
+                        'countryState' => [
                             'arguments' => [
                                 'data' => [
                                     'config' => [
-                                        'dataType' => Text::NAME,
-                                        'formElement' => Select::NAME,
-                                        'componentType' => Field::NAME,
-                                        'dataScope' => 'country',
-                                        'label' => __('Country/State'),
+                                        'componentType' => Container::NAME,
+                                        'component' => 'Magento_Ui/js/form/components/group',
                                         'visible' => true,
-                                        'options' => $this->getCountries(),
-                                        'validation' => [
-                                            'required-entry' => true
+                                        'label' => __('Country/State'),
+                                    ],
+                                ],
+                            ],
+                            'children' => [
+                                'country' => [
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'dataType' => Text::NAME,
+                                                'formElement' => Select::NAME,
+                                                'componentType' => Field::NAME,
+                                                'dataScope' => 'country',
+                                                'visible' => true,
+                                                'options' => $this->getCountries(),
+                                                'validation' => [
+                                                    'required-entry' => true
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'region' => [
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'componentType' => Field::NAME,
+                                                'dataType' => Text::NAME,
+                                                'formElement' => Select::NAME,
+                                                'component' => 'Magento_Weee/js/regions-tax-select',
+                                                'dataScope' => 'region',
+                                                'options' => $this->getRegions(),
+                                                'filterBy' => [
+                                                    'field' => 'country'
+                                                ],
+                                                'caption' => '*',
+                                                'visible' => true,
+                                                'validation' => [
+                                                    'required-entry' => true
+                                                ],
+                                            ],
                                         ],
                                     ],
                                 ],
