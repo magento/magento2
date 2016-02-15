@@ -27,6 +27,10 @@
                     <item name="class" xsi:type="string">Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\Grouped</item>
                     <item name="sortOrder" xsi:type="number">120</item>
                 </item>
+                <item name="grouped_stock_data" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\StockData</item>
+                    <item name="sortOrder" xsi:type="number">121</item>
+                </item>
             </argument>
         </arguments>
     </type>
