@@ -10,16 +10,16 @@ define([
 
     return Select.extend({
         defaults: {
-            imports: {
-                filter: '${ $.parentName }.country:value',
-                disableSelect: '${ $.parentName }.country:value'
+            filterBy: {
+                field: 'country',
+                target: '${ $.parentName }.country:value'
             }
         },
 
         /** @inheritdoc */
-        initialize: function () {
-            return this._super()
-                .disableSelect();
+        filter: function () {
+            this._super();
+            this.disableSelect();
         },
 
         /**
