@@ -60,7 +60,7 @@ class DeleteCreditCardFromMyAccountStep implements TestStepInterface
      * @param CustomerAccountIndex $customerAccountIndex
      * @param FixtureFactory $fixtureFactory
      * @param AssertCreditCardDeletedMessage $assertCreditCardDeletedMessage
-     * @param InjectableFixture $creditCard
+     * @param array $creditCard
      * @param string $creditCardClass
      */
     public function __construct(
