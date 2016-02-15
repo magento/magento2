@@ -440,7 +440,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     /**
      * Get customer account lock status
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getAccountLock()
     {

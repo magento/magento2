@@ -26,6 +26,7 @@ use Magento\User\Api\Data\UserInterface;
  * @method string getExtra()
  * @method \Magento\User\Model\User setExtra(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
@@ -838,5 +839,45 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function setInterfaceLocale($interfaceLocale)
     {
         return $this->setData('interface_locale', $interfaceLocale);
+    }
+
+    /**
+     * Security check for admin user
+     *
+     * @param string $passwordString
+     * @return $this
+     * @throws \Magento\Framework\Exception\State\UserLockedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    public function performIdentityCheck($passwordString)
+    {
+        try {
+            $isCheckSuccessful = $this->verifyIdentity($passwordString);
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $isCheckSuccessful = false;
+        }
+        $this->_eventManager->dispatch(
+            'admin_user_authenticate_after',
+            [
+                'username' => $this->getUserName(),
+                'password' => $passwordString,
+                'user' => $this,
+                'result' => $isCheckSuccessful
+            ]
+        );
+        $this->reload();
+        if ($this->getLockExpires()) {
+            throw new \Magento\Framework\Exception\State\UserLockedException(
+                __('Your account is temporarily disabled.')
+            );
+        }
+
+        if (!$isCheckSuccessful) {
+            throw new \Magento\Framework\Exception\AuthenticationException(
+                __('You have entered an invalid password for current user.')
+            );
+        }
+
+        return $this;
     }
 }
