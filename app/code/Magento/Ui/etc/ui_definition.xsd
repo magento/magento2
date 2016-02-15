@@ -91,10 +91,10 @@
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="fieldset" name="fieldset"/>
                     <xs:element type="dataSource" name="dataSource"/>
-                    <xs:element type="dynamicRows" name="dynamicRows"/>
                     <xs:element type="insertForm" name="insertForm"/>
                     <xs:element type="insertListing" name="insertListing"/>
                     <xs:element type="modal" name="modal"/>
+                    <xs:element type="dynamicRows" name="dynamicRows"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

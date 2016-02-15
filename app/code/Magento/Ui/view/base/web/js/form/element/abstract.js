@@ -25,6 +25,7 @@ define([
             'input_type': 'input',
             placeholder: '',
             description: '',
+            labelVisible: true,
             label: '',
             labelVisible: true,
             error: '',
