@@ -70,7 +70,7 @@ class DeleteCreditCardFromMyAccountStep implements TestStepInterface
         CustomerAccountIndex $customerAccountIndex,
         FixtureFactory $fixtureFactory,
         AssertCreditCardDeletedMessage $assertCreditCardDeletedMessage,
-        InjectableFixture $creditCard,
+        array $creditCard,
         $creditCardClass = 'credit_card'
     ) {
         $this->myCreditCardsPage = $myCreditCardsPage;
@@ -96,7 +96,9 @@ class DeleteCreditCardFromMyAccountStep implements TestStepInterface
         $this->customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Credit Cards');
         $myCreditCardsBlock = $this->myCreditCardsPage->getCreditCardsBlock();
 
-        $lastFourDigits = substr($this->creditCard->getData('credit_card_number'), -4, 4);
+        $creditCardData = $this->creditCard->getData();
+        $creditCardNumber = preg_grep('/([a-z]+)_number/', array_flip($creditCardData));
+        $lastFourDigits = substr(key($creditCardNumber), -4, 4);
 
         $availableCreditCards = $myCreditCardsBlock->getCreditCards();
         if (key_exists($lastFourDigits, $availableCreditCards)) {
@@ -104,6 +106,6 @@ class DeleteCreditCardFromMyAccountStep implements TestStepInterface
         }
         $this->assertCreditCardDeletedMessage->processAssert($this->myCreditCardsPage);
 
-        return ['deletedCreditCard' => $this->creditCard];
+        return ['deletedCreditCard' => $lastFourDigits];
     }
 }
