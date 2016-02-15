@@ -10,6 +10,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Modal;
 
 /**
  * Data provider for Configurable products
@@ -65,7 +66,7 @@ class Configurable extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         if (in_array($this->locator->getProduct()->getTypeId(), self::$availableProductTypes)) {
-            $meta = array_replace_recursive(
+            $meta = array_merge_recursive(
                 $meta,
                 [
                     static::GROUP_CONFIGURABLE => [
@@ -89,6 +90,7 @@ class Configurable extends AbstractModifier
                 ]
             );
         }
+
         return $meta;
     }
 
@@ -134,9 +136,14 @@ class Configurable extends AbstractModifier
                                 'formElement' => 'container',
                                 'componentType' => 'container',
                                 'component' => 'Magento_Ui/js/form/components/button',
-                                'actions' => [],
+                                'actions' => [
+                                    [
+                                        'targetName' =>
+                                            'product_form.product_form.step-wizard-dialog',
+                                        'actionName' => 'openModal',
+                                    ],
+                                ],
                                 'title' => __('Create Configurations'),
-                                'provider' => null,
                             ],
                         ],
                     ],
