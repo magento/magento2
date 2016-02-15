@@ -19,7 +19,7 @@ class CartEmpty extends Block
      *
      * @var string
      */
-    private $linkToMainPage = './/a';
+    private $linkToMainPage = 'p a';
 
     /**
      * CSS selector for message text.
@@ -50,6 +50,6 @@ class CartEmpty extends Block
      */
     public function clickLinkToMainPage()
     {
-        $this->_rootElement->find($this->linkToMainPage, Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find($this->linkToMainPage)->click();
     }
 }
