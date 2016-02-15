@@ -16,27 +16,19 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     protected $securityCookieHelper;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
-     */
-    protected $backendAuthSession;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\User\Model\UserFactory $userFactory,
-        \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
-        \Magento\Backend\Model\Auth\Session $backendAuthSession
+        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
     ) {
         parent::__construct($context, $coreRegistry, $userFactory);
         $this->securityCookieHelper = $securityCookieHelper;
-        $this->backendAuthSession = $backendAuthSession;
     }
 
     /**
@@ -88,7 +80,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             if (!($isCurrentUserPasswordValid)) {
                 throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
-            $this->backendAuthSession->getUser()->performIdentityCheck($data[$currentUserPasswordField]);
+            $currentUser->performIdentityCheck($data[$currentUserPasswordField]);
             $model->save();
 
             $model->sendNotificationEmailsIfRequired();
