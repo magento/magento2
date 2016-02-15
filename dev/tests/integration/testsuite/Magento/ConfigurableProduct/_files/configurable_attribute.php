@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 
@@ -11,10 +12,11 @@ $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
 
 $eavConfig->clear();
 
-/* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
+
 if (!$attribute->getId()) {
+
     /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
     $attribute = Bootstrap::getObjectManager()->create(
         'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
@@ -28,7 +30,6 @@ if (!$attribute->getId()) {
             'attribute_code' => 'test_configurable',
             'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
             'is_global' => 1,
-            'default' => ['option_0'],
             'is_user_defined' => 1,
             'frontend_input' => 'select',
             'is_unique' => 0,
@@ -57,7 +58,4 @@ if (!$attribute->getId()) {
 
 /* Assign attribute to attribute set */
 $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
-
-/** @var \Magento\Eav\Model\Config $eavConfig */
-$eavConfig = Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
 $eavConfig->clear();
