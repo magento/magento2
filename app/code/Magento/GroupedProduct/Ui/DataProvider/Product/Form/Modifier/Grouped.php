@@ -478,6 +478,10 @@ class Grouped extends AbstractModifier
                                     'fit' => true,
                                     'additionalClasses' => 'admin__field-small',
                                     'sortOrder' => 80,
+                                    'validation' => [
+                                        'validate-number' => true,
+                                        'validate-digits' => true,
+                                    ],
                                 ],
                             ],
                         ],
