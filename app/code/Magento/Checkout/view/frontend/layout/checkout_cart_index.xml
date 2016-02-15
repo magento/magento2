@@ -88,7 +88,6 @@
                                                             <item name="region_id" xsi:type="array">
                                                                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
                                                                 <item name="sortOrder" xsi:type="string">112</item>
-                                                                <item name="dataScope" xsi:type="string">shippingAddress.region</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
@@ -102,13 +101,6 @@
                                                             <!-- The following items override configuration of corresponding address attributes -->
                                                             <item name="region" xsi:type="array">
                                                                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/region_input</item>
-                                                                <item name="sortOrder" xsi:type="string">111</item>
-                                                                <item name="dataScope" xsi:type="string">shippingAddress.region_input</item>
-                                                                <item name="provider" xsi:type="string">checkoutProvider</item>
-                                                                <item name="config" xsi:type="array">
-                                                                    <item name="template" xsi:type="string">ui/form/field</item>
-                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
-                                                                </item>
                                                             </item>
                                                             <item name="postcode" xsi:type="array">
                                                                 <!-- post-code field has custom UI component -->
