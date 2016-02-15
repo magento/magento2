@@ -106,15 +106,16 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getChildrenIds($parentId, $required = true)
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $select = $this->getConnection()->select()->from(
-            ['l' => $this->getMainTable()],
-            ['product_id', 'parent_id']
-        )->join(
             ['e' => $this->getTable('catalog_product_entity')],
-            'e.entity_id = l.product_id AND e.required_options = 0',
+            ['l.product_id']
+        )->join(
+            ['l' => $this->getMainTable()],
+            'l.parent_id = e.' . $metadata->getLinkField(),
             []
         )->where(
-            'parent_id IN (?)',
+            'e.entity_id IN (?) AND e.required_options = 0',
             $parentId
         );
 
@@ -136,15 +137,19 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $parentIds = [];
 
-        $select = $this->getConnection()->select()->from(
-            $this->getMainTable(),
-            ['product_id', 'parent_id']
-        )->where(
-            'product_id IN(?)',
-            $childId
-        );
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
+        $select = $this->getConnection()
+            ->select()
+            ->from(['l' => $this->getMainTable()], [])
+            ->join(
+                ['e' => $this->getTable('catalog_product_entity')],
+                'e.' . $metadata->getLinkField() . ' = l.parent_id',
+                ['e.entity_id']
+            )->where('l.product_id IN(?)', $childId);
+
         foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $parentIds[] = $row['parent_id'];
+            $parentIds[] = $row['entity_id'];
         }
 
         return $parentIds;
@@ -167,11 +172,15 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
                 [
                     'sku' => 'entity.sku',
-                    'product_id' => 'super_attribute.product_id',
+                    'product_id' => 'product_entity.entity_id',
                     'attribute_code' => 'attribute.attribute_code',
                     'option_title' => 'option_value.value',
                     'super_attribute_label' => 'attribute_label.value',
                 ]
+            )->joinInner(
+                ['product_entity' => $this->getTable('catalog_product_entity')],
+                'product_entity.' . $metadata->getLinkField() . ' = super_attribute.product_id',
+                []
             )->joinInner(
                 ['product_link' => $this->getTable('catalog_product_super_link')],
                 'product_link.parent_id = super_attribute.product_id',

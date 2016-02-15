@@ -12,8 +12,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Model\Entity\EntityMetadata;
-use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -40,16 +38,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     private $productRepository;
 
-    /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * @var EntityMetadata
-     */
-    private $metadata;
-
     protected function setUp()
     {
         $this->productRepository = Bootstrap::getObjectManager()
@@ -61,11 +49,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->model = Bootstrap::getObjectManager()
             ->create(Configurable::class);
-
-        $this->metadataPool = Bootstrap::getObjectManager()
-            ->create(MetadataPool::class);
-
-        $this->metadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
         // prevent fatal errors by assigning proper "singleton" of type instance to the product
         $this->product->setTypeInstance($this->model);
@@ -86,12 +69,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetChildrenIds()
     {
-        $ids = $this->model->getChildrenIds($this->product->getData($this->metadata->getLinkField()));
+        $ids = $this->model->getChildrenIds($this->product->getId());
         // fixture
         $this->assertArrayHasKey(0, $ids);
         $this->assertTrue(2 === count($ids[0]));
 
-        $ids = $this->model->getChildrenIds($this->product->getData($this->metadata->getLinkField()), false);
+        $ids = $this->model->getChildrenIds($this->product->getId(), false);
         $this->assertArrayHasKey(0, $ids);
         $this->assertTrue(2 === count($ids[0]));
     }
@@ -214,7 +197,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->model->getParentIdsByChild(10);
         // fixture
-        $this->assertEquals([$this->product->getData($this->metadata->getLinkField())], $result);
+        $this->assertEquals([$this->product->getId()], $result);
     }
 
     /**
@@ -430,10 +413,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->product->setCustomOptions(
             [
                 'simple_product' => new \Magento\Framework\DataObject(
-                        [
-                            'product' => new \Magento\Framework\DataObject(['weight' => 2]),
-                        ]
-                    ),
+                    [
+                        'product' => new \Magento\Framework\DataObject(['weight' => 2]),
+                    ]
+                ),
             ]
         );
         $this->assertEquals(2, $this->model->getWeight($this->product));
@@ -487,10 +470,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveProductRelationsOneChild()
     {
-        $id = $this->product->getData($this->metadata->getLinkField());
-
         $oldChildrenIds = $this->product->getTypeInstance()
-            ->getChildrenIds($id);
+            ->getChildrenIds($this->product->getId());
 
         $oldChildrenIds = reset($oldChildrenIds);
         $oneChildId = reset($oldChildrenIds);
@@ -498,7 +479,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         self::assertNotEmpty($oldChildrenIds);
         self::assertNotEmpty($oneChildId);
 
-        $product = $this->productRepository->getById(1);
+        $product = $this->productRepository->getById($this->product->getId());
 
         $extensionAttributes = $product->getExtensionAttributes();
         $extensionAttributes->setConfigurableProductLinks([$oneChildId]);
@@ -512,7 +493,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                     $oneChildId => $oneChildId
                 ]
             ],
-            $this->model->getChildrenIds($id)
+            $this->model->getChildrenIds($this->product->getId())
         );
     }
 
@@ -522,14 +503,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveProductRelationsNoChildren()
     {
-        $id = $this->product->getData($this->metadata->getLinkField());
-
         $childrenIds = $this->product->getTypeInstance()
-            ->getChildrenIds($id);
+            ->getChildrenIds($this->product->getId());
 
         self::assertNotEmpty(reset($childrenIds));
 
-        $product = $this->productRepository->getById(1, true);
+        $product = $this->productRepository->getById($this->product->getId(), true);
 
         $extensionAttributes = $product->getExtensionAttributes();
         $extensionAttributes->setConfigurableProductLinks([]);
@@ -541,7 +520,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             [
                 []
             ],
-            $this->model->getChildrenIds($id)
+            $this->model->getChildrenIds($this->product->getId())
         );
     }
 
