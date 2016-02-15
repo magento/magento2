@@ -134,11 +134,7 @@ class Grouped extends AbstractModifier
                     continue;
                 }
                 /** @var \Magento\Catalog\Api\Data\ProductInterface $linkedProduct */
-                $linkedProduct = $this->productRepository->get(
-                    $linkItem->getLinkedProductSku(),
-                    false,
-                    $storeId
- 	 	 	 	);
+                $linkedProduct = $this->productRepository->get($linkItem->getLinkedProductSku(), false, $storeId);
                 $data[$modelId]['links'][self::LINK_TYPE][] = [
                     'id' => $linkedProduct->getId(),
                     'name' => $linkedProduct->getName(),
