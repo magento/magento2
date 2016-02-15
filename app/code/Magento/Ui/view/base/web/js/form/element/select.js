@@ -6,8 +6,9 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    './abstract'
-], function (_, utils, registry, Abstract) {
+    './abstract',
+    'uiLayout'
+], function (_, utils, registry, Abstract, layout) {
     'use strict';
 
     var inputNode = {
@@ -115,6 +116,10 @@ define([
         initialize: function () {
             this._super();
 
+            if (this.customEntry) {
+                this.initInput();
+            }
+
             if (this.filterBy) {
                 this.initFilter();
             }
@@ -173,6 +178,17 @@ define([
             this.setLinks({
                 filter: filter.target
             }, 'imports');
+
+            return this;
+        },
+
+        /**
+         * Creates input from template, renders it via renderer.
+         *
+         * @returns {Object} Chainable.
+         */
+        initInput: function () {
+            layout([utils.template(inputNode, this)]);
 
             return this;
         },
@@ -244,8 +260,12 @@ define([
 
             this.options(data);
 
-            isVisible = !!data.length;
-            this.setVisible(isVisible);
+            if (this.customEntry) {
+                isVisible = !!data.length;
+
+                this.setVisible(isVisible);
+                this.toggleInput(!isVisible);
+            }
 
             return this;
         },
