@@ -84,38 +84,46 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ]
         ];
 
-        $meta['base_fieldset']['children']['attribute_options'] = [
+        $meta['base_fieldset']['children']['attribute_options_container'] = [
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'componentType' => 'dynamicRows',
-                        'dataScope' => 'attribute_options',
-                        'addButtonLabel' => __('Add Value')
+                        'formElement' => 'container',
+                        'componentType' => 'container',
+                        'component' => 'Magento_Catalog/js/components/visible-on-option',
+                        'valuesForOptions' => [
+                            'select',
+                            'multiselect'
+                        ],
+                        'dataScope' => 'attribute_options_container'
                     ]
                 ]
             ],
             'children' => [
-                'record' => [
+                'attribute_options' => [
                     'arguments' => [
                         'data' => [
                             'config' => [
-                                'componentType' => 'container',
-                                'isTemplate' => true,
-                                'is_collection' => true,
-                                'component' => 'Magento_Ui/js/dynamic-rows/record',
-//                                'positionProvider' => 'attribute_options_container.position'
-                            ],
-                        ],
+                                'componentType' => 'dynamicRows',
+                                'dataScope' => 'attribute_options',
+                                'addButtonLabel' => __('Add Value'),
+//                                'visible' => false,
+                                'imports' => [
+//                                    'visible' => 'product_attribute_add_form.frontend_input:select'
+                                ],
+                            ]
+                        ]
                     ],
                     'children' => [
-                        'attribute_options_container' => [
+                        'record' => [
                             'arguments' => [
                                 'data' => [
                                     'config' => [
-                                        'componentType' => 'fieldset',
-                                        'label' => null,
-                                        'sortOrder' => 10,
-                                        'opened' => true,
+                                        'componentType' => 'container',
+                                        'isTemplate' => true,
+                                        'is_collection' => true,
+                                        'component' => 'Magento_Ui/js/dynamic-rows/record',
+                                        'positionProvider' => 'attribute_options.position'
                                     ],
                                 ],
                             ],
@@ -163,7 +171,33 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                                             ]
                                         ]
                                     ]
-                                ]
+                                ],
+                                'position' => [
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'componentType' => Form\Field::NAME,
+                                                'dataType' => Form\Element\DataType\Text::NAME,
+                                                'formElement' => Form\Element\Input::NAME,
+                                                'dataScope' => 'position',
+                                                'visible' => false,
+                                                'additionalClasses' => ['_hidden' => true]
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'action_delete' => [
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'componentType' => 'actionDelete',
+                                                'dataType' => Form\Element\DataType\Text::NAME,
+                                                'label' => '',
+                                                'fit' => true,
+                                            ],
+                                        ],
+                                    ],
+                                ],
                             ]
                         ]
                     ]

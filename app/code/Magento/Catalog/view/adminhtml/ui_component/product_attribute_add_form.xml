@@ -95,10 +95,6 @@
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="prefer" xsi:type="string">toggle</item>
                     <item name="label" xsi:type="string" translate="true">Required</item>
-                    <!--<item name="valueMap" xsi:type="array">-->
-                        <!--<item name="true" xsi:type="number">1</item>-->
-                        <!--<item name="false" xsi:type="number">0</item>-->
-                    <!--</item>-->
                     <item name="default" xsi:type="number">0</item>
                     <item name="dataScope" xsi:type="string">is_required</item>
                 </item>
