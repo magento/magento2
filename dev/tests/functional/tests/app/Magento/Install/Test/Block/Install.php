@@ -57,7 +57,7 @@ class Install extends Block
     public function clickInstallNow()
     {
         $this->_rootElement->find($this->installNow, Locator::SELECTOR_XPATH)->click();
-        $this->waitForElementVisible($this->launchAdmin, Locator::SELECTOR_CSS);
+        $this->waitSuccessInstall();
     }
 
     /**
@@ -131,8 +131,18 @@ class Install extends Block
      *
      * @return void
      */
-    public function waitSuccessInstall()
+    private function waitSuccessInstall()
     {
-        $this->waitForElementVisible($this->successInstallText, Locator::SELECTOR_XPATH);
+        $root = $this->_rootElement;
+        $successInstallText = $this->successInstallText;
+        $launchAdmin = $this->launchAdmin;
+
+        $root->waitUntil(
+            function () use ($root, $successInstallText, $launchAdmin) {
+                $isInstallText = $root->find($successInstallText, Locator::SELECTOR_XPATH)->isVisible();
+                $isLaunchAdmin = $root->find($launchAdmin, Locator::SELECTOR_CSS)->isVisible();
+                return $isInstallText == true || $isLaunchAdmin == true ? true : null;
+            }
+        );
     }
 }
