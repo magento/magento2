@@ -47,11 +47,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     protected $securityCookieHelper;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
-     */
-    protected $backendAuthSession;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
@@ -60,7 +55,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -70,8 +64,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         \Magento\Authorization\Model\RulesFactory $rulesFactory,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
-        \Magento\Backend\Model\Auth\Session $backendAuthSession
+        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
     ) {
         parent::__construct(
             $context,
@@ -83,7 +76,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             $filterManager
         );
         $this->securityCookieHelper = $securityCookieHelper;
-        $this->backendAuthSession = $backendAuthSession;
     }
 
     /**
@@ -166,7 +158,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         $password = $this->getRequest()->getParam(
             \Magento\User\Block\Role\Tab\Info::IDENTITY_VERIFICATION_PASSWORD_FIELD
         );
-        $user = $this->backendAuthSession->getUser();
+        $user = $this->_authSession->getUser();
         $user->performIdentityCheck($password);
 
         return $this;
