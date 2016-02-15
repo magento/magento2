@@ -722,7 +722,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$filterGroup]);
         $collection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with([['attribute' => 'Field', 'eq' => 'Value']], []);
+            ->with([['attribute' => 'Field', 'eq' => 'Value']]);
         $filterGroup->expects($this->once())
             ->method('getFilters')
             ->willReturn([$filter]);
