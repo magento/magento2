@@ -91,6 +91,7 @@
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
+                                                                    <item name="customEntry" xsi:type="string">shippingAddress.region</item>
                                                                 </item>
                                                                 <!-- Value of region_id field is filtered by the value of county_id attribute -->
                                                                 <item name="filterBy" xsi:type="array">
@@ -100,7 +101,11 @@
                                                             </item>
                                                             <!-- The following items override configuration of corresponding address attributes -->
                                                             <item name="region" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/region_input</item>
+                                                                <!-- Make region attribute invisible on frontend. Corresponding input element is created by region_id field -->
+                                                                <item name="visible" xsi:type="boolean">false</item>
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="sortOrder" xsi:type="string">111</item>
+                                                                <item name="dataScope" xsi:type="string">shippingAddress.region</item>
                                                             </item>
                                                             <item name="postcode" xsi:type="array">
                                                                 <!-- post-code field has custom UI component -->
