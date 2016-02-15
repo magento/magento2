@@ -38,7 +38,7 @@ define([
             return {
                 'is_active': data.category['is_active'],
                 level: data.category.level,
-                value: data.category.id,
+                value: data.category['entity_id'],
                 label: data.category.name,
                 parent: data.category.parent
             };
