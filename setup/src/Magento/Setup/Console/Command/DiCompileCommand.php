@@ -94,7 +94,7 @@ class DiCompileCommand extends Command
     {
         $this->setName(self::NAME)
             ->setDescription(
-                'Generates DI configuration and all non-existing interceptors and factories'
+                'Generates DI configuration and all missing classes that can be auto-generated'
             );
         parent::configure();
     }
