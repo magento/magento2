@@ -173,7 +173,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $this->assertNotEmpty($body);
         $this->assertContains('><span>Quantity</span></label>', $body);
-//        $this->assertContains('>Test Configurable</label>', $body);
+        $this->assertContains('>Test Configurable</label>', $body);
         $this->assertContains('"code":"test_configurable","label":"Test Configurable"', $body);
         $this->assertContains(sprintf('"productId":"%s"', $product->getEntityId()), $body);
     }
