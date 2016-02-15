@@ -65,6 +65,18 @@ class AssertSuccessInstall extends AbstractConstraint
         $allData['baseUrl'] = (isset($allData['https']) ? $allData['https'] : $allData['baseUrl']);
         $allData['admin'] = $allData['baseUrl'] . $allData['admin'] . '/';
 
+        $this->checkInstallData($allData, $adminData, $dbData);
+    }
+
+    /**
+     * Check data on success installation page.
+     *
+     * @param array $allData
+     * @param array $adminData
+     * @param array $dbData
+     * @return void
+     */
+    private function checkInstallData(array $allData, array $adminData, array $dbData) {
         foreach ($this->adminFieldsList as $field) {
             \PHPUnit_Framework_Assert::assertEquals(
                 $allData[$field['fixture']],
