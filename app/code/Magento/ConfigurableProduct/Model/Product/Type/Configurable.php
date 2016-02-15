@@ -7,7 +7,6 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Configurable product type implementation
@@ -135,11 +134,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -159,7 +153,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -179,8 +172,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        MetadataPool $metadataPool
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -190,7 +182,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_scopeConfig = $scopeConfig;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->metadataPool = $metadataPool;
 
         parent::__construct(
             $catalogProductOption,
@@ -592,7 +583,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (!$data) {
             return;
         }
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
         foreach ($data as $attributeData) {
             /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
@@ -618,7 +608,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $configurableAttribute
                 ->addData($attributeData)
                 ->setStoreId($product->getStoreId())
-                ->setProductId($product->getData($metadata->getLinkField()))
+                ->setProductId($product->getId())
                 ->save();
         }
         /** @var $configurableAttributesCollection \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection  */
@@ -779,7 +769,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
         $attributes = $buyRequest->getSuperAttribute();
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         if ($attributes || !$this->_isStrictProcessMode($processMode)) {
             if (!$this->_isStrictProcessMode($processMode)) {
                 if (is_array($attributes)) {
@@ -816,7 +805,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
 
                 if ($subProduct) {
-                    $subProductLinkFieldId = $subProduct->getData($metadata->getLinkField());
+                    $subProductLinkFieldId = $subProduct->getId();
                     $product->addCustomOption('attributes', serialize($attributes));
                     $product->addCustomOption('product_qty_' . $subProductLinkFieldId, 1, $subProduct);
                     $product->addCustomOption('simple_product', $subProductLinkFieldId, $subProduct);
@@ -847,7 +836,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         }
                     }
 
-                    $productLinkFieldId = $product->getData($metadata->getLinkField());
+                    $productLinkFieldId = $product->getId();
                     $_result[0]->setParentProductId($productLinkFieldId)
                         ->addCustomOption('parent_product_id', $productLinkFieldId);
                     if ($this->_isStrictProcessMode($processMode)) {
