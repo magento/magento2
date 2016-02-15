@@ -462,6 +462,27 @@ class Eav extends AbstractModifier
         }
 
         $meta = $this->addWysiwyg($attribute, $meta);
+        $meta = $this->customizeCheckbox($attribute, $meta);
+
+        return $meta;
+    }
+
+    /**
+     * Customize checkboxes
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param array $meta
+     * @return array
+     */
+    private function customizeCheckbox(ProductAttributeInterface $attribute, array $meta)
+    {
+        if ($attribute->getFrontendInput() === 'boolean') {
+            $meta['arguments']['data']['config']['prefer'] = 'toggle';
+            $meta['arguments']['data']['config']['valueMap'] = [
+                'true' => '1',
+                'false' => '0',
+            ];
+        }
 
         return $meta;
     }
