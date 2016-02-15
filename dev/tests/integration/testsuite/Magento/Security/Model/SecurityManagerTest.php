@@ -156,48 +156,6 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $this->assertEquals(1, $i);
-    }
-
-    /**
-     * Here we test if admin identity check executed successfully
-     *
-     * @magentoDataFixture Magento/User/_files/user_with_role.php
-     */
-    public function testAdminIdentityCheck()
-    {
-        /** @var $user \Magento\User\Model\User */
-        $user = $this->objectManager->create('Magento\User\Model\User')->loadByUsername('adminUser');
-        $passwordString = \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD;
-        $this->securityManager->adminIdentityCheck($user, $passwordString);
-    }
-
-    /**
-     * Here we check for a wrong password
-     *
-     * @magentoDataFixture Magento/User/_files/user_with_role.php
-     * @expectedException \Magento\Framework\Exception\AuthenticationException
-     * @expectedExceptionMessage You have entered an invalid password for current user.
-     */
-    public function testAdminIdentityCheckWrongPassword()
-    {
-        /** @var $user \Magento\User\Model\User */
-        $user = $this->objectManager->create('Magento\User\Model\User')->loadByUsername('adminUser');
-        $passwordString = 'wrongPassword';
-        $this->securityManager->adminIdentityCheck($user, $passwordString);
-    }
-
-    /**
-     * Here we check for a locked user
-     *
-     * @magentoDataFixture Magento/User/_files/locked_users.php
-     * @expectedException \Magento\Framework\Exception\State\UserLockedException
-     * @expectedExceptionMessage Your account is temporarily disabled.
-     */
-    public function testAdminIdentityCheckLockExpires()
-    {
-        /** @var $user \Magento\User\Model\User */
-        $user = $this->objectManager->create('Magento\User\Model\User')->loadByUsername('adminUser2');
-        $this->securityManager->adminIdentityCheck($user, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+        $this->fail('Something went wrong. Please check method execution logic.');
     }
 }

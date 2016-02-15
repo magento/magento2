@@ -123,9 +123,10 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
-        $this->assertContains(
-            'All other open sessions for this account were terminated.',
-            (string) $this->messageManager->getMessages()->getLastAddedMessage()->getText()
+        $session->load('669e2e3d752e8', 'session_id');
+        $this->assertEquals(
+            AdminSessionInfo::LOGGED_OUT_BY_LOGIN,
+            (int) $session->getStatus()
         );
     }
 
