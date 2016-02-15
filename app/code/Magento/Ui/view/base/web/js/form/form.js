@@ -46,7 +46,7 @@ define([
 
     /**
      * Check if fields is valid.
-     * 
+     *
      * @param {Array}items
      * @returns {Boolean}
      */
@@ -54,7 +54,7 @@ define([
         var result = true;
 
         _.each(items, function (item) {
-            if (!$.validator.validateElement(item)) {
+            if (!$.validator.validateSingleElement(item)) {
                 result = false;
             }
         });
@@ -209,7 +209,6 @@ define([
             this.source.trigger('data.validate');
             this.set('additionalInvalid', !isValidFields(this.additionalFields));
         },
-
 
         /**
          * Trigger reset form data.
