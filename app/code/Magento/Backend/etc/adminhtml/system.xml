@@ -414,16 +414,16 @@
             </group>
             <group id="security" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Security</label>
-                <field id="use_form_key" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_form_key" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Add Secret Key to URLs</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Admin\Usesecretkey</backend_model>
                 </field>
-                <field id="use_case_sensitive_login" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_case_sensitive_login" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Login is Case Sensitive</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="session_lifetime" translate="label comment" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="session_lifetime" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Admin Session Lifetime (seconds)</label>
                     <comment>Values less than 60 are ignored.</comment>
                     <validate>validate-digits</validate>

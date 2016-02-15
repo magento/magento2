@@ -63,9 +63,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockRegistry;
+    protected $resourceCollection;
 
     /**
      * @var int
@@ -117,8 +117,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Api\StockRegistryInterface')
-            ->getMockForAbstractClass();
+        $this->resourceCollection = $this->getMock(
+            'Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -132,7 +137,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'stockConfiguration' => $this->stockConfiguration,
                 'stockItemRepository' => $this->stockItemRepository,
                 'resource' => $this->resource,
-                'stockRegistry' => $this->stockRegistry
+                'stockItemRegistry' => $this->resourceCollection
             ]
         );
     }
@@ -451,15 +456,5 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 3
             ],
         ];
-    }
-
-    public function testGetStockId()
-    {
-        $stockId = 1;
-        $stock = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockInterface')
-            ->getMockForAbstractClass();
-        $this->stockRegistry->expects($this->once())->method('getStock')->willReturn($stock);
-        $stock->expects($this->once())->method('getStockId')->willReturn($stockId);
-        $this->assertEquals($stockId, $this->item->getStockId());
     }
 }

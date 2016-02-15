@@ -610,4 +610,104 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->userDataMock->expects($this->once())->method('getResetPasswordLinkExpirationPeriod')->willReturn(1);
         $this->assertFalse($this->model->isResetPasswordLinkTokenExpired());
     }
+
+    public function testCheckPasswordChangeEqualToCurrent()
+    {
+        /** @var $validatorMock \Magento\Framework\Validator\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\DataObject')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->validatorObjectFactoryMock->expects($this->once())->method('create')->willReturn($validatorMock);
+        $this->validationRulesMock->expects($this->once())
+            ->method('addUserInfoRules')
+            ->with($validatorMock);
+        $validatorMock->expects($this->once())->method('isValid')->willReturn(true);
+
+        $newPassword = "NEWmYn3wpassw0rd";
+        $oldPassword = "OLDmYn3wpassw0rd";
+        $this->model->setPassword($newPassword)
+            ->setId(1)
+            ->setOrigData('password', $oldPassword);
+        $this->encryptorMock->expects($this->once())
+            ->method('isValidHash')
+            ->with($newPassword, $oldPassword)
+            ->willReturn(true);
+        $result = $this->model->validate();
+        $this->assertInternalType('array', $result);
+        $this->assertCount(1, $result);
+        $this->assertContains("Sorry, but this password has already been used.", (string)$result[0]);
+    }
+
+    public function testCheckPasswordChangeEqualToPrevious()
+    {
+        /** @var $validatorMock \Magento\Framework\Validator\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\DataObject')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->validatorObjectFactoryMock->expects($this->once())->method('create')->willReturn($validatorMock);
+        $this->validationRulesMock->expects($this->once())
+            ->method('addUserInfoRules')
+            ->with($validatorMock);
+        $validatorMock->expects($this->once())->method('isValid')->willReturn(true);
+
+        $newPassword = "NEWmYn3wpassw0rd";
+        $newPasswordHash = "new password hash";
+        $oldPassword = "OLDmYn3wpassw0rd";
+        $this->model->setPassword($newPassword)
+            ->setId(1)
+            ->setOrigData('password', $oldPassword);
+        $this->encryptorMock->expects($this->once())
+            ->method('isValidHash')
+            ->with($newPassword, $oldPassword)
+            ->willReturn(false);
+
+        $this->encryptorMock->expects($this->once())
+            ->method('getHash')
+            ->with($newPassword, false)
+            ->willReturn($newPasswordHash);
+
+        $this->resourceMock->expects($this->once())->method('getOldPasswords')->willReturn(['hash1', $newPasswordHash]);
+
+        $result = $this->model->validate();
+        $this->assertInternalType('array', $result);
+        $this->assertCount(1, $result);
+        $this->assertContains("Sorry, but this password has already been used.", (string)$result[0]);
+    }
+
+    public function testCheckPasswordChangeValid()
+    {
+        /** @var $validatorMock \Magento\Framework\Validator\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\DataObject')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->validatorObjectFactoryMock->expects($this->once())->method('create')->willReturn($validatorMock);
+        $this->validationRulesMock->expects($this->once())
+            ->method('addUserInfoRules')
+            ->with($validatorMock);
+        $validatorMock->expects($this->once())->method('isValid')->willReturn(true);
+
+        $newPassword = "NEWmYn3wpassw0rd";
+        $newPasswordHash = "new password hash";
+        $oldPassword = "OLDmYn3wpassw0rd";
+        $this->model->setPassword($newPassword)
+            ->setId(1)
+            ->setOrigData('password', $oldPassword);
+        $this->encryptorMock->expects($this->once())
+            ->method('isValidHash')
+            ->with($newPassword, $oldPassword)
+            ->willReturn(false);
+
+        $this->encryptorMock->expects($this->once())
+            ->method('getHash')
+            ->with($newPassword, false)
+            ->willReturn($newPasswordHash);
+
+        $this->resourceMock->expects($this->once())->method('getOldPasswords')->willReturn(['hash1', 'hash2']);
+
+        $result = $this->model->validate();
+        $this->assertTrue($result);
+    }
 }

@@ -37,6 +37,13 @@ class FormSections extends AbstractFormContainers
         'div[contains(@class,"fieldset-wrapper")][contains(@class,"admin__collapsible-block-wrapper")]';
 
     /**
+     * Locator for opened collapsible tab.
+     *
+     * @var string
+     */
+    protected $opened = '._show';
+
+    /**
      * Get Section class.
      *
      * @param string $sectionName
@@ -76,9 +83,11 @@ class FormSections extends AbstractFormContainers
      */
     public function openSection($sectionName)
     {
-        $this->browser->find($this->header)->hover();
-        if ($this->isCollapsible($sectionName)) {
+        if ($this->isCollapsible($sectionName) && !$this->isCollapsed($sectionName)) {
             $this->getSectionTitleElement($sectionName)->click();
+        } else {
+            //Scroll to the top of the page so that the page actions header does not overlap any controls
+            $this->browser->find($this->header)->hover();
         }
         return $this;
     }
@@ -96,5 +105,16 @@ class FormSections extends AbstractFormContainers
             return false;
         };
         return $title->find('parent::' . $this->collapsible, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Check if collapsible section is opened.
+     *
+     * @param string $sectionName
+     * @return bool
+     */
+    public function isCollapsed($sectionName)
+    {
+        return $this->getContainerElement($sectionName)->find($this->opened)->isVisible();
     }
 }

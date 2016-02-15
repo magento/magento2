@@ -3140,7 +3140,7 @@ return [
     ['Magento\Webapi\Model\IntegrationConfig', 'Magento\Integration\Model\IntegrationConfig'],
     ['Magento\Webapi\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Service\V1\Integration'],
     ['Magento\Webapi\Model\Plugin\Setup', 'Magento\Integration\Model\Plugin\Setup'],
-    ['Magento\Webapi\Model\Cache\Type', 'Magento\Framework\App\Cache\Type\Webapi'],
+    ['Magento\Framework\App\Cache\Type\Webapi', 'Magento\Webapi\Model\Cache\Type'],
     ['Magento\Framework\Module\DataSetup', 'Magento\Setup\Module\DataSetup'],
     ['Magento\Authorization\Model\ResourceModel\Setup', 'Magento\Authorization\Setup\AuthorizationFactory'],
     ['Magento\Catalog\Model\ResourceModel\Setup', 'Magento\Catalog\Setup\CategorySetup'],
@@ -3879,6 +3879,7 @@ return [
         'Magento\Framework\Component\ComponentRegistrar'
     ],
     ['Magento\Framework\App\Router\ActionList\Reader'],
+    ['Magento\User\Observer\Backend\CheckAdminPasswordChangeObserver'],
     ['Magento\Framework\View\File\AbstractCollector'],
     ['Magento\Tools\Migration\Acl\FileManager'],
     ['Magento\Tools\Migration\Acl\Formatter'],
@@ -4128,4 +4129,10 @@ return [
         'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
         'Magento\Catalog\Model\ResourceModel\Product\Gallery'
     ],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Actions'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Form'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tabs'],
+    ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit']
 ];

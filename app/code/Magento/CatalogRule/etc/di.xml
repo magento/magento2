@@ -79,10 +79,10 @@
         <arguments>
             <argument name="operations" xsi:type="array">
                 <item name="default" xsi:type="array">
-                    <item name="read" xsi:type="object">Magento\Framework\Model\Operation\Read</item>
-                    <item name="create" xsi:type="object">Magento\Framework\Model\Operation\Write\Create</item>
-                    <item name="update" xsi:type="object">Magento\Framework\Model\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="object">Magento\Framework\Model\Operation\Write\Delete</item>
+                    <item name="read" xsi:type="string">Magento\Framework\Model\Operation\Read</item>
+                    <item name="create" xsi:type="string">Magento\Framework\Model\Operation\Write\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\Model\Operation\Write\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\Model\Operation\Write\Delete</item>
                 </item>
             </argument>
         </arguments>
@@ -100,4 +100,32 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="catalog_rule_data_source" xsi:type="string">catalogRuleSearchResult</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="catalogRuleSearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">catalogrule</argument>
+            <argument name="resourceModel" xsi:type="string">\Magento\CatalogRule\Model\ResourceModel\Rule</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogRule\Model\Rule\Condition\Combine">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="form_name" xsi:type="string">catalog_rule_form</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogRule\Model\Rule\Condition\Product">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="form_name" xsi:type="string">catalog_rule_form</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\CatalogRule\Api\Data\ConditionInterface" type="Magento\CatalogRule\Model\Data\Condition" />
 </config>
