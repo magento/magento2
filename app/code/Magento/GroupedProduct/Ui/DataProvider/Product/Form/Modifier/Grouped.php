@@ -150,7 +150,6 @@ class Grouped extends AbstractModifier
                         ->getAttributeSetName(),
                 ];
             }
-
             $data[$modelId][self::DATA_SOURCE_DEFAULT]['current_store_id'] = $storeId;
         }
         return $data;
