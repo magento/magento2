@@ -9,9 +9,31 @@ use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\State\UserLockedException;
 
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
+    /**
+     * @var \Magento\Security\Helper\SecurityCookie
+     */
+    protected $securityCookieHelper;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\User\Model\UserFactory $userFactory,
+        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+    ) {
+        parent::__construct($context, $coreRegistry, $userFactory);
+        $this->securityCookieHelper = $securityCookieHelper;
+    }
+
     /**
      * Saving edited user information
      *
@@ -45,18 +67,25 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         $currentUserPassword = $this->getRequest()->getParam($currentUserPasswordField);
         $isCurrentUserPasswordValid = !empty($currentUserPassword) && is_string($currentUserPassword);
         try {
-            if (!($isCurrentUserPasswordValid && $user->verifyIdentity($currentUserPassword))) {
+            if (!($isCurrentUserPasswordValid)) {
                 throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
             if ($password !== '') {
                 $user->setPassword($password);
                 $user->setPasswordConfirmation($passwordConfirmation);
             }
+            $user->performIdentityCheck($currentUserPassword);
             $user->save();
 
             $user->sendNotificationEmailsIfRequired();
 
             $this->messageManager->addSuccess(__('You saved the account.'));
+        } catch (UserLockedException $e) {
+            $this->_auth->logout();
+            $this->securityCookieHelper->setLogoutReasonCookie(
+                \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+            );
+            $this->_redirect('adminhtml/*/');
         } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {
