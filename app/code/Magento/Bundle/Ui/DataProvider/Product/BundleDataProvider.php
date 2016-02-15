@@ -65,7 +65,9 @@ class BundleDataProvider extends ProductDataProvider
             $this->getCollection()->addAttributeToFilter(
                 'type_id',
                 $this->dataHelper->getAllowedSelectionTypes()
-            )->addFilterByRequiredOptions()->addStoreFilter(
+            );
+            $this->getCollection()->addFilterByRequiredOptions();
+            $this->getCollection()->addStoreFilter(
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             );
             $this->getCollection()->load();
