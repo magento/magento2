@@ -46,6 +46,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var Save */
     protected $controller;
 
+    /** @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $dataPersistor;
+
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -62,12 +65,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         );
         $this->redirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
         $this->configFactory = $this->getMock('Magento\Theme\Model\Data\Design\ConfigFactory', [], [], '', false);
-        $this->scopeValidator = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ScopeValidatorInterface',
-            [],
-            '',
-            false
-        );
         $this->messageManager = $this->getMockForAbstractClass(
             'Magento\Framework\Message\ManagerInterface',
             [],
@@ -98,42 +95,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->fileParams = $this->getMock('Zend\Stdlib\Parameters', [], [], '', false);
+        $this->dataPersistor = $this->getMockBuilder('Magento\Framework\App\Request\DataPersistorInterface')
+            ->getMockForAbstractClass();
         $this->controller = new Save(
+            $this->context,
             $this->designConfigRepository,
             $this->configFactory,
-            $this->scopeValidator,
-            $this->context
+            $this->dataPersistor
         );
-    }
-
-    public function testSaveWithInvalidScope()
-    {
-        $scope = 'sadfa';
-        $scopeId = 0;
-        $this->redirectFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->redirect);
-        $this->redirect->expects($this->once())
-            ->method('setPath')
-            ->with('theme/design_config/');
-        $this->request->expects($this->exactly(2))
-            ->method('getParam')
-            ->withConsecutive(
-                ['scope'],
-                ['scope_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeId
-            );
-        $this->scopeValidator->expects($this->once())
-            ->method('isValidScope')
-            ->with($scope, $scopeId)
-            ->willReturn(false);
-        $this->messageManager->expects($this->once())
-            ->method('addError')
-            ->with(__('Invalid scope or scope id'));
-        $this->assertSame($this->redirect, $this->controller->execute());
     }
 
     public function testSave()
@@ -143,9 +112,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->redirectFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->redirect);
-        $this->redirect->expects($this->once())
-            ->method('setPath')
-            ->with('theme/design_config/');
         $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->withConsecutive(
@@ -156,10 +122,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 $scope,
                 $scopeId
             );
-        $this->scopeValidator->expects($this->once())
-            ->method('isValidScope')
-            ->with($scope, $scopeId)
-            ->willReturn(true);
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(['header_default_title' => 'Default title']);
@@ -177,13 +139,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->configFactory->expects($this->once())
             ->method('create')
-            ->with([
-                'scope' => $scope,
-                'scopeId' => $scopeId,
-                'params' => [
-                    'header_default_title' => 'Default title'
-                ]
-            ])
+            ->with($scope, $scopeId, ['header_default_title' => 'Default title'])
             ->willReturn($this->designConfig);
         $this->designConfigRepository->expects($this->once())
             ->method('save')
@@ -191,6 +147,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with(__('Configuration has been saved'));
+        $this->dataPersistor->expects($this->once())
+            ->method('clear')
+            ->with('theme_design_config');
+        $this->redirect->expects($this->once())
+            ->method('setPath')
+            ->with('theme/design_config/');
 
         $this->assertSame($this->redirect, $this->controller->execute());
     }
@@ -202,9 +164,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->redirectFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->redirect);
-        $this->redirect->expects($this->once())
-            ->method('setPath')
-            ->with('theme/design_config/');
         $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->withConsecutive(
@@ -215,10 +174,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 $scope,
                 $scopeId
             );
-        $this->scopeValidator->expects($this->once())
-            ->method('isValidScope')
-            ->with($scope, $scopeId)
-            ->willReturn(true);
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(['header_default_title' => 'Default title']);
@@ -236,13 +191,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->configFactory->expects($this->once())
             ->method('create')
-            ->with([
-                'scope' => $scope,
-                'scopeId' => $scopeId,
-                'params' => [
-                    'header_default_title' => 'Default title'
-                ]
-            ])
+            ->with($scope, $scopeId, ['header_default_title' => 'Default title'])
             ->willReturn($this->designConfig);
         $this->designConfigRepository->expects($this->once())
             ->method('save')
@@ -251,6 +200,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addError')
             ->with(__('Exception message'));
+
+        $this->dataPersistor->expects($this->once())
+            ->method('set')
+            ->with('theme_design_config', ['header_default_title' => 'Default title']);
+        $this->redirect->expects($this->once())
+            ->method('setPath')
+            ->with('theme/design_config/edit', ['scope' => $scope, 'scope_id' => $scopeId]);
 
         $this->assertSame($this->redirect, $this->controller->execute());
     }
@@ -262,9 +218,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->redirectFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->redirect);
-        $this->redirect->expects($this->once())
-            ->method('setPath')
-            ->with('theme/design_config/');
         $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->withConsecutive(
@@ -275,10 +228,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 $scope,
                 $scopeId
             );
-        $this->scopeValidator->expects($this->once())
-            ->method('isValidScope')
-            ->with($scope, $scopeId)
-            ->willReturn(true);
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(['header_default_title' => 'Default title']);
@@ -296,13 +245,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->configFactory->expects($this->once())
             ->method('create')
-            ->with([
-                'scope' => $scope,
-                'scopeId' => $scopeId,
-                'params' => [
-                    'header_default_title' => 'Default title'
-                ]
-            ])
+            ->with($scope, $scopeId, ['header_default_title' => 'Default title'])
             ->willReturn($this->designConfig);
         $exception = new \Exception(__('Exception message'));
         $this->designConfigRepository->expects($this->once())
@@ -312,6 +255,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addException')
             ->with($exception, 'Something went wrong while saving this configuration: Exception message');
+
+        $this->dataPersistor->expects($this->once())
+            ->method('set')
+            ->with('theme_design_config', ['header_default_title' => 'Default title']);
+        $this->redirect->expects($this->once())
+            ->method('setPath')
+            ->with('theme/design_config/edit', ['scope' => $scope, 'scope_id' => $scopeId]);
 
         $this->assertSame($this->redirect, $this->controller->execute());
     }
