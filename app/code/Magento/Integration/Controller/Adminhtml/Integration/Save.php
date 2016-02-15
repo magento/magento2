@@ -24,9 +24,9 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
     protected $securityCookieHelper;
 
     /**
-     * @var \Magento\Security\Model\SecurityManager
+     * @var \Magento\Backend\Model\Auth\Session
      */
-    protected $securityManager;
+    protected $backendAuthSession;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -39,7 +39,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
      * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * @param \Magento\Security\Model\SecurityManager $securityManager
+     * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -53,7 +53,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
         \Magento\Framework\Escaper $escaper,
         \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection,
         \Magento\Security\Helper\SecurityCookie $securityCookieHelper,
-        \Magento\Security\Model\SecurityManager $securityManager
+        \Magento\Backend\Model\Auth\Session $backendAuthSession
     ) {
         parent::__construct(
             $context,
@@ -67,7 +67,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $integrationCollection
         );
         $this->securityCookieHelper = $securityCookieHelper;
-        $this->securityManager = $securityManager;
+        $this->backendAuthSession = $backendAuthSession;
     }
 
     /**
@@ -90,11 +90,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                     throw new LocalizedException(__('Cannot edit integrations created via config file.'));
                 }
             }
-            $password = $this->getRequest()->getParam(
-                \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD
-            );
-            $user = $this->_auth->getUser();
-            $this->securityManager->adminIdentityCheck($user, $password);
+            $this->validateUser();
             $this->processData($integrationData);
         } catch (UserLockedException $e) {
             $this->_auth->logout();
@@ -118,6 +114,24 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->redirectOnSaveError();
         }
+    }
+
+    /**
+     * Validate current user password
+     *
+     * @return $this
+     * @throws UserLockedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    protected function validateUser()
+    {
+        $password = $this->getRequest()->getParam(
+            \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD
+        );
+        $user = $this->backendAuthSession->getUser();
+        $user->performIdentityCheck($password);
+
+        return $this;
     }
 
     /**
