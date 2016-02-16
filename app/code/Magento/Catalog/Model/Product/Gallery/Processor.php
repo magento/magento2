@@ -296,7 +296,7 @@ class Processor
      */
     public function clearMediaAttribute(\Magento\Catalog\Model\Product $product, $mediaAttribute)
     {
-        $mediaAttributeCodes = array_keys($product->getMediaAttributes());
+        $mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
 
         if (is_array($mediaAttribute)) {
             foreach ($mediaAttribute as $attribute) {
@@ -321,7 +321,7 @@ class Processor
      */
     public function setMediaAttribute(\Magento\Catalog\Model\Product $product, $mediaAttribute, $value)
     {
-        $mediaAttributeCodes = array_keys($product->getMediaAttributes());
+        $mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
 
         if (is_array($mediaAttribute)) {
             foreach ($mediaAttribute as $atttribute) {
@@ -334,6 +334,11 @@ class Processor
         }
 
         return $this;
+    }
+
+    public function getMediaAttributeCodes()
+    {
+        return $this->mediaConfig->getMediaAttributeCodes();
     }
 
     /**
@@ -369,7 +374,6 @@ class Processor
         }
         return str_replace('\\', '/', $destinationFile);
     }
-
 
     /**
      * Check whether file to move exists. Getting unique name

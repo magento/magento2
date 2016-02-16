@@ -33,17 +33,11 @@ class VariationHandler
     protected $stockConfiguration;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes
-     */
-    protected $variationMediaAttributes;
-
-    /**
      * @param Type\Configurable $configurableProduct
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
      * @param \Magento\Eav\Model\EntityFactory $entityFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param VariationMediaAttributes $variationMediaAttributes
      * @param \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
      */
     public function __construct(
@@ -52,7 +46,6 @@ class VariationHandler
         \Magento\Eav\Model\EntityFactory $entityFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes $variationMediaAttributes,
         \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
     ) {
         $this->configurableProduct = $configurableProduct;
@@ -60,7 +53,6 @@ class VariationHandler
         $this->entityFactory = $entityFactory;
         $this->productFactory = $productFactory;
         $this->stockConfiguration = $stockConfiguration;
-        $this->variationMediaAttributes = $variationMediaAttributes;
         $this->mediaGalleryProcessor = $mediaGalleryProcessor;
     }
 
@@ -217,7 +209,7 @@ class VariationHandler
                 $variationId = $image['variation_id'];
                 $newFile = $this->mediaGalleryProcessor->duplicateImageFromTmp($file);
                 $productsData[$variationId]['media_gallery']['images'][$imageId]['file'] = $newFile;
-                foreach ($this->variationMediaAttributes->getMediaAttributes() as $attribute) {
+                foreach ($this->mediaGalleryProcessor->getMediaAttributeCodes() as $attribute) {
                     if (isset($productsData[$variationId][$attribute->getAttributeCode()])
                         && $productsData[$variationId][$attribute->getAttributeCode()] == $file
                     ) {

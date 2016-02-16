@@ -1445,7 +1445,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getMediaAttributeValues()
     {
-        $mediaAttributeCodes = array_keys($this->getMediaAttributes());
+        $mediaAttributeCodes = $this->_catalogProductMediaConfig->getMediaAttributeCodes();
         $mediaAttributeValues = [];
         foreach ($mediaAttributeCodes as $attributeCode) {
             $mediaAttributeValues[$attributeCode] = $this->getData($attributeCode);
