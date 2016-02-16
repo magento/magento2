@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model;
 
+use Magento\Theme\Model\Data\Design\Config;
 use Magento\Theme\Model\DesignConfigRepository;
 
 class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -92,31 +93,11 @@ class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('reinit');
         $this->indexerRegistry->expects($this->once())
             ->method('get')
-            ->with(\Magento\Theme\Model\Data\Design\Config::DESIGN_CONFIG_GRID_INDEXER_ID)
+            ->with(Config::DESIGN_CONFIG_GRID_INDEXER_ID)
             ->willReturn($this->indexer);
         $this->indexer->expects($this->once())
             ->method('reindexAll');
         $this->assertSame($this->designConfig, $this->repository->save($this->designConfig));
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Message
-     */
-    public function testSaveWithException()
-    {
-        $this->designConfig->expects($this->exactly(2))
-            ->method('getExtensionAttributes')
-            ->willReturn($this->designExtension);
-        $this->designExtension->expects($this->once())
-            ->method('getDesignConfigData')
-            ->willReturn([$this->designConfigData]);
-        $this->configStorage->expects($this->once())
-            ->method('save')
-            ->willThrowException(new \Exception('Message'));
-        $this->reinitableConfig->expects($this->once())
-            ->method('reinit');
-        $this->repository->save($this->designConfig);
     }
 
     /**
@@ -132,5 +113,27 @@ class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getDesignConfigData')
             ->willReturn(false);
         $this->repository->save($this->designConfig);
+    }
+
+    public function testDelete()
+    {
+        $this->designConfig->expects($this->exactly(2))
+            ->method('getExtensionAttributes')
+            ->willReturn($this->designExtension);
+        $this->designExtension->expects($this->once())
+            ->method('getDesignConfigData')
+            ->willReturn([$this->designConfigData]);
+        $this->configStorage->expects($this->once())
+            ->method('delete')
+            ->with($this->designConfig);
+        $this->reinitableConfig->expects($this->once())
+            ->method('reinit');
+        $this->indexerRegistry->expects($this->once())
+            ->method('get')
+            ->with(Config::DESIGN_CONFIG_GRID_INDEXER_ID)
+            ->willReturn($this->indexer);
+        $this->indexer->expects($this->once())
+            ->method('reindexAll');
+        $this->assertSame($this->designConfig, $this->repository->delete($this->designConfig));
     }
 }
