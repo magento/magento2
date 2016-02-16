@@ -293,7 +293,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function delete(\Magento\Framework\Model\AbstractModel $object)
     {
-        //TODO: add object relation processor support
+        //TODO: add object relation processor support (MAGETWO-49297)
         $this->transactionManager->start($this->getConnection());
         try {
             $object->beforeDelete();
