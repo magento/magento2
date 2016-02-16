@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -50,7 +51,7 @@ class DataProvider implements DataProviderInterface
     protected $data = [];
 
     /**
-     * @var Reporting
+     * @var ReportingInterface
      */
     protected $reporting;
 
@@ -78,7 +79,7 @@ class DataProvider implements DataProviderInterface
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param Reporting $reporting
+     * @param ReportingInterface $reporting
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
@@ -89,7 +90,7 @@ class DataProvider implements DataProviderInterface
         $name,
         $primaryFieldName,
         $requestFieldName,
-        Reporting $reporting,
+        ReportingInterface $reporting,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
@@ -244,7 +245,6 @@ class DataProvider implements DataProviderInterface
     protected function searchResultToOutput(SearchResultInterface $searchResult)
     {
         $arrItems = [];
-        $arrItems['totalRecords'] = $searchResult->getTotalCount();
 
         $arrItems['items'] = [];
         foreach ($searchResult->getItems() as $item) {
@@ -254,6 +254,9 @@ class DataProvider implements DataProviderInterface
             }
             $arrItems['items'][] = $itemData;
         }
+
+        $arrItems['totalRecords'] = $searchResult->getTotalCount();
+
         return $arrItems;
     }
 

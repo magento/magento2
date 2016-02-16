@@ -48,6 +48,8 @@ class CommandManager implements CommandManagerInterface
      * @param InfoInterface|null $payment
      * @param array $arguments
      * @return ResultInterface|null
+     * @throws NotFoundException
+     * @throws CommandException
      */
     public function executeByCode($commandCode, InfoInterface $payment = null, array $arguments = [])
     {
@@ -68,6 +70,7 @@ class CommandManager implements CommandManagerInterface
      * @param InfoInterface|null $payment
      * @param array $arguments
      * @return ResultInterface|null
+     * @throws CommandException
      */
     public function execute(CommandInterface $command, InfoInterface $payment = null, array $arguments = [])
     {

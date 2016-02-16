@@ -17,7 +17,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
-use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 use Magento\Framework\Reflection\MethodsMap;
 
 /**
