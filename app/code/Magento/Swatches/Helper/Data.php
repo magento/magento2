@@ -5,8 +5,14 @@
  */
 namespace Magento\Swatches\Helper;
 
+use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\Helper\Context;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
+use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Exception\InputException;
@@ -18,7 +24,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data
 {
     /**
      * When we init media gallery empty image types contain this value.
@@ -31,27 +37,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const DEFAULT_STORE_ID = 0;
 
     /**
-     * Catalog\product area inside media folder
-     *
-     */
-    const  CATALOG_PRODUCT_MEDIA_PATH = 'catalog/product';
-
-    /**
-     * Current model
-     *
-     * @var \Magento\Swatches\Model\Query
-     */
-    protected $model;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var CollectionFactory
      */
     protected $productCollectionFactory;
-
-    /**
-     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
-     */
-    protected $configurable;
 
     /**
      * @var ProductRepositoryInterface
@@ -59,19 +47,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $productRepository;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory
+     * @var SwatchCollectionFactory
      */
     protected $swatchCollectionFactory;
 
     /**
      * Catalog Image Helper
      *
-     * @var \Magento\Catalog\Helper\Image
+     * @var Image
      */
     protected $imageHelper;
 
@@ -87,31 +75,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     ];
 
     /**
-     * @param Context $context
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable
+     * @param CollectionFactory $productCollectionFactory
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $swatchCollectionFactory
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param StoreManagerInterface $storeManager
+     * @param SwatchCollectionFactory $swatchCollectionFactory
+     * @param Image $imageHelper
      */
     public function __construct(
-        Context $context,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable,
+        CollectionFactory $productCollectionFactory,
         ProductRepositoryInterface $productRepository,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $swatchCollectionFactory,
-        \Magento\Catalog\Helper\Image $imageHelper
+        StoreManagerInterface $storeManager,
+        SwatchCollectionFactory $swatchCollectionFactory,
+        Image $imageHelper
     ) {
         $this->productCollectionFactory   = $productCollectionFactory;
         $this->productRepository = $productRepository;
-        $this->configurable = $configurable;
         $this->storeManager = $storeManager;
         $this->swatchCollectionFactory = $swatchCollectionFactory;
         $this->imageHelper = $imageHelper;
-
-        parent::__construct($context);
     }
 
     /**
@@ -145,7 +126,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Attribute $attribute
      * @return $this
      */
-    public function populateAdditionalDataEavAttribute(Attribute $attribute)
+    private function populateAdditionalDataEavAttribute(Attribute $attribute)
     {
         $additionalData = unserialize($attribute->getData('additional_data'));
         if (isset($additionalData) && is_array($additionalData)) {
@@ -219,32 +200,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param Product $parentProduct
-     * @param array $attributes
-     * @return bool|ProductCollection
-     * @throws InputException
-     */
-    protected function prepareVariationCollection(Product $parentProduct, array $attributes)
-    {
-        $productCollection = $this->productCollectionFactory->create();
-        $this->addFilterByParent($productCollection, $parentProduct->getId());
-
-        $configurableAttributes = $this->getAttributesFromConfigurable($parentProduct);
-        foreach ($configurableAttributes as $attribute) {
-            $productCollection->addAttributeToSelect($attribute['attribute_code']);
-        }
-
-        $this->addFilterByAttributes($productCollection, $attributes);
-
-        return $productCollection;
-    }
-
-    /**
      * @param ProductCollection $productCollection
      * @param array $attributes
      * @return void
      */
-    protected function addFilterByAttributes(ProductCollection $productCollection, array $attributes)
+    private function addFilterByAttributes(ProductCollection $productCollection, array $attributes)
     {
         foreach ($attributes as $code => $option) {
             $productCollection->addAttributeToFilter($code, ['eq' => $option]);
@@ -256,7 +216,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param integer $parentId
      * @return void
      */
-    protected function addFilterByParent(ProductCollection $productCollection, $parentId)
+    private function addFilterByParent(ProductCollection $productCollection, $parentId)
     {
         $tableProductRelation = $productCollection->getTable('catalog_product_relation');
         $productCollection
@@ -278,10 +238,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *      ...,
      *      ]
      * ]
-     * @param Product $product
+     * @param ModelProduct $product
      * @return array
      */
-    public function getProductMediaGallery (Product $product)
+    public function getProductMediaGallery(ModelProduct $product)
     {
         if ($product->hasData('image')) {
             $baseImage = $product->getData('image');
@@ -308,10 +268,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param Product $product
+     * @param ModelProduct $product
      * @return array
      */
-    protected function getGalleryImages(Product $product)
+    private function getGalleryImages(ModelProduct $product)
     {
         $result = [];
         $mediaGallery = $product->getMediaGalleryImages();
@@ -327,11 +287,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param Product $product
+     * @param ModelProduct $product
      * @param string $imageFile
      * @return array
      */
-    protected function getAllSizeImages(Product $product, $imageFile)
+    private function getAllSizeImages(ModelProduct $product, $imageFile)
     {
         return [
             'large' => $this->imageHelper->init($product, 'product_page_image_large')
@@ -354,7 +314,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
      */
-    public function getSwatchAttributes(Product $product)
+    private function getSwatchAttributes(Product $product)
     {
         $attributes = $this->getAttributesFromConfigurable($product);
         $result = [];
@@ -376,7 +336,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $result = [];
         $typeInstance = $product->getTypeInstance();
-        if ($typeInstance instanceof \Magento\ConfigurableProduct\Model\Product\Type\Configurable) {
+        if ($typeInstance instanceof Configurable) {
             $configurableAttributes = $typeInstance->getConfigurableAttributes($product);
             /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
             foreach ($configurableAttributes as $configurableAttribute) {
