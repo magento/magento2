@@ -6,6 +6,7 @@
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
@@ -134,6 +135,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -153,6 +159,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -172,7 +179,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        MetadataPool $metadataPool
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -182,6 +190,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_scopeConfig = $scopeConfig;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->metadataPool = $metadataPool;
 
         parent::__construct(
             $catalogProductOption,
@@ -584,6 +593,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             return;
         }
 
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
         foreach ($data as $attributeData) {
             /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
             $configurableAttribute = $this->configurableAttributeFactory->create();
@@ -608,7 +619,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $configurableAttribute
                 ->addData($attributeData)
                 ->setStoreId($product->getStoreId())
-                ->setProductId($product->getId())
+                ->setProductId($product->getData($metadata->getLinkField()))
                 ->save();
         }
         /** @var $configurableAttributesCollection \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection  */
