@@ -900,7 +900,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductDuplicateCategories()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-48871');
         $csvFixture = 'products_duplicate_category.csv';
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $csvFixture;
