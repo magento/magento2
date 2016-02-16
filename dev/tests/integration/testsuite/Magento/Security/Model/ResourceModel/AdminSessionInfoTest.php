@@ -1,6 +1,6 @@
 <?php
 
-namespace Magento\Security\ModelResourceModel;
+namespace Magento\Security\Model\ResourceModel;
 
 /**
  * Class AdminSessionInfoTest
