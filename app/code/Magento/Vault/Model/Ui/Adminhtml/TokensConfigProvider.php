@@ -7,15 +7,19 @@ namespace Magento\Vault\Model\Ui\Adminhtml;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class ConfigProvider
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class TokensConfigProvider
 {
@@ -60,6 +64,11 @@ final class TokensConfigProvider
     private $providerCode;
 
     /**
+     * @var DateTimeFactory
+     */
+    private $dateTimeFactory;
+
+    /**
      * Constructor
      *
      * @param SessionManagerInterface $session
@@ -68,6 +77,7 @@ final class TokensConfigProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StoreManagerInterface $storeManager
      * @param VaultPaymentInterface $vaultPayment
+     * @param DateTimeFactory $dateTimeFactory
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
      */
     public function __construct(
@@ -77,6 +87,7 @@ final class TokensConfigProvider
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StoreManagerInterface $storeManager,
         VaultPaymentInterface $vaultPayment,
+        DateTimeFactory $dateTimeFactory,
         array $tokenUiComponentProviders = []
     ) {
         $this->paymentTokenRepository = $paymentTokenRepository;
@@ -86,26 +97,25 @@ final class TokensConfigProvider
         $this->vaultPayment = $vaultPayment;
         $this->storeManager = $storeManager;
         $this->tokenUiComponentProviders = $tokenUiComponentProviders;
+        $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
-     * Retrieve assoc array of configuration
-     *
-     * @return array
+     * @return TokenUiComponentInterface[]
      */
-    public function getConfig()
+    public function getTokensComponents()
     {
-        $vaultPayments = [];
+        $result = [];
 
         $customerId = $this->session->getCustomerId();
         if (!$customerId) {
-            return $vaultPayments;
+            return $result;
         }
 
         $vaultProviderCode = $this->getProviderMethodCode();
         $componentProvider = $this->getComponentProvider($vaultProviderCode);
         if (null === $componentProvider) {
-            return $vaultPayments;
+            return $result;
         }
 
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
@@ -114,25 +124,33 @@ final class TokensConfigProvider
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
             ->setValue($vaultProviderCode)
             ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
+            ->setValue(1)
+            ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
+            ->setConditionType('gt')
+            ->setValue(
+                $this->dateTimeFactory->create(
+                    'now',
+                    new \DateTimeZone('UTC')
+                )->format('Y-m-d 00:00:00')
+            )
+            ->create();
         $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
             ->create();
 
-        foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $index => $token) {
-            $component = $componentProvider->getComponentForToken($token);
-            $vaultPayments[VaultPaymentInterface::CODE . '_item_' . $index] = [
-                'config' => $component->getConfig(),
-                'component' => $component->getName()
-            ];
+        foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $token) {
+            $result[] = $componentProvider->getComponentForToken($token);
         }
 
-        return $vaultPayments;
+        return $result;
     }
 
     /**
      * Get code of payment method provider
      * @return null|string
      */
-    public function getProviderMethodCode()
+    private function getProviderMethodCode()
     {
         if (!$this->providerCode) {
             $storeId = $this->getStoreId();
