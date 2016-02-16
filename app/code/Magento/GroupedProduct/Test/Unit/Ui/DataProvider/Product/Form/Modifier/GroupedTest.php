@@ -20,6 +20,7 @@ use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class GroupedTest
@@ -74,6 +75,11 @@ class GroupedTest extends AbstractModifierTest
      * @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $attributeSetRepositoryMock;
+
+    /**
+     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeMock;
 
 
     protected function setUp()
@@ -137,9 +143,15 @@ class GroupedTest extends AbstractModifierTest
             ->method('get')
             ->with(self::LINKED_PRODUCT_SKU)
             ->willReturn($this->linkedProductMock);
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
         $this->locatorMock->expects($this->any())
             ->method('getProduct')
             ->willReturn($this->productMock);
+        $this->locatorMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
     }
 
     /**
@@ -207,6 +219,9 @@ class GroupedTest extends AbstractModifierTest
                             'attribute_set' => null
                         ],
                     ],
+                ],
+                'product' => [
+                    'current_store_id' => null
                 ],
             ],
         ];

@@ -202,7 +202,7 @@ class Weee extends AbstractModifier
                                         ],
                                     ],
                                 ],
-                                'region' => [
+                                'state' => [
                                     'arguments' => [
                                         'data' => [
                                             'config' => [
@@ -210,7 +210,7 @@ class Weee extends AbstractModifier
                                                 'dataType' => Text::NAME,
                                                 'formElement' => Select::NAME,
                                                 'component' => 'Magento_Weee/js/regions-tax-select',
-                                                'dataScope' => 'region',
+                                                'dataScope' => 'state',
                                                 'options' => $this->getRegions(),
                                                 'filterBy' => [
                                                     'field' => 'country'

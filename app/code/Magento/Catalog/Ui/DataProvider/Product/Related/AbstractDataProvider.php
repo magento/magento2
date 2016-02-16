@@ -13,6 +13,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Class AbstractDataProvider
@@ -30,6 +32,11 @@ abstract class AbstractDataProvider extends ProductDataProvider
     protected $productRepository;
 
     /**
+     * @var StoreRepositoryInterface
+     */
+    protected $storeRepository;
+
+    /**
      * @var ProductLinkRepositoryInterface
      */
     protected $productLinkRepository;
@@ -40,12 +47,18 @@ abstract class AbstractDataProvider extends ProductDataProvider
     private $product;
 
     /**
+     * @var StoreInterface
+     */
+    private $store;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param RequestInterface $request
      * @param ProductRepositoryInterface $productRepository
+     * @param StoreRepositoryInterface $storeRepository
      * @param ProductLinkRepositoryInterface $productLinkRepository
      * @param array $addFieldStrategies
      * @param array $addFilterStrategies
@@ -60,6 +73,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
         CollectionFactory $collectionFactory,
         RequestInterface $request,
         ProductRepositoryInterface $productRepository,
+        StoreRepositoryInterface $storeRepository,
         ProductLinkRepositoryInterface $productLinkRepository,
         $addFieldStrategies,
         $addFilterStrategies,
@@ -79,6 +93,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
 
         $this->request = $request;
         $this->productRepository = $productRepository;
+        $this->storeRepository = $storeRepository;
         $this->productLinkRepository = $productLinkRepository;
     }
 
@@ -96,6 +111,11 @@ abstract class AbstractDataProvider extends ProductDataProvider
     {
         /** @var Collection $collection */
         $collection = parent::getCollection();
+        $collection->addAttributeToSelect('status');
+
+        if ($this->getStore()) {
+            $collection->setStore($this->getStore());
+        }
 
         if (!$this->getProduct()) {
             return $collection;
@@ -154,5 +174,23 @@ abstract class AbstractDataProvider extends ProductDataProvider
         }
 
         return $this->product = $this->productRepository->getById($id);
+    }
+
+    /**
+     * Retrieve store
+     *
+     * @return StoreInterface|null
+     */
+    protected function getStore()
+    {
+        if (null !== $this->store) {
+            return $this->store;
+        }
+
+        if (!($storeId = $this->request->getParam('current_store_id'))) {
+            return null;
+        }
+
+        return $this->store = $this->storeRepository->getById($storeId);
     }
 }
