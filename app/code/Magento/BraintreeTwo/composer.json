@@ -12,6 +12,12 @@
         "magento/module-sales": "*",
         "magento/module-backend": "*",
         "magento/module-vault": "*",
+        "magento/module-customer": "*",
+        "magento/module-catalog": "*",
+        "magento/module-quote": "*",
+        "magento/module-paypal": "*",
+        "magento/module-checkout-agreements": "*",
+        "magento/module-theme": "*",
         "braintree/braintree_php": "3.7.0"
     },
     "type": "magento2-module",
