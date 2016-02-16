@@ -472,6 +472,25 @@ class Eav extends AbstractModifier
         }
 
         $meta = $this->addWysiwyg($attribute, $meta);
+        $meta = $this->customizePriceAttribute($attribute, $meta);
+
+        return $meta;
+    }
+
+    /**
+     * Customize attribute that has price type
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param array $meta
+     * @return array
+     */
+    private function customizePriceAttribute(ProductAttributeInterface $attribute, array $meta)
+    {
+        if ($attribute->getFrontendInput() === 'price') {
+            $meta['arguments']['data']['config']['addbefore'] = $this->locator->getStore()
+                ->getBaseCurrency()
+                ->getCurrencySymbol();
+        }
 
         return $meta;
     }
