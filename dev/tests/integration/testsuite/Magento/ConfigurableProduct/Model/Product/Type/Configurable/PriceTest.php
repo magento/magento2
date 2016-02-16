@@ -5,12 +5,12 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
- * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testGetFinalPrice()
     {
@@ -38,6 +39,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store tax/display/type 1
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testGetFinalPriceExcludingTax()
     {
@@ -46,6 +49,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store tax/display/type 2
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testGetFinalPriceIncludingTax()
     {
@@ -55,6 +60,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store tax/display/type 3
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testGetFinalPriceIncludingExcludingTax()
     {
@@ -63,7 +70,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testGetFinalPriceWithSelectedSimpleProduct()
     {
@@ -73,7 +81,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testGetFinalPriceWithCustomOption()
     {
@@ -102,11 +111,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $product->setCanSaveCustomOptions(true);
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
-        // force reload product
-        $productRepository->get($product->getSku(), false, null, true);
-
-        $product->save();
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $productRepository->save($product);
 
         $product = $this->getProduct(1);
         $optionId = $product->getOptions()[0]->getId();
@@ -166,9 +172,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     private function getProduct($id)
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
-        $product->load($id);
-        return $product;
+        /** @var $productRepository ProductRepositoryInterface */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        return $productRepository->getById($id, true, null, true);
     }
 }
