@@ -7,7 +7,6 @@
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action;
-use Magento\Cms\Controller\RegistryConstants;
 
 class Edit extends \Magento\Backend\App\Action
 {
@@ -23,7 +22,7 @@ class Edit extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -80,19 +79,11 @@ class Edit extends \Magento\Backend\App\Action
                 $this->messageManager->addError(__('This page no longer exists.'));
                 /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
-
                 return $resultRedirect->setPath('*/*/');
             }
         }
 
-        // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
-        if (!empty($data)) {
-            $model->setData($data);
-        }
-
-        // 4. Register model to use later in blocks
-        $this->_coreRegistry->register(RegistryConstants::CMS_PAGE, $model);
+        $this->_coreRegistry->register('cms_page', $model);
 
         // 5. Build edit form
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */

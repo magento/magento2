@@ -80,30 +80,35 @@
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
+            <th class="vars_head">Global variable</th>
             <th class="vars_head">Default value</th>
-            <th class="vars_head">Allowable values</th>
+            <th class="vars_head">Allowed values</th>
             <th class="vars_head">Comment</th>
         </tr>
         <tr>
             <th>@_table-width</th>
+            <td>@table__width</td>
             <td class="vars_value">100%</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table width</td>
         </tr>
         <tr>
             <th>@_cell-padding-horizontal</th>
+            <td>@table-cell__padding-horizontal</td>
             <td class="vars_value">@indent__s</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell horizontal padding</td>
         </tr>
         <tr>
             <th>@_cell-padding-vertical</th>
+            <td>@table-cell__padding-vertical</td>
             <td class="vars_value">8px</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell vertical padding</td>
         </tr>
         <tr>
             <th>@_table-margin-bottom</th>
+            <td>@table__margin-bottom</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table margin bottom</td>
@@ -184,78 +189,91 @@
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
+            <th class="vars_head">Global variable</th>
             <th class="vars_head">Default value</th>
-            <th class="vars_head">Allowable values</th>
+            <th class="vars_head">Allowed values</th>
             <th class="vars_head">Comment</th>
         </tr>
         <tr>
-            <th>@_table-td-font-size </th>
+            <th>@_table-td-font-size</th>
+            <td>@table-td__font-size</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell font size</td>
         </tr>
         <tr>
             <th>@_table-td-color</th>
+            <td>@table-td__color</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell font color</td>
         </tr>
         <tr>
             <th>@_table-td-font-family</th>
+            <td>@table-td__font-family</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell font family</td>
         </tr>
         <tr>
             <th nowrap="nowrap">@_table-td-font-weight</th>
+            <td>@table-td__font-weight</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell font weight</td>
         </tr>
         <tr>
             <th>@_table-td-line-height</th>
+            <td>@table-td__line-height</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell line height</td>
         </tr>
         <tr>
             <th>@_table-td-font-style</th>
+            <td>@table-td__font-style</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell font style</td>
         </tr>
         <tr>
             <th>@_table-th-font-size</th>
+            <td>@table-th__font-size</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell font size</td>
         </tr>
         <tr>
             <th>@_table-th-color</th>
+            <td>@table-th__color</td>
             <td class="vars_value">@text__color__intense</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell font color</td>
         </tr>
         <tr>
             <th>@_table-th-font-family</th>
+            <td>@table-th__font-family</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell font family</td>
         </tr>
         <tr>
             <th>@_table-th-font-weight</th>
+            <td>@table-th__font-weight</td>
             <td class="vars_value">@font-weight__bold</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell font weight</td>
         </tr>
         <tr>
             <th>@_table-th-line-height</th>
+            <td>@table-th__line-height</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell line height</td>
         </tr>
         <tr>
             <th>@_table-th-font-style</th>
+            <td>@table-th__font-style</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell font style</td>
@@ -337,66 +355,77 @@
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
+            <th class="vars_head">Global variable</th>
             <th class="vars_head">Default value</th>
-            <th class="vars_head">Allowable values</th>
+            <th class="vars_head">Allowed values</th>
             <th class="vars_head">Comment</th>
         </tr>
         <tr>
             <th>@_table-caption-hide</th>
+            <td>@table-caption__hide</td>
             <td class="vars_value">true</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption is visible</td>
         </tr>
         <tr>
             <th>@_table-caption-font-size</th>
+            <td>@table-caption__font-size</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption font size</td>
         </tr>
         <tr>
             <th>@_table-caption-color</th>
+            <td>@table-caption__color</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption text color</td>
         </tr>
         <tr>
             <th nowrap="nowrap">@_table-caption-font-family</th>
+            <td>@table-caption__font-family</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption font family</td>
         </tr>
         <tr>
             <th>@_table-caption-font-weight</th>
+            <td>@table-caption__font-weight</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption font weight</td>
         </tr>
         <tr>
             <th>@_table-caption-font-style</th>
+            <td>@table-caption__font-style</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption font style</td>
         </tr>
         <tr>
             <th>@_table-caption-line-height</th>
+            <td>@table-caption__line-height</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption line height</td>
         </tr>
         <tr>
             <th>@_table-caption-alignment</th>
+            <td>@table-caption__alignment</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption alignment</td>
         </tr>
         <tr>
             <th>@_table-caption-margin-top</th>
+            <td>@table-caption__margin-top</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption top margin</td>
         </tr>
         <tr>
             <th nowrap="nowrap">@_table-caption-margin-bottom</th>
+            <td>@table-caption__margin-bottom</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table caption bottom margin</td>
@@ -487,54 +516,63 @@
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
+            <th class="vars_head">Global variable</th>
             <th class="vars_head">Default value</th>
-            <th class="vars_head">Allowable values</th>
+            <th class="vars_head">Allowed values</th>
             <th class="vars_head">Comment</th>
         </tr>
         <tr>
             <th>@_th-padding-top</th>
+            <td>@table-cell__padding-vertical / 2</td>
             <td class="vars_value">@_td-padding-top</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell top padding</td>
         </tr>
         <tr>
             <th>@_th-padding-right</th>
+            <td>@table-cell__padding-horizontal / 2</td>
             <td class="vars_value">@_td-padding-right</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell right padding</td>
         </tr>
         <tr>
             <th>@_th-padding-bottom</th>
+            <td>@table-cell__padding-vertical / 2</td>
             <td class="vars_value">@_td-padding-top</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell bottom padding</td>
         </tr>
         <tr>
             <th>@_th-padding-left</th>
+            <td>@table-cell__padding-horizontal / 2</td>
             <td class="vars_value">@_td-padding-right</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cell left padding</td>
         </tr>
         <tr>
             <th>@_td-padding-top</th>
+            <td>@table-cell__padding-vertical / 2</td>
             <td class="vars_value">@table-cell__padding-vertical / 2</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell top padding</td>
         </tr>
         <tr>
             <th>@_td-padding-right</th>
+            <td>@table-cell__padding-horizontal / 2</td>
             <td class="vars_value">@table-cell__padding-horizontal / 2</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell right padding</td>
         </tr>
         <tr>
             <th>@_td-padding-bottom</th>
+            <td>@table-cell__padding-vertical / 2</td>
             <td class="vars_value">@_td-padding-top</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell bottom padding</td>
         </tr>
         <tr>
             <th nowrap="nowrap">@_td-padding-left</th>
+            <td>@table-cell__padding-horizontal / 2</td>
             <td class="vars_value" nowrap="nowrap">@_td-padding-right</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cell left padding</td>
@@ -622,36 +660,42 @@
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
-            <th class="vars_head">Allowable values</th>
-            <th class="vars_head">Variables list names</th>
+            <th class="vars_head">Global variable</th>
+            <th class="vars_head">Default value</th>
+            <th class="vars_head">Allowed values</th>
             <th class="vars_head">Comment</th>
         </tr>
         <tr>
             <th>@_table-background-color</th>
+            <td>@table__background-color</td>
             <td class="vars_value">false</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table background</td>
         </tr>
         <tr>
             <th>@_table-head-background-color</th>
+            <td>@table-head__background-color</td>
             <td class="vars_value">@table__background-color</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table thead background</td>
         </tr>
         <tr>
             <th>@_table-foot-background-color</th>
+            <td>@table-foot__background-color</td>
             <td class="vars_value">@table__background-color</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table tfoot background</td>
         </tr>
         <tr>
             <th>@_table-body-th-background-color</th>
+            <td>@table-body-th__background-color</td>
             <td class="vars_value">@table__background-color</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table header cells background</td>
         </tr>
         <tr>
             <th nowrap="nowrap">@_table-td-background-color</th>
+            <td>@table-td__background-color</td>
             <td class="vars_value">@table__background-color</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table cells background</td>
@@ -738,30 +782,35 @@
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
+            <th class="vars_head">Global variable</th>
             <th class="vars_head">Default value</th>
             <th class="vars_head">Allowed values</th>
             <th class="vars_head">Comment</th>
         </tr>
         <tr>
             <th>@_table_type</th>
+            <td>-</td>
             <td class="vars_value">normal</td>
             <td class="vars_value">normal | horizontal | vertical | light | clear | horizontal_body</td>
-            <td>Table border settings. When is set to "horizontal_body", the table border settings are applyed only for tbody</td>
+            <td>Table border settings. When is set to "horizontal_body", the table border settings are applied only for tbody</td>
         </tr>
         <tr>
             <th>@_table_border-width</th>
+            <td>@table__border-width</td>
             <td class="vars_value" nowrap="nowrap">@border-width__base</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table border width</td>
         </tr>
         <tr>
             <th>@_table_border-style</th>
+            <td>@table__border-style</td>
             <td class="vars_value">solid</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table border style</td>
         </tr>
         <tr>
             <th nowrap="nowrap">@_table_border-color</th>
+            <td>@table__border-color</td>
             <td class="vars_value">@border-color__base</td>
             <td class="vars_value">'' | false | value</td>
             <td>Table border color</td>
@@ -1140,7 +1189,7 @@
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
-            <th class="vars_head">Variables list names</th>
+            <th class="vars_head">Global variable</th>
             <th class="vars_head">Default value</th>
             <th class="vars_head">Allowed values</th>
             <th class="vars_head">Comment</th>
@@ -1154,7 +1203,7 @@
         </tr>
         <tr>
             <th>@_stripped-color</th>
-            <td class="vars_value">@table-td__color</td>
+            <td class="vars_value">@table-cell-stripped__color</td>
             <td class="vars_value">@text__color</td>
             <td class="vars_value">'' | false | value</td>
             <td>Striped cells text color</td>
@@ -1171,7 +1220,7 @@
             <td class="vars_value">-</td>
             <td class="vars_value">odd</td>
             <td class="vars_value">odd | even</td>
-            <td>Rows stripes are applyed to</td>
+            <td>Rows stripes are applied to</td>
         </tr>
     </table>
   </pre>
@@ -1250,18 +1299,21 @@
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
+            <th class="vars_head">Global variable</th>
             <th class="vars_head">Default value</th>
             <th class="vars_head">Allowed values</th>
             <th class="vars_head">Comment</th>
         </tr>
         <tr>
             <th>@_table_cell-background-color-hover</th>
+            <td>@table-cell__hover__background-color</td>
             <td class="vars_value">@panel__background-color</td>
             <td class="vars_value">'' | false | value</td>
             <td>Hovered table row background</td>
         </tr>
         <tr>
             <th>@_table_cell-odd-background-color-hover</th>
+            <td>@table-cell__hover__background-color</td>
             <td class="vars_value">@_table_cell-background-color-hover</td>
             <td class="vars_value">'' | false | value</td>
             <td>Hovered table odd row background</td>
@@ -1269,7 +1321,7 @@
     </table>
   </pre>
 </div><div class="code"><pre><code></code></pre></div></article><article id="responsive-table-technics-1" class="section"><div class="docs"><a href="#responsive-table-technics-1" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="responsive-table-technics-1">Responsive table technics #1</h1>
-<p>  Magento UI library employs two responsive tables technics which are applyed by calling an appropriate mixin.</p>
+<p>  Magento UI library employs two responsive tables technics which are applied by calling an appropriate mixin.</p>
 <p>  The <code>.lib-table-overflow()</code> mixin adds a horizontal scrollbar for a table. This mixin accepts no variables.</p>
 <textarea class="preview-code" spellcheck="false">    &lt;div class="example-table-14"&gt;
         &lt;table class="example-table-13"&gt;
@@ -1432,7 +1484,7 @@
     <table>
         <tr>
             <th class="vars_head">Mixin variable</th>
-            <th class="vars_head">Variables list names</th>
+            <th class="vars_head">Global variable</th>
             <th class="vars_head">Default value</th>
             <th class="vars_head">Allowed values</th>
             <th class="vars_head">Comment</th>
@@ -1467,8 +1519,8 @@
         </tr>
         <tr>
             <th>@_table-responsive-cell-padding</th>
+            <td class="vars_value">@table-responsive-cell__padding</td>
             <td class="vars_value">@indent__xs 0</td>
-            <td class="vars_value">-</td>
             <td class="vars_value">true | false</td>
             <td>Responsive table cells padding</td>
         </tr>

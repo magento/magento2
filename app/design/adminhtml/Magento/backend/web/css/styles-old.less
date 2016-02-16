@@ -2068,6 +2068,13 @@
         content: attr(data-text-on);
     }
 
+    .admin__actions-switch {
+        .admin__actions-switch-checkbox {
+            position: absolute;
+            z-index: -1;
+        }
+    }
+
     //
     //  Content actions panel (with buttons, switchers...)
     //  --------------------------------------
@@ -4048,6 +4055,13 @@
                 .style28();
             }
         }
+
+        .pp-buttons-container {
+            .action-default {
+                display: inline-block;
+                margin-bottom: @indent__xs;
+            }
+        }
     }
 }
 
@@ -5067,10 +5081,9 @@
 
 //  System -> Notifications
 .adminhtml-notification-index {
-    .admin__scope-old {
-        .col-actions a {
-            &:extend(.col-actions-links);
-        }
+    .col-actions a {
+        &:extend(.col-actions-links);
+        white-space: nowrap;
     }
 }
 
