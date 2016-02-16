@@ -8,32 +8,23 @@ namespace Magento\BraintreeTwo\Gateway\Validator;
 /**
  * Class PaymentNonceResponseValidator
  */
-class PaymentNonceResponseValidator extends ResponseValidator
+class PaymentNonceResponseValidator extends GeneralResponseValidator
 {
     /**
-     * @inheritdoc
+     * @return array
      */
-    public function validate(array $validationSubject)
+    protected function getResponseValidators()
     {
-        $response = $this->subjectReader->readResponseObject($validationSubject);
-        $result = $this->createResult(
-            $this->validateSuccess($response) &&
-            $this->validateErrors($response) &&
-            $this->validatePaymentMethodNonce($response),
-            [__('Payment method nonce can\'t be retrieved.')]
+        return array_merge(
+            parent::getResponseValidators(),
+            [
+                function ($response) {
+                    return [
+                        !empty($response->paymentMethodNonce) && !empty($response->paymentMethodNonce->nonce),
+                        [__('Payment method nonce can\'t be retrieved.')]
+                    ];
+                }
+            ]
         );
-
-        return $result;
-    }
-
-    /**
-     * Validate payment method nonce of response
-     *
-     * @param object $response
-     * @return bool
-     */
-    private function validatePaymentMethodNonce($response)
-    {
-        return !empty($response->paymentMethodNonce) && !empty($response->paymentMethodNonce->nonce);
     }
 }
