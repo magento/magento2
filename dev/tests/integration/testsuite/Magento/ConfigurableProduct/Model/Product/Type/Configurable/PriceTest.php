@@ -117,9 +117,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $productRepository->save($product);
+        $product = $productRepository->save($product);
 
-        $product = $this->getProduct(1);
         $optionId = $product->getOptions()[0]->getId();
         $product->addCustomOption(AbstractType::OPTION_PREFIX . $optionId, 'text');
         $product->addCustomOption('option_ids', $optionId);
