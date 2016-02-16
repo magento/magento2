@@ -182,7 +182,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 []
             )->joinInner(
                 ['entity' => $this->getTable('catalog_product_entity')],
-                'entity.entity_id = product_link.product_id',
+                'entity.row_id = product_link.product_id',
                 []
             )->joinInner(
                 ['entity_value' => $superAttribute->getBackendTable()],
@@ -191,7 +191,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     [
                         'entity_value.attribute_id = super_attribute.attribute_id',
                         'entity_value.store_id = 0',
-                        'entity_value.entity_id = product_link.product_id'
+                        'entity_value.row_id = product_link.product_id'
                     ]
                 ),
                 []

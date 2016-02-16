@@ -305,6 +305,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
+     * @var string
+     */
+    private $productEntityLinkField;
+
+    /**
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
@@ -316,6 +321,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime
      * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -333,6 +339,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime,
         ProcessingErrorAggregatorInterface $errorAggregator,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         array $data = []
     ) {
         $this->_resource = $resource;
@@ -364,6 +371,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         $this->errorAggregator = $errorAggregator;
+
+        /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
+        $productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $this->productEntityLinkField = $productMetadata->getLinkField();
 
         $this->_initSourceEntities($data)->_initTables($data)->_initStores($data);
 
@@ -1193,7 +1204,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!$this->_productsSkuToId || !empty($this->_newOptionsNewData)) {
             $columns = ['entity_id', 'sku'];
             foreach ($this->_productModel->getProductEntitiesInfo($columns) as $product) {
-                $this->_productsSkuToId[$product['sku']] = $product['entity_id'];
+                $this->_productsSkuToId[$product['sku']] = $product[$this->productEntityLinkField];
             }
         }
 
@@ -1429,7 +1440,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _getProductData(array $rowData, $productId)
     {
         $productData = [
-            'entity_id' => $productId,
+            $this->productEntityLinkField => $productId,
             'has_options' => 1,
             'required_options' => 0,
             'updated_at' => $this->dateTime->date(null, null, false)->format('Y-m-d H:i:s'),
