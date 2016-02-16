@@ -225,6 +225,41 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
      * @param string $path
      * @param array $data
      * @param array $result
+     * @dataProvider populateDataProvider
+     */
+    public function testPopulate($path, $data, $result)
+    {
+        $this->assertSame($result, $this->arrayManager->populate($path, $data));
+    }
+
+    /**
+     * @return array
+     */
+    public function populateDataProvider()
+    {
+        return [
+            0 => [
+                'path' => 'some/is/not/array',
+                'data' => ['some' => true],
+                'result' => ['some' => true]
+            ],
+            1 => [
+                'path' => 0,
+                'data' => [],
+                'result' => [[]]
+            ],
+            2 => [
+                'path' => 'nested/1/array',
+                'data' => ['nested' => [true]],
+                'result' => ['nested' => [true, ['array' => []]]]
+            ]
+        ];
+    }
+
+    /**
+     * @param string $path
+     * @param array $data
+     * @param array $result
      * @dataProvider removeDataProvider
      */
     public function testRemove($path, $data, $result)

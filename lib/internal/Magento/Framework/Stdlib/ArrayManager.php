@@ -43,11 +43,11 @@ class ArrayManager
      *
      * @param string $path
      * @param array $data
-     * @param string $delimiter
      * @param null $defaultValue
+     * @param string $delimiter
      * @return mixed|null
      */
-    public function get($path, array $data, $delimiter = self::DEFAULT_PATH_DELIMITER, $defaultValue = null)
+    public function get($path, array $data, $defaultValue = null, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
         return $this->find($path, $data, $delimiter) ? $this->parentNode[$this->nodeIndex] : $defaultValue;
     }
@@ -105,6 +105,21 @@ class ArrayManager
                 $value
             );
         }
+
+        return $data;
+    }
+
+    /**
+     * Populate nested array if possible and needed
+     *
+     * @param string $path
+     * @param array $data
+     * @param string $delimiter
+     * @return array
+     */
+    public function populate($path, array $data, $delimiter = self::DEFAULT_PATH_DELIMITER)
+    {
+        $this->find($path, $data, $delimiter, true);
 
         return $data;
     }
