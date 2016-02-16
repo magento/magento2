@@ -27,7 +27,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             ->willReturn($writer);
 
         // Create new currency object, test values for cache directory and file permission options
-        $currency = new Currency($filesystem);
+        $currency = new Currency($filesystem, null, 'en_US');
         $this->assertEquals(
             DriverInterface::WRITEABLE_FILE_MODE,
             $currency->getCache()->getBackend()->getOption('cache_file_perm')
