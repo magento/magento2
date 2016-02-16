@@ -25,7 +25,6 @@ define([
             'input_type': 'input',
             placeholder: '',
             description: '',
-            labelVisible: true,
             label: '',
             labelVisible: true,
             error: '',
@@ -186,7 +185,7 @@ define([
                 value;
 
             values.some(function (v) {
-                if (v !== null) {
+                if (v !== null && v !== undefined) {
                     value = v;
                     return true;
                 }
@@ -335,6 +334,7 @@ define([
 
         /**
          * Clears 'value' property.
+         *
          *
          * @returns {Abstract} Chainable.
          */
