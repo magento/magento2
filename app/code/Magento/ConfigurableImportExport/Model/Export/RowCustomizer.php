@@ -27,7 +27,7 @@ class RowCustomizer implements RowCustomizerInterface
     {
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter(
-            'entity_id',
+            'row_id',
             ['in' => $productIds]
         )->addAttributeToFilter(
             'type_id',

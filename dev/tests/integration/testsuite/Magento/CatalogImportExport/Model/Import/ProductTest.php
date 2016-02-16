@@ -86,7 +86,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveProductsVisibility()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Api\ProductRepositoryInterface'
@@ -148,7 +147,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveStockItemQty()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Api\ProductRepositoryInterface'
@@ -213,7 +211,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testStockState()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Filesystem');
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -246,7 +243,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveCustomOptions($importFile, $sku)
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         $pathToFile = __DIR__ . '/_files/' . $importFile;
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Filesystem');
@@ -337,7 +333,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveDatetimeAttribute()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Api\ProductRepositoryInterface'
@@ -563,7 +558,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveMediaImage()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Filesystem');
@@ -684,7 +678,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testInvalidSkuLink()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/products_to_import_invalid_attribute_set.csv';
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -770,7 +763,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductsWithMultipleStores()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $filesystem = $objectManager->create('Magento\Framework\Filesystem');
@@ -848,7 +840,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductCategories($fixture, $separator)
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $fixture;
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

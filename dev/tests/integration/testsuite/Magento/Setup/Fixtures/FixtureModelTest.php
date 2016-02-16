@@ -49,10 +49,6 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
         $model->initObjectManager();
 
         foreach ($model->loadFixtures()->getFixtures() as $fixture) {
-            //TODO: OrderFixture execution must be unskiped after implementation MAGETWO-47449
-            if ($fixture->getPriority() == '135') {
-                continue;
-            }
             $fixture->execute();
         }
     }

@@ -37,11 +37,23 @@ class SkuProcessor
     protected $productTypeModels;
 
     /**
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @var string
      */
-    public function __construct(\Magento\Catalog\Model\ProductFactory $productFactory)
-    {
+    private $productEntityLinkField;
+
+    /**
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     */
+    public function __construct(
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+    ) {
         $this->productFactory = $productFactory;
+
+        /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
+        $productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $this->productEntityLinkField = $productMetadata->getLinkField();
     }
 
     /**
@@ -133,6 +145,7 @@ class SkuProcessor
                 'attr_set_id' => $info['attribute_set_id'],
                 'entity_id' => $info['entity_id'],
                 'supported_type' => isset($this->productTypeModels[$typeId]),
+                $this->productEntityLinkField => $info[$this->productEntityLinkField],
             ];
         }
         return $oldSkus;
