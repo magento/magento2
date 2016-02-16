@@ -3,46 +3,47 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Ui\Component\Listing\Columns;
+namespace Magento\Store\Ui\Component\Form\Fieldset;
 
-use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Form\Fieldset;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
-class Websites extends \Magento\Ui\Component\Listing\Columns\Column
+/**
+ * Class Websites Fieldset
+ */
+class Websites extends Fieldset
 {
-    /**
-     * Column name
-     */
-    const NAME = 'websites';
-
     /**
      * Store manager
      *
-     * @var StoreManagerInterface
+     * @var StoreManager
      */
     protected $storeManager;
 
     /**
+     * Constructor
+     *
      * @param ContextInterface $context
-     * @param UiComponentFactory $uiComponentFactory
-     * @param StoreManagerInterface $storeManager
-     * @param array $components
+     * @param StoreManager $storeManager
+     * @param UiComponentInterface[] $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
-        UiComponentFactory $uiComponentFactory,
-        StoreManagerInterface $storeManager,
+        StoreManager $storeManager,
         array $components = [],
         array $data = []
     ) {
-        parent::__construct($context, $uiComponentFactory, $components, $data);
+        parent::__construct($context, $components, $data);
         $this->storeManager = $storeManager;
+
     }
 
     /**
      * Prepare component configuration
+     *
      * @return void
      */
     public function prepare()

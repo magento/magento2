@@ -169,7 +169,7 @@
             </argument>
         </field>
     </fieldset>
-    <fieldset name="websites">
+    <fieldset name="websites" class="Magento\Store\Ui\Component\Form\Fieldset\Websites">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
