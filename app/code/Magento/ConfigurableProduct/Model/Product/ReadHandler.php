@@ -97,7 +97,7 @@ class ReadHandler
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         /** @var Configurable $typeInstance */
         $typeInstance = $product->getTypeInstance();
-        $childrenIds = $typeInstance->getChildrenIds($product->getData($metadata->getLinkField()));
+        $childrenIds = $typeInstance->getChildrenIds($product->getId());
 
         if (isset($childrenIds[0])) {
             return $childrenIds[0];
