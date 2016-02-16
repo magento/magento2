@@ -65,16 +65,12 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         /** Before updating admin user data, ensure that password of current admin user is entered and is correct */
         $currentUserPasswordField = \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD;
         $currentUserPassword = $this->getRequest()->getParam($currentUserPasswordField);
-        $isCurrentUserPasswordValid = !empty($currentUserPassword) && is_string($currentUserPassword);
         try {
-            if (!($isCurrentUserPasswordValid)) {
-                throw new AuthenticationException(__('You have entered an invalid password for current user.'));
-            }
+            $user->performIdentityCheck($currentUserPassword);
             if ($password !== '') {
                 $user->setPassword($password);
                 $user->setPasswordConfirmation($passwordConfirmation);
             }
-            $user->performIdentityCheck($currentUserPassword);
             $user->save();
 
             $user->sendNotificationEmailsIfRequired();
