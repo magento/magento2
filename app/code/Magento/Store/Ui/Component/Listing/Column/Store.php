@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\System\Store as SystemStore;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 /**
  * Class Store
@@ -31,6 +32,13 @@ class Store extends Column
     protected $systemStore;
 
     /**
+     * Store manager
+     *
+     * @var StoreManager
+     */
+    protected $storeManager;
+
+    /**
      * @var string
      */
     protected $storeKey;
@@ -40,6 +48,7 @@ class Store extends Column
      * @param UiComponentFactory $uiComponentFactory
      * @param SystemStore $systemStore
      * @param Escaper $escaper
+     * @param StoreManager $storeManager
      * @param array $components
      * @param array $data
      * @param string $storeKey
@@ -49,6 +58,7 @@ class Store extends Column
         UiComponentFactory $uiComponentFactory,
         SystemStore $systemStore,
         Escaper $escaper,
+        StoreManager $storeManager,
         array $components = [],
         array $data = [],
         $storeKey = 'store_id'
@@ -56,6 +66,7 @@ class Store extends Column
         $this->systemStore = $systemStore;
         $this->escaper = $escaper;
         $this->storeKey = $storeKey;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -110,5 +121,17 @@ class Store extends Column
         }
 
         return $content;
+    }
+
+    /**
+     * Prepare component configuration
+     * @return void
+     */
+    public function prepare()
+    {
+        parent::prepare();
+        if ($this->storeManager->isSingleStoreMode()) {
+            $this->_data['config']['componentDisabled'] = true;
+        }
     }
 }
