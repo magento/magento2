@@ -20,17 +20,13 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\User\Model\UserFactory $userFactory,
         \Magento\Security\Helper\SecurityCookie $securityCookieHelper
     ) {
-        parent::__construct($context, $coreRegistry, $userFactory);
+        parent::__construct($context);
         $this->securityCookieHelper = $securityCookieHelper;
     }
 
@@ -81,7 +77,6 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             $this->securityCookieHelper->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
-            $this->_redirect('adminhtml/*/');
         } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {
