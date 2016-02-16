@@ -21,12 +21,12 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filter\Translit;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
+use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 
 /**
  * Class Eav
@@ -134,6 +134,11 @@ class Eav extends AbstractModifier
     private $translitFilter;
 
     /**
+     * @var array
+     */
+    private $bannedInputTypes = ['media_image'];
+
+    /**
      * Initialize dependencies
      *
      * @param LocatorInterface $locator
@@ -218,14 +223,19 @@ class Eav extends AbstractModifier
     protected function getAttributesMeta(array $attributes, $groupCode)
     {
         $meta = [];
+
         foreach ($attributes as $sortKey => $attribute) {
+            if (in_array($attribute->getFrontendInput(), $this->bannedInputTypes)) {
+                continue;
+            }
+
             $code = $attribute->getAttributeCode();
             $canDisplayService = $this->canDisplayUseDefault($attribute);
             $usedDefault = $this->usedDefault($attribute);
 
             $child = $this->setupMetaProperties($attribute);
 
-            $meta['container_' . $code] = [
+            $meta[static::CONTAINER_PREFIX . $code] = [
                 'arguments' => [
                     'data' => [
                         'config' => [
@@ -239,6 +249,11 @@ class Eav extends AbstractModifier
                     ],
                 ],
             ];
+
+            if ($attribute->getIsWysiwygEnabled()) {
+                $meta[static::CONTAINER_PREFIX . $code]['arguments']['data']['config']['component'] =
+                    'Magento_Ui/js/form/components/group';
+            }
 
             $child['arguments']['data']['config']['code'] = $code;
             $child['arguments']['data']['config']['source'] = $groupCode;
@@ -455,6 +470,27 @@ class Eav extends AbstractModifier
         if ($attributeModel->usesSource()) {
             $meta['arguments']['data']['config']['options'] = $attributeModel->getSource()->getAllOptions();
         }
+
+        $meta = $this->addWysiwyg($attribute, $meta);
+
+        return $meta;
+    }
+
+    /**
+     * Add wysiwyg properties
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param array $meta
+     * @return array
+     */
+    private function addWysiwyg(ProductAttributeInterface $attribute, array $meta)
+    {
+        if (!$attribute->getIsWysiwygEnabled()) {
+            return $meta;
+        }
+
+        $meta['arguments']['data']['config']['formElement'] = WysiwygElement::NAME;
+        $meta['arguments']['data']['config']['wysiwyg'] = true;
 
         return $meta;
     }
