@@ -27,7 +27,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -37,7 +37,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->model = $this->objectManager->create(
             'Magento\CatalogImportExport\Model\Import\Product'
         );
     }
@@ -52,7 +52,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/../../_files/import_configurable.csv';
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $filesystem = $this->objectManager->create(
             'Magento\Framework\Filesystem'
         );
 
@@ -64,7 +64,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'directory' => $directory
             ]
         );
-        $errors = $this->_model->setSource(
+        $errors = $this->model->setSource(
             $source
         )->setParameters(
             [
@@ -74,13 +74,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
-        $this->_model->importData();
+        $this->model->importData();
 
         $resource = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
         $this->assertTrue(is_numeric($productId));
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $product = $this->objectManager->create(
             'Magento\Catalog\Model\Product'
         );
         $product->load($productId);
