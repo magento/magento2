@@ -22,7 +22,17 @@ define(
                 {
                     type: index,
                     config: config.config,
-                    component: config.component
+                    component: config.component,
+
+                    /**
+                     * Custom payment method types comparator
+                     * @param {String} typeA
+                     * @param {String} typeB
+                     * @return {Boolean}
+                     */
+                    typeComparatorCallback: function (typeA, typeB) {
+                        return typeA.indexOf(typeB) === 0;
+                    }
                 }
             );
         });

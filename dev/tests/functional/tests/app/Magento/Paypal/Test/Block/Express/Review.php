@@ -35,5 +35,15 @@ class Review extends AbstractReview
             'Magento\Paypal\Test\Block\Express\Review\ShippingoptgroupElement'
         );
         $shippingElement->setValue($shippingMethod['shipping_service'] . '/' . $shippingMethod['shipping_method']);
+        $this->waitForElementVisible('#review-please-wait');
+        $this->waitForElementNotVisible('#review-please-wait');
+    }
+
+    /**
+     * Click "Place Order" button.
+     */
+    public function placeOrder()
+    {
+        $this->_rootElement->find('#review-button')->click();
     }
 }
