@@ -27,7 +27,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Set security cookie helper
      *
      * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * @void
+     * @return void
      * @deprecated
      */
     public function setSecurityCookieHelper(\Magento\Security\Helper\SecurityCookie $securityCookieHelper)
