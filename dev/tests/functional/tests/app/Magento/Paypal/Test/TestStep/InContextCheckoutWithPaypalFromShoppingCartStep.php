@@ -6,10 +6,8 @@
 
 namespace Magento\Paypal\Test\TestStep;
 
-use Magento\Paypal\Test\Constraint\AssertExpressSuccessfullyCancelledMessage;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Paypal\Test\Block\Sandbox\ExpressLogin;
 
 /**
  * Checkout with PayPal from Shopping Cart.
@@ -24,21 +22,13 @@ class InContextCheckoutWithPaypalFromShoppingCartStep implements TestStepInterfa
     protected $checkoutCart;
 
     /**
-     * @var AssertExpressSuccessfullyCancelledMessage
-     */
-    private $assertExpressSuccessfullyCancelledMessage;
-
-    /**
      * @constructor
      * @param CheckoutCart $checkoutCart
-     * @param AssertExpressSuccessfullyCancelledMessage $assertExpressSuccessfullyCancelledMessage
      */
     public function __construct(
-        CheckoutCart $checkoutCart,
-        AssertExpressSuccessfullyCancelledMessage $assertExpressSuccessfullyCancelledMessage
+        CheckoutCart $checkoutCart
     ) {
         $this->checkoutCart = $checkoutCart;
-        $this->assertExpressSuccessfullyCancelledMessage = $assertExpressSuccessfullyCancelledMessage;
     }
 
     /**
@@ -50,6 +40,5 @@ class InContextCheckoutWithPaypalFromShoppingCartStep implements TestStepInterfa
     {
         $this->checkoutCart->open();
         $this->checkoutCart->getCartBlock()->inContextPaypalCheckout();
-        $this->assertExpressSuccessfullyCancelledMessage->processAssert($this->checkoutCart);
     }
 }
