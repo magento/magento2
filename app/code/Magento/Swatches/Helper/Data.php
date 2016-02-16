@@ -243,7 +243,7 @@ class Data
      */
     public function getProductMediaGallery(ModelProduct $product)
     {
-        if ($product->hasData('image')) {
+        if (!in_array($product->getData('image'), [null, self::EMPTY_IMAGE_VALUE], true)) {
             $baseImage = $product->getData('image');
         } else {
             $productMediaAttributes = array_filter($product->getMediaAttributeValues(), function ($value) {
@@ -275,13 +275,11 @@ class Data
     {
         $result = [];
         $mediaGallery = $product->getMediaGalleryImages();
-        if ($mediaGallery instanceof \Magento\Framework\Data\Collection) {
-            foreach ($mediaGallery as $media) {
-                $result[$media->getData('value_id')] = $this->getAllSizeImages(
-                    $product,
-                    $media->getData('file')
-                );
-            }
+        foreach ($mediaGallery as $media) {
+            $result[$media->getData('value_id')] = $this->getAllSizeImages(
+                $product,
+                $media->getData('file')
+            );
         }
         return $result;
     }
