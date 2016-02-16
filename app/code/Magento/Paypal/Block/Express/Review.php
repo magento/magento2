@@ -286,7 +286,7 @@ class Review extends \Magento\Framework\View\Element\Template
                 ->getAdditionalInformation(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_BUTTON) == 1;
             // misc shipping parameters
             $this->setShippingMethodSubmitUrl(
-                $this->getUrl("{$this->_controllerPath}/saveShippingMethod")
+                $this->getUrl("{$this->_controllerPath}/saveShippingMethod", ['_secure' => true])
             )->setCanEditShippingAddress(
                 $canEditShippingAddress
             )->setCanEditShippingMethod(
@@ -297,7 +297,7 @@ class Review extends \Magento\Framework\View\Element\Template
         $this->setEditUrl(
             $this->getUrl("{$this->_controllerPath}/edit")
         )->setPlaceOrderUrl(
-            $this->getUrl("{$this->_controllerPath}/placeOrder")
+            $this->getUrl("{$this->_controllerPath}/placeOrder", ['_secure' => true])
         );
 
         return parent::_beforeToHtml();
