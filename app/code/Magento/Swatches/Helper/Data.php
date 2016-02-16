@@ -184,14 +184,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Load Variation Product using fallback
      *
-     * @param Product|integer $parentProduct
+     * @param Product $parentProduct
      * @param array $attributes
      * @return bool|Product
      */
-    public function loadVariationByFallback($parentProduct, array $attributes)
+    public function loadVariationByFallback(Product $parentProduct, array $attributes)
     {
-        $parentProduct = $this->createSwatchProduct($parentProduct);
-        if (! $parentProduct) {
+        if (! $this->isProductHasSwatch($parentProduct)) {
             return false;
         }
 
@@ -510,27 +509,5 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $this->populateAdditionalDataEavAttribute($attribute);
         }
         return $attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_TEXT;
-    }
-
-    /**
-     * Load Product instance if required and check for proper instance type.
-     *
-     * @param int|Product $product
-     * @return Product
-     * @throws InputException
-     */
-    protected function createSwatchProduct($product)
-    {
-        if (gettype($product) == 'integer') {
-            $product = $this->productRepository->getById($product);
-        } elseif (! ($product instanceof Product)) {
-            throw new InputException(
-                __('Swatch Helper: not valid parameter for product instantiation')
-            );
-        }
-        if ($this->isProductHasSwatch($product)) {
-            return $product;
-        }
-        return false;
     }
 }
