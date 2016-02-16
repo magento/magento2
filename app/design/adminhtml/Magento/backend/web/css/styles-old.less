@@ -2068,6 +2068,13 @@
         content: attr(data-text-on);
     }
 
+    .admin__actions-switch {
+        .admin__actions-switch-checkbox {
+            position: absolute;
+            z-index: -1;
+        }
+    }
+
     //
     //  Content actions panel (with buttons, switchers...)
     //  --------------------------------------
@@ -4046,6 +4053,13 @@
 
             ul.options-list strong {
                 .style28();
+            }
+        }
+
+        .pp-buttons-container {
+            .action-default {
+                display: inline-block;
+                margin-bottom: @indent__xs;
             }
         }
     }

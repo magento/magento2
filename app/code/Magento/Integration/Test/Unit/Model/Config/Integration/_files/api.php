@@ -6,11 +6,11 @@
 return [
     'TestIntegration1' => [
         'resource' => [
-            'Magento_Customer::manageParent',
             'Magento_Customer::manage',
-            'Magento_SalesRule::quoteParent',
-            'Magento_SalesRule::quote'
+            'Magento_Customer::online',
+            'Magento_Sales::capture',
+            'Magento_SalesRule::quote',
         ],
     ],
-    'TestIntegration2' => ['resource' => ['Magento_Sales::sales']]
+    'TestIntegration2' => ['resource' => ['Magento_Catalog::product_read']]
 ];

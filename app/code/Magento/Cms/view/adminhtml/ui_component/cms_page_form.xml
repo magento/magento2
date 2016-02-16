@@ -66,10 +66,15 @@
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="label" xsi:type="string" translate="true">Enable Page</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
                     <item name="source" xsi:type="string">page</item>
                     <item name="sortOrder" xsi:type="number">10</item>
                     <item name="dataScope" xsi:type="string">is_active</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">1</item>
                 </item>
             </argument>
         </field>
@@ -94,6 +99,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Content</item>
+                <item name="sortOrder" xsi:type="number">10</item>
             </item>
         </argument>
         <field name="content_heading">
@@ -115,6 +121,7 @@
                     <item name="source" xsi:type="string">page</item>
                     <item name="wysiwyg" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="string">content</item>
+                    <item name="additionalClasses" xsi:type="string">admin__field-wide</item>
                 </item>
             </argument>
         </field>
@@ -124,6 +131,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Search Engine Optimisation</item>
+                <item name="sortOrder" xsi:type="number">20</item>
             </item>
         </argument>
         <field name="identifier">
@@ -168,6 +176,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Page in Websites</item>
+                <item name="sortOrder" xsi:type="number">30</item>
             </item>
         </argument>
         <field name="storeviews">
@@ -192,6 +201,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Design</item>
+                <item name="sortOrder" xsi:type="number">50</item>
             </item>
         </argument>
         <field name="page_layout">
@@ -223,6 +233,7 @@
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="label" xsi:type="string" translate="true">Custom Design Update</item>
+                <item name="sortOrder" xsi:type="number">60</item>
             </item>
         </argument>
         <field name="custom_theme_from">

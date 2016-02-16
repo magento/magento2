@@ -77,14 +77,6 @@
                     </item>
                 </item>
             </argument>
-            <filterInput name="id">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">id</item>
-                        <item name="label" xsi:type="string" translate="true">Transaction ID</item>
-                    </item>
-                </argument>
-            </filterInput>
             <filterSelect name="status">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\Status</argument>
@@ -117,6 +109,7 @@
                     </item>
                 </argument>
             </filterSelect>
+            <!--
             <filterSelect name="paymentInstrumentType">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\PaymentType</argument>
@@ -133,27 +126,12 @@
                     </item>
                 </argument>
             </filterSelect>
-            <filterInput name="settlementBatchId">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">settlementBatchId</item>
-                        <item name="label" xsi:type="string" translate="true">Settlement Batch ID</item>
-                    </item>
-                </argument>
-            </filterInput>
+            -->
             <filterInput name="paypalDetails_paymentId">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">paypalDetails_paymentId</item>
                         <item name="label" xsi:type="string" translate="true">PayPal Payment ID</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterInput name="merchantAccountId">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">merchantAccountId</item>
-                        <item name="label" xsi:type="string" translate="true">Merchant Account ID</item>
                     </item>
                 </argument>
             </filterInput>
@@ -194,16 +172,9 @@
         <column name="id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Transaction ID</item>
-                </item>
-            </argument>
-        </column>
-        <column name="merchantAccountId">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Merchant Account ID</item>
                 </item>
             </argument>
         </column>
@@ -219,6 +190,7 @@
         <column name="paypalDetails_paymentId">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">PayPal Payment ID</item>
                 </item>
@@ -291,11 +263,19 @@
                 </item>
             </argument>
         </column>
+        <column name="merchantAccountId">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Merchant Account ID</item>
+                </item>
+            </argument>
+        </column>
         <column name="settlementBatchId">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Settlement Batch</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Settlement Batch ID</item>
                 </item>
             </argument>
         </column>
