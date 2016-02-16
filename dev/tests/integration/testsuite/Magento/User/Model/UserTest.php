@@ -460,4 +460,43 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->setHasAvailableResources(false);
         $this->assertFalse($this->_model->hasAvailableResources());
     }
+
+    /**
+     * Here we test if admin identity check executed successfully
+     *
+     * @magentoDataFixture Magento/User/_files/user_with_role.php
+     */
+    public function testPerformIdentityCheck()
+    {
+        $this->_model->loadByUsername('adminUser');
+        $passwordString = \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD;
+        $this->_model->performIdentityCheck($passwordString);
+    }
+
+    /**
+     * Here we check for a wrong password
+     *
+     * @magentoDataFixture Magento/User/_files/user_with_role.php
+     * @expectedException \Magento\Framework\Exception\AuthenticationException
+     * @expectedExceptionMessage You have entered an invalid password for current user.
+     */
+    public function testPerformIdentityCheckWrongPassword()
+    {
+        $this->_model->loadByUsername('adminUser');
+        $passwordString = 'wrongPassword';
+        $this->_model->performIdentityCheck($passwordString);
+    }
+
+    /**
+     * Here we check for a locked user
+     *
+     * @magentoDataFixture Magento/User/_files/locked_users.php
+     * @expectedException \Magento\Framework\Exception\State\UserLockedException
+     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
+     */
+    public function testPerformIdentityCheckLockExpires()
+    {
+        $this->_model->loadByUsername('adminUser2');
+        $this->_model->performIdentityCheck(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+    }
 }

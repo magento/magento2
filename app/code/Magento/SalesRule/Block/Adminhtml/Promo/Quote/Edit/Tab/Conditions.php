@@ -6,7 +6,7 @@
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+    \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
      * Core registry
@@ -19,6 +19,11 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @var \Magento\Rule\Block\Conditions
      */
     protected $_conditions;
+
+    /**
+     * @var string
+     */
+    protected $_nameInLayout = 'conditions_apply_to';
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -43,6 +48,34 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTabClass()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTabUrl()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -51,6 +84,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -59,6 +93,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -67,6 +102,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -80,7 +116,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $model = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
@@ -106,7 +142,13 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $fieldset->addField(
             'conditions',
             'text',
-            ['name' => 'conditions', 'label' => __('Conditions'), 'title' => __('Conditions')]
+            [
+                'name' => 'conditions',
+                'label' => __('Conditions'),
+                'title' => __('Conditions'),
+                'required' => true,
+                'data-form-part' => 'sales_rule_form'
+            ]
         )->setRule(
             $model
         )->setRenderer(
