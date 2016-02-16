@@ -88,7 +88,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($product->isObjectNew());
         $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
         $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
-        $this->assertEquals([1 => "1", 2 => "2"], $product->getExtensionAttributes()->getConfigurableProductLinks());
+        $this->assertEquals([1 => '1', 2 => '2'], $product->getExtensionAttributes()->getConfigurableProductLinks());
         $configurableOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
         $this->assertEquals(1, count($configurableOptions));
         foreach ($configurableOptions as $option) {
