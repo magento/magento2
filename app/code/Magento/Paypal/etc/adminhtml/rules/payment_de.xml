@@ -12,9 +12,20 @@
             <event value="0" name="deactivate-rule"/>
             <event value="1" name="activate-rule"/>
         </events>
+        <events selector="[data-enable='in-context-api']">
+            <event value="0" name="deactivate-in-context-api"/>
+            <event value="1" name="activate-in-context-api"/>
+        </events>
         <relation target=":self">
             <rule type="simple/mark-enable" event="activate-rule"/>
             <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="paypal/in-context/enable" event="activate-rule"/>
+            <rule type="paypal/in-context/disable" event="deactivate-rule"/>
+            <rule type="paypal/in-context/show-merchant-id" event="activate-rule"/>
+            <rule type="paypal/in-context/hide-merchant-id" event="deactivate-rule"/>
+            <rule type="paypal/in-context/activate" event="activate-in-context-api"/>
+            <rule type="paypal/in-context/deactivate" event="deactivate-in-context-api"/>
+            <rule type="paypal/in-context/disable-conditional" event=":load"/>
         </relation>
     </payment>
 </rules>
