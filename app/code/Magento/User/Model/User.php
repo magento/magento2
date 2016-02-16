@@ -28,6 +28,7 @@ use Magento\User\Api\Data\UserInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
 {

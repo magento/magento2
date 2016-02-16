@@ -83,7 +83,9 @@ class InlineEdit extends \Magento\Backend\App\Action
     {
 
         if (!($this->emailNotification instanceof \Magento\Customer\Helper\EmailNotification)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Customer\Helper\EmailNotification');
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Customer\Helper\EmailNotification'
+            );
         } else {
             return $this->emailNotification;
         }

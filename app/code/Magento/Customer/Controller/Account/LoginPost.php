@@ -70,12 +70,13 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * Set scope config
      *
      * @param ScopeConfigInterface $scopeConfig
+     * @return void
      * @deprecated
      */
     public function setScopeConfig(ScopeConfigInterface $scopeConfig)
     {
 
-        $this->scopeConfig = $scopeConfig;;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
