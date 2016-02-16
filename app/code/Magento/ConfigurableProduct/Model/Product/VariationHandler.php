@@ -151,7 +151,7 @@ class VariationHandler
             $parentProduct->getNewVariationsAttributeSetId()
         );
 
-        foreach ($product->getTypeInstance()->getEditableAttributes($product) as $attribute) {
+        foreach ($product->getTypeInstance()->getSetAttributes($product) as $attribute) {
             if ($attribute->getIsUnique() ||
                 $attribute->getAttributeCode() == 'url_key' ||
                 $attribute->getFrontend()->getInputType() == 'gallery' ||

@@ -796,7 +796,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getAttributes($groupId = null, $skipSuper = false)
     {
-        $productAttributes = $this->getTypeInstance()->getEditableAttributes($this);
+        $productAttributes = $this->getTypeInstance()->getSetAttributes($this);
         if ($groupId) {
             $attributes = [];
             foreach ($productAttributes as $attribute) {

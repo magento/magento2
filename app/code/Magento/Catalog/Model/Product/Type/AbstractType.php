@@ -25,12 +25,6 @@ abstract class AbstractType
     protected $_typeId;
 
     /**
-     *
-     * @var array
-     */
-    protected $_editableAttributes;
-
-    /**
      * Is a composite product type
      *
      * @var bool
@@ -284,25 +278,6 @@ abstract class AbstractType
         }
 
         return 0;
-    }
-
-    /**
-     * Retrieve product type attributes
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
-     */
-    public function getEditableAttributes($product)
-    {
-        $cacheKey = '_cache_editable_attributes';
-        if (!$product->hasData($cacheKey)) {
-            $editableAttributes = [];
-            foreach ($this->getSetAttributes($product) as $attributeCode => $attribute) {
-                $editableAttributes[$attributeCode] = $attribute;
-            }
-            $product->setData($cacheKey, $editableAttributes);
-        }
-        return $product->getData($cacheKey);
     }
 
     /**
