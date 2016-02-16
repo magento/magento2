@@ -668,6 +668,39 @@
 }
 
 //
+//  Complex Field
+//  _____________________________________________
+
+.admin_field-complex {
+    &:extend(.abs-clearfix all);
+    margin-bottom: 3rem;
+    padding-left: @indent__s;
+
+    .admin_field-complex-title {
+        clear: both;
+        color: @collapsible-title__color;
+        font-size: @collapsible-title__font-size;
+        font-weight: @font-weight__semibold;
+        letter-spacing: .025em;
+        margin-bottom: @indent__s;
+    }
+
+    .admin_field-complex-elements {
+        float: right;
+        max-width: 40%;
+
+        button {
+            margin-left: @indent__s;
+        }
+    }
+
+    .admin_field-complex-content {
+        max-width: 60%;
+        overflow: hidden;
+    }
+}
+
+//
 //  Form legend
 //  _____________________________________________
 
