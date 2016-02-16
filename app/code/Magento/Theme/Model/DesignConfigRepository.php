@@ -58,14 +58,9 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
             throw new LocalizedException(__('Can not save empty config'));
         }
 
-        try {
-            $this->configStorage->save($designConfig);
-            $this->reinitableConfig->reinit();
-            $this->reindexGrid();
-        } catch (\Exception $e) {
-            $this->reinitableConfig->reinit();
-            throw $e;
-        }
+        $this->configStorage->save($designConfig);
+        $this->reinitableConfig->reinit();
+        $this->reindexGrid();
 
         return $designConfig;
     }
@@ -82,6 +77,8 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
         }
 
         $this->configStorage->delete($designConfig);
+        $this->reinitableConfig->reinit();
+        $this->reindexGrid();
 
         return $designConfig;
     }
