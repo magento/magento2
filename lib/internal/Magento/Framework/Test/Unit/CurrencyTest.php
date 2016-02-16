@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -19,6 +19,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
         $testCacheDir = realpath(__DIR__ . DIRECTORY_SEPARATOR . '_files') . DIRECTORY_SEPARATOR;
         $writer = $this->getMock('Magento\Framework\Filesystem\Directory\WriteInterface', [], [], '', false, false);
         $writer->expects($this->once())->method('getAbsolutePath')->willReturn($testCacheDir);
+        /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject $filesystem */
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false, false);
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')

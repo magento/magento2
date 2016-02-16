@@ -17,7 +17,7 @@ class Currency extends \Zend_Currency implements CurrencyInterface
      * @param Filesystem $filesystem
      * @param  string|array       $options OPTIONAL Options array or currency short name
      *                                              when string is given
-     * @param  string|\Zend_Locale $locale  OPTIONAL locale name
+     * @param  string $locale  OPTIONAL locale name
      * @throws \Zend_Currency_Exception When currency is invalid
      */
     public function __construct(
