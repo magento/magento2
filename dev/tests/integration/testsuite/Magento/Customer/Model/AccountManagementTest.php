@@ -323,6 +323,22 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for resetPassword() method when reset for the second time
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
+     */
+    public function testResetPasswordTokenSecondTime()
+    {
+        $resetToken = 'lsdj579slkj5987slkj595lkj';
+        $password = 'new_Password123';
+        $email = 'customer@example.com';
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i');
+        $this->assertTrue($this->accountManagement->resetPassword($email, $resetToken, $password));
+        $this->accountManagement->resetPassword($email, $resetToken, $password);
+    }
+
+    /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
      */
