@@ -365,7 +365,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributes()
     {
         $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
-            ->setMethods(['getEditableAttributes'])
+            ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
@@ -376,7 +376,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attribute->expects($this->any())->method('isInGroup')->will($this->returnValue(true));
-        $productType->expects($this->any())->method('getEditableAttributes')->will(
+        $productType->expects($this->any())->method('getSetAttributes')->will(
             $this->returnValue([$attribute])
         );
         $expect = [$attribute];
@@ -942,7 +942,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function setupMediaAttributes()
     {
         $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
-            ->setMethods(['getEditableAttributes'])
+            ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
@@ -971,7 +971,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn($frontendMock);
         $attributeSmallImage->expects($this->any())->method('getAttributeCode')->willReturn('small_image');
 
-        $productType->expects($this->any())->method('getEditableAttributes')->will(
+        $productType->expects($this->any())->method('getSetAttributes')->will(
             $this->returnValue(['image' => $attributeImage, 'small_image' => $attributeSmallImage])
         );
 

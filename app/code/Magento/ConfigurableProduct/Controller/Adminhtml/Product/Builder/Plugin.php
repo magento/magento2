@@ -76,7 +76,7 @@ class Plugin
             $configProduct->setStoreId(0)->load($request->getParam('product'))->setTypeId($request->getParam('type'));
 
             $data = [];
-            foreach ($configProduct->getTypeInstance()->getEditableAttributes($configProduct) as $attribute) {
+            foreach ($configProduct->getTypeInstance()->getSetAttributes($configProduct) as $attribute) {
                 /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 if (!$attribute->getIsUnique() &&
                     $attribute->getFrontend()->getInputType() != 'gallery' &&
