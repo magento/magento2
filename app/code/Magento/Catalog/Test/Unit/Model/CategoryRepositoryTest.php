@@ -155,7 +155,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->atLeastOnce()
         )->method('getId')->willReturn($categoryId);
         $this->categoryFactoryMock->expects(
-            $this->once()
+            $this->exactly(2)
         )->method('create')->willReturn(
             $categoryMock
         );
@@ -187,7 +187,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $parentCategoryMock = $this->getMock('\Magento\Catalog\Model\Category', [], [], '', false, true, true);
         $categoryMock->expects($this->any())->method('getId')
             ->will($this->onConsecutiveCalls($categoryId, $newCategoryId));
-        $this->categoryFactoryMock->expects($this->once())->method('create')->willReturn($parentCategoryMock);
+        $this->categoryFactoryMock->expects($this->exactly(2))->method('create')->willReturn($parentCategoryMock);
         $parentCategoryMock->expects($this->atLeastOnce())->method('getId')->willReturn($parentCategoryId);
 
         $categoryMock->expects($this->once())->method('getParentId')->willReturn($parentCategoryId);
