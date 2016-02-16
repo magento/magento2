@@ -11,6 +11,7 @@ use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Class FlatTableBuilder
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FlatTableBuilder
 {
@@ -279,7 +280,7 @@ class FlatTableBuilder
             if (!empty($columnValueNames)) {
                 $select->joinLeft(
                     $temporaryValueTableName,
-                    "e.${linkField} = " . $temporaryValueTableName . ".${linkField}",
+                    "e.${linkField} = " . $temporaryValueTableName . ".entity_id",
                     $columnValueNames
                 );
                 $allColumns = array_merge($allColumns, $columnValueNames);
