@@ -33,7 +33,7 @@ if (!$attribute->getId()) {
             'is_user_defined' => 1,
             'frontend_input' => 'select',
             'is_unique' => 0,
-            'is_required' => 1,
+            'is_required' => 0,
             'is_searchable' => 0,
             'is_visible_in_advanced_search' => 0,
             'is_comparable' => 0,
