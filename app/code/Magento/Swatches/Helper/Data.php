@@ -173,7 +173,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 if (!in_array($simpleProduct->getData($attributeCode), [null, self::EMPTY_IMAGE_VALUE], true)
                     && !array_diff($requiredAttributes, array_filter($simpleProduct->getData(), 'is_scalar'))
                 ) {
-                    return $this->productRepository->getById($simpleProduct->getId());
+                    return $simpleProduct;
                 }
             }
         }
