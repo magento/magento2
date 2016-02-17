@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ResourceModelConfigurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
 
 /**
@@ -32,13 +33,20 @@ class SaveHandler
     private $productAttributeRepository;
 
     /**
+     * @var ResourceModelConfigurable
+     */
+    private $resourceModel;
+
+    /**
      * SaveHandler constructor
      *
+     * @param ResourceModelConfigurable $resourceModel
      * @param OptionRepositoryInterface $optionRepository
      * @param ConfigurableFactory $configurableFactory
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
+        ResourceModelConfigurable $resourceModel,
         OptionRepositoryInterface $optionRepository,
         ConfigurableFactory $configurableFactory,
         ProductAttributeRepositoryInterface $productAttributeRepository
@@ -46,6 +54,7 @@ class SaveHandler
         $this->optionRepository = $optionRepository;
         $this->configurableFactory = $configurableFactory;
         $this->productAttributeRepository = $productAttributeRepository;
+        $this->resourceModel = $resourceModel;
     }
 
     /**
@@ -76,9 +85,7 @@ class SaveHandler
 
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
 
-        /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable */
-        $configurable = $this->configurableFactory->create();
-        $configurable->saveProducts($entity, $configurableLinks);
+        $this->resourceModel->saveProducts($entity, $configurableLinks);
 
         return $entity;
     }
@@ -96,7 +103,11 @@ class SaveHandler
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
         foreach ($attributes as $attribute) {
             $eavAttribute = $this->productAttributeRepository->get($attribute->getAttributeId());
+
+            $data = $attribute->getData();
             $attribute->loadByProductAndAttribute($product, $eavAttribute);
+            $attribute->setData(array_replace_recursive($attribute->getData(), $data));
+
             $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
         }
 

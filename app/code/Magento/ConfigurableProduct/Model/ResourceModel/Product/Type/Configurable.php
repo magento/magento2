@@ -8,6 +8,7 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Framework\Model\Entity\MetadataPool;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -49,6 +50,27 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('catalog_product_super_link', 'link_id');
+    }
+
+    /**
+     * Get product entity id by product attribute
+     *
+     * @param OptionInterface $option
+     * @return int
+     */
+    public function getEntityIdByAttribute(OptionInterface $option)
+    {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
+        $select = $this->getConnection()->select()->from(
+            ['e' => $this->getTable('catalog_product_entity')],
+            ['e.entity_id']
+        )->where(
+            'e.' . $metadata->getLinkField() . '=?',
+            $option->getProductId()
+        )->limit(1);
+
+        return (int) $this->getConnection()->fetchOne($select);
     }
 
     /**
