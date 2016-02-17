@@ -577,6 +577,10 @@ class BundlePanel extends AbstractModifier
                                 'dataScope' => 'selection_qty',
                                 'value' => '1',
                                 'sortOrder' => 100,
+                                'validation' => [
+                                    'validate-number' => true,
+                                    'validate-digits' => true,
+                                ],
                             ],
                         ],
                     ],

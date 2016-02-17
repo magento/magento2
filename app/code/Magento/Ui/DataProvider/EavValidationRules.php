@@ -35,6 +35,10 @@ class EavValidationRules
         if (!empty($data['arguments']['data']['config']['required'])) {
             $rules['required-entry'] = true;
         }
+        if ($attribute->getFrontendInput() === 'price') {
+            $rules['validate-zero-or-greater'] = true;
+        }
+
         $validation = $attribute->getValidateRules();
         if (!empty($validation)) {
             foreach ($validation as $type => $ruleName) {
