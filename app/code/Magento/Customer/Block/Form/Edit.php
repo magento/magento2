@@ -7,7 +7,7 @@ namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Helper\Config as CustomerConfigHelper;
+use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * Customer edit form block
@@ -17,9 +17,9 @@ use Magento\Customer\Helper\Config as CustomerConfigHelper;
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
     /**
-     * @var CustomerConfigHelper
+     * @var AccountManagementHelper
      */
-    protected $customerConfigHelper;
+    protected $accountManagementHelper;
 
     /**
      * Constructor
@@ -29,7 +29,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
-     * @param CustomerConfigHelper $customerConfigHelper
+     * @param AccountManagementHelper $accountManagementHelper
      * @param array $data
      */
     public function __construct(
@@ -38,10 +38,10 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
-        CustomerConfigHelper $customerConfigHelper,
+        AccountManagementHelper $accountManagementHelper,
         array $data = []
     ) {
-        $this->customerConfigHelper = $customerConfigHelper;
+        $this->accountManagementHelper = $accountManagementHelper;
         parent::__construct(
             $context,
             $customerSession,
@@ -110,7 +110,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      */
     public function getMinimumPasswordLength()
     {
-        return $this->customerConfigHelper->getMinimumPasswordLength();
+        return $this->accountManagementHelper->getMinimumPasswordLength();
     }
 
     /**
@@ -120,6 +120,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      */
     public function getRequiredCharacterClassesNumber()
     {
-        return $this->customerConfigHelper->getRequiredCharacterClassesNumber();
+        return $this->accountManagementHelper->getRequiredCharacterClassesNumber();
     }
 }

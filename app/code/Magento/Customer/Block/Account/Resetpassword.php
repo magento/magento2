@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Block\Account;
 
-use Magento\Customer\Helper\Config as CustomerConfigHelper;
+use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * Customer reset password form
@@ -13,23 +13,23 @@ use Magento\Customer\Helper\Config as CustomerConfigHelper;
 class Resetpassword extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var CustomerConfigHelper
+     * @var AccountManagementHelper
      */
-    protected $customerConfigHelper;
+    protected $accountManagementHelper;
 
     /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param CustomerConfigHelper $customerConfigHelper
+     * @param AccountManagementHelper $accountManagementHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        CustomerConfigHelper $customerConfigHelper,
+        AccountManagementHelper $accountManagementHelper,
         array $data = []
     ) {
-        $this->customerConfigHelper = $customerConfigHelper;
+        $this->accountManagementHelper = $accountManagementHelper;
         parent::__construct($context, $data);
     }
 
@@ -55,7 +55,7 @@ class Resetpassword extends \Magento\Framework\View\Element\Template
      */
     public function getMinimumPasswordLength()
     {
-        return $this->customerConfigHelper->getMinimumPasswordLength();
+        return $this->accountManagementHelper->getMinimumPasswordLength();
     }
 
     /**
@@ -65,6 +65,6 @@ class Resetpassword extends \Magento\Framework\View\Element\Template
      */
     public function getRequiredCharacterClassesNumber()
     {
-        return $this->customerConfigHelper->getRequiredCharacterClassesNumber();
+        return $this->accountManagementHelper->getRequiredCharacterClassesNumber();
     }
 }
