@@ -85,8 +85,7 @@
         <plugin name="invalidate_pagecache_after_update_product_attributes" type="Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache"/>
     </type>
     <preference for="Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface" type="Magento\Catalog\Ui\Component\Listing\Attribute\Repository"/>
-    <preference for="Magento\Ui\DataProvider\Modifier\Pool" type="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool"/>
-    <type name="Magento\Ui\DataProvider\Modifier\Pool">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="eav" xsi:type="array">
@@ -138,6 +137,11 @@
                     <item name="sortOrder" xsi:type="number">120</item>
                 </item>
             </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ProductDataProvider">
+        <arguments>
+            <argument name="pool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\System" shared="false">
