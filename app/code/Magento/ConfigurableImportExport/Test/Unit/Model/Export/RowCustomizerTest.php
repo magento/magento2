@@ -37,7 +37,16 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_model = new \Magento\ConfigurableImportExport\Model\Export\RowCustomizer();
+        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($entityMetadataMock);
+        $entityMetadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+        $this->_model = new \Magento\ConfigurableImportExport\Model\Export\RowCustomizer($metadataPoolMock);
     }
 
     public function testPrepareData()

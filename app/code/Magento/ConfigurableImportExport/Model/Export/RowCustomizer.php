@@ -12,6 +12,20 @@ use Magento\ImportExport\Model\Import;
 class RowCustomizer implements RowCustomizerInterface
 {
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     */
+    public function __construct(
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+    ) {
+        $this->metadataPool = $metadataPool;
+    }
+
+    /**
      * @var array
      */
     protected $configurableData = [];
@@ -25,9 +39,11 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds)
     {
+        /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
+        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter(
-            'row_id',
+            $productMetadata->getLinkField(),
             ['in' => $productIds]
         )->addAttributeToFilter(
             'type_id',
