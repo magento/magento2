@@ -273,6 +273,9 @@ class Data
      */
     private function getGalleryImages(ModelProduct $product)
     {
+        //TODO: remove after fix MAGETWO-48040
+        $product = $this->productRepository->getById($product->getId());
+
         $result = [];
         $mediaGallery = $product->getMediaGalleryImages();
         foreach ($mediaGallery as $media) {
