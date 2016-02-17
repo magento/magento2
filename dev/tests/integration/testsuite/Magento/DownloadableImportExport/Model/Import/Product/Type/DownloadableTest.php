@@ -15,14 +15,24 @@ use Magento\ImportExport\Model\Import;
 class DownloadableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Bundle product test Name
+     * Downloadable product test Name
      */
     const TEST_PRODUCT_NAME = 'Downloadable 1';
 
     /**
-     * Bundle product test Type
+     * Downloadable product test Type
      */
     const TEST_PRODUCT_TYPE = 'downloadable';
+
+    /**
+     * Downloadable product Links Group Name
+     */
+    const TEST_PRODUCT_LINKS_GROUP_NAME = 'TEST Import Links';
+
+    /**
+     * Downloadable product Samples Group Name
+     */
+    const TEST_PRODUCT_SAMPLES_GROUP_NAME = 'TEST Import Samples';
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
@@ -84,25 +94,88 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         );
         $product->load($productId);
 
-
         $this->assertFalse($product->isObjectNew());
         $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
         $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
-/*
-        $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions();
-        $this->assertEquals(2, count($bundleOptions));
-        foreach ($bundleOptions as $optionKey => $option) {
-            $this->assertEquals($optionKey + 1, $option->getData('option_id'));
-            $this->assertEquals('checkbox', $option->getData('type'));
-            $this->assertEquals('Option ' . ($optionKey + 1), $option->getData('title'));
-            $this->assertEquals(self::TEST_PRODUCT_NAME, $option->getData('sku'));
-            $this->assertEquals($optionKey + 1, count($option->getData('product_links')));
-            foreach ($option->getData('product_links') as $linkKey => $productLink) {
-                $this->assertEquals($optionKey + 1 + $linkKey, $productLink->getData('entity_id'));
-                $this->assertEquals('Simple ' . ($optionKey + 1 + $linkKey), $productLink->getData('sku'));
-                $this->assertEquals($optionKey + 1, $productLink->getData('option_id'));
+
+        $downloadableProductLinks   = $product->getExtensionAttributes()->getDownloadableProductLinks();
+        $downloadableLinks          = $product->getDownloadableLinks();
+        $downloadableProductSamples = $product->getExtensionAttributes()->getDownloadableProductSamples();
+        $downloadableSamples        = $product->getDownloadableSamples();
+
+        //TODO: Track Fields: id, link_id, link_file and sample_file)
+        $expectedLinks= [
+            'file' => [
+                'title' => 'TEST Import Link Title File',
+                'sort_order' => '78',
+                'sample_type' => 'file',
+                'price' => '123.0000',
+                'number_of_downloads' => '123',
+                'is_shareable' => '0',
+                'link_type' => 'file'
+            ],
+            'url'  => [
+                'title' => 'TEST Import Link Title URL',
+                'sort_order' => '42',
+                'sample_type' => 'url',
+                'sample_url' => 'http://www.bing.com',
+                'price' => '1.0000',
+                'number_of_downloads' => '0',
+                'is_shareable' => '1',
+                'link_type' => 'url',
+                'link_url' => 'http://www.google.com'
+            ]
+        ];
+        foreach ($downloadableProductLinks as $link) {
+            $actualLink = $link->getData();
+            $this->assertArrayHasKey('link_type', $actualLink);
+            foreach ($expectedLinks[$actualLink['link_type']] as $expectedKey => $expectedValue) {
+                $this->assertArrayHasKey($expectedKey, $actualLink);
+                $this->assertEquals($actualLink[$expectedKey], $expectedValue);
             }
         }
-        */
+        foreach ($downloadableLinks as $link) {
+            $actualLink = $link->getData();
+            $this->assertArrayHasKey('link_type', $actualLink);
+            $this->assertArrayHasKey('product_id', $actualLink);
+            $this->assertEquals($actualLink['product_id'], $product->getId());
+            foreach ($expectedLinks[$actualLink['link_type']] as $expectedKey => $expectedValue) {
+                $this->assertArrayHasKey($expectedKey, $actualLink);
+                $this->assertEquals($actualLink[$expectedKey], $expectedValue);
+            }
+        }
+
+        //TODO: Track Fields: id, sample_id and sample_file)
+        $expectedSamples= [
+            'file' => [
+                'title' => 'TEST Import Sample File',
+                'sort_order' => '178',
+                'sample_type' => 'file'
+            ],
+            'url'  => [
+                'title' => 'TEST Import Sample URL',
+                 'sort_order' => '178',
+                 'sample_type' => 'url',
+                 'sample_url' => 'http://www.yahoo.com'
+            ]
+        ];
+        foreach ($downloadableProductSamples as $sample) {
+            $actualSample = $sample->getData();
+            $this->assertArrayHasKey('sample_type', $actualSample);
+            foreach ($expectedSamples[$actualSample['sample_type']] as $expectedKey => $expectedValue) {
+                $this->assertArrayHasKey($expectedKey, $actualSample);
+                $this->assertEquals($actualSample[$expectedKey], $expectedValue);
+            }
+        }
+        foreach ($downloadableSamples as $sample) {
+            $actualSample = $sample->getData();
+            $this->assertArrayHasKey('sample_type', $actualSample);
+            $this->assertArrayHasKey('product_id', $actualSample);
+            $this->assertEquals($actualSample['product_id'], $product->getId());
+            foreach ($expectedSamples[$actualSample['sample_type']] as $expectedKey => $expectedValue) {
+                $this->assertArrayHasKey($expectedKey, $actualSample);
+                $this->assertEquals($actualSample[$expectedKey], $expectedValue);
+            }
+        }
     }
 }
