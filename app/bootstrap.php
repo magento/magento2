@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 umask(0);
 
 /* PHP version validation */
-if (version_compare(phpversion(), '5.5.0', '<') === true) {
+if (PHP_VERSION_ID < 50500) {
     if (PHP_SAPI == 'cli') {
         echo 'Magento supports PHP 5.5.0 or later. ' .
             'Please read http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html';
