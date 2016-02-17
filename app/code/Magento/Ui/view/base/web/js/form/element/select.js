@@ -51,7 +51,7 @@ define([
 
         return {
             options: _.compact(nodes),
-            caption: caption || false
+            caption: _.isString(caption) ? caption : false
         };
     }
 

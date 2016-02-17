@@ -52,8 +52,17 @@ class BundleDataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['toArray', 'isLoaded', 'addAttributeToFilter', 'load', 'getSize'])
-            ->getMock();
+            ->setMethods(
+                [
+                    'toArray',
+                    'isLoaded',
+                    'addAttributeToFilter',
+                    'load',
+                    'getSize',
+                    'addFilterByRequiredOptions',
+                    'addStoreFilter'
+                ]
+            )->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -100,6 +109,11 @@ class BundleDataProviderTest extends \PHPUnit_Framework_TestCase
         $this->collectionMock->expects($this->once())
             ->method('addAttributeToFilter')
             ->with('type_id', [self::ALLOWED_TYPE]);
+        $this->collectionMock->expects($this->once())
+            ->method('addFilterByRequiredOptions');
+        $this->collectionMock->expects($this->once())
+            ->method('addStoreFilter')
+            ->with(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
         $this->collectionMock->expects($this->once())
             ->method('toArray')
             ->willReturn($items);
