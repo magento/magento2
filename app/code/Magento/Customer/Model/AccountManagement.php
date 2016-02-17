@@ -97,6 +97,16 @@ class AccountManagement implements AccountManagementInterface
     const EMAIL_RESET = 'email_reset';
 
     /**
+     * Configuration path to customer password minimum length
+     */
+    const XML_PATH_MINIMUM_PASSWORD_LENGTH = 'customer/password/minimum_password_length';
+
+    /**
+     * Configuration path to customer password required character classes number
+     */
+    const XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER = 'customer/password/required_character_classes_number';
+
+    /**
      * @var CustomerFactory
      */
     private $customerFactory;
@@ -238,7 +248,6 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerModel $customerModel
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
-     * @param AccountManagementHelper $accountManagementHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -264,8 +273,7 @@ class AccountManagement implements AccountManagementInterface
         DateTime $dateTime,
         CustomerModel $customerModel,
         ObjectFactory $objectFactory,
-        ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        AccountManagementHelper $accountManagementHelper
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -290,7 +298,37 @@ class AccountManagement implements AccountManagementInterface
         $this->customerModel = $customerModel;
         $this->objectFactory = $objectFactory;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+    }
+
+    /**
+     * Set account management helper
+     *
+     * @param AccountManagementHelper $accountManagementHelper
+     * @return void
+     * @deprecated
+     */
+    public function setAccountManagementHelper(AccountManagementHelper $accountManagementHelper)
+    {
+
         $this->accountManagementHelper = $accountManagementHelper;
+    }
+
+    /**
+     * Get account management helper
+     *
+     * @return AccountManagementHelper
+     * @deprecated
+     */
+    public function getAccountManagementHelper()
+    {
+
+        if (!($this->accountManagementHelper instanceof \Magento\Customer\Helper\AccountManagement)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Customer\Helper\AccountManagement'
+            );
+        } else {
+            return $this->accountManagementHelper;
+        }
     }
 
     /**
@@ -371,8 +409,9 @@ class AccountManagement implements AccountManagementInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
 
-        $this->accountManagementHelper->checkIfLocked($customer);
-        $this->accountManagementHelper->validatePasswordAndLockStatus($customer, $password);
+        $accountManagementHelper = $this->getAccountManagementHelper();
+        $accountManagementHelper->checkIfLocked($customer);
+        $accountManagementHelper->validatePasswordAndLockStatus($customer, $password);
         if ($customer->getConfirmation() && $this->isConfirmationRequired($customer)) {
             throw new EmailNotConfirmedException(__('This account is not confirmed.'));
         }
@@ -497,7 +536,7 @@ class AccountManagement implements AccountManagementInterface
     protected function makeRequiredCharactersCheck($password)
     {
         $counter = 0;
-        $requiredNumber = $this->accountManagementHelper->getRequiredCharacterClassesNumber();
+        $requiredNumber = $this->scopeConfig->getValue(self::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
         $return = 0;
 
         if (preg_match('/[0-9]+/', $password)) {
@@ -527,7 +566,7 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function getMinPasswordLength()
     {
-        return $this->accountManagementHelper->getMinimumPasswordLength();
+        return $this->scopeConfig->getValue(self::XML_PATH_MINIMUM_PASSWORD_LENGTH);
     }
 
     /**
@@ -705,7 +744,7 @@ class AccountManagement implements AccountManagementInterface
      */
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
-        $this->accountManagementHelper->validatePasswordAndLockStatus($customer, $currentPassword);
+        $this->getAccountManagementHelper()->validatePasswordAndLockStatus($customer, $currentPassword);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);

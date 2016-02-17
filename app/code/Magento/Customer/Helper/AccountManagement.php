@@ -31,16 +31,6 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     const MAX_FAILURES_PATH = 'customer/password/lockout_failures';
 
     /**
-     * Configuration path to customer password minimum length
-     */
-    const XML_PATH_MINIMUM_PASSWORD_LENGTH = 'customer/password/minimum_password_length';
-
-    /**
-     * Configuration path to customer password required character classes number
-     */
-    const XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER = 'customer/password/required_character_classes_number';
-
-    /**
      * @var CustomerRegistry
      */
     protected $customerRegistry;
@@ -200,25 +190,5 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
                 )
             );
         }
-    }
-
-    /**
-     * Get Email of a customer service
-     *
-     * @return string
-     */
-    public function getMinimumPasswordLength()
-    {
-        return $this->scopeConfig->getValue(self::XML_PATH_MINIMUM_PASSWORD_LENGTH);
-    }
-
-    /**
-     * Get Email of a customer service
-     *
-     * @return string
-     */
-    public function getRequiredCharacterClassesNumber()
-    {
-        return $this->scopeConfig->getValue(self::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
 }

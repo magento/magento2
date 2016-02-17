@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Form;
+use Magento\Customer\Model\AccountManagement;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Edit
@@ -13,7 +14,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Customer\Helper\AccountManagement
      */
-    protected $accountManagementHelperMock;
+    protected $scopeConfigMock;
 
     /**
      * @var \Magento\Customer\Block\Form\Edit
@@ -26,19 +27,31 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->accountManagementHelperMock =  $this->getMock(
+        $this->scopeConfigMock =  $this->getMock(
             '\Magento\Customer\Helper\AccountManagement',
-            [],
+            ['getValue'],
             [],
             '',
             false
         );
 
+        /** @var \Magento\Framework\View\Element\Template\Context | \PHPUnit_Framework_MockObject_MockObject $context */
+        $context = $this->getMock(
+            'Magento\Framework\View\Element\Template\Context',
+            [],
+            [],
+            '',
+            false
+        );
+        $context->expects($this->any())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->block = $objectManager->getObject(
             '\Magento\Customer\Block\Form\Edit',
-            ['AccountManagementHelper' => $this->accountManagementHelperMock]
+            ['context' => $context]
         );
     }
 
@@ -49,8 +62,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $minimumPasswordLength = '8';
 
-        $this->accountManagementHelperMock->expects($this->once())
-            ->method('getMinimumPasswordLength')
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH)
             ->willReturn($minimumPasswordLength);
 
         $this->assertEquals($minimumPasswordLength, $this->block->getMinimumPasswordLength());
@@ -63,8 +77,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $requiredCharacterClassesNumber = '4';
 
-        $this->accountManagementHelperMock->expects($this->once())
-            ->method('getRequiredCharacterClassesNumber')
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER)
             ->willReturn($requiredCharacterClassesNumber);
 
         $this->assertEquals($requiredCharacterClassesNumber, $this->block->getRequiredCharacterClassesNumber());
