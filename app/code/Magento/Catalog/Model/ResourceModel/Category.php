@@ -982,7 +982,6 @@ class Category extends AbstractResource
          */
         $this->entityManager->load(CategoryInterface::class, $object, $entityId);
 
-
         if (!$this->entityManager->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $entityId)) {
             $object->isObjectNew(true);
         }
