@@ -18,7 +18,7 @@ class System extends AbstractModifier
     const KEY_SUBMIT_URL = 'submit_url';
     const KEY_VALIDATE_URL = 'validate_url';
     const KEY_RELOAD_URL = 'reloadUrl';
-    const URL_SUBMIT = 'catalog/product/save';
+    const URL_SUBMIT = 'catalogstaging/product/save';
     const URL_VALIDATE = 'catalog/product/validate';
     const URL_RELOAD = 'catalog/product/reload';
 
@@ -33,13 +33,24 @@ class System extends AbstractModifier
     protected $urlBuilder;
 
     /**
+     * @var string
+     */
+    protected $urlSubmit;
+
+    /**
+     * System constructor.
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
+     * @param array $urlSubmit
      */
-    public function __construct(LocatorInterface $locator, UrlInterface $urlBuilder)
-    {
+    public function __construct(
+        LocatorInterface $locator,
+        UrlInterface $urlBuilder,
+        $urlSubmit = ''
+    ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
+        $this->urlSubmit = $urlSubmit;
     }
 
     /**
@@ -69,7 +80,7 @@ class System extends AbstractModifier
             $data,
             [
                 'config' => [
-                    self::KEY_SUBMIT_URL => $this->urlBuilder->getUrl(self::URL_SUBMIT, $actionParameters),
+                    self::KEY_SUBMIT_URL => $this->urlBuilder->getUrl($this->urlSubmit, $actionParameters),
                     self::KEY_VALIDATE_URL => $this->urlBuilder->getUrl(self::URL_VALIDATE, $actionParameters),
                     self::KEY_RELOAD_URL => $this->urlBuilder->getUrl(self::URL_RELOAD, $reloadParameters),
                 ]
