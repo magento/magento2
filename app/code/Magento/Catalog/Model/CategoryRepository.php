@@ -190,6 +190,9 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         $category->setData('use_post_data_config', $useConfigFields);
         $validate = $category->validate();
         if ($validate !== true) {
+            if (!is_array($validate)) {
+                throw new \Exception('Wrong validation result supplied, should be array.');
+            }
             foreach ($validate as $code => $error) {
                 if ($error === true) {
                     $attribute = $this->categoryResource->getAttribute($code)->getFrontend()->getLabel();
